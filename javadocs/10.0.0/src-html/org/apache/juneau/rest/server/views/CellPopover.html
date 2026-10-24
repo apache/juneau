@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">    * @throws IllegalArgumentException If this popover is not well-formed.</span>
 <span class="source-line-no">084</span><span id="line-84">    */</span>
 <span class="source-line-no">085</span><span id="line-85">   public void validate() {</span>
-<span class="source-line-no">086</span><span id="line-86">      if (fields == null || fields.isEmpty())</span>
+<span class="source-line-no">086</span><span id="line-86">      if (ie(fields))</span>
 <span class="source-line-no">087</span><span id="line-87">         throw iaex("CellPopover must declare at least one field.");</span>
 <span class="source-line-no">088</span><span id="line-88">      var keys = new HashSet&lt;String&gt;();</span>
 <span class="source-line-no">089</span><span id="line-89">      for (var f : fields)</span>

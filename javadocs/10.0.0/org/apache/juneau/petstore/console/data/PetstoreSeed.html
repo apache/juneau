@@ -125,19 +125,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Default random seed.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#ORDERS" class="member-name-link">ORDERS</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#FIXED_NOW_ENV" class="member-name-link">FIXED_NOW_ENV</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Total orders after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
+<div class="block">Environment variable that pins the petstore's "now"; see <a href="#fixedNowClock()"><code>fixedNowClock()</code></a>.</div>
 </div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#PETS" class="member-name-link">PETS</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ORDERS" class="member-name-link">ORDERS</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Total pets after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
+<div class="block">Total orders after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#USERS" class="member-name-link">USERS</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PETS" class="member-name-link">PETS</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Total pets after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#USERS" class="member-name-link">USERS</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Total users after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
 </div>
 </div>
@@ -159,6 +164,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixedNowClock()" class="member-name-link">fixedNowClock</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">The clock the <a href="#FIXED_NOW_ENV">"PETSTORE_FIXED_NOW"</a> environment variable pins "now" to, so screenshots of the day-relative store
+ and jobs pages repeat from run to run.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#now()" class="member-name-link">now</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#populate(org.apache.juneau.petstore.service.PetStore)" class="member-name-link">populate</a><wbr>(<a href="../../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</code></div>
@@ -208,9 +222,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="FIXED_NOW_ENV">
+<h3>FIXED_NOW_ENV</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-57">FIXED_NOW_ENV</a></span></div>
+<div class="block">Environment variable that pins the petstore's "now"; see <a href="#fixedNowClock()"><code>fixedNowClock()</code></a>.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../constant-values.html#org.apache.juneau.petstore.console.data.PetstoreSeed.FIXED_NOW_ENV">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="PETS">
 <h3>PETS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-57">PETS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-60">PETS</a></span></div>
 <div class="block">Total pets after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -225,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ORDERS">
 <h3>ORDERS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-59">ORDERS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-62">ORDERS</a></span></div>
 <div class="block">Total orders after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -240,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="USERS">
 <h3>USERS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-61">USERS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-64">USERS</a></span></div>
 <div class="block">Total users after <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -255,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="AUDIT">
 <h3>AUDIT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-63">AUDIT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-66">AUDIT</a></span></div>
 <div class="block">Audit rows written by <a href="#populate(org.apache.juneau.petstore.service.PetStore)"><code>populate(PetStore)</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -278,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-81">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-84">create</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>A new seed builder with the default seed and clock.</dd>
@@ -288,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="randomSeed(long)">
 <h3>randomSeed</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-89">randomSeed</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-92">randomSeed</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Random.html" title="class or interface in java.util" class="external-link"><code>Random</code></a> seed.</dd>
@@ -298,9 +327,31 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="fixedNowClock()">
+<h3>fixedNowClock</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-103">fixedNowClock</a></span>()</div>
+<div class="block">The clock the <a href="#FIXED_NOW_ENV">"PETSTORE_FIXED_NOW"</a> environment variable pins "now" to, so screenshots of the day-relative store
+ and jobs pages repeat from run to run.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The clock, or <jk>null</jk> when the variable is unset, meaning the system clock.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="now()">
+<h3>now</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-108">now</a></span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The pinned "now" when <a href="#FIXED_NOW_ENV">"PETSTORE_FIXED_NOW"</a> is set, else the current instant.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="clock(java.time.Clock)">
 <h3>clock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-98">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PetstoreSeed.html" title="class in org.apache.juneau.petstore.console.data">PetstoreSeed</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-129">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The clock that dates orders and audit rows.  Must not be <jk>null</jk>.</dd>
@@ -312,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="populate(org.apache.juneau.petstore.service.PetStore)">
 <h3>populate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-110">populate</a></span><wbr><span class="parameters">(<a href="../../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/data/PetstoreSeed.html#line-141">populate</a></span><wbr><span class="parameters">(<a href="../../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</span></div>
 <div class="block">Adds the generated rows to a store that holds only the classic rows.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

@@ -456,53 +456,55 @@
 <span class="source-line-no">443</span><span id="line-443">   }</span>
 <span class="source-line-no">444</span><span id="line-444"></span>
 <span class="source-line-no">445</span><span id="line-445">   // The bucket first, then each group value; a null group (a row with no value) sorts before any text.</span>
-<span class="source-line-no">446</span><span id="line-446">   @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">447</span><span id="line-447">   private static int compareKeys(List&lt;Object&gt; a, List&lt;Object&gt; b) {</span>
-<span class="source-line-no">448</span><span id="line-448">      for (var i = 0; i &lt; a.size(); i++) {</span>
-<span class="source-line-no">449</span><span id="line-449">         var x = a.get(i);</span>
-<span class="source-line-no">450</span><span id="line-450">         var y = b.get(i);</span>
-<span class="source-line-no">451</span><span id="line-451">         if (x == null || y == null) {</span>
-<span class="source-line-no">452</span><span id="line-452">            if (x == y) continue;</span>
-<span class="source-line-no">453</span><span id="line-453">            return x == null ? -1 : 1;</span>
-<span class="source-line-no">454</span><span id="line-454">         }</span>
-<span class="source-line-no">455</span><span id="line-455">         var c = ((Comparable&lt;Object&gt;)x).compareTo(y);</span>
-<span class="source-line-no">456</span><span id="line-456">         if (c != 0) return c;</span>
-<span class="source-line-no">457</span><span id="line-457">      }</span>
-<span class="source-line-no">458</span><span id="line-458">      return 0;</span>
-<span class="source-line-no">459</span><span id="line-459">   }</span>
-<span class="source-line-no">460</span><span id="line-460"></span>
-<span class="source-line-no">461</span><span id="line-461">   // The smallest unit giving at most AUTO_BUCKETS buckets over the window; month when none does.  Counting stops at</span>
-<span class="source-line-no">462</span><span id="line-462">   // AUTO_BUCKETS + 1, so a long window never walks every hour.</span>
-<span class="source-line-no">463</span><span id="line-463">   String autoUnit(Instant start, Instant end) {</span>
-<span class="source-line-no">464</span><span id="line-464">      for (var u : UNITS) {</span>
-<span class="source-line-no">465</span><span id="line-465">         var n = 0;</span>
-<span class="source-line-no">466</span><span id="line-466">         for (var t = floor(start, u); t.isBefore(end) &amp;&amp; n &lt;= AUTO_BUCKETS; t = next(t, u))</span>
-<span class="source-line-no">467</span><span id="line-467">            n++;</span>
-<span class="source-line-no">468</span><span id="line-468">         if (n &lt;= AUTO_BUCKETS) return u;</span>
-<span class="source-line-no">469</span><span id="line-469">      }</span>
-<span class="source-line-no">470</span><span id="line-470">      return "month";</span>
-<span class="source-line-no">471</span><span id="line-471">   }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">   Instant floor(Instant t, String unit) {</span>
-<span class="source-line-no">474</span><span id="line-474">      var d = t.atZone(ZoneOffset.UTC);</span>
-<span class="source-line-no">475</span><span id="line-475">      return switch (unit) {</span>
-<span class="source-line-no">476</span><span id="line-476">         case "hour" -&gt; d.truncatedTo(ChronoUnit.HOURS).toInstant();</span>
-<span class="source-line-no">477</span><span id="line-477">         case "day" -&gt; d.truncatedTo(ChronoUnit.DAYS).toInstant();</span>
-<span class="source-line-no">478</span><span id="line-478">         case "week" -&gt; d.truncatedTo(ChronoUnit.DAYS).with(TemporalAdjusters.previousOrSame(weekStart)).toInstant();</span>
-<span class="source-line-no">479</span><span id="line-479">         default -&gt; d.truncatedTo(ChronoUnit.DAYS).withDayOfMonth(1).toInstant();</span>
-<span class="source-line-no">480</span><span id="line-480">      };</span>
-<span class="source-line-no">481</span><span id="line-481">   }</span>
-<span class="source-line-no">482</span><span id="line-482"></span>
-<span class="source-line-no">483</span><span id="line-483">   static Instant next(Instant t, String unit) {</span>
-<span class="source-line-no">484</span><span id="line-484">      var d = t.atZone(ZoneOffset.UTC);</span>
-<span class="source-line-no">485</span><span id="line-485">      return switch (unit) {</span>
-<span class="source-line-no">486</span><span id="line-486">         case "hour" -&gt; d.plusHours(1).toInstant();</span>
-<span class="source-line-no">487</span><span id="line-487">         case "day" -&gt; d.plusDays(1).toInstant();</span>
-<span class="source-line-no">488</span><span id="line-488">         case "week" -&gt; d.plusWeeks(1).toInstant();</span>
-<span class="source-line-no">489</span><span id="line-489">         default -&gt; d.plusMonths(1).toInstant();</span>
-<span class="source-line-no">490</span><span id="line-490">      };</span>
-<span class="source-line-no">491</span><span id="line-491">   }</span>
-<span class="source-line-no">492</span><span id="line-492">}</span>
+<span class="source-line-no">446</span><span id="line-446">   @SuppressWarnings({</span>
+<span class="source-line-no">447</span><span id="line-447">      "unchecked" // Non-null group values within a series are mutually Comparable.</span>
+<span class="source-line-no">448</span><span id="line-448">   })</span>
+<span class="source-line-no">449</span><span id="line-449">   private static int compareKeys(List&lt;Object&gt; a, List&lt;Object&gt; b) {</span>
+<span class="source-line-no">450</span><span id="line-450">      for (var i = 0; i &lt; a.size(); i++) {</span>
+<span class="source-line-no">451</span><span id="line-451">         var x = a.get(i);</span>
+<span class="source-line-no">452</span><span id="line-452">         var y = b.get(i);</span>
+<span class="source-line-no">453</span><span id="line-453">         if (x == null || y == null) {</span>
+<span class="source-line-no">454</span><span id="line-454">            if (x == y) continue;</span>
+<span class="source-line-no">455</span><span id="line-455">            return x == null ? -1 : 1;</span>
+<span class="source-line-no">456</span><span id="line-456">         }</span>
+<span class="source-line-no">457</span><span id="line-457">         var c = ((Comparable&lt;Object&gt;)x).compareTo(y);</span>
+<span class="source-line-no">458</span><span id="line-458">         if (c != 0) return c;</span>
+<span class="source-line-no">459</span><span id="line-459">      }</span>
+<span class="source-line-no">460</span><span id="line-460">      return 0;</span>
+<span class="source-line-no">461</span><span id="line-461">   }</span>
+<span class="source-line-no">462</span><span id="line-462"></span>
+<span class="source-line-no">463</span><span id="line-463">   // The smallest unit giving at most AUTO_BUCKETS buckets over the window; month when none does.  Counting stops at</span>
+<span class="source-line-no">464</span><span id="line-464">   // AUTO_BUCKETS + 1, so a long window never walks every hour.</span>
+<span class="source-line-no">465</span><span id="line-465">   String autoUnit(Instant start, Instant end) {</span>
+<span class="source-line-no">466</span><span id="line-466">      for (var u : UNITS) {</span>
+<span class="source-line-no">467</span><span id="line-467">         var n = 0;</span>
+<span class="source-line-no">468</span><span id="line-468">         for (var t = floor(start, u); t.isBefore(end) &amp;&amp; n &lt;= AUTO_BUCKETS; t = next(t, u))</span>
+<span class="source-line-no">469</span><span id="line-469">            n++;</span>
+<span class="source-line-no">470</span><span id="line-470">         if (n &lt;= AUTO_BUCKETS) return u;</span>
+<span class="source-line-no">471</span><span id="line-471">      }</span>
+<span class="source-line-no">472</span><span id="line-472">      return "month";</span>
+<span class="source-line-no">473</span><span id="line-473">   }</span>
+<span class="source-line-no">474</span><span id="line-474"></span>
+<span class="source-line-no">475</span><span id="line-475">   Instant floor(Instant t, String unit) {</span>
+<span class="source-line-no">476</span><span id="line-476">      var d = t.atZone(ZoneOffset.UTC);</span>
+<span class="source-line-no">477</span><span id="line-477">      return switch (unit) {</span>
+<span class="source-line-no">478</span><span id="line-478">         case "hour" -&gt; d.truncatedTo(ChronoUnit.HOURS).toInstant();</span>
+<span class="source-line-no">479</span><span id="line-479">         case "day" -&gt; d.truncatedTo(ChronoUnit.DAYS).toInstant();</span>
+<span class="source-line-no">480</span><span id="line-480">         case "week" -&gt; d.truncatedTo(ChronoUnit.DAYS).with(TemporalAdjusters.previousOrSame(weekStart)).toInstant();</span>
+<span class="source-line-no">481</span><span id="line-481">         default -&gt; d.truncatedTo(ChronoUnit.DAYS).withDayOfMonth(1).toInstant();</span>
+<span class="source-line-no">482</span><span id="line-482">      };</span>
+<span class="source-line-no">483</span><span id="line-483">   }</span>
+<span class="source-line-no">484</span><span id="line-484"></span>
+<span class="source-line-no">485</span><span id="line-485">   static Instant next(Instant t, String unit) {</span>
+<span class="source-line-no">486</span><span id="line-486">      var d = t.atZone(ZoneOffset.UTC);</span>
+<span class="source-line-no">487</span><span id="line-487">      return switch (unit) {</span>
+<span class="source-line-no">488</span><span id="line-488">         case "hour" -&gt; d.plusHours(1).toInstant();</span>
+<span class="source-line-no">489</span><span id="line-489">         case "day" -&gt; d.plusDays(1).toInstant();</span>
+<span class="source-line-no">490</span><span id="line-490">         case "week" -&gt; d.plusWeeks(1).toInstant();</span>
+<span class="source-line-no">491</span><span id="line-491">         default -&gt; d.plusMonths(1).toInstant();</span>
+<span class="source-line-no">492</span><span id="line-492">      };</span>
+<span class="source-line-no">493</span><span id="line-493">   }</span>
+<span class="source-line-no">494</span><span id="line-494">}</span>
 
 
 

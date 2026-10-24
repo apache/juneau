@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    *    value.</span>
 <span class="source-line-no">153</span><span id="line-153">    */</span>
 <span class="source-line-no">154</span><span id="line-154">   public MustacheView attrs(Map&lt;String,?&gt; values) {</span>
-<span class="source-line-no">155</span><span id="line-155">      if (values == null || values.isEmpty())</span>
+<span class="source-line-no">155</span><span id="line-155">      if (ie(values))</span>
 <span class="source-line-no">156</span><span id="line-156">         return this;</span>
 <span class="source-line-no">157</span><span id="line-157">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">158</span><span id="line-158">      values.forEach((k, v) -&gt; {</span>

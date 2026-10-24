@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * The REST serving path now enforces this independently of any one call site: every classpath that carries this</span>
 <span class="source-line-no">029</span><span id="line-29"> * module registers a {@code ResponseProcessor} (see</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link WidgetsMixin.WidgetValidationProcessor</span>
 <span class="source-line-no">031</span><span id="line-31"> * WidgetsMixin.WidgetValidationProcessor}) that calls {@link #validate()} on any REST response content</span>
 <span class="source-line-no">032</span><span id="line-32"> * that is a {@code Widget}, fail-closed with a 500 on failure.  That closes the gap for the two implementations</span>
 <span class="source-line-no">033</span><span id="line-33"> * that ride the wire as a JSON response body ({@code ModalDef}/{@code FormDef}) rather than being consumed by a</span>

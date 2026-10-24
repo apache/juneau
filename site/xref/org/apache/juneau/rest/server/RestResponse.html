@@ -620,7 +620,7 @@
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the URI is safe to redirect to.</em>
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSafeRedirectUri(String uri, String...allowedHosts) {
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">if</strong> (uri == <strong class="jxr_keyword">null</strong> || uri.isEmpty())
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">if</strong> (ie(uri))
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">if</strong> (uri.charAt(0) == '/' &amp;&amp; ! uri.startsWith(<span class="jxr_string">"//"</span>))
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -912,7 +912,7 @@
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 	}
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * Sets the &lt;c&gt;Cache-Control&lt;/c&gt; response header from a {@link org.apache.juneau.http.header.CacheControl.Builder}.</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * Sets the &lt;c&gt;Cache-Control&lt;/c&gt; response header from a {@link org.apache.juneau.http.header.CacheControl.Builder CacheControl.Builder}.</em>
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>

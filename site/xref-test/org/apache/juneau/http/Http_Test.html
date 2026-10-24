@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		@Test <strong class="jxr_keyword">void</strong> c05_partList_ofPairs() {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">var</strong> list = PartList.ofPairs(<span class="jxr_string">"user"</span>, <span class="jxr_string">"alice"</span>, <span class="jxr_string">"pass"</span>, <span class="jxr_string">"secret"</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			assertEquals(2, list.size());
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			assertSize(2, list);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			assertEquals(<span class="jxr_string">"alice"</span>, list.getFirst(<span class="jxr_string">"user"</span>).getValue());
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			assertEquals(<span class="jxr_string">"secret"</span>, list.getFirst(<span class="jxr_string">"pass"</span>).getValue());
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		}
@@ -273,7 +273,7 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		@Test <strong class="jxr_keyword">void</strong> c07_partList_empty() {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">var</strong> list = PartList.empty();
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			assertEquals(0, list.size());
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			assertSize(0, list);
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 			assertTrue(list.isEmpty());
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		}
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 

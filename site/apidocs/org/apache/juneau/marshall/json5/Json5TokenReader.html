@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../json5l/Json5lTokenReader.html" title="class in org.apache.juneau.marshall.json5l">Json5lTokenReader</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-50">Json5TokenReader</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-52">Json5TokenReader</a></span>
 <span class="extends-implements">extends <a href="../json/JsonTokenReader.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader</a></span></div>
 <div class="block">Reference implementation of the public <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> surface for the JSON5 format.
 
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe)">
 <h3>Json5TokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-61">Json5TokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-63">Json5TokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor with default settings.</div>
 <dl class="notes">
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.json.JsonTokenReader.Settings,org.apache.juneau.marshall.json5.Json5ParserSession)">
 <h3>Json5TokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-75">Json5TokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-77">Json5TokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="Json5ParserSession.html" title="class in org.apache.juneau.marshall.json5">Json5ParserSession</a>&nbsp;session)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -284,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowsTrailingComma()">
 <h3>allowsTrailingComma</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-83">allowsTrailingComma</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-85">allowsTrailingComma</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#allowsTrailingComma()">JsonTokenReader</a></code></span></div>
 <div class="block">Subclass extension point: returns whether trailing commas are accepted before <c>]</c> /
  <c>}</c>.
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readNumberValue()">
 <h3>readNumberValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-88">readNumberValue</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-90">readNumberValue</a></span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#readNumberValue()">JsonTokenReader</a></code></span></div>
@@ -323,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNumber()">
 <h3>getNumber</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-97">getNumber</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-99">getNumber</a></span>()
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getNumber()">TokenReader</a></code></span></div>
 <div class="block">Returns the current numeric value as a parsed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a>.
@@ -347,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readValueStart(int)">
 <h3>readValueStart</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-104">readValueStart</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-106">readValueStart</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#readValueStart(int)">JsonTokenReader</a></code></span></div>
@@ -370,7 +370,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readFieldNameOrEndObject(int)">
 <h3>readFieldNameOrEndObject</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-153">readFieldNameOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-155">readFieldNameOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#readFieldNameOrEndObject(int)">JsonTokenReader</a></code></span></div>
@@ -393,7 +393,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readCommaOrEndArray(int)">
 <h3>readCommaOrEndArray</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-180">readCommaOrEndArray</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-182">readCommaOrEndArray</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#readCommaOrEndArray(int)">JsonTokenReader</a></code></span></div>
@@ -416,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readCommaOrEndObject(int)">
 <h3>readCommaOrEndObject</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-204">readCommaOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-206">readCommaOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#readCommaOrEndObject(int)">JsonTokenReader</a></code></span></div>
@@ -439,7 +439,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readString()">
 <h3>readString</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-228">readString</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5TokenReader.html#line-230">readString</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#readString()">JsonTokenReader</a></code></span></div>

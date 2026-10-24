@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<strong class="jxr_keyword">void</strong> b01_findBeanSubTypesTraversesMultiLevelHierarchy() {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> creator = bc(B01_GrandParent.<strong class="jxr_keyword">class</strong>).type(B01_Child.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> subTypes = creator.getBeanSubTypes();
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(3, subTypes.size());
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertSize(3, subTypes);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(B01_Child.<strong class="jxr_keyword">class</strong>.getName(), subTypes.get(0).getName());
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertEquals(B01_Parent.<strong class="jxr_keyword">class</strong>.getName(), subTypes.get(1).getName());
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(B01_GrandParent.<strong class="jxr_keyword">class</strong>.getName(), subTypes.get(2).getName());

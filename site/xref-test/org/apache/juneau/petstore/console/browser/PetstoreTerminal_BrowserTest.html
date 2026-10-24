@@ -72,9 +72,9 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		report = run(<span class="jxr_string">"terminal"</span>, base, List.of(
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"jobs"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/ops/jobs?run="</span> + runId,
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<span class="jxr_string">"actions"</span>, List.of(
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  					<em class="jxr_comment">// The run takes about 35 s at the default period; the terminals follow it to the last lines.</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, ROWS + <span class="jxr_string">".includes('Trimmed nail 12 of 12')"</span>, <span class="jxr_string">"timeoutMs"</span>, 60000),
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, FILE_ROWS + <span class="jxr_string">".includes('[51/52] step done')"</span>, <span class="jxr_string">"timeoutMs"</span>, 60000)),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  					<em class="jxr_comment">// The run takes about 8 s at the test server's 150 ms period; the terminals follow it to the last lines.</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, ROWS + <span class="jxr_string">".includes('Trimmed nail 12 of 12')"</span>, <span class="jxr_string">"timeoutMs"</span>, 30000),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, FILE_ROWS + <span class="jxr_string">".includes('[51/52] step done')"</span>, <span class="jxr_string">"timeoutMs"</span>, 30000)),
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  				<span class="jxr_string">"queries"</span>, Map.of(
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  					<span class="jxr_string">"cards"</span>, CARDS,
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  					<span class="jxr_string">"rows"</span>, ROWS,

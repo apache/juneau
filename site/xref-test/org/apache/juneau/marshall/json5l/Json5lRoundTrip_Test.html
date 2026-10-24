@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> in = list(JsonMap.of(<span class="jxr_string">"x"</span>, 1), JsonMap.of(<span class="jxr_string">"y"</span>, 2));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> out = Json5lSerializer.DEFAULT.write(in);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> back = (List&lt;JsonMap&gt;) Json5lParser.DEFAULT.read(out, List.<strong class="jxr_keyword">class</strong>, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(2, back.size());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertSize(2, back);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(1, back.get(0).getInt(<span class="jxr_string">"x"</span>));
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(2, back.get(1).getInt(<span class="jxr_string">"y"</span>));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}

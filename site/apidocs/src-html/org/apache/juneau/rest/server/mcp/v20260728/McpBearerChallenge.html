@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">    * @return This object (for method chaining).</span>
 <span class="source-line-no">095</span><span id="line-95">    */</span>
 <span class="source-line-no">096</span><span id="line-96">   public McpBearerChallenge scope(Collection&lt;String&gt; scopes) {</span>
-<span class="source-line-no">097</span><span id="line-97">      if (scopes == null || scopes.isEmpty())</span>
+<span class="source-line-no">097</span><span id="line-97">      if (ie(scopes))</span>
 <span class="source-line-no">098</span><span id="line-98">         return this;</span>
 <span class="source-line-no">099</span><span id="line-99">      return param("scope", String.join(" ", scopes));</span>
 <span class="source-line-no">100</span><span id="line-100">   }</span>

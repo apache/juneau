@@ -314,7 +314,7 @@
 <span class="source-line-no">301</span><span id="line-301">    * @return The parsed {@link Duration}, or &lt;jk&gt;null&lt;/jk&gt; if {@code iso8601} is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">302</span><span id="line-302">    */</span>
 <span class="source-line-no">303</span><span id="line-303">   public static Duration parseDuration(String iso8601, DurationFormat formatHint) {</span>
-<span class="source-line-no">304</span><span id="line-304">      if (iso8601 == null || iso8601.isEmpty())</span>
+<span class="source-line-no">304</span><span id="line-304">      if (ie(iso8601))</span>
 <span class="source-line-no">305</span><span id="line-305">         return null;</span>
 <span class="source-line-no">306</span><span id="line-306">      String s = iso8601.trim();</span>
 <span class="source-line-no">307</span><span id="line-307">      // Strip optional surrounding quotes</span>
@@ -354,7 +354,7 @@
 <span class="source-line-no">341</span><span id="line-341">    * @return The parsed {@link Period}, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">342</span><span id="line-342">    */</span>
 <span class="source-line-no">343</span><span id="line-343">   public static Period parsePeriod(String value, PeriodFormat formatHint) {</span>
-<span class="source-line-no">344</span><span id="line-344">      if (value == null || value.isEmpty())</span>
+<span class="source-line-no">344</span><span id="line-344">      if (ie(value))</span>
 <span class="source-line-no">345</span><span id="line-345">         return null;</span>
 <span class="source-line-no">346</span><span id="line-346">      String s = value.trim();</span>
 <span class="source-line-no">347</span><span id="line-347">      if (isIntegerLiteral(s))</span>

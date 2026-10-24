@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Test <strong class="jxr_keyword">void</strong> a06_aDayWithNoOrdersIsEmptyNotAnError() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> r = queryOn(<span class="jxr_string">"?day=1999-01-01"</span>, ALL);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		Assertions.assertEquals(0, r.getList(<span class="jxr_string">"data"</span>).size());
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertSize(0, r.getList(<span class="jxr_string">"data"</span>));
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		Assertions.assertEquals(0, r.getInt(<span class="jxr_string">"recordsFiltered"</span>));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 

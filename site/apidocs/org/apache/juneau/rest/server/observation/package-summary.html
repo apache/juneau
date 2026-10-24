@@ -76,7 +76,7 @@ loadScripts(document, 'script');</script>
  Juneau has no method-interception / AOP substrate (no dynamic proxying of arbitrary beans, no
  bytecode weaving, no annotation-processor agent). Rather than introduce one to support an
  <code>@Observed</code>-style annotation, custom observations are <b>explicit</b>: application code wraps a
- block in a try-with-resources over <a href="Observations.html#observe(java.lang.String,java.lang.String)"><code>Observations.observe(String, String)</code></a>.
+ block in a try-with-resources over <a href="Observations.html#observe(java.lang.String,java.lang.String)"><code>Observations#observe(String, String)</code></a>.
  This is consistent with the framework's explicit-over-magic philosophy &mdash; the same reason the
  curated dependency bundles register nothing automatically.
 
@@ -94,8 +94,8 @@ loadScripts(document, 'script');</script>
  <h5 class='topic'>No-backend contract</h5>
 
  <p>
- When no backend is installed, <a href="Observations.html#observe(java.lang.String,java.lang.String)"><code>Observations.observe(String, String)</code></a>
- returns <a href="Observation.html#NOOP"><code>Observation.NOOP</code></a> &mdash; no timestamp taken,
+ When no backend is installed, <a href="Observations.html#observe(java.lang.String,java.lang.String)"><code>Observations#observe(String, String)</code></a>
+ returns <a href="Observation.html#NOOP"><code>Observation#NOOP</code></a> &mdash; no timestamp taken,
  no span opened, zero allocation beyond the try-with-resources scaffolding.</div>
 <dl class="notes">
 <dt>Since:</dt>

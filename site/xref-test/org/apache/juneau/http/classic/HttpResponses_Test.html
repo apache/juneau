@@ -24,64 +24,65 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.classic;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.classic.response.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Tests: {@link HttpResponses}</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="HttpResponses_Test" href="../../../../../org/apache/juneau/http/classic/HttpResponses_Test.html#HttpResponses_Test">HttpResponses_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUnmodifiable(Object o) {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">return</strong> o instanceof BasicHttpResponse&lt;?&gt; r ? r.isUnmodifiable() : ((BasicHttpException)o).isUnmodifiable();
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Field&gt; constants() {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">return</strong> Arrays.stream(HttpResponses.<strong class="jxr_keyword">class</strong>.getFields()).filter(f -&gt; Modifier.isStatic(f.getModifiers())).toList();
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	@Test <strong class="jxr_keyword">void</strong> a01_constants_areUnmodifiableSingletonsOfTheirType() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> fields = constants();
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertEquals(55, fields.size(), <span class="jxr_string">"Number of HttpResponses constants; update when one is added or removed."</span>);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">var</strong> v = f.get(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			assertInstanceOf(HttpResponse.<strong class="jxr_keyword">class</strong>, v, f::getName);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			assertTrue(isUnmodifiable(v), f::getName);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			assertSame(f.getType().getField(<span class="jxr_string">"INSTANCE"</span>).get(<strong class="jxr_keyword">null</strong>), v, f::getName);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		}
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Test <strong class="jxr_keyword">void</strong> a02_factories_matchConstantsAndReturnFreshModifiableInstances() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<em class="jxr_comment">// Factories are matched to constants by return type (names differ, e.g. continue_() and a misspelled constant).</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> byType = <strong class="jxr_keyword">new</strong> HashMap&lt;Class&lt;?&gt;,Method&gt;();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : HttpResponses.<strong class="jxr_keyword">class</strong>.getMethods())
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<strong class="jxr_keyword">if</strong> (Modifier.isStatic(m.getModifiers()))
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  				byType.put(m.getReturnType(), m);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : constants()) {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">var</strong> m = byType.remove(f.getType());
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			assertNotNull(m, () -&gt; <span class="jxr_string">"No factory for "</span> + f.getName());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">var</strong> args = m.getParameterCount() == 0 ? <strong class="jxr_keyword">new</strong> Object[0] : <strong class="jxr_keyword">new</strong> Object[]{<span class="jxr_string">"http://localhost/target"</span>};
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">var</strong> a = (HttpResponse)m.invoke(<strong class="jxr_keyword">null</strong>, args);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">var</strong> b = (HttpResponse)m.invoke(<strong class="jxr_keyword">null</strong>, args);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			assertEquals(f.getType(), a.getClass(), f::getName);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			assertNotSame(a, b, f::getName);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			assertFalse(isUnmodifiable(a), f::getName);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			assertEquals(((HttpResponse)f.get(<strong class="jxr_keyword">null</strong>)).getStatusLine().getStatusCode(), a.getStatusLine().getStatusCode(), f::getName);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">if</strong> (args.length &gt; 0)
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				assertEquals(<span class="jxr_string">"http://localhost/target"</span>, a.getFirstHeader(<span class="jxr_string">"Location"</span>).getValue(), f::getName);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<em class="jxr_comment">// The only factory without a constant is the generic exception.</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(Set.of(BasicHttpException.<strong class="jxr_keyword">class</strong>), byType.keySet());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(0, ((HttpResponse)byType.get(BasicHttpException.<strong class="jxr_keyword">class</strong>).invoke(<strong class="jxr_keyword">null</strong>)).getStatusLine().getStatusCode());
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.classic.response.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Tests: {@link HttpResponses}</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="HttpResponses_Test" href="../../../../../org/apache/juneau/http/classic/HttpResponses_Test.html#HttpResponses_Test">HttpResponses_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUnmodifiable(Object o) {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">return</strong> o instanceof BasicHttpResponse&lt;?&gt; r ? r.isUnmodifiable() : ((BasicHttpException)o).isUnmodifiable();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Field&gt; constants() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">return</strong> Arrays.stream(HttpResponses.<strong class="jxr_keyword">class</strong>.getFields()).filter(f -&gt; Modifier.isStatic(f.getModifiers())).toList();
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Test <strong class="jxr_keyword">void</strong> a01_constants_areUnmodifiableSingletonsOfTheirType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> fields = constants();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertSize(() -&gt; <span class="jxr_string">"Number of HttpResponses constants; update when one is added or removed."</span>, 55, fields);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<strong class="jxr_keyword">var</strong> v = f.get(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			assertInstanceOf(HttpResponse.<strong class="jxr_keyword">class</strong>, v, f::getName);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			assertTrue(isUnmodifiable(v), f::getName);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			assertSame(f.getType().getField(<span class="jxr_string">"INSTANCE"</span>).get(<strong class="jxr_keyword">null</strong>), v, f::getName);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> a02_factories_matchConstantsAndReturnFreshModifiableInstances() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<em class="jxr_comment">// Factories are matched to constants by return type (names differ, e.g. continue_() and a misspelled constant).</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> byType = <strong class="jxr_keyword">new</strong> HashMap&lt;Class&lt;?&gt;,Method&gt;();
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : HttpResponses.<strong class="jxr_keyword">class</strong>.getMethods())
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<strong class="jxr_keyword">if</strong> (Modifier.isStatic(m.getModifiers()))
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  				byType.put(m.getReturnType(), m);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : constants()) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">var</strong> m = byType.remove(f.getType());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			assertNotNull(m, () -&gt; <span class="jxr_string">"No factory for "</span> + f.getName());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">var</strong> args = m.getParameterCount() == 0 ? <strong class="jxr_keyword">new</strong> Object[0] : <strong class="jxr_keyword">new</strong> Object[]{<span class="jxr_string">"http://localhost/target"</span>};
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">var</strong> a = (HttpResponse)m.invoke(<strong class="jxr_keyword">null</strong>, args);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">var</strong> b = (HttpResponse)m.invoke(<strong class="jxr_keyword">null</strong>, args);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			assertEquals(f.getType(), a.getClass(), f::getName);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			assertNotSame(a, b, f::getName);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			assertFalse(isUnmodifiable(a), f::getName);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			assertEquals(((HttpResponse)f.get(<strong class="jxr_keyword">null</strong>)).getStatusLine().getStatusCode(), a.getStatusLine().getStatusCode(), f::getName);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">if</strong> (args.length &gt; 0)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  				assertEquals(<span class="jxr_string">"http://localhost/target"</span>, a.getFirstHeader(<span class="jxr_string">"Location"</span>).getValue(), f::getName);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">// The only factory without a constant is the generic exception.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(Set.of(BasicHttpException.<strong class="jxr_keyword">class</strong>), byType.keySet());
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(0, ((HttpResponse)byType.get(BasicHttpException.<strong class="jxr_keyword">class</strong>).invoke(<strong class="jxr_keyword">null</strong>)).getStatusLine().getStatusCode());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * @return A new {@link ActionRef}.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ActionRef of(String id) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ActionRef id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> ActionRef();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		a.id = id;
@@ -170,9 +170,9 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> ActionRef addEnabledRule(String field, <a name="Op" href="../../../../../../org/apache/juneau/rest/server/widgets/Op.html#Op">Op</a> op, Object value, String reason) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (field == <strong class="jxr_keyword">null</strong> || field.isBlank())
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (ib(field))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"enabledWhen field must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (reason == <strong class="jxr_keyword">null</strong> || reason.isBlank())
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (ib(reason))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"enabledWhen reason must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> EnabledRule();
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		r.field = field;

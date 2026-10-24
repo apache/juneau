@@ -86,8 +86,8 @@
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@code enabledWhen} was added after this schema was first frozen; like {@code ModalDef#barSlot}, it is</span>
 <span class="source-line-no">075</span><span id="line-75"> * additive-only (&lt;jk&gt;null&lt;/jk&gt; when unset, omitted from the serialized form) and its presence does not bump</span>
-<span class="source-line-no">076</span><span id="line-76"> * {@code VIEW_META} &amp;mdash; a {@link RowAction} declared before this field existed is</span>
-<span class="source-line-no">077</span><span id="line-77"> * byte-identical on the wire, and old {@code juneau-views.js} ignores the unknown key.</span>
+<span class="source-line-no">076</span><span id="line-76"> * {@code VIEW_META} &amp;mdash; a {@link RowAction} that leaves it unset serializes</span>
+<span class="source-line-no">077</span><span id="line-77"> * unchanged, and old {@code juneau-views.js} ignores the unknown key.</span>
 <span class="source-line-no">078</span><span id="line-78"> *</span>
 <span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;Why {@link #method} cannot be a safe method&lt;/h5&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;p&gt;</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93"> * {@code href} interpolation.  Unlike a rendered {@code href}, these URLs are &lt;i&gt;fetched&lt;/i&gt; (form: confirmation GET) or</span>
 <span class="source-line-no">094</span><span id="line-94"> * &lt;i&gt;submitted&lt;/i&gt; (endpoint: mutating write), so an unresolved substitution &lt;b&gt;refuses&lt;/b&gt; instead of issuing a</span>
 <span class="source-line-no">095</span><span id="line-95"> * malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and</span>
-<span class="source-line-no">096</span><span id="line-96"> * is used byte-identical to how it always was.  A blank/absent {@code form} is the confirm-only local path (no</span>
+<span class="source-line-no">096</span><span id="line-96"> * is used as declared.  A blank/absent {@code form} is the confirm-only local path (no</span>
 <span class="source-line-no">097</span><span id="line-97"> * GET), not a refusal.</span>
 <span class="source-line-no">098</span><span id="line-98"> *</span>
 <span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
@@ -377,7 +377,7 @@
 <span class="source-line-no">364</span><span id="line-364">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">365</span><span id="line-365">    */</span>
 <span class="source-line-no">366</span><span id="line-366">   public static RowAction create(String id) {</span>
-<span class="source-line-no">367</span><span id="line-367">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">367</span><span id="line-367">      if (ib(id))</span>
 <span class="source-line-no">368</span><span id="line-368">         throw iaex("RowAction id must not be null or blank.");</span>
 <span class="source-line-no">369</span><span id="line-369">      var a = new RowAction();</span>
 <span class="source-line-no">370</span><span id="line-370">      a.id = id;</span>
@@ -434,7 +434,7 @@
 <span class="source-line-no">421</span><span id="line-421">    *</span>
 <span class="source-line-no">422</span><span id="line-422">    * &lt;p&gt;</span>
 <span class="source-line-no">423</span><span id="line-423">    * &lt;b&gt;Backward compatible, narrowed:&lt;/b&gt; an {@code endpoint} with no {@code {...}} token is still</span>
-<span class="source-line-no">424</span><span id="line-424">    * issued byte-identical to how it always was (three of the four guards above cannot fire on it; the fourth,</span>
+<span class="source-line-no">424</span><span id="line-424">    * issued as declared (three of the four guards above cannot fire on it; the fourth,</span>
 <span class="source-line-no">425</span><span id="line-425">    * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now</span>
 <span class="source-line-no">426</span><span id="line-426">    * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a</span>
 <span class="source-line-no">427</span><span id="line-427">    * row with no {@code id}) rather than issuing it.</span>
@@ -547,7 +547,7 @@
 <span class="source-line-no">534</span><span id="line-534">    * &lt;p&gt;</span>
 <span class="source-line-no">535</span><span id="line-535">    * &lt;b&gt;Divergence from {@link #endpoint(String) endpoint}:&lt;/b&gt; a blank/absent {@code form} is still the</span>
 <span class="source-line-no">536</span><span id="line-536">    * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched</span>
-<span class="source-line-no">537</span><span id="line-537">    * byte-identical to how it always was.</span>
+<span class="source-line-no">537</span><span id="line-537">    * as declared.</span>
 <span class="source-line-no">538</span><span id="line-538">    *</span>
 <span class="source-line-no">539</span><span id="line-539">    * @param value The new value.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank for a confirm-only dialog.</span>
 <span class="source-line-no">540</span><span id="line-540">    * @return This object.</span>

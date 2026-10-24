@@ -29,54 +29,57 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.petstore.console.dev.flavors;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.petstore.dto.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.petstore.service.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * The pet rows every rendering flavor shows: the first {@value #LIMIT} pets by id, with display-ready strings.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * Formatting happens here, once, so the three engines differ only in markup and the flavor tests can compare their</span>
-<span class="source-line-no">029</span><span id="line-29"> * cells exactly.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *    List&amp;lt;Map&amp;lt;String,String&amp;gt;&amp;gt; &lt;jv&gt;rows&lt;/jv&gt; = FlavorPets.&lt;jsm&gt;rows&lt;/jsm&gt;(&lt;jv&gt;store&lt;/jv&gt;);</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;jv&gt;rows&lt;/jv&gt;.get(0).get(&lt;js&gt;"name"&lt;/js&gt;);   &lt;jc&gt;// "Mr. Frisky"&lt;/jc&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;/p&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> */</span>
-<span class="source-line-no">037</span><span id="line-37">public final class FlavorPets {</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">   /** How many pets each flavor shows. */</span>
-<span class="source-line-no">040</span><span id="line-40">   public static final int LIMIT = 10;</span>
-<span class="source-line-no">041</span><span id="line-41"></span>
-<span class="source-line-no">042</span><span id="line-42">   private FlavorPets() {}</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.petstore.dto.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.petstore.service.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * The pet rows every rendering flavor shows: the first {@value #LIMIT} pets by id, with display-ready strings.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * Formatting happens here, once, so the three engines differ only in markup and the flavor tests can compare their</span>
+<span class="source-line-no">031</span><span id="line-31"> * cells exactly.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    List&amp;lt;Map&amp;lt;String,String&amp;gt;&amp;gt; &lt;jv&gt;rows&lt;/jv&gt; = FlavorPets.&lt;jsm&gt;rows&lt;/jsm&gt;(&lt;jv&gt;store&lt;/jv&gt;);</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;jv&gt;rows&lt;/jv&gt;.get(0).get(&lt;js&gt;"name"&lt;/js&gt;);   &lt;jc&gt;// "Mr. Frisky"&lt;/jc&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;/p&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> */</span>
+<span class="source-line-no">039</span><span id="line-39">public final class FlavorPets {</span>
+<span class="source-line-no">040</span><span id="line-40"></span>
+<span class="source-line-no">041</span><span id="line-41">   /** How many pets each flavor shows. */</span>
+<span class="source-line-no">042</span><span id="line-42">   public static final int LIMIT = 10;</span>
 <span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">   /**</span>
-<span class="source-line-no">045</span><span id="line-45">    * Returns the display rows.</span>
-<span class="source-line-no">046</span><span id="line-46">    *</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param store The store.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">048</span><span id="line-48">    * @return Rows with keys {@code name}, {@code species}, {@code price} (two decimals) and {@code status}.</span>
-<span class="source-line-no">049</span><span id="line-49">    */</span>
-<span class="source-line-no">050</span><span id="line-50">   public static List&lt;Map&lt;String,String&gt;&gt; rows(PetStore store) {</span>
-<span class="source-line-no">051</span><span id="line-51">      return store.getPets().stream()</span>
-<span class="source-line-no">052</span><span id="line-52">         .sorted(Comparator.comparingLong(Pet::getId))</span>
-<span class="source-line-no">053</span><span id="line-53">         .limit(LIMIT)</span>
-<span class="source-line-no">054</span><span id="line-54">         .map(FlavorPets::row)</span>
-<span class="source-line-no">055</span><span id="line-55">         .toList();</span>
-<span class="source-line-no">056</span><span id="line-56">   }</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   private static Map&lt;String,String&gt; row(Pet p) {</span>
-<span class="source-line-no">059</span><span id="line-59">      var m = new LinkedHashMap&lt;String,String&gt;();</span>
-<span class="source-line-no">060</span><span id="line-60">      m.put("name", p.getName());</span>
-<span class="source-line-no">061</span><span id="line-61">      m.put("species", String.valueOf(p.getSpecies()));</span>
-<span class="source-line-no">062</span><span id="line-62">      m.put("price", String.format(Locale.ROOT, "%.2f", p.getPrice()));</span>
-<span class="source-line-no">063</span><span id="line-63">      m.put("status", String.valueOf(p.getStatus()));</span>
-<span class="source-line-no">064</span><span id="line-64">      return m;</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66">}</span>
+<span class="source-line-no">044</span><span id="line-44">   private FlavorPets() {}</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">   /**</span>
+<span class="source-line-no">047</span><span id="line-47">    * Returns the display rows.</span>
+<span class="source-line-no">048</span><span id="line-48">    *</span>
+<span class="source-line-no">049</span><span id="line-49">    * @param store The store.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">050</span><span id="line-50">    * @return Rows with keys {@code name}, {@code species}, {@code price} (two decimals) and {@code status}.</span>
+<span class="source-line-no">051</span><span id="line-51">    */</span>
+<span class="source-line-no">052</span><span id="line-52">   public static List&lt;Map&lt;String,String&gt;&gt; rows(PetStore store) {</span>
+<span class="source-line-no">053</span><span id="line-53">      return store.getPets().stream()</span>
+<span class="source-line-no">054</span><span id="line-54">         .sorted(Comparator.comparingLong(Pet::getId))</span>
+<span class="source-line-no">055</span><span id="line-55">         .limit(LIMIT)</span>
+<span class="source-line-no">056</span><span id="line-56">         .map(FlavorPets::row)</span>
+<span class="source-line-no">057</span><span id="line-57">         .toList();</span>
+<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   private static Map&lt;String,String&gt; row(Pet p) {</span>
+<span class="source-line-no">061</span><span id="line-61">      Map&lt;String,String&gt; m = map(</span>
+<span class="source-line-no">062</span><span id="line-62">         "name", p.getName(),</span>
+<span class="source-line-no">063</span><span id="line-63">         "species", String.valueOf(p.getSpecies()),</span>
+<span class="source-line-no">064</span><span id="line-64">         "price", String.format(Locale.ROOT, "%.2f", p.getPrice()),</span>
+<span class="source-line-no">065</span><span id="line-65">         "status", String.valueOf(p.getStatus())</span>
+<span class="source-line-no">066</span><span id="line-66">      );</span>
+<span class="source-line-no">067</span><span id="line-67">      return m;</span>
+<span class="source-line-no">068</span><span id="line-68">   }</span>
+<span class="source-line-no">069</span><span id="line-69">}</span>
 
 
 

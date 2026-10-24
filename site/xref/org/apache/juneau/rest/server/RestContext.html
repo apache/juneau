@@ -1495,7 +1495,7 @@
 <a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> <em class="jxr_javadoccomment">	 * Materialized through {@link BeanInstantiator}, which runs the {@code @ConfigProperties} resolution hook and</em>
 <a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">	 * auto-registers the bound instance into {@link #beanStore()}. The bind resolves each {@code RestContext.*} key</em>
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 * against the resource's per-resource {@link org.apache.juneau.commons.settings.PropertySource PropertySource}s</em>
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 * against the resource's per-resource {@link PropertySource PropertySource}s</em>
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> <em class="jxr_javadoccomment">	 * (including a {@code @Rest(config=...)} file) ahead of the global settings chain, so a config-file key takes</em>
 <a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> <em class="jxr_javadoccomment">	 * effect in the resolved defaults. This memoizer is forced exactly once during construction (after the</em>
 <a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> <em class="jxr_javadoccomment">	 * PropertySources are registered) so the single bound instance is the same one held in the bean store; see the</em>
@@ -2915,7 +2915,7 @@
 <a class="jxr_linenumber" name="L2907" href="#L2907">2907</a> 				.orElseGet(Collections::emptyList));
 <a class="jxr_linenumber" name="L2908" href="#L2908">2908</a> 		<em class="jxr_comment">// Dual noInherit source: when this is a mixin sub-context built from a host @Mixin(noInherit=...),</em>
 <a class="jxr_linenumber" name="L2909" href="#L2909">2909</a> 		<em class="jxr_comment">// the host-declared cutoff tokens union with the mixin class's own @Rest(noInherit=...).  A token from</em>
-<a class="jxr_linenumber" name="L2910" href="#L2910">2910</a> 		<em class="jxr_comment">// EITHER source cuts the host→mixin inheritance walk for that property (OQ2/OQ3).</em>
+<a class="jxr_linenumber" name="L2910" href="#L2910">2910</a> 		<em class="jxr_comment">// EITHER source cuts the host→mixin inheritance walk for that property.</em>
 <a class="jxr_linenumber" name="L2911" href="#L2911">2911</a> 		<strong class="jxr_keyword">var</strong> rmNoInherit = resolvedMixinField();
 <a class="jxr_linenumber" name="L2912" href="#L2912">2912</a> 		<strong class="jxr_keyword">if</strong> (rmNoInherit != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2913" href="#L2913">2913</a> 			resolveCdl(rmNoInherit.overrides().noInherit()).forEach(out::add);
@@ -2931,7 +2931,7 @@
 <a class="jxr_linenumber" name="L2923" href="#L2923">2923</a> <em class="jxr_javadoccomment">	 * Built once at memoizer-init time (zero per-request cost).  The synthetic annotation is injected at the</em>
 <a class="jxr_linenumber" name="L2924" href="#L2924">2924</a> <em class="jxr_javadoccomment">	 * most-derived position of {@link #getRestAnnotationsForProperty(String)} so the host override resolves as if</em>
 <a class="jxr_linenumber" name="L2925" href="#L2925">2925</a> <em class="jxr_javadoccomment">	 * declared on the mixin class itself — list-shaped props append after the inherited host chain, replace-shaped</em>
-<a class="jxr_linenumber" name="L2926" href="#L2926">2926</a> <em class="jxr_javadoccomment">	 * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative (OQ3).</em>
+<a class="jxr_linenumber" name="L2926" href="#L2926">2926</a> <em class="jxr_javadoccomment">	 * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative.</em>
 <a class="jxr_linenumber" name="L2927" href="#L2927">2927</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2928" href="#L2928">2928</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Memoizer&lt;AnnotationInfo&lt;Rest&gt;&gt; mixinOverrideAnnotation = memoizer(() -&gt; {
 <a class="jxr_linenumber" name="L2929" href="#L2929">2929</a> 		<strong class="jxr_keyword">var</strong> rm = resolvedMixinField();
@@ -3830,7 +3830,7 @@
 <a class="jxr_linenumber" name="L3822" href="#L3822">3822</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3823" href="#L3823">3823</a> 				x.invoke(beanStore, getResource());
 <a class="jxr_linenumber" name="L3824" href="#L3824">3824</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L3825" href="#L3825">3825</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; String.format(<span class="jxr_string">"Error occurred invoking servlet-destroy method '%s'."</span>, x.getFullName()));
+<a class="jxr_linenumber" name="L3825" href="#L3825">3825</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; f(<span class="jxr_string">"Error occurred invoking servlet-destroy method '%s'."</span>, x.getFullName()));
 <a class="jxr_linenumber" name="L3826" href="#L3826">3826</a> 			}
 <a class="jxr_linenumber" name="L3827" href="#L3827">3827</a> 		}
 <a class="jxr_linenumber" name="L3828" href="#L3828">3828</a> 		<strong class="jxr_keyword">if</strong> (!isMixinContext) {
@@ -3838,7 +3838,7 @@
 <a class="jxr_linenumber" name="L3830" href="#L3830">3830</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3831" href="#L3831">3831</a> 					mctx.destroy();
 <a class="jxr_linenumber" name="L3832" href="#L3832">3832</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L3833" href="#L3833">3833</a> 					getLogger().log(Level.WARNING, unwrap(e), () -&gt; String.format(<span class="jxr_string">"Error occurred destroying mixin sub-context '%s'."</span>, mctx.getResourceClass().getName()));
+<a class="jxr_linenumber" name="L3833" href="#L3833">3833</a> 					getLogger().log(Level.WARNING, unwrap(e), () -&gt; f(<span class="jxr_string">"Error occurred destroying mixin sub-context '%s'."</span>, mctx.getResourceClass().getName()));
 <a class="jxr_linenumber" name="L3834" href="#L3834">3834</a> 				}
 <a class="jxr_linenumber" name="L3835" href="#L3835">3835</a> 			}
 <a class="jxr_linenumber" name="L3836" href="#L3836">3836</a> 		}
@@ -4738,7 +4738,7 @@
 <a class="jxr_linenumber" name="L4730" href="#L4730">4730</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L4731" href="#L4731">4731</a> <em class="jxr_javadoccomment">	 * Besides the full stack trace, this setting also gates the {@code Thrown} error-response header and the</em>
 <a class="jxr_linenumber" name="L4732" href="#L4732">4732</a> <em class="jxr_javadoccomment">	 * message text of any error-body exception that wasn't itself deliberately thrown by application code as a</em>
-<a class="jxr_linenumber" name="L4733" href="#L4733">4733</a> <em class="jxr_javadoccomment">	 * {@link org.apache.juneau.http.response.BasicHttpException BasicHttpException} (see</em>
+<a class="jxr_linenumber" name="L4733" href="#L4733">4733</a> <em class="jxr_javadoccomment">	 * {@link BasicHttpException BasicHttpException} (see</em>
 <a class="jxr_linenumber" name="L4734" href="#L4734">4734</a> <em class="jxr_javadoccomment">	 * {@link #handleError(RestSession, Throwable)}). Leave this off (the default) outside of local debugging so</em>
 <a class="jxr_linenumber" name="L4735" href="#L4735">4735</a> <em class="jxr_javadoccomment">	 * that unplanned exception types (a database driver error, a file-system exception, and the like) don't</em>
 <a class="jxr_linenumber" name="L4736" href="#L4736">4736</a> <em class="jxr_javadoccomment">	 * incidentally echo their class name or message back to the caller.</em>
@@ -5051,7 +5051,7 @@
 <a class="jxr_linenumber" name="L5043" href="#L5043">5043</a> 		<strong class="jxr_keyword">var</strong> name = builder.asyncCompletionExecutorName != <strong class="jxr_keyword">null</strong>
 <a class="jxr_linenumber" name="L5044" href="#L5044">5044</a> 			? builder.asyncCompletionExecutorName
 <a class="jxr_linenumber" name="L5045" href="#L5045">5045</a> 			: mergeReplacedStringAttribute(<span class="jxr_string">"asyncCompletionExecutor"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L5046" href="#L5046">5046</a> 		<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; !name.isBlank())
+<a class="jxr_linenumber" name="L5046" href="#L5046">5046</a> 		<strong class="jxr_keyword">if</strong> (inb(name))
 <a class="jxr_linenumber" name="L5047" href="#L5047">5047</a> 			asyncCompletionExecutor.get(); <em class="jxr_comment">// throws IllegalStateException if bean is missing</em>
 <a class="jxr_linenumber" name="L5048" href="#L5048">5048</a> 	}
 <a class="jxr_linenumber" name="L5049" href="#L5049">5049</a> 
@@ -5179,7 +5179,7 @@
 <a class="jxr_linenumber" name="L5171" href="#L5171">5171</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5172" href="#L5172">5172</a> 				x.invoke(session.getBeanStore(), getResource());
 <a class="jxr_linenumber" name="L5173" href="#L5173">5173</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L5174" href="#L5174">5174</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; String.format(<span class="jxr_string">"Error occurred invoking finish-call method '%s'."</span>, x.getFullName()));
+<a class="jxr_linenumber" name="L5174" href="#L5174">5174</a> 				getLogger().log(Level.WARNING, unwrap(e), () -&gt; f(<span class="jxr_string">"Error occurred invoking finish-call method '%s'."</span>, x.getFullName()));
 <a class="jxr_linenumber" name="L5175" href="#L5175">5175</a> 			}
 <a class="jxr_linenumber" name="L5176" href="#L5176">5176</a> 		}
 <a class="jxr_linenumber" name="L5177" href="#L5177">5177</a> 	}

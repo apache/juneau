@@ -225,7 +225,7 @@
 <span class="source-line-no">212</span><span id="line-212">    * @throws IllegalArgumentException If a rule is broken.</span>
 <span class="source-line-no">213</span><span id="line-213">    */</span>
 <span class="source-line-no">214</span><span id="line-214">   public TerminalDef validate() {</span>
-<span class="source-line-no">215</span><span id="line-215">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">215</span><span id="line-215">      if (ib(id))</span>
 <span class="source-line-no">216</span><span id="line-216">         throw iaex("TerminalDef id must not be blank.");</span>
 <span class="source-line-no">217</span><span id="line-217">      if (bytesUrl == null)</span>
 <span class="source-line-no">218</span><span id="line-218">         throw iaex("TerminalDef '%s' bytesUrl is required.", id);</span>

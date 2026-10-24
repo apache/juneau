@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			attrs.set(<span class="jxr_string">"p3"</span>, <span class="jxr_string">"pp3"</span>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			attrs.set(<span class="jxr_string">"p4"</span>, <span class="jxr_string">"pp4"</span>);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">var</strong> accept = req.getHeaderParam(<span class="jxr_string">"Accept"</span>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">if</strong> (accept == <strong class="jxr_keyword">null</strong> || accept.isEmpty())
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">if</strong> (ie(accept))
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				req.getHeaders().set(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/s2"</span>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}

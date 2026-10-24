@@ -134,7 +134,7 @@
 <span class="source-line-no">121</span><span id="line-121">    * @throws IllegalStateException If both are absent/empty.</span>
 <span class="source-line-no">122</span><span id="line-122">    */</span>
 <span class="source-line-no">123</span><span id="line-123">   public void validate() {</span>
-<span class="source-line-no">124</span><span id="line-124">      if ((inputRequests == null || inputRequests.isEmpty()) &amp;&amp; ie(requestState))</span>
+<span class="source-line-no">124</span><span id="line-124">      if (ie(inputRequests) &amp;&amp; ie(requestState))</span>
 <span class="source-line-no">125</span><span id="line-125">         throw isex("InputRequiredResult requires at least one of inputRequests or requestState");</span>
 <span class="source-line-no">126</span><span id="line-126">   }</span>
 <span class="source-line-no">127</span><span id="line-127">}</span>

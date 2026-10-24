@@ -940,7 +940,7 @@
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link ContentLength}</em>
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link ContentType}</em>
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link Date}</em>
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link org.apache.juneau.http.header.Debug}</em>
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link Debug}</em>
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link Expect}</em>
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link Forwarded}</em>
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link From}</em>
@@ -1573,7 +1573,7 @@
 <a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> <em class="jxr_javadoccomment">	 * Only safe to call once the REST call has reached the point of invoking the matched Java method, e.g. from inside</em>
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> <em class="jxr_javadoccomment">	 * a {@link org.apache.juneau.rest.server.converter.RestConverter}, which only ever runs after method invocation.</em>
-<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">	 * Calling it any earlier throws {@link org.apache.juneau.http.response.InternalServerError}.</em>
+<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">	 * Calling it any earlier throws {@link InternalServerError}.</em>
 <a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> <em class="jxr_javadoccomment">	 * @return The response associated with this request.</em>
 <a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> <em class="jxr_javadoccomment">	 */</em>
@@ -2143,7 +2143,7 @@
 <a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> 		Map&lt;String,Object&gt; m2 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> 
 <a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> 		<strong class="jxr_keyword">var</strong> q = getQueryParams().get(QUERY_juneauSerializerOptions).asString().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 		<strong class="jxr_keyword">if</strong> (q != <strong class="jxr_keyword">null</strong> &amp;&amp; !q.isBlank()) {
+<a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 		<strong class="jxr_keyword">if</strong> (inb(q)) {
 <a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> 			m1 = parseUonMap(q, e -&gt; badRequest(e, <span class="jxr_string">"Could not parse UON session options from query parameter '%s'."</span>, QUERY_juneauSerializerOptions));
 <a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 			<strong class="jxr_keyword">var</strong> invalid = m1.keySet().stream().filter(k -&gt; !allowlist.contains(k)).collect(Collectors.joining(<span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 			<strong class="jxr_keyword">if</strong> (!invalid.isEmpty())
@@ -2151,7 +2151,7 @@
 <a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> 		}
 <a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> 
 <a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> 		<strong class="jxr_keyword">var</strong> h = getHeaderParam(HEADER_JuneauSerializerOptions).asString().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 		<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong> &amp;&amp; !h.isBlank()) {
+<a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 		<strong class="jxr_keyword">if</strong> (inb(h)) {
 <a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> 			m2 = parseJsonMap(h, e -&gt; badRequest(e, <span class="jxr_string">"Could not parse JSON5 session options from header '%s'."</span>, HEADER_JuneauSerializerOptions));
 <a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 			<strong class="jxr_keyword">var</strong> invalid = m2.keySet().stream().filter(k -&gt; !allowlist.contains(k)).collect(Collectors.joining(<span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 			<strong class="jxr_keyword">if</strong> (!invalid.isEmpty())
@@ -2185,7 +2185,7 @@
 <a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 		Map&lt;String,Object&gt; m2 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 
 <a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 		<strong class="jxr_keyword">var</strong> q = getQueryParams().get(QUERY_juneauParserOptions).asString().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		<strong class="jxr_keyword">if</strong> (q != <strong class="jxr_keyword">null</strong> &amp;&amp; !q.isBlank()) {
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		<strong class="jxr_keyword">if</strong> (inb(q)) {
 <a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 			m1 = parseUonMap(q, e -&gt; badRequest(e, <span class="jxr_string">"Could not parse UON session options from query parameter '%s'."</span>, QUERY_juneauParserOptions));
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			<strong class="jxr_keyword">var</strong> invalid = m1.keySet().stream().filter(k -&gt; !allowlist.contains(k)).collect(Collectors.joining(<span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 			<strong class="jxr_keyword">if</strong> (!invalid.isEmpty())
@@ -2193,7 +2193,7 @@
 <a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 		}
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 		<strong class="jxr_keyword">var</strong> h = getHeaderParam(HEADER_JuneauParserOptions).asString().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 		<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong> &amp;&amp; !h.isBlank()) {
+<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 		<strong class="jxr_keyword">if</strong> (inb(h)) {
 <a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 			m2 = parseJsonMap(h, e -&gt; badRequest(e, <span class="jxr_string">"Could not parse JSON5 session options from header '%s'."</span>, HEADER_JuneauParserOptions));
 <a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 			<strong class="jxr_keyword">var</strong> invalid = m2.keySet().stream().filter(k -&gt; !allowlist.contains(k)).collect(Collectors.joining(<span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 			<strong class="jxr_keyword">if</strong> (!invalid.isEmpty())

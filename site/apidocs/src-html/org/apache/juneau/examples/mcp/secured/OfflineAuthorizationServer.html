@@ -282,7 +282,7 @@
 <span class="source-line-no">269</span><span id="line-269">            return;</span>
 <span class="source-line-no">270</span><span id="line-270">         }</span>
 <span class="source-line-no">271</span><span id="line-271">         var resource = form.get("resource");</span>
-<span class="source-line-no">272</span><span id="line-272">         if (resource == null || resource.isBlank()) {</span>
+<span class="source-line-no">272</span><span id="line-272">         if (ib(resource)) {</span>
 <span class="source-line-no">273</span><span id="line-273">            sendJson(exchange, 400, error("invalid_target", "a resource indicator (RFC 8707) is required"));</span>
 <span class="source-line-no">274</span><span id="line-274">            return;</span>
 <span class="source-line-no">275</span><span id="line-275">         }</span>

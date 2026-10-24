@@ -167,7 +167,7 @@
 <span class="source-line-no">154</span><span id="line-154">      var actor = ConsoleWrites.actor(req);</span>
 <span class="source-line-no">155</span><span id="line-155">      var f = fields(body);</span>
 <span class="source-line-no">156</span><span id="line-156">      var username = f.getString("username");</span>
-<span class="source-line-no">157</span><span id="line-157">      if (username == null || username.isBlank())</span>
+<span class="source-line-no">157</span><span id="line-157">      if (ib(username))</span>
 <span class="source-line-no">158</span><span id="line-158">         throw new BadRequest("Username must not be blank");</span>
 <span class="source-line-no">159</span><span id="line-159">      if (store().getUser(username) != null)</span>
 <span class="source-line-no">160</span><span id="line-160">         throw new Conflict("User '%s' already exists", username);</span>
@@ -235,7 +235,7 @@
 <span class="source-line-no">222</span><span id="line-222"></span>
 <span class="source-line-no">223</span><span id="line-223">   private static UserStatus status(JsonMap f, UserStatus dflt) {</span>
 <span class="source-line-no">224</span><span id="line-224">      var s = f.getString("userStatus");</span>
-<span class="source-line-no">225</span><span id="line-225">      if (s == null || s.isBlank())</span>
+<span class="source-line-no">225</span><span id="line-225">      if (ib(s))</span>
 <span class="source-line-no">226</span><span id="line-226">         return dflt;</span>
 <span class="source-line-no">227</span><span id="line-227">      try {</span>
 <span class="source-line-no">228</span><span id="line-228">         return UserStatus.valueOf(s);</span>

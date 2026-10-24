@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * The renderer receives the target {@link SqlDialect}, the already-quoted column reference, the column's</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@link SearchType value type} (so it can bind values as the right JDBC type), and the operator's arguments (typed</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * values when the operator asks for them, otherwise the literal strings; see {@link org.apache.juneau.commons.beanquery.SearchOperator.Builder#typedArgs(boolean)}),</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * values when the operator asks for them, otherwise the literal strings; see {@link org.apache.juneau.commons.beanquery.SearchOperator.Builder#typedArgs(boolean) SearchOperator.Builder#typedArgs(boolean)}),</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * and returns a {@link SqlFragment} (a boolean SQL expression plus its ordered bind values).  It is the</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * SQL-side analog of {@link SearchPredicate} (the in-memory evaluator): built-in operators do not use it &amp;mdash; their</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * SQL comes from {@link SqlDialect#builtinRenderer(String)}.</em>

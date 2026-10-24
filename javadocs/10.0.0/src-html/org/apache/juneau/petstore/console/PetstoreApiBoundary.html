@@ -29,158 +29,160 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.petstore.console;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.commons.settings.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.filter.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import jakarta.servlet.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import jakarta.servlet.http.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * The {@code /petstore} API's CSRF boundary: a {@link RequestBoundaryFilter} over the framework's {@link CsrfBoundary},</span>
-<span class="source-line-no">030</span><span id="line-30"> * applied to {@code /petstore} and everything under it.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * A browser write to the API must come from the page's own origin and carry this boundary's token in the</span>
-<span class="source-line-no">034</span><span id="line-34"> * {@code X-Csrf-Token} header.  The token travels in the header only, so every HTML {@code &lt;form&gt;} POST to</span>
-<span class="source-line-no">035</span><span id="line-35"> * the API is refused, the application's own included.  Requests are judged on their effective method, so</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@code GET /petstore/pets/1?method=DELETE} counts as a write.  Reads are allowed, and so are non-browser writes</span>
-<span class="source-line-no">037</span><span id="line-37"> * (no {@code Origin} and no {@code Sec-Fetch-Site}) that a browser could not have sent cross-site without a CORS</span>
-<span class="source-line-no">038</span><span id="line-38"> * preflight: JSON, XML or UON bodies, and {@code PUT}, {@code DELETE} or {@code PATCH}.  A non-browser urlencoded,</span>
-<span class="source-line-no">039</span><span id="line-39"> * multipart or {@code text/plain} {@code POST} is refused.  Every refusal names its reason in the</span>
-<span class="source-line-no">040</span><span id="line-40"> * {@value RequestBoundaryFilter#REJECTION_HEADER} response header.</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;The token&lt;/h5&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * The token is per process ({@link CsrfTokens#perProcess()}): the petstore has no login session, and the</span>
-<span class="source-line-no">045</span><span id="line-45"> * {@code Origin} check does the real work.  A restart invalidates the token on every open page, so reload them.  A</span>
-<span class="source-line-no">046</span><span id="line-46"> * token that leaks through a page stays valid until the restart.</span>
-<span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> * This token is not the console's.  The console boundary ({@link PetstoreConsoleBoundary}) has its own, and each</span>
-<span class="source-line-no">050</span><span id="line-50"> * boundary refuses the other's.  The console's one write to the API, its photo upload, gets this boundary's token</span>
-<span class="source-line-no">051</span><span id="line-51"> * from the console boundary, which publishes {@link #tokenFor(HttpServletRequest)} under {@link #TOKEN_ATTRIBUTE}</span>
-<span class="source-line-no">052</span><span id="line-52"> * on every console request it allows; the page's script sends it in that header.  So a runner must</span>
-<span class="source-line-no">053</span><span id="line-53"> * give the console boundary the same instance it mounts here: a token from any other instance is refused.</span>
-<span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> * The console page shell marks a token-bearing page {@code no-store}, and when the response is already committed it</span>
-<span class="source-line-no">057</span><span id="line-57"> * strips only its own token attributes.  So on the rare page whose buffer was flushed before the shell ran, this</span>
-<span class="source-line-no">058</span><span id="line-58"> * boundary's token can still be emitted, possibly without {@code no-store}.  That is accepted: this token is only</span>
-<span class="source-line-no">059</span><span id="line-59"> * ever published on console pages, which carry the console's token too, so on every normal path the page is already</span>
-<span class="source-line-no">060</span><span id="line-60"> * marked.</span>
-<span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;The host&lt;/h5&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> * The request's own origin is its scheme plus its {@code Host} header; forwarded headers are never read.  By default</span>
-<span class="source-line-no">065</span><span id="line-65"> * any {@code Host} is answered, which suits a loopback developer setup.  On a host served over plain HTTP, set</span>
-<span class="source-line-no">066</span><span id="line-66"> * {@value #ALLOWED_HOSTS_PROPERTY} (a system property, the environment, or any registered setting source) to the</span>
-<span class="source-line-no">067</span><span id="line-67"> * comma-separated host names the browser uses, without ports.  Every request to the API under any other {@code Host},</span>
-<span class="source-line-no">068</span><span id="line-68"> * reads included, is then answered with {@code 421}: this is the DNS-rebinding defence.  The setting is read once,</span>
-<span class="source-line-no">069</span><span id="line-69"> * when the boundary is constructed, and a malformed entry fails construction rather than being ignored.</span>
-<span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;p&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> * Behind a TLS-terminating proxy the browser's {@code https} origin does not match the {@code http} request the</span>
-<span class="source-line-no">073</span><span id="line-73"> * container sees, so writes are refused.  Such a deployment needs the container's forwarded-header support and the</span>
-<span class="source-line-no">074</span><span id="line-74"> * framework boundary's {@link org.apache.juneau.rest.server.filter.CsrfBoundary.OriginSource#CONTAINER CONTAINER} origin source, which this demo does not</span>
-<span class="source-line-no">075</span><span id="line-75"> * configure.</span>
-<span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;p&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> * In a Juneau microservice, contribute a &lt;c&gt;ServletFilterRegistration&lt;/c&gt; &lt;c&gt;@Bean&lt;/c&gt; just after the console</span>
-<span class="source-line-no">080</span><span id="line-80"> * boundary's, sharing the one instance with it:</span>
-<span class="source-line-no">081</span><span id="line-81"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">082</span><span id="line-82"> *    &lt;jk&gt;private final&lt;/jk&gt; PetstoreApiBoundary &lt;jf&gt;apiBoundary&lt;/jf&gt; = &lt;jk&gt;new&lt;/jk&gt; PetstoreApiBoundary();</span>
-<span class="source-line-no">083</span><span id="line-83"> *</span>
-<span class="source-line-no">084</span><span id="line-84"> *    &lt;ja&gt;@Bean&lt;/ja&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *    &lt;jk&gt;public&lt;/jk&gt; ServletFilterRegistration apiBoundary() {</span>
-<span class="source-line-no">086</span><span id="line-86"> *       &lt;jk&gt;return&lt;/jk&gt; ServletFilterRegistration.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jf&gt;apiBoundary&lt;/jf&gt;)</span>
-<span class="source-line-no">087</span><span id="line-87"> *          .urlPatterns(PetstoreApiBoundary.&lt;jsf&gt;URL_PATTERN&lt;/jsf&gt;)</span>
-<span class="source-line-no">088</span><span id="line-88"> *          .dispatcherTypes(DispatcherType.&lt;jsf&gt;REQUEST&lt;/jsf&gt;)</span>
-<span class="source-line-no">089</span><span id="line-89"> *          .order(ServletFilterRegistration.&lt;jsf&gt;HIGHEST_PRECEDENCE&lt;/jsf&gt; + 10)</span>
-<span class="source-line-no">090</span><span id="line-90"> *          .build();</span>
-<span class="source-line-no">091</span><span id="line-91"> *    }</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;/p&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> * &lt;p&gt;</span>
-<span class="source-line-no">094</span><span id="line-94"> * and build the console boundary with {@code new PetstoreConsoleBoundary(apiBoundary)}.  Register it for</span>
-<span class="source-line-no">095</span><span id="line-95"> * {@code REQUEST} dispatches only: an internal forward or error dispatch is not a new request from the browser.</span>
-<span class="source-line-no">096</span><span id="line-96"> */</span>
-<span class="source-line-no">097</span><span id="line-97">public class PetstoreApiBoundary implements Filter {</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /** The covered path: the API resource's mount point. */</span>
-<span class="source-line-no">100</span><span id="line-100">   public static final String PATH = "/petstore";</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   /** The servlet URL pattern the boundary is registered under.  It matches {@link #PATH} itself and every path under it. */</span>
-<span class="source-line-no">103</span><span id="line-103">   public static final String URL_PATTERN = PATH + "/*";</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Setting (system property, environment, or any registered source) listing the host names the API answers to:</span>
-<span class="source-line-no">107</span><span id="line-107">    * comma-separated, no ports.  Unset or blank, any host is answered.</span>
-<span class="source-line-no">108</span><span id="line-108">    */</span>
-<span class="source-line-no">109</span><span id="line-109">   public static final String ALLOWED_HOSTS_PROPERTY = "petstore.api.allowedHosts";</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /**</span>
-<span class="source-line-no">112</span><span id="line-112">    * Request attribute under which an allowed console request carries a {@link String}: a freshly masked token for</span>
-<span class="source-line-no">113</span><span id="line-113">    * this boundary, for a console page to stamp on the form that writes to the API.</span>
-<span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   public static final String TOKEN_ATTRIBUTE = "org.apache.juneau.petstore.apiCsrfToken";</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   private final CsrfBoundary boundary;</span>
-<span class="source-line-no">118</span><span id="line-118">   private final RequestBoundaryFilter filter;</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Constructor.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;p&gt;</span>
-<span class="source-line-no">124</span><span id="line-124">    * Reads {@value #ALLOWED_HOSTS_PROPERTY} and creates the boundary's per-process token.</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * @throws IllegalArgumentException If {@value #ALLOWED_HOSTS_PROPERTY} holds an entry that is blank or not a bare</span>
-<span class="source-line-no">127</span><span id="line-127">    *    host name.</span>
-<span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   public PetstoreApiBoundary() {</span>
-<span class="source-line-no">130</span><span id="line-130">      boundary = CsrfBoundary.create()</span>
-<span class="source-line-no">131</span><span id="line-131">         .tokens(CsrfTokens.perProcess())</span>
-<span class="source-line-no">132</span><span id="line-132">         .allowedHosts(allowedHosts(Settings.get().get(ALLOWED_HOSTS_PROPERTY).orElse(null)))</span>
-<span class="source-line-no">133</span><span id="line-133">         .build();</span>
-<span class="source-line-no">134</span><span id="line-134">      filter = new RequestBoundaryFilter(boundary);</span>
-<span class="source-line-no">135</span><span id="line-135">   }</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   /**</span>
-<span class="source-line-no">138</span><span id="line-138">    * The host names in an {@value #ALLOWED_HOSTS_PROPERTY} setting.</span>
-<span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * @param setting The setting.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank (not set).</span>
-<span class="source-line-no">141</span><span id="line-141">    * @return The comma-separated entries, trimmed, blank ones included so the boundary refuses them; empty when the</span>
-<span class="source-line-no">142</span><span id="line-142">    *    setting is not set.</span>
-<span class="source-line-no">143</span><span id="line-143">    */</span>
-<span class="source-line-no">144</span><span id="line-144">   private static String[] allowedHosts(String setting) {</span>
-<span class="source-line-no">145</span><span id="line-145">      if (setting == null || setting.isBlank())</span>
-<span class="source-line-no">146</span><span id="line-146">         return new String[0];</span>
-<span class="source-line-no">147</span><span id="line-147">      return Arrays.stream(setting.split(",", -1)).map(String::trim).toArray(String[]::new);</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   /**</span>
-<span class="source-line-no">151</span><span id="line-151">    * A freshly masked token for a page served to this request to embed.</span>
-<span class="source-line-no">152</span><span id="line-152">    *</span>
-<span class="source-line-no">153</span><span id="line-153">    * &lt;p&gt;</span>
-<span class="source-line-no">154</span><span id="line-154">    * Never creates a session.  The value is different on every call, and every value verifies on this instance only.</span>
-<span class="source-line-no">155</span><span id="line-155">    *</span>
-<span class="source-line-no">156</span><span id="line-156">    * @param req The request whose response will embed the token.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">157</span><span id="line-157">    * @return 128 lower-case hex characters.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   public String tokenFor(HttpServletRequest req) {</span>
-<span class="source-line-no">160</span><span id="line-160">      return boundary.tokenFor(req);</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   /**</span>
-<span class="source-line-no">164</span><span id="line-164">    * Applies the boundary: a refused request is answered here and never reaches the API.</span>
-<span class="source-line-no">165</span><span id="line-165">    */</span>
-<span class="source-line-no">166</span><span id="line-166">   @Override /* Filter */</span>
-<span class="source-line-no">167</span><span id="line-167">   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {</span>
-<span class="source-line-no">168</span><span id="line-168">      filter.doFilter(req, res, chain);</span>
-<span class="source-line-no">169</span><span id="line-169">   }</span>
-<span class="source-line-no">170</span><span id="line-170">}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.settings.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.filter.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">import jakarta.servlet.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import jakarta.servlet.http.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">/**</span>
+<span class="source-line-no">031</span><span id="line-31"> * The {@code /petstore} API's CSRF boundary: a {@link RequestBoundaryFilter} over the framework's {@link CsrfBoundary},</span>
+<span class="source-line-no">032</span><span id="line-32"> * applied to {@code /petstore} and everything under it.</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * A browser write to the API must come from the page's own origin and carry this boundary's token in the</span>
+<span class="source-line-no">036</span><span id="line-36"> * {@code X-Csrf-Token} header.  The token travels in the header only, so every HTML {@code &lt;form&gt;} POST to</span>
+<span class="source-line-no">037</span><span id="line-37"> * the API is refused, the application's own included.  Requests are judged on their effective method, so</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@code GET /petstore/pets/1?method=DELETE} counts as a write.  Reads are allowed, and so are non-browser writes</span>
+<span class="source-line-no">039</span><span id="line-39"> * (no {@code Origin} and no {@code Sec-Fetch-Site}) that a browser could not have sent cross-site without a CORS</span>
+<span class="source-line-no">040</span><span id="line-40"> * preflight: JSON, XML or UON bodies, and {@code PUT}, {@code DELETE} or {@code PATCH}.  A non-browser urlencoded,</span>
+<span class="source-line-no">041</span><span id="line-41"> * multipart or {@code text/plain} {@code POST} is refused.  Every refusal names its reason in the</span>
+<span class="source-line-no">042</span><span id="line-42"> * {@value RequestBoundaryFilter#REJECTION_HEADER} response header.</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;The token&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * The token is per process ({@link CsrfTokens#perProcess()}): the petstore has no login session, and the</span>
+<span class="source-line-no">047</span><span id="line-47"> * {@code Origin} check does the real work.  A restart invalidates the token on every open page, so reload them.  A</span>
+<span class="source-line-no">048</span><span id="line-48"> * token that leaks through a page stays valid until the restart.</span>
+<span class="source-line-no">049</span><span id="line-49"> *</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * This token is not the console's.  The console boundary ({@link PetstoreConsoleBoundary}) has its own, and each</span>
+<span class="source-line-no">052</span><span id="line-52"> * boundary refuses the other's.  The console's one write to the API, its photo upload, gets this boundary's token</span>
+<span class="source-line-no">053</span><span id="line-53"> * from the console boundary, which publishes {@link #tokenFor(HttpServletRequest)} under {@link #TOKEN_ATTRIBUTE}</span>
+<span class="source-line-no">054</span><span id="line-54"> * on every console request it allows; the page's script sends it in that header.  So a runner must</span>
+<span class="source-line-no">055</span><span id="line-55"> * give the console boundary the same instance it mounts here: a token from any other instance is refused.</span>
+<span class="source-line-no">056</span><span id="line-56"> *</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * The console page shell marks a token-bearing page {@code no-store}, and when the response is already committed it</span>
+<span class="source-line-no">059</span><span id="line-59"> * strips only its own token attributes.  So on the rare page whose buffer was flushed before the shell ran, this</span>
+<span class="source-line-no">060</span><span id="line-60"> * boundary's token can still be emitted, possibly without {@code no-store}.  That is accepted: this token is only</span>
+<span class="source-line-no">061</span><span id="line-61"> * ever published on console pages, which carry the console's token too, so on every normal path the page is already</span>
+<span class="source-line-no">062</span><span id="line-62"> * marked.</span>
+<span class="source-line-no">063</span><span id="line-63"> *</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;The host&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * The request's own origin is its scheme plus its {@code Host} header; forwarded headers are never read.  By default</span>
+<span class="source-line-no">067</span><span id="line-67"> * any {@code Host} is answered, which suits a loopback developer setup.  On a host served over plain HTTP, set</span>
+<span class="source-line-no">068</span><span id="line-68"> * {@value #ALLOWED_HOSTS_PROPERTY} (a system property, the environment, or any registered setting source) to the</span>
+<span class="source-line-no">069</span><span id="line-69"> * comma-separated host names the browser uses, without ports.  Every request to the API under any other {@code Host},</span>
+<span class="source-line-no">070</span><span id="line-70"> * reads included, is then answered with {@code 421}: this is the DNS-rebinding defence.  The setting is read once,</span>
+<span class="source-line-no">071</span><span id="line-71"> * when the boundary is constructed, and a malformed entry fails construction rather than being ignored.</span>
+<span class="source-line-no">072</span><span id="line-72"> *</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * Behind a TLS-terminating proxy the browser's {@code https} origin does not match the {@code http} request the</span>
+<span class="source-line-no">075</span><span id="line-75"> * container sees, so writes are refused.  Such a deployment needs the container's forwarded-header support and the</span>
+<span class="source-line-no">076</span><span id="line-76"> * framework boundary's {@link org.apache.juneau.rest.server.filter.CsrfBoundary.OriginSource#CONTAINER CONTAINER} origin source, which this demo does not</span>
+<span class="source-line-no">077</span><span id="line-77"> * configure.</span>
+<span class="source-line-no">078</span><span id="line-78"> *</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> * In a Juneau microservice, contribute a &lt;c&gt;ServletFilterRegistration&lt;/c&gt; &lt;c&gt;@Bean&lt;/c&gt; just after the console</span>
+<span class="source-line-no">082</span><span id="line-82"> * boundary's, sharing the one instance with it:</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *    &lt;jk&gt;private final&lt;/jk&gt; PetstoreApiBoundary &lt;jf&gt;apiBoundary&lt;/jf&gt; = &lt;jk&gt;new&lt;/jk&gt; PetstoreApiBoundary();</span>
+<span class="source-line-no">085</span><span id="line-85"> *</span>
+<span class="source-line-no">086</span><span id="line-86"> *    &lt;ja&gt;@Bean&lt;/ja&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> *    &lt;jk&gt;public&lt;/jk&gt; ServletFilterRegistration apiBoundary() {</span>
+<span class="source-line-no">088</span><span id="line-88"> *       &lt;jk&gt;return&lt;/jk&gt; ServletFilterRegistration.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jf&gt;apiBoundary&lt;/jf&gt;)</span>
+<span class="source-line-no">089</span><span id="line-89"> *          .urlPatterns(PetstoreApiBoundary.&lt;jsf&gt;URL_PATTERN&lt;/jsf&gt;)</span>
+<span class="source-line-no">090</span><span id="line-90"> *          .dispatcherTypes(DispatcherType.&lt;jsf&gt;REQUEST&lt;/jsf&gt;)</span>
+<span class="source-line-no">091</span><span id="line-91"> *          .order(ServletFilterRegistration.&lt;jsf&gt;HIGHEST_PRECEDENCE&lt;/jsf&gt; + 10)</span>
+<span class="source-line-no">092</span><span id="line-92"> *          .build();</span>
+<span class="source-line-no">093</span><span id="line-93"> *    }</span>
+<span class="source-line-no">094</span><span id="line-94"> * &lt;/p&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;p&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * and build the console boundary with {@code new PetstoreConsoleBoundary(apiBoundary)}.  Register it for</span>
+<span class="source-line-no">097</span><span id="line-97"> * {@code REQUEST} dispatches only: an internal forward or error dispatch is not a new request from the browser.</span>
+<span class="source-line-no">098</span><span id="line-98"> */</span>
+<span class="source-line-no">099</span><span id="line-99">public class PetstoreApiBoundary implements Filter {</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /** The covered path: the API resource's mount point. */</span>
+<span class="source-line-no">102</span><span id="line-102">   public static final String PATH = "/petstore";</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /** The servlet URL pattern the boundary is registered under.  It matches {@link #PATH} itself and every path under it. */</span>
+<span class="source-line-no">105</span><span id="line-105">   public static final String URL_PATTERN = PATH + "/*";</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   /**</span>
+<span class="source-line-no">108</span><span id="line-108">    * Setting (system property, environment, or any registered source) listing the host names the API answers to:</span>
+<span class="source-line-no">109</span><span id="line-109">    * comma-separated, no ports.  Unset or blank, any host is answered.</span>
+<span class="source-line-no">110</span><span id="line-110">    */</span>
+<span class="source-line-no">111</span><span id="line-111">   public static final String ALLOWED_HOSTS_PROPERTY = "petstore.api.allowedHosts";</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Request attribute under which an allowed console request carries a {@link String}: a freshly masked token for</span>
+<span class="source-line-no">115</span><span id="line-115">    * this boundary, for a console page to stamp on the form that writes to the API.</span>
+<span class="source-line-no">116</span><span id="line-116">    */</span>
+<span class="source-line-no">117</span><span id="line-117">   public static final String TOKEN_ATTRIBUTE = "org.apache.juneau.petstore.apiCsrfToken";</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   private final CsrfBoundary boundary;</span>
+<span class="source-line-no">120</span><span id="line-120">   private final RequestBoundaryFilter filter;</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   /**</span>
+<span class="source-line-no">123</span><span id="line-123">    * Constructor.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * &lt;p&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    * Reads {@value #ALLOWED_HOSTS_PROPERTY} and creates the boundary's per-process token.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @throws IllegalArgumentException If {@value #ALLOWED_HOSTS_PROPERTY} holds an entry that is blank or not a bare</span>
+<span class="source-line-no">129</span><span id="line-129">    *    host name.</span>
+<span class="source-line-no">130</span><span id="line-130">    */</span>
+<span class="source-line-no">131</span><span id="line-131">   public PetstoreApiBoundary() {</span>
+<span class="source-line-no">132</span><span id="line-132">      boundary = CsrfBoundary.create()</span>
+<span class="source-line-no">133</span><span id="line-133">         .tokens(CsrfTokens.perProcess())</span>
+<span class="source-line-no">134</span><span id="line-134">         .allowedHosts(allowedHosts(Settings.get().get(ALLOWED_HOSTS_PROPERTY).orElse(null)))</span>
+<span class="source-line-no">135</span><span id="line-135">         .build();</span>
+<span class="source-line-no">136</span><span id="line-136">      filter = new RequestBoundaryFilter(boundary);</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   /**</span>
+<span class="source-line-no">140</span><span id="line-140">    * The host names in an {@value #ALLOWED_HOSTS_PROPERTY} setting.</span>
+<span class="source-line-no">141</span><span id="line-141">    *</span>
+<span class="source-line-no">142</span><span id="line-142">    * @param setting The setting.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank (not set).</span>
+<span class="source-line-no">143</span><span id="line-143">    * @return The comma-separated entries, trimmed, blank ones included so the boundary refuses them; empty when the</span>
+<span class="source-line-no">144</span><span id="line-144">    *    setting is not set.</span>
+<span class="source-line-no">145</span><span id="line-145">    */</span>
+<span class="source-line-no">146</span><span id="line-146">   private static String[] allowedHosts(String setting) {</span>
+<span class="source-line-no">147</span><span id="line-147">      if (ib(setting))</span>
+<span class="source-line-no">148</span><span id="line-148">         return new String[0];</span>
+<span class="source-line-no">149</span><span id="line-149">      return Arrays.stream(setting.split(",", -1)).map(String::trim).toArray(String[]::new);</span>
+<span class="source-line-no">150</span><span id="line-150">   }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">   /**</span>
+<span class="source-line-no">153</span><span id="line-153">    * A freshly masked token for a page served to this request to embed.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    * Never creates a session.  The value is different on every call, and every value verifies on this instance only.</span>
+<span class="source-line-no">157</span><span id="line-157">    *</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param req The request whose response will embed the token.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return 128 lower-case hex characters.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   public String tokenFor(HttpServletRequest req) {</span>
+<span class="source-line-no">162</span><span id="line-162">      return boundary.tokenFor(req);</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164"></span>
+<span class="source-line-no">165</span><span id="line-165">   /**</span>
+<span class="source-line-no">166</span><span id="line-166">    * Applies the boundary: a refused request is answered here and never reaches the API.</span>
+<span class="source-line-no">167</span><span id="line-167">    */</span>
+<span class="source-line-no">168</span><span id="line-168">   @Override /* Filter */</span>
+<span class="source-line-no">169</span><span id="line-169">   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {</span>
+<span class="source-line-no">170</span><span id="line-170">      filter.doFilter(req, res, chain);</span>
+<span class="source-line-no">171</span><span id="line-171">   }</span>
+<span class="source-line-no">172</span><span id="line-172">}</span>
 
 
 

@@ -136,67 +136,70 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> g01d_parquetConfigValidCodecsCaseInsensitive() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[] { G01d_Class.<strong class="jxr_keyword">class</strong>, G01e_Class.<strong class="jxr_keyword">class</strong> }) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">var</strong> s = ParquetSerializer.create().applyAnnotations(c).build();
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <strong class="jxr_keyword">var</strong> out = (java.util.List&lt;ParquetSerializerBuilder_Test.KBean&gt;) ParquetParser.DEFAULT.read(
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				s.write(java.util.List.of(<strong class="jxr_keyword">new</strong> ParquetSerializerBuilder_Test.KBean(<span class="jxr_string">"v"</span>))), java.util.List.<strong class="jxr_keyword">class</strong>, ParquetSerializerBuilder_Test.KBean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			assertEquals(<span class="jxr_string">"v"</span>, out.get(0).k);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> g01f_parquetConfigParserIgnoresCodec() {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertNotNull(ParquetParser.create().applyAnnotations(G01b_Class.<strong class="jxr_keyword">class</strong>).build());
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String messages(Throwable t) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">for</strong> (; t != <strong class="jxr_keyword">null</strong>; t = t.getCause())
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			sb.append(t.getMessage()).append(<span class="jxr_string">" | "</span>);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@ParquetConfig(addBeanTypes = <span class="jxr_string">"true"</span>)
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G02_Class {}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			@SuppressWarnings({
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Parser returns a raw List; element type is fixed by the KBean class argument.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			})
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">var</strong> out = (java.util.List&lt;ParquetSerializerBuilder_Test.KBean&gt;) ParquetParser.DEFAULT.read(
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 				s.write(java.util.List.of(<strong class="jxr_keyword">new</strong> ParquetSerializerBuilder_Test.KBean(<span class="jxr_string">"v"</span>))), java.util.List.<strong class="jxr_keyword">class</strong>, ParquetSerializerBuilder_Test.KBean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			assertEquals(<span class="jxr_string">"v"</span>, out.get(0).k);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test <strong class="jxr_keyword">void</strong> g01f_parquetConfigParserIgnoresCodec() {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertNotNull(ParquetParser.create().applyAnnotations(G01b_Class.<strong class="jxr_keyword">class</strong>).build());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String messages(Throwable t) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">for</strong> (; t != <strong class="jxr_keyword">null</strong>; t = t.getCause())
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			sb.append(t.getMessage()).append(<span class="jxr_string">" | "</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> g02_parquetConfigAddBeanTypes() {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> s = ParquetSerializer.create().applyAnnotations(G02_Class.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertNotNull(s);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@ParquetConfig
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G03_Class {}
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@ParquetConfig(addBeanTypes = <span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G02_Class {}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@Test <strong class="jxr_keyword">void</strong> g02_parquetConfigAddBeanTypes() {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> s = ParquetSerializer.create().applyAnnotations(G02_Class.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertNotNull(s);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@Test <strong class="jxr_keyword">void</strong> g03_parquetConfigParserApply() {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> p = ParquetParser.create().applyAnnotations(G03_Class.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertNotNull(p);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<em class="jxr_comment">// ParquetBeanPropertyMeta + ParquetClassMeta tests.</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F02_Bean { <strong class="jxr_keyword">public</strong> String name; }
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Test <strong class="jxr_keyword">void</strong> f01_parquetBeanPropertyMeta_<strong class="jxr_keyword">default</strong>() {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertNotNull(ParquetBeanPropertyMeta.DEFAULT);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Test <strong class="jxr_keyword">void</strong> f02_parquetBeanPropertyMeta_lookup() {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> s = ParquetSerializer.DEFAULT;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> bc = MarshallingContext.DEFAULT;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> bm = bc.getBeanMeta(F02_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertNotNull(bm);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> bpm = bm.getPropertyMeta(<span class="jxr_string">"name"</span>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertNotNull(bpm);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotNull(s.getParquetBeanPropertyMeta(bpm));
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertNotNull(s.getParquetBeanPropertyMeta(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> f03_parquetClassMeta_lookup() {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> s = ParquetSerializer.DEFAULT;
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> bc = MarshallingContext.DEFAULT;
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> cm = bc.getClassMeta(F02_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertNotNull(s.getParquetClassMeta(cm));
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> }
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@ParquetConfig
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G03_Class {}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test <strong class="jxr_keyword">void</strong> g03_parquetConfigParserApply() {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> p = ParquetParser.create().applyAnnotations(G03_Class.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertNotNull(p);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_comment">// ParquetBeanPropertyMeta + ParquetClassMeta tests.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F02_Bean { <strong class="jxr_keyword">public</strong> String name; }
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Test <strong class="jxr_keyword">void</strong> f01_parquetBeanPropertyMeta_<strong class="jxr_keyword">default</strong>() {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertNotNull(ParquetBeanPropertyMeta.DEFAULT);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Test <strong class="jxr_keyword">void</strong> f02_parquetBeanPropertyMeta_lookup() {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> s = ParquetSerializer.DEFAULT;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> bc = MarshallingContext.DEFAULT;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> bm = bc.getBeanMeta(F02_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotNull(bm);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> bpm = bm.getPropertyMeta(<span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertNotNull(bpm);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertNotNull(s.getParquetBeanPropertyMeta(bpm));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertNotNull(s.getParquetBeanPropertyMeta(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> f03_parquetClassMeta_lookup() {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> s = ParquetSerializer.DEFAULT;
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> bc = MarshallingContext.DEFAULT;
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> cm = bc.getClassMeta(F02_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertNotNull(s.getParquetClassMeta(cm));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

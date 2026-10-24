@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">    * @throws IllegalArgumentException If {@code capability} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">084</span><span id="line-84">    */</span>
 <span class="source-line-no">085</span><span id="line-85">   public static WritePermit forCapability(String capability) {</span>
-<span class="source-line-no">086</span><span id="line-86">      if (capability == null || capability.isBlank())</span>
+<span class="source-line-no">086</span><span id="line-86">      if (ib(capability))</span>
 <span class="source-line-no">087</span><span id="line-87">         throw iaex("WritePermit capability must not be null or blank.");</span>
 <span class="source-line-no">088</span><span id="line-88">      return new WritePermit(capability);</span>
 <span class="source-line-no">089</span><span id="line-89">   }</span>

@@ -729,7 +729,7 @@
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<em class="jxr_comment">// Verify both threads cached their own values</em>
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		assertEquals(2, threadValues.size());
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		assertSize(2, threadValues);
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread1-value"</span>));
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread2-value"</span>));
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> 
@@ -870,7 +870,7 @@
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> 		<em class="jxr_comment">// Verify both threads cached their own values</em>
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		assertEquals(2, threadValues.size());
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		assertSize(2, threadValues);
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread1-value"</span>));
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread2-value"</span>));
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 

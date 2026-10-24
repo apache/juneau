@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@Test <strong class="jxr_keyword">void</strong> b22_builder_clear_removesAllEntries() {
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> sb = SerializerSet.create().add(SB1.<strong class="jxr_keyword">class</strong>, SB2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(2, sb.<strong class="jxr_keyword">inner</strong>().size());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertSize(2, sb.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		sb.clear();
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertTrue(sb.<strong class="jxr_keyword">inner</strong>().isEmpty());
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}

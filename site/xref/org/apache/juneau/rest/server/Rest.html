@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * 		The implementation is instantiated through the resource's bean store (constructor injection).</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * 		The default {@link org.apache.juneau.rest.server.auth.RestAuthenticator.Null} sentinel means &amp;quot;not specified.&amp;quot;</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * 		The default {@link org.apache.juneau.rest.server.auth.RestAuthenticator.Null RestAuthenticator.Null} sentinel means &amp;quot;not specified.&amp;quot;</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
@@ -1073,7 +1073,7 @@
 <a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">	 * Encoders are automatically inherited from {@link Rest#encoders()} annotations on parent classes with the encoders on child classes</em>
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> <em class="jxr_javadoccomment">	 * prepended to the encoder group.</em>
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.NoInherit EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -1246,7 +1246,7 @@
 <a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> <em class="jxr_javadoccomment">	 * Parsers are automatically inherited from {@link Rest#parsers()} annotations on parent classes with the parsers on child classes</em>
 <a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> <em class="jxr_javadoccomment">	 * prepended to the parser group.</em>
-<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.marshall.parser.ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.marshall.parser.ParserSet.NoInherit ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
 <a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -1272,8 +1272,8 @@
 <a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Parsers on child override those on parent class.</em>
-<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.parser.ParserSet.Inherit} class can be used to inherit and augment values from parent.</em>
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.parser.ParserSet.NoInherit} class can be used to suppress inheriting from parent.</em>
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.parser.ParserSet.Inherit ParserSet.Inherit} class can be used to inherit and augment values from parent.</em>
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.parser.ParserSet.NoInherit ParserSet.NoInherit} class can be used to suppress inheriting from parent.</em>
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Parsers on methods take precedence over those on classes.</em>
 <a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> <em class="jxr_javadoccomment">	 *</em>
@@ -1705,7 +1705,7 @@
 <a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> <em class="jxr_javadoccomment">	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes</em>
 <a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> <em class="jxr_javadoccomment">	 * prepended to the serializer group.</em>
-<a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
+<a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> <em class="jxr_javadoccomment">	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.</em>
 <a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
@@ -1731,8 +1731,8 @@
 <a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Serializers on child override those on parent class.</em>
-<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.</em>
-<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.</em>
+<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit SerializerSet.Inherit} class can be used to inherit and augment values from parent.</em>
+<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit SerializerSet.NoInherit} class can be used to suppress inheriting from parent.</em>
 <a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Serializers on methods take precedence over those on classes.</em>
 <a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> <em class="jxr_javadoccomment">	 *</em>

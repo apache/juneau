@@ -424,12 +424,12 @@
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported."</span>);
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">if</strong> (! TOOLS.contains(tool))
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"TerminalProcess tool must be one of %s; got '%s'."</span>, <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(TOOLS), tool);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">if</strong> (cmd == <strong class="jxr_keyword">null</strong> || cmd.isEmpty())
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">if</strong> (ie(cmd))
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"TerminalProcess cmd must have at least one element."</span>);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (cols &lt; 1 || cols &gt; 9999 || rows &lt; 1 || rows &gt; 9999)
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"TerminalProcess size must be 1-9999 x 1-9999; got '%sx%s'."</span>, cols, rows);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> script = host.scriptProperty() != <strong class="jxr_keyword">null</strong> &amp;&amp; ! host.scriptProperty().isBlank() ? host.scriptProperty() : host.scriptEnv();
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">if</strong> (script == <strong class="jxr_keyword">null</strong> || script.isBlank())
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">if</strong> (ib(script))
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"TerminalProcess cannot find juneau_run.py: set the system property "</span> + SCRIPT_PROPERTY + <span class="jxr_string">" or the environment variable "</span> + SCRIPT_ENV + <span class="jxr_string">"."</span>);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> python = findOnPath(<span class="jxr_string">"python3"</span>, host.path());
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">if</strong> (python == <strong class="jxr_keyword">null</strong>)

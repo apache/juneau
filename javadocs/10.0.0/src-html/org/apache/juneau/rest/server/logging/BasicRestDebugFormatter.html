@@ -346,7 +346,7 @@
 <span class="source-line-no">333</span><span id="line-333"></span>
 <span class="source-line-no">334</span><span id="line-334">   private void appendResponseHeaders(StringBuilder sb, HttpServletResponse sres, Set&lt;String&gt; normalizedRedacted) {</span>
 <span class="source-line-no">335</span><span id="line-335">      var names = sres.getHeaderNames();</span>
-<span class="source-line-no">336</span><span id="line-336">      if (names == null || names.isEmpty())</span>
+<span class="source-line-no">336</span><span id="line-336">      if (ie(names))</span>
 <span class="source-line-no">337</span><span id="line-337">         return;</span>
 <span class="source-line-no">338</span><span id="line-338">      sb.append("\n---Response Headers---");</span>
 <span class="source-line-no">339</span><span id="line-339">      var state = new HeaderScanState();</span>
@@ -461,7 +461,7 @@
 <span class="source-line-no">448</span><span id="line-448">   }</span>
 <span class="source-line-no">449</span><span id="line-449"></span>
 <span class="source-line-no">450</span><span id="line-450">   private String contentTypeToken(String contentType) {</span>
-<span class="source-line-no">451</span><span id="line-451">      if (contentType == null || contentType.isBlank())</span>
+<span class="source-line-no">451</span><span id="line-451">      if (ib(contentType))</span>
 <span class="source-line-no">452</span><span id="line-452">         return "unknown";</span>
 <span class="source-line-no">453</span><span id="line-453">      return DebugTextSanitizer.sanitize(contentType, maxFieldLength);</span>
 <span class="source-line-no">454</span><span id="line-454">   }</span>

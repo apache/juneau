@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String checkId(String id) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"QuickStat id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> id;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkLabel() {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (label == <strong class="jxr_keyword">null</strong> || label.isBlank())
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (ib(label))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">throw</strong> fail(<span class="jxr_string">"label must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">public</strong> QuickStat segment(String label, <strong class="jxr_keyword">long</strong> count, <a name="StatusTone" href="../../../../../../org/apache/juneau/rest/server/widgets/StatusTone.html#StatusTone">StatusTone</a> tone) {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		requireKind(Kind.SEGMENTED, <span class="jxr_string">"segment"</span>);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">if</strong> (label == <strong class="jxr_keyword">null</strong> || label.isBlank())
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">if</strong> (ib(label))
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">throw</strong> fail(<span class="jxr_string">"segment label must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">if</strong> (count &lt; 0)
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">throw</strong> fail(<span class="jxr_string">"segment count must be &gt;= 0."</span>);
@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">if</strong> (kind == Kind.METER) {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			m.put(<span class="jxr_string">"value"</span>, value);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 			m.put(<span class="jxr_string">"max"</span>, max);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">if</strong> (text != <strong class="jxr_keyword">null</strong> &amp;&amp; ! text.isBlank())
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">if</strong> (inb(text))
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 				m.put(<span class="jxr_string">"text"</span>, text);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">if</strong> (tone != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				m.put(<span class="jxr_string">"tone"</span>, tone);

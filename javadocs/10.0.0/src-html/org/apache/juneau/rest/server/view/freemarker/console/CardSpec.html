@@ -204,50 +204,52 @@
 <span class="source-line-no">191</span><span id="line-191">      return this;</span>
 <span class="source-line-no">192</span><span id="line-192">   }</span>
 <span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">195</span><span id="line-195">   private static Map&lt;String,Object&gt; asMap(Object o) {</span>
-<span class="source-line-no">196</span><span id="line-196">      if (! (o instanceof Map))</span>
-<span class="source-line-no">197</span><span id="line-197">         throw new IllegalArgumentException("card wiring entries must be objects; got " + (o == null ? "null" : o.getClass().getSimpleName()) + ".");</span>
-<span class="source-line-no">198</span><span id="line-198">      return (Map&lt;String,Object&gt;)o;</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">   /** @return The template id, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
-<span class="source-line-no">202</span><span id="line-202">   String template() { return template; }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   /** @return The title, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
-<span class="source-line-no">205</span><span id="line-205">   String title() { return title; }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   /** @return The {@code src} URL, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
-<span class="source-line-no">208</span><span id="line-208">   String src() { return src; }</span>
-<span class="source-line-no">209</span><span id="line-209"></span>
-<span class="source-line-no">210</span><span id="line-210">   /** @return The wrapper CSS classes, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
-<span class="source-line-no">211</span><span id="line-211">   String cssClass() { return cssClass; }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   /** @return An unmodifiable copy of the type-specific body fields, in insertion order. */</span>
-<span class="source-line-no">214</span><span id="line-214">   public Map&lt;String,Object&gt; bodyMap() { return Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(body)); }</span>
-<span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">   /** @return The contract entry, common fields first. */</span>
-<span class="source-line-no">217</span><span id="line-217">   public Map&lt;String,Object&gt; toMap() {</span>
-<span class="source-line-no">218</span><span id="line-218">      var m = new LinkedHashMap&lt;String,Object&gt;();</span>
-<span class="source-line-no">219</span><span id="line-219">      m.put("id", id);</span>
-<span class="source-line-no">220</span><span id="line-220">      m.put("type", type);</span>
-<span class="source-line-no">221</span><span id="line-221">      if (nn(title)) m.put("title", title);</span>
-<span class="source-line-no">222</span><span id="line-222">      if (nn(src)) m.put("src", src);</span>
-<span class="source-line-no">223</span><span id="line-223">      if (nn(template)) m.put("template", template);</span>
-<span class="source-line-no">224</span><span id="line-224">      if (bare) m.put("bare", true);</span>
-<span class="source-line-no">225</span><span id="line-225">      if (sanitize) {</span>
-<span class="source-line-no">226</span><span id="line-226">         if (! eq(type, "html") || ! nn(src))</span>
-<span class="source-line-no">227</span><span id="line-227">            throw iaex("card '%s': sanitize applies only to an html card with src.", id);</span>
-<span class="source-line-no">228</span><span id="line-228">         m.put("sanitize", true);</span>
-<span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230">      if (nn(cssClass)) m.put("class", cssClass);</span>
-<span class="source-line-no">231</span><span id="line-231">      if (! visibleWhen.isEmpty()) m.put("visibleWhen", visibleWhen.stream().map(VisibilityRule::toMap).toList());</span>
-<span class="source-line-no">232</span><span id="line-232">      if (! publishes.isEmpty()) m.put("publishes", List.copyOf(publishes));</span>
-<span class="source-line-no">233</span><span id="line-233">      if (! subscribes.isEmpty()) m.put("subscribes", List.copyOf(subscribes));</span>
-<span class="source-line-no">234</span><span id="line-234">      m.putAll(body);</span>
-<span class="source-line-no">235</span><span id="line-235">      return m;</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237">}</span>
+<span class="source-line-no">194</span><span id="line-194">   @SuppressWarnings({</span>
+<span class="source-line-no">195</span><span id="line-195">      "unchecked" // Narrows the validated Map to Map&lt;String,Object&gt;; its keys are always strings.</span>
+<span class="source-line-no">196</span><span id="line-196">   })</span>
+<span class="source-line-no">197</span><span id="line-197">   private static Map&lt;String,Object&gt; asMap(Object o) {</span>
+<span class="source-line-no">198</span><span id="line-198">      if (! (o instanceof Map))</span>
+<span class="source-line-no">199</span><span id="line-199">         throw new IllegalArgumentException("card wiring entries must be objects; got " + (o == null ? "null" : o.getClass().getSimpleName()) + ".");</span>
+<span class="source-line-no">200</span><span id="line-200">      return (Map&lt;String,Object&gt;)o;</span>
+<span class="source-line-no">201</span><span id="line-201">   }</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">   /** @return The template id, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
+<span class="source-line-no">204</span><span id="line-204">   String template() { return template; }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   /** @return The title, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
+<span class="source-line-no">207</span><span id="line-207">   String title() { return title; }</span>
+<span class="source-line-no">208</span><span id="line-208"></span>
+<span class="source-line-no">209</span><span id="line-209">   /** @return The {@code src} URL, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
+<span class="source-line-no">210</span><span id="line-210">   String src() { return src; }</span>
+<span class="source-line-no">211</span><span id="line-211"></span>
+<span class="source-line-no">212</span><span id="line-212">   /** @return The wrapper CSS classes, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
+<span class="source-line-no">213</span><span id="line-213">   String cssClass() { return cssClass; }</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">   /** @return An unmodifiable copy of the type-specific body fields, in insertion order. */</span>
+<span class="source-line-no">216</span><span id="line-216">   public Map&lt;String,Object&gt; bodyMap() { return Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(body)); }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   /** @return The contract entry, common fields first. */</span>
+<span class="source-line-no">219</span><span id="line-219">   public Map&lt;String,Object&gt; toMap() {</span>
+<span class="source-line-no">220</span><span id="line-220">      var m = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">221</span><span id="line-221">      m.put("id", id);</span>
+<span class="source-line-no">222</span><span id="line-222">      m.put("type", type);</span>
+<span class="source-line-no">223</span><span id="line-223">      if (nn(title)) m.put("title", title);</span>
+<span class="source-line-no">224</span><span id="line-224">      if (nn(src)) m.put("src", src);</span>
+<span class="source-line-no">225</span><span id="line-225">      if (nn(template)) m.put("template", template);</span>
+<span class="source-line-no">226</span><span id="line-226">      if (bare) m.put("bare", true);</span>
+<span class="source-line-no">227</span><span id="line-227">      if (sanitize) {</span>
+<span class="source-line-no">228</span><span id="line-228">         if (neq(type, "html") || ! nn(src))</span>
+<span class="source-line-no">229</span><span id="line-229">            throw iaex("card '%s': sanitize applies only to an html card with src.", id);</span>
+<span class="source-line-no">230</span><span id="line-230">         m.put("sanitize", true);</span>
+<span class="source-line-no">231</span><span id="line-231">      }</span>
+<span class="source-line-no">232</span><span id="line-232">      if (nn(cssClass)) m.put("class", cssClass);</span>
+<span class="source-line-no">233</span><span id="line-233">      if (! visibleWhen.isEmpty()) m.put("visibleWhen", visibleWhen.stream().map(VisibilityRule::toMap).toList());</span>
+<span class="source-line-no">234</span><span id="line-234">      if (! publishes.isEmpty()) m.put("publishes", List.copyOf(publishes));</span>
+<span class="source-line-no">235</span><span id="line-235">      if (! subscribes.isEmpty()) m.put("subscribes", List.copyOf(subscribes));</span>
+<span class="source-line-no">236</span><span id="line-236">      m.putAll(body);</span>
+<span class="source-line-no">237</span><span id="line-237">      return m;</span>
+<span class="source-line-no">238</span><span id="line-238">   }</span>
+<span class="source-line-no">239</span><span id="line-239">}</span>
 
 
 

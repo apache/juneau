@@ -95,9 +95,9 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">void</strong> b04_trailingCommaArrayLines() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"[1,]\n[2,3,]"</span>;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> list = (List&lt;JsonList&gt;) Json5l.to(in, List.<strong class="jxr_keyword">class</strong>, JsonList.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(1, list.get(0).size());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertSize(1, list.get(0));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(1, list.get(0).getInt(0));
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(2, list.get(1).size());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertSize(2, list.get(1));
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(2, list.get(1).getInt(0));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(3, list.get(1).getInt(1));
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}

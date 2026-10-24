@@ -290,7 +290,7 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Optional&lt;File&gt; resolveSafely(File rootDir, String userPath) {
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		reqnn(<span class="jxr_string">"rootDir"</span>, rootDir);
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> root = canonicalizeRoot(rootDir.toPath());
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (userPath == <strong class="jxr_keyword">null</strong> || userPath.isEmpty())
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(userPath))
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong> optional(root.toFile());
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		Path target;
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">try</strong> {
@@ -355,7 +355,7 @@
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"basePath escapes its own root."</span>);
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">if</strong> (! bp.endsWith(<span class="jxr_string">"/"</span>))
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 			bp = bp + <span class="jxr_string">"/"</span>;
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">if</strong> (userPath == <strong class="jxr_keyword">null</strong> || userPath.isEmpty())
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(userPath))
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">return</strong> bp;
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> up = userPath.startsWith(<span class="jxr_string">"/"</span>) ? userPath.substring(1) : userPath;
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> combined = normalizeVirtualPath(bp + up);

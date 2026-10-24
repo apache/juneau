@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">public</strong> String invoke(<strong class="jxr_keyword">int</strong> length) { <strong class="jxr_keyword">return</strong> invoke(length, ALPHA_NUM); }
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">public</strong> String invoke(<strong class="jxr_keyword">int</strong> length, String charset) {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">if</strong> (length &lt; 0) <strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"randString: length must be &gt;= 0"</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (charset == <strong class="jxr_keyword">null</strong> || charset.isEmpty()) charset = ALPHA_NUM;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (ie(charset)) charset = ALPHA_NUM;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">var</strong> rnd = ThreadLocalRandom.current();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(length);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; length; i++)

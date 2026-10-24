@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Strict header grammar: the bracketed and plain host branches read best as one sequence</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	})
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">static</strong> Authority parseHost(String value) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || value.isEmpty())
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">if</strong> (ie(value))
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		String host;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		String <strong class="jxr_keyword">rest</strong>;
@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"HTTP/2.0"</span>.equals(req.getProtocol()))
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> name = req.getServerName();
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong> || name.isBlank())
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">if</strong> (ib(name))
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<em class="jxr_comment">// Tomcat reports an IPv6 server name without the brackets a Host header would carry.</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">if</strong> (name.indexOf(':') &gt;= 0 &amp;&amp; ! name.startsWith(<span class="jxr_string">"["</span>))

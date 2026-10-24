@@ -920,7 +920,7 @@
 <span class="source-line-no">907</span><span id="line-907"> * &lt;p&gt;</span>
 <span class="source-line-no">908</span><span id="line-908"> * Enabling debug mode has the following effects:</span>
 <span class="source-line-no">909</span><span id="line-909"> * &lt;ul&gt;</span>
-<span class="source-line-no">910</span><span id="line-910"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Context.Builder#debug()} is enabled.</span>
+<span class="source-line-no">910</span><span id="line-910"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Context.Builder#debug() Context.Builder#debug()} is enabled.</span>
 <span class="source-line-no">911</span><span id="line-911"> *    &lt;li&gt;{@link Builder#detectLeaks()} is enabled.</span>
 <span class="source-line-no">912</span><span id="line-912"> *    &lt;li&gt;{@link Builder#logToConsole()} is called.</span>
 <span class="source-line-no">913</span><span id="line-913"> * &lt;/ul&gt;</span>
@@ -1243,7 +1243,7 @@
 <span class="source-line-no">1230</span><span id="line-1230">       * &lt;/p&gt;</span>
 <span class="source-line-no">1231</span><span id="line-1231">       *</span>
 <span class="source-line-no">1232</span><span id="line-1232">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">1233</span><span id="line-1233">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()}</span>
+<span class="source-line-no">1233</span><span id="line-1233">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()}</span>
 <span class="source-line-no">1234</span><span id="line-1234">       * &lt;/ul&gt;</span>
 <span class="source-line-no">1235</span><span id="line-1235">       *</span>
 <span class="source-line-no">1236</span><span id="line-1236">       * @return This object.</span>
@@ -1364,7 +1364,7 @@
 <span class="source-line-no">1351</span><span id="line-1351">       * &lt;/p&gt;</span>
 <span class="source-line-no">1352</span><span id="line-1352">       *</span>
 <span class="source-line-no">1353</span><span id="line-1353">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">1354</span><span id="line-1354">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addRootType()}</span>
+<span class="source-line-no">1354</span><span id="line-1354">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addRootType() Serializer.Builder#addRootType()}</span>
 <span class="source-line-no">1355</span><span id="line-1355">       * &lt;/ul&gt;</span>
 <span class="source-line-no">1356</span><span id="line-1356">       *</span>
 <span class="source-line-no">1357</span><span id="line-1357">       * @return This object.</span>
@@ -1458,9 +1458,9 @@
 <span class="source-line-no">1445</span><span id="line-1445">       *       The same SSRF restriction applies: a client whose class overrides that method or either</span>
 <span class="source-line-no">1446</span><span id="line-1446">       *       {@code execute(...)} overload it dispatches to refuses SSRF-guard-active {@code @Remote} calls too.</span>
 <span class="source-line-no">1447</span><span id="line-1447">       *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">1448</span><span id="line-1448">       *       Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} &lt;c&gt;impl(Object)&lt;/c&gt; to specify an already instantiated instance.</span>
+<span class="source-line-no">1448</span><span id="line-1448">       *       Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder BeanInstantiator.Builder} &lt;c&gt;impl(Object)&lt;/c&gt; to specify an already instantiated instance.</span>
 <span class="source-line-no">1449</span><span id="line-1449">       *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">1450</span><span id="line-1450">       *       Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} &lt;c&gt;type(Class)&lt;/c&gt; to specify a subtype to instantiate.</span>
+<span class="source-line-no">1450</span><span id="line-1450">       *       Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder BeanInstantiator.Builder} &lt;c&gt;type(Class)&lt;/c&gt; to specify a subtype to instantiate.</span>
 <span class="source-line-no">1451</span><span id="line-1451">       *       &lt;br&gt;Subclass must have a public constructor that takes in any args available</span>
 <span class="source-line-no">1452</span><span id="line-1452">       *       in the bean store of this builder (including {@link RestClient} itself).</span>
 <span class="source-line-no">1453</span><span id="line-1453">       * &lt;/ul&gt;</span>
@@ -1704,7 +1704,7 @@
 <span class="source-line-no">1691</span><span id="line-1691">       * &lt;/p&gt;</span>
 <span class="source-line-no">1692</span><span id="line-1692">       *</span>
 <span class="source-line-no">1693</span><span id="line-1693">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">1694</span><span id="line-1694">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#debugOutputLines(int)}</span>
+<span class="source-line-no">1694</span><span id="line-1694">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#debugOutputLines(int) Parser.Builder#debugOutputLines(int)}</span>
 <span class="source-line-no">1695</span><span id="line-1695">       * &lt;/ul&gt;</span>
 <span class="source-line-no">1696</span><span id="line-1696">       *</span>
 <span class="source-line-no">1697</span><span id="line-1697">       * @param value</span>
@@ -1833,7 +1833,7 @@
 <span class="source-line-no">1820</span><span id="line-1820">       * when the &lt;c&gt;finalize&lt;/c&gt; methods are invoked.</span>
 <span class="source-line-no">1821</span><span id="line-1821">       *</span>
 <span class="source-line-no">1822</span><span id="line-1822">       * &lt;p&gt;</span>
-<span class="source-line-no">1823</span><span id="line-1823">       * Automatically enabled with {@link org.apache.juneau.marshall.Context.Builder#debug()}.</span>
+<span class="source-line-no">1823</span><span id="line-1823">       * Automatically enabled with {@link org.apache.juneau.marshall.Context.Builder#debug() Context.Builder#debug()}.</span>
 <span class="source-line-no">1824</span><span id="line-1824">       *</span>
 <span class="source-line-no">1825</span><span id="line-1825">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">1826</span><span id="line-1826">       * &lt;p class='bjava'&gt;</span>
@@ -1939,7 +1939,7 @@
 <span class="source-line-no">1926</span><span id="line-1926">       * &lt;/p&gt;</span>
 <span class="source-line-no">1927</span><span id="line-1927">       *</span>
 <span class="source-line-no">1928</span><span id="line-1928">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">1929</span><span id="line-1929">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions()}</span>
+<span class="source-line-no">1929</span><span id="line-1929">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions() MarshallingTraverseContext.Builder#detectRecursions()}</span>
 <span class="source-line-no">1930</span><span id="line-1930">       * &lt;/ul&gt;</span>
 <span class="source-line-no">1931</span><span id="line-1931">       *</span>
 <span class="source-line-no">1932</span><span id="line-1932">       * @return This object.</span>
@@ -2850,7 +2850,7 @@
 <span class="source-line-no">2837</span><span id="line-2837">       * &lt;/p&gt;</span>
 <span class="source-line-no">2838</span><span id="line-2838">       *</span>
 <span class="source-line-no">2839</span><span id="line-2839">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">2840</span><span id="line-2840">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#ignoreRecursions()}</span>
+<span class="source-line-no">2840</span><span id="line-2840">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#ignoreRecursions() MarshallingTraverseContext.Builder#ignoreRecursions()}</span>
 <span class="source-line-no">2841</span><span id="line-2841">       * &lt;/ul&gt;</span>
 <span class="source-line-no">2842</span><span id="line-2842">       *</span>
 <span class="source-line-no">2843</span><span id="line-2843">       * @return This object.</span>
@@ -2891,7 +2891,7 @@
 <span class="source-line-no">2878</span><span id="line-2878">       * &lt;/p&gt;</span>
 <span class="source-line-no">2879</span><span id="line-2879">       *</span>
 <span class="source-line-no">2880</span><span id="line-2880">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">2881</span><span id="line-2881">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#initialDepth(int)}</span>
+<span class="source-line-no">2881</span><span id="line-2881">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#initialDepth(int) MarshallingTraverseContext.Builder#initialDepth(int)}</span>
 <span class="source-line-no">2882</span><span id="line-2882">       * &lt;/ul&gt;</span>
 <span class="source-line-no">2883</span><span id="line-2883">       *</span>
 <span class="source-line-no">2884</span><span id="line-2884">       * @param value</span>
@@ -3229,7 +3229,7 @@
 <span class="source-line-no">3216</span><span id="line-3216">       * &lt;/p&gt;</span>
 <span class="source-line-no">3217</span><span id="line-3217">       *</span>
 <span class="source-line-no">3218</span><span id="line-3218">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3219</span><span id="line-3219">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#keepNullProperties()}</span>
+<span class="source-line-no">3219</span><span id="line-3219">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#keepNullProperties() Serializer.Builder#keepNullProperties()}</span>
 <span class="source-line-no">3220</span><span id="line-3220">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3221</span><span id="line-3221">       *</span>
 <span class="source-line-no">3222</span><span id="line-3222">       * @return This object.</span>
@@ -3477,7 +3477,7 @@
 <span class="source-line-no">3464</span><span id="line-3464">       * &lt;/p&gt;</span>
 <span class="source-line-no">3465</span><span id="line-3465">       *</span>
 <span class="source-line-no">3466</span><span id="line-3466">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3467</span><span id="line-3467">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#maxDepth(int)}</span>
+<span class="source-line-no">3467</span><span id="line-3467">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#maxDepth(int) MarshallingTraverseContext.Builder#maxDepth(int)}</span>
 <span class="source-line-no">3468</span><span id="line-3468">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3469</span><span id="line-3469">       *</span>
 <span class="source-line-no">3470</span><span id="line-3470">       * @param value</span>
@@ -3512,7 +3512,7 @@
 <span class="source-line-no">3499</span><span id="line-3499">       * &lt;/p&gt;</span>
 <span class="source-line-no">3500</span><span id="line-3500">       *</span>
 <span class="source-line-no">3501</span><span id="line-3501">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3502</span><span id="line-3502">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#maxIndent(int)}</span>
+<span class="source-line-no">3502</span><span id="line-3502">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#maxIndent(int) WriterSerializer.Builder#maxIndent(int)}</span>
 <span class="source-line-no">3503</span><span id="line-3503">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3504</span><span id="line-3504">       *</span>
 <span class="source-line-no">3505</span><span id="line-3505">       * @param value</span>
@@ -3686,8 +3686,8 @@
 <span class="source-line-no">3673</span><span id="line-3673">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3674</span><span id="line-3674">       *</span>
 <span class="source-line-no">3675</span><span id="line-3675">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3676</span><span id="line-3676">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}</span>
-<span class="source-line-no">3677</span><span id="line-3677">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}</span>
+<span class="source-line-no">3676</span><span id="line-3676">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat) OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}</span>
+<span class="source-line-no">3677</span><span id="line-3677">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat) OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}</span>
 <span class="source-line-no">3678</span><span id="line-3678">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3679</span><span id="line-3679">       *</span>
 <span class="source-line-no">3680</span><span id="line-3680">       * @param value</span>
@@ -3745,8 +3745,8 @@
 <span class="source-line-no">3732</span><span id="line-3732">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3733</span><span id="line-3733">       *</span>
 <span class="source-line-no">3734</span><span id="line-3734">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3735</span><span id="line-3735">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}</span>
-<span class="source-line-no">3736</span><span id="line-3736">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#format(HttpPartFormat)}</span>
+<span class="source-line-no">3735</span><span id="line-3735">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#format(HttpPartFormat) OpenApiSerializer.Builder#format(HttpPartFormat)}</span>
+<span class="source-line-no">3736</span><span id="line-3736">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#format(HttpPartFormat) OpenApiParser.Builder#format(HttpPartFormat)}</span>
 <span class="source-line-no">3737</span><span id="line-3737">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3738</span><span id="line-3738">       *</span>
 <span class="source-line-no">3739</span><span id="line-3739">       * @param value</span>
@@ -3847,7 +3847,7 @@
 <span class="source-line-no">3834</span><span id="line-3834">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3835</span><span id="line-3835">       *</span>
 <span class="source-line-no">3836</span><span id="line-3836">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3837</span><span id="line-3837">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormat(ParamFormat)}</span>
+<span class="source-line-no">3837</span><span id="line-3837">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormat(ParamFormat) UonSerializer.Builder#paramFormat(ParamFormat)}</span>
 <span class="source-line-no">3838</span><span id="line-3838">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3839</span><span id="line-3839">       *</span>
 <span class="source-line-no">3840</span><span id="line-3840">       * @param value The new value for this property.</span>
@@ -3889,7 +3889,7 @@
 <span class="source-line-no">3876</span><span id="line-3876">       * &lt;/p&gt;</span>
 <span class="source-line-no">3877</span><span id="line-3877">       *</span>
 <span class="source-line-no">3878</span><span id="line-3878">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">3879</span><span id="line-3879">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormatPlain()}</span>
+<span class="source-line-no">3879</span><span id="line-3879">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormatPlain() UonSerializer.Builder#paramFormatPlain()}</span>
 <span class="source-line-no">3880</span><span id="line-3880">       * &lt;/ul&gt;</span>
 <span class="source-line-no">3881</span><span id="line-3881">       *</span>
 <span class="source-line-no">3882</span><span id="line-3882">       * @return This object.</span>
@@ -4693,7 +4693,7 @@
 <span class="source-line-no">4680</span><span id="line-4680">       * &lt;/p&gt;</span>
 <span class="source-line-no">4681</span><span id="line-4681">       *</span>
 <span class="source-line-no">4682</span><span id="line-4682">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">4683</span><span id="line-4683">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char)}</span>
+<span class="source-line-no">4683</span><span id="line-4683">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char) WriterSerializer.Builder#quoteChar(char)}</span>
 <span class="source-line-no">4684</span><span id="line-4684">       * &lt;/ul&gt;</span>
 <span class="source-line-no">4685</span><span id="line-4685">       *</span>
 <span class="source-line-no">4686</span><span id="line-4686">       * @param value</span>
@@ -5176,7 +5176,7 @@
 <span class="source-line-no">5163</span><span id="line-5163">       * &lt;/p&gt;</span>
 <span class="source-line-no">5164</span><span id="line-5164">       *</span>
 <span class="source-line-no">5165</span><span id="line-5165">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5166</span><span id="line-5166">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortCollections()}</span>
+<span class="source-line-no">5166</span><span id="line-5166">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortCollections() Serializer.Builder#sortCollections()}</span>
 <span class="source-line-no">5167</span><span id="line-5167">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5168</span><span id="line-5168">       *</span>
 <span class="source-line-no">5169</span><span id="line-5169">       * @return This object.</span>
@@ -5214,7 +5214,7 @@
 <span class="source-line-no">5201</span><span id="line-5201">       * &lt;/p&gt;</span>
 <span class="source-line-no">5202</span><span id="line-5202">       *</span>
 <span class="source-line-no">5203</span><span id="line-5203">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5204</span><span id="line-5204">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortMaps()}</span>
+<span class="source-line-no">5204</span><span id="line-5204">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortMaps() Serializer.Builder#sortMaps()}</span>
 <span class="source-line-no">5205</span><span id="line-5205">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5206</span><span id="line-5206">       *</span>
 <span class="source-line-no">5207</span><span id="line-5207">       * @return This object.</span>
@@ -5255,7 +5255,7 @@
 <span class="source-line-no">5242</span><span id="line-5242">       * &lt;/p&gt;</span>
 <span class="source-line-no">5243</span><span id="line-5243">       *</span>
 <span class="source-line-no">5244</span><span id="line-5244">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5245</span><span id="line-5245">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char)}</span>
+<span class="source-line-no">5245</span><span id="line-5245">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char) WriterSerializer.Builder#quoteChar(char)}</span>
 <span class="source-line-no">5246</span><span id="line-5246">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5247</span><span id="line-5247">       *</span>
 <span class="source-line-no">5248</span><span id="line-5248">       * @return This object.</span>
@@ -5401,7 +5401,7 @@
 <span class="source-line-no">5388</span><span id="line-5388">       * &lt;/p&gt;</span>
 <span class="source-line-no">5389</span><span id="line-5389">       *</span>
 <span class="source-line-no">5390</span><span id="line-5390">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5391</span><span id="line-5391">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyCollections()}</span>
+<span class="source-line-no">5391</span><span id="line-5391">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyCollections() Serializer.Builder#trimEmptyCollections()}</span>
 <span class="source-line-no">5392</span><span id="line-5392">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5393</span><span id="line-5393">       *</span>
 <span class="source-line-no">5394</span><span id="line-5394">       * @return This object.</span>
@@ -5445,7 +5445,7 @@
 <span class="source-line-no">5432</span><span id="line-5432">       * &lt;/p&gt;</span>
 <span class="source-line-no">5433</span><span id="line-5433">       *</span>
 <span class="source-line-no">5434</span><span id="line-5434">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5435</span><span id="line-5435">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyMaps()}</span>
+<span class="source-line-no">5435</span><span id="line-5435">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyMaps() Serializer.Builder#trimEmptyMaps()}</span>
 <span class="source-line-no">5436</span><span id="line-5436">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5437</span><span id="line-5437">       *</span>
 <span class="source-line-no">5438</span><span id="line-5438">       * @return This object.</span>
@@ -5482,7 +5482,7 @@
 <span class="source-line-no">5469</span><span id="line-5469">       * &lt;/p&gt;</span>
 <span class="source-line-no">5470</span><span id="line-5470">       *</span>
 <span class="source-line-no">5471</span><span id="line-5471">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5472</span><span id="line-5472">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#trimStrings()}</span>
+<span class="source-line-no">5472</span><span id="line-5472">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#trimStrings() Parser.Builder#trimStrings()}</span>
 <span class="source-line-no">5473</span><span id="line-5473">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5474</span><span id="line-5474">       *</span>
 <span class="source-line-no">5475</span><span id="line-5475">       * @return This object.</span>
@@ -5517,7 +5517,7 @@
 <span class="source-line-no">5504</span><span id="line-5504">       * &lt;/p&gt;</span>
 <span class="source-line-no">5505</span><span id="line-5505">       *</span>
 <span class="source-line-no">5506</span><span id="line-5506">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5507</span><span id="line-5507">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimStrings()}</span>
+<span class="source-line-no">5507</span><span id="line-5507">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimStrings() Serializer.Builder#trimStrings()}</span>
 <span class="source-line-no">5508</span><span id="line-5508">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5509</span><span id="line-5509">       *</span>
 <span class="source-line-no">5510</span><span id="line-5510">       * @return This object.</span>
@@ -5692,7 +5692,7 @@
 <span class="source-line-no">5679</span><span id="line-5679">       * &lt;/p&gt;</span>
 <span class="source-line-no">5680</span><span id="line-5680">       *</span>
 <span class="source-line-no">5681</span><span id="line-5681">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5682</span><span id="line-5682">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriContext(UriContext)}</span>
+<span class="source-line-no">5682</span><span id="line-5682">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriContext(UriContext) Serializer.Builder#uriContext(UriContext)}</span>
 <span class="source-line-no">5683</span><span id="line-5683">       *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris"&gt;URIs&lt;/a&gt;</span>
 <span class="source-line-no">5684</span><span id="line-5684">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5685</span><span id="line-5685">       *</span>
@@ -5727,7 +5727,7 @@
 <span class="source-line-no">5714</span><span id="line-5714">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5715</span><span id="line-5715">       *</span>
 <span class="source-line-no">5716</span><span id="line-5716">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5717</span><span id="line-5717">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriRelativity(UriRelativity)}</span>
+<span class="source-line-no">5717</span><span id="line-5717">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriRelativity(UriRelativity) Serializer.Builder#uriRelativity(UriRelativity)}</span>
 <span class="source-line-no">5718</span><span id="line-5718">       *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris"&gt;URIs&lt;/a&gt;</span>
 <span class="source-line-no">5719</span><span id="line-5719">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5720</span><span id="line-5720">       *</span>
@@ -5766,7 +5766,7 @@
 <span class="source-line-no">5753</span><span id="line-5753">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5754</span><span id="line-5754">       *</span>
 <span class="source-line-no">5755</span><span id="line-5755">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5756</span><span id="line-5756">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriResolution(UriResolution)}</span>
+<span class="source-line-no">5756</span><span id="line-5756">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriResolution(UriResolution) Serializer.Builder#uriResolution(UriResolution)}</span>
 <span class="source-line-no">5757</span><span id="line-5757">       *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris"&gt;URIs&lt;/a&gt;</span>
 <span class="source-line-no">5758</span><span id="line-5758">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5759</span><span id="line-5759">       *</span>
@@ -5906,7 +5906,7 @@
 <span class="source-line-no">5893</span><span id="line-5893">       * &lt;/p&gt;</span>
 <span class="source-line-no">5894</span><span id="line-5894">       *</span>
 <span class="source-line-no">5895</span><span id="line-5895">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5896</span><span id="line-5896">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace()}</span>
+<span class="source-line-no">5896</span><span id="line-5896">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() WriterSerializer.Builder#useWhitespace()}</span>
 <span class="source-line-no">5897</span><span id="line-5897">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5898</span><span id="line-5898">       * @return This object.</span>
 <span class="source-line-no">5899</span><span id="line-5899">       */</span>
@@ -5942,7 +5942,7 @@
 <span class="source-line-no">5929</span><span id="line-5929">       * &lt;/p&gt;</span>
 <span class="source-line-no">5930</span><span id="line-5930">       *</span>
 <span class="source-line-no">5931</span><span id="line-5931">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">5932</span><span id="line-5932">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace()}</span>
+<span class="source-line-no">5932</span><span id="line-5932">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() WriterSerializer.Builder#useWhitespace()}</span>
 <span class="source-line-no">5933</span><span id="line-5933">       * &lt;/ul&gt;</span>
 <span class="source-line-no">5934</span><span id="line-5934">       *</span>
 <span class="source-line-no">5935</span><span id="line-5935">       * @return This object.</span>
@@ -8465,7 +8465,7 @@
 <span class="source-line-no">8452</span><span id="line-8452">      if (urlIdx &gt;= 0) {</span>
 <span class="source-line-no">8453</span><span id="line-8453">         var arg = (args == null || urlIdx &gt;= args.length) ? null : args[urlIdx];</span>
 <span class="source-line-no">8454</span><span id="line-8454">         var v = arg == null ? null : arg.toString();</span>
-<span class="source-line-no">8455</span><span id="line-8455">         if (v == null || v.trim().isEmpty())</span>
+<span class="source-line-no">8455</span><span id="line-8455">         if (ib(v))</span>
 <span class="source-line-no">8456</span><span id="line-8456">            throw new RemoteMetadataException(interfaceClass, "@Url parameter on " + method.getDeclaringClass().getName() + "." + method.getName() + " must not be null or blank.");</span>
 <span class="source-line-no">8457</span><span id="line-8457">         uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivate, allowedAddressRanges);</span>
 <span class="source-line-no">8458</span><span id="line-8458">         // A scheme-less @Url value is relative and resolved against the client root URL only.</span>

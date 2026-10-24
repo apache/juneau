@@ -619,7 +619,7 @@
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">while</strong> (c != -1) {
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 			c = r.read();
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">if</strong> (c &lt;= 0x1F)
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unescaped control character encountered: '0x%s'"</span>, String.format(<span class="jxr_string">"%04X"</span>, c));
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unescaped control character encountered: '0x%s'"</span>, f(<span class="jxr_string">"%04X"</span>, c));
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">if</strong> (isInEscape) {
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 				<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 				<strong class="jxr_keyword">switch</strong> (c) {

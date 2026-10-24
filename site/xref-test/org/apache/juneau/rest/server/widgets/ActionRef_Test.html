@@ -57,14 +57,14 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> a = ActionRef.of(<span class="jxr_string">"x"</span>)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.enabledWhen(<span class="jxr_string">"status"</span>, Op.EQ, <span class="jxr_string">"OPEN"</span>, <span class="jxr_string">"Must be open"</span>)
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.enabledWhen(<span class="jxr_string">"kind"</span>, Op.NE, <span class="jxr_string">"legacy"</span>, <span class="jxr_string">"Not for legacy"</span>);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertEquals(2, a.enabledWhen.size());
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertSize(2, a.enabledWhen);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertBean(a.enabledWhen.get(0), <span class="jxr_string">"field,op,value,reason"</span>, <span class="jxr_string">"status,EQ,OPEN,Must be open"</span>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertBean(a.enabledWhen.get(1), <span class="jxr_string">"field,op,value,reason"</span>, <span class="jxr_string">"kind,NE,legacy,Not for legacy"</span>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> a05_enabledWhen_presenceForm_recordsRuleWithNullValue() {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> a = ActionRef.of(<span class="jxr_string">"x"</span>).enabledWhen(<span class="jxr_string">"owner"</span>, Op.PRESENT, <span class="jxr_string">"Needs an owner"</span>);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(1, a.enabledWhen.size());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertSize(1, a.enabledWhen);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertBean(a.enabledWhen.get(0), <span class="jxr_string">"field,op,reason"</span>, <span class="jxr_string">"owner,PRESENT,Needs an owner"</span>);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertNull(a.enabledWhen.get(0).value);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		a.enabledWhen(<span class="jxr_string">"owner"</span>, Op.ABSENT, <span class="jxr_string">"Must be unowned"</span>);

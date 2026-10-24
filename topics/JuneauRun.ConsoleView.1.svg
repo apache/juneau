@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="855.6" height="78" viewBox="0 0 855.6 78" role="img" aria-labelledby="title desc">
+<title id="title">The condensed console view of a Maven run, part-way through</title>
+<desc id="desc">juneau-run&#x27;s condensed view during a three-module Maven build: the progress bar at one of three modules and the running module&#x27;s line under the row.</desc>
+<rect width="855.6" height="78" rx="6" fill="#1e1e1e"/>
+<g font-family='SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' font-size="14" xml:space="preserve">
+<text y="25.5"><tspan x="12" textLength="25.2" fill="#d4d4d4">mvn</tspan><tspan x="45.6" textLength="50.4" fill="#d4d4d4">verify</tspan><tspan x="104.4" textLength="8.4" fill="#d4d4d4">·</tspan><tspan x="121.2" textLength="33.6" fill="#d4d4d4">tail</tspan><tspan x="163.2" textLength="16.8" fill="#d4d4d4">-f</tspan><tspan x="188.4" textLength="58.8" fill="#d4d4d4">run.log</tspan><tspan x="255.6" textLength="8.4" fill="#d4d4d4">·</tspan><tspan x="272.4" textLength="33.6" fill="#d4d4d4">tail</tspan><tspan x="314.4" textLength="16.8" fill="#d4d4d4">-f</tspan><tspan x="339.6" textLength="142.8" fill="#d4d4d4">run.condensed.log</tspan></text>
+<text y="43.5"><tspan x="12" textLength="8.4" fill="#11a8cd">⠋</tspan><tspan x="28.8" textLength="25.2" fill="#d4d4d4">mvn</tspan><tspan x="62.4" textLength="50.4" fill="#d4d4d4">verify</tspan><tspan x="129.6" textLength="8.4" fill="#0dbc79">█</tspan><tspan x="138" textLength="8.4" fill="#e5e510">█</tspan><tspan x="146.4" textLength="8.4" fill="#d4d4d4">░</tspan><tspan x="171.6" textLength="25.2" fill="#d4d4d4">1/3</tspan><tspan x="213.6" textLength="8.4" fill="#d4d4d4">2</tspan><tspan x="230.4" textLength="42" fill="#d4d4d4">tests</tspan><tspan x="810" textLength="33.6" fill="#d4d4d4">0:03</tspan></text>
+<text y="61.5"><tspan x="45.6" textLength="33.6" fill="#d4d4d4">Demo</tspan><tspan x="87.6" textLength="50.4" fill="#d4d4d4">Module</tspan><tspan x="146.4" textLength="8.4" fill="#d4d4d4">B</tspan><tspan x="810" textLength="33.6" fill="#d4d4d4">0:03</tspan></text>
+</g>
+</svg>

@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		@Test <strong class="jxr_keyword">void</strong> b08_filterResolved() {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">var</strong> q = search(<span class="jxr_string">"name=Bob,age=$gt(1)"</span>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">var</strong> f = (Filter.And) q.filter();
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			assertEquals(2, f.items().size());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			assertSize(2, f.items());
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">var</strong> leaf = (Filter.Leaf) f.items().get(1);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertBean(leaf, <span class="jxr_string">"column,type"</span>, <span class="jxr_string">"age,NUMERIC"</span>);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			assertEquals(<span class="jxr_string">"$gt"</span>, leaf.expression().name());
@@ -185,7 +185,7 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		@Test <strong class="jxr_keyword">void</strong> c01_sortKeys() {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">var</strong> q = resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"age:desc, name, version-"</span>));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertEquals(3, q.sort().size());
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertSize(3, q.sort());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			assertBean(q.sort().get(0), <span class="jxr_string">"column,descending,type"</span>, <span class="jxr_string">"age,true,NUMERIC"</span>);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			assertFalse(q.sort().get(1).descending());
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			assertTrue(q.sort().get(2).descending());

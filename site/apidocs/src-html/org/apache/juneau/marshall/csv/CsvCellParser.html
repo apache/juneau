@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61">    * @throws ParseException If the input is invalid.</span>
 <span class="source-line-no">062</span><span id="line-62">    */</span>
 <span class="source-line-no">063</span><span id="line-63">   public static Object read(String cell, String nullMarker) throws ParseException {</span>
-<span class="source-line-no">064</span><span id="line-64">      if (cell == null || cell.isEmpty())</span>
+<span class="source-line-no">064</span><span id="line-64">      if (ie(cell))</span>
 <span class="source-line-no">065</span><span id="line-65">         return null;</span>
 <span class="source-line-no">066</span><span id="line-66">      var p = new CsvCellParser(cell, nullMarker);</span>
 <span class="source-line-no">067</span><span id="line-67">      try {</span>

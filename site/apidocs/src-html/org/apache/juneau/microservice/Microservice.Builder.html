@@ -483,7 +483,7 @@
 <span class="source-line-no">470</span><span id="line-470">       * Adds a bean for vars defined in the var resolver.</span>
 <span class="source-line-no">471</span><span id="line-471">       *</span>
 <span class="source-line-no">472</span><span id="line-472">       * &lt;p&gt;</span>
-<span class="source-line-no">473</span><span id="line-473">       * This calls {@link org.apache.juneau.commons.svl.VarResolver.Builder#bean(Class,Object)} on the var resolver used to construct the configuration</span>
+<span class="source-line-no">473</span><span id="line-473">       * This calls {@link org.apache.juneau.commons.svl.VarResolver.Builder#bean(Class,Object) VarResolver.Builder#bean(Class,Object)} on the var resolver used to construct the configuration</span>
 <span class="source-line-no">474</span><span id="line-474">       * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.</span>
 <span class="source-line-no">475</span><span id="line-475">       *</span>
 <span class="source-line-no">476</span><span id="line-476">       * @param c The bean type.</span>
@@ -500,7 +500,7 @@
 <span class="source-line-no">487</span><span id="line-487">       * Augments the set of variables defined in the configuration and var resolver.</span>
 <span class="source-line-no">488</span><span id="line-488">       *</span>
 <span class="source-line-no">489</span><span id="line-489">       * &lt;p&gt;</span>
-<span class="source-line-no">490</span><span id="line-490">       * This calls {@link org.apache.juneau.commons.svl.VarResolver.Builder#vars(Class[])} on the var resolver used to construct the configuration</span>
+<span class="source-line-no">490</span><span id="line-490">       * This calls {@link org.apache.juneau.commons.svl.VarResolver.Builder#vars(Class[]) VarResolver.Builder#vars(Class[])} on the var resolver used to construct the configuration</span>
 <span class="source-line-no">491</span><span id="line-491">       * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.</span>
 <span class="source-line-no">492</span><span id="line-492">       *</span>
 <span class="source-line-no">493</span><span id="line-493">       * @param vars The set of variables to append to the var resolver builder.</span>

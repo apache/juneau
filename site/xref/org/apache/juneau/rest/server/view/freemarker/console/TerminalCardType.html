@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">if</strong> (! BODY_KEYS.contains(k))
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<strong class="jxr_keyword">throw</strong> source.error(<span class="jxr_string">"type='terminal' unknown key '%s'; allowed: contractVersion, terminal."</span>, k);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> version = envelope.get(<span class="jxr_string">"contractVersion"</span>);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (! eq(<span class="jxr_string">"1"</span>, version))
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (neq(<span class="jxr_string">"1"</span>, version))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">throw</strong> source.error(<span class="jxr_string">"type='terminal' requires contractVersion: '1'; got '%s'."</span>, version);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (! (envelope.get(<span class="jxr_string">"terminal"</span>) instanceof Map&lt;?,?&gt; terminal))
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">throw</strong> source.error(<span class="jxr_string">"type='terminal' requires a terminal object."</span>);

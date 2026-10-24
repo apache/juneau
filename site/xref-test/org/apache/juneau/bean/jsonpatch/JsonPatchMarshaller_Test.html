@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> j = JsonPatchMarshaller.of(patch);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> back = JsonPatchMarshaller.to(j, JsonPatch.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(6, back.size());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertSize(6, back);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertInstanceOf(AddOp.<strong class="jxr_keyword">class</strong>, back.get(0));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertInstanceOf(RemoveOp.<strong class="jxr_keyword">class</strong>, back.get(1));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertInstanceOf(ReplaceOp.<strong class="jxr_keyword">class</strong>, back.get(2));
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">void</strong> a08_stringShortcut_typeArgs() {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> j = JsonPatchMarshaller.of(<strong class="jxr_keyword">new</strong> JsonPatch(<strong class="jxr_keyword">new</strong> AddOp(<span class="jxr_string">"/x"</span>, 1), <strong class="jxr_keyword">new</strong> RemoveOp(<span class="jxr_string">"/y"</span>)));
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> back = JsonPatchMarshaller.&lt;JsonPatch&gt;to(j, (Type)JsonPatch.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(2, back.size());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertSize(2, back);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertInstanceOf(AddOp.<strong class="jxr_keyword">class</strong>, back.get(0));
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertBean(back.get(0), <span class="jxr_string">"path,value"</span>, <span class="jxr_string">"/x,1"</span>);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertInstanceOf(RemoveOp.<strong class="jxr_keyword">class</strong>, back.get(1));
@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">void</strong> a09_readerShortcut_typeArgs() {
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> j = JsonPatchMarshaller.of(<strong class="jxr_keyword">new</strong> JsonPatch(<strong class="jxr_keyword">new</strong> MoveOp(<span class="jxr_string">"/a"</span>, <span class="jxr_string">"/b"</span>)));
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> back = JsonPatchMarshaller.&lt;JsonPatch&gt;to(<strong class="jxr_keyword">new</strong> StringReader(j), (Type)JsonPatch.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(1, back.size());
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertSize(1, back);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertInstanceOf(MoveOp.<strong class="jxr_keyword">class</strong>, back.get(0));
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertBean(back.get(0), <span class="jxr_string">"path,from"</span>, <span class="jxr_string">"/a,/b"</span>);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}

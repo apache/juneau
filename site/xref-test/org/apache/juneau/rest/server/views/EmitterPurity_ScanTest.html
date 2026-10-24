@@ -25,222 +25,222 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Design test &lt;b&gt;33&lt;/b&gt;: the &lt;b&gt;emitter-purity scan&lt;/b&gt; &amp;mdash; every {@code rawText(...)} call site in</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * the &lt;b&gt;main&lt;/b&gt; Java of the views and widgets trees hands the verbatim writer a JSON-sidecar payload (or provably</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * nothing), and the content-bearing sites are a closed, individually-named set that &lt;b&gt;cannot grow&lt;/b&gt;.</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * This is the test the design nominates as proving the headline claim of the emitter surgery: emitters stopped being</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * markup authors and became descriptor authors. It shares {@link RawContentSinkScanner}'s stripper and argument extractor with</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@link ShippedJs_SinkScan_Test}, which guards the shipped JavaScript against HTML sinks.</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The design's universal is now the pin&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * The contract is universal &amp;mdash; &lt;i&gt;every&lt;/i&gt; {@code rawText} takes a sidecar payload, i.e. the</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * content-bearing count is &lt;b&gt;zero&lt;/b&gt;.  That is now true: the page/card declarative-content emitters</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * ({@code Tab}/{@code Subtab}/{@code CardContent}) are gone, {@link #KNOWN_CONTENT_SINKS} is empty, and a</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;new&lt;/b&gt; content-bearing {@code rawText} anywhere in either tree fails this test.</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Why the anti-vacuity checks come first&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * Every assertion below &amp;mdash; a floor, a universal, an exact-set pin &amp;mdash; is satisfied &lt;i&gt;more&lt;/i&gt; easily by a</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * scan that finds nothing than by one that finds the real tree. {@link RawContentSinkScanner}'s own javadoc records</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * this hazard biting it once already: the widgets tree is reached by a relative path and a walk skips a missing</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * directory in silence. So the checks proving the scan still sees both trees are as load-bearing as the violation</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * check itself, and they run first.</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<span class="jxr_string">"java:S3415"</span> <em class="jxr_comment">// The Set.of/List.of fixture is the expected value; the constant/field is the actual under test.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  })
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">class</strong> EmitterPurity_ScanTest <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * The content-bearing {@code rawText(...)} sinks that survive the emitter surgery, named individually because an</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * unnamed allowance is indistinguishable from a hole.</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * Empty: the page/card declarative-content emitters are gone.  &lt;b&gt;This set must stay empty.&lt;/b&gt;</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; KNOWN_CONTENT_SINKS = Set.of();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * Floor on the total number of {@code rawText(...)} sites, matching the remaining sidecar write</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * ({@code RegionTable}). ViewTable's VIEW_META / bulk sidecars retired with the MOVE Java delete.</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * Deliberately slack: sidecars legitimately come and go as emitters are refactored, so pinning the total exactly</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * would make this a change-detector. Its only job is to fail loudly if the scan stops seeing the tree at all.</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MINIMUM_EXPECTED_SITES = 1;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path moduleRoot() {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> root = RawContentSinkScanner.locateModuleRoot();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertNotNull(root, <span class="jxr_string">"could not locate the juneau-rest-server-views module root; the scan would see nothing"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">return</strong> root;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;RawContentSinkScanner.RawTextSite&gt; sites() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">return</strong> RawContentSinkScanner.scanRawTextTree(moduleRoot());
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">// a) ANTI-VACUITY.  First on purpose - see the class javadoc.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Test <strong class="jxr_keyword">void</strong> a01_scanSeesTheRealTree() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> sites = sites();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertTrue(sites.size() &gt;= MINIMUM_EXPECTED_SITES,
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			() -&gt; <span class="jxr_string">"the scan stopped seeing the tree, and a silently-empty scan reads as a pass.  Found only "</span>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  				+ sites.size() + <span class="jxr_string">" rawText site(s): "</span> + sites);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> a02_scanReachesTheSiblingWidgetsTree() {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<em class="jxr_comment">// Asserted separately from every other check here because all of those are floors or universals, and both</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<em class="jxr_comment">// are satisfied MORE easily by a smaller set.  This is the exact hazard RawContentSinkScanner's javadoc</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<em class="jxr_comment">// records having bitten it before.</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> widgets = RawContentSinkScanner.widgetsModuleRoot(moduleRoot()).resolve(<span class="jxr_string">"src/main/java"</span>);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertTrue(Files.isDirectory(widgets),
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			() -&gt; <span class="jxr_string">"the widgets main tree is not where this scan looks ("</span> + widgets + <span class="jxr_string">"), so its emitters would drop "</span>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				+ <span class="jxr_string">"out of every scan silently while the detection logic stayed perfectly correct"</span>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> a03_scanFindsTheKnownSidecarShape() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> args = sites().stream().map(RawContentSinkScanner.RawTextSite::arg).toList();
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(args.contains(<span class="jxr_string">"json"</span>),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			() -&gt; <span class="jxr_string">"expected the RegionTable sidecar payload shape to still exist: "</span> + args);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<em class="jxr_comment">// ViewTable bulkJson sidecar retired with the MOVE Java delete.</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Test <strong class="jxr_keyword">void</strong> a04_scanFindsTheKnownContentSinks() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<em class="jxr_comment">// If the classifier silently stopped recognizing content, b01/b02 would both pass vacuously.</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> keys = sites().stream().map(RawContentSinkScanner.RawTextSite::key).toList();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> known : KNOWN_CONTENT_SINKS)
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			assertTrue(keys.contains(known),
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				() -&gt; <span class="jxr_string">"the scan no longer finds the known content sink '"</span> + known + <span class="jxr_string">"'.  If it was genuinely removed "</span>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 					+ <span class="jxr_string">"(the deprecation window closing) drop it from KNOWN_CONTENT_SINKS in the same commit; "</span>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 					+ <span class="jxr_string">"otherwise the scan has gone blind.  Found: "</span> + keys);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a05_argumentExtractionIsBalanced() {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<em class="jxr_comment">// Must be balanced-paren, or rawText(escapeForScript(nestedJson(v, tokenless))) truncates to</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<em class="jxr_comment">// "escapeForScript(nestedJson(v" and gets silently RECLASSIFIED as content-bearing.</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> found = RawContentSinkScanner.scanRawText(<span class="jxr_string">"X.java"</span>,
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<span class="jxr_string">"class X { void f() { q.text(rawText(escapeForScript(nestedJson(v, tokenless)))); } }"</span>);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(1, found.size(), found::toString);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(<span class="jxr_string">"escapeForScript(nestedJson(v, tokenless))"</span>, found.get(0).arg());
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertTrue(found.get(0).isSidecarPayload());
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> a06_commentMentionsAreNotCounted() {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// The real tree mentions rawText(...) in javadoc on ViewTable and siblings.  Counting prose would both</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// inflate the floor and manufacture phantom violations.</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> found = RawContentSinkScanner.scanRawText(<span class="jxr_string">"X.java"</span>, <span class="jxr_string">""</span><span class="jxr_string">"
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">class</strong> X {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 				<em class="jxr_javadoccomment">/** Writes via {@link HtmlBuilder#rawText(String) rawText} verbatim. */</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<em class="jxr_comment">// rawText(t.content) mentioned here</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">void</strong> f() {}
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			}
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<span class="jxr_string">""</span><span class="jxr_string">");
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertTrue(found.isEmpty(), found::toString);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a07_classifierSeparatesTheThreeShapes() {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> sidecar = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 1, <span class="jxr_string">"json"</span>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> inline = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 2, <span class="jxr_string">"escapeForScript(nestedJson(v))"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> empty = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 3, <span class="jxr_string">"\&quot;\&quot;"</span>);
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> content = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 4, <span class="jxr_string">"t.content"</span>);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertTrue(sidecar.isSidecarPayload() &amp;&amp; !sidecar.isContentBearing());
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertTrue(inline.isSidecarPayload() &amp;&amp; !inline.isContentBearing());
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertTrue(empty.isEmptyLiteral() &amp;&amp; !empty.isContentBearing());
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertTrue(content.isContentBearing(), <span class="jxr_string">"a bare field read is the shape a live-data body would take"</span>);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_comment">// b) THE HEADLINE CLAIM.</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test <strong class="jxr_keyword">void</strong> b01_everyRawTextIsASidecarPayloadEmptyOrANamedContentSink() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> violations = sites().stream()
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			.filter(s -&gt; !KNOWN_CONTENT_SINKS.contains(s.key()))
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			.map(RawContentSinkScanner.RawTextSite::toString)
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			.toList();
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertTrue(violations.isEmpty(),
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			() -&gt; <span class="jxr_string">"a NEW content-bearing rawText(...) sink appeared.  Emitters author DESCRIPTORS, not markup: every "</span>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				+ <span class="jxr_string">"rawText in main Java must hand the verbatim writer a JSON-sidecar payload.  The only content-bearing "</span>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				+ <span class="jxr_string">"exceptions are the deprecated declarative-content sinks named in KNOWN_CONTENT_SINKS, and that set "</span>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				+ <span class="jxr_string">"exists to shrink to empty - never to grow:\n  "</span> + String.join(<span class="jxr_string">"\n  "</span>, violations));
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Test <strong class="jxr_keyword">void</strong> b02_theContentBearingSurfaceIsEmpty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> content = sites().stream()
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			.map(RawContentSinkScanner.RawTextSite::toString)
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			.toList();
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(List.of(), content,
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			() -&gt; <span class="jxr_string">"the content-bearing rawText surface closed with the page/card emitters.  It must stay empty:\n  "</span>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				+ String.join(<span class="jxr_string">"\n  "</span>, content));
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> b03_theRegionEmitterIsPureFromDayOne() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<em class="jxr_comment">// The emitter this item ADDS must be on the right side of the line from the start.  A region container is an</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<em class="jxr_comment">// EMPTY div plus a descriptor sidecar; if RegionTable ever writes content verbatim, the whole</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<em class="jxr_comment">// "configuration rides the sidecar, not the markup" claim is gone.</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> region = sites().stream().filter(s -&gt; eq(s.file(), <span class="jxr_string">"RegionTable.java"</span>)).toList();
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertFalse(region.isEmpty(),
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<span class="jxr_string">"RegionTable writes a descriptor sidecar, so at least one rawText site is expected; finding none means "</span>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				+ <span class="jxr_string">"the scan is not reaching it"</span>);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		region.forEach(s -&gt; assertTrue(s.isSidecarPayload(),
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			() -&gt; <span class="jxr_string">"the region emitter must never be a content sink: "</span> + s));
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Test <strong class="jxr_keyword">void</strong> b04_viewTableIsConstantsOnly_noRawText() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> viewTable = sites().stream().filter(s -&gt; eq(s.file(), <span class="jxr_string">"ViewTable.java"</span>)).toList();
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(List.of(), viewTable,
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			() -&gt; <span class="jxr_string">"ViewTable is constants-only after MOVE delete; it must not write rawText: "</span> + viewTable);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test <strong class="jxr_keyword">void</strong> b05_everyContentSinkIsInTheDeprecatedDeclarativePath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<em class="jxr_comment">// Pins WHERE the four live, not just how many.  A content sink migrating into a different emitter would keep</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<em class="jxr_comment">// the count at four while quietly widening the blast radius.</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> files = sites().stream()
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.map(RawContentSinkScanner.RawTextSite::file)
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.distinct()
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.sorted()
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			.toList();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertEquals(List.of(), files,
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<span class="jxr_string">"content-bearing rawText must not return: the page/card declarative-content emitters are gone"</span>);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">// c) Proof the guard BITES.  a01-a07 prove the scan sees the tree; these prove that seeing it is not the same as</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">//    a passing test being meaningful.  Both mutate REAL main source text, so they cannot drift from the shapes</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_comment">//    the emitters actually use the way a hand-written fixture silently would.</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	@Test <strong class="jxr_keyword">void</strong> c01_mutatingARealSidecarIntoAFieldRead_becomesAViolation() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">var</strong> regionTable = moduleRoot().resolve(<span class="jxr_string">"src/main/java/org/apache/juneau/rest/server/views/RegionTable.java"</span>);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> src = Files.readString(regionTable);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertTrue(src.contains(<span class="jxr_string">"text(rawText(json))"</span>), <span class="jxr_string">"the real sidecar shape moved; this mutation no longer applies"</span>);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> mutated = src.replace(<span class="jxr_string">"text(rawText(json))"</span>, <span class="jxr_string">"text(rawText(row.liveValue))"</span>);
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> sites = RawContentSinkScanner.scanRawText(<span class="jxr_string">"RegionTable.java"</span>, mutated);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> offenders = sites.stream().filter(RawContentSinkScanner.RawTextSite::isContentBearing).toList();
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertEquals(1, offenders.size(),
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			() -&gt; <span class="jxr_string">"turning one real sidecar write into a live-data field read must produce exactly one content-bearing "</span>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				+ <span class="jxr_string">"site; if it produces none, b01/b02 are passing for free: "</span> + sites);
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Design test &lt;b&gt;33&lt;/b&gt;: the &lt;b&gt;emitter-purity scan&lt;/b&gt; &amp;mdash; every {@code rawText(...)} call site in</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * the &lt;b&gt;main&lt;/b&gt; Java of the views and widgets trees hands the verbatim writer a JSON-sidecar payload (or provably</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * nothing), and the content-bearing sites are a closed, individually-named set that &lt;b&gt;cannot grow&lt;/b&gt;.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * This is the test the design nominates as proving the headline claim of the emitter surgery: emitters stopped being</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * markup authors and became descriptor authors. It shares {@link RawContentSinkScanner}'s stripper and argument extractor with</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * {@link ShippedJs_SinkScan_Test}, which guards the shipped JavaScript against HTML sinks.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The design's universal is now the pin&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * The contract is universal &amp;mdash; &lt;i&gt;every&lt;/i&gt; {@code rawText} takes a sidecar payload, i.e. the</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * content-bearing count is &lt;b&gt;zero&lt;/b&gt;.  That is now true: the page/card declarative-content emitters</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * ({@code Tab}/{@code Subtab}/{@code CardContent}) are gone, {@link #KNOWN_CONTENT_SINKS} is empty, and a</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;new&lt;/b&gt; content-bearing {@code rawText} anywhere in either tree fails this test.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Why the anti-vacuity checks come first&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Every assertion below &amp;mdash; a floor, a universal, an exact-set pin &amp;mdash; is satisfied &lt;i&gt;more&lt;/i&gt; easily by a</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * scan that finds nothing than by one that finds the real tree. {@link RawContentSinkScanner}'s own javadoc records</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * this hazard biting it once already: the widgets tree is reached by a relative path and a walk skips a missing</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * directory in silence. So the checks proving the scan still sees both trees are as load-bearing as the violation</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * check itself, and they run first.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<span class="jxr_string">"java:S3415"</span> <em class="jxr_comment">// The Set.of/List.of fixture is the expected value; the constant/field is the actual under test.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  })
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">class</strong> EmitterPurity_ScanTest <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * The content-bearing {@code rawText(...)} sinks that survive the emitter surgery, named individually because an</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * unnamed allowance is indistinguishable from a hole.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * Empty: the page/card declarative-content emitters are gone.  &lt;b&gt;This set must stay empty.&lt;/b&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; KNOWN_CONTENT_SINKS = Set.of();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * Floor on the total number of {@code rawText(...)} sites, matching the remaining sidecar write</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * ({@code RegionTable}). ViewTable's VIEW_META / bulk sidecars retired with the MOVE Java delete.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * Deliberately slack: sidecars legitimately come and go as emitters are refactored, so pinning the total exactly</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * would make this a change-detector. Its only job is to fail loudly if the scan stops seeing the tree at all.</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MINIMUM_EXPECTED_SITES = 1;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path moduleRoot() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> root = RawContentSinkScanner.locateModuleRoot();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertNotNull(root, <span class="jxr_string">"could not locate the juneau-rest-server-views module root; the scan would see nothing"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">return</strong> root;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;RawContentSinkScanner.RawTextSite&gt; sites() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> RawContentSinkScanner.scanRawTextTree(moduleRoot());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">// a) ANTI-VACUITY.  First on purpose - see the class javadoc.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a01_scanSeesTheRealTree() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> sites = sites();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertTrue(sites.size() &gt;= MINIMUM_EXPECTED_SITES,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			() -&gt; <span class="jxr_string">"the scan stopped seeing the tree, and a silently-empty scan reads as a pass.  Found only "</span>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				+ sites.size() + <span class="jxr_string">" rawText site(s): "</span> + sites);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a02_scanReachesTheSiblingWidgetsTree() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<em class="jxr_comment">// Asserted separately from every other check here because all of those are floors or universals, and both</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<em class="jxr_comment">// are satisfied MORE easily by a smaller set.  This is the exact hazard RawContentSinkScanner's javadoc</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<em class="jxr_comment">// records having bitten it before.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> widgets = RawContentSinkScanner.widgetsModuleRoot(moduleRoot()).resolve(<span class="jxr_string">"src/main/java"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertTrue(Files.isDirectory(widgets),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			() -&gt; <span class="jxr_string">"the widgets main tree is not where this scan looks ("</span> + widgets + <span class="jxr_string">"), so its emitters would drop "</span>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				+ <span class="jxr_string">"out of every scan silently while the detection logic stayed perfectly correct"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test <strong class="jxr_keyword">void</strong> a03_scanFindsTheKnownSidecarShape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> args = sites().stream().map(RawContentSinkScanner.RawTextSite::arg).toList();
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertTrue(args.contains(<span class="jxr_string">"json"</span>),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			() -&gt; <span class="jxr_string">"expected the RegionTable sidecar payload shape to still exist: "</span> + args);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<em class="jxr_comment">// ViewTable bulkJson sidecar retired with the MOVE Java delete.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> a04_scanFindsTheKnownContentSinks() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<em class="jxr_comment">// If the classifier silently stopped recognizing content, b01/b02 would both pass vacuously.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> keys = sites().stream().map(RawContentSinkScanner.RawTextSite::key).toList();
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> known : KNOWN_CONTENT_SINKS)
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			assertTrue(keys.contains(known),
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 				() -&gt; <span class="jxr_string">"the scan no longer finds the known content sink '"</span> + known + <span class="jxr_string">"'.  If it was genuinely removed "</span>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 					+ <span class="jxr_string">"(the deprecation window closing) drop it from KNOWN_CONTENT_SINKS in the same commit; "</span>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 					+ <span class="jxr_string">"otherwise the scan has gone blind.  Found: "</span> + keys);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a05_argumentExtractionIsBalanced() {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<em class="jxr_comment">// Must be balanced-paren, or rawText(escapeForScript(nestedJson(v, tokenless))) truncates to</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<em class="jxr_comment">// "escapeForScript(nestedJson(v" and gets silently RECLASSIFIED as content-bearing.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> found = RawContentSinkScanner.scanRawText(<span class="jxr_string">"X.java"</span>,
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<span class="jxr_string">"class X { void f() { q.text(rawText(escapeForScript(nestedJson(v, tokenless)))); } }"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertSize(found::toString, 1, found);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(<span class="jxr_string">"escapeForScript(nestedJson(v, tokenless))"</span>, found.get(0).arg());
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertTrue(found.get(0).isSidecarPayload());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a06_commentMentionsAreNotCounted() {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// The real tree mentions rawText(...) in javadoc on ViewTable and siblings.  Counting prose would both</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_comment">// inflate the floor and manufacture phantom violations.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> found = RawContentSinkScanner.scanRawText(<span class="jxr_string">"X.java"</span>, <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">class</strong> X {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<em class="jxr_javadoccomment">/** Writes via {@link HtmlBuilder#rawText(String) rawText} verbatim. */</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<em class="jxr_comment">// rawText(t.content) mentioned here</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">void</strong> f() {}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<span class="jxr_string">""</span><span class="jxr_string">");
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertTrue(found.isEmpty(), found::toString);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@Test <strong class="jxr_keyword">void</strong> a07_classifierSeparatesTheThreeShapes() {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> sidecar = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 1, <span class="jxr_string">"json"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> inline = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 2, <span class="jxr_string">"escapeForScript(nestedJson(v))"</span>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> empty = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 3, <span class="jxr_string">"\&quot;\&quot;"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> content = <strong class="jxr_keyword">new</strong> RawContentSinkScanner.RawTextSite(<span class="jxr_string">"A.java"</span>, 4, <span class="jxr_string">"t.content"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertTrue(sidecar.isSidecarPayload() &amp;&amp; !sidecar.isContentBearing());
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertTrue(inline.isSidecarPayload() &amp;&amp; !inline.isContentBearing());
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertTrue(empty.isEmptyLiteral() &amp;&amp; !empty.isContentBearing());
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertTrue(content.isContentBearing(), <span class="jxr_string">"a bare field read is the shape a live-data body would take"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_comment">// b) THE HEADLINE CLAIM.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> b01_everyRawTextIsASidecarPayloadEmptyOrANamedContentSink() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> violations = sites().stream()
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			.filter(s -&gt; !KNOWN_CONTENT_SINKS.contains(s.key()))
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			.map(RawContentSinkScanner.RawTextSite::toString)
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			.toList();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertTrue(violations.isEmpty(),
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			() -&gt; <span class="jxr_string">"a NEW content-bearing rawText(...) sink appeared.  Emitters author DESCRIPTORS, not markup: every "</span>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				+ <span class="jxr_string">"rawText in main Java must hand the verbatim writer a JSON-sidecar payload.  The only content-bearing "</span>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				+ <span class="jxr_string">"exceptions are the deprecated declarative-content sinks named in KNOWN_CONTENT_SINKS, and that set "</span>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				+ <span class="jxr_string">"exists to shrink to empty - never to grow:\n  "</span> + String.join(<span class="jxr_string">"\n  "</span>, violations));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> b02_theContentBearingSurfaceIsEmpty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> content = sites().stream()
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			.map(RawContentSinkScanner.RawTextSite::toString)
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			.toList();
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(List.of(), content,
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			() -&gt; <span class="jxr_string">"the content-bearing rawText surface closed with the page/card emitters.  It must stay empty:\n  "</span>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				+ String.join(<span class="jxr_string">"\n  "</span>, content));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> b03_theRegionEmitterIsPureFromDayOne() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<em class="jxr_comment">// The emitter this item ADDS must be on the right side of the line from the start.  A region container is an</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<em class="jxr_comment">// EMPTY div plus a descriptor sidecar; if RegionTable ever writes content verbatim, the whole</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<em class="jxr_comment">// "configuration rides the sidecar, not the markup" claim is gone.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> region = sites().stream().filter(s -&gt; eq(s.file(), <span class="jxr_string">"RegionTable.java"</span>)).toList();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertFalse(region.isEmpty(),
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<span class="jxr_string">"RegionTable writes a descriptor sidecar, so at least one rawText site is expected; finding none means "</span>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				+ <span class="jxr_string">"the scan is not reaching it"</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		region.forEach(s -&gt; assertTrue(s.isSidecarPayload(),
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			() -&gt; <span class="jxr_string">"the region emitter must never be a content sink: "</span> + s));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test <strong class="jxr_keyword">void</strong> b04_viewTableIsConstantsOnly_noRawText() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> viewTable = sites().stream().filter(s -&gt; eq(s.file(), <span class="jxr_string">"ViewTable.java"</span>)).toList();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(List.of(), viewTable,
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			() -&gt; <span class="jxr_string">"ViewTable is constants-only after MOVE delete; it must not write rawText: "</span> + viewTable);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	@Test <strong class="jxr_keyword">void</strong> b05_everyContentSinkIsInTheDeprecatedDeclarativePath() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<em class="jxr_comment">// Pins WHERE the four live, not just how many.  A content sink migrating into a different emitter would keep</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<em class="jxr_comment">// the count at four while quietly widening the blast radius.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> files = sites().stream()
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.filter(RawContentSinkScanner.RawTextSite::isContentBearing)
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.map(RawContentSinkScanner.RawTextSite::file)
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.distinct()
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			.sorted()
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			.toList();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertEquals(List.of(), files,
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<span class="jxr_string">"content-bearing rawText must not return: the page/card declarative-content emitters are gone"</span>);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">// c) Proof the guard BITES.  a01-a07 prove the scan sees the tree; these prove that seeing it is not the same as</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_comment">//    a passing test being meaningful.  Both mutate REAL main source text, so they cannot drift from the shapes</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_comment">//    the emitters actually use the way a hand-written fixture silently would.</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Test <strong class="jxr_keyword">void</strong> c01_mutatingARealSidecarIntoAFieldRead_becomesAViolation() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> regionTable = moduleRoot().resolve(<span class="jxr_string">"src/main/java/org/apache/juneau/rest/server/views/RegionTable.java"</span>);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> src = Files.readString(regionTable);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertTrue(src.contains(<span class="jxr_string">"text(rawText(json))"</span>), <span class="jxr_string">"the real sidecar shape moved; this mutation no longer applies"</span>);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> mutated = src.replace(<span class="jxr_string">"text(rawText(json))"</span>, <span class="jxr_string">"text(rawText(row.liveValue))"</span>);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> sites = RawContentSinkScanner.scanRawText(<span class="jxr_string">"RegionTable.java"</span>, mutated);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">var</strong> offenders = sites.stream().filter(RawContentSinkScanner.RawTextSite::isContentBearing).toList();
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertSize(() -&gt; <span class="jxr_string">"turning one real sidecar write into a live-data field read must produce exactly one content-bearing "</span>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				+ <span class="jxr_string">"site; if it produces none, b01/b02 are passing for free: "</span> + sites, 1, offenders);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertFalse(KNOWN_CONTENT_SINKS.contains(offenders.get(0).key()),
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<span class="jxr_string">"the mutated site must NOT be absorbed by the allowlist - otherwise the allowlist is a hole"</span>);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<em class="jxr_comment">// that a violation IN it is actually classified as one.</em>
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> sites = RawContentSinkScanner.scanRawText(<span class="jxr_string">"CardContent.java"</span>,
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<span class="jxr_string">"class CardContent { Object f() { return div(rawText(this.userSuppliedBody)); } }"</span>);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(1, sites.size(), sites::toString);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertSize(sites::toString, 1, sites);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertTrue(sites.get(0).isContentBearing(), () -&gt; <span class="jxr_string">"not classified as content: "</span> + sites.get(0));
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertFalse(KNOWN_CONTENT_SINKS.contains(sites.get(0).key()), <span class="jxr_string">"must not be pre-absorbed by the allowlist"</span>);
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}

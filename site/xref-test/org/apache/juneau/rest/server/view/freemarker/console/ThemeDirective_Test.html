@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(1, count(body, <span class="jxr_string">"juneau-theme-light-red.css"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertFalse(body.contains(<span class="jxr_string">"juneau-theme-open.css"</span>), () -&gt; body);  <em class="jxr_comment">// named pack wins; no second block</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertFalse(body.contains(<span class="jxr_string">"slds-"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		DualHatGuard.assertClean(body);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertPage(body).isValid().hasTheme(<span class="jxr_string">"light-red"</span>);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertFalse(body.contains(<span class="jxr_string">"&lt;style&gt;"</span>), () -&gt; body);  <em class="jxr_comment">// no tokens means no override block</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}

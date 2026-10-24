@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line-191"></span>
 <span class="source-line-no">192</span><span id="line-192">   /** The claimed method upper-cased when it is unsafe, else &lt;jk&gt;null&lt;/jk&gt; (absent, blank or safe). */</span>
 <span class="source-line-no">193</span><span id="line-193">   private static String unsafeClaim(String claim) {</span>
-<span class="source-line-no">194</span><span id="line-194">      if (claim == null || claim.isBlank())</span>
+<span class="source-line-no">194</span><span id="line-194">      if (ib(claim))</span>
 <span class="source-line-no">195</span><span id="line-195">         return null;</span>
 <span class="source-line-no">196</span><span id="line-196">      var c = claim.trim().toUpperCase(Locale.ROOT);</span>
 <span class="source-line-no">197</span><span id="line-197">      return isSafe(c) ? null : c;</span>

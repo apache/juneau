@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169">    * @throws IllegalArgumentException If {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">170</span><span id="line-170">    */</span>
 <span class="source-line-no">171</span><span id="line-171">   public McpResourceServerConfig setRealm(String value) {</span>
-<span class="source-line-no">172</span><span id="line-172">      if (value == null || value.isBlank())</span>
+<span class="source-line-no">172</span><span id="line-172">      if (ib(value))</span>
 <span class="source-line-no">173</span><span id="line-173">         throw iaex("realm must not be null or blank");</span>
 <span class="source-line-no">174</span><span id="line-174">      realm = value;</span>
 <span class="source-line-no">175</span><span id="line-175">      return this;</span>
@@ -275,7 +275,7 @@
 <span class="source-line-no">262</span><span id="line-262">    * @throws IllegalArgumentException If {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">263</span><span id="line-263">    */</span>
 <span class="source-line-no">264</span><span id="line-264">   public McpResourceServerConfig addScopeSupported(String value) {</span>
-<span class="source-line-no">265</span><span id="line-265">      if (value == null || value.isBlank())</span>
+<span class="source-line-no">265</span><span id="line-265">      if (ib(value))</span>
 <span class="source-line-no">266</span><span id="line-266">         throw iaex("scope must not be null or blank");</span>
 <span class="source-line-no">267</span><span id="line-267">      scopesSupported.add(value);</span>
 <span class="source-line-no">268</span><span id="line-268">      return this;</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285">    * @throws IllegalArgumentException If {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">286</span><span id="line-286">    */</span>
 <span class="source-line-no">287</span><span id="line-287">   public McpResourceServerConfig addRequiredScope(String value) {</span>
-<span class="source-line-no">288</span><span id="line-288">      if (value == null || value.isBlank())</span>
+<span class="source-line-no">288</span><span id="line-288">      if (ib(value))</span>
 <span class="source-line-no">289</span><span id="line-289">         throw iaex("scope must not be null or blank");</span>
 <span class="source-line-no">290</span><span id="line-290">      requiredScopes.add(value);</span>
 <span class="source-line-no">291</span><span id="line-291">      scopesSupported.add(value);</span>
@@ -332,7 +332,7 @@
 <span class="source-line-no">319</span><span id="line-319">    * @throws IllegalArgumentException If {@code method} is &lt;jk&gt;null&lt;/jk&gt;/blank or {@code scopes} is invalid.</span>
 <span class="source-line-no">320</span><span id="line-320">    */</span>
 <span class="source-line-no">321</span><span id="line-321">   public McpResourceServerConfig addOperationScope(String method, String name, String... scopes) {</span>
-<span class="source-line-no">322</span><span id="line-322">      if (method == null || method.isBlank())</span>
+<span class="source-line-no">322</span><span id="line-322">      if (ib(method))</span>
 <span class="source-line-no">323</span><span id="line-323">         throw iaex("method must not be null or blank");</span>
 <span class="source-line-no">324</span><span id="line-324">      if (scopes == null || scopes.length == 0)</span>
 <span class="source-line-no">325</span><span id="line-325">         throw iaex("scopes must not be null or empty");</span>
@@ -340,7 +340,7 @@
 <span class="source-line-no">327</span><span id="line-327">      // leaves earlier scopes half-advertised.</span>
 <span class="source-line-no">328</span><span id="line-328">      var set = new LinkedHashSet&lt;String&gt;();</span>
 <span class="source-line-no">329</span><span id="line-329">      for (var s : scopes) {</span>
-<span class="source-line-no">330</span><span id="line-330">         if (s == null || s.isBlank())</span>
+<span class="source-line-no">330</span><span id="line-330">         if (ib(s))</span>
 <span class="source-line-no">331</span><span id="line-331">            throw iaex("scope must not be null or blank");</span>
 <span class="source-line-no">332</span><span id="line-332">         set.add(s);</span>
 <span class="source-line-no">333</span><span id="line-333">      }</span>

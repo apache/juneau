@@ -130,8 +130,8 @@ loadScripts(document, 'script');</script>
  <p>
  <code>enabledWhen</code> was added after this schema was first frozen; like <code>ModalDef#barSlot</code>, it is
  additive-only (<jk>null</jk> when unset, omitted from the serialized form) and its presence does not bump
- <code>VIEW_META</code> &mdash; a <a href="RowAction.html" title="class in org.apache.juneau.rest.server.views"><code>RowAction</code></a> declared before this field existed is
- byte-identical on the wire, and old <code>juneau-views.js</code> ignores the unknown key.
+ <code>VIEW_META</code> &mdash; a <a href="RowAction.html" title="class in org.apache.juneau.rest.server.views"><code>RowAction</code></a> that leaves it unset serializes
+ unchanged, and old <code>juneau-views.js</code> ignores the unknown key.
 
  <h5 class='section'>Why <a href="#method"><code>method</code></a> cannot be a safe method</h5>
  <p>
@@ -150,7 +150,7 @@ loadScripts(document, 'script');</script>
  <code>href</code> interpolation.  Unlike a rendered <code>href</code>, these URLs are <i>fetched</i> (form: confirmation GET) or
  <i>submitted</i> (endpoint: mutating write), so an unresolved substitution <b>refuses</b> instead of issuing a
  malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and
- is used byte-identical to how it always was.  A blank/absent <code>form</code> is the confirm-only local path (no
+ is used as declared.  A blank/absent <code>form</code> is the confirm-only local path (no
  GET), not a refusal.
 
  <h5 class='section'>Example:</h5>
@@ -666,7 +666,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  <b>Backward compatible, narrowed:</b> an <code>endpoint</code> with no <code>{...}</code> token is still
- issued byte-identical to how it always was (three of the four guards above cannot fire on it; the fourth,
+ issued as declared (three of the four guards above cannot fire on it; the fourth,
  the <code>..</code> check, only fires on an author-declared <code>..</code>).  An <code>endpoint</code> WITH a token now
  refuses in cases that previously submitted a malformed URL (e.g. <code>"servlet:/incidents//ack"</code> for a
  row with no <code>id</code>) rather than issuing it.</div>
@@ -790,7 +790,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Divergence from <a href="#endpoint(java.lang.String)"><code>endpoint</code></a>:</b> a blank/absent <code>form</code> is still the
  confirm-only local path (no GET), not a <code>no-endpoint</code> refusal.  A token-less <code>form</code> is fetched
- byte-identical to how it always was.</div>
+ as declared.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value.  Can be <jk>null</jk> or blank for a confirm-only dialog.</dd>

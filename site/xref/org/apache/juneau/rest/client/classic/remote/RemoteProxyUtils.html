@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The parse/apply logic here is ported from the next-generation engine</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * (&lt;c&gt;org.apache.juneau.rest.client.remote.RemoteClient&lt;/c&gt; and &lt;c&gt;RrpcInterfaceMeta&lt;/c&gt;) so that the classic</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * engine can honor the same {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * engine can honor the same {@link Remote @Remote}/{@link RemoteOp @RemoteOp}</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * members without introducing a cross-module dependency on freshly-installed common code.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * @param url The URL to validate.</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * @param allowPrivateUrls When &lt;jk&gt;true&lt;/jk&gt;, the deny-private check is skipped.</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * @return The unchanged URL.</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 */</em>
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * Emits a one-time build-time warning that an {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * Emits a one-time build-time warning that an {@link Remote @Remote}/{@link RemoteOp @RemoteOp}</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * member is set on the classic engine that the classic engine cannot honor.</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>

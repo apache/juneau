@@ -517,7 +517,7 @@
 <span class="source-line-no">504</span><span id="line-504">      if (! users.containsKey(user.getUsername()))</span>
 <span class="source-line-no">505</span><span id="line-505">         throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());</span>
 <span class="source-line-no">506</span><span id="line-506">      var pw = user.getPassword();</span>
-<span class="source-line-no">507</span><span id="line-507">      if (pw == null || pw.isBlank())</span>
+<span class="source-line-no">507</span><span id="line-507">      if (ib(pw))</span>
 <span class="source-line-no">508</span><span id="line-508">         user.setPassword(users.get(user.getUsername()).getPassword());</span>
 <span class="source-line-no">509</span><span id="line-509">      users.put(user.getUsername(), user);</span>
 <span class="source-line-no">510</span><span id="line-510">      recordAudit(actor, "User", user.getUsername(), ACTION_UPDATE, user.getUsername());</span>

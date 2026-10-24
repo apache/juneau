@@ -24,124 +24,133 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="BadgeDef_Test" href="../../../../../../org/apache/juneau/rest/server/views/BadgeDef_Test.html#BadgeDef_Test">BadgeDef_Test</a> {
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	@Test <strong class="jxr_keyword">void</strong> a01_minimal() {
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/rest/changes/pending"</span>);
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		b.validate();
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">var</strong> m = b.toContractMap();
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		assertEquals(<span class="jxr_string">"pending"</span>, m.get(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertEquals(<span class="jxr_string">"/rest/changes/pending"</span>, m.get(<span class="jxr_string">"src"</span>));
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertFalse(m.containsKey(<span class="jxr_string">"placement"</span>));
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertFalse(m.containsKey(<span class="jxr_string">"tone"</span>));
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	}
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@Test <strong class="jxr_keyword">void</strong> a02_fullExample_matchesJavadoc() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			.src(<span class="jxr_string">"/rest/changes/pending"</span>)
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			.scope(<span class="jxr_string">"beanType"</span>, BadgeDef.ScopeBy.NAV, Map.of(<span class="jxr_string">"suspensions"</span>, List.of(<span class="jxr_string">"Suspension"</span>)))
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			.href(<span class="jxr_string">"/ui/changes"</span>)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.stateFilter(<span class="jxr_string">"beanType"</span>)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.refreshes(<span class="jxr_string">"rules-table"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.refreshMs(60_000);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		b.validate();
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> m = b.toContractMap();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertEquals(<span class="jxr_string">"/ui/changes"</span>, m.get(<span class="jxr_string">"href"</span>));
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(60_000L, m.get(<span class="jxr_string">"refreshMs"</span>));
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(List.of(<span class="jxr_string">"rules-table"</span>), m.get(<span class="jxr_string">"refreshes"</span>));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> scope = (Map&lt;String,Object&gt;) m.get(<span class="jxr_string">"scope"</span>);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertEquals(<span class="jxr_string">"beanType"</span>, scope.get(<span class="jxr_string">"param"</span>));
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"nav"</span>, scope.get(<span class="jxr_string">"by"</span>));
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> stateFilter = (Map&lt;String,Object&gt;) m.get(<span class="jxr_string">"stateFilter"</span>);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"beanType"</span>, stateFilter.get(<span class="jxr_string">"column"</span>));
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Test <strong class="jxr_keyword">void</strong> a02b_refreshesAllowMissing_mergesIntoRefreshesAndMarksThem() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/rest/p"</span>).refreshes(<span class="jxr_string">"here"</span>, <span class="jxr_string">"gone"</span>).refreshesAllowMissing(<span class="jxr_string">"gone"</span>, <span class="jxr_string">"far"</span>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		b.validate();
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> m = b.toContractMap();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(List.of(<span class="jxr_string">"here"</span>, <span class="jxr_string">"gone"</span>, <span class="jxr_string">"far"</span>), m.get(<span class="jxr_string">"refreshes"</span>));
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertEquals(List.of(<span class="jxr_string">"gone"</span>, <span class="jxr_string">"far"</span>), m.get(<span class="jxr_string">"refreshesAllowMissing"</span>));
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertFalse(BadgeDef.create(<span class="jxr_string">"x"</span>).src(<span class="jxr_string">"/p"</span>).refreshes(<span class="jxr_string">"a"</span>).toContractMap().containsKey(<span class="jxr_string">"refreshesAllowMissing"</span>));
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a03_idRequired() {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; BadgeDef.create(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertTrue(e.getMessage().contains(<span class="jxr_string">"id must not be null or blank"</span>), e.getMessage());
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> e2 = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; BadgeDef.create(<span class="jxr_string">" "</span>));
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertTrue(e2.getMessage().contains(<span class="jxr_string">"id must not be null or blank"</span>), e2.getMessage());
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> a04_e61_srcRequired() {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> target = BadgeDef.create(<span class="jxr_string">"pending"</span>);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target::validate);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(<span class="jxr_string">"&lt;@badge id='pending'&gt; requires src=."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> a05_e62_refreshMsFloor() {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).refreshMs(1000);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::validate);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(<span class="jxr_string">"'pending' refreshMs='1000' is below the minimum '5000'."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a06_refreshMsAtFloorIsFine() {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).refreshMs(5000).validate();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Test <strong class="jxr_keyword">void</strong> a07_e66_toolbarRequiresTable() {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).placement(BadgeDef.Placement.TOOLBAR);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::validate);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(<span class="jxr_string">"&lt;@badge id='pending'&gt; placement='toolbar' requires table=."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> a08_toolbarWithTableIsFine() {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).placement(BadgeDef.Placement.TOOLBAR).table(<span class="jxr_string">"rules-table"</span>).validate();
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> a09_r7_scopeByViewRequiresTable_uncoded() {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).scope(<span class="jxr_string">"beanType"</span>, BadgeDef.ScopeBy.VIEW, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::validate);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertTrue(e.getMessage().contains(<span class="jxr_string">"scope.by='view' requires table"</span>), e.getMessage());
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> a10_scopeByViewWithTableIsFine() {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).table(<span class="jxr_string">"rules-table"</span>)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			.scope(<span class="jxr_string">"beanType"</span>, BadgeDef.ScopeBy.VIEW, <strong class="jxr_keyword">null</strong>).validate();
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">class</strong> <a name="BadgeDef_Test" href="../../../../../../org/apache/juneau/rest/server/views/BadgeDef_Test.html#BadgeDef_Test">BadgeDef_Test</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	@Test <strong class="jxr_keyword">void</strong> a01_minimal() {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/rest/changes/pending"</span>);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		b.validate();
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">var</strong> m = b.toContractMap();
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertEquals(<span class="jxr_string">"pending"</span>, m.get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertEquals(<span class="jxr_string">"/rest/changes/pending"</span>, m.get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertFalse(m.containsKey(<span class="jxr_string">"placement"</span>));
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertFalse(m.containsKey(<span class="jxr_string">"tone"</span>));
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> a02_fullExample_matchesJavadoc() {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			.src(<span class="jxr_string">"/rest/changes/pending"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			.scope(<span class="jxr_string">"beanType"</span>, BadgeDef.ScopeBy.NAV, Map.of(<span class="jxr_string">"suspensions"</span>, List.of(<span class="jxr_string">"Suspension"</span>)))
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.href(<span class="jxr_string">"/ui/changes"</span>)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.stateFilter(<span class="jxr_string">"beanType"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.refreshes(<span class="jxr_string">"rules-table"</span>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.refreshMs(60_000);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		b.validate();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> m = b.toContractMap();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(<span class="jxr_string">"/ui/changes"</span>, m.get(<span class="jxr_string">"href"</span>));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(60_000L, m.get(<span class="jxr_string">"refreshMs"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertEquals(List.of(<span class="jxr_string">"rules-table"</span>), m.get(<span class="jxr_string">"refreshes"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		@SuppressWarnings({
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		})
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> scope = (Map&lt;String,Object&gt;) m.get(<span class="jxr_string">"scope"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(<span class="jxr_string">"beanType"</span>, scope.get(<span class="jxr_string">"param"</span>));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"nav"</span>, scope.get(<span class="jxr_string">"by"</span>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		@SuppressWarnings({
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		})
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> stateFilter = (Map&lt;String,Object&gt;) m.get(<span class="jxr_string">"stateFilter"</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(<span class="jxr_string">"beanType"</span>, stateFilter.get(<span class="jxr_string">"column"</span>));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Test <strong class="jxr_keyword">void</strong> a02b_refreshesAllowMissing_mergesIntoRefreshesAndMarksThem() {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/rest/p"</span>).refreshes(<span class="jxr_string">"here"</span>, <span class="jxr_string">"gone"</span>).refreshesAllowMissing(<span class="jxr_string">"gone"</span>, <span class="jxr_string">"far"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		b.validate();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> m = b.toContractMap();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(List.of(<span class="jxr_string">"here"</span>, <span class="jxr_string">"gone"</span>, <span class="jxr_string">"far"</span>), m.get(<span class="jxr_string">"refreshes"</span>));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(List.of(<span class="jxr_string">"gone"</span>, <span class="jxr_string">"far"</span>), m.get(<span class="jxr_string">"refreshesAllowMissing"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertFalse(BadgeDef.create(<span class="jxr_string">"x"</span>).src(<span class="jxr_string">"/p"</span>).refreshes(<span class="jxr_string">"a"</span>).toContractMap().containsKey(<span class="jxr_string">"refreshesAllowMissing"</span>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a03_idRequired() {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; BadgeDef.create(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertTrue(e.getMessage().contains(<span class="jxr_string">"id must not be null or blank"</span>), e.getMessage());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> e2 = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; BadgeDef.create(<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(e2.getMessage().contains(<span class="jxr_string">"id must not be null or blank"</span>), e2.getMessage());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a04_e61_srcRequired() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> target = BadgeDef.create(<span class="jxr_string">"pending"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target::validate);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(<span class="jxr_string">"&lt;@badge id='pending'&gt; requires src=."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a05_e62_refreshMsFloor() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).refreshMs(1000);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::validate);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(<span class="jxr_string">"'pending' refreshMs='1000' is below the minimum '5000'."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a06_refreshMsAtFloorIsFine() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).refreshMs(5000).validate();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a07_e66_toolbarRequiresTable() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).placement(BadgeDef.Placement.TOOLBAR);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::validate);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"&lt;@badge id='pending'&gt; placement='toolbar' requires table=."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a08_toolbarWithTableIsFine() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).placement(BadgeDef.Placement.TOOLBAR).table(<span class="jxr_string">"rules-table"</span>).validate();
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a09_r7_scopeByViewRequiresTable_uncoded() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> b = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).scope(<span class="jxr_string">"beanType"</span>, BadgeDef.ScopeBy.VIEW, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, b::validate);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertTrue(e.getMessage().contains(<span class="jxr_string">"scope.by='view' requires table"</span>), e.getMessage());
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> a11_labelToneTooltipMax_roundTrip() {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> m = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>)
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			.label(Map.of(<span class="jxr_string">"one"</span>, <span class="jxr_string">"{total} item"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"{total} items"</span>))
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			.tone(BadgeDef.Tone.DANGER)
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			.tooltipMax(5)
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			.toContractMap();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> label = (Map&lt;String,Object&gt;) m.get(<span class="jxr_string">"label"</span>);
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(<span class="jxr_string">"{total} item"</span>, label.get(<span class="jxr_string">"one"</span>));
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(<span class="jxr_string">"danger"</span>, m.get(<span class="jxr_string">"tone"</span>));
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertEquals(5, m.get(<span class="jxr_string">"tooltipMax"</span>));
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a12_visibleWhen_roundTrip() {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> m = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>)
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			.visibleWhen(VisibilityRule.when(<span class="jxr_string">"facts.viewer.roles"</span>).contains(<span class="jxr_string">"oncall"</span>))
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			.toContractMap();
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> vw = (List&lt;Map&lt;String,Object&gt;&gt;) m.get(<span class="jxr_string">"visibleWhen"</span>);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(1, vw.size());
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(<span class="jxr_string">"facts.viewer.roles"</span>, vw.get(0).get(<span class="jxr_string">"field"</span>));
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(<span class="jxr_string">"contains"</span>, vw.get(0).get(<span class="jxr_string">"op"</span>));
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(<span class="jxr_string">"oncall"</span>, vw.get(0).get(<span class="jxr_string">"value"</span>));
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> }
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> a10_scopeByViewWithTableIsFine() {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>).table(<span class="jxr_string">"rules-table"</span>)
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			.scope(<span class="jxr_string">"beanType"</span>, BadgeDef.ScopeBy.VIEW, <strong class="jxr_keyword">null</strong>).validate();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a11_labelToneTooltipMax_roundTrip() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> m = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			.label(Map.of(<span class="jxr_string">"one"</span>, <span class="jxr_string">"{total} item"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"{total} items"</span>))
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			.tone(BadgeDef.Tone.DANGER)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			.tooltipMax(5)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			.toContractMap();
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		})
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> label = (Map&lt;String,Object&gt;) m.get(<span class="jxr_string">"label"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(<span class="jxr_string">"{total} item"</span>, label.get(<span class="jxr_string">"one"</span>));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"danger"</span>, m.get(<span class="jxr_string">"tone"</span>));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEquals(5, m.get(<span class="jxr_string">"tooltipMax"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test <strong class="jxr_keyword">void</strong> a12_visibleWhen_roundTrip() {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> m = BadgeDef.create(<span class="jxr_string">"pending"</span>).src(<span class="jxr_string">"/x"</span>)
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			.visibleWhen(VisibilityRule.when(<span class="jxr_string">"facts.viewer.roles"</span>).contains(<span class="jxr_string">"oncall"</span>))
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.toContractMap();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		})
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> vw = (List&lt;Map&lt;String,Object&gt;&gt;) m.get(<span class="jxr_string">"visibleWhen"</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertSize(1, vw);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(<span class="jxr_string">"facts.viewer.roles"</span>, vw.get(0).get(<span class="jxr_string">"field"</span>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(<span class="jxr_string">"contains"</span>, vw.get(0).get(<span class="jxr_string">"op"</span>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(<span class="jxr_string">"oncall"</span>, vw.get(0).get(<span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

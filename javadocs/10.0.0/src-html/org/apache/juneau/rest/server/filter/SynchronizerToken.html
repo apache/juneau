@@ -149,7 +149,7 @@
 <span class="source-line-no">136</span><span id="line-136">    * @return &lt;jk&gt;true&lt;/jk&gt; if {@code candidate} equals this token's value.</span>
 <span class="source-line-no">137</span><span id="line-137">    */</span>
 <span class="source-line-no">138</span><span id="line-138">   public boolean matches(String candidate) {</span>
-<span class="source-line-no">139</span><span id="line-139">      if (candidate == null || candidate.isEmpty())</span>
+<span class="source-line-no">139</span><span id="line-139">      if (ie(candidate))</span>
 <span class="source-line-no">140</span><span id="line-140">         return false;</span>
 <span class="source-line-no">141</span><span id="line-141">      return MessageDigest.isEqual(value.getBytes(StandardCharsets.UTF_8), candidate.getBytes(StandardCharsets.UTF_8));</span>
 <span class="source-line-no">142</span><span id="line-142">   }</span>

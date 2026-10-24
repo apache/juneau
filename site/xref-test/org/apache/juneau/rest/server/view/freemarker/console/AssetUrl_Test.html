@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> String[1];
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> records = LogRecordCapture.quietly(AssetUrlMethodModel.<strong class="jxr_keyword">class</strong>, () -&gt; out[0] = render(m, <span class="jxr_string">"${assetUrl('/js/missing.js')}"</span>));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(<span class="jxr_string">"/js/missing.js"</span>, out[0]);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(1, records.size(), records::toString);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertSize(records::toString, 1, records);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(records.get(0).getMessage().contains(<span class="jxr_string">"no bundled resource"</span>), records.get(0).getMessage());
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  

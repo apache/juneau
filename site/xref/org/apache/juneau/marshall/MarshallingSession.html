@@ -1286,7 +1286,7 @@
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 					&amp;&amp; !((to.isMap() &amp;&amp; !to.getValueType().is(Object.<strong class="jxr_keyword">class</strong>)) || ((to.isCollection() || to.isOptional()) &amp;&amp; !to.getElementType().isObject())))
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 				<strong class="jxr_keyword">return</strong> (T) value;
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 			<strong class="jxr_keyword">return</strong> ctx.getConverter().to(value, <strong class="jxr_keyword">outer</strong>, <strong class="jxr_keyword">this</strong>, to.innerType(), to.getParameters());
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		} <strong class="jxr_keyword">catch</strong> (InvalidDataConversionException | <a name="MissingRequiredPropertyException" href="../../../../org/apache/juneau/marshall/parser/MissingRequiredPropertyException.html#MissingRequiredPropertyException">MissingRequiredPropertyException</a> e) {
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		} <strong class="jxr_keyword">catch</strong> (InvalidDataConversionException | MissingRequiredPropertyException e) {
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> InvalidDataConversionException(value, to, e);

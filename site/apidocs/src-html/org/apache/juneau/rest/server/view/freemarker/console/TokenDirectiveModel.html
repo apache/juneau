@@ -45,13 +45,13 @@
 <span class="source-line-no">032</span><span id="line-32"> *</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * Exactly one of {@code value=} / {@code alias=} is required, and they are mutually exclusive &amp;mdash; they are the</span>
-<span class="source-line-no">035</span><span id="line-35"> * two disjoint {@link org.apache.juneau.rest.server.console.Theme} channels:</span>
+<span class="source-line-no">035</span><span id="line-35"> * two disjoint {@link Theme} channels:</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;{@code value=} is a &lt;b&gt;leaf&lt;/b&gt;: a CSS literal, or a {@code var(--jc-name)} reference that</span>
-<span class="source-line-no">038</span><span id="line-38"> *       {@link org.apache.juneau.rest.server.console.Theme.Builder#token(String, String)} &lt;b&gt;resolves to a literal&lt;/b&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *       {@link org.apache.juneau.rest.server.console.Theme.Builder#token(String, String) Theme.Builder#token(String, String)} &lt;b&gt;resolves to a literal&lt;/b&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *       at build time (the substring {@code var(} does not reach the served leaf map).</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@code alias=} is a &lt;b&gt;derived reference&lt;/b&gt;: a {@code var(--jc-name)} that</span>
-<span class="source-line-no">041</span><span id="line-41"> *       {@link org.apache.juneau.rest.server.console.Theme.Builder#alias(String, String)} keeps as a reference</span>
+<span class="source-line-no">041</span><span id="line-41"> *       {@link org.apache.juneau.rest.server.console.Theme.Builder#alias(String, String) Theme.Builder#alias(String, String)} keeps as a reference</span>
 <span class="source-line-no">042</span><span id="line-42"> *       &lt;b&gt;surviving to the wire&lt;/b&gt;. A literal cannot express a live alias &amp;mdash; that is why the attr exists.</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>

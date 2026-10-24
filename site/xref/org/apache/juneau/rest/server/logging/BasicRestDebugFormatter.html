@@ -341,7 +341,7 @@
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> appendResponseHeaders(StringBuilder sb, HttpServletResponse sres, Set&lt;String&gt; normalizedRedacted) {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> names = sres.getHeaderNames();
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (names == <strong class="jxr_keyword">null</strong> || names.isEmpty())
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (ie(names))
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 		sb.append(<span class="jxr_string">"\n---Response Headers---"</span>);
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> HeaderScanState();
@@ -456,7 +456,7 @@
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">private</strong> String contentTypeToken(String contentType) {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">if</strong> (contentType == <strong class="jxr_keyword">null</strong> || contentType.isBlank())
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">if</strong> (ib(contentType))
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"unknown"</span>;
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">return</strong> DebugTextSanitizer.sanitize(contentType, maxFieldLength);
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}

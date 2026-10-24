@@ -139,7 +139,7 @@
 <span class="source-line-no">126</span><span id="line-126">    * @throws IllegalArgumentException If {@code rowIdField} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">127</span><span id="line-127">    */</span>
 <span class="source-line-no">128</span><span id="line-128">   public static SelectionDef create(String rowIdField) {</span>
-<span class="source-line-no">129</span><span id="line-129">      if (rowIdField == null || rowIdField.isBlank())</span>
+<span class="source-line-no">129</span><span id="line-129">      if (ib(rowIdField))</span>
 <span class="source-line-no">130</span><span id="line-130">         throw iaex("SelectionDef rowIdField must not be null or blank.");</span>
 <span class="source-line-no">131</span><span id="line-131">      return new SelectionDef(rowIdField);</span>
 <span class="source-line-no">132</span><span id="line-132">   }</span>

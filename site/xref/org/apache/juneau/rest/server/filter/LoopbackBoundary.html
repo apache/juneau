@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">return</strong> BoundaryResult.ALLOWED;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">var</strong> origin2 = req.getHeader(<span class="jxr_string">"Origin"</span>);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (origin2 == <strong class="jxr_keyword">null</strong> || origin2.isBlank())
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (ib(origin2))
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">return</strong> reject(BoundaryReason.ORIGIN_MISSING, 403,
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 				<span class="jxr_string">"A state-changing request must carry an 'Origin' header of '%s'."</span>, origin);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (! origin2.equals(origin))
@@ -279,7 +279,7 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 				<span class="jxr_string">"A state-changing request must use content type '%s'."</span>, JSON_CONTENT_TYPE);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> presented = req.getHeader(csrfHeader);
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">if</strong> (presented == <strong class="jxr_keyword">null</strong> || presented.isBlank())
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">if</strong> (ib(presented))
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">return</strong> reject(BoundaryReason.CSRF_TOKEN_MISSING, 403,
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				<span class="jxr_string">"A state-changing request must carry this server's CSRF token in the '%s' header."</span>, csrfHeader);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">if</strong> (! token.matches(presented))
@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * Delegates to {@link MethodSafety#isSafe(String)} rather than carrying its own copy of the safe-method set.</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * The startup check that refuses a {@link org.apache.juneau.rest.server.Mutating @Mutating} operation bound to</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * The startup check that refuses a {@link Mutating @Mutating} operation bound to</em>
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * a safe method reads the same definition, and a boundary that disagreed with that check about which methods</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * are writes would silently defeat both.</em>
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 *</em>

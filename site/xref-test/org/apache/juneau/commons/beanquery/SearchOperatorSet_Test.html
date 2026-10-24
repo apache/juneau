@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> set = SearchOperatorSet.of(a);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> b = SearchOperator.create(<span class="jxr_string">"$Near"</span>, <span class="jxr_string">"help2"</span>).predicate((cell, args) -&gt; <strong class="jxr_keyword">true</strong>).build();
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> replaced = set.with(b);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(1, replaced.operators().size());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertSize(1, replaced.operators());
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"$Near"</span>, replaced.get(<span class="jxr_string">"$near"</span>).name());
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">void</strong> e01_ofBuildsExactSetNoBuiltinsImplied() {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> eq = SearchOperatorSet.standard().get(<span class="jxr_string">"$eq"</span>);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> s = SearchOperatorSet.of(eq);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(1, s.operators().size());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertSize(1, s.operators());
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertFalse(s.contains(<span class="jxr_string">"$ne"</span>));
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../sql/SqlDialect.html" title="interface in org.apache.juneau.beanquery.sql">SqlDialect</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-77">PostgresDialect</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-78">PostgresDialect</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../sql/SqlDialect.html" title="interface in org.apache.juneau.beanquery.sql">SqlDialect</a></span></div>
 <div class="block">The PostgreSQL <a href="../sql/SqlDialect.html" title="interface in org.apache.juneau.beanquery.sql"><code>SqlDialect</code></a>: the one dialect Juneau ships for the shared JDBC <a href="../sql/SqlBeanQueryContext.html" title="class in org.apache.juneau.beanquery.sql"><code>SqlBeanQueryContext</code></a>.
@@ -221,7 +221,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="INSTANCE">
 <h3>INSTANCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PostgresDialect.html" title="class in org.apache.juneau.beanquery.postgres">PostgresDialect</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-83">INSTANCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PostgresDialect.html" title="class in org.apache.juneau.beanquery.postgres">PostgresDialect</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-84">INSTANCE</a></span></div>
 <div class="block">The singleton instance.</div>
 </section>
 </li>
@@ -236,7 +236,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="id()">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-103">id</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-104">id</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../sql/SqlDialect.html#id()">SqlDialect</a></code></span></div>
 <div class="block">The stable lowercase dialect id (for example <code>"postgres"</code>).</div>
 <dl class="notes">
@@ -250,7 +250,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="supportsVersionOrdering()">
 <h3>supportsVersionOrdering</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-109">supportsVersionOrdering</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-110">supportsVersionOrdering</a></span>()</div>
 <div class="block">Postgres compares versions as <code>int[]</code> tuples (see <code>versionArray(java.lang.String)</code>), matching the in-memory order.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -263,7 +263,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="quote(java.lang.String)">
 <h3>quote</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-114">quote</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;identifier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-115">quote</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;identifier)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../sql/SqlDialect.html#quote(java.lang.String)">SqlDialect</a></code></span></div>
 <div class="block">Quotes a column or table identifier for this dialect (for example <code>age</code> &rarr; <code>"age"</code>).</div>
 <dl class="notes">
@@ -279,7 +279,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="builtinRenderer(java.lang.String)">
 <h3>builtinRenderer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sql/SearchSqlRenderer.html" title="interface in org.apache.juneau.beanquery.sql">SearchSqlRenderer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-119">builtinRenderer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operatorName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sql/SearchSqlRenderer.html" title="interface in org.apache.juneau.beanquery.sql">SearchSqlRenderer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-120">builtinRenderer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operatorName)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../sql/SqlDialect.html#builtinRenderer(java.lang.String)">SqlDialect</a></code></span></div>
 <div class="block">The renderer for a built-in leaf operator (for example <code>"$eq"</code>), or <jk>null</jk> if this dialect cannot
  express it.
@@ -300,7 +300,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="renderLimitOffset(java.lang.Long,java.lang.Long)">
 <h3>renderLimitOffset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-124">renderLimitOffset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;limit,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-125">renderLimitOffset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;limit,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;offset)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../sql/SqlDialect.html#renderLimitOffset(java.lang.Long,java.lang.Long)">SqlDialect</a></code></span></div>
 <div class="block">Renders the pagination clause appended to a <code>SELECT</code> (for example <code>" LIMIT 10 OFFSET 20"</code>).
@@ -322,7 +322,7 @@ implements <a href="../sql/SqlDialect.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="renderBare(java.lang.String,org.apache.juneau.commons.beanquery.SearchType,java.lang.Object,boolean)">
 <h3>renderBare</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sql/SqlFragment.html" title="class in org.apache.juneau.beanquery.sql">SqlFragment</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-134">renderBare</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;columnSql,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sql/SqlFragment.html" title="class in org.apache.juneau.beanquery.sql">SqlFragment</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/beanquery/postgres/PostgresDialect.html#line-135">renderBare</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;columnSql,
  <a href="../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery">SearchType</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;quoted)</span></div>

@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> items = <strong class="jxr_keyword">new</strong> JsonList();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> mine = 0;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : store().pendingChanges().pending()) {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">var</strong> isMine = Objects.equals(c.getAuthor(), me);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">var</strong> isMine = eq(c.getAuthor(), me);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">if</strong> (isMine)
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				mine++;
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			items.add(JsonMap.of(<span class="jxr_string">"id"</span>, String.valueOf(c.getId()), <span class="jxr_string">"label"</span>, c.getSummary(), <span class="jxr_string">"href"</span>, f(<span class="jxr_string">"/console/pets/%s/summary"</span>, c.getPetId()), <span class="jxr_string">"mine"</span>, isMine, <span class="jxr_string">"kind"</span>, <span class="jxr_string">"Pet"</span>));
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (body.ids == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing 'ids'"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> key = body.idempotencyKey;
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (key == <strong class="jxr_keyword">null</strong> || key.isBlank())
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (ib(key))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing 'idempotencyKey'"</span>);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">if</strong> (replays.size() &gt; 1_000)
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			replays.clear();

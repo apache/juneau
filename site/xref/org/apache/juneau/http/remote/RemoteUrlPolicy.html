@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">throw</strong> iaex(e, <span class="jxr_string">"Invalid @Remote URL override: %s"</span>, url);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> host = uri.getHost();
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong> || host.isEmpty())
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">if</strong> (ie(host))
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"@Remote URL override has no host (non-canonical or opaque form is not allowed): %s"</span>, url);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">if</strong> (! allowPrivateUrls &amp;&amp; isDeniedHost(host, allowedRanges))
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;ParsedAllow&gt; PARSED_ALLOW = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(<strong class="jxr_keyword">new</strong> ParsedAllow(<span class="jxr_string">""</span>, List.of(), <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Cidr&gt; parseAllowedRanges(String spec) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (spec == <strong class="jxr_keyword">null</strong> || spec.isBlank())
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (ib(spec))
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">return</strong> List.of();
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">var</strong> cached = PARSED_ALLOW.get();
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">if</strong> (! cached.spec().equals(spec)) {
@@ -658,7 +658,7 @@
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code location} is blank or does not resolve to an absolute URI.</em>
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> URI resolveRedirectLocation(URI from, String location) {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">if</strong> (location == <strong class="jxr_keyword">null</strong> || location.isBlank())
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">if</strong> (ib(location))
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Redirect response is missing a Location header"</span>);
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		URI target;
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">try</strong> {

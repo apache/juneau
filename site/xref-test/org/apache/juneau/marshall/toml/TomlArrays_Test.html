@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> toml = S.write(b);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertTrue(toml.contains(<span class="jxr_string">"[[ms]]\nk = \&quot;v\&quot;\n\n[[ms]]\nk = \&quot;w\&quot;"</span>), toml);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> r = P.read(toml, Maps.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(2, r.ms.size());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertSize(2, r.ms);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"v"</span>, r.ms.get(0).get(<span class="jxr_string">"k"</span>));
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(<span class="jxr_string">"w"</span>, r.ms.get(1).get(<span class="jxr_string">"k"</span>));
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> toml = S.write(b);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(<span class="jxr_string">"items = [1, \&quot;two\&quot;, [3]]\n"</span>, toml);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> r = P.read(toml, Mixed.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(3, r.items.size());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertSize(3, r.items);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(1, ((Number)r.items.get(0)).intValue());
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"two"</span>, r.items.get(1));
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(List.of(3L), r.items.get(2));
@@ -169,13 +169,13 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> toml = S.write(m);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertTrue(toml.contains(<span class="jxr_string">"[[ins]]\nn = 1\n\n[[ins]]\nn = 2"</span>), toml);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> r = P.read(toml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertEquals(2, r.getList(<span class="jxr_string">"ins"</span>).size());
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertSize(2, r.getList(<span class="jxr_string">"ins"</span>));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a10_beanArray() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> toml = S.write(Map.of(<span class="jxr_string">"ins"</span>, <strong class="jxr_keyword">new</strong> Inner[]{<strong class="jxr_keyword">new</strong> Inner(<span class="jxr_string">"a"</span>, 1)}));
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> r = P.read(toml, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertEquals(1, r.getList(<span class="jxr_string">"ins"</span>).size());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertSize(1, r.getList(<span class="jxr_string">"ins"</span>));
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> }
 </pre>

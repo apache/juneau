@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> BadgeDef create(String id) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"BadgeDef id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> BadgeDef();
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		b.id = id;
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If this definition is not well-formed.</em>
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate() {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">if</strong> (src == <strong class="jxr_keyword">null</strong> || src.isBlank())
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">if</strong> (ib(src))
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"&lt;@badge id='%s'&gt; requires src=."</span>, id);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">if</strong> (! SafePathTemplate.isSameOriginPath(src))
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"&lt;@badge id='%s'&gt; src must be a same-origin path; got '%s'."</span>, id, src);
@@ -344,9 +344,9 @@
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"&lt;@badge id='%s'&gt; href must be a same-origin path; got '%s'."</span>, id, href);
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">if</strong> (refreshMs != <strong class="jxr_keyword">null</strong> &amp;&amp; refreshMs &lt; MIN_REFRESH_MS)
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"'%s' refreshMs='%s' is below the minimum '%s'."</span>, id, refreshMs, MIN_REFRESH_MS);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">if</strong> (placement == Placement.TOOLBAR &amp;&amp; (table == <strong class="jxr_keyword">null</strong> || table.isBlank()))
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">if</strong> (placement == Placement.TOOLBAR &amp;&amp; (ib(table)))
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"&lt;@badge id='%s'&gt; placement='toolbar' requires table=."</span>, id);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">if</strong> (scopeBy == ScopeBy.VIEW &amp;&amp; (table == <strong class="jxr_keyword">null</strong> || table.isBlank()))
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">if</strong> (scopeBy == ScopeBy.VIEW &amp;&amp; (ib(table)))
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"BadgeDef '%s' scope.by='view' requires table=."</span>, id);
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 	}
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 

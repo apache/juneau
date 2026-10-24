@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BeanQueryExecutionException assertFailsLogged(org.junit.jupiter.api.function.Executable body) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> thrown = <strong class="jxr_keyword">new</strong> BeanQueryExecutionException[1];
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> records = LogRecordCapture.quietly(SqlBeanQuerySession.<strong class="jxr_keyword">class</strong>, () -&gt; thrown[0] = assertThrows(BeanQueryExecutionException.<strong class="jxr_keyword">class</strong>, body));
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(1, records.size(), records::toString);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertSize(records::toString, 1, records);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertTrue(records.get(0).getMessage().startsWith(<span class="jxr_string">"Bean query failed: "</span>), records.get(0).getMessage());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> thrown[0];
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		s.close();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(List.of(<span class="jxr_string">"conn.close"</span>), r.events(<span class="jxr_string">"conn.close"</span>));
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		s.close();  <em class="jxr_comment">// Idempotent.</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(1, r.events(<span class="jxr_string">"conn.close"</span>).size());
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertSize(1, r.events(<span class="jxr_string">"conn.close"</span>));
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test
@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			s.find(<strong class="jxr_keyword">new</strong> BeanQuery());
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(<span class="jxr_string">"fetchSize 500"</span>, r.events(<span class="jxr_string">"fetchSize"</span>).get(3));  <em class="jxr_comment">// The default.</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertEquals(3, r.events(<span class="jxr_string">"queryTimeout"</span>).size());  <em class="jxr_comment">// No timeout unless configured.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertSize(3, r.events(<span class="jxr_string">"queryTimeout"</span>));  <em class="jxr_comment">// No timeout unless configured.</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test
@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			.column(<span class="jxr_string">"name"</span>, TEXT).connectionSupplier(SqlBeanQuerySession_Test::open).build();
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertSame(Object.<strong class="jxr_keyword">class</strong>, c.getType());
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = c.getSession()) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			assertEquals(4, s.findValues(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			assertSize(4, s.findValues(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">var</strong> hoistedArg4 = <strong class="jxr_keyword">new</strong> BeanQuery();
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; s.find(hoistedArg4));
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			assertEquals(<span class="jxr_string">"SqlBeanQueryContext requires a rowMapper for find and stream."</span>, e.getMessage());
@@ -383,7 +383,7 @@
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<em class="jxr_comment">// Guards against the appendWhere regression this task must not introduce: an empty top-level Filter.And</em>
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<em class="jxr_comment">// (no search) must not render a spurious "WHERE (1=1)".</em>
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = builder().build().getSession()) {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertEquals(4, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertSize(4, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		}
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 
@@ -536,7 +536,7 @@
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 	<strong class="jxr_keyword">void</strong> t03_mapTypeDefaultsToMapMapperInViewOrder() {
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = defaultBuilder(Map.<strong class="jxr_keyword">class</strong>).build().getSession()) {
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 			<strong class="jxr_keyword">var</strong> rows = s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=$eq(Alice)"</span>).setView(<span class="jxr_string">"age,name"</span>)).rows();
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			assertEquals(1, rows.size());
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			assertSize(1, rows);
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 			assertList(rows.get(0).keySet(), <span class="jxr_string">"age"</span>, <span class="jxr_string">"name"</span>);
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 			assertBean(rows.get(0), <span class="jxr_string">"age,name"</span>, <span class="jxr_string">"30,Alice"</span>);
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 		}
@@ -558,7 +558,7 @@
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">var</strong> hoistedArg10 = <strong class="jxr_keyword">new</strong> BeanQuery();
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; s.find(hoistedArg10));
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 			assertEquals(<span class="jxr_string">"SqlBeanQueryContext requires a rowMapper for find and stream: cannot map rows to 'NotPlannablePerson': no public no-arg constructor."</span>, e.getMessage());
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			assertEquals(4, s.findValues(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());  <em class="jxr_comment">// Values never need a mapper.</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			assertSize(4, s.findValues(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());  <em class="jxr_comment">// Values never need a mapper.</em>
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		}
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 	}
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 

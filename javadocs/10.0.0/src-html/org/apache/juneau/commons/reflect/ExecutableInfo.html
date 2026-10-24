@@ -968,9 +968,9 @@
 <span class="source-line-no">955</span><span id="line-955">   private void checkIndex(int index) {</span>
 <span class="source-line-no">956</span><span id="line-956">      int pc = getParameterCount();</span>
 <span class="source-line-no">957</span><span id="line-957">      if (pc == 0)</span>
-<span class="source-line-no">958</span><span id="line-958">         throw new IndexOutOfBoundsException(String.format("Invalid index '%d'.  No parameters.", index));</span>
+<span class="source-line-no">958</span><span id="line-958">         throw new IndexOutOfBoundsException(f("Invalid index '%d'.  No parameters.", index));</span>
 <span class="source-line-no">959</span><span id="line-959">      if (index &lt; 0 || index &gt;= pc)</span>
-<span class="source-line-no">960</span><span id="line-960">         throw new IndexOutOfBoundsException(String.format("Invalid index '%d'.  Parameter count: %d", index, pc));</span>
+<span class="source-line-no">960</span><span id="line-960">         throw new IndexOutOfBoundsException(f("Invalid index '%d'.  Parameter count: %d", index, pc));</span>
 <span class="source-line-no">961</span><span id="line-961">   }</span>
 <span class="source-line-no">962</span><span id="line-962"></span>
 <span class="source-line-no">963</span><span id="line-963">   private String findNameFull() {</span>

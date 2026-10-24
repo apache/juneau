@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> b01_crashedFileIsOneErrorTest() {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JestJsonReportReader().read(resource(<span class="jxr_string">"jest-crashed.json"</span>));
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(1, r.tests().size());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertSize(1, r.tests());
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertBean(r.tests().get(0), <span class="jxr_string">"name,status,msg"</span>, <span class="jxr_string">"(suite failed to run),ERROR,Cannot find module './x'"</span>);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
@@ -107,7 +107,7 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> b06_maxTests() {
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> JestJsonReportReader().read(resource(<span class="jxr_string">"jest-mixed.json"</span>), <strong class="jxr_keyword">new</strong> ReportLimits(1 &lt;&lt; 20, 2, 512, 2000, 8000));
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertEquals(2, r.tests().size());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertSize(2, r.tests());
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertTrue(r.truncated());
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(List.of(<span class="jxr_string">"report truncated at 2 tests"</span>), r.warnings());
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}

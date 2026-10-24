@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If a rule is broken.</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">public</strong> RunViewDef validate() {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RunViewDef id must not be blank."</span>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">if</strong> (! TYPES.contains(type))
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RunViewDef '%s' type must be one of card-body|tab-body|row-detail; got '%s'."</span>, id, clip(type));

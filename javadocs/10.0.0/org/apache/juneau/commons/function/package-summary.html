@@ -99,10 +99,10 @@ loadScripts(document, 'script');</script>
 
    <table class='styled'>
       <tr><th>Phase</th><th>BeanSupplier (serialization)</th><th>BeanConsumer (parsing)</th></tr>
-      <tr><td><b>Setup</b></td><td><a href="BeanSupplier.html#begin()"><code>BeanSupplier.begin()</code></a> — open cursor, execute query</td><td><a href="BeanConsumer.html#begin()"><code>BeanConsumer.begin()</code></a> — open connection, prepare statement</td></tr>
-      <tr><td><b>Transfer</b></td><td><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html#iterator()" title="class or interface in java.lang" class="external-link"><code>Iterable.iterator()</code></a> — yield one bean per call</td><td><a href="ThrowingConsumer.html#acceptThrows(T)"><code>ThrowingConsumer.acceptThrows(Object)</code></a> — receive one bean per call</td></tr>
-      <tr><td><b>Error</b></td><td><a href="BeanSupplier.html#onError(java.lang.Exception)"><code>BeanSupplier.onError(Exception)</code></a> — rollback / log; rethrow to stop</td><td><a href="BeanConsumer.html#onError(java.lang.Exception)"><code>BeanConsumer.onError(Exception)</code></a> — rollback / log; absorb to skip-and-continue</td></tr>
-      <tr><td><b>Cleanup</b></td><td><a href="BeanSupplier.html#complete()"><code>BeanSupplier.complete()</code></a> — close cursor, connection</td><td><a href="BeanConsumer.html#complete()"><code>BeanConsumer.complete()</code></a> — final commit, close statement</td></tr>
+      <tr><td><b>Setup</b></td><td><a href="BeanSupplier.html#begin()"><code>BeanSupplier#begin()</code></a> — open cursor, execute query</td><td><a href="BeanConsumer.html#begin()"><code>BeanConsumer#begin()</code></a> — open connection, prepare statement</td></tr>
+      <tr><td><b>Transfer</b></td><td><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html#iterator()" title="class or interface in java.lang" class="external-link"><code>BeanSupplier#iterator()</code></a> — yield one bean per call</td><td><a href="ThrowingConsumer.html#acceptThrows(T)"><code>BeanConsumer#acceptThrows(Object)</code></a> — receive one bean per call</td></tr>
+      <tr><td><b>Error</b></td><td><a href="BeanSupplier.html#onError(java.lang.Exception)"><code>BeanSupplier#onError(Exception)</code></a> — rollback / log; rethrow to stop</td><td><a href="BeanConsumer.html#onError(java.lang.Exception)"><code>BeanConsumer#onError(Exception)</code></a> — rollback / log; absorb to skip-and-continue</td></tr>
+      <tr><td><b>Cleanup</b></td><td><a href="BeanSupplier.html#complete()"><code>BeanSupplier#complete()</code></a> — close cursor, connection</td><td><a href="BeanConsumer.html#complete()"><code>BeanConsumer#complete()</code></a> — final commit, close statement</td></tr>
    </table>
 
    <p>
@@ -478,7 +478,7 @@ loadScripts(document, 'script');</script>
    With this wiring in place, any class annotated with
    <code>@BeanType(factory=EmployeeSupplier.Factory.class)</code> is automatically instantiated by
    retrieving the factory from the Spring <code>ApplicationContext</code> and calling
-   <a href="BeanFactory.html#create()"><code>BeanFactory.create()</code></a>. No manual construction or
+   <a href="BeanFactory.html#create()"><code>BeanFactory#create()</code></a>. No manual construction or
    injection is needed in individual REST methods.
    </p>
 

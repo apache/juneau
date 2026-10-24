@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code refusalCode} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ActionResult refusal(String refusalCode) {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">if</strong> (refusalCode == <strong class="jxr_keyword">null</strong> || refusalCode.isBlank())
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">if</strong> (ib(refusalCode))
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ActionResult refusalCode must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> ActionResult();
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		r.outcome = Outcome.REFUSAL.wire();

@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// "type.isCollectionOrArray()" branch (not the dedicated "List.class.isAssignableFrom(...)"</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<em class="jxr_comment">// check further down, which is unreachable dead code -- see the HTT marker at that line).</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		List&lt;SseEvent&gt; v = (List&lt;SseEvent&gt;) SseParser.DEFAULT.read(WIRE, List.<strong class="jxr_keyword">class</strong>, SseEvent.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertEquals(1, v.size());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertSize(1, v);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertBean(v.get(0), <span class="jxr_string">"event,data,id,retry"</span>, <span class="jxr_string">"progress,step 1,42,1000"</span>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  

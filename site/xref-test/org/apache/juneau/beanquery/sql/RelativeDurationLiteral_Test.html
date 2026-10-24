@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a01_timestampColumn_bindsOffsetDateTime_neverSqlNow() {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> f = compile(<span class="jxr_string">"happenedAt=$gt(-24h)"</span>);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(1, f.binds().size());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertSize(1, f.binds());
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertInstanceOf(OffsetDateTime.<strong class="jxr_keyword">class</strong>, f.binds().get(0));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> sql = f.sql().toLowerCase();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertFalse(sql.contains(<span class="jxr_string">"now"</span>) || sql.contains(<span class="jxr_string">"interval"</span>) || sql.contains(<span class="jxr_string">"24h"</span>), f.sql());
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<em class="jxr_comment">// Both operands resolve against the same captured instant, so they are exactly six days apart.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> ctx = builder().build();
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> f = SqlSearchCompiler.create(TestDialect.INSTANCE, ctx).compile(ctx.resolve(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"happenedAt=$and($gt(-7d),$lt(-1d))"</span>)).filter());
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(2, f.binds().size());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertSize(2, f.binds());
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> lo = (OffsetDateTime)f.binds().get(0);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> hi = (OffsetDateTime)f.binds().get(1);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(Duration.ofDays(6), Duration.between(lo, hi));
@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> a07_isoDuration_timestampColumn_bindsOffsetDateTime_neverSqlNow() {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> f = compile(<span class="jxr_string">"happenedAt=$gt(-PT24H)"</span>);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(1, f.binds().size());
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertSize(1, f.binds());
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertInstanceOf(OffsetDateTime.<strong class="jxr_keyword">class</strong>, f.binds().get(0));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> sql = f.sql().toLowerCase();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertFalse(sql.contains(<span class="jxr_string">"now"</span>) || sql.contains(<span class="jxr_string">"interval"</span>) || sql.contains(<span class="jxr_string">"pt24h"</span>), f.sql());
@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> a08_isoDuration_andedBounds_shareOneRequestTimeInstant() {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> ctx = builder().build();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> f = SqlSearchCompiler.create(TestDialect.INSTANCE, ctx).compile(ctx.resolve(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"happenedAt=$and($gt(-P7D),$lt(-P1D))"</span>)).filter());
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(2, f.binds().size());
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertSize(2, f.binds());
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(Duration.ofDays(6), Duration.between((OffsetDateTime)f.binds().get(0), (OffsetDateTime)f.binds().get(1)));
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 

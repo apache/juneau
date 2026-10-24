@@ -122,7 +122,7 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<span class="jxr_string">"states"</span>, <span class="jxr_string">"Array.from(document.querySelectorAll('#changes tbody input.juneau-view-select-checkbox:disabled'))"</span>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 						+ <span class="jxr_string">".map(b =&gt; b.closest('tr').textContent.includes('APPLIED') ? 'APPLIED' : b.closest('tr').textContent.includes('FAILED') ? 'FAILED' : '?')"</span>)),
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<em class="jxr_comment">// Runs before 'discard', which changes the store; this one is refused and changes nothing.</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"discard-fail"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/changes"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"discard-fail"</span>, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/changes"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 				<span class="jxr_string">"actions"</span>, concat(List.of(Map.of(<span class="jxr_string">"evaluate"</span>, FAIL_DISCARDS)), confirm, submit,
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 					List.of(Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"document.querySelector('"</span> + TOAST + <span class="jxr_string">"[role=alert]')"</span>))),
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 				<span class="jxr_string">"queries"</span>, Map.of(
@@ -180,56 +180,60 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap(res.body());
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// ids are a JSON array of strings.</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; ids(Map&lt;String,Object&gt; c, String key) {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">return</strong> ((List&lt;Object&gt;) query(c, key)).stream().map(String::valueOf).toList();
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test <strong class="jxr_keyword">void</strong> a01_rowsThatAreNotPendingCannotBeSelectedAndSayWhy() {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"disabled"</span>);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertList(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"states"</span>)), <span class="jxr_string">"APPLIED"</span>, <span class="jxr_string">"FAILED"</span>);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : ids(c, <span class="jxr_string">"reasons"</span>))
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			assertString(<span class="jxr_string">"Only pending changes can be discarded or applied."</span>, r);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> a02_selectAllTakesOnlyThePendingRows() {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"selected"</span>)));
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	@Test <strong class="jxr_keyword">void</strong> b01_discardIsOnePostWithTheIdsAndAKey() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> runs = ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream()
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; ! String.valueOf(r.get(<span class="jxr_string">"postData"</span>)).contains(<span class="jxr_string">"\&quot;setup\&quot;"</span>)).toList();
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertSize(1, runs);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> body = Json.to((String) runs.get(0).get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;((List&lt;String&gt;) body.get(<span class="jxr_string">"ids"</span>)));
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertNotEmpty(body.get(<span class="jxr_string">"idempotencyKey"</span>));
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> b02_summaryCountsTheGoneAndTheNoLongerPending() {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertString(<span class="jxr_string">"Discard: 2 succeeded, 1 not found, 1 failed (ids: "</span> + query(c, <span class="jxr_string">"applied"</span>) + <span class="jxr_string">")Close"</span>, query(c, <span class="jxr_string">"toast"</span>));
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertString(<span class="jxr_string">"alert"</span>, query(c, <span class="jxr_string">"role"</span>));
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> b03_onlyTheFailedIdStaysSelected() {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertList(ids(c, <span class="jxr_string">"left"</span>), String.valueOf(query(c, <span class="jxr_string">"applied"</span>)));
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Test <strong class="jxr_keyword">void</strong> b04_aRefusedDiscardKeepsTheSelectionBehindAStickyAlert() {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> c = report.get(<span class="jxr_string">"discard-fail"</span>);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertNotNull(c, () -&gt; <span class="jxr_string">"No report for case 'discard-fail'; cases: "</span> + report.keySet());
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<em class="jxr_comment">// The whole-run failure is logged to the console on purpose; nothing else may be.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertList(c.get(<span class="jxr_string">"jsFailures"</span>), REFUSED);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"timeouts"</span>), () -&gt; <span class="jxr_string">"timed out waiting for: "</span> + c.get(<span class="jxr_string">"timeouts"</span>));
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertString(REFUSED + <span class="jxr_string">"Close"</span>, query(c, <span class="jxr_string">"alert"</span>));
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"selected"</span>)));
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"left"</span>)));
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> }
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// ids are a JSON array of strings.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	})
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; ids(Map&lt;String,Object&gt; c, String key) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> ((List&lt;Object&gt;) query(c, key)).stream().map(String::valueOf).toList();
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> a01_rowsThatAreNotPendingCannotBeSelectedAndSayWhy() {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"disabled"</span>);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertList(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"states"</span>)), <span class="jxr_string">"APPLIED"</span>, <span class="jxr_string">"FAILED"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : ids(c, <span class="jxr_string">"reasons"</span>))
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			assertString(<span class="jxr_string">"Only pending changes can be discarded or applied."</span>, r);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test <strong class="jxr_keyword">void</strong> a02_selectAllTakesOnlyThePendingRows() {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"selected"</span>)));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	})
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	@Test <strong class="jxr_keyword">void</strong> b01_discardIsOnePostWithTheIdsAndAKey() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> runs = ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream()
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; ! String.valueOf(r.get(<span class="jxr_string">"postData"</span>)).contains(<span class="jxr_string">"\&quot;setup\&quot;"</span>)).toList();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertSize(1, runs);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> body = Json.to((String) runs.get(0).get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;((List&lt;String&gt;) body.get(<span class="jxr_string">"ids"</span>)));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertNotEmpty(body.get(<span class="jxr_string">"idempotencyKey"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	@Test <strong class="jxr_keyword">void</strong> b02_summaryCountsTheGoneAndTheNoLongerPending() {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertString(<span class="jxr_string">"Discard: 2 succeeded, 1 not found, 1 failed (ids: "</span> + query(c, <span class="jxr_string">"applied"</span>) + <span class="jxr_string">")Close"</span>, query(c, <span class="jxr_string">"toast"</span>));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertString(<span class="jxr_string">"alert"</span>, query(c, <span class="jxr_string">"role"</span>));
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Test <strong class="jxr_keyword">void</strong> b03_onlyTheFailedIdStaysSelected() {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"discard"</span>);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertList(ids(c, <span class="jxr_string">"left"</span>), String.valueOf(query(c, <span class="jxr_string">"applied"</span>)));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@Test <strong class="jxr_keyword">void</strong> b04_aRefusedDiscardKeepsTheSelectionBehindAStickyAlert() {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> c = report.get(<span class="jxr_string">"discard-fail"</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertNotNull(c, () -&gt; <span class="jxr_string">"No report for case 'discard-fail'; cases: "</span> + report.keySet());
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_comment">// The whole-run failure is logged to the console on purpose; nothing else may be.</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertList(c.get(<span class="jxr_string">"jsFailures"</span>), REFUSED);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertEquals(List.of(), c.get(<span class="jxr_string">"timeouts"</span>), () -&gt; <span class="jxr_string">"timed out waiting for: "</span> + c.get(<span class="jxr_string">"timeouts"</span>));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertString(REFUSED + <span class="jxr_string">"Close"</span>, query(c, <span class="jxr_string">"alert"</span>));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"selected"</span>)));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(pending), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(ids(c, <span class="jxr_string">"left"</span>)));
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

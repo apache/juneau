@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">      var version = version(a[0], a[1]);</span>
 <span class="source-line-no">103</span><span id="line-103">      var path = a[2].replace(VERSION_TOKEN, version);</span>
 <span class="source-line-no">104</span><span id="line-104">      if (! b(PRESENT.computeIfAbsent(path, k -&gt; LOADER.getResource(WEBJARS_ROOT + k) != null)))</span>
-<span class="source-line-no">105</span><span id="line-105">         throw new IllegalStateException(String.format("needs WebJar file '%s' (%s:%s:%s), which is not on the classpath.", path, a[0], a[1], version));</span>
+<span class="source-line-no">105</span><span id="line-105">         throw new IllegalStateException(f("needs WebJar file '%s' (%s:%s:%s), which is not on the classpath.", path, a[0], a[1], version));</span>
 <span class="source-line-no">106</span><span id="line-106">      return path;</span>
 <span class="source-line-no">107</span><span id="line-107">   }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
@@ -136,12 +136,12 @@
 <span class="source-line-no">123</span><span id="line-123">      var props = "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties";</span>
 <span class="source-line-no">124</span><span id="line-124">      try (var in = LOADER.getResourceAsStream(props)) {</span>
 <span class="source-line-no">125</span><span id="line-125">         if (in == null)</span>
-<span class="source-line-no">126</span><span id="line-126">            throw new IllegalStateException(String.format("needs %s:%s on the classpath (no %s).", groupId, artifactId, props));</span>
+<span class="source-line-no">126</span><span id="line-126">            throw new IllegalStateException(f("needs %s:%s on the classpath (no %s).", groupId, artifactId, props));</span>
 <span class="source-line-no">127</span><span id="line-127">         var p = new Properties();</span>
 <span class="source-line-no">128</span><span id="line-128">         p.load(in);</span>
 <span class="source-line-no">129</span><span id="line-129">         var v = p.getProperty("version", "").trim();</span>
 <span class="source-line-no">130</span><span id="line-130">         if (v.isEmpty())</span>
-<span class="source-line-no">131</span><span id="line-131">            throw new IllegalStateException(String.format("needs %s:%s on the classpath (%s has no version).", groupId, artifactId, props));</span>
+<span class="source-line-no">131</span><span id="line-131">            throw new IllegalStateException(f("needs %s:%s on the classpath (%s has no version).", groupId, artifactId, props));</span>
 <span class="source-line-no">132</span><span id="line-132">         return v;</span>
 <span class="source-line-no">133</span><span id="line-133">      } catch (IOException e) {</span>
 <span class="source-line-no">134</span><span id="line-134">         throw new UncheckedIOException(e);</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">   private static String[] parse(String asset) {</span>
 <span class="source-line-no">139</span><span id="line-139">      var a = asset == null ? new String[0] : asset.split(":", 3);</span>
 <span class="source-line-no">140</span><span id="line-140">      if (a.length != 3 || a[0].isBlank() || a[1].isBlank() || a[2].isBlank())</span>
-<span class="source-line-no">141</span><span id="line-141">         throw new IllegalArgumentException(String.format("WebJar asset must be 'groupId:artifactId:path'; got '%s'.", asset));</span>
+<span class="source-line-no">141</span><span id="line-141">         throw new IllegalArgumentException(f("WebJar asset must be 'groupId:artifactId:path'; got '%s'.", asset));</span>
 <span class="source-line-no">142</span><span id="line-142">      return a;</span>
 <span class="source-line-no">143</span><span id="line-143">   }</span>
 <span class="source-line-no">144</span><span id="line-144">}</span>

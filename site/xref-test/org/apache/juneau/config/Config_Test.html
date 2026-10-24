@@ -1781,7 +1781,7 @@
 <a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 		assertEquals(<span class="jxr_string">"a"</span>, entry.getKey());
 <a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 		assertEquals(<span class="jxr_string">"my comment"</span>, entry.getComment());
 <a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 		assertEquals(<span class="jxr_string">"*"</span>, entry.getModifiers());
-<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 		assertEquals(1, entry.getPreLines().size());
+<a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 		assertSize(1, entry.getPreLines());
 <a class="jxr_linenumber" name="L1777" href="#L1777">1777</a> 		assertEquals(<span class="jxr_string">"#preline"</span>, entry.getPreLines().get(0));
 <a class="jxr_linenumber" name="L1778" href="#L1778">1778</a> 		assertNotNull(entry.getValue());
 <a class="jxr_linenumber" name="L1779" href="#L1779">1779</a> 	}

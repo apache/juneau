@@ -185,7 +185,7 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<em class="jxr_comment">// them when it is placed on its own (a card body), so the contract descriptor travels on the container.</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">if</strong> (region.params != <strong class="jxr_keyword">null</strong> &amp;&amp; ! region.params.isEmpty())
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			d.attr(REGION_DECLARED_ATTR, Json.of(region.toContractMap()));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">if</strong> (csrfToken != <strong class="jxr_keyword">null</strong> &amp;&amp; ! csrfToken.isBlank())
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">if</strong> (inb(csrfToken))
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			d.attr(REGION_CSRF_ATTR, csrfToken);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> d;
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
@@ -204,7 +204,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * @return The {@code &lt;script type='application/json'&gt;} sidecar.</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Script" href="../../../../../../org/apache/juneau/bean/html5/Script.html#Script">Script</a> sidecar(String hostId, List&lt;RegionDef&gt; regions) {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">if</strong> (hostId == <strong class="jxr_keyword">null</strong> || hostId.isBlank())
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">if</strong> (ib(hostId))
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"hostId must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> s = sidecar(regions);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		s.id(SIDECAR_ID_PREFIX + hostId);
@@ -232,7 +232,7 @@
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Script" href="../../../../../../org/apache/juneau/bean/html5/Script.html#Script">Script</a> sidecar(List&lt;RegionDef&gt; regions) {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">if</strong> (regions == <strong class="jxr_keyword">null</strong> || regions.isEmpty())
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">if</strong> (ie(regions))
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"regions must not be null or empty."</span>);
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> json = escapeForScript(Json.of(buildMeta(regions)));
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">return</strong> script().type(<span class="jxr_string">"application/json"</span>).text(rawText(json));
@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * @return An ordered {@link java.util.Map} ready for {@code Json.of(...)}.</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> java.util.Map&lt;String,Object&gt; buildMeta(List&lt;RegionDef&gt; regions) {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (regions == <strong class="jxr_keyword">null</strong> || regions.isEmpty())
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (ie(regions))
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"regions must not be null or empty."</span>);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> descriptors = <strong class="jxr_keyword">new</strong> ArrayList&lt;java.util.Map&lt;String,Object&gt;&gt;();
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : regions) {

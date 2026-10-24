@@ -262,13 +262,13 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			.filter((k, v) -&gt; v != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			.build();
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(0, map.size());
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertSize(0, map);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		map.put(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertEquals(1, map.size());
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertSize(1, map);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		map.put(<span class="jxr_string">"key2"</span>, <strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// Filtered out</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertEquals(1, map.size());
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertSize(1, map);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		map.put(<span class="jxr_string">"key3"</span>, <span class="jxr_string">"value3"</span>);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertEquals(2, map.size());
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertSize(2, map);
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	@Test

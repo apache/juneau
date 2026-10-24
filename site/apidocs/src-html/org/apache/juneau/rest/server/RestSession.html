@@ -626,7 +626,7 @@
 <span class="source-line-no">613</span><span id="line-613">   /** Adds the claims, trimmed and upper-cased as {@link MethodSafety} judges them, skipping blanks. */</span>
 <span class="source-line-no">614</span><span id="line-614">   private static void addClaims(Set&lt;String&gt; into, List&lt;String&gt; claims) {</span>
 <span class="source-line-no">615</span><span id="line-615">      for (var c : claims)</span>
-<span class="source-line-no">616</span><span id="line-616">         if (c != null &amp;&amp; ! c.isBlank())</span>
+<span class="source-line-no">616</span><span id="line-616">         if (inb(c))</span>
 <span class="source-line-no">617</span><span id="line-617">            into.add(c.trim().toUpperCase(Locale.ROOT));</span>
 <span class="source-line-no">618</span><span id="line-618">   }</span>
 <span class="source-line-no">619</span><span id="line-619"></span>

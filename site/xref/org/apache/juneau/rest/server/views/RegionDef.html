@@ -417,11 +417,11 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If this definition is not well-formed.</em>
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate() {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RegionDef id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (allowedPopulators != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : allowedPopulators)
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 				<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong> || name.isBlank())
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 				<strong class="jxr_keyword">if</strong> (ib(name))
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"allowPopulators entry must not be blank."</span>);
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">if</strong> (populate != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 			PopulatorAllowlist.assertAllowed(populate, allowedPopulators);
@@ -445,10 +445,10 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateDataUrlAndParams() {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">if</strong> (dataUrl != <strong class="jxr_keyword">null</strong> &amp;&amp; !dataUrl.isBlank() &amp;&amp; !isSafeDetailEndpoint(dataUrl))
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">if</strong> (inb(dataUrl) &amp;&amp; !isSafeDetailEndpoint(dataUrl))
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RegionDef '%s' dataUrl must be a same-origin path (no scheme, no leading '//', no '..' "</span>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 				+ <span class="jxr_string">"segment): %s"</span>, id, dataUrl);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">if</strong> (params == <strong class="jxr_keyword">null</strong> || params.isEmpty())
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">if</strong> (ie(params))
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : params.entrySet()) {
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">if</strong> (e.getValue() instanceof Map)
@@ -466,7 +466,7 @@
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">if</strong> (titleFields == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : titleFields)
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong> || f.isBlank())
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">if</strong> (ib(f))
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RegionDef '%s' titleFields entry must not be blank."</span>, id);
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 
@@ -486,7 +486,7 @@
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 		}
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">var</strong> isDefaultPopulate = populate == <strong class="jxr_keyword">null</strong> || eq(populate, <span class="jxr_string">"default"</span>);
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">var</strong> isCardOrTab = eqa(type, TYPE_CARD_BODY, TYPE_TAB_BODY);
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">if</strong> (isDefaultPopulate &amp;&amp; isCardOrTab &amp;&amp; eq(renderer, RENDERER_FIELD_GRID) &amp;&amp; (fields == <strong class="jxr_keyword">null</strong> || fields.isEmpty()))
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">if</strong> (isDefaultPopulate &amp;&amp; isCardOrTab &amp;&amp; eq(renderer, RENDERER_FIELD_GRID) &amp;&amp; (ie(fields)))
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RegionDef '%s' declares renderer 'field-grid' under the default populator but no fields; "</span>
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 				+ <span class="jxr_string">"a field-grid with no catalog would silently paint an unlabeled/empty grid."</span>, id);
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
@@ -618,7 +618,7 @@
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">		 * @return A new {@link Field}.</em>
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Field of(String data) {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">if</strong> (data == <strong class="jxr_keyword">null</strong> || data.isBlank())
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">if</strong> (ib(data))
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RegionDef.Field data must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> Field();
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 			f.data = data;
@@ -725,7 +725,7 @@
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">		 * @param regionId The enclosing region's id, for the error message only.</em>
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<strong class="jxr_keyword">void</strong> validate(String regionId) {
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 			<strong class="jxr_keyword">if</strong> (data == <strong class="jxr_keyword">null</strong> || data.isBlank())
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 			<strong class="jxr_keyword">if</strong> (ib(data))
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RegionDef '%s' field data must not be null or blank."</span>, regionId);
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 		}
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 

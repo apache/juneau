@@ -68,20 +68,20 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test <strong class="jxr_keyword">void</strong> a03_trailingCommas() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> obj = Json5.to(<span class="jxr_string">"{a:1,}"</span>, JsonMap.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(1, obj.getInt(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(1, obj.size());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertSize(1, obj);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> nested = Json5.to(<span class="jxr_string">"{a:{b:2,},c:[3,],}"</span>, JsonMap.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertEquals(2, nested.getMap(<span class="jxr_string">"a"</span>).getInt(<span class="jxr_string">"b"</span>));
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertEquals(3, nested.getList(<span class="jxr_string">"c"</span>).getInt(0));
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(1, nested.getList(<span class="jxr_string">"c"</span>).size());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertSize(1, nested.getList(<span class="jxr_string">"c"</span>));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> arr = Json5.to(<span class="jxr_string">"[1,2,]"</span>, JsonList.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(2, arr.size());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertSize(2, arr);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(1, arr.getInt(0));
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(2, arr.getInt(1));
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> emptyish = Json5.to(<span class="jxr_string">"[1,]"</span>, JsonList.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(1, emptyish.size());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertSize(1, emptyish);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(1, emptyish.getInt(0));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  

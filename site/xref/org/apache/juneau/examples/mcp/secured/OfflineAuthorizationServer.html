@@ -277,7 +277,7 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 			}
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">var</strong> resource = form.get(<span class="jxr_string">"resource"</span>);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">if</strong> (resource == <strong class="jxr_keyword">null</strong> || resource.isBlank()) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">if</strong> (ib(resource)) {
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 				sendJson(exchange, 400, error(<span class="jxr_string">"invalid_target"</span>, <span class="jxr_string">"a resource indicator (RFC 8707) is required"</span>));
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			}

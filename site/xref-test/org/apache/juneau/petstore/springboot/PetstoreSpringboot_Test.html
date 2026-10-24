@@ -485,7 +485,7 @@
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<em class="jxr_comment">// The live registrations: exactly one PetstoreApiBoundary, on /petstore/* alone (no auto-registered /* copy).</em>
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">var</strong> live = servletContext.getFilterRegistrations().values().stream()
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 			.filter(r -&gt; PetstoreApiBoundary.<strong class="jxr_keyword">class</strong>.getName().equals(r.getClassName())).toList();
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		assertEquals(1, live.size(), <span class="jxr_string">"PetstoreApiBoundary registrations: "</span> + live);
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		assertSize(() -&gt; <span class="jxr_string">"PetstoreApiBoundary registrations: "</span> + live, 1, live);
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 		assertEquals(List.of(PetstoreApiBoundary.URL_PATTERN), List.copyOf(live.get(0).getUrlPatternMappings()));
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		assertTrue(live.get(0).getServletNameMappings().isEmpty(), <span class="jxr_string">"mapped by servlet name: "</span> + live.get(0).getServletNameMappings());
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<em class="jxr_comment">// The servlet API cannot read a live registration's dispatcher types or order, so those come from the beans.</em>

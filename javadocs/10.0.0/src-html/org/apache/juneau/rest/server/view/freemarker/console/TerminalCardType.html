@@ -93,7 +93,7 @@
 <span class="source-line-no">080</span><span id="line-80">         if (! BODY_KEYS.contains(k))</span>
 <span class="source-line-no">081</span><span id="line-81">            throw source.error("type='terminal' unknown key '%s'; allowed: contractVersion, terminal.", k);</span>
 <span class="source-line-no">082</span><span id="line-82">      var version = envelope.get("contractVersion");</span>
-<span class="source-line-no">083</span><span id="line-83">      if (! eq("1", version))</span>
+<span class="source-line-no">083</span><span id="line-83">      if (neq("1", version))</span>
 <span class="source-line-no">084</span><span id="line-84">         throw source.error("type='terminal' requires contractVersion: '1'; got '%s'.", version);</span>
 <span class="source-line-no">085</span><span id="line-85">      if (! (envelope.get("terminal") instanceof Map&lt;?,?&gt; terminal))</span>
 <span class="source-line-no">086</span><span id="line-86">         throw source.error("type='terminal' requires a terminal object.");</span>

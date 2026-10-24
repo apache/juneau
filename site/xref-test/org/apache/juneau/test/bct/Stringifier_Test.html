@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">void</strong> d01_numberStringification() {
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 			Stringifier&lt;Number&gt; numberFormatter = (converter, num) -&gt; {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">if</strong> (num instanceof Integer) <strong class="jxr_keyword">return</strong> <span class="jxr_string">"INT:"</span> + num;
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">if</strong> (num instanceof Double) <strong class="jxr_keyword">return</strong> <span class="jxr_string">"DOUBLE:"</span> + String.format(<span class="jxr_string">"%.2f"</span>, num);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">if</strong> (num instanceof Double) <strong class="jxr_keyword">return</strong> <span class="jxr_string">"DOUBLE:"</span> + f(<span class="jxr_string">"%.2f"</span>, num);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"NUMBER:"</span> + num;
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 			};
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
@@ -256,7 +256,7 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		@Test
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">void</strong> d04_customObjectStringification() {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			Stringifier&lt;TestPerson&gt; personFormatter = (converter, person) -&gt; String.format(<span class="jxr_string">"Person{name='%s', age=%d}"</span>, person.name, person.age);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			Stringifier&lt;TestPerson&gt; personFormatter = (converter, person) -&gt; f(<span class="jxr_string">"Person{name='%s', age=%d}"</span>, person.name, person.age);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">var</strong> person = <strong class="jxr_keyword">new</strong> TestPerson(<span class="jxr_string">"Alice"</span>, 30);

@@ -431,7 +431,7 @@
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> req = dummyRequest();
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> msgs = warnings(() -&gt; out[0] = <strong class="jxr_keyword">new</strong> ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), req, List.of(<span class="jxr_string">"https://cdn.example/dataTables.dataTables.min.css"</span>), <span class="jxr_string">"t.ftlh"</span>));
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertEmpty(((ToolkitPackRegistry.Resolved)out[0]).vendorCss());
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertEquals(1, msgs.size(), msgs::toString);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertSize(msgs::toString, 1, msgs);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	@Test <strong class="jxr_keyword">void</strong> c03_fileName_lastSegment_noQueryOrFragment_lowerCase() {

@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52">    * @return A new {@link PopoverField}.</span>
 <span class="source-line-no">053</span><span id="line-53">    */</span>
 <span class="source-line-no">054</span><span id="line-54">   public static PopoverField of(String data) {</span>
-<span class="source-line-no">055</span><span id="line-55">      if (data == null || data.isBlank())</span>
+<span class="source-line-no">055</span><span id="line-55">      if (ib(data))</span>
 <span class="source-line-no">056</span><span id="line-56">         throw iaex("PopoverField data must not be null or blank.");</span>
 <span class="source-line-no">057</span><span id="line-57">      var f = new PopoverField();</span>
 <span class="source-line-no">058</span><span id="line-58">      f.data = data;</span>

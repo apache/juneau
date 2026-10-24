@@ -648,7 +648,7 @@
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<strong class="jxr_keyword">var</strong> f = compile(ctx, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"createdAt=$gt(-24h)"</span>));
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		assertTrue(f.sql().endsWith(<span class="jxr_string">" &gt; ?"</span>), f.sql());
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 		assertFalse(f.sql().toLowerCase().contains(<span class="jxr_string">"interval"</span>) || f.sql().toLowerCase().contains(<span class="jxr_string">"now()"</span>), f.sql());
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertEquals(1, f.binds().size());
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertSize(1, f.binds());
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		assertInstanceOf(java.time.OffsetDateTime.<strong class="jxr_keyword">class</strong>, f.binds().get(0));
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 
@@ -659,7 +659,7 @@
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">var</strong> rel = compile(ctx, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"createdAt=$gt(-24h)"</span>));
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 		assertEquals(rel.sql(), iso.sql());
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 		assertFalse(iso.sql().toLowerCase().contains(<span class="jxr_string">"interval"</span>) || iso.sql().toLowerCase().contains(<span class="jxr_string">"now()"</span>), iso.sql());
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		assertEquals(1, iso.binds().size());
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		assertSize(1, iso.binds());
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		assertInstanceOf(java.time.OffsetDateTime.<strong class="jxr_keyword">class</strong>, iso.binds().get(0));
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 	}
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> }

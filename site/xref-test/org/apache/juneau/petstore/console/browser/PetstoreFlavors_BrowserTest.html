@@ -78,41 +78,43 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  					<span class="jxr_string">"title"</span>, <span class="jxr_string">"document.querySelector('#flavor iframe').title"</span>))));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// names is a JSON array of strings.</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; names(String engine) {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;) query(assertClean(report, engine), <span class="jxr_string">"names"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> a01_threeFlavorsShowTheSameTenPets() {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> html = names(<span class="jxr_string">"html"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertSize(10, html);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertList(() -&gt; <span class="jxr_string">"freemarker differs from html"</span>, names(<span class="jxr_string">"freemarker"</span>), html.toArray());
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertList(() -&gt; <span class="jxr_string">"mustache differs from html"</span>, names(<span class="jxr_string">"mustache"</span>), html.toArray());
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a02_eachFragmentIsItsOwnFlavorWithNoSecondChrome() {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : List.of(<span class="jxr_string">"html"</span>, <span class="jxr_string">"freemarker"</span>, <span class="jxr_string">"mustache"</span>)) {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> c = assertClean(report, e);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			assertString(e, query(c, <span class="jxr_string">"flavor"</span>));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			assertString(<span class="jxr_string">"1"</span>, String.valueOf(query(c, <span class="jxr_string">"islands"</span>)));
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			assertString(<span class="jxr_string">"1"</span>, String.valueOf(query(c, <span class="jxr_string">"navs"</span>)));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		}
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> a03_reactIframesTheApp() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"react"</span>);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertString(<span class="jxr_string">"/petstore-ui"</span>, query(c, <span class="jxr_string">"frame"</span>));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertString(<span class="jxr_string">"Petstore React app"</span>, query(c, <span class="jxr_string">"title"</span>));
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a04_reactAppLoadsEverythingFromTheServer() {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<em class="jxr_comment">// The embedded app must render with no network: React/ReactDOM are vendored, so every resource the</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<em class="jxr_comment">// console page and its iframe requested came from this server's origin.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"react"</span>);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertTrue(((Number) query(c, <span class="jxr_string">"frameRows"</span>)).intValue() &gt; 0, <span class="jxr_string">"React app rendered no pet rows"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(List.of(), query(c, <span class="jxr_string">"frameForeign"</span>), <span class="jxr_string">"Cross-origin requests made by the React flavor"</span>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// names is a JSON array of strings.</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	})
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; names(String engine) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;) query(assertClean(report, engine), <span class="jxr_string">"names"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a01_threeFlavorsShowTheSameTenPets() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> html = names(<span class="jxr_string">"html"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertSize(10, html);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertList(() -&gt; <span class="jxr_string">"freemarker differs from html"</span>, names(<span class="jxr_string">"freemarker"</span>), html.toArray());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertList(() -&gt; <span class="jxr_string">"mustache differs from html"</span>, names(<span class="jxr_string">"mustache"</span>), html.toArray());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a02_eachFragmentIsItsOwnFlavorWithNoSecondChrome() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : List.of(<span class="jxr_string">"html"</span>, <span class="jxr_string">"freemarker"</span>, <span class="jxr_string">"mustache"</span>)) {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">var</strong> c = assertClean(report, e);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			assertString(e, query(c, <span class="jxr_string">"flavor"</span>));
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			assertString(<span class="jxr_string">"1"</span>, String.valueOf(query(c, <span class="jxr_string">"islands"</span>)));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			assertString(<span class="jxr_string">"1"</span>, String.valueOf(query(c, <span class="jxr_string">"navs"</span>)));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a03_reactIframesTheApp() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"react"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertString(<span class="jxr_string">"/petstore-ui"</span>, query(c, <span class="jxr_string">"frame"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertString(<span class="jxr_string">"Petstore React app"</span>, query(c, <span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a04_reactAppLoadsEverythingFromTheServer() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<em class="jxr_comment">// The embedded app must render with no network: React/ReactDOM are vendored, so every resource the</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<em class="jxr_comment">// console page and its iframe requested came from this server's origin.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"react"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertTrue(((Number) query(c, <span class="jxr_string">"frameRows"</span>)).intValue() &gt; 0, <span class="jxr_string">"React app rendered no pet rows"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(List.of(), query(c, <span class="jxr_string">"frameForeign"</span>), <span class="jxr_string">"Cross-origin requests made by the React flavor"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

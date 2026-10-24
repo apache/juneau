@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">       */</span>
 <span class="source-line-no">108</span><span id="line-108">      private static List&lt;String&gt; defaultProfiles() {</span>
 <span class="source-line-no">109</span><span id="line-109">         var s = env("juneau.profiles.active", "");</span>
-<span class="source-line-no">110</span><span id="line-110">         if (s == null || s.isBlank())</span>
+<span class="source-line-no">110</span><span id="line-110">         if (ib(s))</span>
 <span class="source-line-no">111</span><span id="line-111">            return list();</span>
 <span class="source-line-no">112</span><span id="line-112">         return Arrays.stream(s.split(",")).filter(p -&gt; ! p.isBlank()).map(String::trim).collect(Collectors.toCollection(ArrayList::new));</span>
 <span class="source-line-no">113</span><span id="line-113">      }</span>

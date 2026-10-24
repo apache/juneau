@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64">      // this swap so the underlying BSON / CBOR / MsgPack writer emits the raw byte sequence and the</span>
 <span class="source-line-no">065</span><span id="line-65">      // corresponding parser consumes it.  Binary serializers without a native byte-array wire type</span>
 <span class="source-line-no">066</span><span id="line-66">      // (Parquet, binary RDF) report hasNativeBytes()==false and still run this swap to produce /</span>
-<span class="source-line-no">067</span><span id="line-67">      // consume the configured text wire form (HEX / BASE64 / etc.) per OQ 10 (b).</span>
+<span class="source-line-no">067</span><span id="line-67">      // consume the configured text wire form (HEX / BASE64 / etc.).</span>
 <span class="source-line-no">068</span><span id="line-68">      if (session instanceof OutputStreamSerializerSession session2 &amp;&amp; session2.hasNativeBytes())</span>
 <span class="source-line-no">069</span><span id="line-69">         return 0;</span>
 <span class="source-line-no">070</span><span id="line-70">      if (session instanceof InputStreamParserSession session2 &amp;&amp; session2.hasNativeBytes())</span>

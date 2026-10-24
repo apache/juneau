@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * The parse/apply logic here is ported from the next-generation engine</span>
 <span class="source-line-no">031</span><span id="line-31"> * (&lt;c&gt;org.apache.juneau.rest.client.remote.RemoteClient&lt;/c&gt; and &lt;c&gt;RrpcInterfaceMeta&lt;/c&gt;) so that the classic</span>
-<span class="source-line-no">032</span><span id="line-32"> * engine can honor the same {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}</span>
+<span class="source-line-no">032</span><span id="line-32"> * engine can honor the same {@link Remote @Remote}/{@link RemoteOp @RemoteOp}</span>
 <span class="source-line-no">033</span><span id="line-33"> * members without introducing a cross-module dependency on freshly-installed common code.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151">    *</span>
 <span class="source-line-no">152</span><span id="line-152">    * @param url The URL to validate.</span>
 <span class="source-line-no">153</span><span id="line-153">    * @param allowPrivateUrls When &lt;jk&gt;true&lt;/jk&gt;, the deny-private check is skipped.</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.</span>
+<span class="source-line-no">154</span><span id="line-154">    * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.</span>
 <span class="source-line-no">155</span><span id="line-155">    * @return The unchanged URL.</span>
 <span class="source-line-no">156</span><span id="line-156">    * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.</span>
 <span class="source-line-no">157</span><span id="line-157">    */</span>
@@ -173,7 +173,7 @@
 <span class="source-line-no">160</span><span id="line-160">   }</span>
 <span class="source-line-no">161</span><span id="line-161"></span>
 <span class="source-line-no">162</span><span id="line-162">   /**</span>
-<span class="source-line-no">163</span><span id="line-163">    * Emits a one-time build-time warning that an {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}</span>
+<span class="source-line-no">163</span><span id="line-163">    * Emits a one-time build-time warning that an {@link Remote @Remote}/{@link RemoteOp @RemoteOp}</span>
 <span class="source-line-no">164</span><span id="line-164">    * member is set on the classic engine that the classic engine cannot honor.</span>
 <span class="source-line-no">165</span><span id="line-165">    *</span>
 <span class="source-line-no">166</span><span id="line-166">    * &lt;p&gt;</span>

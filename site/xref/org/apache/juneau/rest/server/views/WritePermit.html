@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code capability} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="WritePermit" href="../../../../../../org/apache/juneau/rest/server/views/WritePermit.html#WritePermit">WritePermit</a> forCapability(String capability) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (capability == <strong class="jxr_keyword">null</strong> || capability.isBlank())
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (ib(capability))
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"WritePermit capability must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="WritePermit" href="../../../../../../org/apache/juneau/rest/server/views/WritePermit.html#WritePermit">WritePermit</a>(capability);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}

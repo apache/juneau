@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65"> * The types above are considered "YAML-primitive" object types.</span>
 <span class="source-line-no">066</span><span id="line-66"> * Any non-YAML-primitive object types are transformed into YAML-primitive object types through</span>
 <span class="source-line-no">067</span><span id="line-67"> * {@link org.apache.juneau.marshall.swap.spi.ObjectSwap ObjectSwaps} associated through the</span>
-<span class="source-line-no">068</span><span id="line-68"> * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)} method.</span>
+<span class="source-line-no">068</span><span id="line-68"> * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder#swaps(Class...)} method.</span>
 <span class="source-line-no">069</span><span id="line-69"> * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;p&gt;</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">       * through reflection.</span>
 <span class="source-line-no">188</span><span id="line-188">       *</span>
 <span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">       * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting and is</span>
+<span class="source-line-no">190</span><span id="line-190">       * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()} setting and is</span>
 <span class="source-line-no">191</span><span id="line-191">       * provided to customize the behavior of specific serializers in a {@link SerializerSet}.</span>
 <span class="source-line-no">192</span><span id="line-192">       *</span>
 <span class="source-line-no">193</span><span id="line-193">       * @return This object.</span>

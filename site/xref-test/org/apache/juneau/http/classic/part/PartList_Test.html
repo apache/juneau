@@ -548,7 +548,7 @@
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 	@Test <strong class="jxr_keyword">void</strong> e03_unmodifiable_readsStillWork() {
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">var</strong> u = PartList.create().append(<span class="jxr_string">"a"</span>, <span class="jxr_string">"1"</span>).append(<span class="jxr_string">"b"</span>, <span class="jxr_string">"2"</span>).unmodifiable();
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		assertEquals(2, u.size());
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		assertSize(2, u);
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 		assertEquals(<span class="jxr_string">"1"</span>, u.get(0).getValue());
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		assertEquals(<span class="jxr_string">"b"</span>, u.get(1).getName());
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">var</strong> count = <strong class="jxr_keyword">new</strong> AtomicInteger();
@@ -620,7 +620,7 @@
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">var</strong> x = PartList.create().append(<span class="jxr_string">"a"</span>, <span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> u = x.unmodifiable();
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 		x.append(<span class="jxr_string">"b"</span>, <span class="jxr_string">"2"</span>); <em class="jxr_comment">// Mutate original after snapshotting.</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertEquals(1, u.size());
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertSize(1, u);
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 		assertEquals(<span class="jxr_string">"a"</span>, u.get(0).getName());
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 	}
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 

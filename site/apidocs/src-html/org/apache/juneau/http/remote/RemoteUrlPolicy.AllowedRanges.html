@@ -167,7 +167,7 @@
 <span class="source-line-no">154</span><span id="line-154">         throw iaex(e, "Invalid @Remote URL override: %s", url);</span>
 <span class="source-line-no">155</span><span id="line-155">      }</span>
 <span class="source-line-no">156</span><span id="line-156">      var host = uri.getHost();</span>
-<span class="source-line-no">157</span><span id="line-157">      if (host == null || host.isEmpty())</span>
+<span class="source-line-no">157</span><span id="line-157">      if (ie(host))</span>
 <span class="source-line-no">158</span><span id="line-158">         throw iaex("@Remote URL override has no host (non-canonical or opaque form is not allowed): %s", url);</span>
 <span class="source-line-no">159</span><span id="line-159"></span>
 <span class="source-line-no">160</span><span id="line-160">      if (! allowPrivateUrls &amp;&amp; isDeniedHost(host, allowedRanges))</span>
@@ -447,7 +447,7 @@
 <span class="source-line-no">434</span><span id="line-434">   private static final AtomicReference&lt;ParsedAllow&gt; PARSED_ALLOW = new AtomicReference&lt;&gt;(new ParsedAllow("", List.of(), null));</span>
 <span class="source-line-no">435</span><span id="line-435"></span>
 <span class="source-line-no">436</span><span id="line-436">   private static List&lt;Cidr&gt; parseAllowedRanges(String spec) {</span>
-<span class="source-line-no">437</span><span id="line-437">      if (spec == null || spec.isBlank())</span>
+<span class="source-line-no">437</span><span id="line-437">      if (ib(spec))</span>
 <span class="source-line-no">438</span><span id="line-438">         return List.of();</span>
 <span class="source-line-no">439</span><span id="line-439">      var cached = PARSED_ALLOW.get();</span>
 <span class="source-line-no">440</span><span id="line-440">      if (! cached.spec().equals(spec)) {</span>
@@ -663,7 +663,7 @@
 <span class="source-line-no">650</span><span id="line-650">    * @throws IllegalArgumentException If {@code location} is blank or does not resolve to an absolute URI.</span>
 <span class="source-line-no">651</span><span id="line-651">    */</span>
 <span class="source-line-no">652</span><span id="line-652">   public static URI resolveRedirectLocation(URI from, String location) {</span>
-<span class="source-line-no">653</span><span id="line-653">      if (location == null || location.isBlank())</span>
+<span class="source-line-no">653</span><span id="line-653">      if (ib(location))</span>
 <span class="source-line-no">654</span><span id="line-654">         throw iaex("Redirect response is missing a Location header");</span>
 <span class="source-line-no">655</span><span id="line-655">      URI target;</span>
 <span class="source-line-no">656</span><span id="line-656">      try {</span>

@@ -67,7 +67,7 @@
 <span class="source-line-no">054</span><span id="line-54">         case SECONDS -&gt; {</span>
 <span class="source-line-no">055</span><span id="line-55">            long seconds = value.getSeconds();</span>
 <span class="source-line-no">056</span><span id="line-56">            int nanos = value.getNano();</span>
-<span class="source-line-no">057</span><span id="line-57">            yield seconds + "." + String.format("%09d", nanos);</span>
+<span class="source-line-no">057</span><span id="line-57">            yield seconds + "." + f("%09d", nanos);</span>
 <span class="source-line-no">058</span><span id="line-58">         }</span>
 <span class="source-line-no">059</span><span id="line-59">         case HOCON -&gt; formatHocon(value);</span>
 <span class="source-line-no">060</span><span id="line-60">      };</span>
@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">         if (minutes &gt; 0)</span>
 <span class="source-line-no">134</span><span id="line-134">            sb.append(minutes).append('M');</span>
 <span class="source-line-no">135</span><span id="line-135">         if (seconds &gt; 0 || nanos &gt; 0 || (hours == 0 &amp;&amp; minutes == 0))</span>
-<span class="source-line-no">136</span><span id="line-136">            sb.append(seconds).append(nanos == 0 ? "" : "." + trimTrailingZeros(String.format("%09d", nanos))).append('S');</span>
+<span class="source-line-no">136</span><span id="line-136">            sb.append(seconds).append(nanos == 0 ? "" : "." + trimTrailingZeros(f("%09d", nanos))).append('S');</span>
 <span class="source-line-no">137</span><span id="line-137">      }</span>
 <span class="source-line-no">138</span><span id="line-138">      return sb.toString();</span>
 <span class="source-line-no">139</span><span id="line-139">   }</span>

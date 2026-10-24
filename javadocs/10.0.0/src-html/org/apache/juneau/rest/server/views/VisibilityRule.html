@@ -83,7 +83,7 @@
 <span class="source-line-no">070</span><span id="line-70">    * @throws IllegalArgumentException If {@code field} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">071</span><span id="line-71">    */</span>
 <span class="source-line-no">072</span><span id="line-72">   public static Builder when(String field) {</span>
-<span class="source-line-no">073</span><span id="line-73">      if (field == null || field.isBlank())</span>
+<span class="source-line-no">073</span><span id="line-73">      if (ib(field))</span>
 <span class="source-line-no">074</span><span id="line-74">         throw iaex("VisibilityRule field must not be null or blank.");</span>
 <span class="source-line-no">075</span><span id="line-75">      return new Builder(field);</span>
 <span class="source-line-no">076</span><span id="line-76">   }</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">    * @throws IllegalArgumentException If a rule's {@code op} is not one of the known tokens.</span>
 <span class="source-line-no">090</span><span id="line-90">    */</span>
 <span class="source-line-no">091</span><span id="line-91">   public static boolean test(List&lt;VisibilityRule&gt; rules, Map&lt;String,Object&gt; map) {</span>
-<span class="source-line-no">092</span><span id="line-92">      if (rules == null || rules.isEmpty())</span>
+<span class="source-line-no">092</span><span id="line-92">      if (ie(rules))</span>
 <span class="source-line-no">093</span><span id="line-93">         return true;</span>
 <span class="source-line-no">094</span><span id="line-94">      for (var r : rules)</span>
 <span class="source-line-no">095</span><span id="line-95">         if (! r.matches(map))</span>
@@ -134,8 +134,8 @@
 <span class="source-line-no">121</span><span id="line-121">      var actual = resolve(map, field);</span>
 <span class="source-line-no">122</span><span id="line-122">      var missing = actual == MISSING;</span>
 <span class="source-line-no">123</span><span id="line-123">      return switch (op) {</span>
-<span class="source-line-no">124</span><span id="line-124">         case "eq" -&gt; ! missing &amp;&amp; Objects.equals(actual, value);</span>
-<span class="source-line-no">125</span><span id="line-125">         case "ne" -&gt; ! missing &amp;&amp; ! Objects.equals(actual, value);</span>
+<span class="source-line-no">124</span><span id="line-124">         case "eq" -&gt; ! missing &amp;&amp; eq(actual, value);</span>
+<span class="source-line-no">125</span><span id="line-125">         case "ne" -&gt; ! missing &amp;&amp; neq(actual, value);</span>
 <span class="source-line-no">126</span><span id="line-126">         case "present" -&gt; ! missing &amp;&amp; actual != null &amp;&amp; ! (actual instanceof String s &amp;&amp; s.isBlank());</span>
 <span class="source-line-no">127</span><span id="line-127">         case "absent" -&gt; missing || actual == null || (actual instanceof String s &amp;&amp; s.isBlank());</span>
 <span class="source-line-no">128</span><span id="line-128">         case "in" -&gt; ! missing &amp;&amp; value instanceof Collection&lt;?&gt; c &amp;&amp; c.contains(actual);</span>

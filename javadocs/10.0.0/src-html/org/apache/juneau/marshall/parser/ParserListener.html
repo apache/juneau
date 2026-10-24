@@ -29,64 +29,65 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.parser;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.bean.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> * Class for listening for certain parse events during a document parse.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers"&gt;Serializers and Parsers&lt;/a&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;/ul&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> */</span>
-<span class="source-line-no">031</span><span id="line-31">public class ParserListener {</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">   /**</span>
-<span class="source-line-no">034</span><span id="line-34">    * Represents no parser listener.</span>
-<span class="source-line-no">035</span><span id="line-35">    */</span>
-<span class="source-line-no">036</span><span id="line-36">   public static final class Void extends ParserListener {}</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">   /**</span>
-<span class="source-line-no">039</span><span id="line-39">    * Called when an exception is thrown when trying to call a bean setter method.</span>
-<span class="source-line-no">040</span><span id="line-40">    *</span>
-<span class="source-line-no">041</span><span id="line-41">    * @param session The parser session.</span>
-<span class="source-line-no">042</span><span id="line-42">    * @param t The throwable that was thrown by the setter method.</span>
-<span class="source-line-no">043</span><span id="line-43">    * @param p The bean property we had an issue on.</span>
-<span class="source-line-no">044</span><span id="line-44">    */</span>
-<span class="source-line-no">045</span><span id="line-45">   public void onBeanSetterException(ParserSession session, Throwable t, BeanPropertyMeta p) {</span>
-<span class="source-line-no">046</span><span id="line-46">      onError(session, t, String.format("Could not call setValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t)));</span>
-<span class="source-line-no">047</span><span id="line-47">   }</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Called when an error occurs during parsing but is ignored.</span>
-<span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param session The parser session.</span>
-<span class="source-line-no">053</span><span id="line-53">    * @param t The throwable that was thrown by the getter method.</span>
-<span class="source-line-no">054</span><span id="line-54">    * @param msg The error message.</span>
-<span class="source-line-no">055</span><span id="line-55">    */</span>
-<span class="source-line-no">056</span><span id="line-56">   public void onError(ParserSession session, Throwable t, String msg) {</span>
-<span class="source-line-no">057</span><span id="line-57">      // Do something with this information.</span>
-<span class="source-line-no">058</span><span id="line-58">   }</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   /**</span>
-<span class="source-line-no">061</span><span id="line-61">    * Gets called when an unknown bean property is detected in a document.</span>
-<span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * &lt;p&gt;</span>
-<span class="source-line-no">064</span><span id="line-64">    * This method only gets called if {@link org.apache.juneau.marshall.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting is &lt;jk&gt;true&lt;/jk&gt;.</span>
-<span class="source-line-no">065</span><span id="line-65">    * Otherwise, the parser will throw a {@link ParseException}.</span>
-<span class="source-line-no">066</span><span id="line-66">    *</span>
-<span class="source-line-no">067</span><span id="line-67">    * @param &lt;T&gt; The class type of the bean.</span>
-<span class="source-line-no">068</span><span id="line-68">    * @param session The parser session.</span>
-<span class="source-line-no">069</span><span id="line-69">    * @param propertyName The property name encountered in the document.</span>
-<span class="source-line-no">070</span><span id="line-70">    * @param beanClass The bean class.</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param bean The bean.</span>
-<span class="source-line-no">072</span><span id="line-72">    */</span>
-<span class="source-line-no">073</span><span id="line-73">   public &lt;T&gt; void onUnknownBeanProperty(ParserSession session, String propertyName, Class&lt;T&gt; beanClass, T bean) {</span>
-<span class="source-line-no">074</span><span id="line-74">      onError(session, null, String.format("Unknown property '%s' encountered while trying to parse into class '%s' at location %s", propertyName, beanClass, session.getPosition()));</span>
-<span class="source-line-no">075</span><span id="line-75">   }</span>
-<span class="source-line-no">076</span><span id="line-76">}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.f;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.commons.bean.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Class for listening for certain parse events during a document parse.</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers"&gt;Serializers and Parsers&lt;/a&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;/ul&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> */</span>
+<span class="source-line-no">032</span><span id="line-32">public class ParserListener {</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">   /**</span>
+<span class="source-line-no">035</span><span id="line-35">    * Represents no parser listener.</span>
+<span class="source-line-no">036</span><span id="line-36">    */</span>
+<span class="source-line-no">037</span><span id="line-37">   public static final class Void extends ParserListener {}</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">   /**</span>
+<span class="source-line-no">040</span><span id="line-40">    * Called when an exception is thrown when trying to call a bean setter method.</span>
+<span class="source-line-no">041</span><span id="line-41">    *</span>
+<span class="source-line-no">042</span><span id="line-42">    * @param session The parser session.</span>
+<span class="source-line-no">043</span><span id="line-43">    * @param t The throwable that was thrown by the setter method.</span>
+<span class="source-line-no">044</span><span id="line-44">    * @param p The bean property we had an issue on.</span>
+<span class="source-line-no">045</span><span id="line-45">    */</span>
+<span class="source-line-no">046</span><span id="line-46">   public void onBeanSetterException(ParserSession session, Throwable t, BeanPropertyMeta p) {</span>
+<span class="source-line-no">047</span><span id="line-47">      onError(session, t, f("Could not call setValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t)));</span>
+<span class="source-line-no">048</span><span id="line-48">   }</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   /**</span>
+<span class="source-line-no">051</span><span id="line-51">    * Called when an error occurs during parsing but is ignored.</span>
+<span class="source-line-no">052</span><span id="line-52">    *</span>
+<span class="source-line-no">053</span><span id="line-53">    * @param session The parser session.</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param t The throwable that was thrown by the getter method.</span>
+<span class="source-line-no">055</span><span id="line-55">    * @param msg The error message.</span>
+<span class="source-line-no">056</span><span id="line-56">    */</span>
+<span class="source-line-no">057</span><span id="line-57">   public void onError(ParserSession session, Throwable t, String msg) {</span>
+<span class="source-line-no">058</span><span id="line-58">      // Do something with this information.</span>
+<span class="source-line-no">059</span><span id="line-59">   }</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   /**</span>
+<span class="source-line-no">062</span><span id="line-62">    * Gets called when an unknown bean property is detected in a document.</span>
+<span class="source-line-no">063</span><span id="line-63">    *</span>
+<span class="source-line-no">064</span><span id="line-64">    * &lt;p&gt;</span>
+<span class="source-line-no">065</span><span id="line-65">    * This method only gets called if {@link org.apache.juneau.marshall.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting is &lt;jk&gt;true&lt;/jk&gt;.</span>
+<span class="source-line-no">066</span><span id="line-66">    * Otherwise, the parser will throw a {@link ParseException}.</span>
+<span class="source-line-no">067</span><span id="line-67">    *</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param &lt;T&gt; The class type of the bean.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param session The parser session.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @param propertyName The property name encountered in the document.</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param beanClass The bean class.</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param bean The bean.</span>
+<span class="source-line-no">073</span><span id="line-73">    */</span>
+<span class="source-line-no">074</span><span id="line-74">   public &lt;T&gt; void onUnknownBeanProperty(ParserSession session, String propertyName, Class&lt;T&gt; beanClass, T bean) {</span>
+<span class="source-line-no">075</span><span id="line-75">      onError(session, null, f("Unknown property '%s' encountered while trying to parse into class '%s' at location %s", propertyName, beanClass, session.getPosition()));</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77">}</span>
 
 
 

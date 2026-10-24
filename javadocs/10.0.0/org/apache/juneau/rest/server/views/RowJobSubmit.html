@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <dd><code><span id="param-fields">fields</span></code> - The submitted fields; empty when the body omitted them.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">RowJobSubmit</a></span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;action, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetId, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey, <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;fields)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">RowJobSubmit</a></span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;action, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetId, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey, <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;fields)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">The action-envelope submit of a row job: <code>{action, targetId, idempotencyKey, fields}</code>, the shape the
  row-action dialog and the job-log card's <code>envelope: "action"</code> both send.
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="REFUSAL_STATUS">
 <h3>REFUSAL_STATUS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-59">REFUSAL_STATUS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-61">REFUSAL_STATUS</a></span></div>
 <div class="block">The HTTP status to answer <a href="#bindingRefusal()"><code>bindingRefusal()</code></a> with.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)">
 <h3>RowJobSubmit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">RowJobSubmit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;action,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">RowJobSubmit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;action,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetId,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey,
  <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;fields)</span></div>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parse(org.apache.juneau.marshall.collections.JsonMap)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RowJobSubmit.html" title="class in org.apache.juneau.rest.server.views">RowJobSubmit</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-69">parse</a></span><wbr><span class="parameters">(<a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RowJobSubmit.html" title="class in org.apache.juneau.rest.server.views">RowJobSubmit</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-71">parse</a></span><wbr><span class="parameters">(<a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span></div>
 <div class="block">Parses the envelope.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -307,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="verify(org.apache.juneau.rest.server.views.JobKeyLedger,java.lang.String)">
 <h3>verify</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="JobKeyLedger.Grant.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger.Grant</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-100">verify</a></span><wbr><span class="parameters">(<a href="JobKeyLedger.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger</a>&nbsp;ledger,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="JobKeyLedger.Grant.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger.Grant</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-102">verify</a></span><wbr><span class="parameters">(<a href="JobKeyLedger.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger</a>&nbsp;ledger,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedAction)</span></div>
 <div class="block">Checks the action, then the key's binding to <code>(action, targetId)</code>.</div>
 <dl class="notes">
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="verify(org.apache.juneau.rest.server.views.JobKeyLedger,java.lang.String,java.lang.String)">
 <h3>verify</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="JobKeyLedger.Grant.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger.Grant</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-114">verify</a></span><wbr><span class="parameters">(<a href="JobKeyLedger.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger</a>&nbsp;ledger,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="JobKeyLedger.Grant.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger.Grant</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-116">verify</a></span><wbr><span class="parameters">(<a href="JobKeyLedger.html" title="class in org.apache.juneau.rest.server.views">JobKeyLedger</a>&nbsp;ledger,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedAction,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;principal)</span></div>
 <div class="block">Checks the action, then the key's binding to <code>(action, targetId, principal)</code>.</div>
@@ -339,7 +339,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bindingRefusal()">
 <h3>bindingRefusal</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-128">bindingRefusal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-130">bindingRefusal</a></span>()</div>
 <div class="block">The standard refusal for a failed verify; answer it with <a href="#REFUSAL_STATUS"><code>REFUSAL_STATUS</code></a>.
 
  <p>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-132">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-134">toString</a></span>()</div>
 <div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -366,7 +366,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">hashCode</a></span>()</div>
 <div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -379,7 +379,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -394,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="action()">
 <h3>action</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">action</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">action</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-action"><code>action</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -405,7 +405,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="targetId()">
 <h3>targetId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">targetId</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">targetId</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-targetId"><code>targetId</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -416,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="idempotencyKey()">
 <h3>idempotencyKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">idempotencyKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">idempotencyKey</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-idempotencyKey"><code>idempotencyKey</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fields()">
 <h3>fields</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-56">fields</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/views/RowJobSubmit.html#line-58">fields</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-fields"><code>fields</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

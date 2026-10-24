@@ -24,121 +24,125 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.browser;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.extension.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The Users and Pets row Delete actions declare a {@code confirm} but no {@code present(DIALOG)}; in the real browser</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * each must still prompt with its row-filled text.  Cancel sends no DELETE; Confirm sends exactly one, for that row,</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * and the row leaves the table.</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches=<span class="jxr_string">"true"</span>, disabledReason=PetstoreBrowser.DISABLED)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">class</strong> <a name="PetstoreDeleteConfirm_BrowserTest" href="../../../../../../org/apache/juneau/petstore/console/browser/PetstoreDeleteConfirm_BrowserTest.html#PetstoreDeleteConfirm_BrowserTest">PetstoreDeleteConfirm_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@RegisterExtension
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture server = PetstoreTestServer.fixture();
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DLG = <span class="jxr_string">".juneau-view-dialog"</span>;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TITLE = DLG + <span class="jxr_string">" .juneau-view-dialog-title"</span>;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NO_DLG = <span class="jxr_string">"!document.querySelector('"</span> + DLG + <span class="jxr_string">"')"</span>;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_javadoccomment">/** JS: some row in {@code body} has a cell whose text is exactly the quoted name (so "Rex 10" never matches "Rex 100"). */</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String rowWithName(String body) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Array.from(document.querySelectorAll('"</span> + body + <span class="jxr_string">" tbody tr')).some(tr =&gt; Array.from(tr.cells).some(td =&gt; td.textContent.trim() === window.__name))"</span>;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; wait(String js) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"waitFor"</span>, js, <span class="jxr_string">"timeoutMs"</span>, 5000);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * Opens the first row's action menu on {@code page}, clicks Delete, records the prompt (and the quoted name in it),</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * then clicks {@code button} ({@code cancel} or {@code confirm}).</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; theCase(String name, String page, String button) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"#"</span> + page + <span class="jxr_string">"-body"</span>;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> actions = <strong class="jxr_keyword">new</strong> ArrayList&lt;Map&lt;String,Object&gt;&gt;();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		actions.add(wait(<span class="jxr_string">"document.querySelector('"</span> + body + <span class="jxr_string">" .juneau-view-action-trigger')"</span>));
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		actions.add(Map.of(<span class="jxr_string">"click"</span>, body + <span class="jxr_string">" .juneau-view-action-trigger"</span>));
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		actions.add(Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">".juneau-view-action-item[data-action-id=delete]"</span>));
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		actions.add(wait(<span class="jxr_string">"document.querySelector('"</span> + TITLE + <span class="jxr_string">"')"</span>));
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		actions.add(Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"(() =&gt; { const t = document.querySelector('"</span> + TITLE + <span class="jxr_string">"').textContent; window.__title = t;"</span>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			+ <span class="jxr_string">" const m = /'([^']+)'/.exec(t); window.__name = m &amp;&amp; m[1]; })()"</span>));
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		actions.add(Map.of(<span class="jxr_string">"click"</span>, DLG + <span class="jxr_string">" .juneau-view-dialog-"</span> + button));
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		actions.add(wait(NO_DLG));
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">if</strong> (button.equals(<span class="jxr_string">"confirm"</span>))
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			actions.add(wait(<span class="jxr_string">"!"</span> + rowWithName(body)));
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/"</span> + page, <span class="jxr_string">"capture"</span>, <span class="jxr_string">"/console/"</span> + page + <span class="jxr_string">"/"</span>, <span class="jxr_string">"actions"</span>, actions,
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"title"</span>, <span class="jxr_string">"window.__title"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"window.__name"</span>,
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<span class="jxr_string">"rowStill"</span>, rowWithName(body)));
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@BeforeAll
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> base = PetstoreTestServer.awaitReady(server);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		report = run(<span class="jxr_string">"delete-confirm"</span>, base, List.of(
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			theCase(<span class="jxr_string">"usersCancel"</span>, <span class="jxr_string">"users"</span>, <span class="jxr_string">"cancel"</span>),
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			theCase(<span class="jxr_string">"usersConfirm"</span>, <span class="jxr_string">"users"</span>, <span class="jxr_string">"confirm"</span>),
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			theCase(<span class="jxr_string">"petsCancel"</span>, <span class="jxr_string">"pets"</span>, <span class="jxr_string">"cancel"</span>),
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			theCase(<span class="jxr_string">"petsConfirm"</span>, <span class="jxr_string">"pets"</span>, <span class="jxr_string">"confirm"</span>)));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; deletes(Map&lt;String,Object&gt; c) {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">return</strong> ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream()
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			.filter(r -&gt; <span class="jxr_string">"DELETE"</span>.equals(r.get(<span class="jxr_string">"method"</span>)))
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.map(r -&gt; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).replaceFirst(<span class="jxr_string">"^https?://[^/]+"</span>, <span class="jxr_string">""</span>))
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			.toList();
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertCancelled(String name, String prompt) {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> who = (String) query(c, <span class="jxr_string">"name"</span>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertNotEmpty(who);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertEquals(prompt.replace(<span class="jxr_string">"{}"</span>, who), query(c, <span class="jxr_string">"title"</span>));
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertEmpty(deletes(c));
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, query(c, <span class="jxr_string">"rowStill"</span>));
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<em class="jxr_javadoccomment">/** {@code url} is a glob in which {@code {}} stands for the quoted name the prompt showed. */</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertConfirmed(String name, String prompt, String url) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> who = (String) query(c, <span class="jxr_string">"name"</span>);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertNotEmpty(who);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(prompt.replace(<span class="jxr_string">"{}"</span>, who), query(c, <span class="jxr_string">"title"</span>));
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> d = deletes(c);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertSize(1, d);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertMatchesGlob(url.replace(<span class="jxr_string">"{}"</span>, who), d.get(0));
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(false, query(c, <span class="jxr_string">"rowStill"</span>));
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test <strong class="jxr_keyword">void</strong> a01_usersDeletePromptsAndCancelSendsNothing() {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertCancelled(<span class="jxr_string">"usersCancel"</span>, <span class="jxr_string">"Delete user '{}'?"</span>);
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.extension.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The Users and Pets row Delete actions declare a {@code confirm} but no {@code present(DIALOG)}; in the real browser</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * each must still prompt with its row-filled text.  Cancel sends no DELETE; Confirm sends exactly one, for that row,</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * and the row leaves the table.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches=<span class="jxr_string">"true"</span>, disabledReason=PetstoreBrowser.DISABLED)
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">class</strong> <a name="PetstoreDeleteConfirm_BrowserTest" href="../../../../../../org/apache/juneau/petstore/console/browser/PetstoreDeleteConfirm_BrowserTest.html#PetstoreDeleteConfirm_BrowserTest">PetstoreDeleteConfirm_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@RegisterExtension
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture server = PetstoreTestServer.fixture();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DLG = <span class="jxr_string">".juneau-view-dialog"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TITLE = DLG + <span class="jxr_string">" .juneau-view-dialog-title"</span>;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NO_DLG = <span class="jxr_string">"!document.querySelector('"</span> + DLG + <span class="jxr_string">"')"</span>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_javadoccomment">/** JS: some row in {@code body} has a cell whose text is exactly the quoted name (so "Rex 10" never matches "Rex 100"). */</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String rowWithName(String body) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Array.from(document.querySelectorAll('"</span> + body + <span class="jxr_string">" tbody tr')).some(tr =&gt; Array.from(tr.cells).some(td =&gt; td.textContent.trim() === window.__name))"</span>;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; wait(String js) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"waitFor"</span>, js, <span class="jxr_string">"timeoutMs"</span>, 5000);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * Opens the first row's action menu on {@code page}, clicks Delete, records the prompt (and the quoted name in it),</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * then clicks {@code button} ({@code cancel} or {@code confirm}).</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; theCase(String name, String page, String button) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"#"</span> + page + <span class="jxr_string">"-body"</span>;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		List&lt;Map&lt;String,Object&gt;&gt; actions = list(
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			wait(<span class="jxr_string">"document.querySelector('"</span> + body + <span class="jxr_string">" .juneau-view-action-trigger')"</span>),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			Map.of(<span class="jxr_string">"click"</span>, body + <span class="jxr_string">" .juneau-view-action-trigger"</span>),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">".juneau-view-action-item[data-action-id=delete]"</span>),
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			wait(<span class="jxr_string">"document.querySelector('"</span> + TITLE + <span class="jxr_string">"')"</span>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		actions.add(Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"(() =&gt; { const t = document.querySelector('"</span> + TITLE + <span class="jxr_string">"').textContent; window.__title = t;"</span>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			+ <span class="jxr_string">" const m = /'([^']+)'/.exec(t); window.__name = m &amp;&amp; m[1]; })()"</span>));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		actions.add(Map.of(<span class="jxr_string">"click"</span>, DLG + <span class="jxr_string">" .juneau-view-dialog-"</span> + button));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		actions.add(wait(NO_DLG));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (button.equals(<span class="jxr_string">"confirm"</span>))
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			actions.add(wait(<span class="jxr_string">"!"</span> + rowWithName(body)));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/"</span> + page, <span class="jxr_string">"capture"</span>, <span class="jxr_string">"/console/"</span> + page + <span class="jxr_string">"/"</span>, <span class="jxr_string">"actions"</span>, actions,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"title"</span>, <span class="jxr_string">"window.__title"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"window.__name"</span>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				<span class="jxr_string">"rowStill"</span>, rowWithName(body)));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@BeforeAll
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> base = PetstoreTestServer.awaitReady(server);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		report = run(<span class="jxr_string">"delete-confirm"</span>, base, List.of(
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			theCase(<span class="jxr_string">"usersCancel"</span>, <span class="jxr_string">"users"</span>, <span class="jxr_string">"cancel"</span>),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			theCase(<span class="jxr_string">"usersConfirm"</span>, <span class="jxr_string">"users"</span>, <span class="jxr_string">"confirm"</span>),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			theCase(<span class="jxr_string">"petsCancel"</span>, <span class="jxr_string">"pets"</span>, <span class="jxr_string">"cancel"</span>),
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			theCase(<span class="jxr_string">"petsConfirm"</span>, <span class="jxr_string">"pets"</span>, <span class="jxr_string">"confirm"</span>)));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	})
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; deletes(Map&lt;String,Object&gt; c) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">return</strong> ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream()
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			.filter(r -&gt; <span class="jxr_string">"DELETE"</span>.equals(r.get(<span class="jxr_string">"method"</span>)))
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			.map(r -&gt; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).replaceFirst(<span class="jxr_string">"^https?://[^/]+"</span>, <span class="jxr_string">""</span>))
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.toList();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertCancelled(String name, String prompt) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> who = (String) query(c, <span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertNotEmpty(who);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(prompt.replace(<span class="jxr_string">"{}"</span>, who), query(c, <span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEmpty(deletes(c));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, query(c, <span class="jxr_string">"rowStill"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/** {@code url} is a glob in which {@code {}} stands for the quoted name the prompt showed. */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertConfirmed(String name, String prompt, String url) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> who = (String) query(c, <span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertNotEmpty(who);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(prompt.replace(<span class="jxr_string">"{}"</span>, who), query(c, <span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> d = deletes(c);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertSize(1, d);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertMatchesGlob(url.replace(<span class="jxr_string">"{}"</span>, who), d.get(0));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(false, query(c, <span class="jxr_string">"rowStill"</span>));
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Test <strong class="jxr_keyword">void</strong> a02_usersDeleteConfirmSendsOneDelete() {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertConfirmed(<span class="jxr_string">"usersConfirm"</span>, <span class="jxr_string">"Delete user '{}'?"</span>, <span class="jxr_string">"/console/users/{}"</span>);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Test <strong class="jxr_keyword">void</strong> a01_usersDeletePromptsAndCancelSendsNothing() {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertCancelled(<span class="jxr_string">"usersCancel"</span>, <span class="jxr_string">"Delete user '{}'?"</span>);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a03_petsDeletePromptsAndCancelSendsNothing() {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertCancelled(<span class="jxr_string">"petsCancel"</span>, <span class="jxr_string">"Delete '{}'?"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a02_usersDeleteConfirmSendsOneDelete() {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertConfirmed(<span class="jxr_string">"usersConfirm"</span>, <span class="jxr_string">"Delete user '{}'?"</span>, <span class="jxr_string">"/console/users/{}"</span>);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> a04_petsDeleteConfirmSendsOneDelete() {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertConfirmed(<span class="jxr_string">"petsConfirm"</span>, <span class="jxr_string">"Delete '{}'?"</span>, <span class="jxr_string">"/console/pets/*"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> a03_petsDeletePromptsAndCancelSendsNothing() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertCancelled(<span class="jxr_string">"petsCancel"</span>, <span class="jxr_string">"Delete '{}'?"</span>);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Test <strong class="jxr_keyword">void</strong> a04_petsDeleteConfirmSendsOneDelete() {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertConfirmed(<span class="jxr_string">"petsConfirm"</span>, <span class="jxr_string">"Delete '{}'?"</span>, <span class="jxr_string">"/console/pets/*"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

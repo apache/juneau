@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @return This object (for method chaining).</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <a name="McpBearerChallenge" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpBearerChallenge.html#McpBearerChallenge">McpBearerChallenge</a> scope(Collection&lt;String&gt; scopes) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">if</strong> (scopes == <strong class="jxr_keyword">null</strong> || scopes.isEmpty())
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">if</strong> (ie(scopes))
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">return</strong> param(<span class="jxr_string">"scope"</span>, String.join(<span class="jxr_string">" "</span>, scopes));
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}

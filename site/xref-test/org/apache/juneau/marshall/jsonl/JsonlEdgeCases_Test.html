@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> a = list(<strong class="jxr_keyword">inner</strong>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> jsonl = Jsonl.of(a);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> b = (List&lt;JsonMap&gt;) Jsonl.to(jsonl, List.<strong class="jxr_keyword">class</strong>, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(1, b.size());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertSize(1, b);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> c = b.get(0);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt;= 10; i++) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			assertEquals(i, c.getInt(<span class="jxr_string">"depth"</span>));
@@ -96,11 +96,11 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> a = list(JsonMap.of(), JsonList.of());
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> jsonl = Jsonl.of(a);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> b = (List&lt;Object&gt;) Jsonl.to(jsonl, List.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(2, b.size());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertSize(2, b);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertTrue(b.get(0) instanceof JsonMap);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(0, ((JsonMap) b.get(0)).size());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertSize(0, ((JsonMap) b.get(0)));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertTrue(b.get(1) instanceof JsonList);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(0, ((JsonList) b.get(1)).size());
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertSize(0, ((JsonList) b.get(1)));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test

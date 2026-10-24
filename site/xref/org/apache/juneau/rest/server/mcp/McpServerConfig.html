@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<strong class="jxr_keyword">if</strong> (argument == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">var</strong> name = argument.getName();
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">if</strong> (argument.getCompleter() != <strong class="jxr_keyword">null</strong> &amp;&amp; (name == <strong class="jxr_keyword">null</strong> || name.isBlank()))
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">if</strong> (argument.getCompleter() != <strong class="jxr_keyword">null</strong> &amp;&amp; ib(name))
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 					<strong class="jxr_keyword">throw</strong> iaex(
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 						<span class="jxr_string">"Invalid prompt registration at index %s (prompt '%s'), argument index %s: a completer must not be attached to a null or blank argument name"</span>,
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 						i, descriptor.getName(), j);
@@ -460,7 +460,7 @@
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<strong class="jxr_keyword">if</strong> (descriptor == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Invalid resource-template registration at index %s: descriptor() must not return null"</span>, i);
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">var</strong> uriTemplate = descriptor.getUriTemplate();
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">if</strong> (uriTemplate == <strong class="jxr_keyword">null</strong> || uriTemplate.isBlank())
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">if</strong> (ib(uriTemplate))
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Invalid resource-template registration at index %s (template '%s'): uriTemplate must not be null or blank"</span>,
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 					i, uriTemplate);
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			McpUriTemplateMatcher matcher;

@@ -115,90 +115,96 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 					<span class="jxr_string">"buttons"</span>, <span class="jxr_string">"[...document.querySelectorAll('#pets-body .juneau-view-ribbon-btn')].map(b =&gt; b.getAttribute('aria-label'))"</span>))));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Map&lt;String,Object&gt;&gt; requests() {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">return</strong> (List&lt;Map&lt;String,Object&gt;&gt;) assertClean(report, <span class="jxr_string">"audit"</span>).get(<span class="jxr_string">"requests"</span>);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; body(Map&lt;String,Object&gt; request) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">return</strong> Json.to((String) request.get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Test <strong class="jxr_keyword">void</strong> a01_firstLoadPostsADataTablesRequest() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> r = requests().get(0);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertString(<span class="jxr_string">"POST"</span>, r.get(<span class="jxr_string">"method"</span>));
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> b = body(r);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertBean(b, <span class="jxr_string">"draw,start,length"</span>, <span class="jxr_string">"1,0,25"</span>);  <em class="jxr_comment">// views toolkit default page size: juneau-views.js PAGE_SIZE_OPTIONS[0] = 25</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertContainsAll(String.valueOf(b.get(<span class="jxr_string">"columns"</span>)), <span class="jxr_string">"at"</span>, <span class="jxr_string">"actor"</span>, <span class="jxr_string">"action"</span>, <span class="jxr_string">"entity"</span>, <span class="jxr_string">"entityId"</span>, <span class="jxr_string">"detail"</span>);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> a02_globalSearchSendsTheValue() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> reqs = requests();
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertContains(SEARCH, String.valueOf(body(reqs.get(reqs.size() - 1)).get(<span class="jxr_string">"search"</span>)));
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test <strong class="jxr_keyword">void</strong> a03_onlyRowsMatchingTheSearchRender() {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> rows = (List&lt;?&gt;) query(assertClean(report, <span class="jxr_string">"audit"</span>), <span class="jxr_string">"rows"</span>);  <em class="jxr_comment">// DataTables' "no data" row is filtered out</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertNotEmpty(rows);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> row : rows)
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			assertContains(SEARCH, row);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">// b - P2 pets, server mode</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	})
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Map&lt;String,Object&gt;&gt; requests() {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">return</strong> (List&lt;Map&lt;String,Object&gt;&gt;) assertClean(report, <span class="jxr_string">"audit"</span>).get(<span class="jxr_string">"requests"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; body(Map&lt;String,Object&gt; request) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">return</strong> Json.to((String) request.get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> a01_firstLoadPostsADataTablesRequest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> r = requests().get(0);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertString(<span class="jxr_string">"POST"</span>, r.get(<span class="jxr_string">"method"</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> b = body(r);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertBean(b, <span class="jxr_string">"draw,start,length"</span>, <span class="jxr_string">"1,0,25"</span>);  <em class="jxr_comment">// views toolkit default page size: juneau-views.js PAGE_SIZE_OPTIONS[0] = 25</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertContainsAll(String.valueOf(b.get(<span class="jxr_string">"columns"</span>)), <span class="jxr_string">"at"</span>, <span class="jxr_string">"actor"</span>, <span class="jxr_string">"action"</span>, <span class="jxr_string">"entity"</span>, <span class="jxr_string">"entityId"</span>, <span class="jxr_string">"detail"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Test <strong class="jxr_keyword">void</strong> a02_globalSearchSendsTheValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> reqs = requests();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertContains(SEARCH, String.valueOf(body(reqs.get(reqs.size() - 1)).get(<span class="jxr_string">"search"</span>)));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Test <strong class="jxr_keyword">void</strong> a03_onlyRowsMatchingTheSearchRender() {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> rows = (List&lt;?&gt;) query(assertClean(report, <span class="jxr_string">"audit"</span>), <span class="jxr_string">"rows"</span>);  <em class="jxr_comment">// DataTables' "no data" row is filtered out</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertNotEmpty(rows);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> row : rows)
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			assertContains(SEARCH, row);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> b01_ribbonDefaultOnFirstLoad() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> req = lastCaptured(assertClean(report, <span class="jxr_string">"pets-default"</span>), PETS_QUERY);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertContainsAll(Json.of(req.get(<span class="jxr_string">"columns"</span>)), <span class="jxr_string">"$eq(AVAILABLE)"</span>, <span class="jxr_string">"$in(DOG,CAT,MOUSE,RABBIT)"</span>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> b02_sortPostsOrder() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> req = lastCaptured(assertClean(report, <span class="jxr_string">"pets-sort"</span>), PETS_QUERY);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertBean(req, <span class="jxr_string">"order{0{column}}"</span>, <span class="jxr_string">"{{"</span> + PRICE_COLUMN + <span class="jxr_string">"}}"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> b03_ribbonAndUserSearchMerge() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> req = lastCaptured(assertClean(report, <span class="jxr_string">"pets-merge"</span>), PETS_QUERY);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertContains(<span class="jxr_string">"rex"</span>, String.valueOf(req.get(<span class="jxr_string">"search"</span>)));
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertContainsAll(Json.of(req.get(<span class="jxr_string">"columns"</span>)), <span class="jxr_string">"$eq(AVAILABLE)"</span>, <span class="jxr_string">"$in(DOG,CAT,MOUSE,RABBIT)"</span>);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_javadoccomment">/** The gear opens View Settings; page size 50 on the Options tab is applied, and survives a reload (localStorage). */</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> b04_viewSettingsPageSizePersistsAcrossReload() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"pets-settings"</span>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> first = Json.to((String) ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).get(0).get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertEquals(25, ((Number) first.get(<span class="jxr_string">"length"</span>)).intValue());
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertEquals(50, ((Number) query(c, <span class="jxr_string">"count"</span>)).intValue());
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertEquals(50, ((Number) lastCaptured(c, PETS_QUERY).get(<span class="jxr_string">"length"</span>)).intValue());
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<em class="jxr_comment">// c - P2 export</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_comment">// b - P2 pets, server mode</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> b01_ribbonDefaultOnFirstLoad() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> req = lastCaptured(assertClean(report, <span class="jxr_string">"pets-default"</span>), PETS_QUERY);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertContainsAll(Json.of(req.get(<span class="jxr_string">"columns"</span>)), <span class="jxr_string">"$eq(AVAILABLE)"</span>, <span class="jxr_string">"$in(DOG,CAT,MOUSE,RABBIT)"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> b02_sortPostsOrder() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> req = lastCaptured(assertClean(report, <span class="jxr_string">"pets-sort"</span>), PETS_QUERY);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertBean(req, <span class="jxr_string">"order{0{column}}"</span>, <span class="jxr_string">"{{"</span> + PRICE_COLUMN + <span class="jxr_string">"}}"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	@Test <strong class="jxr_keyword">void</strong> b03_ribbonAndUserSearchMerge() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> req = lastCaptured(assertClean(report, <span class="jxr_string">"pets-merge"</span>), PETS_QUERY);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertContains(<span class="jxr_string">"rex"</span>, String.valueOf(req.get(<span class="jxr_string">"search"</span>)));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertContainsAll(Json.of(req.get(<span class="jxr_string">"columns"</span>)), <span class="jxr_string">"$eq(AVAILABLE)"</span>, <span class="jxr_string">"$in(DOG,CAT,MOUSE,RABBIT)"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_javadoccomment">/** The gear opens View Settings; page size 50 on the Options tab is applied, and survives a reload (localStorage). */</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	})
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> b04_viewSettingsPageSizePersistsAcrossReload() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"pets-settings"</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> first = Json.to((String) ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).get(0).get(<span class="jxr_string">"postData"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertEquals(25, ((Number) first.get(<span class="jxr_string">"length"</span>)).intValue());
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertEquals(50, ((Number) query(c, <span class="jxr_string">"count"</span>)).intValue());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertEquals(50, ((Number) lastCaptured(c, PETS_QUERY).get(<span class="jxr_string">"length"</span>)).intValue());
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Test <strong class="jxr_keyword">void</strong> c01_exportButtonsRender() {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> buttons = String.valueOf(query(assertClean(report, <span class="jxr_string">"pets-export"</span>), <span class="jxr_string">"buttons"</span>));
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertContainsAll(buttons, <span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertNotContains(() -&gt; buttons, <span class="jxr_string">"excel"</span>, buttons);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// downloads values are {name, bytes, head}.</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test <strong class="jxr_keyword">void</strong> c02_csvExportDownloadsTheShownRows() {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"pets-export"</span>);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> d = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) c.get(<span class="jxr_string">"downloads"</span>)).get(<span class="jxr_string">"csv"</span>);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertNotNull(d, () -&gt; <span class="jxr_string">"no csv download: "</span> + c.get(<span class="jxr_string">"downloads"</span>));
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertTrue(String.valueOf(d.get(<span class="jxr_string">"name"</span>)).endsWith(<span class="jxr_string">".csv"</span>), () -&gt; <span class="jxr_string">"download name: "</span> + d.get(<span class="jxr_string">"name"</span>));
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> lines = String.valueOf(d.get(<span class="jxr_string">"head"</span>)).strip().split(<span class="jxr_string">"&#92;&#92;R"</span>);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertContainsAll(lines[0], <span class="jxr_string">"\&quot;Id\&quot;"</span>, <span class="jxr_string">"\&quot;Name\&quot;"</span>, <span class="jxr_string">"\&quot;Species\&quot;"</span>, <span class="jxr_string">"\&quot;Price (USD)\&quot;"</span>);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> rows = ((Number) query(c, <span class="jxr_string">"rows"</span>)).intValue();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertTrue(rows &gt; 0, <span class="jxr_string">"the table showed no rows"</span>);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(rows + 1, lines.length, () -&gt; String.valueOf(d.get(<span class="jxr_string">"head"</span>)));
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt; lines.length; i++)
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			assertContains(<span class="jxr_string">"AVAILABLE"</span>, lines[i]);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> }
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<em class="jxr_comment">// c - P2 export</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Test <strong class="jxr_keyword">void</strong> c01_exportButtonsRender() {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> buttons = String.valueOf(query(assertClean(report, <span class="jxr_string">"pets-export"</span>), <span class="jxr_string">"buttons"</span>));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertContainsAll(buttons, <span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertNotContains(() -&gt; buttons, <span class="jxr_string">"excel"</span>, buttons);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// downloads values are {name, bytes, head}.</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	})
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Test <strong class="jxr_keyword">void</strong> c02_csvExportDownloadsTheShownRows() {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"pets-export"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> d = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) c.get(<span class="jxr_string">"downloads"</span>)).get(<span class="jxr_string">"csv"</span>);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertNotNull(d, () -&gt; <span class="jxr_string">"no csv download: "</span> + c.get(<span class="jxr_string">"downloads"</span>));
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertTrue(String.valueOf(d.get(<span class="jxr_string">"name"</span>)).endsWith(<span class="jxr_string">".csv"</span>), () -&gt; <span class="jxr_string">"download name: "</span> + d.get(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> lines = String.valueOf(d.get(<span class="jxr_string">"head"</span>)).strip().split(<span class="jxr_string">"&#92;&#92;R"</span>);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertContainsAll(lines[0], <span class="jxr_string">"\&quot;Id\&quot;"</span>, <span class="jxr_string">"\&quot;Name\&quot;"</span>, <span class="jxr_string">"\&quot;Species\&quot;"</span>, <span class="jxr_string">"\&quot;Price (USD)\&quot;"</span>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> rows = ((Number) query(c, <span class="jxr_string">"rows"</span>)).intValue();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertTrue(rows &gt; 0, <span class="jxr_string">"the table showed no rows"</span>);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(rows + 1, lines.length, () -&gt; String.valueOf(d.get(<span class="jxr_string">"head"</span>)));
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 1; i &lt; lines.length; i++)
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			assertContains(<span class="jxr_string">"AVAILABLE"</span>, lines[i]);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

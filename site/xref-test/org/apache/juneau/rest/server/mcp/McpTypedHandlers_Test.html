@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a03_singularConfigOverloadStoresRawAdapter() {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> McpServerConfig().addTool(handler(Args.<strong class="jxr_keyword">class</strong>, Result.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">new</strong> Result()));
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertEquals(1, a.getTools().size());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertSize(1, a.getTools());
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertInstanceOf(McpToolHandler.<strong class="jxr_keyword">class</strong>, a.getTools().get(0));
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 

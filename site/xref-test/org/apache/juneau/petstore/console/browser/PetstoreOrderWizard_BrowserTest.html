@@ -123,59 +123,61 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<em class="jxr_javadoccomment">/** The order this places is left in the throwaway test server's store; nothing else reads it. */</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> verify(String name, String shipDate, String shown) {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertContains(<span class="jxr_string">"New order"</span>, String.valueOf(query(c, <span class="jxr_string">"step1"</span>)));
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<em class="jxr_comment">// The second step reads back the first step's inputs: the chosen pet and the ship date.</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> step2 = String.valueOf(query(c, <span class="jxr_string">"step2"</span>));
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertContains(<span class="jxr_string">"Review order"</span>, step2);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertContains(String.valueOf(query(c, <span class="jxr_string">"petName"</span>)), step2);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertContains(shipDate, step2);
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(2, ((Number)query(c, <span class="jxr_string">"dialogs"</span>)).intValue(), <span class="jxr_string">"both steps are stacked"</span>);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertTrue((Integer)query(c, <span class="jxr_string">"compact"</span>) &gt; 0);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertTrue(((Number)query(c, <span class="jxr_string">"offset"</span>)).doubleValue() &gt; 0, <span class="jxr_string">"the second step is offset from the first, so the two read as a stack"</span>);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(Boolean.TRUE, query(c, <span class="jxr_string">"fits"</span>), () -&gt; <span class="jxr_string">"the stacked step must fit the viewport: "</span> + query(c, <span class="jxr_string">"rect"</span>));
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(Boolean.TRUE, query(c, <span class="jxr_string">"firstFits"</span>), () -&gt; <span class="jxr_string">"the compact first step must fit the viewport: "</span> + query(c, <span class="jxr_string">"firstRect"</span>));
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> em = ((Number)query(c, <span class="jxr_string">"fontPx"</span>)).doubleValue();
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> width = ((Number)query(c, <span class="jxr_string">"firstWidth"</span>)).doubleValue();
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> offset = ((Number)query(c, <span class="jxr_string">"offset"</span>)).doubleValue();
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(1.5 * em, offset, 1.0, <span class="jxr_string">"the stack offset is one 1.5em shift"</span>);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"wide"</span>.equals(name))
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			assertTrue(width &gt;= 28 * em - 1, <span class="jxr_string">"wide geometry keeps the 28em minimum width: "</span> + width);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			assertEquals(((Number)query(c, <span class="jxr_string">"innerWidth"</span>)).doubleValue() - 3 * em, width, 2.0, <span class="jxr_string">"narrow: the compact step fills the viewport less the 3em slack"</span>);
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> posted = ((List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"requests"</span>)).stream()
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).endsWith(<span class="jxr_string">"/console/orders"</span>)).toList();
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(1, posted.size());
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<em class="jxr_comment">// A successful submit redraws the table, which re-queries it after the order was posted.</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> urls = ((List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"requests"</span>)).stream().filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>))).map(r -&gt; String.valueOf(r.get(<span class="jxr_string">"url"</span>))).toList();
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertTrue(urls.lastIndexOf(posted.get(0).get(<span class="jxr_string">"url"</span>).toString() + <span class="jxr_string">"/query"</span>) &gt; urls.indexOf(posted.get(0).get(<span class="jxr_string">"url"</span>).toString()));
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> org.apache.juneau.marshall.collections.JsonMap(String.valueOf(posted.get(0).get(<span class="jxr_string">"postData"</span>)));
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(String.valueOf(query(c, <span class="jxr_string">"petId"</span>)), body.getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"petId"</span>));
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertEquals(shipDate, body.getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"shipDate"</span>));
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_comment">// The committed write closes the whole stack - the first step too, not just the one that submitted - and</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_comment">// its outcome is the banner under the ribbon.</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(0, ((Number)query(c, <span class="jxr_string">"backdrops"</span>)).intValue());
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertContains(<span class="jxr_string">"Placed order"</span>, String.valueOf(query(c, <span class="jxr_string">"banner"</span>)));
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<em class="jxr_comment">// The new order is in the redrawn table: the total grew by one and the newest row is that order, still placed</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<em class="jxr_comment">// and carrying the chosen pet and ship date.</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(((Number)query(c, <span class="jxr_string">"totalBefore"</span>)).intValue() + 1, ((Number)query(c, <span class="jxr_string">"totalAfter"</span>)).intValue());
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> row = String.valueOf(query(c, <span class="jxr_string">"firstRow"</span>));
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertTrue(row.startsWith(String.valueOf(query(c, <span class="jxr_string">"orderId"</span>)) + query(c, <span class="jxr_string">"petId"</span>)), row);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// A date-only value renders as the calendar day it names, in any browser time zone.</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTrue(row.matches(<span class="jxr_string">".*"</span> + shown + <span class="jxr_string">".*"</span>), row);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertTrue(row.endsWith(<span class="jxr_string">"PLACED"</span>), row);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> a01_wideViewport() {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		verify(<span class="jxr_string">"wide"</span>, <span class="jxr_string">"2031-03-14"</span>, <span class="jxr_string">"Mar 14, 2031"</span>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a02_narrowViewport() {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		verify(<span class="jxr_string">"narrow"</span>, <span class="jxr_string">"2032-04-15"</span>, <span class="jxr_string">"Apr 15, 2032"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	})
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> verify(String name, String shipDate, String shown) {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertContains(<span class="jxr_string">"New order"</span>, String.valueOf(query(c, <span class="jxr_string">"step1"</span>)));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<em class="jxr_comment">// The second step reads back the first step's inputs: the chosen pet and the ship date.</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> step2 = String.valueOf(query(c, <span class="jxr_string">"step2"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertContains(<span class="jxr_string">"Review order"</span>, step2);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertContains(String.valueOf(query(c, <span class="jxr_string">"petName"</span>)), step2);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertContains(shipDate, step2);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEquals(2, ((Number)query(c, <span class="jxr_string">"dialogs"</span>)).intValue(), <span class="jxr_string">"both steps are stacked"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertTrue((Integer)query(c, <span class="jxr_string">"compact"</span>) &gt; 0);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertTrue(((Number)query(c, <span class="jxr_string">"offset"</span>)).doubleValue() &gt; 0, <span class="jxr_string">"the second step is offset from the first, so the two read as a stack"</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(Boolean.TRUE, query(c, <span class="jxr_string">"fits"</span>), () -&gt; <span class="jxr_string">"the stacked step must fit the viewport: "</span> + query(c, <span class="jxr_string">"rect"</span>));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(Boolean.TRUE, query(c, <span class="jxr_string">"firstFits"</span>), () -&gt; <span class="jxr_string">"the compact first step must fit the viewport: "</span> + query(c, <span class="jxr_string">"firstRect"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> em = ((Number)query(c, <span class="jxr_string">"fontPx"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> width = ((Number)query(c, <span class="jxr_string">"firstWidth"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> offset = ((Number)query(c, <span class="jxr_string">"offset"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertEquals(1.5 * em, offset, 1.0, <span class="jxr_string">"the stack offset is one 1.5em shift"</span>);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"wide"</span>.equals(name))
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			assertTrue(width &gt;= 28 * em - 1, <span class="jxr_string">"wide geometry keeps the 28em minimum width: "</span> + width);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			assertEquals(((Number)query(c, <span class="jxr_string">"innerWidth"</span>)).doubleValue() - 3 * em, width, 2.0, <span class="jxr_string">"narrow: the compact step fills the viewport less the 3em slack"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> posted = ((List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"requests"</span>)).stream()
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).endsWith(<span class="jxr_string">"/console/orders"</span>)).toList();
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertSize(1, posted);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<em class="jxr_comment">// A successful submit redraws the table, which re-queries it after the order was posted.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> urls = ((List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"requests"</span>)).stream().filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>))).map(r -&gt; String.valueOf(r.get(<span class="jxr_string">"url"</span>))).toList();
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertTrue(urls.lastIndexOf(posted.get(0).get(<span class="jxr_string">"url"</span>).toString() + <span class="jxr_string">"/query"</span>) &gt; urls.indexOf(posted.get(0).get(<span class="jxr_string">"url"</span>).toString()));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> org.apache.juneau.marshall.collections.JsonMap(String.valueOf(posted.get(0).get(<span class="jxr_string">"postData"</span>)));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(String.valueOf(query(c, <span class="jxr_string">"petId"</span>)), body.getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"petId"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(shipDate, body.getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"shipDate"</span>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// The committed write closes the whole stack - the first step too, not just the one that submitted - and</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<em class="jxr_comment">// its outcome is the banner under the ribbon.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(0, ((Number)query(c, <span class="jxr_string">"backdrops"</span>)).intValue());
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertContains(<span class="jxr_string">"Placed order"</span>, String.valueOf(query(c, <span class="jxr_string">"banner"</span>)));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<em class="jxr_comment">// The new order is in the redrawn table: the total grew by one and the newest row is that order, still placed</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<em class="jxr_comment">// and carrying the chosen pet and ship date.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertEquals(((Number)query(c, <span class="jxr_string">"totalBefore"</span>)).intValue() + 1, ((Number)query(c, <span class="jxr_string">"totalAfter"</span>)).intValue());
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> row = String.valueOf(query(c, <span class="jxr_string">"firstRow"</span>));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTrue(row.startsWith(String.valueOf(query(c, <span class="jxr_string">"orderId"</span>)) + query(c, <span class="jxr_string">"petId"</span>)), row);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// A date-only value renders as the calendar day it names, in any browser time zone.</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertTrue(row.matches(<span class="jxr_string">".*"</span> + shown + <span class="jxr_string">".*"</span>), row);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertTrue(row.endsWith(<span class="jxr_string">"PLACED"</span>), row);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> a01_wideViewport() {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		verify(<span class="jxr_string">"wide"</span>, <span class="jxr_string">"2031-03-14"</span>, <span class="jxr_string">"Mar 14, 2031"</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test <strong class="jxr_keyword">void</strong> a02_narrowViewport() {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		verify(<span class="jxr_string">"narrow"</span>, <span class="jxr_string">"2032-04-15"</span>, <span class="jxr_string">"Apr 15, 2032"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

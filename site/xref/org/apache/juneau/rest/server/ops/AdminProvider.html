@@ -116,45 +116,45 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">var</strong> t = e.getKey();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">if</strong> (isExcludedThread(t.getName()))
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">var</strong> entry = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			entry.put(<span class="jxr_string">"name"</span>, t.getName());
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			entry.put(<span class="jxr_string">"id"</span>, t.getId());
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			entry.put(<span class="jxr_string">"state"</span>, t.getState().toString());
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			entry.put(<span class="jxr_string">"daemon"</span>, t.isDaemon());
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			entry.put(<span class="jxr_string">"priority"</span>, t.getPriority());
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">var</strong> stack = Arrays.stream(e.getValue()).map(StackTraceElement::toString).collect(Collectors.toCollection(ArrayList::<strong class="jxr_keyword">new</strong>));
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			entry.put(<span class="jxr_string">"stack"</span>, stack);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			out.add(entry);
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		}
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		writeJson(res, out);
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * Serves JVM heap and non-heap memory statistics.</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * @param res The current REST response. Must not be {@code null}.</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs while writing the response.</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> serveHeap(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> rt = Runtime.getRuntime();
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> heap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		heap.put(<span class="jxr_string">"total"</span>, rt.totalMemory());
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		heap.put(<span class="jxr_string">"free"</span>, rt.freeMemory());
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		heap.put(<span class="jxr_string">"max"</span>, rt.maxMemory());
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		heap.put(<span class="jxr_string">"used"</span>, rt.totalMemory() - rt.freeMemory());
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> mx = ManagementFactory.getMemoryMXBean();
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> nonHeapUsage = mx.getNonHeapMemoryUsage();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> nonHeap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		nonHeap.put(<span class="jxr_string">"init"</span>, nonHeapUsage.getInit());
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		nonHeap.put(<span class="jxr_string">"used"</span>, nonHeapUsage.getUsed());
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		nonHeap.put(<span class="jxr_string">"committed"</span>, nonHeapUsage.getCommitted());
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		nonHeap.put(<span class="jxr_string">"max"</span>, nonHeapUsage.getMax());
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		out.put(<span class="jxr_string">"heap"</span>, heap);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		out.put(<span class="jxr_string">"nonHeap"</span>, nonHeap);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		out.put(<span class="jxr_string">"availableProcessors"</span>, rt.availableProcessors());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			Map&lt;String,Object&gt; entry = m(
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<span class="jxr_string">"name"</span>, t.getName(),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<span class="jxr_string">"id"</span>, t.getId(),
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 				<span class="jxr_string">"state"</span>, t.getState().toString(),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 				<span class="jxr_string">"daemon"</span>, t.isDaemon(),
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<span class="jxr_string">"priority"</span>, t.getPriority()
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">var</strong> stack = Arrays.stream(e.getValue()).map(StackTraceElement::toString).collect(Collectors.toCollection(ArrayList::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			entry.put(<span class="jxr_string">"stack"</span>, stack);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			out.add(entry);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		writeJson(res, out);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * Serves JVM heap and non-heap memory statistics.</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @param res The current REST response. Must not be {@code null}.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * @throws IOException If an I/O error occurs while writing the response.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> serveHeap(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> rt = Runtime.getRuntime();
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		Map&lt;String,Object&gt; heap = m(
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<span class="jxr_string">"total"</span>, rt.totalMemory(),
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<span class="jxr_string">"free"</span>, rt.freeMemory(),
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<span class="jxr_string">"max"</span>, rt.maxMemory(),
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<span class="jxr_string">"used"</span>, rt.totalMemory() - rt.freeMemory()
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> mx = ManagementFactory.getMemoryMXBean();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> nonHeapUsage = mx.getNonHeapMemoryUsage();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		Map&lt;String,Object&gt; nonHeap = m(
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<span class="jxr_string">"init"</span>, nonHeapUsage.getInit(),
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<span class="jxr_string">"used"</span>, nonHeapUsage.getUsed(),
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<span class="jxr_string">"committed"</span>, nonHeapUsage.getCommitted(),
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<span class="jxr_string">"max"</span>, nonHeapUsage.getMax()
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		Map&lt;String,Object&gt; out = m(<span class="jxr_string">"heap"</span>, heap, <span class="jxr_string">"nonHeap"</span>, nonHeap, <span class="jxr_string">"availableProcessors"</span>, rt.availableProcessors());
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		writeJson(res, out);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> serveCacheFlush(RestRequest req, RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> namesParam = req.getQueryParams().get(<span class="jxr_string">"names"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		Set&lt;String&gt; selected = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">if</strong> (namesParam != <strong class="jxr_keyword">null</strong> &amp;&amp; ! namesParam.isBlank()) {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">if</strong> (inb(namesParam)) {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			selected = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : namesParam.split(<span class="jxr_string">","</span>))
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">if</strong> (! n.isBlank())
@@ -261,95 +261,96 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; describeRateLimitGuard(RateLimitGuard g) {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		m.put(<span class="jxr_string">"class"</span>, cn(g));
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		m.put(<span class="jxr_string">"limit"</span>, g.getCapacity());
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		m.put(<span class="jxr_string">"permitsPerSecond"</span>, g.getPermitsPerSecond());
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		m.put(<span class="jxr_string">"xForwardedForAware"</span>, g.isXForwardedForAware());
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		m.put(<span class="jxr_string">"exemptPaths"</span>, g.getExemptPaths().stream().sorted().toList());
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeJson(RestResponse res, Object payload) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> w = res.getDirectWriter(<span class="jxr_string">"application/json"</span>)) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			JsonSerializer.DEFAULT_READABLE.write(payload, w);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		}
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * Builder for {@link AdminProvider} instances.</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Runnable&gt; cacheFlushHooks = m();
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; threadNamePrefixExclude = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_javadoccomment">/** Constructor &amp;mdash; package access for {@link AdminProvider#create()}. */</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">protected</strong> Builder() {}
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">		 * Registers a cache-flush hook under a name.</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">		 * The hook is invoked synchronously when {@code POST /admin/cache/flush} is called (with</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">		 * no {@code names} parameter, or with a {@code names} parameter that includes this name).</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">		 * @param name The hook name. Must not be {@code null} or blank.</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">		 * @param hook The hook. Must not be {@code null}.</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">public</strong> Builder cacheFlush(String name, Runnable hook) {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">if</strong> (isBlank(name))
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Argument 'name' must not be null or blank"</span>);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">if</strong> (hook == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Argument 'hook' must not be null"</span>);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			cacheFlushHooks.put(name, hook);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		}
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">		 * Registers multiple cache-flush hooks at once.</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> Builder cacheFlushAll(Map&lt;String,Runnable&gt; hooks) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">if</strong> (hooks != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				hooks.forEach(<strong class="jxr_keyword">this</strong>::cacheFlush);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">		 * Replaces the thread-name-prefix exclude list.</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">		 * Threads whose {@link Thread#getName() name} starts with any of the supplied prefixes are</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">		 * omitted from the {@code /admin/threads} output. Pass an empty array to disable</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">		 * filtering entirely.</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">		 * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">		 * 	array &amp;mdash; disables filtering); {@code null} or empty elements are skipped.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">public</strong> Builder threadNamePrefixExclude(String...values) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			threadNamePrefixExclude.clear();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 					<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong> &amp;&amp; ! v.isEmpty())
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 						threadNamePrefixExclude.add(v);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">		 * Builds an {@link AdminProvider} instance.</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">		 * @return A configured instance.</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">public</strong> <a name="AdminProvider" href="../../../../../../org/apache/juneau/rest/server/ops/AdminProvider.html#AdminProvider">AdminProvider</a> build() {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AdminProvider" href="../../../../../../org/apache/juneau/rest/server/ops/AdminProvider.html#AdminProvider">AdminProvider</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		}
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	}
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> }
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		Map&lt;String,Object&gt; m = m(
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<span class="jxr_string">"class"</span>, cn(g),
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<span class="jxr_string">"limit"</span>, g.getCapacity(),
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<span class="jxr_string">"permitsPerSecond"</span>, g.getPermitsPerSecond(),
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<span class="jxr_string">"xForwardedForAware"</span>, g.isXForwardedForAware(),
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<span class="jxr_string">"exemptPaths"</span>, g.getExemptPaths().stream().sorted().toList()
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeJson(RestResponse res, Object payload) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> w = res.getDirectWriter(<span class="jxr_string">"application/json"</span>)) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			JsonSerializer.DEFAULT_READABLE.write(payload, w);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	}
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * Builder for {@link AdminProvider} instances.</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Runnable&gt; cacheFlushHooks = m();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; threadNamePrefixExclude = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<em class="jxr_javadoccomment">/** Constructor &amp;mdash; package access for {@link AdminProvider#create()}. */</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">protected</strong> Builder() {}
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">		 * Registers a cache-flush hook under a name.</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">		 * The hook is invoked synchronously when {@code POST /admin/cache/flush} is called (with</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">		 * no {@code names} parameter, or with a {@code names} parameter that includes this name).</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">		 * @param name The hook name. Must not be {@code null} or blank.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">		 * @param hook The hook. Must not be {@code null}.</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">public</strong> Builder cacheFlush(String name, Runnable hook) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">if</strong> (isBlank(name))
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Argument 'name' must not be null or blank"</span>);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">if</strong> (hook == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Argument 'hook' must not be null"</span>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			cacheFlushHooks.put(name, hook);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">		 * Registers multiple cache-flush hooks at once.</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">public</strong> Builder cacheFlushAll(Map&lt;String,Runnable&gt; hooks) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">if</strong> (hooks != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 				hooks.forEach(<strong class="jxr_keyword">this</strong>::cacheFlush);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">		 * Replaces the thread-name-prefix exclude list.</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">		 * Threads whose {@link Thread#getName() name} starts with any of the supplied prefixes are</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">		 * omitted from the {@code /admin/threads} output. Pass an empty array to disable</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">		 * filtering entirely.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">		 * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">		 * 	array &amp;mdash; disables filtering); {@code null} or empty elements are skipped.</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">public</strong> Builder threadNamePrefixExclude(String...values) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			threadNamePrefixExclude.clear();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 					<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong> &amp;&amp; ! v.isEmpty())
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 						threadNamePrefixExclude.add(v);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">		 * Builds an {@link AdminProvider} instance.</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">		 * @return A configured instance.</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">public</strong> <a name="AdminProvider" href="../../../../../../org/apache/juneau/rest/server/ops/AdminProvider.html#AdminProvider">AdminProvider</a> build() {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AdminProvider" href="../../../../../../org/apache/juneau/rest/server/ops/AdminProvider.html#AdminProvider">AdminProvider</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		}
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

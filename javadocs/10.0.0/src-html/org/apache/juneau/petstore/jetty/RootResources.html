@@ -130,24 +130,32 @@
 <span class="source-line-no">117</span><span id="line-117">    * &lt;p&gt;</span>
 <span class="source-line-no">118</span><span id="line-118">    * Child resources inherit the group's beans, so a plain {@code @Bean} method is all that is needed.</span>
 <span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * @return The seeded {@link PetStore}.</span>
-<span class="source-line-no">121</span><span id="line-121">    */</span>
-<span class="source-line-no">122</span><span id="line-122">   @Bean</span>
-<span class="source-line-no">123</span><span id="line-123">   public PetStore petStore() {</span>
-<span class="source-line-no">124</span><span id="line-124">      return PetstoreSeed.create().populate(new PetStore());</span>
-<span class="source-line-no">125</span><span id="line-125">   }</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   /**</span>
-<span class="source-line-no">128</span><span id="line-128">    * {@code GET /} goes to the console store page.</span>
-<span class="source-line-no">129</span><span id="line-129">    *</span>
-<span class="source-line-no">130</span><span id="line-130">    * @param req The request.</span>
-<span class="source-line-no">131</span><span id="line-131">    * @return A 303 to {@code /console/store}.</span>
-<span class="source-line-no">132</span><span id="line-132">    */</span>
-<span class="source-line-no">133</span><span id="line-133">   @RestGet(path="/")</span>
-<span class="source-line-no">134</span><span id="line-134">   public SeeOther index(RestRequest req) {</span>
-<span class="source-line-no">135</span><span id="line-135">      return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/console/store"));</span>
-<span class="source-line-no">136</span><span id="line-136">   }</span>
-<span class="source-line-no">137</span><span id="line-137">}</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    * The store runs on the system clock unless the {@value PetstoreSeed#FIXED_NOW_ENV} environment variable is set, which pins</span>
+<span class="source-line-no">122</span><span id="line-122">    * "now" so the store page's day figures render the same on every run (the docs screenshots rely on this).  Its value</span>
+<span class="source-line-no">123</span><span id="line-123">    * is an ISO-8601 instant such as {@code 2026-10-01T12:00:00Z}, or {@code seed} for the seed data's own clock.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * @return The seeded {@link PetStore}.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   @Bean</span>
+<span class="source-line-no">128</span><span id="line-128">   public PetStore petStore() {</span>
+<span class="source-line-no">129</span><span id="line-129">      var clock = PetstoreSeed.fixedNowClock();</span>
+<span class="source-line-no">130</span><span id="line-130">      if (clock == null)</span>
+<span class="source-line-no">131</span><span id="line-131">         return PetstoreSeed.create().populate(new PetStore());</span>
+<span class="source-line-no">132</span><span id="line-132">      return PetstoreSeed.create().clock(clock).populate(new PetStore(clock));</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   /**</span>
+<span class="source-line-no">136</span><span id="line-136">    * {@code GET /} goes to the console store page.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param req The request.</span>
+<span class="source-line-no">139</span><span id="line-139">    * @return A 303 to {@code /console/store}.</span>
+<span class="source-line-no">140</span><span id="line-140">    */</span>
+<span class="source-line-no">141</span><span id="line-141">   @RestGet(path="/")</span>
+<span class="source-line-no">142</span><span id="line-142">   public SeeOther index(RestRequest req) {</span>
+<span class="source-line-no">143</span><span id="line-143">      return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/console/store"));</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145">}</span>
 
 
 

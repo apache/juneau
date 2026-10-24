@@ -34,15 +34,15 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Phase 4 hardening &amp;mdash; regression test for an edge case not called out explicitly by name in spec &amp;sect;6.6:</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Regression test for an edge case not called out explicitly by name in spec &amp;sect;6.6:</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * a CHILD CLASS that itself transitively implements {@code DefaultConfig} (e.g. by extending</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@code BasicRestServlet}/{@code BasicRestServletGroup}, which implement {@code BasicUniversalConfig extends</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * DefaultConfig}), rather than being a plain POJO with no framework-default mixin.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Bug found and fixed by this test (Phase 4 hardening):&lt;/b&gt; {@code computeRawRestAnnotations()}'s</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Bug found and fixed by this test:&lt;/b&gt; {@code computeRawRestAnnotations()}'s</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@code hasDefaultConfig}-true branch originally appended the seed annotation after the ENTIRE {@code raw}</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * chain unconditionally. For a plain child class (the common case exercised by every other Phase 2-4 test),</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * chain unconditionally. For a plain child class (the common case exercised by every other child-inheritance test),</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * {@code raw} never embeds {@code DefaultConfig} itself, so appending after {@code raw} correctly placed the</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * seed above the framework's separately-synthesized {@code DefaultConfig} fallback. But when the child class</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * itself transitively implements {@code DefaultConfig}, that interface's own {@code @Rest} entry is already</em>

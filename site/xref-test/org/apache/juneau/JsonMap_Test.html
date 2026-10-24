@@ -399,7 +399,7 @@
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertTrue(m.isEmpty());
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertEquals(JsonMap.<strong class="jxr_keyword">class</strong>, m.getClass());
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		m.put(<span class="jxr_string">"x"</span>, 1);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertSize(1, m);
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Test <strong class="jxr_keyword">void</strong> a11_factoryOfStringNullReader() <strong class="jxr_keyword">throws</strong> Exception {
@@ -408,7 +408,7 @@
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertTrue(m.isEmpty());
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertEquals(JsonMap.<strong class="jxr_keyword">class</strong>, m.getClass());
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 		m.put(<span class="jxr_string">"x"</span>, 1);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertSize(1, m);
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 	@Test <strong class="jxr_keyword">void</strong> a12_factoryOfStringNullCharSequenceWithParser() <strong class="jxr_keyword">throws</strong> Exception {
@@ -417,7 +417,7 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertTrue(m.isEmpty());
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertEquals(JsonMap.<strong class="jxr_keyword">class</strong>, m.getClass());
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		m.put(<span class="jxr_string">"x"</span>, 1);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertSize(1, m);
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 	@Test <strong class="jxr_keyword">void</strong> a13_factoryOfStringNullReaderWithParser() <strong class="jxr_keyword">throws</strong> Exception {
@@ -426,7 +426,7 @@
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertTrue(m.isEmpty());
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertEquals(JsonMap.<strong class="jxr_keyword">class</strong>, m.getClass());
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		m.put(<span class="jxr_string">"x"</span>, 1);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertSize(1, m);
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 	}
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> }
 </pre>

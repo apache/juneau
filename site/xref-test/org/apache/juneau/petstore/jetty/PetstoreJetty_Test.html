@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		root.getContext().getRestChildren().addChild(SHUTDOWN, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> mounted = root.getContext().getRestChildren().asMap().values().stream()
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			.filter(c -&gt; c.getResource() instanceof ShutdownResource).toList();
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(1, mounted.size());
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertSize(1, mounted);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertSame(SHUTDOWN, mounted.get(0).getResource(), <span class="jxr_string">"The test's shutdown resource must be the mounted one"</span>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(405, get(<span class="jxr_string">"/shutdown"</span>, <span class="jxr_string">"application/json"</span>).statusCode());
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
@@ -545,7 +545,7 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertTrue(console &gt;= 0 &amp;&amp; console &lt; api, <span class="jxr_string">"console boundary must be ahead of the API boundary"</span>);
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> registrations = ServletFilterRegistration.collect(fixture.getMicroservice().getBeanStore()).stream()
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			.filter(r -&gt; r.getFilter() instanceof PetstoreApiBoundary).toList();
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		assertEquals(1, registrations.size());
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		assertSize(1, registrations);
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		assertEquals(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10, registrations.get(0).getOrder());
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 	}
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 
@@ -732,7 +732,7 @@
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 		assertTrue(api &gt;= 0 &amp;&amp; api &lt; admin, <span class="jxr_string">"API boundary must be ahead of the admin boundary"</span>);
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">var</strong> registrations = ServletFilterRegistration.collect(fixture.getMicroservice().getBeanStore()).stream()
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 			.filter(r -&gt; r.getUrlPatterns().contains(<span class="jxr_string">"/shutdown"</span>)).toList();
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		assertEquals(1, registrations.size());
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		assertSize(1, registrations);
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 		assertEquals(AdminBoundary.ORDER, registrations.get(0).getOrder());
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 	}
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 

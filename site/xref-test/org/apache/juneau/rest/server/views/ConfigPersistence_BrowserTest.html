@@ -224,42 +224,41 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> d01_watchExternalChanges_seesOnlyItsOwnScopesKeyAndOnlyWhileWatching() {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> seen = list(<span class="jxr_string">"c_storageEventsSeen"</span>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(1, seen.size(),
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			() -&gt; <span class="jxr_string">"expected exactly one in-scope, pre-unwatch storage event to be observed: "</span> + report);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> key = (String) seen.get(0);
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertTrue(key.endsWith(<span class="jxr_string">".columns.views.someKey"</span>), () -&gt; <span class="jxr_string">"wrong key observed: "</span> + key);
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertFalse(key.contains(<span class="jxr_string">"SOME-OTHER-SCOPE"</span>), () -&gt; <span class="jxr_string">"an out-of-scope key leaked through: "</span> + key);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<em class="jxr_comment">// f) the last-applied View Settings survive a REAL page reload through the localStorage-backed page-state store</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	@Test <strong class="jxr_keyword">void</strong> f01_pageStateStoreIsPresentAfterReload() {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> r = obj(<span class="jxr_string">"f_reload"</span>);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"hasPageState"</span>),
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			() -&gt; <span class="jxr_string">"juneau-pagestate.js must populate NS.pageState (the reload round-trip rides on it): "</span> + report);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@Test <strong class="jxr_keyword">void</strong> f02_committedViewSettingsAreRestoredAfterReload() {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<em class="jxr_comment">// The exact blob written before the reload comes back verbatim from REAL localStorage.</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> restored = obj(<span class="jxr_string">"f_reload"</span>);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertBean(restored, <span class="jxr_string">"restored{schemaVersion,visible,search,sort,options{pageSize,wrap,density}}"</span>,
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<span class="jxr_string">"{2,[a,b],[a],[{column=b,dir=asc}],{50,true,compact}}"</span>);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	@Test <strong class="jxr_keyword">void</strong> f03_secondViewIdKeepsItsOwnIndependentSlotAcrossReload() {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<em class="jxr_comment">// Per-table keying: a different view id is neither clobbered by nor merged with the first.</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> restored = obj(<span class="jxr_string">"f_reload"</span>);
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertBean(restored, <span class="jxr_string">"other{visible,options{pageSize,wrap,density}}"</span>, <span class="jxr_string">"{[z],{10,false,comfortable}}"</span>);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> f04_neverWrittenViewAndTableWithNoViewIdBothReadBackNull() {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> restored = obj(<span class="jxr_string">"f_reload"</span>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertNull(restored.get(<span class="jxr_string">"absent"</span>), () -&gt; <span class="jxr_string">"a view id that was never written must read back null: "</span> + report);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertNull(restored.get(<span class="jxr_string">"noId"</span>), () -&gt; <span class="jxr_string">"a table with no data-juneau-view has no scope, so null: "</span> + report);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertSize(() -&gt; <span class="jxr_string">"expected exactly one in-scope, pre-unwatch storage event to be observed: "</span> + report, 1, seen);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> key = (String) seen.get(0);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertTrue(key.endsWith(<span class="jxr_string">".columns.views.someKey"</span>), () -&gt; <span class="jxr_string">"wrong key observed: "</span> + key);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertFalse(key.contains(<span class="jxr_string">"SOME-OTHER-SCOPE"</span>), () -&gt; <span class="jxr_string">"an out-of-scope key leaked through: "</span> + key);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_comment">// f) the last-applied View Settings survive a REAL page reload through the localStorage-backed page-state store</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	@Test <strong class="jxr_keyword">void</strong> f01_pageStateStoreIsPresentAfterReload() {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> r = obj(<span class="jxr_string">"f_reload"</span>);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"hasPageState"</span>),
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			() -&gt; <span class="jxr_string">"juneau-pagestate.js must populate NS.pageState (the reload round-trip rides on it): "</span> + report);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> f02_committedViewSettingsAreRestoredAfterReload() {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<em class="jxr_comment">// The exact blob written before the reload comes back verbatim from REAL localStorage.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> restored = obj(<span class="jxr_string">"f_reload"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertBean(restored, <span class="jxr_string">"restored{schemaVersion,visible,search,sort,options{pageSize,wrap,density}}"</span>,
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<span class="jxr_string">"{2,[a,b],[a],[{column=b,dir=asc}],{50,true,compact}}"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@Test <strong class="jxr_keyword">void</strong> f03_secondViewIdKeepsItsOwnIndependentSlotAcrossReload() {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<em class="jxr_comment">// Per-table keying: a different view id is neither clobbered by nor merged with the first.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> restored = obj(<span class="jxr_string">"f_reload"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertBean(restored, <span class="jxr_string">"other{visible,options{pageSize,wrap,density}}"</span>, <span class="jxr_string">"{[z],{10,false,comfortable}}"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Test <strong class="jxr_keyword">void</strong> f04_neverWrittenViewAndTableWithNoViewIdBothReadBackNull() {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">var</strong> restored = obj(<span class="jxr_string">"f_reload"</span>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertNull(restored.get(<span class="jxr_string">"absent"</span>), () -&gt; <span class="jxr_string">"a view id that was never written must read back null: "</span> + report);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertNull(restored.get(<span class="jxr_string">"noId"</span>), () -&gt; <span class="jxr_string">"a table with no data-juneau-view has no scope, so null: "</span> + report);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

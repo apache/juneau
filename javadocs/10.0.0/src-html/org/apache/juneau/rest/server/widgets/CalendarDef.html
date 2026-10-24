@@ -300,7 +300,7 @@
 <span class="source-line-no">287</span><span id="line-287">    * @throws IllegalArgumentException If this definition is not well-formed.</span>
 <span class="source-line-no">288</span><span id="line-288">    */</span>
 <span class="source-line-no">289</span><span id="line-289">   public void validate(Integer effectiveYear, Integer effectiveMonth) {</span>
-<span class="source-line-no">290</span><span id="line-290">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">290</span><span id="line-290">      if (ib(id))</span>
 <span class="source-line-no">291</span><span id="line-291">         throw iaex("CalendarDef id must not be null or blank.");</span>
 <span class="source-line-no">292</span><span id="line-292">      if (!ID_PATTERN.matcher(id).matches())</span>
 <span class="source-line-no">293</span><span id="line-293">         throw iaex("CalendarDef id '%s' must match [A-Za-z][A-Za-z0-9_-]*.", id);</span>

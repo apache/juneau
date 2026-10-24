@@ -81,8 +81,8 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * {@code enabledWhen} was added after this schema was first frozen; like {@code ModalDef#barSlot}, it is</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * additive-only (&lt;jk&gt;null&lt;/jk&gt; when unset, omitted from the serialized form) and its presence does not bump</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * {@code VIEW_META} &amp;mdash; a {@link RowAction} declared before this field existed is</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * byte-identical on the wire, and old {@code juneau-views.js} ignores the unknown key.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * {@code VIEW_META} &amp;mdash; a {@link RowAction} that leaves it unset serializes</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * unchanged, and old {@code juneau-views.js} ignores the unknown key.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Why {@link #method} cannot be a safe method&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * {@code href} interpolation.  Unlike a rendered {@code href}, these URLs are &lt;i&gt;fetched&lt;/i&gt; (form: confirmation GET) or</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * &lt;i&gt;submitted&lt;/i&gt; (endpoint: mutating write), so an unresolved substitution &lt;b&gt;refuses&lt;/b&gt; instead of issuing a</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * is used byte-identical to how it always was.  A blank/absent {@code form} is the confirm-only local path (no</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * is used as declared.  A blank/absent {@code form} is the confirm-only local path (no</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * GET), not a refusal.</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
@@ -372,7 +372,7 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowAction create(String id) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RowAction id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> RowAction();
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		a.id = id;
@@ -429,7 +429,7 @@
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Backward compatible, narrowed:&lt;/b&gt; an {@code endpoint} with no {@code {...}} token is still</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * issued byte-identical to how it always was (three of the four guards above cannot fire on it; the fourth,</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * issued as declared (three of the four guards above cannot fire on it; the fourth,</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now</em>
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a</em>
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * row with no {@code id}) rather than issuing it.</em>
@@ -542,7 +542,7 @@
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from {@link #endpoint(String) endpoint}:&lt;/b&gt; a blank/absent {@code form} is still the</em>
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * byte-identical to how it always was.</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * as declared.</em>
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * @param value The new value.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank for a confirm-only dialog.</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * @return This object.</em>

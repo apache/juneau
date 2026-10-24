@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> logger = getLogger(<span class="jxr_string">"a03"</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> capture = logger.captureEvents()) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			assertTrue(capture.isEmpty());
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			assertEquals(0, capture.size());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			assertSize(0, capture);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			assertSize(2, capture.getRecords());
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			capture.clear();
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			assertTrue(capture.isEmpty());
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			assertEquals(0, capture.size());
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			assertSize(0, capture);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
@@ -197,11 +197,11 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test <strong class="jxr_keyword">void</strong> e01_size_returnsCorrectCount() {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> logger = getLogger(<span class="jxr_string">"e01"</span>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> capture = logger.captureEvents()) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			assertEquals(0, capture.size());
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			assertSize(0, capture);
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			logger.info(<span class="jxr_string">"Message 1"</span>);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			assertEquals(1, capture.size());
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			assertSize(1, capture);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			logger.info(<span class="jxr_string">"Message 2"</span>);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			assertEquals(2, capture.size());
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			assertSize(2, capture);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		}
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
@@ -280,7 +280,7 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<em class="jxr_comment">// All messages should be captured</em>
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">var</strong> records = capture.getRecords();
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			assertEquals(3, records.size());
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			assertSize(3, records);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		}
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 	}
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
@@ -384,7 +384,7 @@
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			logger.info(<span class="jxr_string">"keep-2"</span>);
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertEquals(List.of(<span class="jxr_string">"keep-1"</span>, <span class="jxr_string">"keep-2"</span>), capture.messages());
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertEquals(2, capture.size());
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertSize(2, capture);
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		}
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 
@@ -418,8 +418,8 @@
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 			logger.warning(<span class="jxr_string">"abc-2"</span>);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 			logger.warning(<span class="jxr_string">"xyz"</span>);
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			assertEquals(2, capture.byLevel(Level.WARNING).size());
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			assertEquals(2, capture.matching(<span class="jxr_string">"abc"</span>).size());
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			assertSize(2, capture.byLevel(Level.WARNING));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			assertSize(2, capture.matching(<span class="jxr_string">"abc"</span>));
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		}
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 

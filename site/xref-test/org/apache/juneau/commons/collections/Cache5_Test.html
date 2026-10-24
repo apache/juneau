@@ -451,7 +451,7 @@
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<em class="jxr_comment">// Verify both threads cached their own values</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		assertEquals(2, threadValues.size());
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		assertSize(2, threadValues);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread1-value"</span>));
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread2-value"</span>));
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 
@@ -568,7 +568,7 @@
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<em class="jxr_comment">// Verify both threads cached their own values</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		assertEquals(2, threadValues.size());
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		assertSize(2, threadValues);
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread1-value"</span>));
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertTrue(threadValues.containsValue(<span class="jxr_string">"thread2-value"</span>));
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 

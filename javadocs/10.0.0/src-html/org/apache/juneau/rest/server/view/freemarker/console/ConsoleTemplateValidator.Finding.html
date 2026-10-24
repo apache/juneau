@@ -39,590 +39,591 @@
 <span class="source-line-no">026</span><span id="line-26">import java.util.regex.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.util.stream.*;</span>
 <span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.rest.server.staticfile.WebJarResolver;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.rest.server.views.*;</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">import freemarker.core.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import freemarker.template.*;</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">/**</span>
-<span class="source-line-no">036</span><span id="line-36"> * Static lint for console FreeMarker templates. Scans each template for console directive calls and reports unknown</span>
-<span class="source-line-no">037</span><span id="line-37"> * directives, unknown attributes, dangling template references, duplicate nav and card ids, non-strict booleans,</span>
-<span class="source-line-no">038</span><span id="line-38"> * removed card types and globals, a chart card whose ECharts WebJar is missing (E-70), and a wrong {@code &lt;@main/&gt;} count, without rendering any page.</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * The attribute sets are the same ones the directives enforce at render time. Interpolated values</span>
-<span class="source-line-no">042</span><span id="line-42"> * ({@code visible="${x}"}) and unquoted expressions ({@code visible=flag}) are skipped; the render-time errors cover</span>
-<span class="source-line-no">043</span><span id="line-43"> * them. Macros defined in the template, in literally {@code &lt;#include&gt;}d templates and in the</span>
-<span class="source-line-no">044</span><span id="line-44"> * {@link #chromeTemplate(String) chrome template} are in scope, as are {@code &lt;@ns.x&gt;} calls on an</span>
-<span class="source-line-no">045</span><span id="line-45"> * {@code &lt;#import … as ns&gt;} namespace.</span>
-<span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *    &lt;ja&gt;@Test&lt;/ja&gt; &lt;jk&gt;void&lt;/jk&gt; templatesLint() {</span>
-<span class="source-line-no">050</span><span id="line-50"> *       List&amp;lt;ConsoleTemplateValidator.Finding&amp;gt; &lt;jv&gt;f&lt;/jv&gt; = ConsoleTemplateValidator.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">051</span><span id="line-51"> *          .templateRoot(Paths.&lt;jsm&gt;get&lt;/jsm&gt;(&lt;js&gt;"src/main/resources/templates"&lt;/js&gt;))</span>
-<span class="source-line-no">052</span><span id="line-52"> *          .chromeTemplate(&lt;js&gt;"base.ftlh"&lt;/js&gt;)</span>
-<span class="source-line-no">053</span><span id="line-53"> *          .allowDirective(&lt;js&gt;"pageHero"&lt;/js&gt;)</span>
-<span class="source-line-no">054</span><span id="line-54"> *          .validateAll();</span>
-<span class="source-line-no">055</span><span id="line-55"> *       &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;f&lt;/jv&gt;.isEmpty(), &lt;jv&gt;f&lt;/jv&gt;::toString);</span>
-<span class="source-line-no">056</span><span id="line-56"> *    }</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * @since 10.0.0</span>
-<span class="source-line-no">060</span><span id="line-60"> */</span>
-<span class="source-line-no">061</span><span id="line-61">@SuppressWarnings({</span>
-<span class="source-line-no">062</span><span id="line-62">   "java:S1075", // "/" is the template-name separator, not a file-system path.</span>
-<span class="source-line-no">063</span><span id="line-63">   "java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.</span>
-<span class="source-line-no">064</span><span id="line-64">})</span>
-<span class="source-line-no">065</span><span id="line-65">public final class ConsoleTemplateValidator {</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * One lint finding.</span>
-<span class="source-line-no">069</span><span id="line-69">    *</span>
-<span class="source-line-no">070</span><span id="line-70">    * @param template The template name, relative to the root, with {@code /} separators.</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param line The 1-based line.</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param column The 1-based column.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @param rule The rule id, for example {@code unknown-attribute}.</span>
-<span class="source-line-no">074</span><span id="line-74">    * @param message The human-readable message.</span>
-<span class="source-line-no">075</span><span id="line-75">    */</span>
-<span class="source-line-no">076</span><span id="line-76">   public record Finding(String template, int line, int column, String rule, String message) {</span>
-<span class="source-line-no">077</span><span id="line-77">      @Override</span>
-<span class="source-line-no">078</span><span id="line-78">      public String toString() {</span>
-<span class="source-line-no">079</span><span id="line-79">         return template + ":" + line + ":" + column + ": [" + rule + "] " + message;</span>
-<span class="source-line-no">080</span><span id="line-80">      }</span>
-<span class="source-line-no">081</span><span id="line-81">   }</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   @SuppressWarnings({</span>
-<span class="source-line-no">084</span><span id="line-84">      "java:S5843", // Tag grammar needs this complexity; it is one regex by design.</span>
-<span class="source-line-no">085</span><span id="line-85">      "java:S5998", // Lint runs on authored templates at build time, never untrusted input.</span>
-<span class="source-line-no">086</span><span id="line-86">      "java:S8786" // Same: the lazy attribute scan is linear on well-formed tags.</span>
-<span class="source-line-no">087</span><span id="line-87">   })</span>
-<span class="source-line-no">088</span><span id="line-88">   private static final Pattern TAG = Pattern.compile("&lt;(/?)@([A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*)?)((?:\"[^\"]*\"|'[^']*'|[^&gt;\"'])*?)(/?)&gt;");</span>
-<span class="source-line-no">089</span><span id="line-89">   private static final Pattern ATTR = Pattern.compile("([A-Za-z_]\\w*)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'/&gt;]+))");</span>
-<span class="source-line-no">090</span><span id="line-90">   private static final Pattern MACRO = Pattern.compile("&lt;#macro\\s+([A-Za-z_]\\w*)");</span>
-<span class="source-line-no">091</span><span id="line-91">   private static final Pattern INCLUDE = Pattern.compile("&lt;#include\\s+\"([^\"]+)\"");</span>
-<span class="source-line-no">092</span><span id="line-92">   private static final Pattern IMPORT = Pattern.compile("&lt;#import\\s+\"[^\"]+\"\\s+as\\s+([A-Za-z_]\\w*)");</span>
-<span class="source-line-no">093</span><span id="line-93">   private static final Pattern COMMENT = Pattern.compile("(?s)&lt;#--.*?--&gt;");</span>
-<span class="source-line-no">094</span><span id="line-94">   private static final Pattern GLOBAL = Pattern.compile("\\b(pageBody|pageTab|pageInit|pageCss|pageToolkitCss|pageToolkitJs|pageToolkit|pageThemeCss)\\b");</span>
-<span class="source-line-no">095</span><span id="line-95">   private static final Pattern VIEW_KEY = Pattern.compile("\\bview\\s*:\\s*\\{");</span>
-<span class="source-line-no">096</span><span id="line-96">   private static final Pattern VIEW_VERSION = Pattern.compile("^\\s*[\"']?contractVersion[\"']?\\s*:\\s*[\"']([^\"']*)[\"']");</span>
-<span class="source-line-no">097</span><span id="line-97">   private static final Pattern ASSET_REF = Pattern.compile("\\b(?:src|href)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')");</span>
-<span class="source-line-no">098</span><span id="line-98">   private static final Pattern JUNEAU_ASSET = Pattern.compile("(?:^|/)(?:juneau-[\\w-]+\\.(?:js|css|svg)|juneau-console/chrome\\.css)(?:[?#].*)?$");</span>
-<span class="source-line-no">099</span><span id="line-99">   private static final Set&lt;String&gt; REMOVED_TYPES = Set.of("js", "json", "calendar");</span>
-<span class="source-line-no">100</span><span id="line-100">   private static final Map&lt;String,Set&lt;String&gt;&gt; STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle"));</span>
-<span class="source-line-no">101</span><span id="line-101">   private static final Map&lt;String,Set&lt;String&gt;&gt; DIRECTIVES = directives();</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">   private static Map&lt;String,Set&lt;String&gt;&gt; directives() {</span>
-<span class="source-line-no">104</span><span id="line-104">      var m = new LinkedHashMap&lt;String,Set&lt;String&gt;&gt;();</span>
-<span class="source-line-no">105</span><span id="line-105">      m.put(PageDirectiveModel.NAME, PageDirectiveModel.ATTRS);</span>
-<span class="source-line-no">106</span><span id="line-106">      m.put(ConsoleDirectiveModel.NAME, ConsoleDirectiveModel.ATTRS);</span>
-<span class="source-line-no">107</span><span id="line-107">      m.put(MainDirectiveModel.NAME, MainDirectiveModel.ATTRS);</span>
-<span class="source-line-no">108</span><span id="line-108">      m.put(NavigationDirectiveModel.NAME, NavigationDirectiveModel.ATTRS);</span>
-<span class="source-line-no">109</span><span id="line-109">      m.put(NodeDirectiveModel.NAME, NodeDirectiveModel.ATTRS);</span>
-<span class="source-line-no">110</span><span id="line-110">      m.put(ThemeDirectiveModel.NAME, ThemeDirectiveModel.ATTRS);</span>
-<span class="source-line-no">111</span><span id="line-111">      m.put(TokenDirectiveModel.NAME, TokenDirectiveModel.ATTRS);</span>
-<span class="source-line-no">112</span><span id="line-112">      m.put(CardDirectiveModel.NAME, CardDirectiveModel.ATTRS);</span>
-<span class="source-line-no">113</span><span id="line-113">      m.put(TopicDirectiveModel.NAME, TopicDirectiveModel.ATTRS);</span>
-<span class="source-line-no">114</span><span id="line-114">      m.put(BridgeDirectiveModel.NAME, BridgeDirectiveModel.ATTRS);</span>
-<span class="source-line-no">115</span><span id="line-115">      m.put(BadgeDirectiveModel.NAME, BadgeDirectiveModel.ATTRS);</span>
-<span class="source-line-no">116</span><span id="line-116">      m.put(FactsDirectiveModel.NAME, Set.of());</span>
-<span class="source-line-no">117</span><span id="line-117">      for (var s : ConsoleSlotDirectiveModel.SLOT_NAMES)</span>
-<span class="source-line-no">118</span><span id="line-118">         m.put(s, new ConsoleSlotDirectiveModel(s).attrs());</span>
-<span class="source-line-no">119</span><span id="line-119">      return u(m);</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   private static final Configuration PARSE_CFG = parseConfig();</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">   private static Configuration parseConfig() {</span>
-<span class="source-line-no">125</span><span id="line-125">      var c = new Configuration(Configuration.VERSION_2_3_34);</span>
-<span class="source-line-no">126</span><span id="line-126">      c.setRecognizeStandardFileExtensions(true);</span>
-<span class="source-line-no">127</span><span id="line-127">      return c;</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   private Path templateRoot;</span>
-<span class="source-line-no">131</span><span id="line-131">   private String classpathRoot;</span>
-<span class="source-line-no">132</span><span id="line-132">   private String chromeTemplate;</span>
-<span class="source-line-no">133</span><span id="line-133">   private final Set&lt;String&gt; allowed = new TreeSet&lt;&gt;();</span>
-<span class="source-line-no">134</span><span id="line-134">   private UnaryOperator&lt;String&gt; webJarProbe = WebJarResolver::resolvePath;</span>
-<span class="source-line-no">135</span><span id="line-135">   private final ToolkitPackRegistry packs = new ToolkitPackRegistry();</span>
-<span class="source-line-no">136</span><span id="line-136">   private String echartsProblem;         // cached E-70 (or invalid-pack-graph) message; null when the probe passed</span>
-<span class="source-line-no">137</span><span id="line-137">   private String echartsRule;            // the rule id the cached problem is reported under</span>
-<span class="source-line-no">138</span><span id="line-138">   private boolean echartsProbed;</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">   private ConsoleTemplateValidator() {}</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   /** @return A new validator with no roots. */</span>
-<span class="source-line-no">143</span><span id="line-143">   public static ConsoleTemplateValidator create() {</span>
-<span class="source-line-no">144</span><span id="line-144">      return new ConsoleTemplateValidator();</span>
-<span class="source-line-no">145</span><span id="line-145">   }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   /**</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param dir The file-system directory templates are resolved against and {@link #validateAll()} walks.</span>
-<span class="source-line-no">149</span><span id="line-149">    * @return This object.</span>
-<span class="source-line-no">150</span><span id="line-150">    */</span>
-<span class="source-line-no">151</span><span id="line-151">   public ConsoleTemplateValidator templateRoot(Path dir) {</span>
-<span class="source-line-no">152</span><span id="line-152">      templateRoot = dir;</span>
-<span class="source-line-no">153</span><span id="line-153">      return this;</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   /**</span>
-<span class="source-line-no">157</span><span id="line-157">    * @param prefix The classpath prefix templates are resolved against when not found under the template root, for</span>
-<span class="source-line-no">158</span><span id="line-158">    *    example {@code "/templates/"}.</span>
-<span class="source-line-no">159</span><span id="line-159">    * @return This object.</span>
-<span class="source-line-no">160</span><span id="line-160">    */</span>
-<span class="source-line-no">161</span><span id="line-161">   public ConsoleTemplateValidator classpathRoot(String prefix) {</span>
-<span class="source-line-no">162</span><span id="line-162">      classpathRoot = prefix.endsWith("/") ? prefix : prefix + "/";</span>
-<span class="source-line-no">163</span><span id="line-163">      return this;</span>
-<span class="source-line-no">164</span><span id="line-164">   }</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">   /**</span>
-<span class="source-line-no">167</span><span id="line-167">    * @param name The chrome template the {@code &lt;@page&gt;} directive renders. Its macros are in scope for every template.</span>
-<span class="source-line-no">168</span><span id="line-168">    * @return This object.</span>
-<span class="source-line-no">169</span><span id="line-169">    */</span>
-<span class="source-line-no">170</span><span id="line-170">   public ConsoleTemplateValidator chromeTemplate(String name) {</span>
-<span class="source-line-no">171</span><span id="line-171">      chromeTemplate = name;</span>
-<span class="source-line-no">172</span><span id="line-172">      return this;</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">   /**</span>
-<span class="source-line-no">176</span><span id="line-176">    * @param name An adopter-defined directive or macro name to accept, for example {@code "pageHero"}.</span>
-<span class="source-line-no">177</span><span id="line-177">    * @return This object.</span>
-<span class="source-line-no">178</span><span id="line-178">    */</span>
-<span class="source-line-no">179</span><span id="line-179">   public ConsoleTemplateValidator allowDirective(String name) {</span>
-<span class="source-line-no">180</span><span id="line-180">      allowed.add(name);</span>
-<span class="source-line-no">181</span><span id="line-181">      return this;</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   // Package-private (no production caller; the mixin owns its own registry).  Names packs the app's chrome already</span>
-<span class="source-line-no">185</span><span id="line-185">   // loads; a provided "echarts" pack suppresses the missing-webjar rule.</span>
-<span class="source-line-no">186</span><span id="line-186">   // @throws IllegalArgumentException If a name is not a registered pack.</span>
-<span class="source-line-no">187</span><span id="line-187">   ConsoleTemplateValidator providedPacks(String...names) {</span>
-<span class="source-line-no">188</span><span id="line-188">      var list = Arrays.asList(names);</span>
-<span class="source-line-no">189</span><span id="line-189">      packs.requireKnown(list, "providedPacks");</span>
-<span class="source-line-no">190</span><span id="line-190">      packs.provide(list);</span>
-<span class="source-line-no">191</span><span id="line-191">      echartsProbed = false;</span>
-<span class="source-line-no">192</span><span id="line-192">      return this;</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   // Package-private: registers an app-supplied toolkit pack; a replacement "echarts" pack (for example one served</span>
-<span class="source-line-no">196</span><span id="line-196">   // from a CDN) suppresses the missing-webjar rule.</span>
-<span class="source-line-no">197</span><span id="line-197">   // The mixin's registerToolkitPack(String, List, List) overload is deliberately absent: it builds a pack from asset</span>
-<span class="source-line-no">198</span><span id="line-198">   // lists, which cannot change whether the "charts" WebJars resolve, so no lint rule depends on it.</span>
-<span class="source-line-no">199</span><span id="line-199">   ConsoleTemplateValidator registerToolkitPack(ToolkitPack pack) {</span>
-<span class="source-line-no">200</span><span id="line-200">      packs.register(rnn(pack));</span>
-<span class="source-line-no">201</span><span id="line-201">      echartsProbed = false;</span>
-<span class="source-line-no">202</span><span id="line-202">      return this;</span>
-<span class="source-line-no">203</span><span id="line-203">   }</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">   // Package-private: tests simulate an absent WebJar.</span>
-<span class="source-line-no">206</span><span id="line-206">   ConsoleTemplateValidator webJarProbe(UnaryOperator&lt;String&gt; probe) {</span>
-<span class="source-line-no">207</span><span id="line-207">      webJarProbe = rnn(probe);</span>
-<span class="source-line-no">208</span><span id="line-208">      echartsProbed = false;</span>
-<span class="source-line-no">209</span><span id="line-209">      return this;</span>
-<span class="source-line-no">210</span><span id="line-210">   }</span>
-<span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">   // The E-70 message when the WebJars the "charts" pack reaches are missing, or null.  Probes the pack the chart card</span>
-<span class="source-line-no">213</span><span id="line-213">   // resolves at runtime (so a replaced "charts" or "echarts" pack is honoured) through the registry's own provided and</span>
-<span class="source-line-no">214</span><span id="line-214">   // replaced-pack knowledge; probed at most once per configuration, not once per chart card.  A broken pack graph</span>
-<span class="source-line-no">215</span><span id="line-215">   // (unknown dependsOn, cycle) is reported as an invalid-pack-graph finding instead of crashing the lint.</span>
-<span class="source-line-no">216</span><span id="line-216">   private String echartsProblem() {</span>
-<span class="source-line-no">217</span><span id="line-217">      if (! echartsProbed) {</span>
-<span class="source-line-no">218</span><span id="line-218">         echartsProblem = null;</span>
-<span class="source-line-no">219</span><span id="line-219">         echartsRule = "missing-webjar";</span>
-<span class="source-line-no">220</span><span id="line-220">         try {</span>
-<span class="source-line-no">221</span><span id="line-221">            packs.checkWebJars(List.of(ToolkitPackRegistry.PACK_CHARTS), webJarProbe);</span>
-<span class="source-line-no">222</span><span id="line-222">         } catch (IllegalStateException e) {</span>
-<span class="source-line-no">223</span><span id="line-223">            echartsProblem = e.getMessage();</span>
-<span class="source-line-no">224</span><span id="line-224">         } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">225</span><span id="line-225">            echartsProblem = e.getMessage();</span>
-<span class="source-line-no">226</span><span id="line-226">            echartsRule = "invalid-pack-graph";</span>
-<span class="source-line-no">227</span><span id="line-227">         }</span>
-<span class="source-line-no">228</span><span id="line-228">         echartsProbed = true;</span>
-<span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230">      return echartsProblem;</span>
-<span class="source-line-no">231</span><span id="line-231">   }</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">   /**</span>
-<span class="source-line-no">234</span><span id="line-234">    * @param templateName The template to lint, relative to the template root or classpath root.</span>
-<span class="source-line-no">235</span><span id="line-235">    * @return The findings, sorted by line and column. Empty when the template is clean.</span>
-<span class="source-line-no">236</span><span id="line-236">    * @throws IllegalArgumentException If the template cannot be found.</span>
-<span class="source-line-no">237</span><span id="line-237">    */</span>
-<span class="source-line-no">238</span><span id="line-238">   public List&lt;Finding&gt; validate(String templateName) {</span>
-<span class="source-line-no">239</span><span id="line-239">      var src = load(templateName);</span>
-<span class="source-line-no">240</span><span id="line-240">      if (n(src))</span>
-<span class="source-line-no">241</span><span id="line-241">         throw iaex("Template '%s' not found under templateRoot or classpathRoot.", templateName);</span>
-<span class="source-line-no">242</span><span id="line-242">      return validateSource(templateName, src);</span>
-<span class="source-line-no">243</span><span id="line-243">   }</span>
-<span class="source-line-no">244</span><span id="line-244"></span>
-<span class="source-line-no">245</span><span id="line-245">   /**</span>
-<span class="source-line-no">246</span><span id="line-246">    * Lints every {@code *.ftlh} and {@code *.ftl} file under the template root.</span>
-<span class="source-line-no">247</span><span id="line-247">    *</span>
-<span class="source-line-no">248</span><span id="line-248">    * @return The findings, sorted by template, line and column. Empty when every template is clean.</span>
-<span class="source-line-no">249</span><span id="line-249">    * @throws IllegalStateException If no template root is set.</span>
-<span class="source-line-no">250</span><span id="line-250">    */</span>
-<span class="source-line-no">251</span><span id="line-251">   public List&lt;Finding&gt; validateAll() {</span>
-<span class="source-line-no">252</span><span id="line-252">      if (n(templateRoot))</span>
-<span class="source-line-no">253</span><span id="line-253">         throw isex("validateAll() requires templateRoot(Path); a classpath root cannot be listed.");</span>
-<span class="source-line-no">254</span><span id="line-254">      try (Stream&lt;Path&gt; s = Files.walk(templateRoot)) {</span>
-<span class="source-line-no">255</span><span id="line-255">         var names = s.filter(Files::isRegularFile)</span>
-<span class="source-line-no">256</span><span id="line-256">            .map(p -&gt; templateRoot.relativize(p).toString().replace(File.separatorChar, '/'))</span>
-<span class="source-line-no">257</span><span id="line-257">            .filter(n -&gt; n.endsWith(".ftlh") || n.endsWith(".ftl"))</span>
-<span class="source-line-no">258</span><span id="line-258">            .sorted()</span>
-<span class="source-line-no">259</span><span id="line-259">            .toList();</span>
-<span class="source-line-no">260</span><span id="line-260">         var out = new ArrayList&lt;Finding&gt;();</span>
-<span class="source-line-no">261</span><span id="line-261">         for (var n : names)</span>
-<span class="source-line-no">262</span><span id="line-262">            out.addAll(validate(n));</span>
-<span class="source-line-no">263</span><span id="line-263">         return out;</span>
-<span class="source-line-no">264</span><span id="line-264">      } catch (IOException e) {</span>
-<span class="source-line-no">265</span><span id="line-265">         throw new UncheckedIOException(e);</span>
-<span class="source-line-no">266</span><span id="line-266">      }</span>
-<span class="source-line-no">267</span><span id="line-267">   }</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">   // Package-private: lints a source string as if it were the template with the given name (unit tests).</span>
-<span class="source-line-no">270</span><span id="line-270">   @SuppressWarnings({</span>
-<span class="source-line-no">271</span><span id="line-271">      "java:S3776" // One pass over the directive tags; splitting it would scatter the lint rules.</span>
-<span class="source-line-no">272</span><span id="line-272">   })</span>
-<span class="source-line-no">273</span><span id="line-273">   List&lt;Finding&gt; validateSource(String name, String source) {</span>
-<span class="source-line-no">274</span><span id="line-274">      var out = new ArrayList&lt;Finding&gt;();</span>
-<span class="source-line-no">275</span><span id="line-275">      var lines = lineStarts(source);</span>
-<span class="source-line-no">276</span><span id="line-276">      parse(name, source, out);</span>
-<span class="source-line-no">277</span><span id="line-277">      var text = blankComments(source);</span>
-<span class="source-line-no">278</span><span id="line-278"></span>
-<span class="source-line-no">279</span><span id="line-279">      var macros = new HashSet&lt;String&gt;(allowed);</span>
-<span class="source-line-no">280</span><span id="line-280">      var namespaces = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">281</span><span id="line-281">      collectScope(name, text, macros, namespaces, new HashSet&lt;&gt;());</span>
-<span class="source-line-no">282</span><span id="line-282">      if (nn(chromeTemplate) &amp;&amp; neq(chromeTemplate, name)) {</span>
-<span class="source-line-no">283</span><span id="line-283">         var chrome = load(chromeTemplate);</span>
-<span class="source-line-no">284</span><span id="line-284">         if (n(chrome))</span>
-<span class="source-line-no">285</span><span id="line-285">            throw iaex("Chrome template '%s' not found under templateRoot or classpathRoot.", chromeTemplate);</span>
-<span class="source-line-no">286</span><span id="line-286">         collectScope(chromeTemplate, blankComments(chrome), macros, namespaces, new HashSet&lt;&gt;());</span>
-<span class="source-line-no">287</span><span id="line-287">      }</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">      var siblings = new ArrayDeque&lt;Set&lt;String&gt;&gt;();</span>
-<span class="source-line-no">290</span><span id="line-290">      siblings.push(new HashSet&lt;&gt;());</span>
-<span class="source-line-no">291</span><span id="line-291">      var cardIds = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">292</span><span id="line-292">      var navDepth = 0;</span>
-<span class="source-line-no">293</span><span id="line-293">      var templateRefs = new ArrayList&lt;Object[]&gt;();   // each entry pairs a template name with its source offset</span>
-<span class="source-line-no">294</span><span id="line-294">      var consoleAt = -1;</span>
-<span class="source-line-no">295</span><span id="line-295">      var mains = 0;</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">      var m = TAG.matcher(text);</span>
-<span class="source-line-no">298</span><span id="line-298">      while (m.find()) {</span>
-<span class="source-line-no">299</span><span id="line-299">         var closing = ! m.group(1).isEmpty();</span>
-<span class="source-line-no">300</span><span id="line-300">         var dname = m.group(2);</span>
-<span class="source-line-no">301</span><span id="line-301">         var selfClosing = ! m.group(4).isEmpty();</span>
-<span class="source-line-no">302</span><span id="line-302">         var at = m.start();</span>
-<span class="source-line-no">303</span><span id="line-303">         var known = closing ? null : DIRECTIVES.get(dname);</span>
-<span class="source-line-no">304</span><span id="line-304">         if (closing) {</span>
-<span class="source-line-no">305</span><span id="line-305">            if ((dname.equals(NodeDirectiveModel.NAME) || dname.equals(NavigationDirectiveModel.NAME)) &amp;&amp; siblings.size() &gt; 1)</span>
-<span class="source-line-no">306</span><span id="line-306">               siblings.pop();</span>
-<span class="source-line-no">307</span><span id="line-307">            if (dname.equals(NavigationDirectiveModel.NAME) &amp;&amp; navDepth &gt; 0)</span>
-<span class="source-line-no">308</span><span id="line-308">               navDepth--;</span>
-<span class="source-line-no">309</span><span id="line-309">         } else if (n(known)) {</span>
-<span class="source-line-no">310</span><span id="line-310">            var dot = dname.indexOf('.');</span>
-<span class="source-line-no">311</span><span id="line-311">            var ok = dot &gt; 0 ? namespaces.contains(dname.substring(0, dot)) : macros.contains(dname);</span>
-<span class="source-line-no">312</span><span id="line-312">            if (! ok)</span>
-<span class="source-line-no">313</span><span id="line-313">               add(out, name, lines, at, "unknown-directive", f("&lt;@%s&gt; is not a console directive, a macro in scope, or allow-listed.", dname));</span>
-<span class="source-line-no">314</span><span id="line-314">         } else {</span>
-<span class="source-line-no">315</span><span id="line-315">            var attrs = attrs(m.group(3));</span>
-<span class="source-line-no">316</span><span id="line-316">            for (var a : attrs.keySet())</span>
-<span class="source-line-no">317</span><span id="line-317">               if (! known.contains(a))</span>
-<span class="source-line-no">318</span><span id="line-318">                  add(out, name, lines, at, "unknown-attribute", f("&lt;@%s&gt; unknown attribute '%s'.", dname, a));</span>
-<span class="source-line-no">319</span><span id="line-319">            for (var a : STRICT.getOrDefault(dname, Set.of())) {</span>
-<span class="source-line-no">320</span><span id="line-320">               var v = attrs.get(a);</span>
-<span class="source-line-no">321</span><span id="line-321">               if (nn(v) &amp;&amp; v.literal &amp;&amp; !eqa(v.value, "true", "false"))</span>
-<span class="source-line-no">322</span><span id="line-322">                  add(out, name, lines, at, "strict-boolean", f("&lt;@%s&gt; %s= must be true or false; got '%s'.", dname, a, v.value));</span>
-<span class="source-line-no">323</span><span id="line-323">            }</span>
-<span class="source-line-no">324</span><span id="line-324">            var id = attrs.get("id");</span>
-<span class="source-line-no">325</span><span id="line-325">            switch (dname) {</span>
-<span class="source-line-no">326</span><span id="line-326">               case NavigationDirectiveModel.NAME -&gt; {</span>
-<span class="source-line-no">327</span><span id="line-327">                  if (! selfClosing) {</span>
-<span class="source-line-no">328</span><span id="line-328">                     siblings.push(new HashSet&lt;&gt;());</span>
-<span class="source-line-no">329</span><span id="line-329">                     navDepth++;</span>
-<span class="source-line-no">330</span><span id="line-330">                  }</span>
-<span class="source-line-no">331</span><span id="line-331">               }</span>
-<span class="source-line-no">332</span><span id="line-332">               case NodeDirectiveModel.NAME -&gt; {</span>
-<span class="source-line-no">333</span><span id="line-333">                  if (nn(id) &amp;&amp; id.literal &amp;&amp; ! siblings.peek().add(id.value))</span>
-<span class="source-line-no">334</span><span id="line-334">                     add(out, name, lines, at, "duplicate-id", f("&lt;@node id='%s'&gt; duplicates a sibling id.", id.value));</span>
-<span class="source-line-no">335</span><span id="line-335">                  if (navDepth &gt; 0 &amp;&amp; attrs.containsKey("under"))</span>
-<span class="source-line-no">336</span><span id="line-336">                     add(out, name, lines, at, "unknown-attribute", f("&lt;@%s&gt; unknown attribute '%s'.", dname, "under"));</span>
-<span class="source-line-no">337</span><span id="line-337">                  if (! selfClosing)</span>
-<span class="source-line-no">338</span><span id="line-338">                     siblings.push(new HashSet&lt;&gt;());</span>
-<span class="source-line-no">339</span><span id="line-339">               }</span>
-<span class="source-line-no">340</span><span id="line-340">               case CardDirectiveModel.NAME -&gt; {</span>
-<span class="source-line-no">341</span><span id="line-341">                  if (nn(id) &amp;&amp; id.literal &amp;&amp; ! cardIds.add(id.value))</span>
-<span class="source-line-no">342</span><span id="line-342">                     add(out, name, lines, at, "duplicate-id", f("&lt;@card id='%s'&gt; duplicates an existing card id.", id.value));</span>
-<span class="source-line-no">343</span><span id="line-343">                  var type = attrs.get("type");</span>
-<span class="source-line-no">344</span><span id="line-344">                  if (nn(type) &amp;&amp; type.literal &amp;&amp; REMOVED_TYPES.contains(type.value))</span>
-<span class="source-line-no">345</span><span id="line-345">                     add(out, name, lines, at, "removed-card-type", f(</span>
-<span class="source-line-no">346</span><span id="line-346">                        "&lt;@card id='%s'&gt; type='%s' was removed in 10.0.0; use type='html' with a &lt;template&gt;, or a registered card type.",</span>
-<span class="source-line-no">347</span><span id="line-347">                        n(id) ? "" : id.value, type.value));</span>
-<span class="source-line-no">348</span><span id="line-348">                  if (nn(type) &amp;&amp; type.literal &amp;&amp; eq(type.value, "chart")) {</span>
-<span class="source-line-no">349</span><span id="line-349">                     var problem = echartsProblem();</span>
-<span class="source-line-no">350</span><span id="line-350">                     if (nn(problem))</span>
-<span class="source-line-no">351</span><span id="line-351">                        add(out, name, lines, at, echartsRule, problem);</span>
-<span class="source-line-no">352</span><span id="line-352">                  }</span>
-<span class="source-line-no">353</span><span id="line-353">                  var tpl = attrs.get("template");</span>
-<span class="source-line-no">354</span><span id="line-354">                  if (nn(tpl) &amp;&amp; tpl.literal)</span>
-<span class="source-line-no">355</span><span id="line-355">                     templateRefs.add(new Object[]{tpl.value, at});</span>
-<span class="source-line-no">356</span><span id="line-356">                  if (nn(type) &amp;&amp; type.literal &amp;&amp; eq(type.value, "datatables") &amp;&amp; ! selfClosing)</span>
-<span class="source-line-no">357</span><span id="line-357">                     checkViewVersion(out, name, lines, text, m.end(), n(id) ? "" : id.value);</span>
-<span class="source-line-no">358</span><span id="line-358">                  if (! selfClosing)</span>
-<span class="source-line-no">359</span><span id="line-359">                     checkCardBody(out, name, lines, at, text, m.end(), id, attrs.get("src"), attrs.get("type"));</span>
-<span class="source-line-no">360</span><span id="line-360">               }</span>
-<span class="source-line-no">361</span><span id="line-361">               case ConsoleDirectiveModel.NAME -&gt; {</span>
-<span class="source-line-no">362</span><span id="line-362">                  if (consoleAt &lt; 0)</span>
-<span class="source-line-no">363</span><span id="line-363">                     consoleAt = at;</span>
-<span class="source-line-no">364</span><span id="line-364">               }</span>
-<span class="source-line-no">365</span><span id="line-365">               case MainDirectiveModel.NAME -&gt; mains++;</span>
-<span class="source-line-no">366</span><span id="line-366">               default -&gt; { /* slots, theme, token, page: nothing beyond the attribute checks above */ }</span>
-<span class="source-line-no">367</span><span id="line-367">            }</span>
-<span class="source-line-no">368</span><span id="line-368">         }</span>
-<span class="source-line-no">369</span><span id="line-369">      }</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">      for (var r : templateRefs) {</span>
-<span class="source-line-no">372</span><span id="line-372">         var v = (String)r[0];</span>
-<span class="source-line-no">373</span><span id="line-373">         if (! cardIds.contains(v) &amp;&amp; ! v.startsWith("header.") &amp;&amp; ! v.startsWith("footer."))</span>
-<span class="source-line-no">374</span><span id="line-374">            add(out, name, lines, (Integer)r[1], "dangling-template", f("&lt;@card&gt; template='%s' names no &lt;@card id&gt; or slot in this template.", v));</span>
-<span class="source-line-no">375</span><span id="line-375">      }</span>
-<span class="source-line-no">376</span><span id="line-376">      if (consoleAt &gt;= 0 &amp;&amp; mains != 1)</span>
-<span class="source-line-no">377</span><span id="line-377">         add(out, name, lines, consoleAt, "main-count", f("&lt;@console&gt; requires exactly one &lt;@main/&gt;; found '%s'.", mains));</span>
-<span class="source-line-no">378</span><span id="line-378"></span>
-<span class="source-line-no">379</span><span id="line-379">      var g = GLOBAL.matcher(text);</span>
-<span class="source-line-no">380</span><span id="line-380">      while (g.find()) {</span>
-<span class="source-line-no">381</span><span id="line-381">         add(out, name, lines, g.start(), "removed-global", f("'%s' was removed in 10.0.0; %s", g.group(1),</span>
-<span class="source-line-no">382</span><span id="line-382">            eq(g.group(1), "pageToolkit") ? "use jcHasToolkit(\"views\")." : "&lt;@page&gt; captures the page into the contract."));</span>
-<span class="source-line-no">383</span><span id="line-383">      }</span>
-<span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">      var a = ASSET_REF.matcher(text);</span>
-<span class="source-line-no">386</span><span id="line-386">      while (a.find()) {</span>
-<span class="source-line-no">387</span><span id="line-387">         var url = a.group(nn(a.group(1)) ? 1 : 2);</span>
-<span class="source-line-no">388</span><span id="line-388">         if (! url.contains("${") &amp;&amp; ! url.contains("&lt;#") &amp;&amp; JUNEAU_ASSET.matcher(url).find())</span>
-<span class="source-line-no">389</span><span id="line-389">            add(out, name, lines, a.start(), "hardcoded-asset-url", f(</span>
-<span class="source-line-no">390</span><span id="line-390">               "Hard-coded Juneau asset URL '%s' is unversioned and goes stale in browser caches; use viewAssetUrl(...), consoleJsUrl(...), chromeCssUrl(...) or themeAssetUrl(...) so it carries ?v= (an adopter's own assets can use assetUrl(...)).", url));</span>
-<span class="source-line-no">391</span><span id="line-391">      }</span>
-<span class="source-line-no">392</span><span id="line-392"></span>
-<span class="source-line-no">393</span><span id="line-393">      out.sort(Comparator.comparingInt(Finding::line).thenComparingInt(Finding::column));</span>
-<span class="source-line-no">394</span><span id="line-394">      return out;</span>
-<span class="source-line-no">395</span><span id="line-395">   }</span>
-<span class="source-line-no">396</span><span id="line-396"></span>
-<span class="source-line-no">397</span><span id="line-397">   /**</span>
-<span class="source-line-no">398</span><span id="line-398">    * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a</span>
-<span class="source-line-no">399</span><span id="line-399">    * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale</span>
-<span class="source-line-no">400</span><span id="line-400">    * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}</span>
-<span class="source-line-no">401</span><span id="line-401">    * keys (quickStats, detail, ...) are never mistaken for it.</span>
-<span class="source-line-no">402</span><span id="line-402">    */</span>
-<span class="source-line-no">403</span><span id="line-403">   private static void checkViewVersion(List&lt;Finding&gt; out, String name, int[] lines, String text, int bodyStart, String cardId) {</span>
-<span class="source-line-no">404</span><span id="line-404">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
-<span class="source-line-no">405</span><span id="line-405">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
-<span class="source-line-no">406</span><span id="line-406">      var vm = VIEW_KEY.matcher(body);</span>
-<span class="source-line-no">407</span><span id="line-407">      if (! vm.find())</span>
-<span class="source-line-no">408</span><span id="line-408">         return;</span>
-<span class="source-line-no">409</span><span id="line-409">      var depth = 1;</span>
-<span class="source-line-no">410</span><span id="line-410">      for (var i = vm.end(); i &lt; body.length() &amp;&amp; depth &gt; 0; i++) {</span>
-<span class="source-line-no">411</span><span id="line-411">         var c = body.charAt(i);</span>
-<span class="source-line-no">412</span><span id="line-412">         if (c == '{' || c == '[')</span>
-<span class="source-line-no">413</span><span id="line-413">            depth++;</span>
-<span class="source-line-no">414</span><span id="line-414">         else if (c == '}' || c == ']')</span>
-<span class="source-line-no">415</span><span id="line-415">            depth--;</span>
-<span class="source-line-no">416</span><span id="line-416">         else if (depth == 1 &amp;&amp; c == 'c') {</span>
-<span class="source-line-no">417</span><span id="line-417">            var v = VIEW_VERSION.matcher(body.substring(i));</span>
-<span class="source-line-no">418</span><span id="line-418">            if (v.find() &amp;&amp; ! eq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {</span>
-<span class="source-line-no">419</span><span id="line-419">               add(out, name, lines, bodyStart + i, "view-contract-version", f(</span>
-<span class="source-line-no">420</span><span id="line-420">                  "&lt;@card id='%s'&gt; view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",</span>
-<span class="source-line-no">421</span><span id="line-421">                  cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));</span>
-<span class="source-line-no">422</span><span id="line-422">               return;</span>
-<span class="source-line-no">423</span><span id="line-423">            }</span>
-<span class="source-line-no">424</span><span id="line-424">         }</span>
-<span class="source-line-no">425</span><span id="line-425">      }</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   private record Value(String value, boolean literal) {}</span>
-<span class="source-line-no">429</span><span id="line-429"></span>
-<span class="source-line-no">430</span><span id="line-430">   // Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.</span>
-<span class="source-line-no">431</span><span id="line-431">   private static final Set&lt;String&gt; RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");</span>
-<span class="source-line-no">432</span><span id="line-432"></span>
-<span class="source-line-no">433</span><span id="line-433">   /**</span>
-<span class="source-line-no">434</span><span id="line-434">    * The C2 card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.</span>
-<span class="source-line-no">435</span><span id="line-435">    * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code &lt;/@card}.</span>
-<span class="source-line-no">436</span><span id="line-436">    */</span>
-<span class="source-line-no">437</span><span id="line-437">   @SuppressWarnings({</span>
-<span class="source-line-no">438</span><span id="line-438">      "java:S107" // Internal helper whose parameters are the render/validation context.</span>
-<span class="source-line-no">439</span><span id="line-439">   })</span>
-<span class="source-line-no">440</span><span id="line-440">   private static void checkCardBody(List&lt;Finding&gt; out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src, Value type) {</span>
-<span class="source-line-no">441</span><span id="line-441">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
-<span class="source-line-no">442</span><span id="line-442">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
-<span class="source-line-no">443</span><span id="line-443">      var cardId = n(id) ? "" : id.value;</span>
-<span class="source-line-no">444</span><span id="line-444">      var trimmed = body.trim();</span>
-<span class="source-line-no">445</span><span id="line-445">      // A chart card legitimately takes src= (remote rows) plus a body (kind and options).</span>
-<span class="source-line-no">446</span><span id="line-446">      var chart = nn(type) &amp;&amp; type.literal &amp;&amp; "chart".equals(type.value);</span>
-<span class="source-line-no">447</span><span id="line-447">      if (! trimmed.isEmpty() &amp;&amp; nn(src) &amp;&amp; src.literal &amp;&amp; ! chart)</span>
-<span class="source-line-no">448</span><span id="line-448">         add(out, name, lines, at, "card-src-and-body", f(</span>
-<span class="source-line-no">449</span><span id="line-449">            "&lt;@card id='%s'&gt; has both src='%s' and a body; use exactly one.", cardId, src.value));</span>
-<span class="source-line-no">450</span><span id="line-450">      if (trimmed.isEmpty() || body.contains("${"))</span>
-<span class="source-line-no">451</span><span id="line-451">         return;</span>
-<span class="source-line-no">452</span><span id="line-452">      var keys = topLevelJson5Keys(trimmed);</span>
-<span class="source-line-no">453</span><span id="line-453">      for (var k : keys)</span>
-<span class="source-line-no">454</span><span id="line-454">         if (RESERVED_BODY_KEYS.contains(k))</span>
-<span class="source-line-no">455</span><span id="line-455">            add(out, name, lines, at, "card-reserved-key", f(</span>
-<span class="source-line-no">456</span><span id="line-456">               "&lt;@card id='%s'&gt; body key '%s' is reserved; set it as an attribute.", cardId, k));</span>
-<span class="source-line-no">457</span><span id="line-457">   }</span>
-<span class="source-line-no">458</span><span id="line-458"></span>
-<span class="source-line-no">459</span><span id="line-459">   // Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a</span>
-<span class="source-line-no">460</span><span id="line-460">   // general parser — enough to catch literal top-level keys for the two card-body lint rules above.</span>
-<span class="source-line-no">461</span><span id="line-461">   private static Set&lt;String&gt; topLevelJson5Keys(String body) {</span>
-<span class="source-line-no">462</span><span id="line-462">      var s = body.trim();</span>
-<span class="source-line-no">463</span><span id="line-463">      if (s.startsWith("{") &amp;&amp; s.endsWith("}"))</span>
-<span class="source-line-no">464</span><span id="line-464">         s = s.substring(1, s.length() - 1);</span>
-<span class="source-line-no">465</span><span id="line-465">      var keys = new LinkedHashSet&lt;String&gt;();</span>
-<span class="source-line-no">466</span><span id="line-466">      var depth = 0;</span>
-<span class="source-line-no">467</span><span id="line-467">      var i = 0;</span>
-<span class="source-line-no">468</span><span id="line-468">      while (i &lt; s.length()) {</span>
-<span class="source-line-no">469</span><span id="line-469">         var c = s.charAt(i);</span>
-<span class="source-line-no">470</span><span id="line-470">         if (c == '"' || c == '\'') {</span>
-<span class="source-line-no">471</span><span id="line-471">            // Honor backslash escapes in both quote styles: skip the escaped character wholesale.</span>
-<span class="source-line-no">472</span><span id="line-472">            var j = i + 1;</span>
-<span class="source-line-no">473</span><span id="line-473">            while (j &lt; s.length() &amp;&amp; s.charAt(j) != c)</span>
-<span class="source-line-no">474</span><span id="line-474">               j += s.charAt(j) == '\\' ? 2 : 1;</span>
-<span class="source-line-no">475</span><span id="line-475">            i = j &gt;= s.length() ? s.length() : j + 1;</span>
-<span class="source-line-no">476</span><span id="line-476">         } else if (c == '{' || c == '[') {</span>
-<span class="source-line-no">477</span><span id="line-477">            depth++;</span>
-<span class="source-line-no">478</span><span id="line-478">            i++;</span>
-<span class="source-line-no">479</span><span id="line-479">         } else if (c == '}' || c == ']') {</span>
-<span class="source-line-no">480</span><span id="line-480">            depth--;</span>
-<span class="source-line-no">481</span><span id="line-481">            i++;</span>
-<span class="source-line-no">482</span><span id="line-482">         } else if (depth == 0 &amp;&amp; (Character.isLetter(c) || c == '_')) {</span>
-<span class="source-line-no">483</span><span id="line-483">            var start = i;</span>
-<span class="source-line-no">484</span><span id="line-484">            while (i &lt; s.length() &amp;&amp; (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))</span>
-<span class="source-line-no">485</span><span id="line-485">               i++;</span>
-<span class="source-line-no">486</span><span id="line-486">            var word = s.substring(start, i);</span>
-<span class="source-line-no">487</span><span id="line-487">            var j = i;</span>
-<span class="source-line-no">488</span><span id="line-488">            while (j &lt; s.length() &amp;&amp; Character.isWhitespace(s.charAt(j)))</span>
-<span class="source-line-no">489</span><span id="line-489">               j++;</span>
-<span class="source-line-no">490</span><span id="line-490">            if (j &lt; s.length() &amp;&amp; s.charAt(j) == ':')</span>
-<span class="source-line-no">491</span><span id="line-491">               keys.add(word);</span>
-<span class="source-line-no">492</span><span id="line-492">         } else {</span>
-<span class="source-line-no">493</span><span id="line-493">            i++;</span>
-<span class="source-line-no">494</span><span id="line-494">         }</span>
-<span class="source-line-no">495</span><span id="line-495">      }</span>
-<span class="source-line-no">496</span><span id="line-496">      return keys;</span>
-<span class="source-line-no">497</span><span id="line-497">   }</span>
-<span class="source-line-no">498</span><span id="line-498"></span>
-<span class="source-line-no">499</span><span id="line-499">   private static Map&lt;String,Value&gt; attrs(String s) {</span>
-<span class="source-line-no">500</span><span id="line-500">      var out = new LinkedHashMap&lt;String,Value&gt;();</span>
-<span class="source-line-no">501</span><span id="line-501">      var m = ATTR.matcher(s);</span>
-<span class="source-line-no">502</span><span id="line-502">      while (m.find()) {</span>
-<span class="source-line-no">503</span><span id="line-503">         String v;</span>
-<span class="source-line-no">504</span><span id="line-504">         boolean literal;</span>
-<span class="source-line-no">505</span><span id="line-505">         if (nn(m.group(2)) || nn(m.group(3))) {</span>
-<span class="source-line-no">506</span><span id="line-506">            v = m.group(nn(m.group(2)) ? 2 : 3);</span>
-<span class="source-line-no">507</span><span id="line-507">            literal = ! v.contains("${");</span>
-<span class="source-line-no">508</span><span id="line-508">         } else {</span>
-<span class="source-line-no">509</span><span id="line-509">            v = m.group(4);</span>
-<span class="source-line-no">510</span><span id="line-510">            literal = eqa(v, "true", "false");</span>
-<span class="source-line-no">511</span><span id="line-511">         }</span>
-<span class="source-line-no">512</span><span id="line-512">         out.put(m.group(1), new Value(v, literal));</span>
-<span class="source-line-no">513</span><span id="line-513">      }</span>
-<span class="source-line-no">514</span><span id="line-514">      return out;</span>
-<span class="source-line-no">515</span><span id="line-515">   }</span>
-<span class="source-line-no">516</span><span id="line-516"></span>
-<span class="source-line-no">517</span><span id="line-517">   private void collectScope(String name, String text, Set&lt;String&gt; macros, Set&lt;String&gt; namespaces, Set&lt;String&gt; seen) {</span>
-<span class="source-line-no">518</span><span id="line-518">      if (! seen.add(name))</span>
-<span class="source-line-no">519</span><span id="line-519">         return;</span>
-<span class="source-line-no">520</span><span id="line-520">      var m = MACRO.matcher(text);</span>
-<span class="source-line-no">521</span><span id="line-521">      while (m.find())</span>
-<span class="source-line-no">522</span><span id="line-522">         macros.add(m.group(1));</span>
-<span class="source-line-no">523</span><span id="line-523">      var i = IMPORT.matcher(text);</span>
-<span class="source-line-no">524</span><span id="line-524">      while (i.find())</span>
-<span class="source-line-no">525</span><span id="line-525">         namespaces.add(i.group(1));</span>
-<span class="source-line-no">526</span><span id="line-526">      var inc = INCLUDE.matcher(text);</span>
-<span class="source-line-no">527</span><span id="line-527">      while (inc.find()) {</span>
-<span class="source-line-no">528</span><span id="line-528">         var target = resolve(name, inc.group(1));</span>
-<span class="source-line-no">529</span><span id="line-529">         var src = load(target);</span>
-<span class="source-line-no">530</span><span id="line-530">         if (nn(src))</span>
-<span class="source-line-no">531</span><span id="line-531">            collectScope(target, blankComments(src), macros, namespaces, seen);</span>
-<span class="source-line-no">532</span><span id="line-532">      }</span>
-<span class="source-line-no">533</span><span id="line-533">   }</span>
-<span class="source-line-no">534</span><span id="line-534"></span>
-<span class="source-line-no">535</span><span id="line-535">   private static String resolve(String from, String path) {</span>
-<span class="source-line-no">536</span><span id="line-536">      if (path.startsWith("/"))</span>
-<span class="source-line-no">537</span><span id="line-537">         return path;</span>
-<span class="source-line-no">538</span><span id="line-538">      var slash = from.lastIndexOf('/');</span>
-<span class="source-line-no">539</span><span id="line-539">      return slash &lt; 0 ? path : from.substring(0, slash + 1) + path;</span>
-<span class="source-line-no">540</span><span id="line-540">   }</span>
-<span class="source-line-no">541</span><span id="line-541"></span>
-<span class="source-line-no">542</span><span id="line-542">   // Template root first, then the classpath root, then (for absolute names) the classpath itself.</span>
-<span class="source-line-no">543</span><span id="line-543">   private String load(String name) {</span>
-<span class="source-line-no">544</span><span id="line-544">      var rel = name.startsWith("/") ? name.substring(1) : name;</span>
-<span class="source-line-no">545</span><span id="line-545">      try {</span>
-<span class="source-line-no">546</span><span id="line-546">         if (nn(templateRoot)) {</span>
-<span class="source-line-no">547</span><span id="line-547">            var p = templateRoot.resolve(rel);</span>
-<span class="source-line-no">548</span><span id="line-548">            if (Files.isRegularFile(p))</span>
-<span class="source-line-no">549</span><span id="line-549">               return Files.readString(p, UTF_8);</span>
-<span class="source-line-no">550</span><span id="line-550">         }</span>
-<span class="source-line-no">551</span><span id="line-551">         if (nn(classpathRoot)) {</span>
-<span class="source-line-no">552</span><span id="line-552">            var s = resource(classpathRoot + rel);</span>
-<span class="source-line-no">553</span><span id="line-553">            if (nn(s))</span>
-<span class="source-line-no">554</span><span id="line-554">               return s;</span>
-<span class="source-line-no">555</span><span id="line-555">         }</span>
-<span class="source-line-no">556</span><span id="line-556">         return name.startsWith("/") ? resource(name) : null;</span>
-<span class="source-line-no">557</span><span id="line-557">      } catch (IOException e) {</span>
-<span class="source-line-no">558</span><span id="line-558">         throw new UncheckedIOException(e);</span>
-<span class="source-line-no">559</span><span id="line-559">      }</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   private static String resource(String absPath) throws IOException {</span>
-<span class="source-line-no">563</span><span id="line-563">      var cl = Thread.currentThread().getContextClassLoader();</span>
-<span class="source-line-no">564</span><span id="line-564">      if (n(cl))</span>
-<span class="source-line-no">565</span><span id="line-565">         cl = ConsoleTemplateValidator.class.getClassLoader();</span>
-<span class="source-line-no">566</span><span id="line-566">      try (var in = cl.getResourceAsStream(absPath.substring(1))) {</span>
-<span class="source-line-no">567</span><span id="line-567">         return n(in) ? null : new String(in.readAllBytes(), UTF_8);</span>
-<span class="source-line-no">568</span><span id="line-568">      }</span>
-<span class="source-line-no">569</span><span id="line-569">   }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">   @SuppressWarnings({</span>
-<span class="source-line-no">572</span><span id="line-572">      "unused" // the Template is built only so its constructor parses (and may throw)</span>
-<span class="source-line-no">573</span><span id="line-573">   })</span>
-<span class="source-line-no">574</span><span id="line-574">   private static void parse(String name, String source, List&lt;Finding&gt; out) {</span>
-<span class="source-line-no">575</span><span id="line-575">      try {</span>
-<span class="source-line-no">576</span><span id="line-576">         new Template(name, new StringReader(source), PARSE_CFG);</span>
-<span class="source-line-no">577</span><span id="line-577">      } catch (ParseException e) {</span>
-<span class="source-line-no">578</span><span id="line-578">         out.add(new Finding(name, e.getLineNumber(), e.getColumnNumber(), "parse-error", e.getEditorMessage()));</span>
-<span class="source-line-no">579</span><span id="line-579">      } catch (IOException e) {</span>
-<span class="source-line-no">580</span><span id="line-580">         throw new UncheckedIOException(e);</span>
-<span class="source-line-no">581</span><span id="line-581">      }</span>
-<span class="source-line-no">582</span><span id="line-582">   }</span>
-<span class="source-line-no">583</span><span id="line-583"></span>
-<span class="source-line-no">584</span><span id="line-584">   // Replaces each &lt;#-- … --&gt; with spaces (newlines kept), so offsets still map to the original line and column.</span>
-<span class="source-line-no">585</span><span id="line-585">   private static String blankComments(String s) {</span>
-<span class="source-line-no">586</span><span id="line-586">      var sb = new StringBuilder(s);</span>
-<span class="source-line-no">587</span><span id="line-587">      var m = COMMENT.matcher(s);</span>
-<span class="source-line-no">588</span><span id="line-588">      while (m.find())</span>
-<span class="source-line-no">589</span><span id="line-589">         for (var i = m.start(); i &lt; m.end(); i++)</span>
-<span class="source-line-no">590</span><span id="line-590">            if (sb.charAt(i) != '\n')</span>
-<span class="source-line-no">591</span><span id="line-591">               sb.setCharAt(i, ' ');</span>
-<span class="source-line-no">592</span><span id="line-592">      return sb.toString();</span>
-<span class="source-line-no">593</span><span id="line-593">   }</span>
-<span class="source-line-no">594</span><span id="line-594"></span>
-<span class="source-line-no">595</span><span id="line-595">   @SuppressWarnings({</span>
-<span class="source-line-no">596</span><span id="line-596">      "javabugs:S2259" // False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.</span>
-<span class="source-line-no">597</span><span id="line-597">   })</span>
-<span class="source-line-no">598</span><span id="line-598">   private static int[] lineStarts(String s) {</span>
-<span class="source-line-no">599</span><span id="line-599">      var starts = new ArrayList&lt;Integer&gt;();</span>
-<span class="source-line-no">600</span><span id="line-600">      starts.add(0);</span>
-<span class="source-line-no">601</span><span id="line-601">      for (var i = 0; i &lt; s.length(); i++)</span>
-<span class="source-line-no">602</span><span id="line-602">         if (s.charAt(i) == '\n')</span>
-<span class="source-line-no">603</span><span id="line-603">            starts.add(i + 1);</span>
-<span class="source-line-no">604</span><span id="line-604">      return starts.stream().mapToInt(Integer::intValue).toArray();</span>
-<span class="source-line-no">605</span><span id="line-605">   }</span>
-<span class="source-line-no">606</span><span id="line-606"></span>
-<span class="source-line-no">607</span><span id="line-607">   private static void add(List&lt;Finding&gt; out, String name, int[] lines, int offset, String rule, String message) {</span>
-<span class="source-line-no">608</span><span id="line-608">      var i = Arrays.binarySearch(lines, offset);</span>
-<span class="source-line-no">609</span><span id="line-609">      var line = i &gt;= 0 ? i : -i - 2;</span>
-<span class="source-line-no">610</span><span id="line-610">      out.add(new Finding(name, line + 1, offset - lines[line] + 1, rule, message));</span>
-<span class="source-line-no">611</span><span id="line-611">   }</span>
-<span class="source-line-no">612</span><span id="line-612">}</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.commons.collections.Maps;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.rest.server.staticfile.WebJarResolver;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.rest.server.views.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">import freemarker.core.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import freemarker.template.*;</span>
+<span class="source-line-no">035</span><span id="line-35"></span>
+<span class="source-line-no">036</span><span id="line-36">/**</span>
+<span class="source-line-no">037</span><span id="line-37"> * Static lint for console FreeMarker templates. Scans each template for console directive calls and reports unknown</span>
+<span class="source-line-no">038</span><span id="line-38"> * directives, unknown attributes, dangling template references, duplicate nav and card ids, non-strict booleans,</span>
+<span class="source-line-no">039</span><span id="line-39"> * removed card types and globals, a chart card whose ECharts WebJar is missing (E-70), and a wrong {@code &lt;@main/&gt;} count, without rendering any page.</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * The attribute sets are the same ones the directives enforce at render time. Interpolated values</span>
+<span class="source-line-no">043</span><span id="line-43"> * ({@code visible="${x}"}) and unquoted expressions ({@code visible=flag}) are skipped; the render-time errors cover</span>
+<span class="source-line-no">044</span><span id="line-44"> * them. Macros defined in the template, in literally {@code &lt;#include&gt;}d templates and in the</span>
+<span class="source-line-no">045</span><span id="line-45"> * {@link #chromeTemplate(String) chrome template} are in scope, as are {@code &lt;@ns.x&gt;} calls on an</span>
+<span class="source-line-no">046</span><span id="line-46"> * {@code &lt;#import … as ns&gt;} namespace.</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;ja&gt;@Test&lt;/ja&gt; &lt;jk&gt;void&lt;/jk&gt; templatesLint() {</span>
+<span class="source-line-no">051</span><span id="line-51"> *       List&amp;lt;ConsoleTemplateValidator.Finding&amp;gt; &lt;jv&gt;f&lt;/jv&gt; = ConsoleTemplateValidator.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">052</span><span id="line-52"> *          .templateRoot(Paths.&lt;jsm&gt;get&lt;/jsm&gt;(&lt;js&gt;"src/main/resources/templates"&lt;/js&gt;))</span>
+<span class="source-line-no">053</span><span id="line-53"> *          .chromeTemplate(&lt;js&gt;"base.ftlh"&lt;/js&gt;)</span>
+<span class="source-line-no">054</span><span id="line-54"> *          .allowDirective(&lt;js&gt;"pageHero"&lt;/js&gt;)</span>
+<span class="source-line-no">055</span><span id="line-55"> *          .validateAll();</span>
+<span class="source-line-no">056</span><span id="line-56"> *       &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;f&lt;/jv&gt;.isEmpty(), &lt;jv&gt;f&lt;/jv&gt;::toString);</span>
+<span class="source-line-no">057</span><span id="line-57"> *    }</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *</span>
+<span class="source-line-no">060</span><span id="line-60"> * @since 10.0.0</span>
+<span class="source-line-no">061</span><span id="line-61"> */</span>
+<span class="source-line-no">062</span><span id="line-62">@SuppressWarnings({</span>
+<span class="source-line-no">063</span><span id="line-63">   "java:S1075", // "/" is the template-name separator, not a file-system path.</span>
+<span class="source-line-no">064</span><span id="line-64">   "java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.</span>
+<span class="source-line-no">065</span><span id="line-65">})</span>
+<span class="source-line-no">066</span><span id="line-66">public final class ConsoleTemplateValidator {</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">   /**</span>
+<span class="source-line-no">069</span><span id="line-69">    * One lint finding.</span>
+<span class="source-line-no">070</span><span id="line-70">    *</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param template The template name, relative to the root, with {@code /} separators.</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param line The 1-based line.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param column The 1-based column.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @param rule The rule id, for example {@code unknown-attribute}.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param message The human-readable message.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public record Finding(String template, int line, int column, String rule, String message) {</span>
+<span class="source-line-no">078</span><span id="line-78">      @Override</span>
+<span class="source-line-no">079</span><span id="line-79">      public String toString() {</span>
+<span class="source-line-no">080</span><span id="line-80">         return template + ":" + line + ":" + column + ": [" + rule + "] " + message;</span>
+<span class="source-line-no">081</span><span id="line-81">      }</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   @SuppressWarnings({</span>
+<span class="source-line-no">085</span><span id="line-85">      "java:S5843", // Tag grammar needs this complexity; it is one regex by design.</span>
+<span class="source-line-no">086</span><span id="line-86">      "java:S5998", // Lint runs on authored templates at build time, never untrusted input.</span>
+<span class="source-line-no">087</span><span id="line-87">      "java:S8786" // Same: the lazy attribute scan is linear on well-formed tags.</span>
+<span class="source-line-no">088</span><span id="line-88">   })</span>
+<span class="source-line-no">089</span><span id="line-89">   private static final Pattern TAG = Pattern.compile("&lt;(/?)@([A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*)?)((?:\"[^\"]*\"|'[^']*'|[^&gt;\"'])*?)(/?)&gt;");</span>
+<span class="source-line-no">090</span><span id="line-90">   private static final Pattern ATTR = Pattern.compile("([A-Za-z_]\\w*)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'/&gt;]+))");</span>
+<span class="source-line-no">091</span><span id="line-91">   private static final Pattern MACRO = Pattern.compile("&lt;#macro\\s+([A-Za-z_]\\w*)");</span>
+<span class="source-line-no">092</span><span id="line-92">   private static final Pattern INCLUDE = Pattern.compile("&lt;#include\\s+\"([^\"]+)\"");</span>
+<span class="source-line-no">093</span><span id="line-93">   private static final Pattern IMPORT = Pattern.compile("&lt;#import\\s+\"[^\"]+\"\\s+as\\s+([A-Za-z_]\\w*)");</span>
+<span class="source-line-no">094</span><span id="line-94">   private static final Pattern COMMENT = Pattern.compile("(?s)&lt;#--.*?--&gt;");</span>
+<span class="source-line-no">095</span><span id="line-95">   private static final Pattern GLOBAL = Pattern.compile("\\b(pageBody|pageTab|pageInit|pageCss|pageToolkitCss|pageToolkitJs|pageToolkit|pageThemeCss)\\b");</span>
+<span class="source-line-no">096</span><span id="line-96">   private static final Pattern VIEW_KEY = Pattern.compile("\\bview\\s*:\\s*\\{");</span>
+<span class="source-line-no">097</span><span id="line-97">   private static final Pattern VIEW_VERSION = Pattern.compile("^\\s*[\"']?contractVersion[\"']?\\s*:\\s*[\"']([^\"']*)[\"']");</span>
+<span class="source-line-no">098</span><span id="line-98">   private static final Pattern ASSET_REF = Pattern.compile("\\b(?:src|href)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')");</span>
+<span class="source-line-no">099</span><span id="line-99">   private static final Pattern JUNEAU_ASSET = Pattern.compile("(?:^|/)(?:juneau-[\\w-]+\\.(?:js|css|svg)|juneau-console/chrome\\.css)(?:[?#].*)?$");</span>
+<span class="source-line-no">100</span><span id="line-100">   private static final Set&lt;String&gt; REMOVED_TYPES = Set.of("js", "json", "calendar");</span>
+<span class="source-line-no">101</span><span id="line-101">   private static final Map&lt;String,Set&lt;String&gt;&gt; STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle"));</span>
+<span class="source-line-no">102</span><span id="line-102">   private static final Map&lt;String,Set&lt;String&gt;&gt; DIRECTIVES = directives();</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   private static Map&lt;String,Set&lt;String&gt;&gt; directives() {</span>
+<span class="source-line-no">105</span><span id="line-105">      Maps&lt;String,Set&lt;String&gt;&gt; m = mb();</span>
+<span class="source-line-no">106</span><span id="line-106">      m.add(PageDirectiveModel.NAME, PageDirectiveModel.ATTRS);</span>
+<span class="source-line-no">107</span><span id="line-107">      m.add(ConsoleDirectiveModel.NAME, ConsoleDirectiveModel.ATTRS);</span>
+<span class="source-line-no">108</span><span id="line-108">      m.add(MainDirectiveModel.NAME, MainDirectiveModel.ATTRS);</span>
+<span class="source-line-no">109</span><span id="line-109">      m.add(NavigationDirectiveModel.NAME, NavigationDirectiveModel.ATTRS);</span>
+<span class="source-line-no">110</span><span id="line-110">      m.add(NodeDirectiveModel.NAME, NodeDirectiveModel.ATTRS);</span>
+<span class="source-line-no">111</span><span id="line-111">      m.add(ThemeDirectiveModel.NAME, ThemeDirectiveModel.ATTRS);</span>
+<span class="source-line-no">112</span><span id="line-112">      m.add(TokenDirectiveModel.NAME, TokenDirectiveModel.ATTRS);</span>
+<span class="source-line-no">113</span><span id="line-113">      m.add(CardDirectiveModel.NAME, CardDirectiveModel.ATTRS);</span>
+<span class="source-line-no">114</span><span id="line-114">      m.add(TopicDirectiveModel.NAME, TopicDirectiveModel.ATTRS);</span>
+<span class="source-line-no">115</span><span id="line-115">      m.add(BridgeDirectiveModel.NAME, BridgeDirectiveModel.ATTRS);</span>
+<span class="source-line-no">116</span><span id="line-116">      m.add(BadgeDirectiveModel.NAME, BadgeDirectiveModel.ATTRS);</span>
+<span class="source-line-no">117</span><span id="line-117">      m.add(FactsDirectiveModel.NAME, Set.of());</span>
+<span class="source-line-no">118</span><span id="line-118">      for (var s : ConsoleSlotDirectiveModel.SLOT_NAMES)</span>
+<span class="source-line-no">119</span><span id="line-119">         m.add(s, new ConsoleSlotDirectiveModel(s).attrs());</span>
+<span class="source-line-no">120</span><span id="line-120">      return u(m.build());</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   private static final Configuration PARSE_CFG = parseConfig();</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   private static Configuration parseConfig() {</span>
+<span class="source-line-no">126</span><span id="line-126">      var c = new Configuration(Configuration.VERSION_2_3_34);</span>
+<span class="source-line-no">127</span><span id="line-127">      c.setRecognizeStandardFileExtensions(true);</span>
+<span class="source-line-no">128</span><span id="line-128">      return c;</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   private Path templateRoot;</span>
+<span class="source-line-no">132</span><span id="line-132">   private String classpathRoot;</span>
+<span class="source-line-no">133</span><span id="line-133">   private String chromeTemplate;</span>
+<span class="source-line-no">134</span><span id="line-134">   private final Set&lt;String&gt; allowed = new TreeSet&lt;&gt;();</span>
+<span class="source-line-no">135</span><span id="line-135">   private UnaryOperator&lt;String&gt; webJarProbe = WebJarResolver::resolvePath;</span>
+<span class="source-line-no">136</span><span id="line-136">   private final ToolkitPackRegistry packs = new ToolkitPackRegistry();</span>
+<span class="source-line-no">137</span><span id="line-137">   private String echartsProblem;         // cached E-70 (or invalid-pack-graph) message; null when the probe passed</span>
+<span class="source-line-no">138</span><span id="line-138">   private String echartsRule;            // the rule id the cached problem is reported under</span>
+<span class="source-line-no">139</span><span id="line-139">   private boolean echartsProbed;</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">   private ConsoleTemplateValidator() {}</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">   /** @return A new validator with no roots. */</span>
+<span class="source-line-no">144</span><span id="line-144">   public static ConsoleTemplateValidator create() {</span>
+<span class="source-line-no">145</span><span id="line-145">      return new ConsoleTemplateValidator();</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   /**</span>
+<span class="source-line-no">149</span><span id="line-149">    * @param dir The file-system directory templates are resolved against and {@link #validateAll()} walks.</span>
+<span class="source-line-no">150</span><span id="line-150">    * @return This object.</span>
+<span class="source-line-no">151</span><span id="line-151">    */</span>
+<span class="source-line-no">152</span><span id="line-152">   public ConsoleTemplateValidator templateRoot(Path dir) {</span>
+<span class="source-line-no">153</span><span id="line-153">      templateRoot = dir;</span>
+<span class="source-line-no">154</span><span id="line-154">      return this;</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   /**</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param prefix The classpath prefix templates are resolved against when not found under the template root, for</span>
+<span class="source-line-no">159</span><span id="line-159">    *    example {@code "/templates/"}.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @return This object.</span>
+<span class="source-line-no">161</span><span id="line-161">    */</span>
+<span class="source-line-no">162</span><span id="line-162">   public ConsoleTemplateValidator classpathRoot(String prefix) {</span>
+<span class="source-line-no">163</span><span id="line-163">      classpathRoot = prefix.endsWith("/") ? prefix : prefix + "/";</span>
+<span class="source-line-no">164</span><span id="line-164">      return this;</span>
+<span class="source-line-no">165</span><span id="line-165">   }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">   /**</span>
+<span class="source-line-no">168</span><span id="line-168">    * @param name The chrome template the {@code &lt;@page&gt;} directive renders. Its macros are in scope for every template.</span>
+<span class="source-line-no">169</span><span id="line-169">    * @return This object.</span>
+<span class="source-line-no">170</span><span id="line-170">    */</span>
+<span class="source-line-no">171</span><span id="line-171">   public ConsoleTemplateValidator chromeTemplate(String name) {</span>
+<span class="source-line-no">172</span><span id="line-172">      chromeTemplate = name;</span>
+<span class="source-line-no">173</span><span id="line-173">      return this;</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175"></span>
+<span class="source-line-no">176</span><span id="line-176">   /**</span>
+<span class="source-line-no">177</span><span id="line-177">    * @param name An adopter-defined directive or macro name to accept, for example {@code "pageHero"}.</span>
+<span class="source-line-no">178</span><span id="line-178">    * @return This object.</span>
+<span class="source-line-no">179</span><span id="line-179">    */</span>
+<span class="source-line-no">180</span><span id="line-180">   public ConsoleTemplateValidator allowDirective(String name) {</span>
+<span class="source-line-no">181</span><span id="line-181">      allowed.add(name);</span>
+<span class="source-line-no">182</span><span id="line-182">      return this;</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184"></span>
+<span class="source-line-no">185</span><span id="line-185">   // Package-private (no production caller; the mixin owns its own registry).  Names packs the app's chrome already</span>
+<span class="source-line-no">186</span><span id="line-186">   // loads; a provided "echarts" pack suppresses the missing-webjar rule.</span>
+<span class="source-line-no">187</span><span id="line-187">   // @throws IllegalArgumentException If a name is not a registered pack.</span>
+<span class="source-line-no">188</span><span id="line-188">   ConsoleTemplateValidator providedPacks(String...names) {</span>
+<span class="source-line-no">189</span><span id="line-189">      var list = Arrays.asList(names);</span>
+<span class="source-line-no">190</span><span id="line-190">      packs.requireKnown(list, "providedPacks");</span>
+<span class="source-line-no">191</span><span id="line-191">      packs.provide(list);</span>
+<span class="source-line-no">192</span><span id="line-192">      echartsProbed = false;</span>
+<span class="source-line-no">193</span><span id="line-193">      return this;</span>
+<span class="source-line-no">194</span><span id="line-194">   }</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">   // Package-private: registers an app-supplied toolkit pack; a replacement "echarts" pack (for example one served</span>
+<span class="source-line-no">197</span><span id="line-197">   // from a CDN) suppresses the missing-webjar rule.</span>
+<span class="source-line-no">198</span><span id="line-198">   // The mixin's registerToolkitPack(String, List, List) overload is deliberately absent: it builds a pack from asset</span>
+<span class="source-line-no">199</span><span id="line-199">   // lists, which cannot change whether the "charts" WebJars resolve, so no lint rule depends on it.</span>
+<span class="source-line-no">200</span><span id="line-200">   ConsoleTemplateValidator registerToolkitPack(ToolkitPack pack) {</span>
+<span class="source-line-no">201</span><span id="line-201">      packs.register(rnn(pack));</span>
+<span class="source-line-no">202</span><span id="line-202">      echartsProbed = false;</span>
+<span class="source-line-no">203</span><span id="line-203">      return this;</span>
+<span class="source-line-no">204</span><span id="line-204">   }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   // Package-private: tests simulate an absent WebJar.</span>
+<span class="source-line-no">207</span><span id="line-207">   ConsoleTemplateValidator webJarProbe(UnaryOperator&lt;String&gt; probe) {</span>
+<span class="source-line-no">208</span><span id="line-208">      webJarProbe = rnn(probe);</span>
+<span class="source-line-no">209</span><span id="line-209">      echartsProbed = false;</span>
+<span class="source-line-no">210</span><span id="line-210">      return this;</span>
+<span class="source-line-no">211</span><span id="line-211">   }</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">   // The E-70 message when the WebJars the "charts" pack reaches are missing, or null.  Probes the pack the chart card</span>
+<span class="source-line-no">214</span><span id="line-214">   // resolves at runtime (so a replaced "charts" or "echarts" pack is honoured) through the registry's own provided and</span>
+<span class="source-line-no">215</span><span id="line-215">   // replaced-pack knowledge; probed at most once per configuration, not once per chart card.  A broken pack graph</span>
+<span class="source-line-no">216</span><span id="line-216">   // (unknown dependsOn, cycle) is reported as an invalid-pack-graph finding instead of crashing the lint.</span>
+<span class="source-line-no">217</span><span id="line-217">   private String echartsProblem() {</span>
+<span class="source-line-no">218</span><span id="line-218">      if (! echartsProbed) {</span>
+<span class="source-line-no">219</span><span id="line-219">         echartsProblem = null;</span>
+<span class="source-line-no">220</span><span id="line-220">         echartsRule = "missing-webjar";</span>
+<span class="source-line-no">221</span><span id="line-221">         try {</span>
+<span class="source-line-no">222</span><span id="line-222">            packs.checkWebJars(List.of(ToolkitPackRegistry.PACK_CHARTS), webJarProbe);</span>
+<span class="source-line-no">223</span><span id="line-223">         } catch (IllegalStateException e) {</span>
+<span class="source-line-no">224</span><span id="line-224">            echartsProblem = e.getMessage();</span>
+<span class="source-line-no">225</span><span id="line-225">         } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">226</span><span id="line-226">            echartsProblem = e.getMessage();</span>
+<span class="source-line-no">227</span><span id="line-227">            echartsRule = "invalid-pack-graph";</span>
+<span class="source-line-no">228</span><span id="line-228">         }</span>
+<span class="source-line-no">229</span><span id="line-229">         echartsProbed = true;</span>
+<span class="source-line-no">230</span><span id="line-230">      }</span>
+<span class="source-line-no">231</span><span id="line-231">      return echartsProblem;</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /**</span>
+<span class="source-line-no">235</span><span id="line-235">    * @param templateName The template to lint, relative to the template root or classpath root.</span>
+<span class="source-line-no">236</span><span id="line-236">    * @return The findings, sorted by line and column. Empty when the template is clean.</span>
+<span class="source-line-no">237</span><span id="line-237">    * @throws IllegalArgumentException If the template cannot be found.</span>
+<span class="source-line-no">238</span><span id="line-238">    */</span>
+<span class="source-line-no">239</span><span id="line-239">   public List&lt;Finding&gt; validate(String templateName) {</span>
+<span class="source-line-no">240</span><span id="line-240">      var src = load(templateName);</span>
+<span class="source-line-no">241</span><span id="line-241">      if (n(src))</span>
+<span class="source-line-no">242</span><span id="line-242">         throw iaex("Template '%s' not found under templateRoot or classpathRoot.", templateName);</span>
+<span class="source-line-no">243</span><span id="line-243">      return validateSource(templateName, src);</span>
+<span class="source-line-no">244</span><span id="line-244">   }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   /**</span>
+<span class="source-line-no">247</span><span id="line-247">    * Lints every {@code *.ftlh} and {@code *.ftl} file under the template root.</span>
+<span class="source-line-no">248</span><span id="line-248">    *</span>
+<span class="source-line-no">249</span><span id="line-249">    * @return The findings, sorted by template, line and column. Empty when every template is clean.</span>
+<span class="source-line-no">250</span><span id="line-250">    * @throws IllegalStateException If no template root is set.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public List&lt;Finding&gt; validateAll() {</span>
+<span class="source-line-no">253</span><span id="line-253">      if (n(templateRoot))</span>
+<span class="source-line-no">254</span><span id="line-254">         throw isex("validateAll() requires templateRoot(Path); a classpath root cannot be listed.");</span>
+<span class="source-line-no">255</span><span id="line-255">      try (Stream&lt;Path&gt; s = Files.walk(templateRoot)) {</span>
+<span class="source-line-no">256</span><span id="line-256">         var names = s.filter(Files::isRegularFile)</span>
+<span class="source-line-no">257</span><span id="line-257">            .map(p -&gt; templateRoot.relativize(p).toString().replace(File.separatorChar, '/'))</span>
+<span class="source-line-no">258</span><span id="line-258">            .filter(n -&gt; n.endsWith(".ftlh") || n.endsWith(".ftl"))</span>
+<span class="source-line-no">259</span><span id="line-259">            .sorted()</span>
+<span class="source-line-no">260</span><span id="line-260">            .toList();</span>
+<span class="source-line-no">261</span><span id="line-261">         var out = new ArrayList&lt;Finding&gt;();</span>
+<span class="source-line-no">262</span><span id="line-262">         for (var n : names)</span>
+<span class="source-line-no">263</span><span id="line-263">            out.addAll(validate(n));</span>
+<span class="source-line-no">264</span><span id="line-264">         return out;</span>
+<span class="source-line-no">265</span><span id="line-265">      } catch (IOException e) {</span>
+<span class="source-line-no">266</span><span id="line-266">         throw new UncheckedIOException(e);</span>
+<span class="source-line-no">267</span><span id="line-267">      }</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   // Package-private: lints a source string as if it were the template with the given name (unit tests).</span>
+<span class="source-line-no">271</span><span id="line-271">   @SuppressWarnings({</span>
+<span class="source-line-no">272</span><span id="line-272">      "java:S3776" // One pass over the directive tags; splitting it would scatter the lint rules.</span>
+<span class="source-line-no">273</span><span id="line-273">   })</span>
+<span class="source-line-no">274</span><span id="line-274">   List&lt;Finding&gt; validateSource(String name, String source) {</span>
+<span class="source-line-no">275</span><span id="line-275">      var out = new ArrayList&lt;Finding&gt;();</span>
+<span class="source-line-no">276</span><span id="line-276">      var lines = lineStarts(source);</span>
+<span class="source-line-no">277</span><span id="line-277">      parse(name, source, out);</span>
+<span class="source-line-no">278</span><span id="line-278">      var text = blankComments(source);</span>
+<span class="source-line-no">279</span><span id="line-279"></span>
+<span class="source-line-no">280</span><span id="line-280">      var macros = new HashSet&lt;String&gt;(allowed);</span>
+<span class="source-line-no">281</span><span id="line-281">      var namespaces = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">282</span><span id="line-282">      collectScope(name, text, macros, namespaces, new HashSet&lt;&gt;());</span>
+<span class="source-line-no">283</span><span id="line-283">      if (nn(chromeTemplate) &amp;&amp; neq(chromeTemplate, name)) {</span>
+<span class="source-line-no">284</span><span id="line-284">         var chrome = load(chromeTemplate);</span>
+<span class="source-line-no">285</span><span id="line-285">         if (n(chrome))</span>
+<span class="source-line-no">286</span><span id="line-286">            throw iaex("Chrome template '%s' not found under templateRoot or classpathRoot.", chromeTemplate);</span>
+<span class="source-line-no">287</span><span id="line-287">         collectScope(chromeTemplate, blankComments(chrome), macros, namespaces, new HashSet&lt;&gt;());</span>
+<span class="source-line-no">288</span><span id="line-288">      }</span>
+<span class="source-line-no">289</span><span id="line-289"></span>
+<span class="source-line-no">290</span><span id="line-290">      var siblings = new ArrayDeque&lt;Set&lt;String&gt;&gt;();</span>
+<span class="source-line-no">291</span><span id="line-291">      siblings.push(new HashSet&lt;&gt;());</span>
+<span class="source-line-no">292</span><span id="line-292">      var cardIds = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">293</span><span id="line-293">      var navDepth = 0;</span>
+<span class="source-line-no">294</span><span id="line-294">      var templateRefs = new ArrayList&lt;Object[]&gt;();   // each entry pairs a template name with its source offset</span>
+<span class="source-line-no">295</span><span id="line-295">      var consoleAt = -1;</span>
+<span class="source-line-no">296</span><span id="line-296">      var mains = 0;</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">      var m = TAG.matcher(text);</span>
+<span class="source-line-no">299</span><span id="line-299">      while (m.find()) {</span>
+<span class="source-line-no">300</span><span id="line-300">         var closing = ! m.group(1).isEmpty();</span>
+<span class="source-line-no">301</span><span id="line-301">         var dname = m.group(2);</span>
+<span class="source-line-no">302</span><span id="line-302">         var selfClosing = ! m.group(4).isEmpty();</span>
+<span class="source-line-no">303</span><span id="line-303">         var at = m.start();</span>
+<span class="source-line-no">304</span><span id="line-304">         var known = closing ? null : DIRECTIVES.get(dname);</span>
+<span class="source-line-no">305</span><span id="line-305">         if (closing) {</span>
+<span class="source-line-no">306</span><span id="line-306">            if ((dname.equals(NodeDirectiveModel.NAME) || dname.equals(NavigationDirectiveModel.NAME)) &amp;&amp; siblings.size() &gt; 1)</span>
+<span class="source-line-no">307</span><span id="line-307">               siblings.pop();</span>
+<span class="source-line-no">308</span><span id="line-308">            if (dname.equals(NavigationDirectiveModel.NAME) &amp;&amp; navDepth &gt; 0)</span>
+<span class="source-line-no">309</span><span id="line-309">               navDepth--;</span>
+<span class="source-line-no">310</span><span id="line-310">         } else if (n(known)) {</span>
+<span class="source-line-no">311</span><span id="line-311">            var dot = dname.indexOf('.');</span>
+<span class="source-line-no">312</span><span id="line-312">            var ok = dot &gt; 0 ? namespaces.contains(dname.substring(0, dot)) : macros.contains(dname);</span>
+<span class="source-line-no">313</span><span id="line-313">            if (! ok)</span>
+<span class="source-line-no">314</span><span id="line-314">               add(out, name, lines, at, "unknown-directive", f("&lt;@%s&gt; is not a console directive, a macro in scope, or allow-listed.", dname));</span>
+<span class="source-line-no">315</span><span id="line-315">         } else {</span>
+<span class="source-line-no">316</span><span id="line-316">            var attrs = attrs(m.group(3));</span>
+<span class="source-line-no">317</span><span id="line-317">            for (var a : attrs.keySet())</span>
+<span class="source-line-no">318</span><span id="line-318">               if (! known.contains(a))</span>
+<span class="source-line-no">319</span><span id="line-319">                  add(out, name, lines, at, "unknown-attribute", f("&lt;@%s&gt; unknown attribute '%s'.", dname, a));</span>
+<span class="source-line-no">320</span><span id="line-320">            for (var a : STRICT.getOrDefault(dname, Set.of())) {</span>
+<span class="source-line-no">321</span><span id="line-321">               var v = attrs.get(a);</span>
+<span class="source-line-no">322</span><span id="line-322">               if (nn(v) &amp;&amp; v.literal &amp;&amp; !eqa(v.value, "true", "false"))</span>
+<span class="source-line-no">323</span><span id="line-323">                  add(out, name, lines, at, "strict-boolean", f("&lt;@%s&gt; %s= must be true or false; got '%s'.", dname, a, v.value));</span>
+<span class="source-line-no">324</span><span id="line-324">            }</span>
+<span class="source-line-no">325</span><span id="line-325">            var id = attrs.get("id");</span>
+<span class="source-line-no">326</span><span id="line-326">            switch (dname) {</span>
+<span class="source-line-no">327</span><span id="line-327">               case NavigationDirectiveModel.NAME -&gt; {</span>
+<span class="source-line-no">328</span><span id="line-328">                  if (! selfClosing) {</span>
+<span class="source-line-no">329</span><span id="line-329">                     siblings.push(new HashSet&lt;&gt;());</span>
+<span class="source-line-no">330</span><span id="line-330">                     navDepth++;</span>
+<span class="source-line-no">331</span><span id="line-331">                  }</span>
+<span class="source-line-no">332</span><span id="line-332">               }</span>
+<span class="source-line-no">333</span><span id="line-333">               case NodeDirectiveModel.NAME -&gt; {</span>
+<span class="source-line-no">334</span><span id="line-334">                  if (nn(id) &amp;&amp; id.literal &amp;&amp; ! siblings.peek().add(id.value))</span>
+<span class="source-line-no">335</span><span id="line-335">                     add(out, name, lines, at, "duplicate-id", f("&lt;@node id='%s'&gt; duplicates a sibling id.", id.value));</span>
+<span class="source-line-no">336</span><span id="line-336">                  if (navDepth &gt; 0 &amp;&amp; attrs.containsKey("under"))</span>
+<span class="source-line-no">337</span><span id="line-337">                     add(out, name, lines, at, "unknown-attribute", f("&lt;@%s&gt; unknown attribute '%s'.", dname, "under"));</span>
+<span class="source-line-no">338</span><span id="line-338">                  if (! selfClosing)</span>
+<span class="source-line-no">339</span><span id="line-339">                     siblings.push(new HashSet&lt;&gt;());</span>
+<span class="source-line-no">340</span><span id="line-340">               }</span>
+<span class="source-line-no">341</span><span id="line-341">               case CardDirectiveModel.NAME -&gt; {</span>
+<span class="source-line-no">342</span><span id="line-342">                  if (nn(id) &amp;&amp; id.literal &amp;&amp; ! cardIds.add(id.value))</span>
+<span class="source-line-no">343</span><span id="line-343">                     add(out, name, lines, at, "duplicate-id", f("&lt;@card id='%s'&gt; duplicates an existing card id.", id.value));</span>
+<span class="source-line-no">344</span><span id="line-344">                  var type = attrs.get("type");</span>
+<span class="source-line-no">345</span><span id="line-345">                  if (nn(type) &amp;&amp; type.literal &amp;&amp; REMOVED_TYPES.contains(type.value))</span>
+<span class="source-line-no">346</span><span id="line-346">                     add(out, name, lines, at, "removed-card-type", f(</span>
+<span class="source-line-no">347</span><span id="line-347">                        "&lt;@card id='%s'&gt; type='%s' was removed in 10.0.0; use type='html' with a &lt;template&gt;, or a registered card type.",</span>
+<span class="source-line-no">348</span><span id="line-348">                        n(id) ? "" : id.value, type.value));</span>
+<span class="source-line-no">349</span><span id="line-349">                  if (nn(type) &amp;&amp; type.literal &amp;&amp; eq(type.value, "chart")) {</span>
+<span class="source-line-no">350</span><span id="line-350">                     var problem = echartsProblem();</span>
+<span class="source-line-no">351</span><span id="line-351">                     if (nn(problem))</span>
+<span class="source-line-no">352</span><span id="line-352">                        add(out, name, lines, at, echartsRule, problem);</span>
+<span class="source-line-no">353</span><span id="line-353">                  }</span>
+<span class="source-line-no">354</span><span id="line-354">                  var tpl = attrs.get("template");</span>
+<span class="source-line-no">355</span><span id="line-355">                  if (nn(tpl) &amp;&amp; tpl.literal)</span>
+<span class="source-line-no">356</span><span id="line-356">                     templateRefs.add(new Object[]{tpl.value, at});</span>
+<span class="source-line-no">357</span><span id="line-357">                  if (nn(type) &amp;&amp; type.literal &amp;&amp; eq(type.value, "datatables") &amp;&amp; ! selfClosing)</span>
+<span class="source-line-no">358</span><span id="line-358">                     checkViewVersion(out, name, lines, text, m.end(), n(id) ? "" : id.value);</span>
+<span class="source-line-no">359</span><span id="line-359">                  if (! selfClosing)</span>
+<span class="source-line-no">360</span><span id="line-360">                     checkCardBody(out, name, lines, at, text, m.end(), id, attrs.get("src"), attrs.get("type"));</span>
+<span class="source-line-no">361</span><span id="line-361">               }</span>
+<span class="source-line-no">362</span><span id="line-362">               case ConsoleDirectiveModel.NAME -&gt; {</span>
+<span class="source-line-no">363</span><span id="line-363">                  if (consoleAt &lt; 0)</span>
+<span class="source-line-no">364</span><span id="line-364">                     consoleAt = at;</span>
+<span class="source-line-no">365</span><span id="line-365">               }</span>
+<span class="source-line-no">366</span><span id="line-366">               case MainDirectiveModel.NAME -&gt; mains++;</span>
+<span class="source-line-no">367</span><span id="line-367">               default -&gt; { /* slots, theme, token, page: nothing beyond the attribute checks above */ }</span>
+<span class="source-line-no">368</span><span id="line-368">            }</span>
+<span class="source-line-no">369</span><span id="line-369">         }</span>
+<span class="source-line-no">370</span><span id="line-370">      }</span>
+<span class="source-line-no">371</span><span id="line-371"></span>
+<span class="source-line-no">372</span><span id="line-372">      for (var r : templateRefs) {</span>
+<span class="source-line-no">373</span><span id="line-373">         var v = (String)r[0];</span>
+<span class="source-line-no">374</span><span id="line-374">         if (! cardIds.contains(v) &amp;&amp; ! v.startsWith("header.") &amp;&amp; ! v.startsWith("footer."))</span>
+<span class="source-line-no">375</span><span id="line-375">            add(out, name, lines, (Integer)r[1], "dangling-template", f("&lt;@card&gt; template='%s' names no &lt;@card id&gt; or slot in this template.", v));</span>
+<span class="source-line-no">376</span><span id="line-376">      }</span>
+<span class="source-line-no">377</span><span id="line-377">      if (consoleAt &gt;= 0 &amp;&amp; mains != 1)</span>
+<span class="source-line-no">378</span><span id="line-378">         add(out, name, lines, consoleAt, "main-count", f("&lt;@console&gt; requires exactly one &lt;@main/&gt;; found '%s'.", mains));</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">      var g = GLOBAL.matcher(text);</span>
+<span class="source-line-no">381</span><span id="line-381">      while (g.find()) {</span>
+<span class="source-line-no">382</span><span id="line-382">         add(out, name, lines, g.start(), "removed-global", f("'%s' was removed in 10.0.0; %s", g.group(1),</span>
+<span class="source-line-no">383</span><span id="line-383">            eq(g.group(1), "pageToolkit") ? "use jcHasToolkit(\"views\")." : "&lt;@page&gt; captures the page into the contract."));</span>
+<span class="source-line-no">384</span><span id="line-384">      }</span>
+<span class="source-line-no">385</span><span id="line-385"></span>
+<span class="source-line-no">386</span><span id="line-386">      var a = ASSET_REF.matcher(text);</span>
+<span class="source-line-no">387</span><span id="line-387">      while (a.find()) {</span>
+<span class="source-line-no">388</span><span id="line-388">         var url = a.group(nn(a.group(1)) ? 1 : 2);</span>
+<span class="source-line-no">389</span><span id="line-389">         if (! url.contains("${") &amp;&amp; ! url.contains("&lt;#") &amp;&amp; JUNEAU_ASSET.matcher(url).find())</span>
+<span class="source-line-no">390</span><span id="line-390">            add(out, name, lines, a.start(), "hardcoded-asset-url", f(</span>
+<span class="source-line-no">391</span><span id="line-391">               "Hard-coded Juneau asset URL '%s' is unversioned and goes stale in browser caches; use viewAssetUrl(...), consoleJsUrl(...), chromeCssUrl(...) or themeAssetUrl(...) so it carries ?v= (an adopter's own assets can use assetUrl(...)).", url));</span>
+<span class="source-line-no">392</span><span id="line-392">      }</span>
+<span class="source-line-no">393</span><span id="line-393"></span>
+<span class="source-line-no">394</span><span id="line-394">      out.sort(Comparator.comparingInt(Finding::line).thenComparingInt(Finding::column));</span>
+<span class="source-line-no">395</span><span id="line-395">      return out;</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
+<span class="source-line-no">398</span><span id="line-398">   /**</span>
+<span class="source-line-no">399</span><span id="line-399">    * Flags a literal {@code view.contractVersion} that differs from {@link ViewsMixin#CONTRACT_VERSION} in a</span>
+<span class="source-line-no">400</span><span id="line-400">    * {@code type="datatables"} card body. An omitted version is fine (the runtime injects it); only a pinned, stale</span>
+<span class="source-line-no">401</span><span id="line-401">    * value is reported. Scans the {@code view:{...}} object at its own nesting depth so nested {@code contractVersion}</span>
+<span class="source-line-no">402</span><span id="line-402">    * keys (quickStats, detail, ...) are never mistaken for it.</span>
+<span class="source-line-no">403</span><span id="line-403">    */</span>
+<span class="source-line-no">404</span><span id="line-404">   private static void checkViewVersion(List&lt;Finding&gt; out, String name, int[] lines, String text, int bodyStart, String cardId) {</span>
+<span class="source-line-no">405</span><span id="line-405">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
+<span class="source-line-no">406</span><span id="line-406">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
+<span class="source-line-no">407</span><span id="line-407">      var vm = VIEW_KEY.matcher(body);</span>
+<span class="source-line-no">408</span><span id="line-408">      if (! vm.find())</span>
+<span class="source-line-no">409</span><span id="line-409">         return;</span>
+<span class="source-line-no">410</span><span id="line-410">      var depth = 1;</span>
+<span class="source-line-no">411</span><span id="line-411">      for (var i = vm.end(); i &lt; body.length() &amp;&amp; depth &gt; 0; i++) {</span>
+<span class="source-line-no">412</span><span id="line-412">         var c = body.charAt(i);</span>
+<span class="source-line-no">413</span><span id="line-413">         if (c == '{' || c == '[')</span>
+<span class="source-line-no">414</span><span id="line-414">            depth++;</span>
+<span class="source-line-no">415</span><span id="line-415">         else if (c == '}' || c == ']')</span>
+<span class="source-line-no">416</span><span id="line-416">            depth--;</span>
+<span class="source-line-no">417</span><span id="line-417">         else if (depth == 1 &amp;&amp; c == 'c') {</span>
+<span class="source-line-no">418</span><span id="line-418">            var v = VIEW_VERSION.matcher(body.substring(i));</span>
+<span class="source-line-no">419</span><span id="line-419">            if (v.find() &amp;&amp; neq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {</span>
+<span class="source-line-no">420</span><span id="line-420">               add(out, name, lines, bodyStart + i, "view-contract-version", f(</span>
+<span class="source-line-no">421</span><span id="line-421">                  "&lt;@card id='%s'&gt; view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",</span>
+<span class="source-line-no">422</span><span id="line-422">                  cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));</span>
+<span class="source-line-no">423</span><span id="line-423">               return;</span>
+<span class="source-line-no">424</span><span id="line-424">            }</span>
+<span class="source-line-no">425</span><span id="line-425">         }</span>
+<span class="source-line-no">426</span><span id="line-426">      }</span>
+<span class="source-line-no">427</span><span id="line-427">   }</span>
+<span class="source-line-no">428</span><span id="line-428"></span>
+<span class="source-line-no">429</span><span id="line-429">   private record Value(String value, boolean literal) {}</span>
+<span class="source-line-no">430</span><span id="line-430"></span>
+<span class="source-line-no">431</span><span id="line-431">   // Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.</span>
+<span class="source-line-no">432</span><span id="line-432">   private static final Set&lt;String&gt; RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");</span>
+<span class="source-line-no">433</span><span id="line-433"></span>
+<span class="source-line-no">434</span><span id="line-434">   /**</span>
+<span class="source-line-no">435</span><span id="line-435">    * The C2 card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.</span>
+<span class="source-line-no">436</span><span id="line-436">    * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code &lt;/@card}.</span>
+<span class="source-line-no">437</span><span id="line-437">    */</span>
+<span class="source-line-no">438</span><span id="line-438">   @SuppressWarnings({</span>
+<span class="source-line-no">439</span><span id="line-439">      "java:S107" // Internal helper whose parameters are the render/validation context.</span>
+<span class="source-line-no">440</span><span id="line-440">   })</span>
+<span class="source-line-no">441</span><span id="line-441">   private static void checkCardBody(List&lt;Finding&gt; out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src, Value type) {</span>
+<span class="source-line-no">442</span><span id="line-442">      var end = text.indexOf("&lt;/@card", bodyStart);</span>
+<span class="source-line-no">443</span><span id="line-443">      var body = text.substring(bodyStart, end &lt; 0 ? text.length() : end);</span>
+<span class="source-line-no">444</span><span id="line-444">      var cardId = n(id) ? "" : id.value;</span>
+<span class="source-line-no">445</span><span id="line-445">      var trimmed = body.trim();</span>
+<span class="source-line-no">446</span><span id="line-446">      // A chart card legitimately takes src= (remote rows) plus a body (kind and options).</span>
+<span class="source-line-no">447</span><span id="line-447">      var chart = nn(type) &amp;&amp; type.literal &amp;&amp; "chart".equals(type.value);</span>
+<span class="source-line-no">448</span><span id="line-448">      if (! trimmed.isEmpty() &amp;&amp; nn(src) &amp;&amp; src.literal &amp;&amp; ! chart)</span>
+<span class="source-line-no">449</span><span id="line-449">         add(out, name, lines, at, "card-src-and-body", f(</span>
+<span class="source-line-no">450</span><span id="line-450">            "&lt;@card id='%s'&gt; has both src='%s' and a body; use exactly one.", cardId, src.value));</span>
+<span class="source-line-no">451</span><span id="line-451">      if (trimmed.isEmpty() || body.contains("${"))</span>
+<span class="source-line-no">452</span><span id="line-452">         return;</span>
+<span class="source-line-no">453</span><span id="line-453">      var keys = topLevelJson5Keys(trimmed);</span>
+<span class="source-line-no">454</span><span id="line-454">      for (var k : keys)</span>
+<span class="source-line-no">455</span><span id="line-455">         if (RESERVED_BODY_KEYS.contains(k))</span>
+<span class="source-line-no">456</span><span id="line-456">            add(out, name, lines, at, "card-reserved-key", f(</span>
+<span class="source-line-no">457</span><span id="line-457">               "&lt;@card id='%s'&gt; body key '%s' is reserved; set it as an attribute.", cardId, k));</span>
+<span class="source-line-no">458</span><span id="line-458">   }</span>
+<span class="source-line-no">459</span><span id="line-459"></span>
+<span class="source-line-no">460</span><span id="line-460">   // Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a</span>
+<span class="source-line-no">461</span><span id="line-461">   // general parser — enough to catch literal top-level keys for the two card-body lint rules above.</span>
+<span class="source-line-no">462</span><span id="line-462">   private static Set&lt;String&gt; topLevelJson5Keys(String body) {</span>
+<span class="source-line-no">463</span><span id="line-463">      var s = body.trim();</span>
+<span class="source-line-no">464</span><span id="line-464">      if (s.startsWith("{") &amp;&amp; s.endsWith("}"))</span>
+<span class="source-line-no">465</span><span id="line-465">         s = s.substring(1, s.length() - 1);</span>
+<span class="source-line-no">466</span><span id="line-466">      var keys = new LinkedHashSet&lt;String&gt;();</span>
+<span class="source-line-no">467</span><span id="line-467">      var depth = 0;</span>
+<span class="source-line-no">468</span><span id="line-468">      var i = 0;</span>
+<span class="source-line-no">469</span><span id="line-469">      while (i &lt; s.length()) {</span>
+<span class="source-line-no">470</span><span id="line-470">         var c = s.charAt(i);</span>
+<span class="source-line-no">471</span><span id="line-471">         if (c == '"' || c == '\'') {</span>
+<span class="source-line-no">472</span><span id="line-472">            // Honor backslash escapes in both quote styles: skip the escaped character wholesale.</span>
+<span class="source-line-no">473</span><span id="line-473">            var j = i + 1;</span>
+<span class="source-line-no">474</span><span id="line-474">            while (j &lt; s.length() &amp;&amp; s.charAt(j) != c)</span>
+<span class="source-line-no">475</span><span id="line-475">               j += s.charAt(j) == '\\' ? 2 : 1;</span>
+<span class="source-line-no">476</span><span id="line-476">            i = j &gt;= s.length() ? s.length() : j + 1;</span>
+<span class="source-line-no">477</span><span id="line-477">         } else if (c == '{' || c == '[') {</span>
+<span class="source-line-no">478</span><span id="line-478">            depth++;</span>
+<span class="source-line-no">479</span><span id="line-479">            i++;</span>
+<span class="source-line-no">480</span><span id="line-480">         } else if (c == '}' || c == ']') {</span>
+<span class="source-line-no">481</span><span id="line-481">            depth--;</span>
+<span class="source-line-no">482</span><span id="line-482">            i++;</span>
+<span class="source-line-no">483</span><span id="line-483">         } else if (depth == 0 &amp;&amp; (Character.isLetter(c) || c == '_')) {</span>
+<span class="source-line-no">484</span><span id="line-484">            var start = i;</span>
+<span class="source-line-no">485</span><span id="line-485">            while (i &lt; s.length() &amp;&amp; (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))</span>
+<span class="source-line-no">486</span><span id="line-486">               i++;</span>
+<span class="source-line-no">487</span><span id="line-487">            var word = s.substring(start, i);</span>
+<span class="source-line-no">488</span><span id="line-488">            var j = i;</span>
+<span class="source-line-no">489</span><span id="line-489">            while (j &lt; s.length() &amp;&amp; Character.isWhitespace(s.charAt(j)))</span>
+<span class="source-line-no">490</span><span id="line-490">               j++;</span>
+<span class="source-line-no">491</span><span id="line-491">            if (j &lt; s.length() &amp;&amp; s.charAt(j) == ':')</span>
+<span class="source-line-no">492</span><span id="line-492">               keys.add(word);</span>
+<span class="source-line-no">493</span><span id="line-493">         } else {</span>
+<span class="source-line-no">494</span><span id="line-494">            i++;</span>
+<span class="source-line-no">495</span><span id="line-495">         }</span>
+<span class="source-line-no">496</span><span id="line-496">      }</span>
+<span class="source-line-no">497</span><span id="line-497">      return keys;</span>
+<span class="source-line-no">498</span><span id="line-498">   }</span>
+<span class="source-line-no">499</span><span id="line-499"></span>
+<span class="source-line-no">500</span><span id="line-500">   private static Map&lt;String,Value&gt; attrs(String s) {</span>
+<span class="source-line-no">501</span><span id="line-501">      var out = new LinkedHashMap&lt;String,Value&gt;();</span>
+<span class="source-line-no">502</span><span id="line-502">      var m = ATTR.matcher(s);</span>
+<span class="source-line-no">503</span><span id="line-503">      while (m.find()) {</span>
+<span class="source-line-no">504</span><span id="line-504">         String v;</span>
+<span class="source-line-no">505</span><span id="line-505">         boolean literal;</span>
+<span class="source-line-no">506</span><span id="line-506">         if (nn(m.group(2)) || nn(m.group(3))) {</span>
+<span class="source-line-no">507</span><span id="line-507">            v = m.group(nn(m.group(2)) ? 2 : 3);</span>
+<span class="source-line-no">508</span><span id="line-508">            literal = ! v.contains("${");</span>
+<span class="source-line-no">509</span><span id="line-509">         } else {</span>
+<span class="source-line-no">510</span><span id="line-510">            v = m.group(4);</span>
+<span class="source-line-no">511</span><span id="line-511">            literal = eqa(v, "true", "false");</span>
+<span class="source-line-no">512</span><span id="line-512">         }</span>
+<span class="source-line-no">513</span><span id="line-513">         out.put(m.group(1), new Value(v, literal));</span>
+<span class="source-line-no">514</span><span id="line-514">      }</span>
+<span class="source-line-no">515</span><span id="line-515">      return out;</span>
+<span class="source-line-no">516</span><span id="line-516">   }</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">   private void collectScope(String name, String text, Set&lt;String&gt; macros, Set&lt;String&gt; namespaces, Set&lt;String&gt; seen) {</span>
+<span class="source-line-no">519</span><span id="line-519">      if (! seen.add(name))</span>
+<span class="source-line-no">520</span><span id="line-520">         return;</span>
+<span class="source-line-no">521</span><span id="line-521">      var m = MACRO.matcher(text);</span>
+<span class="source-line-no">522</span><span id="line-522">      while (m.find())</span>
+<span class="source-line-no">523</span><span id="line-523">         macros.add(m.group(1));</span>
+<span class="source-line-no">524</span><span id="line-524">      var i = IMPORT.matcher(text);</span>
+<span class="source-line-no">525</span><span id="line-525">      while (i.find())</span>
+<span class="source-line-no">526</span><span id="line-526">         namespaces.add(i.group(1));</span>
+<span class="source-line-no">527</span><span id="line-527">      var inc = INCLUDE.matcher(text);</span>
+<span class="source-line-no">528</span><span id="line-528">      while (inc.find()) {</span>
+<span class="source-line-no">529</span><span id="line-529">         var target = resolve(name, inc.group(1));</span>
+<span class="source-line-no">530</span><span id="line-530">         var src = load(target);</span>
+<span class="source-line-no">531</span><span id="line-531">         if (nn(src))</span>
+<span class="source-line-no">532</span><span id="line-532">            collectScope(target, blankComments(src), macros, namespaces, seen);</span>
+<span class="source-line-no">533</span><span id="line-533">      }</span>
+<span class="source-line-no">534</span><span id="line-534">   }</span>
+<span class="source-line-no">535</span><span id="line-535"></span>
+<span class="source-line-no">536</span><span id="line-536">   private static String resolve(String from, String path) {</span>
+<span class="source-line-no">537</span><span id="line-537">      if (path.startsWith("/"))</span>
+<span class="source-line-no">538</span><span id="line-538">         return path;</span>
+<span class="source-line-no">539</span><span id="line-539">      var slash = from.lastIndexOf('/');</span>
+<span class="source-line-no">540</span><span id="line-540">      return slash &lt; 0 ? path : from.substring(0, slash + 1) + path;</span>
+<span class="source-line-no">541</span><span id="line-541">   }</span>
+<span class="source-line-no">542</span><span id="line-542"></span>
+<span class="source-line-no">543</span><span id="line-543">   // Template root first, then the classpath root, then (for absolute names) the classpath itself.</span>
+<span class="source-line-no">544</span><span id="line-544">   private String load(String name) {</span>
+<span class="source-line-no">545</span><span id="line-545">      var rel = name.startsWith("/") ? name.substring(1) : name;</span>
+<span class="source-line-no">546</span><span id="line-546">      try {</span>
+<span class="source-line-no">547</span><span id="line-547">         if (nn(templateRoot)) {</span>
+<span class="source-line-no">548</span><span id="line-548">            var p = templateRoot.resolve(rel);</span>
+<span class="source-line-no">549</span><span id="line-549">            if (Files.isRegularFile(p))</span>
+<span class="source-line-no">550</span><span id="line-550">               return Files.readString(p, UTF_8);</span>
+<span class="source-line-no">551</span><span id="line-551">         }</span>
+<span class="source-line-no">552</span><span id="line-552">         if (nn(classpathRoot)) {</span>
+<span class="source-line-no">553</span><span id="line-553">            var s = resource(classpathRoot + rel);</span>
+<span class="source-line-no">554</span><span id="line-554">            if (nn(s))</span>
+<span class="source-line-no">555</span><span id="line-555">               return s;</span>
+<span class="source-line-no">556</span><span id="line-556">         }</span>
+<span class="source-line-no">557</span><span id="line-557">         return name.startsWith("/") ? resource(name) : null;</span>
+<span class="source-line-no">558</span><span id="line-558">      } catch (IOException e) {</span>
+<span class="source-line-no">559</span><span id="line-559">         throw new UncheckedIOException(e);</span>
+<span class="source-line-no">560</span><span id="line-560">      }</span>
+<span class="source-line-no">561</span><span id="line-561">   }</span>
+<span class="source-line-no">562</span><span id="line-562"></span>
+<span class="source-line-no">563</span><span id="line-563">   private static String resource(String absPath) throws IOException {</span>
+<span class="source-line-no">564</span><span id="line-564">      var cl = Thread.currentThread().getContextClassLoader();</span>
+<span class="source-line-no">565</span><span id="line-565">      if (n(cl))</span>
+<span class="source-line-no">566</span><span id="line-566">         cl = ConsoleTemplateValidator.class.getClassLoader();</span>
+<span class="source-line-no">567</span><span id="line-567">      try (var in = cl.getResourceAsStream(absPath.substring(1))) {</span>
+<span class="source-line-no">568</span><span id="line-568">         return n(in) ? null : new String(in.readAllBytes(), UTF_8);</span>
+<span class="source-line-no">569</span><span id="line-569">      }</span>
+<span class="source-line-no">570</span><span id="line-570">   }</span>
+<span class="source-line-no">571</span><span id="line-571"></span>
+<span class="source-line-no">572</span><span id="line-572">   @SuppressWarnings({</span>
+<span class="source-line-no">573</span><span id="line-573">      "unused" // the Template is built only so its constructor parses (and may throw)</span>
+<span class="source-line-no">574</span><span id="line-574">   })</span>
+<span class="source-line-no">575</span><span id="line-575">   private static void parse(String name, String source, List&lt;Finding&gt; out) {</span>
+<span class="source-line-no">576</span><span id="line-576">      try {</span>
+<span class="source-line-no">577</span><span id="line-577">         new Template(name, new StringReader(source), PARSE_CFG);</span>
+<span class="source-line-no">578</span><span id="line-578">      } catch (ParseException e) {</span>
+<span class="source-line-no">579</span><span id="line-579">         out.add(new Finding(name, e.getLineNumber(), e.getColumnNumber(), "parse-error", e.getEditorMessage()));</span>
+<span class="source-line-no">580</span><span id="line-580">      } catch (IOException e) {</span>
+<span class="source-line-no">581</span><span id="line-581">         throw new UncheckedIOException(e);</span>
+<span class="source-line-no">582</span><span id="line-582">      }</span>
+<span class="source-line-no">583</span><span id="line-583">   }</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">   // Replaces each &lt;#-- … --&gt; with spaces (newlines kept), so offsets still map to the original line and column.</span>
+<span class="source-line-no">586</span><span id="line-586">   private static String blankComments(String s) {</span>
+<span class="source-line-no">587</span><span id="line-587">      var sb = new StringBuilder(s);</span>
+<span class="source-line-no">588</span><span id="line-588">      var m = COMMENT.matcher(s);</span>
+<span class="source-line-no">589</span><span id="line-589">      while (m.find())</span>
+<span class="source-line-no">590</span><span id="line-590">         for (var i = m.start(); i &lt; m.end(); i++)</span>
+<span class="source-line-no">591</span><span id="line-591">            if (sb.charAt(i) != '\n')</span>
+<span class="source-line-no">592</span><span id="line-592">               sb.setCharAt(i, ' ');</span>
+<span class="source-line-no">593</span><span id="line-593">      return sb.toString();</span>
+<span class="source-line-no">594</span><span id="line-594">   }</span>
+<span class="source-line-no">595</span><span id="line-595"></span>
+<span class="source-line-no">596</span><span id="line-596">   @SuppressWarnings({</span>
+<span class="source-line-no">597</span><span id="line-597">      "javabugs:S2259" // False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.</span>
+<span class="source-line-no">598</span><span id="line-598">   })</span>
+<span class="source-line-no">599</span><span id="line-599">   private static int[] lineStarts(String s) {</span>
+<span class="source-line-no">600</span><span id="line-600">      var starts = new ArrayList&lt;Integer&gt;();</span>
+<span class="source-line-no">601</span><span id="line-601">      starts.add(0);</span>
+<span class="source-line-no">602</span><span id="line-602">      for (var i = 0; i &lt; s.length(); i++)</span>
+<span class="source-line-no">603</span><span id="line-603">         if (s.charAt(i) == '\n')</span>
+<span class="source-line-no">604</span><span id="line-604">            starts.add(i + 1);</span>
+<span class="source-line-no">605</span><span id="line-605">      return starts.stream().mapToInt(Integer::intValue).toArray();</span>
+<span class="source-line-no">606</span><span id="line-606">   }</span>
+<span class="source-line-no">607</span><span id="line-607"></span>
+<span class="source-line-no">608</span><span id="line-608">   private static void add(List&lt;Finding&gt; out, String name, int[] lines, int offset, String rule, String message) {</span>
+<span class="source-line-no">609</span><span id="line-609">      var i = Arrays.binarySearch(lines, offset);</span>
+<span class="source-line-no">610</span><span id="line-610">      var line = i &gt;= 0 ? i : -i - 2;</span>
+<span class="source-line-no">611</span><span id="line-611">      out.add(new Finding(name, line + 1, offset - lines[line] + 1, rule, message));</span>
+<span class="source-line-no">612</span><span id="line-612">   }</span>
+<span class="source-line-no">613</span><span id="line-613">}</span>
 
 
 

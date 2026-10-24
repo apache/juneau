@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Binding order and lifecycle&lt;/h5&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * The whole-object config bind runs &lt;b&gt;after&lt;/b&gt; {@code @Value}/{@code @Inject} field-and-method injection and</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;b&gt;before&lt;/b&gt; any {@link org.apache.juneau.commons.inject.PostConstruct @PostConstruct} method — so a</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;b&gt;before&lt;/b&gt; any {@link PostConstruct @PostConstruct} method — so a</span>
 <span class="source-line-no">038</span><span id="line-38"> * {@code @PostConstruct} method observes the fully-bound config fields. Fields that are themselves annotated with</span>
 <span class="source-line-no">039</span><span id="line-39"> * {@code @Value} or {@code @Inject} are left to the injection engine and are never overwritten by config binding,</span>
 <span class="source-line-no">040</span><span id="line-40"> * even when a matching {@code prefix.fieldName} key exists.</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/p&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> * {@code @ConfigProperties} and {@link org.apache.juneau.commons.inject.Value @Value} coexist: {@code @Value}</span>
+<span class="source-line-no">071</span><span id="line-71"> * {@code @ConfigProperties} and {@link Value @Value} coexist: {@code @Value}</span>
 <span class="source-line-no">072</span><span id="line-72"> * resolves a single value; {@code @ConfigProperties} resolves a whole object. A class can use</span>
 <span class="source-line-no">073</span><span id="line-73"> * {@code @Value} fields internally and separately be the target of another class's nested</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@code @ConfigProperties} bind.</span>

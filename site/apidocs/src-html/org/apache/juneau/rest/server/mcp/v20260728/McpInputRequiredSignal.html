@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">    */</span>
 <span class="source-line-no">059</span><span id="line-59">   public McpInputRequiredSignal(Map&lt;String,Object&gt; inputRequests, Object continuation) {</span>
 <span class="source-line-no">060</span><span id="line-60">      super("Handler requested more input");</span>
-<span class="source-line-no">061</span><span id="line-61">      if (inputRequests == null || inputRequests.isEmpty())</span>
+<span class="source-line-no">061</span><span id="line-61">      if (ie(inputRequests))</span>
 <span class="source-line-no">062</span><span id="line-62">         throw iaex("inputRequests must not be null or empty");</span>
 <span class="source-line-no">063</span><span id="line-63">      this.inputRequests = inputRequests;</span>
 <span class="source-line-no">064</span><span id="line-64">      this.continuation = continuation;</span>

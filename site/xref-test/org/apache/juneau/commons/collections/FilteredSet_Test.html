@@ -224,15 +224,15 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 			.filter(v -&gt; v != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			.build();
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(0, set.size());
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertSize(0, set);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		set.add(<span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertEquals(1, set.size());
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertSize(1, set);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		set.add(<strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// Filtered out</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertEquals(1, set.size());
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertSize(1, set);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		set.add(<span class="jxr_string">"value3"</span>);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertEquals(2, set.size());
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertSize(2, set);
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		set.add(<span class="jxr_string">"value1"</span>);  <em class="jxr_comment">// Duplicate, not added</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertEquals(2, set.size());
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertSize(2, set);
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 	@Test

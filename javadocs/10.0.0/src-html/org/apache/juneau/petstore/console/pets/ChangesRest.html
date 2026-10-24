@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">      var items = new JsonList();</span>
 <span class="source-line-no">109</span><span id="line-109">      var mine = 0;</span>
 <span class="source-line-no">110</span><span id="line-110">      for (var c : store().pendingChanges().pending()) {</span>
-<span class="source-line-no">111</span><span id="line-111">         var isMine = Objects.equals(c.getAuthor(), me);</span>
+<span class="source-line-no">111</span><span id="line-111">         var isMine = eq(c.getAuthor(), me);</span>
 <span class="source-line-no">112</span><span id="line-112">         if (isMine)</span>
 <span class="source-line-no">113</span><span id="line-113">            mine++;</span>
 <span class="source-line-no">114</span><span id="line-114">         items.add(JsonMap.of("id", String.valueOf(c.getId()), "label", c.getSummary(), "href", f("/console/pets/%s/summary", c.getPetId()), "mine", isMine, "kind", "Pet"));</span>
@@ -177,7 +177,7 @@
 <span class="source-line-no">164</span><span id="line-164">      if (body.ids == null)</span>
 <span class="source-line-no">165</span><span id="line-165">         throw new BadRequest("Missing 'ids'");</span>
 <span class="source-line-no">166</span><span id="line-166">      var key = body.idempotencyKey;</span>
-<span class="source-line-no">167</span><span id="line-167">      if (key == null || key.isBlank())</span>
+<span class="source-line-no">167</span><span id="line-167">      if (ib(key))</span>
 <span class="source-line-no">168</span><span id="line-168">         throw new BadRequest("Missing 'idempotencyKey'");</span>
 <span class="source-line-no">169</span><span id="line-169">      if (replays.size() &gt; 1_000)</span>
 <span class="source-line-no">170</span><span id="line-170">         replays.clear();</span>

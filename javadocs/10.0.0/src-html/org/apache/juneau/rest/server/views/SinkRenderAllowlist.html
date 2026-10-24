@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68">    * @throws IllegalArgumentException If the id is not a built-in.</span>
 <span class="source-line-no">069</span><span id="line-69">    */</span>
 <span class="source-line-no">070</span><span id="line-70">   public static void assertAllowed(String renderId) {</span>
-<span class="source-line-no">071</span><span id="line-71">      if (renderId == null || renderId.isBlank())</span>
+<span class="source-line-no">071</span><span id="line-71">      if (ib(renderId))</span>
 <span class="source-line-no">072</span><span id="line-72">         throw iaex("Render id must not be null or blank.");</span>
 <span class="source-line-no">073</span><span id="line-73">      if (BUILTIN_IDS.contains(renderId))</span>
 <span class="source-line-no">074</span><span id="line-74">         return;</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82">    * @throws IllegalArgumentException If the id is not in {@link #POPOVER_TEXT_IDS}.</span>
 <span class="source-line-no">083</span><span id="line-83">    */</span>
 <span class="source-line-no">084</span><span id="line-84">   public static void assertPopoverAllowed(String renderId) {</span>
-<span class="source-line-no">085</span><span id="line-85">      if (renderId == null || renderId.isBlank())</span>
+<span class="source-line-no">085</span><span id="line-85">      if (ib(renderId))</span>
 <span class="source-line-no">086</span><span id="line-86">         throw iaex("PopoverField render id must not be null or blank.");</span>
 <span class="source-line-no">087</span><span id="line-87">      if (!POPOVER_TEXT_IDS.contains(renderId))</span>
 <span class="source-line-no">088</span><span id="line-88">         throw iaex("PopoverField render id '%s' is not a text-shaped built-in.", renderId);</span>

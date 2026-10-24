@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test <strong class="jxr_keyword">void</strong> a04_notThirdPartyConsoleOrSldsArt() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> body = svg();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertFalse(body.contains(<span class="jxr_string">"slds-"</span>), body);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		DualHatGuard.assertClean(body);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertFalse(body.contains(<span class="jxr_string">"icon-overrides"</span>), body);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  }

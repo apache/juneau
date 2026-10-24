@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> version = version(a[0], a[1]);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> path = a[2].replace(VERSION_TOKEN, version);
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">if</strong> (! b(PRESENT.computeIfAbsent(path, k -&gt; LOADER.getResource(WEBJARS_ROOT + k) != <strong class="jxr_keyword">null</strong>)))
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"needs WebJar file '%s' (%s:%s:%s), which is not on the classpath."</span>, path, a[0], a[1], version));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(f(<span class="jxr_string">"needs WebJar file '%s' (%s:%s:%s), which is not on the classpath."</span>, path, a[0], a[1], version));
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">return</strong> path;
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
@@ -131,12 +131,12 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> props = <span class="jxr_string">"META-INF/maven/"</span> + groupId + <span class="jxr_string">"/"</span> + artifactId + <span class="jxr_string">"/pom.properties"</span>;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = LOADER.getResourceAsStream(props)) {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"needs %s:%s on the classpath (no %s)."</span>, groupId, artifactId, props));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(f(<span class="jxr_string">"needs %s:%s on the classpath (no %s)."</span>, groupId, artifactId, props));
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> Properties();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			p.load(in);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">var</strong> v = p.getProperty(<span class="jxr_string">"version"</span>, <span class="jxr_string">""</span>).trim();
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">if</strong> (v.isEmpty())
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"needs %s:%s on the classpath (%s has no version)."</span>, groupId, artifactId, props));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(f(<span class="jxr_string">"needs %s:%s on the classpath (%s has no version)."</span>, groupId, artifactId, props));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">return</strong> v;
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] parse(String asset) {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> a = asset == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> String[0] : asset.split(<span class="jxr_string">":"</span>, 3);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (a.length != 3 || a[0].isBlank() || a[1].isBlank() || a[2].isBlank())
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(String.format(<span class="jxr_string">"WebJar asset must be 'groupId:artifactId:path'; got '%s'."</span>, asset));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(f(<span class="jxr_string">"WebJar asset must be 'groupId:artifactId:path'; got '%s'."</span>, asset));
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> a;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> }

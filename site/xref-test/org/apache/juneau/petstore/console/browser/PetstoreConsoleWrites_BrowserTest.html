@@ -255,19 +255,19 @@
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"writes"</span>, <span class="jxr_string">"window.__writes"</span>, <span class="jxr_string">"sold"</span>, <span class="jxr_string">"window.__sold"</span>,
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 					<span class="jxr_string">"toast"</span>, <span class="jxr_string">"document.querySelector('.juneau-view-bulk-toast')?.textContent"</span>)),
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<em class="jxr_comment">// The tab's &lt;object&gt; asks for the photo before there is one, so its 404 load is expected.</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"upload"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"upload"</span>, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<span class="jxr_string">"actions"</span>, List.of(
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 					eval(UPLOAD_PNG),
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 					wait(<span class="jxr_string">"performance.getEntriesByType('navigation')[0].type === 'reload'"</span>)),
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"status"</span>, <span class="jxr_string">"document.querySelector('form[data-petstore-upload] [role=status]')?.textContent ?? null"</span>,
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<span class="jxr_string">"marker"</span>, <span class="jxr_string">"sessionStorage.getItem('uploaded')"</span>)),
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"uploadNoToken"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"uploadNoToken"</span>, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 				<span class="jxr_string">"actions"</span>, List.of(
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 					eval(UPLOAD_NO_TOKEN),
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 					wait(<span class="jxr_string">"document.querySelector('form[data-petstore-upload] [role=status]')"</span>)),
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"status"</span>, <span class="jxr_string">"document.querySelector('form[data-petstore-upload] [role=status]')?.textContent ?? null"</span>,
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 					<span class="jxr_string">"navigation"</span>, <span class="jxr_string">"performance.getEntriesByType('navigation')[0].type"</span>)),
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"uploadFails"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"uploadFails"</span>, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 				<span class="jxr_string">"actions"</span>, List.of(
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 					eval(UPLOAD_BAD),
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 					wait(<span class="jxr_string">"document.querySelector('form[data-petstore-upload] [role=status]')"</span>)),
@@ -337,90 +337,94 @@
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap(get(<span class="jxr_string">"/petstore/pets/"</span> + id, <span class="jxr_string">"application/json"</span>).body());
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// writes is a JSON array of {url, method, status, body}.</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; theWrite(String name, String method, String part) {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> w = ((List&lt;Map&lt;String,Object&gt;&gt;) query(c, <span class="jxr_string">"writes"</span>)).stream()
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			.filter(x -&gt; method.equals(x.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(x.get(<span class="jxr_string">"url"</span>)).contains(part)).toList();
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertSize(1, w);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertEquals(200, ((Number) w.get(0).get(<span class="jxr_string">"status"</span>)).intValue(), () -&gt; name + <span class="jxr_string">": "</span> + w.get(0));
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">return</strong> w.get(0);
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> a01_pencilSaveStagesTheRename() {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		theWrite(<span class="jxr_string">"rename"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets/"</span> + renamePet + <span class="jxr_string">"/stage"</span>);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertContains(<span class="jxr_string">"Staged"</span>, (String) query(report.get(<span class="jxr_string">"rename"</span>), <span class="jxr_string">"toast"</span>));
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertNull(query(report.get(<span class="jxr_string">"rename"</span>), <span class="jxr_string">"error"</span>));
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	@Test <strong class="jxr_keyword">void</strong> a02_pencilSaveStagesTheReprice() {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		theWrite(<span class="jxr_string">"reprice"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets/"</span> + repricePet + <span class="jxr_string">"/stage"</span>);
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertContains(<span class="jxr_string">"Staged"</span>, (String) query(report.get(<span class="jxr_string">"reprice"</span>), <span class="jxr_string">"toast"</span>));
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// fetches is a JSON object of {status, body}.</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	@Test <strong class="jxr_keyword">void</strong> a03_applyWritesTheStagedChange() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertContains(<span class="jxr_string">"Applied"</span>, theWrite(<span class="jxr_string">"apply"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/apply"</span>).get(<span class="jxr_string">"body"</span>));
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> pet = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) report.get(<span class="jxr_string">"apply"</span>).get(<span class="jxr_string">"fetches"</span>)).get(<span class="jxr_string">"pet"</span>);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertString(renamed, <strong class="jxr_keyword">new</strong> JsonMap(String.valueOf(pet.get(<span class="jxr_string">"body"</span>))).getString(<span class="jxr_string">"name"</span>));
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> a04_discardDropsTheStagedChange() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertContains(<span class="jxr_string">"\&quot;succeeded\&quot;"</span>, theWrite(<span class="jxr_string">"discard"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets/changes/discard"</span>).get(<span class="jxr_string">"body"</span>));
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertNotEquals(<span class="jxr_string">"77.5"</span>, String.valueOf(pet(repricePet).get(<span class="jxr_string">"price"</span>)));
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Test <strong class="jxr_keyword">void</strong> a05_addPetDialogCreatesAPet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertContains(<span class="jxr_string">"Added 'Added in browser'"</span>, theWrite(<span class="jxr_string">"add"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets"</span>).get(<span class="jxr_string">"body"</span>));
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertContains(<span class="jxr_string">"Added in browser"</span>, get(<span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"application/json"</span>).body());
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> a06_editPetDialogReplacesThePet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		theWrite(<span class="jxr_string">"edit"</span>, <span class="jxr_string">"PUT"</span>, <span class="jxr_string">"/console/pets/"</span>);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertContains(<span class="jxr_string">"Edited in browser"</span>, get(<span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"application/json"</span>).body());
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> a07_bulkMarkSoldSellsTheSelectedPet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"sell"</span>);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		theWrite(<span class="jxr_string">"sell"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/sell"</span>);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertNotContains(<span class="jxr_string">"fail"</span>, String.valueOf(query(c, <span class="jxr_string">"toast"</span>)).toLowerCase());
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertString(<span class="jxr_string">"SOLD"</span>, pet(query(c, <span class="jxr_string">"sold"</span>)).getString(<span class="jxr_string">"status"</span>));
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Test <strong class="jxr_keyword">void</strong> a08_photoUploadSucceedsAndReloads() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"upload"</span>);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertString(<span class="jxr_string">"pending"</span>, query(c, <span class="jxr_string">"marker"</span>));
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertNull(query(c, <span class="jxr_string">"status"</span>));
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> r = HTTP.send(HttpRequest.newBuilder(URI.create(base + <span class="jxr_string">"/petstore/pets/1/photo"</span>)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"image/png"</span>).GET().build(), BodyHandlers.ofByteArray());
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertEquals(200, r.statusCode());
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> img = ImageIO.read(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(r.body()));
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertEquals(7, img.getWidth());
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertEquals(5, img.getHeight());
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	@Test <strong class="jxr_keyword">void</strong> a09_failedPhotoUploadShowsTheStatusLineAndStaysOnThePage() {
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"uploadFails"</span>);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertContains(<span class="jxr_string">"Upload failed (400)"</span>, String.valueOf(query(c, <span class="jxr_string">"status"</span>)));
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertString(<span class="jxr_string">"navigate"</span>, query(c, <span class="jxr_string">"navigation"</span>));
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	@Test <strong class="jxr_keyword">void</strong> a10_photoUploadWithoutTheTokenIsRefusedAndStaysOnThePage() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"uploadNoToken"</span>);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertContains(<span class="jxr_string">"Upload failed (403)"</span>, String.valueOf(query(c, <span class="jxr_string">"status"</span>)));
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertString(<span class="jxr_string">"navigate"</span>, query(c, <span class="jxr_string">"navigation"</span>));
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">var</strong> r = HTTP.send(HttpRequest.newBuilder(URI.create(base + <span class="jxr_string">"/petstore/pets/1/photo"</span>)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"image/png"</span>).GET().build(), BodyHandlers.ofByteArray());
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<em class="jxr_comment">// Whatever the pet's photo is, it is not the refused upload's 11x13 image (there may be none at all).</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> img = r.statusCode() == 200 ? ImageIO.read(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(r.body())) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertFalse(img != <strong class="jxr_keyword">null</strong> &amp;&amp; img.getWidth() == 11 &amp;&amp; img.getHeight() == 13, <span class="jxr_string">"the refused upload was stored"</span>);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	@Test <strong class="jxr_keyword">void</strong> a11_crossOriginFormPostToTheApiChangesNothing() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(attack, <span class="jxr_string">"crossOriginForm"</span>);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertString(base, query(c, <span class="jxr_string">"landed"</span>));
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertEquals(petsBefore, petsAfter);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertNotContains(<span class="jxr_string">"Planted"</span>, get(<span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"application/json"</span>).body());
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> }
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// writes is a JSON array of {url, method, status, body}.</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	})
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; theWrite(String name, String method, String part) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> w = ((List&lt;Map&lt;String,Object&gt;&gt;) query(c, <span class="jxr_string">"writes"</span>)).stream()
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			.filter(x -&gt; method.equals(x.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(x.get(<span class="jxr_string">"url"</span>)).contains(part)).toList();
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertSize(1, w);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertEquals(200, ((Number) w.get(0).get(<span class="jxr_string">"status"</span>)).intValue(), () -&gt; name + <span class="jxr_string">": "</span> + w.get(0));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">return</strong> w.get(0);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	@Test <strong class="jxr_keyword">void</strong> a01_pencilSaveStagesTheRename() {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		theWrite(<span class="jxr_string">"rename"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets/"</span> + renamePet + <span class="jxr_string">"/stage"</span>);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertContains(<span class="jxr_string">"Staged"</span>, (String) query(report.get(<span class="jxr_string">"rename"</span>), <span class="jxr_string">"toast"</span>));
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertNull(query(report.get(<span class="jxr_string">"rename"</span>), <span class="jxr_string">"error"</span>));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	@Test <strong class="jxr_keyword">void</strong> a02_pencilSaveStagesTheReprice() {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		theWrite(<span class="jxr_string">"reprice"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets/"</span> + repricePet + <span class="jxr_string">"/stage"</span>);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertContains(<span class="jxr_string">"Staged"</span>, (String) query(report.get(<span class="jxr_string">"reprice"</span>), <span class="jxr_string">"toast"</span>));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// fetches is a JSON object of {status, body}.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	})
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Test <strong class="jxr_keyword">void</strong> a03_applyWritesTheStagedChange() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertContains(<span class="jxr_string">"Applied"</span>, theWrite(<span class="jxr_string">"apply"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/apply"</span>).get(<span class="jxr_string">"body"</span>));
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">var</strong> pet = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) report.get(<span class="jxr_string">"apply"</span>).get(<span class="jxr_string">"fetches"</span>)).get(<span class="jxr_string">"pet"</span>);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertString(renamed, <strong class="jxr_keyword">new</strong> JsonMap(String.valueOf(pet.get(<span class="jxr_string">"body"</span>))).getString(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> a04_discardDropsTheStagedChange() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertContains(<span class="jxr_string">"\&quot;succeeded\&quot;"</span>, theWrite(<span class="jxr_string">"discard"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets/changes/discard"</span>).get(<span class="jxr_string">"body"</span>));
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertNotEquals(<span class="jxr_string">"77.5"</span>, String.valueOf(pet(repricePet).get(<span class="jxr_string">"price"</span>)));
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Test <strong class="jxr_keyword">void</strong> a05_addPetDialogCreatesAPet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertContains(<span class="jxr_string">"Added 'Added in browser'"</span>, theWrite(<span class="jxr_string">"add"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/console/pets"</span>).get(<span class="jxr_string">"body"</span>));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertContains(<span class="jxr_string">"Added in browser"</span>, get(<span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"application/json"</span>).body());
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test <strong class="jxr_keyword">void</strong> a06_editPetDialogReplacesThePet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		theWrite(<span class="jxr_string">"edit"</span>, <span class="jxr_string">"PUT"</span>, <span class="jxr_string">"/console/pets/"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertContains(<span class="jxr_string">"Edited in browser"</span>, get(<span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"application/json"</span>).body());
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	@Test <strong class="jxr_keyword">void</strong> a07_bulkMarkSoldSellsTheSelectedPet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"sell"</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		theWrite(<span class="jxr_string">"sell"</span>, <span class="jxr_string">"POST"</span>, <span class="jxr_string">"/sell"</span>);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertNotContains(<span class="jxr_string">"fail"</span>, String.valueOf(query(c, <span class="jxr_string">"toast"</span>)).toLowerCase());
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertString(<span class="jxr_string">"SOLD"</span>, pet(query(c, <span class="jxr_string">"sold"</span>)).getString(<span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test <strong class="jxr_keyword">void</strong> a08_photoUploadSucceedsAndReloads() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"upload"</span>);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertString(<span class="jxr_string">"pending"</span>, query(c, <span class="jxr_string">"marker"</span>));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertNull(query(c, <span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> r = HTTP.send(HttpRequest.newBuilder(URI.create(base + <span class="jxr_string">"/petstore/pets/1/photo"</span>)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"image/png"</span>).GET().build(), BodyHandlers.ofByteArray());
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertEquals(200, r.statusCode());
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> img = ImageIO.read(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(r.body()));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertEquals(7, img.getWidth());
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(5, img.getHeight());
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Test <strong class="jxr_keyword">void</strong> a09_failedPhotoUploadShowsTheStatusLineAndStaysOnThePage() {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"uploadFails"</span>);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertContains(<span class="jxr_string">"Upload failed (400)"</span>, String.valueOf(query(c, <span class="jxr_string">"status"</span>)));
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertString(<span class="jxr_string">"navigate"</span>, query(c, <span class="jxr_string">"navigation"</span>));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@Test <strong class="jxr_keyword">void</strong> a10_photoUploadWithoutTheTokenIsRefusedAndStaysOnThePage() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"uploadNoToken"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertContains(<span class="jxr_string">"Upload failed (403)"</span>, String.valueOf(query(c, <span class="jxr_string">"status"</span>)));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertString(<span class="jxr_string">"navigate"</span>, query(c, <span class="jxr_string">"navigation"</span>));
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> r = HTTP.send(HttpRequest.newBuilder(URI.create(base + <span class="jxr_string">"/petstore/pets/1/photo"</span>)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"image/png"</span>).GET().build(), BodyHandlers.ofByteArray());
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<em class="jxr_comment">// Whatever the pet's photo is, it is not the refused upload's 11x13 image (there may be none at all).</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> img = r.statusCode() == 200 ? ImageIO.read(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(r.body())) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertFalse(img != <strong class="jxr_keyword">null</strong> &amp;&amp; img.getWidth() == 11 &amp;&amp; img.getHeight() == 13, <span class="jxr_string">"the refused upload was stored"</span>);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	@Test <strong class="jxr_keyword">void</strong> a11_crossOriginFormPostToTheApiChangesNothing() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(attack, <span class="jxr_string">"crossOriginForm"</span>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertString(base, query(c, <span class="jxr_string">"landed"</span>));
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertEquals(petsBefore, petsAfter);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertNotContains(<span class="jxr_string">"Planted"</span>, get(<span class="jxr_string">"/petstore/pets"</span>, <span class="jxr_string">"application/json"</span>).body());
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

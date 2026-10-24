@@ -537,7 +537,7 @@
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 					<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 				<strong class="jxr_keyword">default</strong>:
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 					<strong class="jxr_keyword">if</strong> (c &lt; 0x20 || c == 0x7f)
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 						out.write(String.format(<span class="jxr_string">"&#92;&#92;u%04x"</span>, (<strong class="jxr_keyword">int</strong>) c));
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 						out.write(f(<span class="jxr_string">"&#92;&#92;u%04x"</span>, (<strong class="jxr_keyword">int</strong>) c));
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 					<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 						out.write(c);
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 			}

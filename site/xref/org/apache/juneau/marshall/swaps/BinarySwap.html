@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<em class="jxr_comment">// this swap so the underlying BSON / CBOR / MsgPack writer emits the raw byte sequence and the</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<em class="jxr_comment">// corresponding parser consumes it.  Binary serializers without a native byte-array wire type</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<em class="jxr_comment">// (Parquet, binary RDF) report hasNativeBytes()==false and still run this swap to produce /</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// consume the configured text wire form (HEX / BASE64 / etc.) per OQ 10 (b).</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// consume the configured text wire form (HEX / BASE64 / etc.).</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">if</strong> (session instanceof OutputStreamSerializerSession session2 &amp;&amp; session2.hasNativeBytes())
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">return</strong> 0;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">if</strong> (session instanceof InputStreamParserSession session2 &amp;&amp; session2.hasNativeBytes())

@@ -24,97 +24,98 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.terminal;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The terminal region in a real Chromium: the real xterm.js WebJar and the real {@code juneau-terminal.js}, driven by</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@code terminal-browser.cjs}.</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The prober answers every request itself through Playwright's request routing on a made-up origin, so nothing</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * listens on a port.  The endpoints' headers are covered by {@link TerminalMixin_Test}; the end-to-end path is</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@link TerminalSmoke_BrowserTest}.</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Off by default:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * Disabled unless the {@value #GATE} system property is set, which only the module's opt-in {@code js-tests} Maven</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * profile does.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  @EnabledIfSystemProperty(named=Terminal_BrowserTest.GATE, matches=<span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	disabledReason=<span class="jxr_string">"JS-execution harness is opt-in; run with -Pjs-tests"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">class</strong> <a name="Terminal_BrowserTest" href="../../../../../../org/apache/juneau/rest/server/terminal/Terminal_BrowserTest.html#Terminal_BrowserTest">Terminal_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_javadoccomment">/** System property the {@code js-tests} profile sets to enable this class. */</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String GATE = <span class="jxr_string">"juneau.jsTests"</span>;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; report;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@BeforeAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setUp() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> dir = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.dir"</span>));
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> harness = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.harnessDir"</span>), <span class="jxr_string">"terminal-browser.cjs"</span>);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> out = TerminalHarness.run(List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString()),
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			TerminalHarness.BROWSER_ASSETS,
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			Map.of(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString(), <span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, requiredProperty(<span class="jxr_string">"juneau.jsTests.browsers"</span>)),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			300);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		report = Json.to(out, Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertNull(report.get(<span class="jxr_string">"harnessError"</span>), () -&gt; <span class="jxr_string">"prober failed: "</span> + report.get(<span class="jxr_string">"harnessError"</span>));
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_javadoccomment">/** Asserts that case {@code name} passed with no page or console errors. */</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> ok(String name) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(<strong class="jxr_keyword">true</strong>, cases.get(name), () -&gt; name + <span class="jxr_string">" -&gt; "</span> + cases.get(name));
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"pageErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" page errors"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"consoleErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" console errors"</span>);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a01_umdBundleLoadsFromAClassicScript() { ok(<span class="jxr_string">"b01_umdBundleLoadsFromAClassicScript"</span>); }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a02_sgrColoursReachTheCellsAndTheBadgeSaysDone() { ok(<span class="jxr_string">"b02_sgrColoursReachTheCellsAndTheBadgeSaysDone"</span>); }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> a03_carriageReturnRedrawsInPlace() { ok(<span class="jxr_string">"b03_carriageReturnRedrawsInPlace"</span>); }
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a04_altScreenBoxIsDrawn() { ok(<span class="jxr_string">"b04_altScreenBoxIsDrawn"</span>); }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a05_scrollbackAndSearch() { ok(<span class="jxr_string">"b05_scrollbackAndSearch"</span>); }
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a06_hashScrollsToTheStepOffset() { ok(<span class="jxr_string">"b06_hashScrollsToTheStepOffset"</span>); }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a07_fontScalesWithThePanelWhileColsAndRowsStay() { ok(<span class="jxr_string">"b07_fontScalesWithThePanelWhileColsAndRowsStay"</span>); }
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a08_osc52LeavesTheClipboardAlone() { ok(<span class="jxr_string">"b08_osc52LeavesTheClipboardAlone"</span>); }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a09_onlyHttpLinksOpen() { ok(<span class="jxr_string">"b09_onlyHttpLinksOpen"</span>); }
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a10_rawLinkOnlyForHttpUrls() { ok(<span class="jxr_string">"b10_rawLinkOnlyForHttpUrls"</span>); }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a11_handleScrollsWithoutAHashChange() { ok(<span class="jxr_string">"b11_handleScrollsWithoutAHashChange"</span>); }
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Test <strong class="jxr_keyword">void</strong> a12_mountWithoutInputHasNoToggle() { ok(<span class="jxr_string">"b12_mountWithoutInputHasNoToggle"</span>); }
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a13_inputCardArmsTheTerminal() { ok(<span class="jxr_string">"b13_inputCardArmsTheTerminal"</span>); }
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Test <strong class="jxr_keyword">void</strong> a14_inputStatusRoleReachesItsCard() { ok(<span class="jxr_string">"b14_inputStatusRoleReachesItsCard"</span>); }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> a15_toneBackgroundsStayLegibleWithViewsCss() { ok(<span class="jxr_string">"b15_toneBackgroundsStayLegibleWithViewsCss"</span>); }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a16_nudgeRoleFetchesAtOnce() { ok(<span class="jxr_string">"b16_nudgeRoleFetchesAtOnce"</span>); }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a17_cardWithoutNudgeSubscriptionPollsNormally() { ok(<span class="jxr_string">"b17_cardWithoutNudgeSubscriptionPollsNormally"</span>); }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> a18_destroyUnregistersTheNudgeLink() { ok(<span class="jxr_string">"b18_destroyUnregistersTheNudgeLink"</span>); }
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> a19_nudgeFetchesAndRestores() { ok(<span class="jxr_string">"b19_nudgeFetchesAndRestores"</span>); }
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a20_wildcardNudgeTopicNeverLinks() { ok(<span class="jxr_string">"b20_wildcardNudgeTopicNeverLinks"</span>); }
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a21_terminalOptionsReachTheXterm() { ok(<span class="jxr_string">"b21_terminalOptionsReachTheXterm"</span>); }
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> a22_absentTerminalKeepsTheDefaultXtermOptions() { ok(<span class="jxr_string">"b22_absentTerminalKeepsTheDefaultXtermOptions"</span>); }
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> a15d_toneBackgroundsLegibleUnderDark() { ok(<span class="jxr_string">"b15d_toneBackgroundsLegibleUnderDark"</span>); }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCaseHasAMethod() {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(24, cases.size(), () -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + cases.keySet());
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> }
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * The terminal region in a real Chromium: the real xterm.js WebJar and the real {@code juneau-terminal.js}, driven by</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@code terminal-browser.cjs}.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * The prober answers every request itself through Playwright's request routing on a made-up origin, so nothing</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * listens on a port.  The endpoints' headers are covered by {@link TerminalMixin_Test}; the end-to-end path is</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * {@link TerminalSmoke_BrowserTest}.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Off by default:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Disabled unless the {@value #GATE} system property is set, which only the module's opt-in {@code js-tests} Maven</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * profile does.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  @EnabledIfSystemProperty(named=Terminal_BrowserTest.GATE, matches=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	disabledReason=<span class="jxr_string">"JS-execution harness is opt-in; run with -Pjs-tests"</span>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">class</strong> <a name="Terminal_BrowserTest" href="../../../../../../org/apache/juneau/rest/server/terminal/Terminal_BrowserTest.html#Terminal_BrowserTest">Terminal_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<em class="jxr_javadoccomment">/** System property the {@code js-tests} profile sets to enable this class. */</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String GATE = <span class="jxr_string">"juneau.jsTests"</span>;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; report;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@BeforeAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setUp() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> dir = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.dir"</span>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> harness = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.harnessDir"</span>), <span class="jxr_string">"terminal-browser.cjs"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> out = TerminalHarness.run(List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString()),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			TerminalHarness.BROWSER_ASSETS,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			Map.of(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString(), <span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, requiredProperty(<span class="jxr_string">"juneau.jsTests.browsers"</span>)),
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			300);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		report = Json.to(out, Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertNull(report.get(<span class="jxr_string">"harnessError"</span>), () -&gt; <span class="jxr_string">"prober failed: "</span> + report.get(<span class="jxr_string">"harnessError"</span>));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_javadoccomment">/** Asserts that case {@code name} passed with no page or console errors. */</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> ok(String name) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(<strong class="jxr_keyword">true</strong>, cases.get(name), () -&gt; name + <span class="jxr_string">" -&gt; "</span> + cases.get(name));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"pageErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" page errors"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"consoleErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" console errors"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a01_umdBundleLoadsFromAClassicScript() { ok(<span class="jxr_string">"b01_umdBundleLoadsFromAClassicScript"</span>); }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> a02_sgrColoursReachTheCellsAndTheBadgeSaysDone() { ok(<span class="jxr_string">"b02_sgrColoursReachTheCellsAndTheBadgeSaysDone"</span>); }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a03_carriageReturnRedrawsInPlace() { ok(<span class="jxr_string">"b03_carriageReturnRedrawsInPlace"</span>); }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a04_altScreenBoxIsDrawn() { ok(<span class="jxr_string">"b04_altScreenBoxIsDrawn"</span>); }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a05_scrollbackAndSearch() { ok(<span class="jxr_string">"b05_scrollbackAndSearch"</span>); }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a06_hashScrollsToTheStepOffset() { ok(<span class="jxr_string">"b06_hashScrollsToTheStepOffset"</span>); }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a07_fontScalesWithThePanelWhileColsAndRowsStay() { ok(<span class="jxr_string">"b07_fontScalesWithThePanelWhileColsAndRowsStay"</span>); }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a08_osc52LeavesTheClipboardAlone() { ok(<span class="jxr_string">"b08_osc52LeavesTheClipboardAlone"</span>); }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a09_onlyHttpLinksOpen() { ok(<span class="jxr_string">"b09_onlyHttpLinksOpen"</span>); }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Test <strong class="jxr_keyword">void</strong> a10_rawLinkOnlyForHttpUrls() { ok(<span class="jxr_string">"b10_rawLinkOnlyForHttpUrls"</span>); }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Test <strong class="jxr_keyword">void</strong> a11_handleScrollsWithoutAHashChange() { ok(<span class="jxr_string">"b11_handleScrollsWithoutAHashChange"</span>); }
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a12_mountWithoutInputHasNoToggle() { ok(<span class="jxr_string">"b12_mountWithoutInputHasNoToggle"</span>); }
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Test <strong class="jxr_keyword">void</strong> a13_inputCardArmsTheTerminal() { ok(<span class="jxr_string">"b13_inputCardArmsTheTerminal"</span>); }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> a14_inputStatusRoleReachesItsCard() { ok(<span class="jxr_string">"b14_inputStatusRoleReachesItsCard"</span>); }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a15_toneBackgroundsStayLegibleWithViewsCss() { ok(<span class="jxr_string">"b15_toneBackgroundsStayLegibleWithViewsCss"</span>); }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a16_nudgeRoleFetchesAtOnce() { ok(<span class="jxr_string">"b16_nudgeRoleFetchesAtOnce"</span>); }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> a17_cardWithoutNudgeSubscriptionPollsNormally() { ok(<span class="jxr_string">"b17_cardWithoutNudgeSubscriptionPollsNormally"</span>); }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> a18_destroyUnregistersTheNudgeLink() { ok(<span class="jxr_string">"b18_destroyUnregistersTheNudgeLink"</span>); }
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a19_nudgeFetchesAndRestores() { ok(<span class="jxr_string">"b19_nudgeFetchesAndRestores"</span>); }
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a20_wildcardNudgeTopicNeverLinks() { ok(<span class="jxr_string">"b20_wildcardNudgeTopicNeverLinks"</span>); }
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> a21_terminalOptionsReachTheXterm() { ok(<span class="jxr_string">"b21_terminalOptionsReachTheXterm"</span>); }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a22_absentTerminalKeepsTheDefaultXtermOptions() { ok(<span class="jxr_string">"b22_absentTerminalKeepsTheDefaultXtermOptions"</span>); }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a15d_toneBackgroundsLegibleUnderDark() { ok(<span class="jxr_string">"b15d_toneBackgroundsLegibleUnderDark"</span>); }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCaseHasAMethod() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + cases.keySet(), 24, cases);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

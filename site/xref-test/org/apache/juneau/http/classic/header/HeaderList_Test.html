@@ -485,7 +485,7 @@
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 	@Test <strong class="jxr_keyword">void</strong> e03_unmodifiable_readsStillWork() {
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">var</strong> u = HeaderList.create().append(<span class="jxr_string">"X-A"</span>, <span class="jxr_string">"a"</span>).append(<span class="jxr_string">"X-B"</span>, <span class="jxr_string">"b"</span>).unmodifiable();
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		assertEquals(2, u.size());
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		assertSize(2, u);
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 		assertList(u, <span class="jxr_string">"X-A: a"</span>, <span class="jxr_string">"X-B: b"</span>);
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		assertEquals(<span class="jxr_string">"a"</span>, u.get(0).getValue());
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">var</strong> count = <strong class="jxr_keyword">new</strong> AtomicInteger();
@@ -558,7 +558,7 @@
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">var</strong> x = HeaderList.create().append(<span class="jxr_string">"X-A"</span>, <span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> u = x.unmodifiable();
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		x.append(<span class="jxr_string">"X-B"</span>, <span class="jxr_string">"b"</span>); <em class="jxr_comment">// Mutate original after snapshotting.</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		assertEquals(1, u.size());
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		assertSize(1, u);
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		assertList(u, <span class="jxr_string">"X-A: a"</span>);
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 	}
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 

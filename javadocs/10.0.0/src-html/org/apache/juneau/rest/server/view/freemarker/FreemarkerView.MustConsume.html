@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">    *    value.</span>
 <span class="source-line-no">159</span><span id="line-159">    */</span>
 <span class="source-line-no">160</span><span id="line-160">   public FreemarkerView attrs(Map&lt;String,?&gt; values) {</span>
-<span class="source-line-no">161</span><span id="line-161">      if (values == null || values.isEmpty())</span>
+<span class="source-line-no">161</span><span id="line-161">      if (ie(values))</span>
 <span class="source-line-no">162</span><span id="line-162">         return this;</span>
 <span class="source-line-no">163</span><span id="line-163">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">164</span><span id="line-164">      values.forEach((k, v) -&gt; {</span>

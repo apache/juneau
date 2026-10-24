@@ -244,168 +244,153 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(1));
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(2));
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> HashMap&lt;Integer,String&gt;();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		x2.put(1, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		x2.put(2, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		x2.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(1));
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertNull(x2.get(2));
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<em class="jxr_comment">// Map&lt;Boolean,String&gt; test</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">void</strong> a02_mapBooleanString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;Boolean,String&gt;();
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		x.put(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		x.put(false, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(<strong class="jxr_keyword">true</strong>));
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(false));
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> HashMap&lt;Boolean,String&gt;();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		x2.put(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		x2.put(false, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		x2.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(<strong class="jxr_keyword">true</strong>));
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		assertNull(x2.get(false));
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	}
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<em class="jxr_comment">// Map&lt;byte[],String&gt; test</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	<strong class="jxr_keyword">void</strong> a03_mapByteArrayString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<em class="jxr_comment">// Note, you cannot really test maps with byte[] keys since byte[] does not test for equality.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_comment">// So just test serialization.</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		String e;
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		Object r;
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">var</strong> x = map();
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		x.put(bytes(1,2,3), <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		x.put(bytes(4,5,6), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		x.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> s = (Serializer)Json5Serializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		e = <span class="jxr_string">"{AQID:'a',BAUG:null,null:'b'}"</span>;
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		r = s.write(x);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		assertEquals(e, r);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		s = XmlSerializer.create().ns().sq().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		e = <span class="jxr_string">"&lt;object&gt;&lt;AQID&gt;a&lt;/AQID&gt;&lt;BAUG _type='null'/&gt;&lt;_x0000_&gt;b&lt;/_x0000_&gt;&lt;/object&gt;"</span>;
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		r = s.write(x);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertEquals(e, r);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		s = HtmlSerializer.create().sq().keepNullProperties().addKeyValueTableHeaders().binaryFormat(BinaryFormat.BASE64).build();
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		e = <span class="jxr_string">"&lt;table&gt;&lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;AQID&lt;/td&gt;&lt;td&gt;a&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;BAUG&lt;/td&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;td&gt;b&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;"</span>;
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		r = s.write(x);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertEquals(e, r);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		s = UonSerializer.create().encoding().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		e = <span class="jxr_string">"(AQID=a,BAUG=null,null=b)"</span>;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		r = s.write(x);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertEquals(e, r);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		Map&lt;Integer,String&gt; x2 = m(1, <span class="jxr_string">"a"</span>, 2, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(1));
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertNull(x2.get(2));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_comment">// Map&lt;Boolean,String&gt; test</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">void</strong> a02_mapBooleanString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;Boolean,String&gt;();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		x.put(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		x.put(false, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(false));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		Map&lt;Boolean,String&gt; x2 = m(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"a"</span>, false, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, Boolean.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertNull(x2.get(false));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<em class="jxr_comment">// Map&lt;byte[],String&gt; test</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<strong class="jxr_keyword">void</strong> a03_mapByteArrayString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<em class="jxr_comment">// Note, you cannot really test maps with byte[] keys since byte[] does not test for equality.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<em class="jxr_comment">// So just test serialization.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		String e;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		Object r;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">var</strong> x = map();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		x.put(bytes(1,2,3), <span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		x.put(bytes(4,5,6), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		x.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">var</strong> s = (Serializer)Json5Serializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		e = <span class="jxr_string">"{AQID:'a',BAUG:null,null:'b'}"</span>;
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		r = s.write(x);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		assertEquals(e, r);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		s = XmlSerializer.create().ns().sq().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		e = <span class="jxr_string">"&lt;object&gt;&lt;AQID&gt;a&lt;/AQID&gt;&lt;BAUG _type='null'/&gt;&lt;_x0000_&gt;b&lt;/_x0000_&gt;&lt;/object&gt;"</span>;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		r = s.write(x);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertEquals(e, r);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		s = HtmlSerializer.create().sq().keepNullProperties().addKeyValueTableHeaders().binaryFormat(BinaryFormat.BASE64).build();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		e = <span class="jxr_string">"&lt;table&gt;&lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;AQID&lt;/td&gt;&lt;td&gt;a&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;BAUG&lt;/td&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;td&gt;b&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;"</span>;
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		r = s.write(x);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertEquals(e, r);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		s = UonSerializer.create().encoding().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		e = <span class="jxr_string">"(AQID=a,BAUG=null,null=b)"</span>;
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		r = s.write(x);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(e, r);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		s = UrlEncodingSerializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		e = <span class="jxr_string">"AQID=a&amp;BAUG=null&amp;null=b"</span>;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		r = s.write(x);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertEquals(e, r);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		s = UrlEncodingSerializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		e = <span class="jxr_string">"AQID=a&amp;BAUG=null&amp;null=b"</span>;
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		r = s.write(x);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		assertEquals(e, r);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_comment">// Map&lt;Date,String&gt; test</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_comment">// Map&lt;Date,String&gt; test</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">void</strong> a04_mapDateString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> xd1 = <strong class="jxr_keyword">new</strong> Date(1,2,3,4,5,6);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> xd2 = <strong class="jxr_keyword">new</strong> Date(2,3,4,5,6,7);
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">void</strong> a04_mapDateString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> xd1 = <strong class="jxr_keyword">new</strong> Date(1,2,3,4,5,6);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> xd2 = <strong class="jxr_keyword">new</strong> Date(2,3,4,5,6,7);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;Date,String&gt;();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		x.put(xd1, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		x.put(xd2, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, Date.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(xd1));
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(xd2));
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> HashMap&lt;Date,String&gt;();
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		x2.put(xd1, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		x2.put(xd2, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		x2.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, Date.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(xd1));
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertNull(x2.get(xd2));
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_comment">// Map&lt;Calendar,String&gt; test</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<strong class="jxr_keyword">void</strong> a05_mapCalendarString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> xc1 = GregorianCalendar.from(ZonedDateTime.parse(<span class="jxr_string">"2012-12-21T12:34:56Z"</span>));
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> xc2 = GregorianCalendar.from(ZonedDateTime.parse(<span class="jxr_string">"2012-12-21T12:34:57Z"</span>));
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;Calendar,String&gt;();
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		x.put(xc1, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		x.put(xc2, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, GregorianCalendar.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(xc1));
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(xc2));
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> HashMap&lt;Calendar,String&gt;();
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		x2.put(xc1, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		x2.put(xc2, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		x2.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, GregorianCalendar.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(xc1));
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertNull(x2.get(xc2));
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_comment">// Map&lt;Enum,String&gt; test</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">void</strong> a06_mapEnumString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;TestEnum,String&gt;();
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		x.put(TestEnum.FOO, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		x.put(TestEnum.BAR, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, TestEnum.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(TestEnum.FOO));
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(TestEnum.BAR));
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> HashMap&lt;TestEnum,String&gt;();
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		x2.put(TestEnum.FOO, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		x2.put(TestEnum.BAR, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		x2.put(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, TestEnum.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(TestEnum.FOO));
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertNull(x2.get(TestEnum.BAR));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> enum TestEnum {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		FOO,BAR,BAZ
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;Date,String&gt;();
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		x.put(xd1, <span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		x.put(xd2, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, Date.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(xd1));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(xd2));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		Map&lt;Date,String&gt; x2 = m(xd1, <span class="jxr_string">"a"</span>, xd2, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, Date.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(xd1));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		assertNull(x2.get(xd2));
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<em class="jxr_comment">// Map&lt;Calendar,String&gt; test</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">void</strong> a05_mapCalendarString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> xc1 = GregorianCalendar.from(ZonedDateTime.parse(<span class="jxr_string">"2012-12-21T12:34:56Z"</span>));
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> xc2 = GregorianCalendar.from(ZonedDateTime.parse(<span class="jxr_string">"2012-12-21T12:34:57Z"</span>));
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;Calendar,String&gt;();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		x.put(xc1, <span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		x.put(xc2, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, GregorianCalendar.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(xc1));
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(xc2));
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		Map&lt;Calendar,String&gt; x2 = m(xc1, <span class="jxr_string">"a"</span>, xc2, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, GregorianCalendar.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(xc1));
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertNull(x2.get(xc2));
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_comment">// Map&lt;Enum,String&gt; test</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">void</strong> a06_mapEnumString(RoundTrip_Tester t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> TreeMap&lt;TestEnum,String&gt;();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		x.put(TestEnum.FOO, <span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		x.put(TestEnum.BAR, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		x = t.roundTrip(x, TreeMap.<strong class="jxr_keyword">class</strong>, TestEnum.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(<span class="jxr_string">"a"</span>, x.get(TestEnum.FOO));
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertNull(<strong class="jxr_keyword">null</strong>, x.get(TestEnum.BAR));
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		Map&lt;TestEnum,String&gt; x2 = m(TestEnum.FOO, <span class="jxr_string">"a"</span>, TestEnum.BAR, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		x2 = t.roundTrip(x2, HashMap.<strong class="jxr_keyword">class</strong>, TestEnum.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(<span class="jxr_string">"a"</span>, x2.get(TestEnum.FOO));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertNull(x2.get(TestEnum.BAR));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<span class="jxr_string">"b"</span>, x2.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">public</strong> enum TestEnum {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		FOO,BAR,BAZ
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

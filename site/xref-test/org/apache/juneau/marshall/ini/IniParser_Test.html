@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> ini = <span class="jxr_string">"=badline\nkey = value"</span>;
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;String,Object&gt;) IniParser.DEFAULT.read(ini, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertBean(m, <span class="jxr_string">"key"</span>, <span class="jxr_string">"value"</span>);
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertSize(1, m);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	@Test
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> ini = <span class="jxr_string">"justtext\nkey = value"</span>;
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;String,Object&gt;) IniParser.DEFAULT.read(ini, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertBean(m, <span class="jxr_string">"key"</span>, <span class="jxr_string">"value"</span>);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(1, m.size());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertSize(1, m);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test

@@ -497,7 +497,7 @@
 <span class="source-line-no">484</span><span id="line-484">         throw reject("\"iss\" claim does not match expected issuer");</span>
 <span class="source-line-no">485</span><span id="line-485"></span>
 <span class="source-line-no">486</span><span id="line-486">      var aud = claims.getAudience();</span>
-<span class="source-line-no">487</span><span id="line-487">      if (aud == null || aud.isEmpty())</span>
+<span class="source-line-no">487</span><span id="line-487">      if (ie(aud))</span>
 <span class="source-line-no">488</span><span id="line-488">         throw reject("\"aud\" claim is required");</span>
 <span class="source-line-no">489</span><span id="line-489">      if (! aud.contains(audience))</span>
 <span class="source-line-no">490</span><span id="line-490">         throw reject("\"aud\" claim does not include expected audience");</span>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-58">InMemoryReplayCache</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-59">InMemoryReplayCache</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a></span></div>
 <div class="block">Built-in default <a href="ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a>: a per-process, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a>-backed seen-identifier set with
@@ -203,7 +203,7 @@ implements <a href="ReplayCache.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="DEFAULT_SWEEP_INTERVAL_MS">
 <h3>DEFAULT_SWEEP_INTERVAL_MS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-61">DEFAULT_SWEEP_INTERVAL_MS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-62">DEFAULT_SWEEP_INTERVAL_MS</a></span></div>
 <div class="block">Default minimum interval, in milliseconds, between opportunistic expired-record sweeps.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -226,7 +226,7 @@ implements <a href="ReplayCache.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>InMemoryReplayCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-70">InMemoryReplayCache</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-72">InMemoryReplayCache</a></span>()</div>
 <div class="block">Constructor using the <a href="#DEFAULT_SWEEP_INTERVAL_MS"><code>default</code></a> sweep interval.</div>
 </section>
 </li>
@@ -241,7 +241,7 @@ implements <a href="ReplayCache.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="checkAndRecord(java.lang.String,long)">
 <h3>checkAndRecord</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-86">checkAndRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/concurrent/InMemoryReplayCache.html#line-104">checkAndRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  long&nbsp;expiresAtMs)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ReplayCache.html#checkAndRecord(java.lang.String,long)">ReplayCache</a></code></span></div>
 <div class="block">Atomically checks whether the specified identifier has been observed before and records it as seen if not.

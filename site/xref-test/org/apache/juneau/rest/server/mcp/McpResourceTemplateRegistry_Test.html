@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">var</strong> source = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(a));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().setResourceTemplates(source);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			source.clear();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			assertEquals(1, config.getResourceTemplates().size());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			assertSize(1, config.getResourceTemplates());
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			assertSame(a, config.getResourceTemplates().get(0));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">var</strong> source = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(spec));
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().setResourceTemplateSpecs(source);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			source.clear();
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			assertEquals(1, config.getResourceTemplates().size());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			assertSize(1, config.getResourceTemplates());
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			assertSame(spec, config.getResourceTemplates().get(0).descriptor());
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			config.setResourceTemplateSpecs(<strong class="jxr_keyword">null</strong>);
@@ -290,19 +290,19 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		@Test <strong class="jxr_keyword">void</strong> e01_explodeVarspecRegistersSuccessfully() {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(handler(<span class="jxr_string">"file:///{?tags*}"</span>));
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			assertEquals(1, config.getResourceTemplates().size());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			assertSize(1, config.getResourceTemplates());
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			assertFalse(McpUriTemplateMatcher.compile(<span class="jxr_string">"file:///{?tags*}"</span>).isReverseMatchable());
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		}
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		@Test <strong class="jxr_keyword">void</strong> e02_multiVariableSimpleExpressionRegistersSuccessfully() {
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(handler(<span class="jxr_string">"file:///{x,y}"</span>));
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			assertEquals(1, config.getResourceTemplates().size());
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			assertSize(1, config.getResourceTemplates());
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			assertFalse(McpUriTemplateMatcher.compile(<span class="jxr_string">"file:///{x,y}"</span>).isReverseMatchable());
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		}
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		@Test <strong class="jxr_keyword">void</strong> e03_prefixModifierRegistersSuccessfully() {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(handler(<span class="jxr_string">"file:///{var:3}"</span>));
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			assertEquals(1, config.getResourceTemplates().size());
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			assertSize(1, config.getResourceTemplates());
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			assertFalse(McpUriTemplateMatcher.compile(<span class="jxr_string">"file:///{var:3}"</span>).isReverseMatchable());
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		}
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}

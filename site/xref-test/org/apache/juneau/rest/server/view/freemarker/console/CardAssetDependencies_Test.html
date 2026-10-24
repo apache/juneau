@@ -279,7 +279,7 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@Test <strong class="jxr_keyword">void</strong> e01_initJquery_skipsPackJquery() {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">var</strong> holder = <strong class="jxr_keyword">new</strong> String[1];
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> records = LogRecordCapture.quietly(ToolkitPackRegistry.<strong class="jxr_keyword">class</strong>, () -&gt; holder[0] = get(Host.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"dup-init"</span>));
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertEquals(1, records.size(), records::toString);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertSize(records::toString, 1, records);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> body = holder[0];
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertEquals(1, count(body, <span class="jxr_string">"jquery.min.js"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertTrue(body.contains(<span class="jxr_string">"/app/static/jquery.min.js"</span>), () -&gt; body);

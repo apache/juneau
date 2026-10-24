@@ -76,37 +76,39 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  					<span class="jxr_string">"echarts"</span>, <span class="jxr_string">"document.querySelectorAll('canvas').length &gt; 0"</span>))));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a list of {url, method, postData}.</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; urls(Map&lt;String,Object&gt; c) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">return</strong> ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream().map(r -&gt; (String) r.get(<span class="jxr_string">"url"</span>)).toList();
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String day(Instant start) {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> end = URLEncoder.encode(start.plus(1, ChronoUnit.DAYS).toString(), UTF_8);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"end="</span> + end + <span class="jxr_string">"&amp;start="</span> + URLEncoder.encode(start.toString(), UTF_8);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> a01_firstLoadRequestsExactlyTheFourDayChunks() {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> u = urls(assertClean(report, <span class="jxr_string">"data"</span>));
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> got = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		u.subList(0, Math.min(4, u.size())).forEach(x -&gt; got.add(x.substring(x.indexOf('?') + 1)));
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> want = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 4; i &gt;= 1; i--)
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			want.add(day(END.minus(i, ChronoUnit.DAYS)));
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(want, got, () -&gt; <span class="jxr_string">"requests: "</span> + u);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertTrue(u.size() &gt;= 4, () -&gt; <span class="jxr_string">"requests: "</span> + u);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a02_reloadRequestsNoClosedDay() {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> u = urls(assertClean(report, <span class="jxr_string">"data"</span>));
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(4, u.size(), () -&gt; <span class="jxr_string">"requests: "</span> + u);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> a03_reloadDrawsTheSameRowsFromTheCache() {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"data"</span>);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertBean(c.get(<span class="jxr_string">"queries"</span>), <span class="jxr_string">"range,rows,cache,echarts"</span>, <span class="jxr_string">"true,96,indexedDb,true"</span>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// requests is a list of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	})
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; urls(Map&lt;String,Object&gt; c) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">return</strong> ((List&lt;Map&lt;String,Object&gt;&gt;) c.get(<span class="jxr_string">"requests"</span>)).stream().map(r -&gt; (String) r.get(<span class="jxr_string">"url"</span>)).toList();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String day(Instant start) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> end = URLEncoder.encode(start.plus(1, ChronoUnit.DAYS).toString(), UTF_8);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"end="</span> + end + <span class="jxr_string">"&amp;start="</span> + URLEncoder.encode(start.toString(), UTF_8);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a01_firstLoadRequestsExactlyTheFourDayChunks() {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> u = urls(assertClean(report, <span class="jxr_string">"data"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> got = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		u.subList(0, Math.min(4, u.size())).forEach(x -&gt; got.add(x.substring(x.indexOf('?') + 1)));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> want = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 4; i &gt;= 1; i--)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			want.add(day(END.minus(i, ChronoUnit.DAYS)));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(want, got, () -&gt; <span class="jxr_string">"requests: "</span> + u);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertTrue(u.size() &gt;= 4, () -&gt; <span class="jxr_string">"requests: "</span> + u);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> a02_reloadRequestsNoClosedDay() {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> u = urls(assertClean(report, <span class="jxr_string">"data"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertSize(() -&gt; <span class="jxr_string">"requests: "</span> + u, 4, u);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a03_reloadDrawsTheSameRowsFromTheCache() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"data"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertBean(c.get(<span class="jxr_string">"queries"</span>), <span class="jxr_string">"range,rows,cache,echarts"</span>, <span class="jxr_string">"true,96,indexedDb,true"</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

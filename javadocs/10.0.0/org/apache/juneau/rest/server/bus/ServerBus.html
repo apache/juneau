@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-63">ServerBus</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-65">ServerBus</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></span></div>
 <div class="block">The server half of the console message bus: a retained-value store plus the sessions that bridge it to pages.
@@ -225,7 +225,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="create(org.apache.juneau.rest.server.bus.BusPolicy)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ServerBus.html" title="class in org.apache.juneau.rest.server.bus">ServerBus</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-112">create</a></span><wbr><span class="parameters">(<a href="BusPolicy.html" title="class in org.apache.juneau.rest.server.bus">BusPolicy</a>&nbsp;policy)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ServerBus.html" title="class in org.apache.juneau.rest.server.bus">ServerBus</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-114">create</a></span><wbr><span class="parameters">(<a href="BusPolicy.html" title="class in org.apache.juneau.rest.server.bus">BusPolicy</a>&nbsp;policy)</span></div>
 <div class="block">Creates a bus and starts its timer (one daemon thread: heartbeat pings and session expiry).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="publish(java.lang.String,java.lang.Object)">
 <h3>publish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-142">publish</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-144">publish</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;payload)</span></div>
 <div class="block">Publishes a value to every connected session granted the topic, and stores it if the topic is retained.
 
@@ -260,7 +260,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="clear(java.lang.String)">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-167">clear</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-169">clear</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
 <div class="block">Removes a retained value and sends <code>clear</code> to every connected session granted the topic.
 
  <p>
@@ -276,7 +276,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="publishTo(java.util.function.Predicate,java.lang.String,java.lang.Object)">
 <h3>publishTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-188">publishTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&gt;&nbsp;audience,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-190">publishTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&gt;&nbsp;audience,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;payload)</span></div>
 <div class="block">Publishes a value to the connected sessions that match an audience.  Never retained, even on a retained topic.</div>
@@ -295,7 +295,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="retainedJson(java.lang.String)">
 <h3>retainedJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-207">retainedJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-209">retainedJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic)</span></div>
 <div class="block">The stored JSON of a retained topic.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -308,7 +308,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="sessions()">
 <h3>sessions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-218">sessions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-220">sessions</a></span>()</div>
 <div class="block">The live sessions (connected, or disconnected within their grace period).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -319,7 +319,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="policy()">
 <h3>policy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BusPolicy.html" title="class in org.apache.juneau.rest.server.bus">BusPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-226">policy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BusPolicy.html" title="class in org.apache.juneau.rest.server.bus">BusPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-228">policy</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The policy this bus enforces.</dd>
@@ -329,7 +329,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-234">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-236">close</a></span>()</div>
 <div class="block">Closes every connection with <code>1001</code> (<code>bus:closed</code>), forgets every session and stops the timer.
  Retained values are kept.  Idempotent.</div>
 <dl class="notes">
@@ -341,7 +341,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="openSession(jakarta.servlet.http.HttpServletRequest,org.apache.juneau.marshall.collections.JsonMap)">
 <h3>openSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-265">openSession</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-267">openSession</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span>
                        throws <span class="exceptions"><a href="BusRefusal.html" title="class in org.apache.juneau.rest.server.bus">BusRefusal</a></span></div>
 <div class="block">Transport SPI: opens a session from a session POST body.
@@ -364,7 +364,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="session(java.lang.String,java.security.Principal)">
 <h3>session</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-319">session</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-321">session</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal)</span></div>
 <div class="block">Transport SPI: finds a live session by its capability id, for the principal that opened it.</div>
 <dl class="notes">
@@ -380,7 +380,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="connect(org.apache.juneau.rest.server.bus.BusSession,org.apache.juneau.rest.server.bus.FrameSink)">
 <h3>connect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-348">connect</a></span><wbr><span class="parameters">(<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-350">connect</a></span><wbr><span class="parameters">(<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
  <a href="FrameSink.html" title="interface in org.apache.juneau.rest.server.bus">FrameSink</a>&nbsp;sink)</span></div>
 <div class="block">Transport SPI: attaches a connection to a session, then sends the resync.
 
@@ -399,7 +399,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="disconnect(org.apache.juneau.rest.server.bus.BusSession,org.apache.juneau.rest.server.bus.FrameSink)">
 <h3>disconnect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-387">disconnect</a></span><wbr><span class="parameters">(<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-389">disconnect</a></span><wbr><span class="parameters">(<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
  <a href="FrameSink.html" title="interface in org.apache.juneau.rest.server.bus">FrameSink</a>&nbsp;sink)</span></div>
 <div class="block">Transport SPI: the connection behind a sink has closed.  Starts the session's grace period.
 
@@ -415,7 +415,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="receive(org.apache.juneau.rest.server.bus.BusSession,java.lang.String)">
 <h3>receive</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-406">receive</a></span><wbr><span class="parameters">(<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-408">receive</a></span><wbr><span class="parameters">(<a href="BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;frameText)</span></div>
 <div class="block">Transport SPI: one upstream frame from a WebSocket connection.
 
@@ -431,7 +431,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="enableWebSocket(java.lang.String)">
 <h3>enableWebSocket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-460">enableWebSocket</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contextRelativePathPrefix)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/bus/ServerBus.html#line-462">enableWebSocket</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contextRelativePathPrefix)</span></div>
 <div class="block">Transport SPI: records that the WebSocket transport is registered, so <code>transport:"websocket"</code> sessions may
  open and the session POST response carries <code>paths.websocket</code>.</div>
 <dl class="notes">

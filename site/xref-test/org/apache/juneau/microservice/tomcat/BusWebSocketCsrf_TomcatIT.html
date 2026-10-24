@@ -24,585 +24,586 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.microservice.tomcat;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.http.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.catalina.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.catalina.startup.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.catalina.valves.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.bus.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.bus.websocket.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.*;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> jakarta.websocket.*;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> jakarta.websocket.server.*;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * The bus's WebSocket handshake under a {@link CsrfBoundary}, over a real Tomcat 11 socket; the counterpart of the</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Jetty IT of the same name.</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * Three Tomcat instances share one bus and boundary: a plain one; one with a {@link RemoteIpValve} (protocol header</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * pinned to {@code X-Forwarded-Proto}), the container's own forwarded-header support; and one whose valve also reads</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * {@code X-Forwarded-Host}.  A probe endpoint records what {@link HandshakeRequest#getRequestURI()} and {@code Host}</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * report on each.  The handshake does not consult {@link CsrfBoundary.OriginSource}: its scheme comes from the</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * (valve-rewritten) handshake URI and its host and port from the {@code Host} header, so the boundary here uses the</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * default source.  The valved rows model a trusted proxy (loopback is in the valve's {@code internalProxies}), not an</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * untrusted client; a client that can reach Tomcat directly and is trusted by the valve could forge the forwarded</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * headers.</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What Tomcat reports (Tomcat 11.0.25), unlike Jetty:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * Tomcat reports the WebSocket scheme, {@code ws} or {@code wss}, where Jetty reports {@code http} or {@code https}.</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * With the client's Origin and Host as shown, the request URI is:</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;table class='styled'&gt;</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;th&gt;Case&lt;/th&gt;&lt;th&gt;Request URI&lt;/th&gt;&lt;th&gt;Headers visible&lt;/th&gt;&lt;/tr&gt;</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(a) no valve, plain&lt;/td&gt;&lt;td&gt;{@code ws://127.0.0.1:&lt;port&gt;/probe}&lt;/td&gt;&lt;td&gt;{@code Host} {@code 127.0.0.1:&lt;port&gt;}&lt;/td&gt;&lt;/tr&gt;</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(b) {@code RemoteIpValve}, {@code X-Forwarded-Proto: https}&lt;/td&gt;&lt;td&gt;{@code wss://127.0.0.1/probe} (scheme</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 		rewritten, port dropped)&lt;/td&gt;&lt;td&gt;{@code Host} {@code 127.0.0.1:&lt;port&gt;}, {@code X-Forwarded-Proto}&lt;/td&gt;&lt;/tr&gt;</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(c) {@code RemoteIpValve}, no forwarded header&lt;/td&gt;&lt;td&gt;{@code ws://127.0.0.1:&lt;port&gt;/probe}&lt;/td&gt;&lt;td&gt;{@code Host}&lt;/td&gt;&lt;/tr&gt;</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(d) no valve, {@code X-Forwarded-Proto: https}&lt;/td&gt;&lt;td&gt;{@code ws://127.0.0.1:&lt;port&gt;/probe} (header ignored)&lt;/td&gt;</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code Host}, {@code X-Forwarded-Proto}&lt;/td&gt;&lt;/tr&gt;</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(e) {@code RemoteIpValve} with {@code hostHeader=X-Forwarded-Host}, {@code X-Forwarded-Host: evil.example}&lt;/td&gt;</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code ws://evil.example:&lt;port&gt;/probe} (URI host rewritten, scheme and port kept)&lt;/td&gt;&lt;td&gt;{@code Host} still {@code 127.0.0.1:&lt;port&gt;}&lt;/td&gt;&lt;/tr&gt;</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * &lt;/table&gt;</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * {@link CsrfBoundary#checkHandshake} normalizes {@code ws} to {@code http} and {@code wss} to {@code https}, so the</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * fail-closed path for an unknown scheme is never reached on Tomcat.  The port always comes from the {@code Host}</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * header, never from the URI, which is why the valve dropping it in (b) does not matter: an {@code https} Origin</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * without a port (implied 443) is refused there.  Only the {@code RemoteIpValve} carries {@code X-Forwarded-Proto} into</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * the scheme.  The default valve ignores {@code X-Forwarded-Host}, so a forged forwarded host is refused.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * Binds sockets, so it is off by default.  Run it with {@code -Djuneau.busIt=true}, outside the sandbox.</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  @EnabledIfSystemProperty(named=BusWebSocketCsrf_TomcatIT.GATE, matches=<span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	disabledReason=<span class="jxr_string">"binds a socket; run with -Dtest='BusWebSocketCsrf_TomcatIT' -Djuneau.busIt=true"</span>)
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The Tomcat servers and buses are static fixtures started in @BeforeAll and stopped in @AfterAll; raw-socket chains are closed with the socket.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  })
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <strong class="jxr_keyword">class</strong> BusWebSocketCsrf_TomcatIT <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String GATE = <span class="jxr_string">"juneau.busIt"</span>;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BlockingQueue&lt;String&gt; PROBED = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;&gt;();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BlockingQueue&lt;List&lt;String&gt;&gt; FORWARDED_HOSTS = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;&gt;();
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat plain;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat valved;
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat hostValved;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat trusted;
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Path&gt; TEMP = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> plainPort;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> valvedPort;
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> hostValvedPort;
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> trustedPort;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ServerBus bus;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary boundary;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ServerBus trustedBus;
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary trustedBoundary;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Rest
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BusRest <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> BusEventsMixin {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		@Override <strong class="jxr_keyword">public</strong> ServerBus serverBus() { <strong class="jxr_keyword">return</strong> bus; }
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<em class="jxr_javadoccomment">/** The same REST resource over the bus that sits behind a {@code trustedProxies} boundary. */</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Rest
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TrustedBusRest <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> BusEventsMixin {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		@Override <strong class="jxr_keyword">public</strong> ServerBus serverBus() { <strong class="jxr_keyword">return</strong> trustedBus; }
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/** Accepts and does nothing; the probe configurator is what matters. */</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ProbeEndpoint <strong class="jxr_keyword">extends</strong> Endpoint {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onOpen(jakarta.websocket.Session session, EndpointConfig config) { <em class="jxr_comment">/* no-op by design */</em> }
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<em class="jxr_javadoccomment">/** Records the handshake's request URI as the container reports it. */</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> ProbeConfigurator <strong class="jxr_keyword">extends</strong> ServerEndpointConfig.Configurator {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			PROBED.add(request.getRequestURI() + <span class="jxr_string">" Host="</span> + request.getHeaders().get(<span class="jxr_string">"Host"</span>));
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">var</strong> lines = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			request.getHeaders().forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"X-Forwarded-Host"</span>.equalsIgnoreCase(k))
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 					lines.addAll(v);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			});
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			FORWARDED_HOSTS.add(lines);
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		}
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_javadoccomment">/** Boots a Tomcat, with a {@link RemoteIpValve} when {@code valve} is set (reading the host from {@code hostHeader} when non-null). */</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat boot(<strong class="jxr_keyword">boolean</strong> valve, String hostHeader) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> boot(valve, hostHeader, <strong class="jxr_keyword">new</strong> BusRest(), bus);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat boot(<strong class="jxr_keyword">boolean</strong> valve, String hostHeader, HttpServlet <strong class="jxr_keyword">rest</strong>, ServerBus serverBus) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> tomcat = <strong class="jxr_keyword">new</strong> Tomcat();
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> base = Files.createTempDirectory(<span class="jxr_string">"tc-bus-it"</span>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		TEMP.add(base);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		tomcat.setBaseDir(base.toString());
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> c = tomcat.getConnector();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		c.setPort(0);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		c.setProperty(<span class="jxr_string">"address"</span>, <span class="jxr_string">"127.0.0.1"</span>);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		c.addUpgradeProtocol(<strong class="jxr_keyword">new</strong> org.apache.coyote.http2.Http2Protocol());
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		tomcat.getHost().setAppBase(base.toString());
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">if</strong> (valve) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">var</strong> v = <strong class="jxr_keyword">new</strong> RemoteIpValve();
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			v.setProtocolHeader(<span class="jxr_string">"X-Forwarded-Proto"</span>);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			v.setProtocolHeaderHttpsValue(<span class="jxr_string">"https"</span>);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (hostHeader != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				v.setHostHeader(hostHeader);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			tomcat.getEngine().getPipeline().addValve(v);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		Context ctx = tomcat.addContext(<span class="jxr_string">""</span>, base.toString());
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_comment">// The WebSocket filter only runs for a request that maps to a servlet.</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> dflt = Tomcat.addServlet(ctx, <span class="jxr_string">"default"</span>, <strong class="jxr_keyword">new</strong> HttpServlet() {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		});
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		dflt.addMapping(<span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> wrapper = Tomcat.addServlet(ctx, <span class="jxr_string">"bus"</span>, <strong class="jxr_keyword">rest</strong>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		wrapper.setLoadOnStartup(1);
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		wrapper.addMapping(<span class="jxr_string">"/rest/*"</span>);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		ctx.addApplicationListener(org.apache.tomcat.websocket.server.WsContextListener.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		tomcat.start();
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> sc = (ServerContainer) ctx.getServletContext().getAttribute(ServerContainer.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		BusWebSockets.register(sc, serverBus);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		sc.addEndpoint(ServerEndpointConfig.Builder.create(ProbeEndpoint.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"/probe"</span>)
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			.configurator(<strong class="jxr_keyword">new</strong> ProbeConfigurator())
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			.build());
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">return</strong> tomcat;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	@BeforeAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> start() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		boundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).build();
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		bus = ServerBus.create(BusPolicy.create()
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			.downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			.boundary(boundary)
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			.build());
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		trustedBoundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess())
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			.trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED).trustedProxies(<span class="jxr_string">"127.0.0.1/32"</span>).build();
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		trustedBus = ServerBus.create(BusPolicy.create()
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			.downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			.boundary(trustedBoundary)
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.build());
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		plain = boot(false, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		trusted = boot(false, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> TrustedBusRest(), trustedBus);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		valved = boot(<strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		hostValved = boot(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"X-Forwarded-Host"</span>);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		plainPort = plain.getConnector().getLocalPort();
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		valvedPort = valved.getConnector().getLocalPort();
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		hostValvedPort = hostValved.getConnector().getLocalPort();
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		trustedPort = trusted.getConnector().getLocalPort();
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertNotEquals(plainPort, valvedPort);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertNotEquals(plainPort, hostValvedPort);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertNotEquals(valvedPort, hostValvedPort);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertNotEquals(trustedPort, plainPort);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertNotEquals(trustedPort, valvedPort);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertNotEquals(trustedPort, hostValvedPort);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		bus.publish(<span class="jxr_string">"ops.jobs"</span>, JsonMap.of(<span class="jxr_string">"schemaVersion"</span>, 1, <span class="jxr_string">"running"</span>, List.of()));
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		trustedBus.publish(<span class="jxr_string">"ops.jobs"</span>, JsonMap.of(<span class="jxr_string">"schemaVersion"</span>, 1, <span class="jxr_string">"running"</span>, List.of()));
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@AfterAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> stop() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">if</strong> (bus != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			bus.close();
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">if</strong> (trustedBus != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			trustedBus.close();
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : <strong class="jxr_keyword">new</strong> Tomcat[]{plain, valved, hostValved, trusted})
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 				t.stop();
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				t.destroy();
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : TEMP)
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> walk = Files.walk(d)) {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				walk.sorted(Comparator.reverseOrder()).forEach(f -&gt; f.toFile().delete());
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			}
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String origin(<strong class="jxr_keyword">int</strong> port) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://127.0.0.1:"</span> + port;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<em class="jxr_javadoccomment">/** The process-wide token; the per-process source does not look at the request. */</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String token() {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> req = (HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(HttpServletRequest.<strong class="jxr_keyword">class</strong>.getClassLoader(), <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[]{HttpServletRequest.<strong class="jxr_keyword">class</strong>},
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			(proxy, method, args) -&gt; method.getReturnType() == <strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong> ? (Object) false : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">return</strong> boundary.tokenFor(req);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_javadoccomment">/** Opens a WebSocket session through the plain instance and returns its WebSocket path. */</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String openSession(HttpClient http) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;v\&quot;:1,\&quot;bridge\&quot;:\&quot;ops\&quot;,\&quot;transport\&quot;:\&quot;websocket\&quot;,\&quot;downstream\&quot;:[\&quot;ops.jobs\&quot;],\&quot;upstream\&quot;:[]}"</span>;
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> res = http.send(HttpRequest.newBuilder(URI.create(origin(plainPort) + <span class="jxr_string">"/rest"</span> + BusEventsMixin.SESSION_PATH))
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(plainPort))
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			.header(boundary.csrfHeader(), token())
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			.build(), HttpResponse.BodyHandlers.ofString());
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(200, res.statusCode(), res::body);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">return</strong> JsonMap.ofString(res.body()).getMap(<span class="jxr_string">"paths"</span>).getString(<span class="jxr_string">"websocket"</span>);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URI wsUri(<strong class="jxr_keyword">int</strong> port, String path) {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">return</strong> URI.create(<span class="jxr_string">"ws://127.0.0.1:"</span> + port + path);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	<em class="jxr_javadoccomment">/** Collects whole text frames and the close code. */</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Frames <strong class="jxr_keyword">implements</strong> WebSocket.Listener {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">final</strong> BlockingQueue&lt;JsonMap&gt; frames = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;&gt;();
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">final</strong> CompletableFuture&lt;Integer&gt; closed = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;&gt;();
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringBuilder partial = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		@Override <strong class="jxr_keyword">public</strong> CompletionStage&lt;?&gt; onText(WebSocket ws, CharSequence data, <strong class="jxr_keyword">boolean</strong> last) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			partial.append(data);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (last) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 					frames.add(JsonMap.ofString(partial.toString()));
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 					closed.completeExceptionally(e);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				}
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				partial.setLength(0);
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			}
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			ws.request(1);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		}
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		@Override <strong class="jxr_keyword">public</strong> CompletionStage&lt;?&gt; onClose(WebSocket ws, <strong class="jxr_keyword">int</strong> statusCode, String reason) {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			closed.complete(statusCode);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_javadoccomment">/** The HTTP status of a handshake the container refused before the upgrade. */</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> handshakeStatus(HttpClient http, URI uri, String...headers) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">var</strong> b = http.newWebSocketBuilder();
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			b.header(headers[i], headers[i + 1]);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(ExecutionException.<strong class="jxr_keyword">class</strong>, () -&gt; b.buildAsync(uri, <strong class="jxr_keyword">new</strong> Frames()).get(10, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> assertInstanceOf(WebSocketHandshakeException.<strong class="jxr_keyword">class</strong>, e.getCause()).getResponse().statusCode();
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_javadoccomment">/** Connects with the given headers, expects the first frame {@code resync-begin} and an open socket, then closes. */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertAdmitted(<strong class="jxr_keyword">int</strong> port, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> frames = <strong class="jxr_keyword">new</strong> Frames();
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> b = http.newWebSocketBuilder();
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			b.header(headers[i], headers[i + 1]);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> ws = b.buildAsync(wsUri(port, openSession(http)), frames).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> first = frames.frames.poll(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertNotNull(first, <span class="jxr_string">"no frame within 10s; closed with "</span> + frames.closed.getNow(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertEquals(<span class="jxr_string">"resync-begin"</span>, first.getString(<span class="jxr_string">"type"</span>));
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertNull(frames.closed.getNow(<strong class="jxr_keyword">null</strong>), <span class="jxr_string">"the socket was closed"</span>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		ws.sendClose(WebSocket.NORMAL_CLOSURE, <span class="jxr_string">""</span>).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_javadoccomment">/** Connects with the given headers and expects the upgrade to complete and the endpoint to close at once with {@code 4403}. */</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertRefused4403(<strong class="jxr_keyword">int</strong> port, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> frames = <strong class="jxr_keyword">new</strong> Frames();
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> b = http.newWebSocketBuilder();
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			b.header(headers[i], headers[i + 1]);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		b.buildAsync(wsUri(port, openSession(http)), frames).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertEquals(4403, frames.closed.get(10, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		assertTrue(frames.frames.isEmpty(), <span class="jxr_string">"a refused handshake saw a frame"</span>);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/** A same-origin {@code Origin} on a plain Tomcat is admitted and the first frame arrives. */</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@Test <strong class="jxr_keyword">void</strong> a01_sameOriginWsConnects() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertAdmitted(plainPort, <span class="jxr_string">"Origin"</span>, origin(plainPort));
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * A well-formed cross-site Origin.  {@code checkOrigin} sees only the Origin value, not the Host it must match, so</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * the upgrade completes (101) and the endpoint closes at once with {@code 4403} before any frame.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	@Test <strong class="jxr_keyword">void</strong> a02_crossSiteOriginCloses4403BeforeAnyFrame() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		assertRefused4403(plainPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	}
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<em class="jxr_javadoccomment">/** No {@code Origin} at all is refused before the upgrade with {@code 403}. */</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	@Test <strong class="jxr_keyword">void</strong> a03_missingOriginRefused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(403, handshakeStatus(http, wsUri(plainPort, openSession(http))));
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<em class="jxr_javadoccomment">/** The opaque {@code Origin: null} is refused before the upgrade with {@code 403}. */</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Test <strong class="jxr_keyword">void</strong> a03b_originNullRefused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertEquals(403, handshakeStatus(http, wsUri(plainPort, openSession(http)), <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"null"</span>));
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * A {@code Host} that is not the Origin's host.  The JDK client cannot set {@code Host}, so this speaks the handshake</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * over a raw socket: the upgrade completes and the endpoint's first frame is a close with {@code 4403}.</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	@Test <strong class="jxr_keyword">void</strong> a04_hostOriginMismatchCloses4403() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> path = openSession(HttpClient.newHttpClient());
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, plainPort); <strong class="jxr_keyword">var</strong> out = socket.getOutputStream(); <strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> BufferedInputStream(socket.getInputStream())) {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			socket.setSoTimeout(10_000);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			out.write((<span class="jxr_string">"GET "</span> + path + <span class="jxr_string">" HTTP/1.1\r\n"</span>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				+ <span class="jxr_string">"Host: evil.example\r\n"</span>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				+ <span class="jxr_string">"Origin: "</span> + origin(plainPort) + <span class="jxr_string">"\r\n"</span>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				+ <span class="jxr_string">"Connection: Upgrade\r\n"</span>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				+ <span class="jxr_string">"Upgrade: websocket\r\n"</span>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				+ <span class="jxr_string">"Sec-WebSocket-Version: 13\r\n"</span>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 				+ <span class="jxr_string">"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n"</span>).getBytes(StandardCharsets.US_ASCII));
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			out.flush();
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">var</strong> head = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">while</strong> (! head.toString().endsWith(<span class="jxr_string">"\r\n\r\n"</span>)) {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 				<strong class="jxr_keyword">var</strong> b = in.read();
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				assertTrue(b &gt;= 0, <span class="jxr_string">"connection closed during handshake: "</span> + head);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				head.append((<strong class="jxr_keyword">char</strong>) b);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			}
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			assertTrue(head.toString().startsWith(<span class="jxr_string">"HTTP/1.1 101"</span>), head::toString);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			assertEquals(0x88, in.read(), <span class="jxr_string">"first frame is not a close frame"</span>);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> len = in.read();
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			assertTrue(len &gt;= 2 &amp;&amp; len &lt; 126, <span class="jxr_string">"unexpected close payload length "</span> + len);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			assertEquals(4403, (in.read() &lt;&lt; 8) | in.read());
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * A {@code wss} page behind a TLS-terminating proxy: the proxy sends {@code X-Forwarded-Proto: https}, and the</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * {@link RemoteIpValve} carries that into the handshake's request URI, so an {@code https} Origin on the real port</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * matches (the port comes from {@code Host}) and an {@code http} Origin does not.</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@Test <strong class="jxr_keyword">void</strong> a05_forwardedProtoBehindRemoteIpValve() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertAdmitted(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"https://127.0.0.1:"</span> + valvedPort, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, origin(valvedPort), <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_javadoccomment">/** A forwarded {@code https} but a cross-site Origin through the valve is still refused. */</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> a05b_forwardedProtoCrossSiteOriginRefused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * The valve rewrites the URI to {@code wss} without a port, but the port comes from {@code Host}: an {@code https}</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * Origin with the implied port 443 is not this server's origin and is refused.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Test <strong class="jxr_keyword">void</strong> a05c_forwardedProtoImpliedPortOriginRefused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"https://127.0.0.1"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<em class="jxr_javadoccomment">/** The default valve ignores {@code X-Forwarded-Host}, so a forged forwarded host and a matching Origin are refused. */</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	@Test <strong class="jxr_keyword">void</strong> a07_forwardedHostIgnoredByDefaultValve() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * With {@code hostHeader=X-Forwarded-Host} the valve rewrites the host of the handshake's request URI, but the</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * {@code Host} header the handshake sees stays the real one (case (e) in the class Javadoc).  The boundary reads</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * {@code Host}, so the forged forwarded host and its matching Origin are still refused.</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	@Test <strong class="jxr_keyword">void</strong> a08_forwardedHostHeaderValveStillRefusesForgedHost() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertRefused4403(hostValvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_javadoccomment">/** Records the request URI and Host of an upgrade to the probe endpoint. */</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String probe(<strong class="jxr_keyword">int</strong> port, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> b = HttpClient.newHttpClient().newWebSocketBuilder();
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			b.header(headers[i], headers[i + 1]);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		PROBED.clear();
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		b.buildAsync(wsUri(port, <span class="jxr_string">"/probe"</span>), <strong class="jxr_keyword">new</strong> Frames()).get(10, TimeUnit.SECONDS)
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			.sendClose(WebSocket.NORMAL_CLOSURE, <span class="jxr_string">""</span>).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">return</strong> PROBED.poll(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	}
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * Pins what Tomcat reports from {@code HandshakeRequest.getRequestURI()} (the class Javadoc table): always</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * {@code ws} or {@code wss}, never {@code http} or {@code https}; only the {@code RemoteIpValve} applies</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * {@code X-Forwarded-Proto}, and it drops the port.</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	@Test <strong class="jxr_keyword">void</strong> a06_requestUriSchemeIsWsOrWss() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertEquals(<span class="jxr_string">"ws://127.0.0.1:"</span> + plainPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + plainPort + <span class="jxr_string">"]"</span>, probe(plainPort, <span class="jxr_string">"Origin"</span>, origin(plainPort)), <span class="jxr_string">"(a)"</span>);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertEquals(<span class="jxr_string">"wss://127.0.0.1/probe Host=[127.0.0.1:"</span> + valvedPort + <span class="jxr_string">"]"</span>, probe(valvedPort, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>), <span class="jxr_string">"(b)"</span>);
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertEquals(<span class="jxr_string">"ws://127.0.0.1:"</span> + valvedPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + valvedPort + <span class="jxr_string">"]"</span>, probe(valvedPort), <span class="jxr_string">"(c)"</span>);
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertEquals(<span class="jxr_string">"ws://127.0.0.1:"</span> + plainPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + plainPort + <span class="jxr_string">"]"</span>, probe(plainPort, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>), <span class="jxr_string">"(d)"</span>);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertEquals(<span class="jxr_string">"ws://evil.example:"</span> + hostValvedPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + hostValvedPort + <span class="jxr_string">"]"</span>, probe(hostValvedPort, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>), <span class="jxr_string">"(e)"</span>);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * Trusted forwarding picks the rightmost entry, which relies on the handshake's repeated header lines keeping their</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * wire order.  Three lines, sent raw because the JDK client cannot repeat a header, come back in order.</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> a09_repeatedForwardedHostLinesKeepWireOrder() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		FORWARDED_HOSTS.clear();
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, plainPort); <strong class="jxr_keyword">var</strong> out = socket.getOutputStream()) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			socket.setSoTimeout(10_000);
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			out.write((<span class="jxr_string">"GET /probe HTTP/1.1\r\n"</span>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 				+ <span class="jxr_string">"Host: 127.0.0.1:"</span> + plainPort + <span class="jxr_string">"\r\n"</span>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				+ <span class="jxr_string">"X-Forwarded-Host: first.example\r\n"</span>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				+ <span class="jxr_string">"X-Forwarded-Host: second.example\r\n"</span>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				+ <span class="jxr_string">"X-Forwarded-Host: third.example\r\n"</span>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				+ <span class="jxr_string">"Connection: Upgrade\r\n"</span>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				+ <span class="jxr_string">"Upgrade: websocket\r\n"</span>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				+ <span class="jxr_string">"Sec-WebSocket-Version: 13\r\n"</span>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				+ <span class="jxr_string">"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n"</span>).getBytes(StandardCharsets.US_ASCII));
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			out.flush();
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">var</strong> seen = FORWARDED_HOSTS.poll(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			assertEquals(List.of(<span class="jxr_string">"first.example"</span>, <span class="jxr_string">"second.example"</span>, <span class="jxr_string">"third.example"</span>), seen);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	}
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	<em class="jxr_javadoccomment">/** Opens a session through the {@code trustedProxies} instance with a forwarded write, as a proxy on the loopback peer would send it. */</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String openTrustedSession(HttpClient http) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;v\&quot;:1,\&quot;bridge\&quot;:\&quot;ops\&quot;,\&quot;transport\&quot;:\&quot;websocket\&quot;,\&quot;downstream\&quot;:[\&quot;ops.jobs\&quot;],\&quot;upstream\&quot;:[]}"</span>;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> req = (HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(HttpServletRequest.<strong class="jxr_keyword">class</strong>.getClassLoader(), <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[]{HttpServletRequest.<strong class="jxr_keyword">class</strong>},
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			(proxy, method, args) -&gt; method.getReturnType() == <strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong> ? (Object) false : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">var</strong> res = http.send(HttpRequest.newBuilder(URI.create(origin(trustedPort) + <span class="jxr_string">"/rest"</span> + BusEventsMixin.SESSION_PATH))
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(trustedPort))
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.header(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"127.0.0.1:"</span> + trustedPort)
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.header(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>)
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			.header(trustedBoundary.csrfHeader(), trustedBoundary.tokenFor(req))
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			.build(), HttpResponse.BodyHandlers.ofString());
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertEquals(200, res.statusCode(), res::body);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">return</strong> JsonMap.ofString(res.body()).getMap(<span class="jxr_string">"paths"</span>).getString(<span class="jxr_string">"websocket"</span>);
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	}
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * With {@code trustedProxies} set, Tomcat reports the peer on HTTP (the loopback proxy is believed) but supplies none</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * on a handshake, so the peer there is unknown and untrusted.  A handshake that carries a forwarded host is refused</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * with {@code 4403}; the documented recipe (same scheme, {@code Host} preserved, no forwarded header on the socket)</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * connects.  This fails loudly if a future Tomcat starts supplying the peer.</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	@Test <strong class="jxr_keyword">void</strong> i01_trustedProxiesOnTomcat() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> path = openTrustedSession(http);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">var</strong> refused = <strong class="jxr_keyword">new</strong> Frames();
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		http.newWebSocketBuilder()
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(trustedPort))
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			.header(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"127.0.0.1:"</span> + trustedPort)
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			.header(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>)
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			.buildAsync(wsUri(trustedPort, path), refused).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		assertEquals(4403, refused.closed.get(10, TimeUnit.SECONDS));
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		assertTrue(refused.frames.isEmpty(), <span class="jxr_string">"a refused handshake saw a frame"</span>);
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> frames = <strong class="jxr_keyword">new</strong> Frames();
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">var</strong> ws = http.newWebSocketBuilder()
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(trustedPort))
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			.buildAsync(wsUri(trustedPort, openTrustedSession(http)), frames).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">var</strong> first = frames.frames.poll(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		assertNotNull(first, <span class="jxr_string">"no frame within 10s; closed with "</span> + frames.closed.getNow(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		assertEquals(<span class="jxr_string">"resync-begin"</span>, first.getString(<span class="jxr_string">"type"</span>));
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		ws.sendClose(WebSocket.NORMAL_CLOSURE, <span class="jxr_string">""</span>).get(10, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	}
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	<em class="jxr_javadoccomment">/** What an h2c connection did with an RFC 8441 extended CONNECT: the SETTINGS it sent and how the stream ended. */</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	record Ext(<strong class="jxr_keyword">boolean</strong> settingsSeen, <strong class="jxr_keyword">boolean</strong> connectProtocolAdvertised, String frames) {}
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> field(ByteArrayOutputStream h, String name, String value) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		h.write(0);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		str(h, name);
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		str(h, value);
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	}
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> str(ByteArrayOutputStream h, String value) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">var</strong> v = value.getBytes(StandardCharsets.US_ASCII);
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		h.write(v.length);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		h.write(v);
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	}
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] frame(<strong class="jxr_keyword">int</strong> type, <strong class="jxr_keyword">int</strong> flags, <strong class="jxr_keyword">int</strong> stream, byte[] payload) {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">var</strong> b = java.nio.ByteBuffer.allocate(9 + payload.length);
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		b.put((byte)(payload.length &gt;&gt; 16)).put((byte)(payload.length &gt;&gt; 8)).put((byte)payload.length);
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		b.put((byte)type).put((byte)flags).putInt(stream).put(payload);
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">return</strong> b.array();
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	}
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * Sends a hand-encoded extended CONNECT over prior-knowledge h2c and reads until the stream is reset or the</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * connection ends or goes quiet.  The frame types seen are returned for the record.</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Ext extendedConnect(<strong class="jxr_keyword">int</strong> port, String path) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		out.write(<span class="jxr_string">"PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"</span>.getBytes(StandardCharsets.US_ASCII));
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		out.write(frame(0x4, 0, 0, <strong class="jxr_keyword">new</strong> byte[0]));
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		h.write(2);                                    <em class="jxr_comment">// :method, name from the static table</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		str(h, <span class="jxr_string">"CONNECT"</span>);
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		field(h, <span class="jxr_string">":protocol"</span>, <span class="jxr_string">"websocket"</span>);
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		h.write(0x86);                                 <em class="jxr_comment">// :scheme http</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		h.write(4);                                    <em class="jxr_comment">// :path</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		str(h, path);
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		h.write(1);                                    <em class="jxr_comment">// :authority</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		str(h, <span class="jxr_string">"127.0.0.1:"</span> + port);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		field(h, <span class="jxr_string">"origin"</span>, origin(port));
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		field(h, <span class="jxr_string">"sec-websocket-version"</span>, <span class="jxr_string">"13"</span>);
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		out.write(frame(0x1, 0x4, 1, h.toByteArray()));
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> settings = false;
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">var</strong> advertised = false;
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, port); <strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> DataInputStream(socket.getInputStream())) {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			socket.setSoTimeout(3_000);
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			socket.getOutputStream().write(out.toByteArray());
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			socket.getOutputStream().flush();
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 				<strong class="jxr_keyword">for</strong> (;;) {
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 					<strong class="jxr_keyword">var</strong> head = <strong class="jxr_keyword">new</strong> byte[9];
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 					in.readFully(head);
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 					<strong class="jxr_keyword">var</strong> len = ((head[0] &amp; 0xFF) &lt;&lt; 16) | ((head[1] &amp; 0xFF) &lt;&lt; 8) | (head[2] &amp; 0xFF);
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 					<strong class="jxr_keyword">var</strong> payload = <strong class="jxr_keyword">new</strong> byte[len];
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 					in.readFully(payload);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 					seen.append(String.format(<span class="jxr_string">"%02x "</span>, head[3]));
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 					<strong class="jxr_keyword">if</strong> (head[3] == 0x4 &amp;&amp; (head[4] &amp; 0x1) == 0) {
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 						settings = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i + 6 &lt;= len; i += 6)
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 							<strong class="jxr_keyword">if</strong> ((((payload[i] &amp; 0xFF) &lt;&lt; 8) | (payload[i + 1] &amp; 0xFF)) == 0x8 &amp;&amp; payload[i + 5] == 1)
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 								advertised = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 						socket.getOutputStream().write(frame(0x4, 0x1, 0, <strong class="jxr_keyword">new</strong> byte[0]));
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 						socket.getOutputStream().flush();
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 					}
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 					<strong class="jxr_keyword">if</strong> (head[3] == 0x3 || head[3] == 0x7)
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 				}
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			} <strong class="jxr_keyword">catch</strong> (EOFException | SocketTimeoutException e) {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 				seen.append(e instanceof EOFException ? <span class="jxr_string">"eof"</span> : <span class="jxr_string">"quiet"</span>);
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			}
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		}
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Ext(settings, advertised, seen.toString().trim());
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	}
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * Tomcat 11 has no RFC 8441 support: it does not advertise {@code SETTINGS_ENABLE_CONNECT_PROTOCOL}, and an extended</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * CONNECT never reaches a WebSocket endpoint, so there is no HTTP/2 handshake for the boundary to judge.</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	@Test <strong class="jxr_keyword">void</strong> h01_tomcatHasNoExtendedConnect() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">var</strong> path = openSession(HttpClient.newHttpClient());
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		PROBED.clear();
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">var</strong> res = extendedConnect(plainPort, <span class="jxr_string">"/probe"</span>);
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> real = extendedConnect(plainPort, path);
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		assertTrue(res.settingsSeen(), res::toString);
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		assertFalse(res.connectProtocolAdvertised(), res::toString);
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		assertFalse(real.connectProtocolAdvertised(), real::toString);
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		assertNull(PROBED.poll(1, TimeUnit.SECONDS), <span class="jxr_string">"an extended CONNECT reached the configurator"</span>);
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	}
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> }
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.f;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.http.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.catalina.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.catalina.startup.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.catalina.valves.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.bus.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.bus.websocket.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> jakarta.websocket.*;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> jakarta.websocket.server.*;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * The bus's WebSocket handshake under a {@link CsrfBoundary}, over a real Tomcat 11 socket; the counterpart of the</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * Jetty IT of the same name.</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * Three Tomcat instances share one bus and boundary: a plain one; one with a {@link RemoteIpValve} (protocol header</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * pinned to {@code X-Forwarded-Proto}), the container's own forwarded-header support; and one whose valve also reads</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * {@code X-Forwarded-Host}.  A probe endpoint records what {@link HandshakeRequest#getRequestURI()} and {@code Host}</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * report on each.  The handshake does not consult {@link CsrfBoundary.OriginSource}: its scheme comes from the</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * (valve-rewritten) handshake URI and its host and port from the {@code Host} header, so the boundary here uses the</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * default source.  The valved rows model a trusted proxy (loopback is in the valve's {@code internalProxies}), not an</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * untrusted client; a client that can reach Tomcat directly and is trusted by the valve could forge the forwarded</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * headers.</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What Tomcat reports (Tomcat 11.0.25), unlike Jetty:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * Tomcat reports the WebSocket scheme, {@code ws} or {@code wss}, where Jetty reports {@code http} or {@code https}.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * With the client's Origin and Host as shown, the request URI is:</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;table class='styled'&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;th&gt;Case&lt;/th&gt;&lt;th&gt;Request URI&lt;/th&gt;&lt;th&gt;Headers visible&lt;/th&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(a) no valve, plain&lt;/td&gt;&lt;td&gt;{@code ws://127.0.0.1:&lt;port&gt;/probe}&lt;/td&gt;&lt;td&gt;{@code Host} {@code 127.0.0.1:&lt;port&gt;}&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(b) {@code RemoteIpValve}, {@code X-Forwarded-Proto: https}&lt;/td&gt;&lt;td&gt;{@code wss://127.0.0.1/probe} (scheme</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 		rewritten, port dropped)&lt;/td&gt;&lt;td&gt;{@code Host} {@code 127.0.0.1:&lt;port&gt;}, {@code X-Forwarded-Proto}&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(c) {@code RemoteIpValve}, no forwarded header&lt;/td&gt;&lt;td&gt;{@code ws://127.0.0.1:&lt;port&gt;/probe}&lt;/td&gt;&lt;td&gt;{@code Host}&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(d) no valve, {@code X-Forwarded-Proto: https}&lt;/td&gt;&lt;td&gt;{@code ws://127.0.0.1:&lt;port&gt;/probe} (header ignored)&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code Host}, {@code X-Forwarded-Proto}&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;(e) {@code RemoteIpValve} with {@code hostHeader=X-Forwarded-Host}, {@code X-Forwarded-Host: evil.example}&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code ws://evil.example:&lt;port&gt;/probe} (URI host rewritten, scheme and port kept)&lt;/td&gt;&lt;td&gt;{@code Host} still {@code 127.0.0.1:&lt;port&gt;}&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;/table&gt;</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * {@link CsrfBoundary#checkHandshake} normalizes {@code ws} to {@code http} and {@code wss} to {@code https}, so the</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * fail-closed path for an unknown scheme is never reached on Tomcat.  The port always comes from the {@code Host}</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * header, never from the URI, which is why the valve dropping it in (b) does not matter: an {@code https} Origin</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * without a port (implied 443) is refused there.  Only the {@code RemoteIpValve} carries {@code X-Forwarded-Proto} into</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * the scheme.  The default valve ignores {@code X-Forwarded-Host}, so a forged forwarded host is refused.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * Binds sockets, so it is off by default.  Run it with {@code -Djuneau.busIt=true}, outside the sandbox.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  @EnabledIfSystemProperty(named=BusWebSocketCsrf_TomcatIT.GATE, matches=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	disabledReason=<span class="jxr_string">"binds a socket; run with -Dtest='BusWebSocketCsrf_TomcatIT' -Djuneau.busIt=true"</span>)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The Tomcat servers and buses are static fixtures started in @BeforeAll and stopped in @AfterAll; raw-socket chains are closed with the socket.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  })
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <strong class="jxr_keyword">class</strong> BusWebSocketCsrf_TomcatIT <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String GATE = <span class="jxr_string">"juneau.busIt"</span>;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BlockingQueue&lt;String&gt; PROBED = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;&gt;();
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BlockingQueue&lt;List&lt;String&gt;&gt; FORWARDED_HOSTS = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;&gt;();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat plain;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat valved;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat hostValved;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat trusted;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;Path&gt; TEMP = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> plainPort;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> valvedPort;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> hostValvedPort;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> trustedPort;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ServerBus bus;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary boundary;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ServerBus trustedBus;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary trustedBoundary;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Rest
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BusRest <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> BusEventsMixin {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		@Override <strong class="jxr_keyword">public</strong> ServerBus serverBus() { <strong class="jxr_keyword">return</strong> bus; }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_javadoccomment">/** The same REST resource over the bus that sits behind a {@code trustedProxies} boundary. */</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Rest
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TrustedBusRest <strong class="jxr_keyword">extends</strong> BasicRestServlet <strong class="jxr_keyword">implements</strong> BusEventsMixin {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		@Override <strong class="jxr_keyword">public</strong> ServerBus serverBus() { <strong class="jxr_keyword">return</strong> trustedBus; }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/** Accepts and does nothing; the probe configurator is what matters. */</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ProbeEndpoint <strong class="jxr_keyword">extends</strong> Endpoint {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onOpen(jakarta.websocket.Session session, EndpointConfig config) { <em class="jxr_comment">/* no-op by design */</em> }
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_javadoccomment">/** Records the handshake's request URI as the container reports it. */</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> ProbeConfigurator <strong class="jxr_keyword">extends</strong> ServerEndpointConfig.Configurator {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			PROBED.add(request.getRequestURI() + <span class="jxr_string">" Host="</span> + request.getHeaders().get(<span class="jxr_string">"Host"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">var</strong> lines = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			request.getHeaders().forEach((k, v) -&gt; {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"X-Forwarded-Host"</span>.equalsIgnoreCase(k))
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 					lines.addAll(v);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			});
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			FORWARDED_HOSTS.add(lines);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		}
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_javadoccomment">/** Boots a Tomcat, with a {@link RemoteIpValve} when {@code valve} is set (reading the host from {@code hostHeader} when non-null). */</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat boot(<strong class="jxr_keyword">boolean</strong> valve, String hostHeader) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">return</strong> boot(valve, hostHeader, <strong class="jxr_keyword">new</strong> BusRest(), bus);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Tomcat boot(<strong class="jxr_keyword">boolean</strong> valve, String hostHeader, HttpServlet <strong class="jxr_keyword">rest</strong>, ServerBus serverBus) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> tomcat = <strong class="jxr_keyword">new</strong> Tomcat();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> base = Files.createTempDirectory(<span class="jxr_string">"tc-bus-it"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		TEMP.add(base);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		tomcat.setBaseDir(base.toString());
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> c = tomcat.getConnector();
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		c.setPort(0);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		c.setProperty(<span class="jxr_string">"address"</span>, <span class="jxr_string">"127.0.0.1"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		c.addUpgradeProtocol(<strong class="jxr_keyword">new</strong> org.apache.coyote.http2.Http2Protocol());
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		tomcat.getHost().setAppBase(base.toString());
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">if</strong> (valve) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">var</strong> v = <strong class="jxr_keyword">new</strong> RemoteIpValve();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			v.setProtocolHeader(<span class="jxr_string">"X-Forwarded-Proto"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			v.setProtocolHeaderHttpsValue(<span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">if</strong> (hostHeader != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 				v.setHostHeader(hostHeader);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			tomcat.getEngine().getPipeline().addValve(v);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		Context ctx = tomcat.addContext(<span class="jxr_string">""</span>, base.toString());
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<em class="jxr_comment">// The WebSocket filter only runs for a request that maps to a servlet.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> dflt = Tomcat.addServlet(ctx, <span class="jxr_string">"default"</span>, <strong class="jxr_keyword">new</strong> HttpServlet() {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		});
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		dflt.addMapping(<span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> wrapper = Tomcat.addServlet(ctx, <span class="jxr_string">"bus"</span>, <strong class="jxr_keyword">rest</strong>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		wrapper.setLoadOnStartup(1);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		wrapper.addMapping(<span class="jxr_string">"/rest/*"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		ctx.addApplicationListener(org.apache.tomcat.websocket.server.WsContextListener.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		tomcat.start();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> sc = (ServerContainer) ctx.getServletContext().getAttribute(ServerContainer.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		BusWebSockets.register(sc, serverBus);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		sc.addEndpoint(ServerEndpointConfig.Builder.create(ProbeEndpoint.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"/probe"</span>)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			.configurator(<strong class="jxr_keyword">new</strong> ProbeConfigurator())
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			.build());
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> tomcat;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@BeforeAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> start() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		boundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).build();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		bus = ServerBus.create(BusPolicy.create()
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			.downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			.boundary(boundary)
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			.build());
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		trustedBoundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess())
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			.trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED).trustedProxies(<span class="jxr_string">"127.0.0.1/32"</span>).build();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		trustedBus = ServerBus.create(BusPolicy.create()
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			.downstream(<span class="jxr_string">"ops.jobs"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.boundary(trustedBoundary)
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			.build());
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		plain = boot(false, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		trusted = boot(false, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> TrustedBusRest(), trustedBus);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		valved = boot(<strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		hostValved = boot(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"X-Forwarded-Host"</span>);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		plainPort = plain.getConnector().getLocalPort();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		valvedPort = valved.getConnector().getLocalPort();
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		hostValvedPort = hostValved.getConnector().getLocalPort();
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		trustedPort = trusted.getConnector().getLocalPort();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertNotEquals(plainPort, valvedPort);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertNotEquals(plainPort, hostValvedPort);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertNotEquals(valvedPort, hostValvedPort);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertNotEquals(trustedPort, plainPort);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertNotEquals(trustedPort, valvedPort);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertNotEquals(trustedPort, hostValvedPort);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		bus.publish(<span class="jxr_string">"ops.jobs"</span>, JsonMap.of(<span class="jxr_string">"schemaVersion"</span>, 1, <span class="jxr_string">"running"</span>, List.of()));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		trustedBus.publish(<span class="jxr_string">"ops.jobs"</span>, JsonMap.of(<span class="jxr_string">"schemaVersion"</span>, 1, <span class="jxr_string">"running"</span>, List.of()));
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	@AfterAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> stop() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">if</strong> (bus != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			bus.close();
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">if</strong> (trustedBus != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			trustedBus.close();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : <strong class="jxr_keyword">new</strong> Tomcat[]{plain, valved, hostValved, trusted})
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				t.stop();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				t.destroy();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : TEMP)
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> walk = Files.walk(d)) {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				walk.sorted(Comparator.reverseOrder()).forEach(f -&gt; f.toFile().delete());
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String origin(<strong class="jxr_keyword">int</strong> port) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://127.0.0.1:"</span> + port;
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<em class="jxr_javadoccomment">/** The process-wide token; the per-process source does not look at the request. */</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String token() {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> req = (HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(HttpServletRequest.<strong class="jxr_keyword">class</strong>.getClassLoader(), <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[]{HttpServletRequest.<strong class="jxr_keyword">class</strong>},
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			(proxy, method, args) -&gt; method.getReturnType() == <strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong> ? (Object) false : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> boundary.tokenFor(req);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/** Opens a WebSocket session through the plain instance and returns its WebSocket path. */</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String openSession(HttpClient http) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;v\&quot;:1,\&quot;bridge\&quot;:\&quot;ops\&quot;,\&quot;transport\&quot;:\&quot;websocket\&quot;,\&quot;downstream\&quot;:[\&quot;ops.jobs\&quot;],\&quot;upstream\&quot;:[]}"</span>;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> res = http.send(HttpRequest.newBuilder(URI.create(origin(plainPort) + <span class="jxr_string">"/rest"</span> + BusEventsMixin.SESSION_PATH))
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(plainPort))
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			.header(boundary.csrfHeader(), token())
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			.build(), HttpResponse.BodyHandlers.ofString());
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(200, res.statusCode(), res::body);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">return</strong> JsonMap.ofString(res.body()).getMap(<span class="jxr_string">"paths"</span>).getString(<span class="jxr_string">"websocket"</span>);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> URI wsUri(<strong class="jxr_keyword">int</strong> port, String path) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">return</strong> URI.create(<span class="jxr_string">"ws://127.0.0.1:"</span> + port + path);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<em class="jxr_javadoccomment">/** Collects whole text frames and the close code. */</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Frames <strong class="jxr_keyword">implements</strong> WebSocket.Listener {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">final</strong> BlockingQueue&lt;JsonMap&gt; frames = <strong class="jxr_keyword">new</strong> LinkedBlockingQueue&lt;&gt;();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">final</strong> CompletableFuture&lt;Integer&gt; closed = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;&gt;();
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringBuilder partial = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		@Override <strong class="jxr_keyword">public</strong> CompletionStage&lt;?&gt; onText(WebSocket ws, CharSequence data, <strong class="jxr_keyword">boolean</strong> last) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			partial.append(data);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">if</strong> (last) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 					frames.add(JsonMap.ofString(partial.toString()));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 					closed.completeExceptionally(e);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				partial.setLength(0);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			}
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			ws.request(1);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		@Override <strong class="jxr_keyword">public</strong> CompletionStage&lt;?&gt; onClose(WebSocket ws, <strong class="jxr_keyword">int</strong> statusCode, String reason) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			closed.complete(statusCode);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_javadoccomment">/** The HTTP status of a handshake the container refused before the upgrade. */</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> handshakeStatus(HttpClient http, URI uri, String...headers) {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> b = http.newWebSocketBuilder();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			b.header(headers[i], headers[i + 1]);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(ExecutionException.<strong class="jxr_keyword">class</strong>, () -&gt; b.buildAsync(uri, <strong class="jxr_keyword">new</strong> Frames()).get(10, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">return</strong> assertInstanceOf(WebSocketHandshakeException.<strong class="jxr_keyword">class</strong>, e.getCause()).getResponse().statusCode();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_javadoccomment">/** Connects with the given headers, expects the first frame {@code resync-begin} and an open socket, then closes. */</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertAdmitted(<strong class="jxr_keyword">int</strong> port, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> frames = <strong class="jxr_keyword">new</strong> Frames();
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> b = http.newWebSocketBuilder();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			b.header(headers[i], headers[i + 1]);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> ws = b.buildAsync(wsUri(port, openSession(http)), frames).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> first = frames.frames.poll(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertNotNull(first, <span class="jxr_string">"no frame within 10s; closed with "</span> + frames.closed.getNow(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertEquals(<span class="jxr_string">"resync-begin"</span>, first.getString(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertNull(frames.closed.getNow(<strong class="jxr_keyword">null</strong>), <span class="jxr_string">"the socket was closed"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		ws.sendClose(WebSocket.NORMAL_CLOSURE, <span class="jxr_string">""</span>).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<em class="jxr_javadoccomment">/** Connects with the given headers and expects the upgrade to complete and the endpoint to close at once with {@code 4403}. */</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertRefused4403(<strong class="jxr_keyword">int</strong> port, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> frames = <strong class="jxr_keyword">new</strong> Frames();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> b = http.newWebSocketBuilder();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			b.header(headers[i], headers[i + 1]);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		b.buildAsync(wsUri(port, openSession(http)), frames).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		assertEquals(4403, frames.closed.get(10, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		assertTrue(frames.frames.isEmpty(), <span class="jxr_string">"a refused handshake saw a frame"</span>);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_javadoccomment">/** A same-origin {@code Origin} on a plain Tomcat is admitted and the first frame arrives. */</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test <strong class="jxr_keyword">void</strong> a01_sameOriginWsConnects() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertAdmitted(plainPort, <span class="jxr_string">"Origin"</span>, origin(plainPort));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * A well-formed cross-site Origin.  {@code checkOrigin} sees only the Origin value, not the Host it must match, so</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * the upgrade completes (101) and the endpoint closes at once with {@code 4403} before any frame.</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	@Test <strong class="jxr_keyword">void</strong> a02_crossSiteOriginCloses4403BeforeAnyFrame() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertRefused4403(plainPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<em class="jxr_javadoccomment">/** No {@code Origin} at all is refused before the upgrade with {@code 403}. */</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	@Test <strong class="jxr_keyword">void</strong> a03_missingOriginRefused() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertEquals(403, handshakeStatus(http, wsUri(plainPort, openSession(http))));
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_javadoccomment">/** The opaque {@code Origin: null} is refused before the upgrade with {@code 403}. */</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> a03b_originNullRefused() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertEquals(403, handshakeStatus(http, wsUri(plainPort, openSession(http)), <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"null"</span>));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * A {@code Host} that is not the Origin's host.  The JDK client cannot set {@code Host}, so this speaks the handshake</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * over a raw socket: the upgrade completes and the endpoint's first frame is a close with {@code 4403}.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> a04_hostOriginMismatchCloses4403() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> path = openSession(HttpClient.newHttpClient());
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, plainPort); <strong class="jxr_keyword">var</strong> out = socket.getOutputStream(); <strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> BufferedInputStream(socket.getInputStream())) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			socket.setSoTimeout(10_000);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			out.write((<span class="jxr_string">"GET "</span> + path + <span class="jxr_string">" HTTP/1.1\r\n"</span>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				+ <span class="jxr_string">"Host: evil.example\r\n"</span>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				+ <span class="jxr_string">"Origin: "</span> + origin(plainPort) + <span class="jxr_string">"\r\n"</span>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				+ <span class="jxr_string">"Connection: Upgrade\r\n"</span>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				+ <span class="jxr_string">"Upgrade: websocket\r\n"</span>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 				+ <span class="jxr_string">"Sec-WebSocket-Version: 13\r\n"</span>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				+ <span class="jxr_string">"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n"</span>).getBytes(StandardCharsets.US_ASCII));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			out.flush();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">var</strong> head = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">while</strong> (! head.toString().endsWith(<span class="jxr_string">"\r\n\r\n"</span>)) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				<strong class="jxr_keyword">var</strong> b = in.read();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				assertTrue(b &gt;= 0, <span class="jxr_string">"connection closed during handshake: "</span> + head);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				head.append((<strong class="jxr_keyword">char</strong>) b);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			assertTrue(head.toString().startsWith(<span class="jxr_string">"HTTP/1.1 101"</span>), head::toString);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			assertEquals(0x88, in.read(), <span class="jxr_string">"first frame is not a close frame"</span>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">var</strong> len = in.read();
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			assertTrue(len &gt;= 2 &amp;&amp; len &lt; 126, <span class="jxr_string">"unexpected close payload length "</span> + len);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			assertEquals(4403, (in.read() &lt;&lt; 8) | in.read());
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * A {@code wss} page behind a TLS-terminating proxy: the proxy sends {@code X-Forwarded-Proto: https}, and the</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * {@link RemoteIpValve} carries that into the handshake's request URI, so an {@code https} Origin on the real port</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * matches (the port comes from {@code Host}) and an {@code http} Origin does not.</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Test <strong class="jxr_keyword">void</strong> a05_forwardedProtoBehindRemoteIpValve() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertAdmitted(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"https://127.0.0.1:"</span> + valvedPort, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, origin(valvedPort), <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<em class="jxr_javadoccomment">/** A forwarded {@code https} but a cross-site Origin through the valve is still refused. */</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	@Test <strong class="jxr_keyword">void</strong> a05b_forwardedProtoCrossSiteOriginRefused() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * The valve rewrites the URI to {@code wss} without a port, but the port comes from {@code Host}: an {@code https}</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * Origin with the implied port 443 is not this server's origin and is refused.</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> a05c_forwardedProtoImpliedPortOriginRefused() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"https://127.0.0.1"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<em class="jxr_javadoccomment">/** The default valve ignores {@code X-Forwarded-Host}, so a forged forwarded host and a matching Origin are refused. */</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	@Test <strong class="jxr_keyword">void</strong> a07_forwardedHostIgnoredByDefaultValve() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertRefused4403(valvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * With {@code hostHeader=X-Forwarded-Host} the valve rewrites the host of the handshake's request URI, but the</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * {@code Host} header the handshake sees stays the real one (case (e) in the class Javadoc).  The boundary reads</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * {@code Host}, so the forged forwarded host and its matching Origin are still refused.</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@Test <strong class="jxr_keyword">void</strong> a08_forwardedHostHeaderValveStillRefusesForgedHost() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertRefused4403(hostValvedPort, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	}
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<em class="jxr_javadoccomment">/** Records the request URI and Host of an upgrade to the probe endpoint. */</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String probe(<strong class="jxr_keyword">int</strong> port, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> b = HttpClient.newHttpClient().newWebSocketBuilder();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			b.header(headers[i], headers[i + 1]);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		PROBED.clear();
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		b.buildAsync(wsUri(port, <span class="jxr_string">"/probe"</span>), <strong class="jxr_keyword">new</strong> Frames()).get(10, TimeUnit.SECONDS)
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			.sendClose(WebSocket.NORMAL_CLOSURE, <span class="jxr_string">""</span>).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">return</strong> PROBED.poll(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * Pins what Tomcat reports from {@code HandshakeRequest.getRequestURI()} (the class Javadoc table): always</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * {@code ws} or {@code wss}, never {@code http} or {@code https}; only the {@code RemoteIpValve} applies</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * {@code X-Forwarded-Proto}, and it drops the port.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Test <strong class="jxr_keyword">void</strong> a06_requestUriSchemeIsWsOrWss() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertEquals(<span class="jxr_string">"ws://127.0.0.1:"</span> + plainPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + plainPort + <span class="jxr_string">"]"</span>, probe(plainPort, <span class="jxr_string">"Origin"</span>, origin(plainPort)), <span class="jxr_string">"(a)"</span>);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertEquals(<span class="jxr_string">"wss://127.0.0.1/probe Host=[127.0.0.1:"</span> + valvedPort + <span class="jxr_string">"]"</span>, probe(valvedPort, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>), <span class="jxr_string">"(b)"</span>);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertEquals(<span class="jxr_string">"ws://127.0.0.1:"</span> + valvedPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + valvedPort + <span class="jxr_string">"]"</span>, probe(valvedPort), <span class="jxr_string">"(c)"</span>);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertEquals(<span class="jxr_string">"ws://127.0.0.1:"</span> + plainPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + plainPort + <span class="jxr_string">"]"</span>, probe(plainPort, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>), <span class="jxr_string">"(d)"</span>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		assertEquals(<span class="jxr_string">"ws://evil.example:"</span> + hostValvedPort + <span class="jxr_string">"/probe Host=[127.0.0.1:"</span> + hostValvedPort + <span class="jxr_string">"]"</span>, probe(hostValvedPort, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>), <span class="jxr_string">"(e)"</span>);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * Trusted forwarding picks the rightmost entry, which relies on the handshake's repeated header lines keeping their</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * wire order.  Three lines, sent raw because the JDK client cannot repeat a header, come back in order.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	@Test <strong class="jxr_keyword">void</strong> a09_repeatedForwardedHostLinesKeepWireOrder() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		FORWARDED_HOSTS.clear();
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, plainPort); <strong class="jxr_keyword">var</strong> out = socket.getOutputStream()) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			socket.setSoTimeout(10_000);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			out.write((<span class="jxr_string">"GET /probe HTTP/1.1\r\n"</span>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				+ <span class="jxr_string">"Host: 127.0.0.1:"</span> + plainPort + <span class="jxr_string">"\r\n"</span>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				+ <span class="jxr_string">"X-Forwarded-Host: first.example\r\n"</span>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				+ <span class="jxr_string">"X-Forwarded-Host: second.example\r\n"</span>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				+ <span class="jxr_string">"X-Forwarded-Host: third.example\r\n"</span>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				+ <span class="jxr_string">"Connection: Upgrade\r\n"</span>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				+ <span class="jxr_string">"Upgrade: websocket\r\n"</span>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				+ <span class="jxr_string">"Sec-WebSocket-Version: 13\r\n"</span>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				+ <span class="jxr_string">"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n"</span>).getBytes(StandardCharsets.US_ASCII));
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			out.flush();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">var</strong> seen = FORWARDED_HOSTS.poll(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			assertEquals(List.of(<span class="jxr_string">"first.example"</span>, <span class="jxr_string">"second.example"</span>, <span class="jxr_string">"third.example"</span>), seen);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		}
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<em class="jxr_javadoccomment">/** Opens a session through the {@code trustedProxies} instance with a forwarded write, as a proxy on the loopback peer would send it. */</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String openTrustedSession(HttpClient http) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> body = <span class="jxr_string">"{\&quot;v\&quot;:1,\&quot;bridge\&quot;:\&quot;ops\&quot;,\&quot;transport\&quot;:\&quot;websocket\&quot;,\&quot;downstream\&quot;:[\&quot;ops.jobs\&quot;],\&quot;upstream\&quot;:[]}"</span>;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> req = (HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(HttpServletRequest.<strong class="jxr_keyword">class</strong>.getClassLoader(), <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[]{HttpServletRequest.<strong class="jxr_keyword">class</strong>},
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			(proxy, method, args) -&gt; method.getReturnType() == <strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong> ? (Object) false : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">var</strong> res = http.send(HttpRequest.newBuilder(URI.create(origin(trustedPort) + <span class="jxr_string">"/rest"</span> + BusEventsMixin.SESSION_PATH))
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			.header(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(trustedPort))
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.header(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"127.0.0.1:"</span> + trustedPort)
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			.header(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>)
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			.header(trustedBoundary.csrfHeader(), trustedBoundary.tokenFor(req))
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			.POST(HttpRequest.BodyPublishers.ofString(body))
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			.build(), HttpResponse.BodyHandlers.ofString());
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		assertEquals(200, res.statusCode(), res::body);
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">return</strong> JsonMap.ofString(res.body()).getMap(<span class="jxr_string">"paths"</span>).getString(<span class="jxr_string">"websocket"</span>);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * With {@code trustedProxies} set, Tomcat reports the peer on HTTP (the loopback proxy is believed) but supplies none</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * on a handshake, so the peer there is unknown and untrusted.  A handshake that carries a forwarded host is refused</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * with {@code 4403}; the documented recipe (same scheme, {@code Host} preserved, no forwarded header on the socket)</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * connects.  This fails loudly if a future Tomcat starts supplying the peer.</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	@Test <strong class="jxr_keyword">void</strong> i01_trustedProxiesOnTomcat() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> http = HttpClient.newHttpClient();
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> path = openTrustedSession(http);
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		<strong class="jxr_keyword">var</strong> refused = <strong class="jxr_keyword">new</strong> Frames();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		http.newWebSocketBuilder()
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(trustedPort))
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			.header(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"127.0.0.1:"</span> + trustedPort)
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			.header(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>)
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			.buildAsync(wsUri(trustedPort, path), refused).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		assertEquals(4403, refused.closed.get(10, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		assertTrue(refused.frames.isEmpty(), <span class="jxr_string">"a refused handshake saw a frame"</span>);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">var</strong> frames = <strong class="jxr_keyword">new</strong> Frames();
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		<strong class="jxr_keyword">var</strong> ws = http.newWebSocketBuilder()
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			.header(<span class="jxr_string">"Origin"</span>, origin(trustedPort))
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			.buildAsync(wsUri(trustedPort, openTrustedSession(http)), frames).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> first = frames.frames.poll(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		assertNotNull(first, <span class="jxr_string">"no frame within 10s; closed with "</span> + frames.closed.getNow(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertEquals(<span class="jxr_string">"resync-begin"</span>, first.getString(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		ws.sendClose(WebSocket.NORMAL_CLOSURE, <span class="jxr_string">""</span>).get(10, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	}
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	<em class="jxr_javadoccomment">/** What an h2c connection did with an RFC 8441 extended CONNECT: the SETTINGS it sent and how the stream ended. */</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	record Ext(<strong class="jxr_keyword">boolean</strong> settingsSeen, <strong class="jxr_keyword">boolean</strong> connectProtocolAdvertised, String frames) {}
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> field(ByteArrayOutputStream h, String name, String value) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		h.write(0);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		str(h, name);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		str(h, value);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	}
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> str(ByteArrayOutputStream h, String value) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">var</strong> v = value.getBytes(StandardCharsets.US_ASCII);
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		h.write(v.length);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		h.write(v);
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	}
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] frame(<strong class="jxr_keyword">int</strong> type, <strong class="jxr_keyword">int</strong> flags, <strong class="jxr_keyword">int</strong> stream, byte[] payload) {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">var</strong> b = java.nio.ByteBuffer.allocate(9 + payload.length);
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		b.put((byte)(payload.length &gt;&gt; 16)).put((byte)(payload.length &gt;&gt; 8)).put((byte)payload.length);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		b.put((byte)type).put((byte)flags).putInt(stream).put(payload);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">return</strong> b.array();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 	}
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * Sends a hand-encoded extended CONNECT over prior-knowledge h2c and reads until the stream is reset or the</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 * connection ends or goes quiet.  The frame types seen are returned for the record.</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Ext extendedConnect(<strong class="jxr_keyword">int</strong> port, String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		out.write(<span class="jxr_string">"PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"</span>.getBytes(StandardCharsets.US_ASCII));
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		out.write(frame(0x4, 0, 0, <strong class="jxr_keyword">new</strong> byte[0]));
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		h.write(2);                                    <em class="jxr_comment">// :method, name from the static table</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		str(h, <span class="jxr_string">"CONNECT"</span>);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		field(h, <span class="jxr_string">":protocol"</span>, <span class="jxr_string">"websocket"</span>);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		h.write(0x86);                                 <em class="jxr_comment">// :scheme http</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		h.write(4);                                    <em class="jxr_comment">// :path</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		str(h, path);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		h.write(1);                                    <em class="jxr_comment">// :authority</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		str(h, <span class="jxr_string">"127.0.0.1:"</span> + port);
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		field(h, <span class="jxr_string">"origin"</span>, origin(port));
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		field(h, <span class="jxr_string">"sec-websocket-version"</span>, <span class="jxr_string">"13"</span>);
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		out.write(frame(0x1, 0x4, 1, h.toByteArray()));
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">var</strong> settings = false;
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">var</strong> advertised = false;
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, port); <strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> DataInputStream(socket.getInputStream())) {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			socket.setSoTimeout(3_000);
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			socket.getOutputStream().write(out.toByteArray());
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			socket.getOutputStream().flush();
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 				<strong class="jxr_keyword">for</strong> (;;) {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 					<strong class="jxr_keyword">var</strong> head = <strong class="jxr_keyword">new</strong> byte[9];
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 					in.readFully(head);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 					<strong class="jxr_keyword">var</strong> len = ((head[0] &amp; 0xFF) &lt;&lt; 16) | ((head[1] &amp; 0xFF) &lt;&lt; 8) | (head[2] &amp; 0xFF);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 					<strong class="jxr_keyword">var</strong> payload = <strong class="jxr_keyword">new</strong> byte[len];
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 					in.readFully(payload);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 					seen.append(f(<span class="jxr_string">"%02x "</span>, head[3]));
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 					<strong class="jxr_keyword">if</strong> (head[3] == 0x4 &amp;&amp; (head[4] &amp; 0x1) == 0) {
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 						settings = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i + 6 &lt;= len; i += 6)
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 							<strong class="jxr_keyword">if</strong> ((((payload[i] &amp; 0xFF) &lt;&lt; 8) | (payload[i + 1] &amp; 0xFF)) == 0x8 &amp;&amp; payload[i + 5] == 1)
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 								advertised = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 						socket.getOutputStream().write(frame(0x4, 0x1, 0, <strong class="jxr_keyword">new</strong> byte[0]));
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 						socket.getOutputStream().flush();
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 					}
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 					<strong class="jxr_keyword">if</strong> (head[3] == 0x3 || head[3] == 0x7)
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 				}
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			} <strong class="jxr_keyword">catch</strong> (EOFException | SocketTimeoutException e) {
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 				seen.append(e instanceof EOFException ? <span class="jxr_string">"eof"</span> : <span class="jxr_string">"quiet"</span>);
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 			}
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		}
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Ext(settings, advertised, seen.toString().trim());
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * Tomcat 11 has no RFC 8441 support: it does not advertise {@code SETTINGS_ENABLE_CONNECT_PROTOCOL}, and an extended</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * CONNECT never reaches a WebSocket endpoint, so there is no HTTP/2 handshake for the boundary to judge.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	@Test <strong class="jxr_keyword">void</strong> h01_tomcatHasNoExtendedConnect() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> path = openSession(HttpClient.newHttpClient());
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		PROBED.clear();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> res = extendedConnect(plainPort, <span class="jxr_string">"/probe"</span>);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">var</strong> real = extendedConnect(plainPort, path);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		assertTrue(res.settingsSeen(), res::toString);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		assertFalse(res.connectProtocolAdvertised(), res::toString);
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		assertFalse(real.connectProtocolAdvertised(), real::toString);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		assertNull(PROBED.poll(1, TimeUnit.SECONDS), <span class="jxr_string">"an extended CONNECT reached the configurator"</span>);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	}
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

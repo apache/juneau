@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@code label} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Field of(String label, String value) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">if</strong> (label == <strong class="jxr_keyword">null</strong> || label.isBlank())
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">if</strong> (ib(label))
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Field label must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> Field();
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			f.label = label;
@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Step of(String id) {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> Step();
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 			s.id = id;
@@ -389,9 +389,9 @@
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@code id} or {@code label} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ChildAction of(String id, String label) {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction id must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">if</strong> (label == <strong class="jxr_keyword">null</strong> || label.isBlank())
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">if</strong> (ib(label))
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction label must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">var</strong> c = <strong class="jxr_keyword">new</strong> ChildAction();
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 			c.id = id;
@@ -554,7 +554,7 @@
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code title} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ModalDef create(String title) {
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">if</strong> (title == <strong class="jxr_keyword">null</strong> || title.isBlank())
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">if</strong> (ib(title))
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef title must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> ModalDef();
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		m.title = title;
@@ -638,9 +638,9 @@
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * Passing &lt;jk&gt;false&lt;/jk&gt; &lt;b&gt;clears&lt;/b&gt; the flag rather than serializing an explicit {@code false}: the wire</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.</em>
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) keeps today's close-then-submit behaviour.</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) keeps the default close-then-submit behaviour.</em>
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<strong class="jxr_keyword">public</strong> ModalDef keepOpenOnSubmit(<strong class="jxr_keyword">boolean</strong> value) {
@@ -680,9 +680,9 @@
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * Passing &lt;jk&gt;false&lt;/jk&gt; &lt;b&gt;clears&lt;/b&gt; the flag rather than serializing an explicit {@code false}: the wire</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.</em>
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) leaves today's row-id behaviour untouched.</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) keeps the default row-id behaviour.</em>
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 	<strong class="jxr_keyword">public</strong> ModalDef selfTargeted(<strong class="jxr_keyword">boolean</strong> value) {
@@ -727,7 +727,7 @@
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 	@Override
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate() {
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">if</strong> (title == <strong class="jxr_keyword">null</strong> || title.isBlank())
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">if</strong> (ib(title))
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef title must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">if</strong> (fields != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields) {
@@ -817,7 +817,7 @@
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">	 * 		{@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as</em>
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> <em class="jxr_javadoccomment">	 * 		contract-&lt;i&gt;valid&lt;/i&gt; with no complaint.</em>
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;REST responses&lt;/b&gt; are validated independently:</em>
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">	 * 		{@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">	 * 		{@link WidgetsMixin.WidgetValidationProcessor</em>
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">	 * 		WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a</em>
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> <em class="jxr_javadoccomment">	 * 		{@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.</em>
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * 		Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case</em>

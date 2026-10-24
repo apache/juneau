@@ -292,7 +292,7 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 			field = body.getString(<span class="jxr_string">"field"</span>);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			value = body.getString(<span class="jxr_string">"value"</span>);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		}
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (field == <strong class="jxr_keyword">null</strong> || field.isBlank())
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (ib(field))
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing field to stage"</span>);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">var</strong> c = store().pendingChanges().stage(id, field, value, ConsoleWrites.author(actor));

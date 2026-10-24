@@ -141,7 +141,7 @@
 <span class="source-line-no">128</span><span id="line-128">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">129</span><span id="line-129">    */</span>
 <span class="source-line-no">130</span><span id="line-130">   public static BadgeDef create(String id) {</span>
-<span class="source-line-no">131</span><span id="line-131">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">131</span><span id="line-131">      if (ib(id))</span>
 <span class="source-line-no">132</span><span id="line-132">         throw iaex("BadgeDef id must not be null or blank.");</span>
 <span class="source-line-no">133</span><span id="line-133">      var b = new BadgeDef();</span>
 <span class="source-line-no">134</span><span id="line-134">      b.id = id;</span>
@@ -341,7 +341,7 @@
 <span class="source-line-no">328</span><span id="line-328">    * @throws IllegalArgumentException If this definition is not well-formed.</span>
 <span class="source-line-no">329</span><span id="line-329">    */</span>
 <span class="source-line-no">330</span><span id="line-330">   public void validate() {</span>
-<span class="source-line-no">331</span><span id="line-331">      if (src == null || src.isBlank())</span>
+<span class="source-line-no">331</span><span id="line-331">      if (ib(src))</span>
 <span class="source-line-no">332</span><span id="line-332">         throw iaex("&lt;@badge id='%s'&gt; requires src=.", id);</span>
 <span class="source-line-no">333</span><span id="line-333">      if (! SafePathTemplate.isSameOriginPath(src))</span>
 <span class="source-line-no">334</span><span id="line-334">         throw iaex("&lt;@badge id='%s'&gt; src must be a same-origin path; got '%s'.", id, src);</span>
@@ -349,9 +349,9 @@
 <span class="source-line-no">336</span><span id="line-336">         throw iaex("&lt;@badge id='%s'&gt; href must be a same-origin path; got '%s'.", id, href);</span>
 <span class="source-line-no">337</span><span id="line-337">      if (refreshMs != null &amp;&amp; refreshMs &lt; MIN_REFRESH_MS)</span>
 <span class="source-line-no">338</span><span id="line-338">         throw iaex("'%s' refreshMs='%s' is below the minimum '%s'.", id, refreshMs, MIN_REFRESH_MS);</span>
-<span class="source-line-no">339</span><span id="line-339">      if (placement == Placement.TOOLBAR &amp;&amp; (table == null || table.isBlank()))</span>
+<span class="source-line-no">339</span><span id="line-339">      if (placement == Placement.TOOLBAR &amp;&amp; (ib(table)))</span>
 <span class="source-line-no">340</span><span id="line-340">         throw iaex("&lt;@badge id='%s'&gt; placement='toolbar' requires table=.", id);</span>
-<span class="source-line-no">341</span><span id="line-341">      if (scopeBy == ScopeBy.VIEW &amp;&amp; (table == null || table.isBlank()))</span>
+<span class="source-line-no">341</span><span id="line-341">      if (scopeBy == ScopeBy.VIEW &amp;&amp; (ib(table)))</span>
 <span class="source-line-no">342</span><span id="line-342">         throw iaex("BadgeDef '%s' scope.by='view' requires table=.", id);</span>
 <span class="source-line-no">343</span><span id="line-343">   }</span>
 <span class="source-line-no">344</span><span id="line-344"></span>

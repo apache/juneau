@@ -1184,27 +1184,27 @@
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 	@Test <strong class="jxr_keyword">void</strong> k19_guardedRedirect_crossOrigin_credentialsStripped() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		<strong class="jxr_keyword">var</strong> hops = guardedRedirect(<span class="jxr_string">"http://93.184.216.35/end"</span>);
-<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		assertEquals(2, hops.size());
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		assertSize(2, hops);
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 		assertEquals(<span class="jxr_string">"Bearer secret|session=abc|key|Basic proxy"</span>, hops.get(0).credentials);
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		assertEquals(<span class="jxr_string">"null|null|null|null"</span>, hops.get(1).credentials);
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	}
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 	@Test <strong class="jxr_keyword">void</strong> k20_guardedRedirect_sameOrigin_credentialsKept() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 		<strong class="jxr_keyword">var</strong> hops = guardedRedirect(<span class="jxr_string">"http://93.184.216.34/end"</span>);
-<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 		assertEquals(2, hops.size());
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 		assertSize(2, hops);
 <a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 		assertEquals(<span class="jxr_string">"Bearer secret|session=abc|key|Basic proxy"</span>, hops.get(1).credentials);
 <a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 	}
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 	@Test <strong class="jxr_keyword">void</strong> k21_guardedRedirect_crossOriginThenBack_credentialsStayStripped() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 		<strong class="jxr_keyword">var</strong> hops = guardedRedirect(<span class="jxr_string">"http://93.184.216.35/back"</span>);
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		assertEquals(3, hops.size());
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		assertSize(3, hops);
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 		assertEquals(<span class="jxr_string">"null|null|null|null"</span>, hops.get(1).credentials);
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 		assertEquals(<span class="jxr_string">"null|null|null|null"</span>, hops.get(2).credentials);
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 	}
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 	@Test <strong class="jxr_keyword">void</strong> k22_guardedRedirect_everyHopMarked() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">var</strong> hops = guardedRedirect(<span class="jxr_string">"http://93.184.216.35/back"</span>);
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		assertEquals(3, hops.size());
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		assertSize(3, hops);
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : hops)
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 			assertEquals(Boolean.TRUE, h.marker);
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 		<em class="jxr_comment">// Each hop has its own context, so no authentication state is carried from one host to the next.</em>

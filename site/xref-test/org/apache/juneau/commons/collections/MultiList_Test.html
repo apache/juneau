@@ -423,7 +423,7 @@
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> l2 = l(a(<span class="jxr_string">"3"</span>, <span class="jxr_string">"4"</span>, <span class="jxr_string">"5"</span>));
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> ml = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1, l2);
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(5, ml.size());
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertSize(5, ml);
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 	@Test
@@ -433,13 +433,13 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> l3 = l(<strong class="jxr_keyword">new</strong> String[0]);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> ml = <strong class="jxr_keyword">new</strong> MultiList&lt;&gt;(l1, l2, l3);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertEquals(1, ml.size());
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertSize(1, ml);
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Test
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">void</strong> d03_size_emptyMultiList() {
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">var</strong> ml = <strong class="jxr_keyword">new</strong> MultiList&lt;String&gt;();
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertEquals(0, ml.size());
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertSize(0, ml);
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>

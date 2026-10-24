@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../commons/inject/Configuration.html" title="annotation interface in org.apache.juneau.commons.inject">@Configuration</a>
-</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.html#line-73">App.AppConfig</a></span>
+</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.html#line-75">App.AppConfig</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Application-specific configuration class contributing the top-level REST servlet and the console, API and admin
  boundary filters.</div>
@@ -155,7 +155,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AppConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-74">AppConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-76">AppConfig</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rootResources()">
 <h3>rootResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.Servlet</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-85">rootResources</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.Servlet</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-87">rootResources</a></span>()</div>
 <div class="block">Provides the top-level REST servlet, auto-mounted by <code>JettyServerComponent</code> at
  <a href="../../rest/server/Rest.html#path()"><code>Rest.path()</code></a>.</div>
 <dl class="notes">
@@ -181,7 +181,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consoleBoundary()">
 <h3>consoleBoundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-102">consoleBoundary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-104">consoleBoundary</a></span>()</div>
 <div class="block">Provides the console's CSRF boundary, covering <code>/console</code> only.
 
  <p>
@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="apiBoundary()">
 <h3>apiBoundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-121">apiBoundary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-123">apiBoundary</a></span>()</div>
 <div class="block">Provides the API's CSRF boundary, covering <code>/petstore/*</code>.
 
  <p>
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="adminBoundary()">
 <h3>adminBoundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-143">adminBoundary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-145">adminBoundary</a></span>()</div>
 <div class="block">Provides the admin resources' CSRF boundary, covering <code>/config</code>, <code>/logs</code> and <code>/shutdown</code>.
 
  <p>

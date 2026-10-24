@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">while</strong> (r.canRead())
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 				seen.add(r.read(Map.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(2, seen.size());
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertSize(2, seen);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertBean(seen.get(0), <span class="jxr_string">"x"</span>, <span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertBean(seen.get(1), <span class="jxr_string">"x"</span>, <span class="jxr_string">"2"</span>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}

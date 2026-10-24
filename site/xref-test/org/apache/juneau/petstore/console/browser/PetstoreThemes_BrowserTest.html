@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * P9 in the real browser: each stock theme resolves to a distinct set of token values, the custom theme's leaf and</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * alias resolve, and every theme is screenshotted to {@code target/js/snapshots} (CI artifacts only, OQ9).</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * alias resolve, and every theme is screenshotted to {@code target/js/snapshots} (CI artifacts only).</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches=<span class="jxr_string">"true"</span>, disabledReason=PetstoreBrowser.DISABLED)
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">class</strong> <a name="PetstoreThemes_BrowserTest" href="../../../../../../org/apache/juneau/petstore/console/browser/PetstoreThemes_BrowserTest.html#PetstoreThemes_BrowserTest">PetstoreThemes_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> base = PetstoreTestServer.awaitReady(server);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> cases = <strong class="jxr_keyword">new</strong> ArrayList&lt;Map&lt;String,Object&gt;&gt;();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : concat(STOCK, <span class="jxr_string">"custom"</span>))
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			cases.add(Map.of(<span class="jxr_string">"name"</span>, t, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/dev/themes?theme="</span> + t,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			cases.add(Map.of(<span class="jxr_string">"name"</span>, t, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/dev/themes?theme="</span> + t,
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  				<span class="jxr_string">"actions"</span>, List.of(Map.of(<span class="jxr_string">"screenshot"</span>, <span class="jxr_string">"theme-"</span> + t + <span class="jxr_string">".png"</span>)),
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"tokens"</span>, <span class="jxr_string">"custom"</span>.equals(t) ? CUSTOM_TOKENS : TOKENS)));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		cases.add(Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"scheme-dark"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/store"</span>,
@@ -82,41 +82,45 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">return</strong> out;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// tokens is a JSON array of strings.</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; tokens(String theme) {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;) query(assertClean(report, theme), <span class="jxr_string">"tokens"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a01_everyTokenResolvesInEveryTheme() {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : concat(STOCK, <span class="jxr_string">"custom"</span>))
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : tokens(t))
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				assertNotEmpty(() -&gt; <span class="jxr_string">"Theme '"</span> + t + <span class="jxr_string">"' left a token unresolved: "</span> + tokens(t), v);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a02_stockThemesAreDistinct() {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;List&lt;String&gt;&gt;();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : STOCK)
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			seen.add(tokens(t));
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertSize(STOCK.size(), seen);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a03_customLeafAndAliasResolve() {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> c = tokens(<span class="jxr_string">"custom"</span>);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertString(<span class="jxr_string">"#fdeceb"</span>, c.get(0));  <em class="jxr_comment">// --jc-pill-red-bg leaf override</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertString(c.get(2), c.get(1));   <em class="jxr_comment">// --jc-tab-bar-bg follows --jc-card-bg</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// state is a JSON object of strings.</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a04_headerToggleSwitchesToDark() {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> state = (Map&lt;String,Object&gt;) query(assertClean(report, <span class="jxr_string">"scheme-dark"</span>), <span class="jxr_string">"state"</span>);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertString(<span class="jxr_string">"dark"</span>, state.get(<span class="jxr_string">"scheme"</span>));
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<em class="jxr_comment">// The dark body background is a dark colour, not the light page white.</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> bg = String.valueOf(state.get(<span class="jxr_string">"bg"</span>));
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"rgba?&#92;&#92;((&#92;&#92;d+), (&#92;&#92;d+), (&#92;&#92;d+)"</span>).matcher(bg);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		org.junit.jupiter.api.Assertions.assertTrue(m.find(), () -&gt; <span class="jxr_string">"unparseable body background: "</span> + bg);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		org.junit.jupiter.api.Assertions.assertTrue(Integer.parseInt(m.group(1)) + Integer.parseInt(m.group(2)) + Integer.parseInt(m.group(3)) &lt; 3 * 96, () -&gt; <span class="jxr_string">"body background is not dark: "</span> + bg);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// tokens is a JSON array of strings.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	})
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; tokens(String theme) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;) query(assertClean(report, theme), <span class="jxr_string">"tokens"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a01_everyTokenResolvesInEveryTheme() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : concat(STOCK, <span class="jxr_string">"custom"</span>))
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : tokens(t))
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				assertNotEmpty(() -&gt; <span class="jxr_string">"Theme '"</span> + t + <span class="jxr_string">"' left a token unresolved: "</span> + tokens(t), v);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a02_stockThemesAreDistinct() {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;List&lt;String&gt;&gt;();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : STOCK)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			seen.add(tokens(t));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertSize(STOCK.size(), seen);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> a03_customLeafAndAliasResolve() {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> c = tokens(<span class="jxr_string">"custom"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertString(<span class="jxr_string">"#fdeceb"</span>, c.get(0));  <em class="jxr_comment">// --jc-pill-red-bg leaf override</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertString(c.get(2), c.get(1));   <em class="jxr_comment">// --jc-tab-bar-bg follows --jc-card-bg</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// state is a JSON object of strings.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	})
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a04_headerToggleSwitchesToDark() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> state = (Map&lt;String,Object&gt;) query(assertClean(report, <span class="jxr_string">"scheme-dark"</span>), <span class="jxr_string">"state"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertString(<span class="jxr_string">"dark"</span>, state.get(<span class="jxr_string">"scheme"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<em class="jxr_comment">// The dark body background is a dark colour, not the light page white.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> bg = String.valueOf(state.get(<span class="jxr_string">"bg"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> m = java.util.regex.Pattern.compile(<span class="jxr_string">"rgba?&#92;&#92;((&#92;&#92;d+), (&#92;&#92;d+), (&#92;&#92;d+)"</span>).matcher(bg);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		org.junit.jupiter.api.Assertions.assertTrue(m.find(), () -&gt; <span class="jxr_string">"unparseable body background: "</span> + bg);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		org.junit.jupiter.api.Assertions.assertTrue(Integer.parseInt(m.group(1)) + Integer.parseInt(m.group(2)) + Integer.parseInt(m.group(3)) &lt; 3 * 96, () -&gt; <span class="jxr_string">"body background is not dark: "</span> + bg);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

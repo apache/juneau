@@ -136,7 +136,7 @@
 <span class="source-line-no">123</span><span id="line-123">    * @throws IllegalArgumentException If a rule is broken.</span>
 <span class="source-line-no">124</span><span id="line-124">    */</span>
 <span class="source-line-no">125</span><span id="line-125">   public JobLogRegion validate() {</span>
-<span class="source-line-no">126</span><span id="line-126">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">126</span><span id="line-126">      if (ib(id))</span>
 <span class="source-line-no">127</span><span id="line-127">         throw iaex("JobLogRegion id must not be blank.");</span>
 <span class="source-line-no">128</span><span id="line-128">      try {</span>
 <span class="source-line-no">129</span><span id="line-129">         if (! (config.get("submit") instanceof Map&lt;?,?&gt; submit))</span>
@@ -239,96 +239,98 @@
 <span class="source-line-no">226</span><span id="line-226">       * @param value The field.</span>
 <span class="source-line-no">227</span><span id="line-227">       * @return This object.</span>
 <span class="source-line-no">228</span><span id="line-228">       */</span>
-<span class="source-line-no">229</span><span id="line-229">      @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">230</span><span id="line-230">      public Submit field(Field value) {</span>
-<span class="source-line-no">231</span><span id="line-231">         ((List&lt;Object&gt;)map.computeIfAbsent("fields", k -&gt; new ArrayList&lt;&gt;())).add(value.map);</span>
-<span class="source-line-no">232</span><span id="line-232">         return this;</span>
-<span class="source-line-no">233</span><span id="line-233">      }</span>
-<span class="source-line-no">234</span><span id="line-234">   }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">   /** One {@code submit.fields} entry. */</span>
-<span class="source-line-no">237</span><span id="line-237">   public static final class Field {</span>
-<span class="source-line-no">238</span><span id="line-238">      final Map&lt;String,Object&gt; map = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">239</span><span id="line-239"></span>
-<span class="source-line-no">240</span><span id="line-240">      private Field() {}</span>
+<span class="source-line-no">229</span><span id="line-229">      @SuppressWarnings({</span>
+<span class="source-line-no">230</span><span id="line-230">         "unchecked" // The "fields" entry is always created here as a List&lt;Object&gt;.</span>
+<span class="source-line-no">231</span><span id="line-231">      })</span>
+<span class="source-line-no">232</span><span id="line-232">      public Submit field(Field value) {</span>
+<span class="source-line-no">233</span><span id="line-233">         ((List&lt;Object&gt;)map.computeIfAbsent("fields", k -&gt; new ArrayList&lt;&gt;())).add(value.map);</span>
+<span class="source-line-no">234</span><span id="line-234">         return this;</span>
+<span class="source-line-no">235</span><span id="line-235">      }</span>
+<span class="source-line-no">236</span><span id="line-236">   }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">   /** One {@code submit.fields} entry. */</span>
+<span class="source-line-no">239</span><span id="line-239">   public static final class Field {</span>
+<span class="source-line-no">240</span><span id="line-240">      final Map&lt;String,Object&gt; map = new LinkedHashMap&lt;&gt;();</span>
 <span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">      /**</span>
-<span class="source-line-no">243</span><span id="line-243">       * @param name The field name, sent under {@code fields}.</span>
-<span class="source-line-no">244</span><span id="line-244">       * @return A new field.</span>
-<span class="source-line-no">245</span><span id="line-245">       */</span>
-<span class="source-line-no">246</span><span id="line-246">      public static Field of(String name) {</span>
-<span class="source-line-no">247</span><span id="line-247">         var f = new Field();</span>
-<span class="source-line-no">248</span><span id="line-248">         f.map.put("name", name);</span>
-<span class="source-line-no">249</span><span id="line-249">         return f;</span>
-<span class="source-line-no">250</span><span id="line-250">      }</span>
-<span class="source-line-no">251</span><span id="line-251"></span>
-<span class="source-line-no">252</span><span id="line-252">      /** @param value The label. @return This object. */</span>
-<span class="source-line-no">253</span><span id="line-253">      public Field label(String value) { map.put("label", value); return this; }</span>
-<span class="source-line-no">254</span><span id="line-254">      /** @param value {@code text}, {@code textarea}, {@code number} or {@code hidden}. @return This object. */</span>
-<span class="source-line-no">255</span><span id="line-255">      public Field type(String value) { map.put("type", value); return this; }</span>
-<span class="source-line-no">256</span><span id="line-256">      /** @param value The placeholder. @return This object. */</span>
-<span class="source-line-no">257</span><span id="line-257">      public Field placeholder(String value) { map.put("placeholder", value); return this; }</span>
-<span class="source-line-no">258</span><span id="line-258">      /** @param value Whether the field must be filled in. @return This object. */</span>
-<span class="source-line-no">259</span><span id="line-259">      public Field required(boolean value) { map.put("required", value); return this; }</span>
-<span class="source-line-no">260</span><span id="line-260">      /** @param value The literal default, or the fallback when {@link #source(String)} is absent. @return This object. */</span>
-<span class="source-line-no">261</span><span id="line-261">      public Field defaultValue(Object value) { map.put("default", value); return this; }</span>
-<span class="source-line-no">262</span><span id="line-262">      /** @param value {@code row.&lt;field&gt;}: the parent row's own property. @return This object. */</span>
-<span class="source-line-no">263</span><span id="line-263">      public Field source(String value) { map.put("source", value); return this; }</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   /** The optional field grid painted above the form, whose slots {@code output.target.field} can address. */</span>
-<span class="source-line-no">267</span><span id="line-267">   public static final class Detail {</span>
-<span class="source-line-no">268</span><span id="line-268">      final Map&lt;String,Object&gt; map = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">269</span><span id="line-269"></span>
-<span class="source-line-no">270</span><span id="line-270">      private Detail() {}</span>
+<span class="source-line-no">242</span><span id="line-242">      private Field() {}</span>
+<span class="source-line-no">243</span><span id="line-243"></span>
+<span class="source-line-no">244</span><span id="line-244">      /**</span>
+<span class="source-line-no">245</span><span id="line-245">       * @param name The field name, sent under {@code fields}.</span>
+<span class="source-line-no">246</span><span id="line-246">       * @return A new field.</span>
+<span class="source-line-no">247</span><span id="line-247">       */</span>
+<span class="source-line-no">248</span><span id="line-248">      public static Field of(String name) {</span>
+<span class="source-line-no">249</span><span id="line-249">         var f = new Field();</span>
+<span class="source-line-no">250</span><span id="line-250">         f.map.put("name", name);</span>
+<span class="source-line-no">251</span><span id="line-251">         return f;</span>
+<span class="source-line-no">252</span><span id="line-252">      }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">      /** @param value The label. @return This object. */</span>
+<span class="source-line-no">255</span><span id="line-255">      public Field label(String value) { map.put("label", value); return this; }</span>
+<span class="source-line-no">256</span><span id="line-256">      /** @param value {@code text}, {@code textarea}, {@code number} or {@code hidden}. @return This object. */</span>
+<span class="source-line-no">257</span><span id="line-257">      public Field type(String value) { map.put("type", value); return this; }</span>
+<span class="source-line-no">258</span><span id="line-258">      /** @param value The placeholder. @return This object. */</span>
+<span class="source-line-no">259</span><span id="line-259">      public Field placeholder(String value) { map.put("placeholder", value); return this; }</span>
+<span class="source-line-no">260</span><span id="line-260">      /** @param value Whether the field must be filled in. @return This object. */</span>
+<span class="source-line-no">261</span><span id="line-261">      public Field required(boolean value) { map.put("required", value); return this; }</span>
+<span class="source-line-no">262</span><span id="line-262">      /** @param value The literal default, or the fallback when {@link #source(String)} is absent. @return This object. */</span>
+<span class="source-line-no">263</span><span id="line-263">      public Field defaultValue(Object value) { map.put("default", value); return this; }</span>
+<span class="source-line-no">264</span><span id="line-264">      /** @param value {@code row.&lt;field&gt;}: the parent row's own property. @return This object. */</span>
+<span class="source-line-no">265</span><span id="line-265">      public Field source(String value) { map.put("source", value); return this; }</span>
+<span class="source-line-no">266</span><span id="line-266">   }</span>
+<span class="source-line-no">267</span><span id="line-267"></span>
+<span class="source-line-no">268</span><span id="line-268">   /** The optional field grid painted above the form, whose slots {@code output.target.field} can address. */</span>
+<span class="source-line-no">269</span><span id="line-269">   public static final class Detail {</span>
+<span class="source-line-no">270</span><span id="line-270">      final Map&lt;String,Object&gt; map = new LinkedHashMap&lt;&gt;();</span>
 <span class="source-line-no">271</span><span id="line-271"></span>
-<span class="source-line-no">272</span><span id="line-272">      /**</span>
-<span class="source-line-no">273</span><span id="line-273">       * @param renderer The region helper that paints the grid, for example {@code fieldGrid}.</span>
-<span class="source-line-no">274</span><span id="line-274">       * @param fields The field catalog.</span>
-<span class="source-line-no">275</span><span id="line-275">       * @return A new grid declaration.</span>
-<span class="source-line-no">276</span><span id="line-276">       */</span>
-<span class="source-line-no">277</span><span id="line-277">      public static Detail of(String renderer, RegionDef.Field...fields) {</span>
-<span class="source-line-no">278</span><span id="line-278">         var d = new Detail();</span>
-<span class="source-line-no">279</span><span id="line-279">         d.map.put("renderer", renderer);</span>
-<span class="source-line-no">280</span><span id="line-280">         d.map.put("fields", Arrays.stream(fields).map(RegionDef.Field::toContractMap).toList());</span>
-<span class="source-line-no">281</span><span id="line-281">         return d;</span>
-<span class="source-line-no">282</span><span id="line-282">      }</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   /** Where a terminal result is written. */</span>
-<span class="source-line-no">286</span><span id="line-286">   public static final class Output {</span>
-<span class="source-line-no">287</span><span id="line-287">      final Map&lt;String,Object&gt; map = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">      private Output() {}</span>
+<span class="source-line-no">272</span><span id="line-272">      private Detail() {}</span>
+<span class="source-line-no">273</span><span id="line-273"></span>
+<span class="source-line-no">274</span><span id="line-274">      /**</span>
+<span class="source-line-no">275</span><span id="line-275">       * @param renderer The region helper that paints the grid, for example {@code fieldGrid}.</span>
+<span class="source-line-no">276</span><span id="line-276">       * @param fields The field catalog.</span>
+<span class="source-line-no">277</span><span id="line-277">       * @return A new grid declaration.</span>
+<span class="source-line-no">278</span><span id="line-278">       */</span>
+<span class="source-line-no">279</span><span id="line-279">      public static Detail of(String renderer, RegionDef.Field...fields) {</span>
+<span class="source-line-no">280</span><span id="line-280">         var d = new Detail();</span>
+<span class="source-line-no">281</span><span id="line-281">         d.map.put("renderer", renderer);</span>
+<span class="source-line-no">282</span><span id="line-282">         d.map.put("fields", Arrays.stream(fields).map(RegionDef.Field::toContractMap).toList());</span>
+<span class="source-line-no">283</span><span id="line-283">         return d;</span>
+<span class="source-line-no">284</span><span id="line-284">      }</span>
+<span class="source-line-no">285</span><span id="line-285">   }</span>
+<span class="source-line-no">286</span><span id="line-286"></span>
+<span class="source-line-no">287</span><span id="line-287">   /** Where a terminal result is written. */</span>
+<span class="source-line-no">288</span><span id="line-288">   public static final class Output {</span>
+<span class="source-line-no">289</span><span id="line-289">      final Map&lt;String,Object&gt; map = new LinkedHashMap&lt;&gt;();</span>
 <span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">      /**</span>
-<span class="source-line-no">292</span><span id="line-292">       * @param name The {@code data-juneau-field} name to write, within the region.</span>
-<span class="source-line-no">293</span><span id="line-293">       * @return A new output.</span>
-<span class="source-line-no">294</span><span id="line-294">       */</span>
-<span class="source-line-no">295</span><span id="line-295">      public static Output field(String name) {</span>
-<span class="source-line-no">296</span><span id="line-296">         var o = new Output();</span>
-<span class="source-line-no">297</span><span id="line-297">         o.map.put("target", new LinkedHashMap&lt;&gt;(Map.of("field", name)));</span>
-<span class="source-line-no">298</span><span id="line-298">         return o;</span>
-<span class="source-line-no">299</span><span id="line-299">      }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">      /**</span>
-<span class="source-line-no">302</span><span id="line-302">       * @param css A selector resolved within the region.</span>
-<span class="source-line-no">303</span><span id="line-303">       * @return A new output.</span>
-<span class="source-line-no">304</span><span id="line-304">       */</span>
-<span class="source-line-no">305</span><span id="line-305">      public static Output selector(String css) {</span>
-<span class="source-line-no">306</span><span id="line-306">         var o = new Output();</span>
-<span class="source-line-no">307</span><span id="line-307">         o.map.put("target", new LinkedHashMap&lt;&gt;(Map.of("selector", css)));</span>
-<span class="source-line-no">308</span><span id="line-308">         return o;</span>
-<span class="source-line-no">309</span><span id="line-309">      }</span>
-<span class="source-line-no">310</span><span id="line-310"></span>
-<span class="source-line-no">311</span><span id="line-311">      /** @param value {@code replace} (the default) or {@code append}. @return This object. */</span>
-<span class="source-line-no">312</span><span id="line-312">      public Output mode(String value) { map.put("mode", value); return this; }</span>
-<span class="source-line-no">313</span><span id="line-313">      /** @param value {@code message} (the default) or {@code row.&lt;key&gt;}. @return This object. */</span>
-<span class="source-line-no">314</span><span id="line-314">      public Output from(String value) { map.put("from", value); return this; }</span>
-<span class="source-line-no">315</span><span id="line-315">      /** @param value {@code success} (the default) or {@code any}. @return This object. */</span>
-<span class="source-line-no">316</span><span id="line-316">      public Output when(String value) { map.put("when", value); return this; }</span>
-<span class="source-line-no">317</span><span id="line-317">   }</span>
-<span class="source-line-no">318</span><span id="line-318">}</span>
+<span class="source-line-no">291</span><span id="line-291">      private Output() {}</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">      /**</span>
+<span class="source-line-no">294</span><span id="line-294">       * @param name The {@code data-juneau-field} name to write, within the region.</span>
+<span class="source-line-no">295</span><span id="line-295">       * @return A new output.</span>
+<span class="source-line-no">296</span><span id="line-296">       */</span>
+<span class="source-line-no">297</span><span id="line-297">      public static Output field(String name) {</span>
+<span class="source-line-no">298</span><span id="line-298">         var o = new Output();</span>
+<span class="source-line-no">299</span><span id="line-299">         o.map.put("target", new LinkedHashMap&lt;&gt;(Map.of("field", name)));</span>
+<span class="source-line-no">300</span><span id="line-300">         return o;</span>
+<span class="source-line-no">301</span><span id="line-301">      }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">      /**</span>
+<span class="source-line-no">304</span><span id="line-304">       * @param css A selector resolved within the region.</span>
+<span class="source-line-no">305</span><span id="line-305">       * @return A new output.</span>
+<span class="source-line-no">306</span><span id="line-306">       */</span>
+<span class="source-line-no">307</span><span id="line-307">      public static Output selector(String css) {</span>
+<span class="source-line-no">308</span><span id="line-308">         var o = new Output();</span>
+<span class="source-line-no">309</span><span id="line-309">         o.map.put("target", new LinkedHashMap&lt;&gt;(Map.of("selector", css)));</span>
+<span class="source-line-no">310</span><span id="line-310">         return o;</span>
+<span class="source-line-no">311</span><span id="line-311">      }</span>
+<span class="source-line-no">312</span><span id="line-312"></span>
+<span class="source-line-no">313</span><span id="line-313">      /** @param value {@code replace} (the default) or {@code append}. @return This object. */</span>
+<span class="source-line-no">314</span><span id="line-314">      public Output mode(String value) { map.put("mode", value); return this; }</span>
+<span class="source-line-no">315</span><span id="line-315">      /** @param value {@code message} (the default) or {@code row.&lt;key&gt;}. @return This object. */</span>
+<span class="source-line-no">316</span><span id="line-316">      public Output from(String value) { map.put("from", value); return this; }</span>
+<span class="source-line-no">317</span><span id="line-317">      /** @param value {@code success} (the default) or {@code any}. @return This object. */</span>
+<span class="source-line-no">318</span><span id="line-318">      public Output when(String value) { map.put("when", value); return this; }</span>
+<span class="source-line-no">319</span><span id="line-319">   }</span>
+<span class="source-line-no">320</span><span id="line-320">}</span>
 
 
 

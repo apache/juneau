@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> b05_parseParquet() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> A04_Bean();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		List&lt;A04_Bean&gt; parsed = parquet(parquet(a), A04_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertEquals(1, parsed.size());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertSize(1, parsed);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertString(<span class="jxr_string">"test"</span>, parsed.get(0).x);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 

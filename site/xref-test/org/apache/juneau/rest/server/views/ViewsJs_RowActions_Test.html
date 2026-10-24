@@ -458,7 +458,7 @@
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<em class="jxr_comment">// what happens to a TEMPLATED endpoint: it now REFUSES (reason "unresolved-endpoint", no `url`) instead</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<em class="jxr_comment">// of firing the literal-token URL `servlet:/incidents/{id}/ack`, which is a URL the action's author</em>
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<em class="jxr_comment">// demonstrably did not write.  The valuable, UNCHANGED half is the real point of this test: a</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<em class="jxr_comment">// non-templated (literal) endpoint still fires byte-identical - shipping juneau-views.js alone remains</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<em class="jxr_comment">// non-templated (literal) endpoint still fires as declared - shipping juneau-views.js alone remains</em>
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<em class="jxr_comment">// fully backward compatible for every endpoint that has no `{property}` token at all.</em>
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> r = reportNoRendersJs();
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		assertBean(r, <span class="jxr_string">"hasInterpolateHref,literal_withRowData"</span>, <span class="jxr_string">"false,servlet:/incidents/ack"</span>);

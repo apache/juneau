@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> getNew = parsed.getPaths().get(<span class="jxr_string">"/pet"</span>).getGet();
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(getOrig.getOperationId(), getNew.getOperationId());
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<em class="jxr_comment">// components.schemas preserved including the Pet entry lifted in Phase 4.</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<em class="jxr_comment">// components.schemas preserved including the lifted Pet entry.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> origSchemas = original.getComponents().getSchemas();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> newSchemas = parsed.getComponents().getSchemas();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEquals(origSchemas.keySet(), newSchemas.keySet());

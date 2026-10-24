@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * @return A new {@code JspView} carrying the additional attributes.</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> <a name="JspView" href="../../../../../../../org/apache/juneau/rest/server/view/jsp/JspView.html#JspView">JspView</a> attrs(Map&lt;String,?&gt; values) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty())
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (ie(values))
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> copy = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(attributes);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		values.forEach((k, v) -&gt; {

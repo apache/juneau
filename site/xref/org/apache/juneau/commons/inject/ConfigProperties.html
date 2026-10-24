@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Binding order and lifecycle&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * The whole-object config bind runs &lt;b&gt;after&lt;/b&gt; {@code @Value}/{@code @Inject} field-and-method injection and</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;before&lt;/b&gt; any {@link org.apache.juneau.commons.inject.PostConstruct @PostConstruct} method — so a</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;before&lt;/b&gt; any {@link PostConstruct @PostConstruct} method — so a</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * {@code @PostConstruct} method observes the fully-bound config fields. Fields that are themselves annotated with</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * {@code @Value} or {@code @Inject} are left to the injection engine and are never overwritten by config binding,</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * even when a matching {@code prefix.fieldName} key exists.</em>
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * {@code @ConfigProperties} and {@link org.apache.juneau.commons.inject.Value @Value} coexist: {@code @Value}</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * {@code @ConfigProperties} and {@link Value @Value} coexist: {@code @Value}</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * resolves a single value; {@code @ConfigProperties} resolves a whole object. A class can use</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * {@code @Value} fields internally and separately be the target of another class's nested</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * {@code @ConfigProperties} bind.</em>

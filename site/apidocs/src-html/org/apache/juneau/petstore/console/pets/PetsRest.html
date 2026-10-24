@@ -297,7 +297,7 @@
 <span class="source-line-no">284</span><span id="line-284">         field = body.getString("field");</span>
 <span class="source-line-no">285</span><span id="line-285">         value = body.getString("value");</span>
 <span class="source-line-no">286</span><span id="line-286">      }</span>
-<span class="source-line-no">287</span><span id="line-287">      if (field == null || field.isBlank())</span>
+<span class="source-line-no">287</span><span id="line-287">      if (ib(field))</span>
 <span class="source-line-no">288</span><span id="line-288">         throw new BadRequest("Missing field to stage");</span>
 <span class="source-line-no">289</span><span id="line-289">      try {</span>
 <span class="source-line-no">290</span><span id="line-290">         var c = store().pendingChanges().stage(id, field, value, ConsoleWrites.author(actor));</span>

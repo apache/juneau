@@ -512,7 +512,7 @@
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">if</strong> (! users.containsKey(user.getUsername()))
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="PetstoreNotFoundException" href="../../../../../org/apache/juneau/petstore/service/PetstoreNotFoundException.html#PetstoreNotFoundException">PetstoreNotFoundException</a>(<span class="jxr_string">"User not found: username="</span> + user.getUsername());
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">var</strong> pw = user.getPassword();
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">if</strong> (pw == <strong class="jxr_keyword">null</strong> || pw.isBlank())
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">if</strong> (ib(pw))
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 			user.setPassword(users.get(user.getUsername()).getPassword());
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 		users.put(user.getUsername(), user);
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 		recordAudit(actor, <span class="jxr_string">"User"</span>, user.getUsername(), ACTION_UPDATE, user.getUsername());

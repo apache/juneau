@@ -344,54 +344,56 @@
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		verify(req, never()).setAttribute(eq(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE), any());
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@SuppressWarnings(<span class="jxr_string">"resource"</span>) <em class="jxr_comment">// verify(...).getWriter() only checks that the mock was never asked for a writer; nothing is opened.</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@Test <strong class="jxr_keyword">void</strong> a12_rejectionProducedWithBrokenSerializers() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<em class="jxr_comment">// No REST context, serializer or writer exists here: the refusal is built and written as bytes by the filter.</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> c = run(filter(), build(r(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Content-Type"</span>, JSON)), mock(FilterChain.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> body = c.body();
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertTrue(body.startsWith(<span class="jxr_string">"{\&quot;reason\&quot;:\&quot;ORIGIN_MISMATCH\&quot;,\&quot;message\&quot;:\&quot;"</span>), body);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertTrue(body.endsWith(<span class="jxr_string">"\&quot;}"</span>), body);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		verify(c.res()).setContentType(<span class="jxr_string">"application/json;charset=utf-8"</span>);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		verify(c.res()).setContentLength(body.getBytes(StandardCharsets.UTF_8).length);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		verify(c.res(), never()).getWriter();
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@EnumSource(DispatcherType.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">void</strong> a13_filterAppliesToWhateverDispatchItIsGiven(DispatcherType type) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> refused = build(r(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Content-Type"</span>, JSON));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		when(refused.getDispatcherType()).thenReturn(type);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> chain = mock(FilterChain.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> c = run(filter(), refused, chain);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		verifyNoInteractions(chain);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(List.of(<span class="jxr_string">"ORIGIN_MISMATCH"</span>), c.header(RequestBoundaryFilter.REJECTION_HEADER));
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> allowed = build(r(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"http"</span>, HOST, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		when(allowed.getDispatcherType()).thenReturn(type);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> chain2 = mock(FilterChain.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		run(filter(), allowed, chain2);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		verify(chain2).doFilter(eq(allowed), any());
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> a14_optionsAddsNoCorsHeaders() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<em class="jxr_comment">// The chain adds nothing, so any Access-Control-* header on the response came from the filter.</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> allowed = build(r(<span class="jxr_string">"OPTIONS"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Access-Control-Request-Method"</span>, <span class="jxr_string">"DELETE"</span>));
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> chain = mock(FilterChain.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> c1 = run(filter(), allowed, chain);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		verify(chain).doFilter(eq(allowed), any());
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> refused = build(r(<span class="jxr_string">"OPTIONS"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Access-Control-Request-Method"</span>, <span class="jxr_string">"DELETE"</span>).query(<span class="jxr_string">"method=DELETE"</span>));
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> c2 = run(filter(), refused, mock(FilterChain.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(List.of(<span class="jxr_string">"ORIGIN_MISMATCH"</span>), c2.header(RequestBoundaryFilter.REJECTION_HEADER));
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : List.of(c1, c2)) {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			c.headers().keySet().forEach(k -&gt;
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				assertFalse(k.regionMatches(<strong class="jxr_keyword">true</strong>, 0, <span class="jxr_string">"Access-Control-"</span>, 0, 15), () -&gt; <span class="jxr_string">"CORS header added: "</span> + k));
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			verify(c.res(), never()).setHeader(startsWith(<span class="jxr_string">"Access-Control-"</span>), anyString());
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			verify(c.res(), never()).addHeader(startsWith(<span class="jxr_string">"Access-Control-"</span>), anyString());
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// verify(...).getWriter() only checks that the mock was never asked for a writer; nothing is opened.</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	})
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> a12_rejectionProducedWithBrokenSerializers() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<em class="jxr_comment">// No REST context, serializer or writer exists here: the refusal is built and written as bytes by the filter.</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> c = run(filter(), build(r(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Content-Type"</span>, JSON)), mock(FilterChain.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> body = c.body();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertTrue(body.startsWith(<span class="jxr_string">"{\&quot;reason\&quot;:\&quot;ORIGIN_MISMATCH\&quot;,\&quot;message\&quot;:\&quot;"</span>), body);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertTrue(body.endsWith(<span class="jxr_string">"\&quot;}"</span>), body);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		verify(c.res()).setContentType(<span class="jxr_string">"application/json;charset=utf-8"</span>);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		verify(c.res()).setContentLength(body.getBytes(StandardCharsets.UTF_8).length);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		verify(c.res(), never()).getWriter();
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	@EnumSource(DispatcherType.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">void</strong> a13_filterAppliesToWhateverDispatchItIsGiven(DispatcherType type) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> refused = build(r(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Content-Type"</span>, JSON));
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		when(refused.getDispatcherType()).thenReturn(type);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> chain = mock(FilterChain.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">var</strong> c = run(filter(), refused, chain);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		verifyNoInteractions(chain);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(List.of(<span class="jxr_string">"ORIGIN_MISMATCH"</span>), c.header(RequestBoundaryFilter.REJECTION_HEADER));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> allowed = build(r(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"http"</span>, HOST, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		when(allowed.getDispatcherType()).thenReturn(type);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> chain2 = mock(FilterChain.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		run(filter(), allowed, chain2);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		verify(chain2).doFilter(eq(allowed), any());
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> a14_optionsAddsNoCorsHeaders() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<em class="jxr_comment">// The chain adds nothing, so any Access-Control-* header on the response came from the filter.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> allowed = build(r(<span class="jxr_string">"OPTIONS"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Access-Control-Request-Method"</span>, <span class="jxr_string">"DELETE"</span>));
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> chain = mock(FilterChain.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">var</strong> c1 = run(filter(), allowed, chain);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		verify(chain).doFilter(eq(allowed), any());
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> refused = build(r(<span class="jxr_string">"OPTIONS"</span>, <span class="jxr_string">"http"</span>, HOST, EVIL, <span class="jxr_string">"Access-Control-Request-Method"</span>, <span class="jxr_string">"DELETE"</span>).query(<span class="jxr_string">"method=DELETE"</span>));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> c2 = run(filter(), refused, mock(FilterChain.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(List.of(<span class="jxr_string">"ORIGIN_MISMATCH"</span>), c2.header(RequestBoundaryFilter.REJECTION_HEADER));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : List.of(c1, c2)) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			c.headers().keySet().forEach(k -&gt;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 				assertFalse(k.regionMatches(<strong class="jxr_keyword">true</strong>, 0, <span class="jxr_string">"Access-Control-"</span>, 0, 15), () -&gt; <span class="jxr_string">"CORS header added: "</span> + k));
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			verify(c.res(), never()).setHeader(startsWith(<span class="jxr_string">"Access-Control-"</span>), anyString());
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			verify(c.res(), never()).addHeader(startsWith(<span class="jxr_string">"Access-Control-"</span>), anyString());
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		}
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

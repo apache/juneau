@@ -40,13 +40,13 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Exactly one of {@code value=} / {@code alias=} is required, and they are mutually exclusive &amp;mdash; they are the</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * two disjoint {@link org.apache.juneau.rest.server.console.Theme} channels:</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * two disjoint {@link Theme} channels:</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code value=} is a &lt;b&gt;leaf&lt;/b&gt;: a CSS literal, or a {@code var(--jc-name)} reference that</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#token(String, String)} &lt;b&gt;resolves to a literal&lt;/b&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#token(String, String) Theme.Builder#token(String, String)} &lt;b&gt;resolves to a literal&lt;/b&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 		at build time (the substring {@code var(} does not reach the served leaf map).</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code alias=} is a &lt;b&gt;derived reference&lt;/b&gt;: a {@code var(--jc-name)} that</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#alias(String, String)} keeps as a reference</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#alias(String, String) Theme.Builder#alias(String, String)} keeps as a reference</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 		&lt;b&gt;surviving to the wire&lt;/b&gt;. A literal cannot express a live alias &amp;mdash; that is why the attr exists.</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>

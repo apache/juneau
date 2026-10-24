@@ -1500,7 +1500,7 @@
 <span class="source-line-no">1487</span><span id="line-1487">    * &lt;p&gt;</span>
 <span class="source-line-no">1488</span><span id="line-1488">    * Materialized through {@link BeanInstantiator}, which runs the {@code @ConfigProperties} resolution hook and</span>
 <span class="source-line-no">1489</span><span id="line-1489">    * auto-registers the bound instance into {@link #beanStore()}. The bind resolves each {@code RestContext.*} key</span>
-<span class="source-line-no">1490</span><span id="line-1490">    * against the resource's per-resource {@link org.apache.juneau.commons.settings.PropertySource PropertySource}s</span>
+<span class="source-line-no">1490</span><span id="line-1490">    * against the resource's per-resource {@link PropertySource PropertySource}s</span>
 <span class="source-line-no">1491</span><span id="line-1491">    * (including a {@code @Rest(config=...)} file) ahead of the global settings chain, so a config-file key takes</span>
 <span class="source-line-no">1492</span><span id="line-1492">    * effect in the resolved defaults. This memoizer is forced exactly once during construction (after the</span>
 <span class="source-line-no">1493</span><span id="line-1493">    * PropertySources are registered) so the single bound instance is the same one held in the bean store; see the</span>
@@ -2920,7 +2920,7 @@
 <span class="source-line-no">2907</span><span id="line-2907">            .orElseGet(Collections::emptyList));</span>
 <span class="source-line-no">2908</span><span id="line-2908">      // Dual noInherit source: when this is a mixin sub-context built from a host @Mixin(noInherit=...),</span>
 <span class="source-line-no">2909</span><span id="line-2909">      // the host-declared cutoff tokens union with the mixin class's own @Rest(noInherit=...).  A token from</span>
-<span class="source-line-no">2910</span><span id="line-2910">      // EITHER source cuts the host→mixin inheritance walk for that property (OQ2/OQ3).</span>
+<span class="source-line-no">2910</span><span id="line-2910">      // EITHER source cuts the host→mixin inheritance walk for that property.</span>
 <span class="source-line-no">2911</span><span id="line-2911">      var rmNoInherit = resolvedMixinField();</span>
 <span class="source-line-no">2912</span><span id="line-2912">      if (rmNoInherit != null)</span>
 <span class="source-line-no">2913</span><span id="line-2913">         resolveCdl(rmNoInherit.overrides().noInherit()).forEach(out::add);</span>
@@ -2936,7 +2936,7 @@
 <span class="source-line-no">2923</span><span id="line-2923">    * Built once at memoizer-init time (zero per-request cost).  The synthetic annotation is injected at the</span>
 <span class="source-line-no">2924</span><span id="line-2924">    * most-derived position of {@link #getRestAnnotationsForProperty(String)} so the host override resolves as if</span>
 <span class="source-line-no">2925</span><span id="line-2925">    * declared on the mixin class itself — list-shaped props append after the inherited host chain, replace-shaped</span>
-<span class="source-line-no">2926</span><span id="line-2926">    * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative (OQ3).</span>
+<span class="source-line-no">2926</span><span id="line-2926">    * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative.</span>
 <span class="source-line-no">2927</span><span id="line-2927">    */</span>
 <span class="source-line-no">2928</span><span id="line-2928">   private final Memoizer&lt;AnnotationInfo&lt;Rest&gt;&gt; mixinOverrideAnnotation = memoizer(() -&gt; {</span>
 <span class="source-line-no">2929</span><span id="line-2929">      var rm = resolvedMixinField();</span>
@@ -3835,7 +3835,7 @@
 <span class="source-line-no">3822</span><span id="line-3822">         try {</span>
 <span class="source-line-no">3823</span><span id="line-3823">            x.invoke(beanStore, getResource());</span>
 <span class="source-line-no">3824</span><span id="line-3824">         } catch (Exception e) {</span>
-<span class="source-line-no">3825</span><span id="line-3825">            getLogger().log(Level.WARNING, unwrap(e), () -&gt; String.format("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));</span>
+<span class="source-line-no">3825</span><span id="line-3825">            getLogger().log(Level.WARNING, unwrap(e), () -&gt; f("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));</span>
 <span class="source-line-no">3826</span><span id="line-3826">         }</span>
 <span class="source-line-no">3827</span><span id="line-3827">      }</span>
 <span class="source-line-no">3828</span><span id="line-3828">      if (!isMixinContext) {</span>
@@ -3843,7 +3843,7 @@
 <span class="source-line-no">3830</span><span id="line-3830">            try {</span>
 <span class="source-line-no">3831</span><span id="line-3831">               mctx.destroy();</span>
 <span class="source-line-no">3832</span><span id="line-3832">            } catch (Exception e) {</span>
-<span class="source-line-no">3833</span><span id="line-3833">               getLogger().log(Level.WARNING, unwrap(e), () -&gt; String.format("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));</span>
+<span class="source-line-no">3833</span><span id="line-3833">               getLogger().log(Level.WARNING, unwrap(e), () -&gt; f("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));</span>
 <span class="source-line-no">3834</span><span id="line-3834">            }</span>
 <span class="source-line-no">3835</span><span id="line-3835">         }</span>
 <span class="source-line-no">3836</span><span id="line-3836">      }</span>
@@ -4743,7 +4743,7 @@
 <span class="source-line-no">4730</span><span id="line-4730">    * &lt;p&gt;</span>
 <span class="source-line-no">4731</span><span id="line-4731">    * Besides the full stack trace, this setting also gates the {@code Thrown} error-response header and the</span>
 <span class="source-line-no">4732</span><span id="line-4732">    * message text of any error-body exception that wasn't itself deliberately thrown by application code as a</span>
-<span class="source-line-no">4733</span><span id="line-4733">    * {@link org.apache.juneau.http.response.BasicHttpException BasicHttpException} (see</span>
+<span class="source-line-no">4733</span><span id="line-4733">    * {@link BasicHttpException BasicHttpException} (see</span>
 <span class="source-line-no">4734</span><span id="line-4734">    * {@link #handleError(RestSession, Throwable)}). Leave this off (the default) outside of local debugging so</span>
 <span class="source-line-no">4735</span><span id="line-4735">    * that unplanned exception types (a database driver error, a file-system exception, and the like) don't</span>
 <span class="source-line-no">4736</span><span id="line-4736">    * incidentally echo their class name or message back to the caller.</span>
@@ -5056,7 +5056,7 @@
 <span class="source-line-no">5043</span><span id="line-5043">      var name = builder.asyncCompletionExecutorName != null</span>
 <span class="source-line-no">5044</span><span id="line-5044">         ? builder.asyncCompletionExecutorName</span>
 <span class="source-line-no">5045</span><span id="line-5045">         : mergeReplacedStringAttribute("asyncCompletionExecutor", null);</span>
-<span class="source-line-no">5046</span><span id="line-5046">      if (name != null &amp;&amp; !name.isBlank())</span>
+<span class="source-line-no">5046</span><span id="line-5046">      if (inb(name))</span>
 <span class="source-line-no">5047</span><span id="line-5047">         asyncCompletionExecutor.get(); // throws IllegalStateException if bean is missing</span>
 <span class="source-line-no">5048</span><span id="line-5048">   }</span>
 <span class="source-line-no">5049</span><span id="line-5049"></span>
@@ -5184,7 +5184,7 @@
 <span class="source-line-no">5171</span><span id="line-5171">         try {</span>
 <span class="source-line-no">5172</span><span id="line-5172">            x.invoke(session.getBeanStore(), getResource());</span>
 <span class="source-line-no">5173</span><span id="line-5173">         } catch (Exception e) {</span>
-<span class="source-line-no">5174</span><span id="line-5174">            getLogger().log(Level.WARNING, unwrap(e), () -&gt; String.format("Error occurred invoking finish-call method '%s'.", x.getFullName()));</span>
+<span class="source-line-no">5174</span><span id="line-5174">            getLogger().log(Level.WARNING, unwrap(e), () -&gt; f("Error occurred invoking finish-call method '%s'.", x.getFullName()));</span>
 <span class="source-line-no">5175</span><span id="line-5175">         }</span>
 <span class="source-line-no">5176</span><span id="line-5176">      }</span>
 <span class="source-line-no">5177</span><span id="line-5177">   }</span>

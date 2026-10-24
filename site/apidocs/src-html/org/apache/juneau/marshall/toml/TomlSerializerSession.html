@@ -422,7 +422,7 @@
 <span class="source-line-no">409</span><span id="line-409">      if (value instanceof Collection&lt;?&gt; c)</span>
 <span class="source-line-no">410</span><span id="line-410">         l = new ArrayList&lt;&gt;(c);</span>
 <span class="source-line-no">411</span><span id="line-411">      else if (value != null &amp;&amp; value.getClass().isArray() &amp;&amp; !value.getClass().getComponentType().isPrimitive())</span>
-<span class="source-line-no">412</span><span id="line-412">         l = new ArrayList&lt;&gt;(Arrays.asList((Object[])value));</span>
+<span class="source-line-no">412</span><span id="line-412">         l = l((Object[])value);</span>
 <span class="source-line-no">413</span><span id="line-413">      else</span>
 <span class="source-line-no">414</span><span id="line-414">         return Collections.emptyList();</span>
 <span class="source-line-no">415</span><span id="line-415">      if (l.isEmpty())</span>

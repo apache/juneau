@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<em class="jxr_comment">// readArray's separator check: NEWLINE arm (b07 in HjsonParser_Test only exercises COMMA).</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;String,Object&gt;) HjsonParser.DEFAULT.read(<span class="jxr_string">"{\&quot;arr\&quot;:[1\n2\n3]}"</span>, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> arr = (List&lt;?&gt;) m.get(<span class="jxr_string">"arr"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertEquals(3, arr.size());
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertSize(3, arr);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Test
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<strong class="jxr_keyword">void</strong> c03_arrayOfObjects() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;String,Object&gt;) HjsonParser.DEFAULT.read(<span class="jxr_string">"{\&quot;arr\&quot;:[{a:1},{a:2}]}"</span>, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> arr = (List&lt;Map&lt;String,Object&gt;&gt;) m.get(<span class="jxr_string">"arr"</span>);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(2, arr.size());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertSize(2, arr);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(1, arr.get(0).get(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> hjson = <span class="jxr_string">"items: [ {name: A, age: 1}, {name: B, age: 2} ]"</span>;
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> bean = HjsonParser.DEFAULT.read(hjson, BeanWithList.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertNotNull(bean);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertEquals(2, bean.items.size());
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertSize(2, bean.items);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertEquals(<span class="jxr_string">"A"</span>, bean.items.get(0).name);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(2, bean.items.get(1).age);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> hjson = <span class="jxr_string">"{data: [\&quot;abc\&quot;]}"</span>;
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> bean = HjsonParser.DEFAULT.read(hjson, BeanWithByteList.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertNotNull(bean);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertEquals(1, bean.data.size());
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertSize(1, bean.data);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertArrayEquals(<span class="jxr_string">"abc"</span>.getBytes(java.nio.charset.StandardCharsets.UTF_8), bean.data.get(0));
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<em class="jxr_comment">// injectParentAnnotations' collection branch: List&lt;Child&gt; elements get @ParentProperty back-filled.</em>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> bean = HjsonParser.DEFAULT.read(<span class="jxr_string">"{children: [{name: a}, {name: b}]}"</span>, BeanWithParent.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertNotNull(bean);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertEquals(2, bean.children.size());
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertSize(2, bean.children);
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertSame(bean, bean.children.get(0).parent);
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertSame(bean, bean.children.get(1).parent);
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
@@ -367,7 +367,7 @@
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<em class="jxr_comment">// injectParentAnnotations' "val == null" true-arm, reached via per-element recursion.</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">var</strong> bean = HjsonParser.DEFAULT.read(<span class="jxr_string">"{children: [null, {name: a}]}"</span>, BeanWithParent.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertNotNull(bean);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEquals(2, bean.children.size());
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertSize(2, bean.children);
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertNull(bean.children.get(0));
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertSame(bean, bean.children.get(1).parent);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
@@ -377,7 +377,7 @@
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<em class="jxr_comment">// injectParentAnnotations' collection branch: et.isObject() == true short-circuits before recursing.</em>
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> bean = HjsonParser.DEFAULT.read(<span class="jxr_string">"{items: [1, \&quot;a\&quot;]}"</span>, BeanWithObjectList.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertNotNull(bean);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(2, bean.items.size());
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertSize(2, bean.items);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test
@@ -413,7 +413,7 @@
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<em class="jxr_comment">// injectParentAnnotations' map branch: vt.isObject() == true short-circuits before recursing.</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> bean = HjsonParser.DEFAULT.read(<span class="jxr_string">"{items: {a: 1, b: hi}}"</span>, BeanWithObjectMap.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertNotNull(bean);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertEquals(2, bean.items.size());
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertSize(2, bean.items);
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Test

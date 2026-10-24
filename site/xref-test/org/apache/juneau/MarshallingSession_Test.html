@@ -25,44 +25,45 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json5.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Tests for {@link MarshallingSession}.</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Confirms that the session-level parse helpers tolerate null input now that</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * {@link Json5Map#ofString(CharSequence)} returns an empty instance instead of {@code null}.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="MarshallingSession_Test" href="../../../org/apache/juneau/marshall/MarshallingSession_Test.html#MarshallingSession_Test">MarshallingSession_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a01_parseToMapNullReturnsEmptySessionAttachedMap() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.getSession();
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> m = session.parseToMap(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertNotNull(m);
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertTrue(m.isEmpty());
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertTrue(m instanceof Json5Map);
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	@Test <strong class="jxr_keyword">void</strong> a02_parseToMapEmptyParsesToEmptyMap() {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.getSession();
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> m = session.parseToMap(<span class="jxr_string">"{}"</span>);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertNotNull(m);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertTrue(m.isEmpty());
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertTrue(m instanceof Json5Map);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	@Test <strong class="jxr_keyword">void</strong> a03_parseToMapPopulatedInputParsesNormally() {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.getSession();
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> m = session.parseToMap(<span class="jxr_string">"{a:1,b:'two'}"</span>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(2, m.size());
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertEquals(1, ((Json5Map)m).getInt(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(<span class="jxr_string">"two"</span>, ((Json5Map)m).getString(<span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  }
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json5.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Tests for {@link MarshallingSession}.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Confirms that the session-level parse helpers tolerate null input now that</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@link Json5Map#ofString(CharSequence)} returns an empty instance instead of {@code null}.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="MarshallingSession_Test" href="../../../org/apache/juneau/marshall/MarshallingSession_Test.html#MarshallingSession_Test">MarshallingSession_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Test <strong class="jxr_keyword">void</strong> a01_parseToMapNullReturnsEmptySessionAttachedMap() {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.getSession();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">var</strong> m = session.parseToMap(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertNotNull(m);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertTrue(m.isEmpty());
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertTrue(m instanceof Json5Map);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Test <strong class="jxr_keyword">void</strong> a02_parseToMapEmptyParsesToEmptyMap() {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.getSession();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">var</strong> m = session.parseToMap(<span class="jxr_string">"{}"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertNotNull(m);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertTrue(m.isEmpty());
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertTrue(m instanceof Json5Map);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> a03_parseToMapPopulatedInputParsesNormally() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.getSession();
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">var</strong> m = session.parseToMap(<span class="jxr_string">"{a:1,b:'two'}"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertSize(2, m);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(1, ((Json5Map)m).getInt(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"two"</span>, ((Json5Map)m).getString(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

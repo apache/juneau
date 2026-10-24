@@ -171,25 +171,27 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test <strong class="jxr_keyword">void</strong> c07_countsAreCopied() {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> m = SUITE_EVENT.toContractMap();
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> counts = (Map&lt;String,Object&gt;)m.get(<span class="jxr_string">"counts"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		counts.put(<span class="jxr_string">"pass"</span>, 99);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertBean(SUITE_EVENT.toContractMap(), <span class="jxr_string">"counts"</span>, <span class="jxr_string">"{pass=3,fail=1,skip=0}"</span>);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Test <strong class="jxr_keyword">void</strong> c08_rawOffsetRoundTripsAndOrders() {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> step = RunEvent.step(<span class="jxr_string">"a"</span>, <span class="jxr_string">"T"</span>).withRawOffset(120);
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> suite = RunEvent.suite(<span class="jxr_string">"a"</span>, <span class="jxr_string">"jest"</span>, <span class="jxr_string">"s"</span>, 1, 0, 0).withRawOffset(5);
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> test = RunEvent.test(<span class="jxr_string">"a"</span>, <span class="jxr_string">"jest"</span>, <span class="jxr_string">"s"</span>, <span class="jxr_string">"n"</span>, TestStatus.FAIL).withRawOffset(9);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : List.of(step, suite, test))
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			assertEquals(e, RunEvent.fromMap(e.toContractMap()));
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertEquals(List.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"rawOffset"</span>), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(step.toContractMap().keySet()));
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertEquals(List.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"fw"</span>, <span class="jxr_string">"suite"</span>, <span class="jxr_string">"counts"</span>, <span class="jxr_string">"rawOffset"</span>), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(suite.toContractMap().keySet()));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(List.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"fw"</span>, <span class="jxr_string">"suite"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"status"</span>, <span class="jxr_string">"rawOffset"</span>), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(test.toContractMap().keySet()));
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(120L, RunEvent.fromMap(Map.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"T"</span>, <span class="jxr_string">"rawOffset"</span>, 120.0)).toContractMap().get(<span class="jxr_string">"rawOffset"</span>));
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"rawOffset"</span>, () -&gt; RunEvent.fromMap(Map.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"T"</span>, <span class="jxr_string">"rawOffset"</span>, 1.5)));
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> }
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		})
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> counts = (Map&lt;String,Object&gt;)m.get(<span class="jxr_string">"counts"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		counts.put(<span class="jxr_string">"pass"</span>, 99);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertBean(SUITE_EVENT.toContractMap(), <span class="jxr_string">"counts"</span>, <span class="jxr_string">"{pass=3,fail=1,skip=0}"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Test <strong class="jxr_keyword">void</strong> c08_rawOffsetRoundTripsAndOrders() {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> step = RunEvent.step(<span class="jxr_string">"a"</span>, <span class="jxr_string">"T"</span>).withRawOffset(120);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> suite = RunEvent.suite(<span class="jxr_string">"a"</span>, <span class="jxr_string">"jest"</span>, <span class="jxr_string">"s"</span>, 1, 0, 0).withRawOffset(5);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> test = RunEvent.test(<span class="jxr_string">"a"</span>, <span class="jxr_string">"jest"</span>, <span class="jxr_string">"s"</span>, <span class="jxr_string">"n"</span>, TestStatus.FAIL).withRawOffset(9);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : List.of(step, suite, test))
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertEquals(e, RunEvent.fromMap(e.toContractMap()));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(List.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"rawOffset"</span>), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(step.toContractMap().keySet()));
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(List.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"fw"</span>, <span class="jxr_string">"suite"</span>, <span class="jxr_string">"counts"</span>, <span class="jxr_string">"rawOffset"</span>), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(suite.toContractMap().keySet()));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(List.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"fw"</span>, <span class="jxr_string">"suite"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"status"</span>, <span class="jxr_string">"rawOffset"</span>), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(test.toContractMap().keySet()));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(120L, RunEvent.fromMap(Map.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"T"</span>, <span class="jxr_string">"rawOffset"</span>, 120.0)).toContractMap().get(<span class="jxr_string">"rawOffset"</span>));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"rawOffset"</span>, () -&gt; RunEvent.fromMap(Map.of(<span class="jxr_string">"ev"</span>, <span class="jxr_string">"step"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"T"</span>, <span class="jxr_string">"rawOffset"</span>, 1.5)));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

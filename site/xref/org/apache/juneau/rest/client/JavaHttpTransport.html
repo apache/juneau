@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * transport pin-on-connects: it resolves the request host, selects an address that passes</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.http.remote.RemoteUrlPolicy}, and rewrites the request URI to that literal address</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * {@link RemoteUrlPolicy}, and rewrites the request URI to that literal address</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * validated address &amp;mdash; and re-runs the same check on every {@code Location} hop via</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal</em>
@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<em class="jxr_comment">// already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<em class="jxr_comment">// silently sending the wrong Host.</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">if</strong> (existing == <strong class="jxr_keyword">null</strong> || existing.isBlank())
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">if</strong> (ib(existing))
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			System.setProperty(RESTRICTED_HEADERS_PROPERTY, <span class="jxr_string">"host"</span>);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! existing.toLowerCase(Locale.ROOT).contains(<span class="jxr_string">"host"</span>))
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + <span class="jxr_string">",host"</span>);

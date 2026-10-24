@@ -1857,7 +1857,7 @@
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 		a.put(<span class="jxr_string">"s"</span>, list(<span class="jxr_string">"ONE"</span>,<span class="jxr_string">"TWO"</span>));
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 		assertEquals(2, b.s.size());
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 		assertSize(2, b.s);
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 		assertTrue(b.s.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 		assertTrue(b.s.contains(HEnum.ONE));
 <a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 		assertTrue(b.s.contains(HEnum.TWO));
@@ -1873,7 +1873,7 @@
 <a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> 		a.put(<span class="jxr_string">"s"</span>, list(<span class="jxr_string">"ONE"</span>,<span class="jxr_string">"TWO"</span>));
 <a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 
 <a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
-<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 		assertEquals(2, b.getS().size());
+<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 		assertSize(2, b.getS());
 <a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 		assertTrue(b.getS().stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 		assertTrue(b.getS().contains(HEnum.ONE));
 <a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 		assertTrue(b.getS().contains(HEnum.TWO));
@@ -1906,7 +1906,7 @@
 <a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 		a.put(<span class="jxr_string">"s"</span>, set(<span class="jxr_string">"ONE"</span>,<span class="jxr_string">"TWO"</span>));
 <a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 
 <a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
-<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 		assertEquals(2, b.s.size());
+<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 		assertSize(2, b.s);
 <a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 		assertTrue(b.s.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 		assertTrue(b.s.contains(HEnum.ONE));
 <a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 		assertTrue(b.s.contains(HEnum.TWO));
@@ -1931,7 +1931,7 @@
 <a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> 		a.put(<span class="jxr_string">"s"</span>, List.of(<span class="jxr_string">"ONE"</span>,<span class="jxr_string">"TWO"</span>));
 <a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 
 <a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
-<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 		assertEquals(2, b.s.size());
+<a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 		assertSize(2, b.s);
 <a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 		assertTrue(b.s.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 		assertTrue(b.s.contains(HEnum.ONE));
 <a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 		assertTrue(b.s.contains(HEnum.TWO));
@@ -1948,7 +1948,7 @@
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
 <a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 		assertTrue(b.s instanceof LinkedHashSet);
-<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 		assertEquals(2, b.s.size());
+<a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 		assertSize(2, b.s);
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 		assertTrue(b.s.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 		assertEquals(list(HEnum.ONE, HEnum.TWO), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.s));
 <a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 	}
@@ -1963,7 +1963,7 @@
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
 <a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 		assertTrue(b.s instanceof TreeSet);
-<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 		assertEquals(2, b.s.size());
+<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 		assertSize(2, b.s);
 <a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 		assertTrue(b.s.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 		assertEquals(list(HEnum.ONE, HEnum.TWO), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.s));
 <a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 	}
@@ -1978,7 +1978,7 @@
 <a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 
 <a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
 <a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 		assertTrue(b.q instanceof ArrayDeque);
-<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 		assertEquals(2, b.q.size());
+<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 		assertSize(2, b.q);
 <a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> 		assertTrue(b.q.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> 		assertEquals(list(HEnum.ONE, HEnum.TWO), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.q));
 <a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> 	}
@@ -1993,7 +1993,7 @@
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 
 <a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
 <a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 		assertTrue(b.d instanceof ArrayDeque);
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 		assertEquals(2, b.d.size());
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 		assertSize(2, b.d);
 <a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 		assertTrue(b.d.stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 		assertEquals(list(HEnum.ONE, HEnum.TWO), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.d));
 <a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 	}
@@ -2008,7 +2008,7 @@
 <a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> 
 <a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> 		<strong class="jxr_keyword">var</strong> b = a.getBean();
 <a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> 		assertTrue(b.getS() instanceof LinkedHashSet);
-<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> 		assertEquals(2, b.getS().size());
+<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> 		assertSize(2, b.getS());
 <a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> 		assertTrue(b.getS().stream().allMatch(HEnum.<strong class="jxr_keyword">class</strong>::isInstance));
 <a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> 		assertEquals(list(HEnum.ONE, HEnum.TWO), <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.getS()));
 <a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> 	}

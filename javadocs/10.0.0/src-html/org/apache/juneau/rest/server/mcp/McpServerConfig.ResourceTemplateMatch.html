@@ -262,7 +262,7 @@
 <span class="source-line-no">249</span><span id="line-249">            if (argument == null)</span>
 <span class="source-line-no">250</span><span id="line-250">               continue;</span>
 <span class="source-line-no">251</span><span id="line-251">            var name = argument.getName();</span>
-<span class="source-line-no">252</span><span id="line-252">            if (argument.getCompleter() != null &amp;&amp; (name == null || name.isBlank()))</span>
+<span class="source-line-no">252</span><span id="line-252">            if (argument.getCompleter() != null &amp;&amp; ib(name))</span>
 <span class="source-line-no">253</span><span id="line-253">               throw iaex(</span>
 <span class="source-line-no">254</span><span id="line-254">                  "Invalid prompt registration at index %s (prompt '%s'), argument index %s: a completer must not be attached to a null or blank argument name",</span>
 <span class="source-line-no">255</span><span id="line-255">                  i, descriptor.getName(), j);</span>
@@ -465,7 +465,7 @@
 <span class="source-line-no">452</span><span id="line-452">         if (descriptor == null)</span>
 <span class="source-line-no">453</span><span id="line-453">            throw iaex("Invalid resource-template registration at index %s: descriptor() must not return null", i);</span>
 <span class="source-line-no">454</span><span id="line-454">         var uriTemplate = descriptor.getUriTemplate();</span>
-<span class="source-line-no">455</span><span id="line-455">         if (uriTemplate == null || uriTemplate.isBlank())</span>
+<span class="source-line-no">455</span><span id="line-455">         if (ib(uriTemplate))</span>
 <span class="source-line-no">456</span><span id="line-456">            throw iaex("Invalid resource-template registration at index %s (template '%s'): uriTemplate must not be null or blank",</span>
 <span class="source-line-no">457</span><span id="line-457">               i, uriTemplate);</span>
 <span class="source-line-no">458</span><span id="line-458">         McpUriTemplateMatcher matcher;</span>

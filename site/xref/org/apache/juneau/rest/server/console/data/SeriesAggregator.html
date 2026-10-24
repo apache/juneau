@@ -451,53 +451,55 @@
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 	}
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<em class="jxr_comment">// The bucket first, then each group value; a null group (a row with no value) sorts before any text.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> compareKeys(List&lt;Object&gt; a, List&lt;Object&gt; b) {
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; a.size(); i++) {
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">var</strong> x = a.get(i);
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">var</strong> y = b.get(i);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> || y == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				<strong class="jxr_keyword">if</strong> (x == y) <strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				<strong class="jxr_keyword">return</strong> x == <strong class="jxr_keyword">null</strong> ? -1 : 1;
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			}
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">var</strong> c = ((Comparable&lt;Object&gt;)x).compareTo(y);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">if</strong> (c != 0) <strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<em class="jxr_comment">// The smallest unit giving at most AUTO_BUCKETS buckets over the window; month when none does.  Counting stops at</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<em class="jxr_comment">// AUTO_BUCKETS + 1, so a long window never walks every hour.</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	String autoUnit(Instant start, Instant end) {
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> u : UNITS) {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">var</strong> n = 0;
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t = floor(start, u); t.isBefore(end) &amp;&amp; n &lt;= AUTO_BUCKETS; t = next(t, u))
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				n++;
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">if</strong> (n &lt;= AUTO_BUCKETS) <strong class="jxr_keyword">return</strong> u;
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		}
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"month"</span>;
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	Instant floor(Instant t, String unit) {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> d = t.atZone(ZoneOffset.UTC);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"hour"</span> -&gt; d.truncatedTo(ChronoUnit.HOURS).toInstant();
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"day"</span> -&gt; d.truncatedTo(ChronoUnit.DAYS).toInstant();
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"week"</span> -&gt; d.truncatedTo(ChronoUnit.DAYS).with(TemporalAdjusters.previousOrSame(weekStart)).toInstant();
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<strong class="jxr_keyword">default</strong> -&gt; d.truncatedTo(ChronoUnit.DAYS).withDayOfMonth(1).toInstant();
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		};
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	}
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">static</strong> Instant next(Instant t, String unit) {
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">var</strong> d = t.atZone(ZoneOffset.UTC);
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"hour"</span> -&gt; d.plusHours(1).toInstant();
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"day"</span> -&gt; d.plusDays(1).toInstant();
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"week"</span> -&gt; d.plusWeeks(1).toInstant();
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">default</strong> -&gt; d.plusMonths(1).toInstant();
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		};
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Non-null group values within a series are mutually Comparable.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	})
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> compareKeys(List&lt;Object&gt; a, List&lt;Object&gt; b) {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; a.size(); i++) {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">var</strong> x = a.get(i);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<strong class="jxr_keyword">var</strong> y = b.get(i);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> || y == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				<strong class="jxr_keyword">if</strong> (x == y) <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 				<strong class="jxr_keyword">return</strong> x == <strong class="jxr_keyword">null</strong> ? -1 : 1;
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">var</strong> c = ((Comparable&lt;Object&gt;)x).compareTo(y);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">if</strong> (c != 0) <strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<em class="jxr_comment">// The smallest unit giving at most AUTO_BUCKETS buckets over the window; month when none does.  Counting stops at</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<em class="jxr_comment">// AUTO_BUCKETS + 1, so a long window never walks every hour.</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	String autoUnit(Instant start, Instant end) {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> u : UNITS) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">var</strong> n = 0;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t = floor(start, u); t.isBefore(end) &amp;&amp; n &lt;= AUTO_BUCKETS; t = next(t, u))
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 				n++;
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<strong class="jxr_keyword">if</strong> (n &lt;= AUTO_BUCKETS) <strong class="jxr_keyword">return</strong> u;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"month"</span>;
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	}
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	Instant floor(Instant t, String unit) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">var</strong> d = t.atZone(ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"hour"</span> -&gt; d.truncatedTo(ChronoUnit.HOURS).toInstant();
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"day"</span> -&gt; d.truncatedTo(ChronoUnit.DAYS).toInstant();
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"week"</span> -&gt; d.truncatedTo(ChronoUnit.DAYS).with(TemporalAdjusters.previousOrSame(weekStart)).toInstant();
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<strong class="jxr_keyword">default</strong> -&gt; d.truncatedTo(ChronoUnit.DAYS).withDayOfMonth(1).toInstant();
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		};
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	}
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	<strong class="jxr_keyword">static</strong> Instant next(Instant t, String unit) {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> d = t.atZone(ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"hour"</span> -&gt; d.plusHours(1).toInstant();
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"day"</span> -&gt; d.plusDays(1).toInstant();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"week"</span> -&gt; d.plusWeeks(1).toInstant();
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">default</strong> -&gt; d.plusMonths(1).toInstant();
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		};
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	}
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

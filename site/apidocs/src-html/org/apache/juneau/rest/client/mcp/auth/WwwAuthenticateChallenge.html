@@ -209,7 +209,7 @@
 <span class="source-line-no">196</span><span id="line-196">    */</span>
 <span class="source-line-no">197</span><span id="line-197">   public Optional&lt;URI&gt; resourceMetadata() {</span>
 <span class="source-line-no">198</span><span id="line-198">      var v = parameters.get("resource_metadata");</span>
-<span class="source-line-no">199</span><span id="line-199">      if (v == null || v.isBlank())</span>
+<span class="source-line-no">199</span><span id="line-199">      if (ib(v))</span>
 <span class="source-line-no">200</span><span id="line-200">         return oe();</span>
 <span class="source-line-no">201</span><span id="line-201">      try {</span>
 <span class="source-line-no">202</span><span id="line-202">         return o(URI.create(v));</span>
@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">    */</span>
 <span class="source-line-no">222</span><span id="line-222">   public Set&lt;String&gt; scopes() {</span>
 <span class="source-line-no">223</span><span id="line-223">      var v = parameters.get("scope");</span>
-<span class="source-line-no">224</span><span id="line-224">      if (v == null || v.isBlank())</span>
+<span class="source-line-no">224</span><span id="line-224">      if (ib(v))</span>
 <span class="source-line-no">225</span><span id="line-225">         return Set.of();</span>
 <span class="source-line-no">226</span><span id="line-226">      var out = Arrays.stream(v.strip().split("\\s+"))</span>
 <span class="source-line-no">227</span><span id="line-227">         .collect(Collectors.toCollection(LinkedHashSet&lt;String&gt;::new));</span>

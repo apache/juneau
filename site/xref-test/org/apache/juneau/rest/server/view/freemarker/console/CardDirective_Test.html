@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			.hasCard(<span class="jxr_string">"jc-card-1"</span>, <span class="jxr_string">"html"</span>).templateContains(<span class="jxr_string">"jc-card-1"</span>, <span class="jxr_string">"&lt;h1&gt;Title&lt;/h1&gt;"</span>)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			.hasCard(<span class="jxr_string">"second"</span>, <span class="jxr_string">"html"</span>).templateContains(<span class="jxr_string">"second"</span>, <span class="jxr_string">"&lt;p&gt;more&lt;/p&gt;"</span>);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertFalse(body.contains(<span class="jxr_string">"&amp;lt;h1"</span>), () -&gt; <span class="jxr_string">"double-escaped card body: "</span> + body);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertFalse(body.contains(<span class="jxr_string">"slds-"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		DualHatGuard.assertClean(body);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Test <strong class="jxr_keyword">void</strong> b02_formatAttr_isRejected() <strong class="jxr_keyword">throws</strong> Exception {

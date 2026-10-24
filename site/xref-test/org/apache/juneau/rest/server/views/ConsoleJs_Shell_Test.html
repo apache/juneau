@@ -359,7 +359,7 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> c = map(r().get(<span class="jxr_string">"runView"</span>));
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertBean(c, <span class="jxr_string">"threw,errors,callsBeforeReady,cardTitle,resultCards,duplicateIds"</span>, <span class="jxr_string">"&lt;null&gt;,[],0,Run,[rv1,rv2],[]"</span>);
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> calls = list(c.get(<span class="jxr_string">"calls"</span>));
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertEquals(2, calls.size(), c::toString);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertSize(c::toString, 2, calls);
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertBean(calls.get(0), <span class="jxr_string">"elId,elClass,hostId,ctx"</span>, <span class="jxr_string">"rv1-body,jc-card-body,rv1,{}"</span>);
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertBean(calls.get(1), <span class="jxr_string">"elId,elClass,hostId,ctx"</span>, <span class="jxr_string">"rv2-body,jc-card-body,rv2,{}"</span>);
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertEquals(Json5.to(<span class="jxr_string">"{eventsUrl:'/runs/1/events',compact:true}"</span>, Map.<strong class="jxr_keyword">class</strong>),

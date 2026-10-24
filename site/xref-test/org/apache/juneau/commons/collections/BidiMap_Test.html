@@ -712,7 +712,7 @@
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 			.add(<span class="jxr_string">"two"</span>, 2)
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			.build();
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		assertFalse(map.containsValue(1));
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		assertEquals(1, map.size());
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		assertSize(1, map);
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 	}
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 	@Test
@@ -722,7 +722,7 @@
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 			.add(<span class="jxr_string">"two"</span>, 2)
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 			.build();
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 		assertFalse(map.containsKey(<span class="jxr_string">"one"</span>));
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		assertEquals(1, map.size());
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		assertSize(1, map);
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 	}
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 	@Test
@@ -732,7 +732,7 @@
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 			.build();
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<em class="jxr_comment">// Putting same key-value pair again is not a conflict</em>
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 		map.put(<span class="jxr_string">"one"</span>, 1);
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		assertEquals(1, map.size());
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		assertSize(1, map);
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> 		assertEquals(1, map.get(<span class="jxr_string">"one"</span>));
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 	}
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 
@@ -745,7 +745,7 @@
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">var</strong> sameEntries = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Integer&gt;();
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 		sameEntries.put(<span class="jxr_string">"one"</span>, 1);
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 		map.putAll(sameEntries);
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		assertEquals(1, map.size());
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		assertSize(1, map);
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 		assertEquals(1, map.get(<span class="jxr_string">"one"</span>));
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 	}
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> }

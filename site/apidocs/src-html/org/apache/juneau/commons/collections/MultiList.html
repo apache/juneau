@@ -529,7 +529,7 @@
 <span class="source-line-no">516</span><span id="line-516">         while (e1.hasNext() &amp;&amp; e2.hasNext()) {</span>
 <span class="source-line-no">517</span><span id="line-517">            var o1 = e1.next();</span>
 <span class="source-line-no">518</span><span id="line-518">            var o2 = e2.next();</span>
-<span class="source-line-no">519</span><span id="line-519">            if (!eq(o1, o2))</span>
+<span class="source-line-no">519</span><span id="line-519">            if (neq(o1, o2))</span>
 <span class="source-line-no">520</span><span id="line-520">               return false;</span>
 <span class="source-line-no">521</span><span id="line-521">         }</span>
 <span class="source-line-no">522</span><span id="line-522">         return !(e1.hasNext() || e2.hasNext());</span>

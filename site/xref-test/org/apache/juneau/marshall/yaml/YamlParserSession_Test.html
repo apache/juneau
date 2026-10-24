@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> c03_flowMappingIntoRawMap() {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<em class="jxr_comment">// readFlowMapping: keyType == null -&gt; defaults to string() (raw, ungenerified Map target).</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		JsonMap m = YamlParser.DEFAULT.read(<span class="jxr_string">"{a: 1, b: 2}"</span>, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(2, m.size());
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertSize(2, m);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test <strong class="jxr_keyword">void</strong> e05_flowMapping_typedMapTarget_notMap() {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<em class="jxr_comment">// sType.isMap() arm of readAnything's '{' dispatch, target is a concrete (non-generic-JsonMap) Map subtype.</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		Map&lt;String,Integer&gt; m = YamlParser.DEFAULT.read(<span class="jxr_string">"{a: 1, b: 2}"</span>, TreeMap.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(2, m.size());
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertSize(2, m);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertInstanceOf(TreeMap.<strong class="jxr_keyword">class</strong>, m);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 

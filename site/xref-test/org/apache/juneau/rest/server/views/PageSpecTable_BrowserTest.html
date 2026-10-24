@@ -69,32 +69,34 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.run();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; probeList(String key) {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;)ConsoleBrowserFixture.probe(report.get(<span class="jxr_string">"table"</span>)).get(key);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Test <strong class="jxr_keyword">void</strong> a01_mountsWithoutErrors() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertNoShellErrors(report.get(<span class="jxr_string">"table"</span>));
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_comment">// defaultVisible(false) only takes effect with columnConfig on (juneau-config.js); corpus 03 has no columnConfig, so the table keeps every column.</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a02_headerHasEveryColumn_withLabelsLiftedToTitles() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> ths = probeList(<span class="jxr_string">"ths"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertTrue(ths.containsAll(List.of(<span class="jxr_string">"Pod"</span>, <span class="jxr_string">"Incident"</span>, <span class="jxr_string">"Root cause"</span>)), ths::toString);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a03_ribbonButtonsPresent() {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> labels = probeList(<span class="jxr_string">"ribbon"</span>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTrue(labels.contains(<span class="jxr_string">"Refresh"</span>), () -&gt; <span class="jxr_string">"ribbon buttons: "</span> + report.get(<span class="jxr_string">"table"</span>));
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a04_fetchedRow_isRenderedWithRowClassAndLinkedRender() {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> q = queries(report.get(<span class="jxr_string">"table"</span>));
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(<span class="jxr_string">"p1"</span>, q.get(<span class="jxr_string">"row"</span>));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(<span class="jxr_string">"I-1"</span>, q.get(<span class="jxr_string">"link"</span>));
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	})
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; probeList(String key) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;)ConsoleBrowserFixture.probe(report.get(<span class="jxr_string">"table"</span>)).get(key);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test <strong class="jxr_keyword">void</strong> a01_mountsWithoutErrors() {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertNoShellErrors(report.get(<span class="jxr_string">"table"</span>));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">// defaultVisible(false) only takes effect with columnConfig on (juneau-config.js); corpus 03 has no columnConfig, so the table keeps every column.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a02_headerHasEveryColumn_withLabelsLiftedToTitles() {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> ths = probeList(<span class="jxr_string">"ths"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertTrue(ths.containsAll(List.of(<span class="jxr_string">"Pod"</span>, <span class="jxr_string">"Incident"</span>, <span class="jxr_string">"Root cause"</span>)), ths::toString);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> a03_ribbonButtonsPresent() {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> labels = probeList(<span class="jxr_string">"ribbon"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertTrue(labels.contains(<span class="jxr_string">"Refresh"</span>), () -&gt; <span class="jxr_string">"ribbon buttons: "</span> + report.get(<span class="jxr_string">"table"</span>));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a04_fetchedRow_isRenderedWithRowClassAndLinkedRender() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> q = queries(report.get(<span class="jxr_string">"table"</span>));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(<span class="jxr_string">"p1"</span>, q.get(<span class="jxr_string">"row"</span>));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(<span class="jxr_string">"I-1"</span>, q.get(<span class="jxr_string">"link"</span>));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

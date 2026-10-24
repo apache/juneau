@@ -601,45 +601,44 @@
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 * The opaque {@code requestState} minted into {@code MRTR-resume-input-required-again}'s second PAUSE is</em>
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 * redacted for {@code a01}'s byte comparison, so its embedded round counter is verified here instead: unseal</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * the live token with the same fixed-key codec {@link F_Mrtr} uses and assert the round advanced to 2 (plan</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * Phase 4 Task 12 decode-and-check).</em>
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	@Test
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	<strong class="jxr_keyword">void</strong> a02_resumeInputRequiredAgain_sealedRoundIsTwo() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> raw = replayHttp(<span class="jxr_string">"MRTR-resume-input-required-again"</span>);
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> envelope = Json.to(raw, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;?,?&gt;) envelope.get(<span class="jxr_string">"result"</span>);
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> token = (String) result.get(<span class="jxr_string">"requestState"</span>);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> FixedKeyGcmCodec().unseal(token, aad(<span class="jxr_string">"tools/call"</span>, <span class="jxr_string">"ask"</span>)).orElseThrow();
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		assertEquals(2, state.round());
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		assertEquals(<span class="jxr_string">"cont-2"</span>, state.continuation());
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	}
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<strong class="jxr_keyword">private</strong> String replayHttp(String fixture) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">var</strong> requestBody = Files.readString(DIR.resolve(fixture + <span class="jxr_string">".request.json"</span>)).strip();
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">if</strong> (requestBody.contains(TOKEN_PLACEHOLDER))
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			requestBody = requestBody.replace(TOKEN_PLACEHOLDER, mrtrToken(fixture));
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> headers = loadHeaders(fixture);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">var</strong> client = MockRestClient.create(servletFor(fixture)).json()
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			.contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">var</strong> req = client.post(<span class="jxr_string">"/"</span>).contentString(requestBody);
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		headers.forEach(req::header);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">var</strong> res = req.run();
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		assertEquals(200, res.getStatusCode(), () -&gt; fixture + <span class="jxr_string">": HTTP status changed"</span>);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">return</strong> res.getContent().asString();
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	}
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,String&gt; loadHeaders(String fixture) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">var</strong> props = <strong class="jxr_keyword">new</strong> Properties();
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = Files.newBufferedReader(DIR.resolve(fixture + <span class="jxr_string">".headers.properties"</span>))) {
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			props.load(in);
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		}
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : props.stringPropertyNames())
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			m.put(name, props.getProperty(name));
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	}
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> }
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * the live token with the same fixed-key codec {@link F_Mrtr} uses and assert the round advanced to 2.</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	@Test
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<strong class="jxr_keyword">void</strong> a02_resumeInputRequiredAgain_sealedRoundIsTwo() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">var</strong> raw = replayHttp(<span class="jxr_string">"MRTR-resume-input-required-again"</span>);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> envelope = Json.to(raw, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> result = (Map&lt;?,?&gt;) envelope.get(<span class="jxr_string">"result"</span>);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> token = (String) result.get(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> state = <strong class="jxr_keyword">new</strong> FixedKeyGcmCodec().unseal(token, aad(<span class="jxr_string">"tools/call"</span>, <span class="jxr_string">"ask"</span>)).orElseThrow();
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		assertEquals(2, state.round());
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		assertEquals(<span class="jxr_string">"cont-2"</span>, state.continuation());
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	}
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">private</strong> String replayHttp(String fixture) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">var</strong> requestBody = Files.readString(DIR.resolve(fixture + <span class="jxr_string">".request.json"</span>)).strip();
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">if</strong> (requestBody.contains(TOKEN_PLACEHOLDER))
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			requestBody = requestBody.replace(TOKEN_PLACEHOLDER, mrtrToken(fixture));
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> headers = loadHeaders(fixture);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> client = MockRestClient.create(servletFor(fixture)).json()
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			.contentType(<span class="jxr_string">"application/json"</span>).accept(<span class="jxr_string">"application/json"</span>).ignoreErrors().build();
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">var</strong> req = client.post(<span class="jxr_string">"/"</span>).contentString(requestBody);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		headers.forEach(req::header);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> res = req.run();
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		assertEquals(200, res.getStatusCode(), () -&gt; fixture + <span class="jxr_string">": HTTP status changed"</span>);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">return</strong> res.getContent().asString();
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	}
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,String&gt; loadHeaders(String fixture) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">var</strong> props = <strong class="jxr_keyword">new</strong> Properties();
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = Files.newBufferedReader(DIR.resolve(fixture + <span class="jxr_string">".headers.properties"</span>))) {
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			props.load(in);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		}
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : props.stringPropertyNames())
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			m.put(name, props.getProperty(name));
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

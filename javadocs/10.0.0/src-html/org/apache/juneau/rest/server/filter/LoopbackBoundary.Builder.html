@@ -265,7 +265,7 @@
 <span class="source-line-no">252</span><span id="line-252">         return BoundaryResult.ALLOWED;</span>
 <span class="source-line-no">253</span><span id="line-253"></span>
 <span class="source-line-no">254</span><span id="line-254">      var origin2 = req.getHeader("Origin");</span>
-<span class="source-line-no">255</span><span id="line-255">      if (origin2 == null || origin2.isBlank())</span>
+<span class="source-line-no">255</span><span id="line-255">      if (ib(origin2))</span>
 <span class="source-line-no">256</span><span id="line-256">         return reject(BoundaryReason.ORIGIN_MISSING, 403,</span>
 <span class="source-line-no">257</span><span id="line-257">            "A state-changing request must carry an 'Origin' header of '%s'.", origin);</span>
 <span class="source-line-no">258</span><span id="line-258">      if (! origin2.equals(origin))</span>
@@ -284,7 +284,7 @@
 <span class="source-line-no">271</span><span id="line-271">            "A state-changing request must use content type '%s'.", JSON_CONTENT_TYPE);</span>
 <span class="source-line-no">272</span><span id="line-272"></span>
 <span class="source-line-no">273</span><span id="line-273">      var presented = req.getHeader(csrfHeader);</span>
-<span class="source-line-no">274</span><span id="line-274">      if (presented == null || presented.isBlank())</span>
+<span class="source-line-no">274</span><span id="line-274">      if (ib(presented))</span>
 <span class="source-line-no">275</span><span id="line-275">         return reject(BoundaryReason.CSRF_TOKEN_MISSING, 403,</span>
 <span class="source-line-no">276</span><span id="line-276">            "A state-changing request must carry this server's CSRF token in the '%s' header.", csrfHeader);</span>
 <span class="source-line-no">277</span><span id="line-277">      if (! token.matches(presented))</span>
@@ -338,7 +338,7 @@
 <span class="source-line-no">325</span><span id="line-325">    *</span>
 <span class="source-line-no">326</span><span id="line-326">    * &lt;p&gt;</span>
 <span class="source-line-no">327</span><span id="line-327">    * Delegates to {@link MethodSafety#isSafe(String)} rather than carrying its own copy of the safe-method set.</span>
-<span class="source-line-no">328</span><span id="line-328">    * The startup check that refuses a {@link org.apache.juneau.rest.server.Mutating @Mutating} operation bound to</span>
+<span class="source-line-no">328</span><span id="line-328">    * The startup check that refuses a {@link Mutating @Mutating} operation bound to</span>
 <span class="source-line-no">329</span><span id="line-329">    * a safe method reads the same definition, and a boundary that disagreed with that check about which methods</span>
 <span class="source-line-no">330</span><span id="line-330">    * are writes would silently defeat both.</span>
 <span class="source-line-no">331</span><span id="line-331">    *</span>

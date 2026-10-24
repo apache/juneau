@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the body is absent/blank, or no template sink was registered.</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">public</strong> String captureTemplate() {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">if</strong> (body == <strong class="jxr_keyword">null</strong> || body.isEmpty())
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">if</strong> (ie(body))
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">throw</strong> error(<span class="jxr_string">"type='%s' requires a markup body; got none."</span>, type);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">if</strong> (templateSink == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">throw</strong> error(<span class="jxr_string">"type='%s' requires a markup body, but this CardSource has no template sink."</span>, type);
@@ -190,9 +190,9 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">private</strong> BiConsumer&lt;String,String&gt; templateSink;
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">private</strong> Builder(String type, String id) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong> || type.isBlank())
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> (ib(type))
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"CardSource type must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"CardSource id must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">this</strong>.type = type;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">this</strong>.id = id;

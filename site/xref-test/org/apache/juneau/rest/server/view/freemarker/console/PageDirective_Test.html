@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertPage(body).isValid().hasCardOrder(<span class="jxr_string">"jc-seg-1"</span>)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.templateContains(<span class="jxr_string">"jc-seg-1"</span>, <span class="jxr_string">"&lt;p class=\&quot;naked-html\&quot;&gt;hello&lt;/p&gt;"</span>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertFalse(body.contains(<span class="jxr_string">"&lt;main"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertFalse(body.contains(<span class="jxr_string">"slds-"</span>), <span class="jxr_string">"dual-hat: no slds-* in page output"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		DualHatGuard.assertClean(body);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a02_tab_init_css_areEmittedGenerically() <strong class="jxr_keyword">throws</strong> Exception {
@@ -215,7 +215,7 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<em class="jxr_comment">// No table card: no glue, no DataTables, no jQuery.</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertFalse(body.toLowerCase().contains(<span class="jxr_string">"datatables"</span>), () -&gt; body);
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertFalse(body.contains(<span class="jxr_string">"/webjars/jquery/"</span>), () -&gt; body);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertFalse(body.contains(<span class="jxr_string">"slds-"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		DualHatGuard.assertClean(body);
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Test <strong class="jxr_keyword">void</strong> a05d_toolkitViews_emitsBusFirst_beforeEveryBusConsumer() <strong class="jxr_keyword">throws</strong> Exception {

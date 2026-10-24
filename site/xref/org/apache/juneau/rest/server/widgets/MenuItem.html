@@ -143,12 +143,12 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate() {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">if</strong> (isDivider())
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"MenuItem id must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (label == <strong class="jxr_keyword">null</strong> || label.isBlank())
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (ib(label))
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"MenuItem '%s' label must not be null or blank."</span>, id);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> hasHref = href != <strong class="jxr_keyword">null</strong> &amp;&amp; !href.isBlank();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> hasSafe = safe != <strong class="jxr_keyword">null</strong> &amp;&amp; !safe.isBlank();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> hasHref = inb(href);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> hasSafe = inb(safe);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">if</strong> (hasHref == hasSafe)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"MenuItem '%s' must declare exactly one of link/safe."</span>, id);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">if</strong> (hasHref &amp;&amp; !SafePathTemplate.isSameOriginPath(href))

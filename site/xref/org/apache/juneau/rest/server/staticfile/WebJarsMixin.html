@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@RestGet(path=PATH + <span class="jxr_string">"/*"</span>, summary=<span class="jxr_string">"WebJar files"</span>, swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>))
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getWebJarFile(RestRequest req) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> path = checkedPath(req.getPathParams().getRemainderUndecoded().asString().orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> type = path == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : contentType(path);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> type = contentType(path);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong> || WebJarsMixin.<strong class="jxr_keyword">class</strong>.getResource(<span class="jxr_string">"/"</span> + WebJarResolver.WEBJARS_ROOT + path) == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> ASSETS.serve(<span class="jxr_string">"/"</span> + WebJarResolver.WEBJARS_ROOT + path, type, CACHE_CONTROL);
@@ -129,27 +129,29 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * Returns the content type for a path's extension, compared case-insensitively.</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * @param path The path.</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @return The content type, or &lt;jk&gt;null&lt;/jk&gt; if the extension isn't served.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * @param path The path.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @return The content type, or &lt;jk&gt;null&lt;/jk&gt; if the path is &lt;jk&gt;null&lt;/jk&gt; or the extension isn't served.</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">static</strong> String contentType(String path) {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> name = path.substring(path.lastIndexOf('/') + 1);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> dot = name.lastIndexOf('.');
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> dot &lt; 0 ? <strong class="jxr_keyword">null</strong> : CONTENT_TYPES.get(name.substring(dot + 1).toLowerCase(Locale.ROOT));
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> safe(String p) {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">if</strong> (p.isEmpty() || p.startsWith(<span class="jxr_string">"/"</span>) || p.indexOf('&#92;&#92;') &gt;= 0)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> lower = p.toLowerCase(Locale.ROOT);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">if</strong> (lower.contains(<span class="jxr_string">"%2f"</span>) || lower.contains(<span class="jxr_string">"%5c"</span>))
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> seg : p.split(<span class="jxr_string">"/"</span>, -1))
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">if</strong> (seg.isEmpty() || <span class="jxr_string">"."</span>.equals(seg) || <span class="jxr_string">".."</span>.equals(seg))
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> }
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (path == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> name = path.substring(path.lastIndexOf('/') + 1);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> dot = name.lastIndexOf('.');
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> dot &lt; 0 ? <strong class="jxr_keyword">null</strong> : CONTENT_TYPES.get(name.substring(dot + 1).toLowerCase(Locale.ROOT));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> safe(String p) {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">if</strong> (p.isEmpty() || p.startsWith(<span class="jxr_string">"/"</span>) || p.indexOf('&#92;&#92;') &gt;= 0)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> lower = p.toLowerCase(Locale.ROOT);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">if</strong> (lower.contains(<span class="jxr_string">"%2f"</span>) || lower.contains(<span class="jxr_string">"%5c"</span>))
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> seg : p.split(<span class="jxr_string">"/"</span>, -1))
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">if</strong> (seg.isEmpty() || <span class="jxr_string">"."</span>.equals(seg) || <span class="jxr_string">".."</span>.equals(seg))
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

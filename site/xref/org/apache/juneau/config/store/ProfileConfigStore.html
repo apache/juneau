@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">public</strong> String read(String name) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">if</strong> (! eq(name, baseName))
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">if</strong> (neq(name, baseName))
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> delegate.read(name);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> mergedContents();
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStore */</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">public</strong> String getNotifiedContents(String name, String written) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">if</strong> (! eq(name, baseName))
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">if</strong> (neq(name, baseName))
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">return</strong> written;
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">return</strong> mergeWithOverlays(written);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}

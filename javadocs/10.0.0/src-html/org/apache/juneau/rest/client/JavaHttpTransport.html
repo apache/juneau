@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this</span>
 <span class="source-line-no">062</span><span id="line-62"> * transport pin-on-connects: it resolves the request host, selects an address that passes</span>
-<span class="source-line-no">063</span><span id="line-63"> * {@link org.apache.juneau.http.remote.RemoteUrlPolicy}, and rewrites the request URI to that literal address</span>
+<span class="source-line-no">063</span><span id="line-63"> * {@link RemoteUrlPolicy}, and rewrites the request URI to that literal address</span>
 <span class="source-line-no">064</span><span id="line-64"> * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the</span>
 <span class="source-line-no">065</span><span id="line-65"> * validated address &amp;mdash; and re-runs the same check on every {@code Location} hop via</span>
 <span class="source-line-no">066</span><span id="line-66"> * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">      // already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of</span>
 <span class="source-line-no">095</span><span id="line-95">      // silently sending the wrong Host.</span>
 <span class="source-line-no">096</span><span id="line-96">      var existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);</span>
-<span class="source-line-no">097</span><span id="line-97">      if (existing == null || existing.isBlank())</span>
+<span class="source-line-no">097</span><span id="line-97">      if (ib(existing))</span>
 <span class="source-line-no">098</span><span id="line-98">         System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");</span>
 <span class="source-line-no">099</span><span id="line-99">      else if (! existing.toLowerCase(Locale.ROOT).contains("host"))</span>
 <span class="source-line-no">100</span><span id="line-100">         System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");</span>

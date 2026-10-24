@@ -581,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addPendingNavUnder(java.lang.String,org.apache.juneau.rest.server.view.freemarker.console.PageCapture.NavAdder)">
 <h3>addPendingNavUnder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-653">addPendingNavUnder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentIdPath,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-657">addPendingNavUnder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentIdPath,
  <a href="PageCapture.NavAdder.html" title="interface in org.apache.juneau.rest.server.view.freemarker.console">PageCapture.NavAdder</a>&nbsp;adder)</span></div>
 <div class="block">Records a child to add under an existing chrome nav node, resolved later by <a href="#applyPendingNavAdds()"><code>applyPendingNavAdds()</code></a>.</div>
 <dl class="notes">
@@ -594,7 +594,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="applyPendingNavAdds()">
 <h3>applyPendingNavAdds</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-663">applyPendingNavAdds</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-667">applyPendingNavAdds</a></span>()
                          throws <span class="exceptions">freemarker.template.TemplateModelException</span></div>
 <div class="block">Resolves every pending nav addition recorded by <a href="#addPendingNavUnder(java.lang.String,org.apache.juneau.rest.server.view.freemarker.console.PageCapture.NavAdder)"><code>addPendingNavUnder(java.lang.String, org.apache.juneau.rest.server.view.freemarker.console.PageCapture.NavAdder)</code></a>, in declaration order.  The
  pending list is cleared first, so a second call does nothing.</div>
@@ -607,7 +607,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mergeTab(java.lang.String)">
 <h3>mergeTab</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-684">mergeTab</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tab)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-688">mergeTab</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tab)</span>
                      throws <span class="exceptions">freemarker.template.TemplateModelException</span></div>
 <div class="block">Merge-aware twin of <a href="#tab(java.lang.String)"><code>tab(String)</code></a>: first writer wins, and any second non-blank writer is rejected, even with the
  same value.</div>
@@ -624,7 +624,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mergeTheme(java.lang.String)">
 <h3>mergeTheme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-703">mergeTheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-707">mergeTheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
                        throws <span class="exceptions">freemarker.template.TemplateModelException</span></div>
 <div class="block">Merge-aware twin of <a href="#theme(java.lang.String)"><code>theme(String)</code></a>: first writer wins, a repeat of the same value is a no-op, and a
  differing second writer is rejected.</div>
@@ -641,7 +641,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mergeBodyAttrs(java.lang.String)">
 <h3>mergeBodyAttrs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-734">mergeBodyAttrs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrs)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-738">mergeBodyAttrs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrs)</span>
                            throws <span class="exceptions">freemarker.template.TemplateModelException</span></div>
 <div class="block">Merge-aware setter for the raw <code>&lt;@body&gt;</code> attribute text: union by attribute name, existing (spec) text
  first and then the new text.  The same attribute name on both sides is always rejected, even when the values
@@ -660,7 +660,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mergeToolkit(java.util.List)">
 <h3>mergeToolkit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-842">mergeToolkit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-846">mergeToolkit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names)</span></div>
 <div class="block">Union merge for <a href="#toolkit(java.util.List)"><code>toolkit(List)</code></a>: appends any name not already present, in first-seen order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -673,7 +673,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mergeCss(java.util.List)">
 <h3>mergeCss</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-853">mergeCss</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hrefs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-857">mergeCss</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hrefs)</span></div>
 <div class="block">Union merge for the page stylesheets: appends any URL not already present, in first-seen order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -686,7 +686,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mergeInit(java.util.List)">
 <h3>mergeInit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-864">mergeInit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;srcs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-868">mergeInit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;srcs)</span></div>
 <div class="block">Union merge for the page init scripts: appends any URL not already present, in first-seen order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -699,7 +699,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="require(java.util.Collection)">
 <h3>require</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-906">require</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;packs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageCapture.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-910">require</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;packs)</span></div>
 <div class="block">Records toolkit packs the page needs, in first-seen order.  Called by <code>&lt;@card&gt;</code> for each authored card
  and by other directives that emit markup needing a pack.</div>
 <dl class="notes">
@@ -713,7 +713,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requiredPacks()">
 <h3>requiredPacks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-912">requiredPacks</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-916">requiredPacks</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The recorded pack names, in first-seen order.</dd>
@@ -723,7 +723,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="inPage()">
 <h3>inPage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-915">inPage</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-919">inPage</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd><jk>true</jk> while a <code>&lt;@page&gt;</code> body is rendering.</dd>
@@ -733,7 +733,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tab()">
 <h3>tab</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-990">tab</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-994">tab</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The <code>&lt;@page tab&gt;</code> value, <code>""</code> when absent.</dd>
@@ -743,7 +743,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toolkits()">
 <h3>toolkits</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-993">toolkits</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-997">toolkits</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The toolkit names.</dd>
@@ -753,7 +753,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="activeNav()">
 <h3>activeNav</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-996">activeNav</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1000">activeNav</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The resolved active path (empty until <code>&lt;@console&gt;</code> closes, or when there is no selection).</dd>
@@ -763,7 +763,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cards()">
 <h3>cards</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">CardSpec</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-999">cards</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">CardSpec</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1003">cards</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The cards, in page order.</dd>
@@ -773,7 +773,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="templates()">
 <h3>templates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1002">templates</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1006">templates</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Template id to markup, in emit order.</dd>
@@ -783,7 +783,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toContractJson()">
 <h3>toContractJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1009">toContractJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1013">toContractJson</a></span>()</div>
 <div class="block">Serializes the contract.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -794,7 +794,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeBody(java.io.Writer)">
 <h3>writeBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1045">writeBody</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/console/PageCapture.html#line-1049">writeBody</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes the contract island, the templates and the shell script tag.</div>
 <dl class="notes">

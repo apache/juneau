@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code field} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder when(String field) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (field == <strong class="jxr_keyword">null</strong> || field.isBlank())
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (ib(field))
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"VisibilityRule field must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(field);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If a rule's {@code op} is not one of the known tokens.</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> test(List&lt;VisibilityRule&gt; rules, Map&lt;String,Object&gt; map) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">if</strong> (rules == <strong class="jxr_keyword">null</strong> || rules.isEmpty())
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">if</strong> (ie(rules))
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : rules)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">if</strong> (! r.matches(map))
@@ -129,8 +129,8 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> actual = resolve(map, field);
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> missing = actual == MISSING;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (op) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"eq"</span> -&gt; ! missing &amp;&amp; Objects.equals(actual, value);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"ne"</span> -&gt; ! missing &amp;&amp; ! Objects.equals(actual, value);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"eq"</span> -&gt; ! missing &amp;&amp; eq(actual, value);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"ne"</span> -&gt; ! missing &amp;&amp; neq(actual, value);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"present"</span> -&gt; ! missing &amp;&amp; actual != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (actual instanceof String s &amp;&amp; s.isBlank());
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"absent"</span> -&gt; missing || actual == <strong class="jxr_keyword">null</strong> || (actual instanceof String s &amp;&amp; s.isBlank());
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"in"</span> -&gt; ! missing &amp;&amp; value instanceof Collection&lt;?&gt; c &amp;&amp; c.contains(actual);

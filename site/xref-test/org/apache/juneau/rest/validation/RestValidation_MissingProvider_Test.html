@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.validation;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.logging.LogRecordCapture;
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  				<strong class="jxr_keyword">throw</strong> rex(e);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			}
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		});
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(1, records.size());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertSize(1, records);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 				<strong class="jxr_keyword">throw</strong> rex(e);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		});
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertEquals(1, records.size());
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertSize(1, records);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> }
 </pre>

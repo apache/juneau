@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209">       * @throws IllegalArgumentException If {@code label} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">210</span><span id="line-210">       */</span>
 <span class="source-line-no">211</span><span id="line-211">      public static Field of(String label, String value) {</span>
-<span class="source-line-no">212</span><span id="line-212">         if (label == null || label.isBlank())</span>
+<span class="source-line-no">212</span><span id="line-212">         if (ib(label))</span>
 <span class="source-line-no">213</span><span id="line-213">            throw iaex("ModalDef.Field label must not be null or blank.");</span>
 <span class="source-line-no">214</span><span id="line-214">         var f = new Field();</span>
 <span class="source-line-no">215</span><span id="line-215">         f.label = label;</span>
@@ -279,7 +279,7 @@
 <span class="source-line-no">266</span><span id="line-266">       * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">267</span><span id="line-267">       */</span>
 <span class="source-line-no">268</span><span id="line-268">      public static Step of(String id) {</span>
-<span class="source-line-no">269</span><span id="line-269">         if (id == null || id.isBlank())</span>
+<span class="source-line-no">269</span><span id="line-269">         if (ib(id))</span>
 <span class="source-line-no">270</span><span id="line-270">            throw iaex("ModalDef.Step id must not be null or blank.");</span>
 <span class="source-line-no">271</span><span id="line-271">         var s = new Step();</span>
 <span class="source-line-no">272</span><span id="line-272">         s.id = id;</span>
@@ -394,9 +394,9 @@
 <span class="source-line-no">381</span><span id="line-381">       * @throws IllegalArgumentException If {@code id} or {@code label} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">382</span><span id="line-382">       */</span>
 <span class="source-line-no">383</span><span id="line-383">      public static ChildAction of(String id, String label) {</span>
-<span class="source-line-no">384</span><span id="line-384">         if (id == null || id.isBlank())</span>
+<span class="source-line-no">384</span><span id="line-384">         if (ib(id))</span>
 <span class="source-line-no">385</span><span id="line-385">            throw iaex("ModalDef.ChildAction id must not be null or blank.");</span>
-<span class="source-line-no">386</span><span id="line-386">         if (label == null || label.isBlank())</span>
+<span class="source-line-no">386</span><span id="line-386">         if (ib(label))</span>
 <span class="source-line-no">387</span><span id="line-387">            throw iaex("ModalDef.ChildAction label must not be null or blank.");</span>
 <span class="source-line-no">388</span><span id="line-388">         var c = new ChildAction();</span>
 <span class="source-line-no">389</span><span id="line-389">         c.id = id;</span>
@@ -559,7 +559,7 @@
 <span class="source-line-no">546</span><span id="line-546">    * @throws IllegalArgumentException If {@code title} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">547</span><span id="line-547">    */</span>
 <span class="source-line-no">548</span><span id="line-548">   public static ModalDef create(String title) {</span>
-<span class="source-line-no">549</span><span id="line-549">      if (title == null || title.isBlank())</span>
+<span class="source-line-no">549</span><span id="line-549">      if (ib(title))</span>
 <span class="source-line-no">550</span><span id="line-550">         throw iaex("ModalDef title must not be null or blank.");</span>
 <span class="source-line-no">551</span><span id="line-551">      var m = new ModalDef();</span>
 <span class="source-line-no">552</span><span id="line-552">      m.title = title;</span>
@@ -643,9 +643,9 @@
 <span class="source-line-no">630</span><span id="line-630">    *</span>
 <span class="source-line-no">631</span><span id="line-631">    * &lt;p&gt;</span>
 <span class="source-line-no">632</span><span id="line-632">    * Passing &lt;jk&gt;false&lt;/jk&gt; &lt;b&gt;clears&lt;/b&gt; the flag rather than serializing an explicit {@code false}: the wire</span>
-<span class="source-line-no">633</span><span id="line-633">    * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.</span>
+<span class="source-line-no">633</span><span id="line-633">    * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.</span>
 <span class="source-line-no">634</span><span id="line-634">    *</span>
-<span class="source-line-no">635</span><span id="line-635">    * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) keeps today's close-then-submit behaviour.</span>
+<span class="source-line-no">635</span><span id="line-635">    * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) keeps the default close-then-submit behaviour.</span>
 <span class="source-line-no">636</span><span id="line-636">    * @return This object.</span>
 <span class="source-line-no">637</span><span id="line-637">    */</span>
 <span class="source-line-no">638</span><span id="line-638">   public ModalDef keepOpenOnSubmit(boolean value) {</span>
@@ -685,9 +685,9 @@
 <span class="source-line-no">672</span><span id="line-672">    *</span>
 <span class="source-line-no">673</span><span id="line-673">    * &lt;p&gt;</span>
 <span class="source-line-no">674</span><span id="line-674">    * Passing &lt;jk&gt;false&lt;/jk&gt; &lt;b&gt;clears&lt;/b&gt; the flag rather than serializing an explicit {@code false}: the wire</span>
-<span class="source-line-no">675</span><span id="line-675">    * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.</span>
+<span class="source-line-no">675</span><span id="line-675">    * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.</span>
 <span class="source-line-no">676</span><span id="line-676">    *</span>
-<span class="source-line-no">677</span><span id="line-677">    * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) leaves today's row-id behaviour untouched.</span>
+<span class="source-line-no">677</span><span id="line-677">    * @param value &lt;jk&gt;true&lt;/jk&gt; to opt in; &lt;jk&gt;false&lt;/jk&gt; (or unset) keeps the default row-id behaviour.</span>
 <span class="source-line-no">678</span><span id="line-678">    * @return This object.</span>
 <span class="source-line-no">679</span><span id="line-679">    */</span>
 <span class="source-line-no">680</span><span id="line-680">   public ModalDef selfTargeted(boolean value) {</span>
@@ -732,7 +732,7 @@
 <span class="source-line-no">719</span><span id="line-719">    */</span>
 <span class="source-line-no">720</span><span id="line-720">   @Override</span>
 <span class="source-line-no">721</span><span id="line-721">   public void validate() {</span>
-<span class="source-line-no">722</span><span id="line-722">      if (title == null || title.isBlank())</span>
+<span class="source-line-no">722</span><span id="line-722">      if (ib(title))</span>
 <span class="source-line-no">723</span><span id="line-723">         throw iaex("ModalDef title must not be null or blank.");</span>
 <span class="source-line-no">724</span><span id="line-724">      if (fields != null)</span>
 <span class="source-line-no">725</span><span id="line-725">         for (var f : fields) {</span>
@@ -822,7 +822,7 @@
 <span class="source-line-no">809</span><span id="line-809">    *       {@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as</span>
 <span class="source-line-no">810</span><span id="line-810">    *       contract-&lt;i&gt;valid&lt;/i&gt; with no complaint.</span>
 <span class="source-line-no">811</span><span id="line-811">    *    &lt;li&gt;&lt;b&gt;REST responses&lt;/b&gt; are validated independently:</span>
-<span class="source-line-no">812</span><span id="line-812">    *       {@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor</span>
+<span class="source-line-no">812</span><span id="line-812">    *       {@link WidgetsMixin.WidgetValidationProcessor</span>
 <span class="source-line-no">813</span><span id="line-813">    *       WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a</span>
 <span class="source-line-no">814</span><span id="line-814">    *       {@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.</span>
 <span class="source-line-no">815</span><span id="line-815">    *       Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case</span>

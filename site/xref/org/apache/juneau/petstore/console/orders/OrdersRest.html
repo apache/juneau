@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@RestGet(path=<span class="jxr_string">"/review-form"</span>)
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">public</strong> ModalDef reviewForm(@Query(<span class="jxr_string">"juneauDrafts"</span>) String drafts) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">if</strong> (drafts == <strong class="jxr_keyword">null</strong> || drafts.isBlank())
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">if</strong> (ib(drafts))
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing order draft"</span>);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		JsonMap m;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">try</strong> {
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">private</strong> <a name="Pet" href="../../../../../../org/apache/juneau/petstore/dto/Pet.html#Pet">Pet</a> pet(String id) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Missing pet"</span>);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		Pet p = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">try</strong> {
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String shipDate(String value) {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || value.isBlank())
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">if</strong> (ib(value))
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">return</strong> LocalDate.parse(value.trim()).toString();
@@ -328,7 +328,7 @@
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String reason(RestRequest req) {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">var</strong> text = req.getContent().asString();
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">if</strong> (text == <strong class="jxr_keyword">null</strong> || text.isBlank())
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">if</strong> (ib(text))
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> JsonMap(text);
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">var</strong> fields = body.getMap(<span class="jxr_string">"fields"</span>);

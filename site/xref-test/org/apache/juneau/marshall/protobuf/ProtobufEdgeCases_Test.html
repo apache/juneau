@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">void</strong> a10_nullInsideCollectionSkipped() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> Lists();
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		a.strs = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		a.strs = list(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<em class="jxr_comment">// nulls skipped -&gt; two tagged strings.</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertEquals(<span class="jxr_string">"12 01 61 12 01 62"</span>, ser(a));
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}

@@ -915,7 +915,7 @@
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment"> * Enabling debug mode has the following effects:</em>
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link org.apache.juneau.marshall.Context.Builder#debug()} is enabled.</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link org.apache.juneau.marshall.Context.Builder#debug() Context.Builder#debug()} is enabled.</em>
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link Builder#detectLeaks()} is enabled.</em>
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link Builder#logToConsole()} is called.</em>
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
@@ -1238,7 +1238,7 @@
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()}</em>
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()}</em>
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -1359,7 +1359,7 @@
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addRootType()}</em>
+<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addRootType() Serializer.Builder#addRootType()}</em>
 <a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -1453,9 +1453,9 @@
 <a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">		 * 		The same SSRF restriction applies: a client whose class overrides that method or either</em>
 <a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">		 * 		{@code execute(...)} overload it dispatches to refuses SSRF-guard-active {@code @Remote} calls too.</em>
 <a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} &lt;c&gt;impl(Object)&lt;/c&gt; to specify an already instantiated instance.</em>
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder BeanInstantiator.Builder} &lt;c&gt;impl(Object)&lt;/c&gt; to specify an already instantiated instance.</em>
 <a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> <em class="jxr_javadoccomment">		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} &lt;c&gt;type(Class)&lt;/c&gt; to specify a subtype to instantiate.</em>
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> <em class="jxr_javadoccomment">		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder BeanInstantiator.Builder} &lt;c&gt;type(Class)&lt;/c&gt; to specify a subtype to instantiate.</em>
 <a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> <em class="jxr_javadoccomment">		 * 		&lt;br&gt;Subclass must have a public constructor that takes in any args available</em>
 <a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> <em class="jxr_javadoccomment">		 * 		in the bean store of this builder (including {@link RestClient} itself).</em>
 <a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1699,7 +1699,7 @@
 <a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#debugOutputLines(int)}</em>
+<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#debugOutputLines(int) Parser.Builder#debugOutputLines(int)}</em>
 <a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -1828,7 +1828,7 @@
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> <em class="jxr_javadoccomment">		 * when the &lt;c&gt;finalize&lt;/c&gt; methods are invoked.</em>
 <a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> <em class="jxr_javadoccomment">		 * Automatically enabled with {@link org.apache.juneau.marshall.Context.Builder#debug()}.</em>
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> <em class="jxr_javadoccomment">		 * Automatically enabled with {@link org.apache.juneau.marshall.Context.Builder#debug() Context.Builder#debug()}.</em>
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
@@ -1934,7 +1934,7 @@
 <a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions()}</em>
+<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions() MarshallingTraverseContext.Builder#detectRecursions()}</em>
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -2845,7 +2845,7 @@
 <a class="jxr_linenumber" name="L2837" href="#L2837">2837</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2838" href="#L2838">2838</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2839" href="#L2839">2839</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L2840" href="#L2840">2840</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#ignoreRecursions()}</em>
+<a class="jxr_linenumber" name="L2840" href="#L2840">2840</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#ignoreRecursions() MarshallingTraverseContext.Builder#ignoreRecursions()}</em>
 <a class="jxr_linenumber" name="L2841" href="#L2841">2841</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2842" href="#L2842">2842</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2843" href="#L2843">2843</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -2886,7 +2886,7 @@
 <a class="jxr_linenumber" name="L2878" href="#L2878">2878</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2879" href="#L2879">2879</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2880" href="#L2880">2880</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L2881" href="#L2881">2881</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#initialDepth(int)}</em>
+<a class="jxr_linenumber" name="L2881" href="#L2881">2881</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#initialDepth(int) MarshallingTraverseContext.Builder#initialDepth(int)}</em>
 <a class="jxr_linenumber" name="L2882" href="#L2882">2882</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2883" href="#L2883">2883</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2884" href="#L2884">2884</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -3224,7 +3224,7 @@
 <a class="jxr_linenumber" name="L3216" href="#L3216">3216</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3217" href="#L3217">3217</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3218" href="#L3218">3218</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3219" href="#L3219">3219</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#keepNullProperties()}</em>
+<a class="jxr_linenumber" name="L3219" href="#L3219">3219</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#keepNullProperties() Serializer.Builder#keepNullProperties()}</em>
 <a class="jxr_linenumber" name="L3220" href="#L3220">3220</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3221" href="#L3221">3221</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3222" href="#L3222">3222</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -3472,7 +3472,7 @@
 <a class="jxr_linenumber" name="L3464" href="#L3464">3464</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3465" href="#L3465">3465</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3466" href="#L3466">3466</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3467" href="#L3467">3467</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#maxDepth(int)}</em>
+<a class="jxr_linenumber" name="L3467" href="#L3467">3467</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#maxDepth(int) MarshallingTraverseContext.Builder#maxDepth(int)}</em>
 <a class="jxr_linenumber" name="L3468" href="#L3468">3468</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3469" href="#L3469">3469</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3470" href="#L3470">3470</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -3507,7 +3507,7 @@
 <a class="jxr_linenumber" name="L3499" href="#L3499">3499</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3500" href="#L3500">3500</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3501" href="#L3501">3501</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3502" href="#L3502">3502</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#maxIndent(int)}</em>
+<a class="jxr_linenumber" name="L3502" href="#L3502">3502</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#maxIndent(int) WriterSerializer.Builder#maxIndent(int)}</em>
 <a class="jxr_linenumber" name="L3503" href="#L3503">3503</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3504" href="#L3504">3504</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3505" href="#L3505">3505</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -3681,8 +3681,8 @@
 <a class="jxr_linenumber" name="L3673" href="#L3673">3673</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3674" href="#L3674">3674</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3675" href="#L3675">3675</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3676" href="#L3676">3676</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}</em>
-<a class="jxr_linenumber" name="L3677" href="#L3677">3677</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}</em>
+<a class="jxr_linenumber" name="L3676" href="#L3676">3676</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat) OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}</em>
+<a class="jxr_linenumber" name="L3677" href="#L3677">3677</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat) OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}</em>
 <a class="jxr_linenumber" name="L3678" href="#L3678">3678</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3679" href="#L3679">3679</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3680" href="#L3680">3680</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -3740,8 +3740,8 @@
 <a class="jxr_linenumber" name="L3732" href="#L3732">3732</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3733" href="#L3733">3733</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3734" href="#L3734">3734</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3735" href="#L3735">3735</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}</em>
-<a class="jxr_linenumber" name="L3736" href="#L3736">3736</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#format(HttpPartFormat)}</em>
+<a class="jxr_linenumber" name="L3735" href="#L3735">3735</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#format(HttpPartFormat) OpenApiSerializer.Builder#format(HttpPartFormat)}</em>
+<a class="jxr_linenumber" name="L3736" href="#L3736">3736</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#format(HttpPartFormat) OpenApiParser.Builder#format(HttpPartFormat)}</em>
 <a class="jxr_linenumber" name="L3737" href="#L3737">3737</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3738" href="#L3738">3738</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3739" href="#L3739">3739</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -3842,7 +3842,7 @@
 <a class="jxr_linenumber" name="L3834" href="#L3834">3834</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3835" href="#L3835">3835</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3836" href="#L3836">3836</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3837" href="#L3837">3837</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormat(ParamFormat)}</em>
+<a class="jxr_linenumber" name="L3837" href="#L3837">3837</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormat(ParamFormat) UonSerializer.Builder#paramFormat(ParamFormat)}</em>
 <a class="jxr_linenumber" name="L3838" href="#L3838">3838</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3839" href="#L3839">3839</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3840" href="#L3840">3840</a> <em class="jxr_javadoccomment">		 * @param value The new value for this property.</em>
@@ -3884,7 +3884,7 @@
 <a class="jxr_linenumber" name="L3876" href="#L3876">3876</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3877" href="#L3877">3877</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3878" href="#L3878">3878</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L3879" href="#L3879">3879</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormatPlain()}</em>
+<a class="jxr_linenumber" name="L3879" href="#L3879">3879</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormatPlain() UonSerializer.Builder#paramFormatPlain()}</em>
 <a class="jxr_linenumber" name="L3880" href="#L3880">3880</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3881" href="#L3881">3881</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3882" href="#L3882">3882</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -4688,7 +4688,7 @@
 <a class="jxr_linenumber" name="L4680" href="#L4680">4680</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L4681" href="#L4681">4681</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L4682" href="#L4682">4682</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L4683" href="#L4683">4683</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char)}</em>
+<a class="jxr_linenumber" name="L4683" href="#L4683">4683</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char) WriterSerializer.Builder#quoteChar(char)}</em>
 <a class="jxr_linenumber" name="L4684" href="#L4684">4684</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4685" href="#L4685">4685</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L4686" href="#L4686">4686</a> <em class="jxr_javadoccomment">		 * @param value</em>
@@ -5171,7 +5171,7 @@
 <a class="jxr_linenumber" name="L5163" href="#L5163">5163</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5164" href="#L5164">5164</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5165" href="#L5165">5165</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5166" href="#L5166">5166</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortCollections()}</em>
+<a class="jxr_linenumber" name="L5166" href="#L5166">5166</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortCollections() Serializer.Builder#sortCollections()}</em>
 <a class="jxr_linenumber" name="L5167" href="#L5167">5167</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5168" href="#L5168">5168</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5169" href="#L5169">5169</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5209,7 +5209,7 @@
 <a class="jxr_linenumber" name="L5201" href="#L5201">5201</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5202" href="#L5202">5202</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5203" href="#L5203">5203</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5204" href="#L5204">5204</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortMaps()}</em>
+<a class="jxr_linenumber" name="L5204" href="#L5204">5204</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortMaps() Serializer.Builder#sortMaps()}</em>
 <a class="jxr_linenumber" name="L5205" href="#L5205">5205</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5206" href="#L5206">5206</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5207" href="#L5207">5207</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5250,7 +5250,7 @@
 <a class="jxr_linenumber" name="L5242" href="#L5242">5242</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5243" href="#L5243">5243</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5244" href="#L5244">5244</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5245" href="#L5245">5245</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char)}</em>
+<a class="jxr_linenumber" name="L5245" href="#L5245">5245</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char) WriterSerializer.Builder#quoteChar(char)}</em>
 <a class="jxr_linenumber" name="L5246" href="#L5246">5246</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5247" href="#L5247">5247</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5248" href="#L5248">5248</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5396,7 +5396,7 @@
 <a class="jxr_linenumber" name="L5388" href="#L5388">5388</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5389" href="#L5389">5389</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5390" href="#L5390">5390</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5391" href="#L5391">5391</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyCollections()}</em>
+<a class="jxr_linenumber" name="L5391" href="#L5391">5391</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyCollections() Serializer.Builder#trimEmptyCollections()}</em>
 <a class="jxr_linenumber" name="L5392" href="#L5392">5392</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5393" href="#L5393">5393</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5394" href="#L5394">5394</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5440,7 +5440,7 @@
 <a class="jxr_linenumber" name="L5432" href="#L5432">5432</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5433" href="#L5433">5433</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5434" href="#L5434">5434</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5435" href="#L5435">5435</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyMaps()}</em>
+<a class="jxr_linenumber" name="L5435" href="#L5435">5435</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyMaps() Serializer.Builder#trimEmptyMaps()}</em>
 <a class="jxr_linenumber" name="L5436" href="#L5436">5436</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5437" href="#L5437">5437</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5438" href="#L5438">5438</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5477,7 +5477,7 @@
 <a class="jxr_linenumber" name="L5469" href="#L5469">5469</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5470" href="#L5470">5470</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5471" href="#L5471">5471</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5472" href="#L5472">5472</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#trimStrings()}</em>
+<a class="jxr_linenumber" name="L5472" href="#L5472">5472</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.parser.Parser.Builder#trimStrings() Parser.Builder#trimStrings()}</em>
 <a class="jxr_linenumber" name="L5473" href="#L5473">5473</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5474" href="#L5474">5474</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5475" href="#L5475">5475</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5512,7 +5512,7 @@
 <a class="jxr_linenumber" name="L5504" href="#L5504">5504</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5505" href="#L5505">5505</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5506" href="#L5506">5506</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5507" href="#L5507">5507</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimStrings()}</em>
+<a class="jxr_linenumber" name="L5507" href="#L5507">5507</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimStrings() Serializer.Builder#trimStrings()}</em>
 <a class="jxr_linenumber" name="L5508" href="#L5508">5508</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5509" href="#L5509">5509</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5510" href="#L5510">5510</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -5687,7 +5687,7 @@
 <a class="jxr_linenumber" name="L5679" href="#L5679">5679</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5680" href="#L5680">5680</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5681" href="#L5681">5681</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5682" href="#L5682">5682</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriContext(UriContext)}</em>
+<a class="jxr_linenumber" name="L5682" href="#L5682">5682</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriContext(UriContext) Serializer.Builder#uriContext(UriContext)}</em>
 <a class="jxr_linenumber" name="L5683" href="#L5683">5683</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/MarshallingUris" target="alexandria_uri">https://juneau.apache.org/docs/topics/MarshallingUris</a>"&gt;URIs&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L5684" href="#L5684">5684</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5685" href="#L5685">5685</a> <em class="jxr_javadoccomment">		 *</em>
@@ -5722,7 +5722,7 @@
 <a class="jxr_linenumber" name="L5714" href="#L5714">5714</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5715" href="#L5715">5715</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5716" href="#L5716">5716</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5717" href="#L5717">5717</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriRelativity(UriRelativity)}</em>
+<a class="jxr_linenumber" name="L5717" href="#L5717">5717</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriRelativity(UriRelativity) Serializer.Builder#uriRelativity(UriRelativity)}</em>
 <a class="jxr_linenumber" name="L5718" href="#L5718">5718</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/MarshallingUris" target="alexandria_uri">https://juneau.apache.org/docs/topics/MarshallingUris</a>"&gt;URIs&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L5719" href="#L5719">5719</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5720" href="#L5720">5720</a> <em class="jxr_javadoccomment">		 *</em>
@@ -5761,7 +5761,7 @@
 <a class="jxr_linenumber" name="L5753" href="#L5753">5753</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5754" href="#L5754">5754</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5755" href="#L5755">5755</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5756" href="#L5756">5756</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriResolution(UriResolution)}</em>
+<a class="jxr_linenumber" name="L5756" href="#L5756">5756</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriResolution(UriResolution) Serializer.Builder#uriResolution(UriResolution)}</em>
 <a class="jxr_linenumber" name="L5757" href="#L5757">5757</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/MarshallingUris" target="alexandria_uri">https://juneau.apache.org/docs/topics/MarshallingUris</a>"&gt;URIs&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L5758" href="#L5758">5758</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5759" href="#L5759">5759</a> <em class="jxr_javadoccomment">		 *</em>
@@ -5901,7 +5901,7 @@
 <a class="jxr_linenumber" name="L5893" href="#L5893">5893</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5894" href="#L5894">5894</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5895" href="#L5895">5895</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5896" href="#L5896">5896</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace()}</em>
+<a class="jxr_linenumber" name="L5896" href="#L5896">5896</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() WriterSerializer.Builder#useWhitespace()}</em>
 <a class="jxr_linenumber" name="L5897" href="#L5897">5897</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5898" href="#L5898">5898</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L5899" href="#L5899">5899</a> <em class="jxr_javadoccomment">		 */</em>
@@ -5937,7 +5937,7 @@
 <a class="jxr_linenumber" name="L5929" href="#L5929">5929</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L5930" href="#L5930">5930</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5931" href="#L5931">5931</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L5932" href="#L5932">5932</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace()}</em>
+<a class="jxr_linenumber" name="L5932" href="#L5932">5932</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() WriterSerializer.Builder#useWhitespace()}</em>
 <a class="jxr_linenumber" name="L5933" href="#L5933">5933</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L5934" href="#L5934">5934</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L5935" href="#L5935">5935</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
@@ -8460,7 +8460,7 @@
 <a class="jxr_linenumber" name="L8452" href="#L8452">8452</a> 		<strong class="jxr_keyword">if</strong> (urlIdx &gt;= 0) {
 <a class="jxr_linenumber" name="L8453" href="#L8453">8453</a> 			<strong class="jxr_keyword">var</strong> arg = (args == <strong class="jxr_keyword">null</strong> || urlIdx &gt;= args.length) ? <strong class="jxr_keyword">null</strong> : args[urlIdx];
 <a class="jxr_linenumber" name="L8454" href="#L8454">8454</a> 			<strong class="jxr_keyword">var</strong> v = arg == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : arg.toString();
-<a class="jxr_linenumber" name="L8455" href="#L8455">8455</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong> || v.trim().isEmpty())
+<a class="jxr_linenumber" name="L8455" href="#L8455">8455</a> 			<strong class="jxr_keyword">if</strong> (ib(v))
 <a class="jxr_linenumber" name="L8456" href="#L8456">8456</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RemoteMetadataException(interfaceClass, <span class="jxr_string">"@Url parameter on "</span> + method.getDeclaringClass().getName() + <span class="jxr_string">"."</span> + method.getName() + <span class="jxr_string">" must not be null or blank."</span>);
 <a class="jxr_linenumber" name="L8457" href="#L8457">8457</a> 			uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivate, allowedAddressRanges);
 <a class="jxr_linenumber" name="L8458" href="#L8458">8458</a> 			<em class="jxr_comment">// A scheme-less @Url value is relative and resolved against the client root URL only.</em>

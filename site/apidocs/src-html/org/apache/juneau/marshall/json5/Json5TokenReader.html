@@ -29,311 +29,313 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.json5;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.marshall.json.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.marshall.parser.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.stream.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Reference implementation of the public {@link TokenReader} surface for the JSON5 format.</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * Subclasses {@link JsonTokenReader} to add the JSON5 dialect's relaxations:</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;ul&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;Strings can be single-quoted, double-quoted, or unquoted bare identifiers.</span>
-<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;Field names can be single-quoted, double-quoted, or unquoted bare identifiers.</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Trailing commas before &lt;c&gt;]&lt;/c&gt; / &lt;c&gt;}&lt;/c&gt; are allowed.</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Missing values in arrays / objects emit {@link TokenType#VALUE_NULL}.</span>
-<span class="source-line-no">035</span><span id="line-35"> *          &lt;li&gt;JavaScript comments (&lt;c&gt;//&lt;/c&gt; line, &lt;c&gt;/* &amp;#42;/&lt;/c&gt; block) are tolerated &amp;mdash; already</span>
-<span class="source-line-no">036</span><span id="line-36"> *       accepted by the parent class.</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;JSON5 numbers: leading &lt;c&gt;+&lt;/c&gt;, leading/trailing decimal points, hexadecimal, {@code Infinity}/{@code NaN}.</span>
-<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;String line-continuation (backslash + line terminator is omitted from the value).</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * The cursor is a true O(1)-memory streaming cursor ({@link #isStreaming()} == &lt;jk&gt;true&lt;/jk&gt;).</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='warn'&gt;This class is not thread safe.</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;The cursor is purely structural; object swaps and {@code @Schema} annotations have no</span>
-<span class="source-line-no">047</span><span id="line-47"> *       effect.  Use the POJO databind path on {@link Json5Parser} for those.</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> */</span>
-<span class="source-line-no">050</span><span id="line-50">@SuppressWarnings({</span>
-<span class="source-line-no">051</span><span id="line-51">   "resource" // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.</span>
-<span class="source-line-no">052</span><span id="line-52">})</span>
-<span class="source-line-no">053</span><span id="line-53">public class Json5TokenReader extends JsonTokenReader {</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   /**</span>
-<span class="source-line-no">056</span><span id="line-56">    * Constructor with default settings.</span>
-<span class="source-line-no">057</span><span id="line-57">    *</span>
-<span class="source-line-no">058</span><span id="line-58">    * @param pipe The parser input pipe to read from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">059</span><span id="line-59">    * @throws IOException If a problem occurred opening the underlying reader.</span>
-<span class="source-line-no">060</span><span id="line-60">    */</span>
-<span class="source-line-no">061</span><span id="line-61">   public Json5TokenReader(ParserPipe pipe) throws IOException {</span>
-<span class="source-line-no">062</span><span id="line-62">      super(pipe);</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Constructor used by {@link Json5ParserSession#readTokens(Object)} to plumb the calling</span>
-<span class="source-line-no">067</span><span id="line-67">    * session through so that {@link #read(Class)} can delegate to the JSON5 databind path.</span>
-<span class="source-line-no">068</span><span id="line-68">    *</span>
-<span class="source-line-no">069</span><span id="line-69">    * @param pipe The parser input pipe to read from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">070</span><span id="line-70">    * @param settings The cursor-level settings.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param session The {@link Json5ParserSession} for {@link #read(Class)} delegation, or</span>
-<span class="source-line-no">072</span><span id="line-72">    *    &lt;jk&gt;null&lt;/jk&gt; to disable {@code read}.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @throws IOException If a problem occurred opening the underlying reader.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   public Json5TokenReader(ParserPipe pipe, Settings settings, Json5ParserSession session) throws IOException {</span>
-<span class="source-line-no">076</span><span id="line-76">      super(pipe, settings, session);</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   // =================================================================================</span>
-<span class="source-line-no">080</span><span id="line-80">   // JSON5 dialect relaxations</span>
+<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.parser.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.marshall.stream.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Reference implementation of the public {@link TokenReader} surface for the JSON5 format.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * Subclasses {@link JsonTokenReader} to add the JSON5 dialect's relaxations:</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;ul&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Strings can be single-quoted, double-quoted, or unquoted bare identifiers.</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Field names can be single-quoted, double-quoted, or unquoted bare identifiers.</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Trailing commas before &lt;c&gt;]&lt;/c&gt; / &lt;c&gt;}&lt;/c&gt; are allowed.</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Missing values in arrays / objects emit {@link TokenType#VALUE_NULL}.</span>
+<span class="source-line-no">037</span><span id="line-37"> *          &lt;li&gt;JavaScript comments (&lt;c&gt;//&lt;/c&gt; line, &lt;c&gt;/* &amp;#42;/&lt;/c&gt; block) are tolerated &amp;mdash; already</span>
+<span class="source-line-no">038</span><span id="line-38"> *       accepted by the parent class.</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;JSON5 numbers: leading &lt;c&gt;+&lt;/c&gt;, leading/trailing decimal points, hexadecimal, {@code Infinity}/{@code NaN}.</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;String line-continuation (backslash + line terminator is omitted from the value).</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * The cursor is a true O(1)-memory streaming cursor ({@link #isStreaming()} == &lt;jk&gt;true&lt;/jk&gt;).</span>
+<span class="source-line-no">045</span><span id="line-45"> *</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li class='warn'&gt;This class is not thread safe.</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;The cursor is purely structural; object swaps and {@code @Schema} annotations have no</span>
+<span class="source-line-no">049</span><span id="line-49"> *       effect.  Use the POJO databind path on {@link Json5Parser} for those.</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> */</span>
+<span class="source-line-no">052</span><span id="line-52">@SuppressWarnings({</span>
+<span class="source-line-no">053</span><span id="line-53">   "resource" // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.</span>
+<span class="source-line-no">054</span><span id="line-54">})</span>
+<span class="source-line-no">055</span><span id="line-55">public class Json5TokenReader extends JsonTokenReader {</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   /**</span>
+<span class="source-line-no">058</span><span id="line-58">    * Constructor with default settings.</span>
+<span class="source-line-no">059</span><span id="line-59">    *</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param pipe The parser input pipe to read from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">061</span><span id="line-61">    * @throws IOException If a problem occurred opening the underlying reader.</span>
+<span class="source-line-no">062</span><span id="line-62">    */</span>
+<span class="source-line-no">063</span><span id="line-63">   public Json5TokenReader(ParserPipe pipe) throws IOException {</span>
+<span class="source-line-no">064</span><span id="line-64">      super(pipe);</span>
+<span class="source-line-no">065</span><span id="line-65">   }</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   /**</span>
+<span class="source-line-no">068</span><span id="line-68">    * Constructor used by {@link Json5ParserSession#readTokens(Object)} to plumb the calling</span>
+<span class="source-line-no">069</span><span id="line-69">    * session through so that {@link #read(Class)} can delegate to the JSON5 databind path.</span>
+<span class="source-line-no">070</span><span id="line-70">    *</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param pipe The parser input pipe to read from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param settings The cursor-level settings.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param session The {@link Json5ParserSession} for {@link #read(Class)} delegation, or</span>
+<span class="source-line-no">074</span><span id="line-74">    *    &lt;jk&gt;null&lt;/jk&gt; to disable {@code read}.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @throws IOException If a problem occurred opening the underlying reader.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public Json5TokenReader(ParserPipe pipe, Settings settings, Json5ParserSession session) throws IOException {</span>
+<span class="source-line-no">078</span><span id="line-78">      super(pipe, settings, session);</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
 <span class="source-line-no">081</span><span id="line-81">   // =================================================================================</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">084</span><span id="line-84">   protected boolean allowsTrailingComma() {</span>
-<span class="source-line-no">085</span><span id="line-85">      return true;</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">089</span><span id="line-89">   protected void readNumberValue() throws IOException, ParseException {</span>
-<span class="source-line-no">090</span><span id="line-90">      var s = Json5ParserSession.readJson5NumberLexeme(r);</span>
-<span class="source-line-no">091</span><span id="line-91">      if (s.isEmpty())</span>
-<span class="source-line-no">092</span><span id="line-92">         throw parseException("Invalid JSON5 number: '%s'", s);</span>
-<span class="source-line-no">093</span><span id="line-93">      currentNumberLexeme = s;</span>
-<span class="source-line-no">094</span><span id="line-94">      currentToken = TokenType.VALUE_NUMBER;</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   @Override /* TokenReader */</span>
-<span class="source-line-no">098</span><span id="line-98">   public Number getNumber() throws ParseException {</span>
-<span class="source-line-no">099</span><span id="line-99">      if (currentToken != TokenType.VALUE_NUMBER)</span>
-<span class="source-line-no">100</span><span id="line-100">         throw new IllegalStateException("Current token is not VALUE_NUMBER (was " + currentToken + ")");</span>
-<span class="source-line-no">101</span><span id="line-101">      return Json5ParserSession.parseJson5Number(currentNumberLexeme, null);</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">105</span><span id="line-105">   protected void readValueStart(int c) throws IOException, ParseException {</span>
-<span class="source-line-no">106</span><span id="line-106">      // Missing-value: a leading comma or container-end at value position emits VALUE_NULL and</span>
-<span class="source-line-no">107</span><span id="line-107">      // re-injects the structural char so the next state transition picks it up.</span>
-<span class="source-line-no">108</span><span id="line-108">      if (c == ',' || c == ']' || c == '}') {</span>
-<span class="source-line-no">109</span><span id="line-109">         r.unread();</span>
-<span class="source-line-no">110</span><span id="line-110">         currentToken = TokenType.VALUE_NULL;</span>
-<span class="source-line-no">111</span><span id="line-111">         afterValue();</span>
-<span class="source-line-no">112</span><span id="line-112">         return;</span>
-<span class="source-line-no">113</span><span id="line-113">      }</span>
-<span class="source-line-no">114</span><span id="line-114">      // Single-quoted strings (JSON5).</span>
-<span class="source-line-no">115</span><span id="line-115">      if (c == '\'') {</span>
-<span class="source-line-no">116</span><span id="line-116">         r.unread();</span>
-<span class="source-line-no">117</span><span id="line-117">         currentString = maybeTrimString(readString());</span>
-<span class="source-line-no">118</span><span id="line-118">         currentToken = TokenType.VALUE_STRING;</span>
-<span class="source-line-no">119</span><span id="line-119">         afterValue();</span>
-<span class="source-line-no">120</span><span id="line-120">         return;</span>
-<span class="source-line-no">121</span><span id="line-121">      }</span>
-<span class="source-line-no">122</span><span id="line-122">      // JSON5 numbers that JSON itself would not start: leading '+', leading '.', Infinity, NaN.</span>
-<span class="source-line-no">123</span><span id="line-123">      if (c == '+' || c == '.') {</span>
-<span class="source-line-no">124</span><span id="line-124">         r.unread();</span>
-<span class="source-line-no">125</span><span id="line-125">         readNumberValue();</span>
-<span class="source-line-no">126</span><span id="line-126">         afterValue();</span>
-<span class="source-line-no">127</span><span id="line-127">         return;</span>
-<span class="source-line-no">128</span><span id="line-128">      }</span>
-<span class="source-line-no">129</span><span id="line-129">      // Bare identifier as a string value (e.g. `[foo, bar]` -&gt; ["foo", "bar"]).</span>
-<span class="source-line-no">130</span><span id="line-130">      if (isBareStart(c)) {</span>
-<span class="source-line-no">131</span><span id="line-131">         r.unread();</span>
-<span class="source-line-no">132</span><span id="line-132">         // Bare identifiers might also be the keyword literals true/false/null — distinguish.</span>
-<span class="source-line-no">133</span><span id="line-133">         var word = readBareWord();</span>
-<span class="source-line-no">134</span><span id="line-134">         switch (word) {</span>
-<span class="source-line-no">135</span><span id="line-135">            case "true":  currentBoolean = true;  currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;</span>
-<span class="source-line-no">136</span><span id="line-136">            case "false": currentBoolean = false; currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;</span>
-<span class="source-line-no">137</span><span id="line-137">            case "null":  currentToken = TokenType.VALUE_NULL; afterValue(); return;</span>
-<span class="source-line-no">138</span><span id="line-138">            case "Infinity", "NaN":</span>
-<span class="source-line-no">139</span><span id="line-139">               currentNumberLexeme = word;</span>
-<span class="source-line-no">140</span><span id="line-140">               currentToken = TokenType.VALUE_NUMBER;</span>
-<span class="source-line-no">141</span><span id="line-141">               afterValue();</span>
-<span class="source-line-no">142</span><span id="line-142">               return;</span>
-<span class="source-line-no">143</span><span id="line-143">            default:</span>
-<span class="source-line-no">144</span><span id="line-144">               currentString = maybeTrimString(word);</span>
-<span class="source-line-no">145</span><span id="line-145">               currentToken = TokenType.VALUE_STRING;</span>
-<span class="source-line-no">146</span><span id="line-146">               afterValue();</span>
-<span class="source-line-no">147</span><span id="line-147">               return;</span>
-<span class="source-line-no">148</span><span id="line-148">         }</span>
-<span class="source-line-no">149</span><span id="line-149">      }</span>
-<span class="source-line-no">150</span><span id="line-150">      super.readValueStart(c);</span>
-<span class="source-line-no">151</span><span id="line-151">   }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">154</span><span id="line-154">   protected void readFieldNameOrEndObject(int c) throws IOException, ParseException {</span>
-<span class="source-line-no">155</span><span id="line-155">      if (c == '}') {</span>
-<span class="source-line-no">156</span><span id="line-156">         popContainer();</span>
-<span class="source-line-no">157</span><span id="line-157">         currentToken = TokenType.END_OBJECT;</span>
-<span class="source-line-no">158</span><span id="line-158">         afterValue();</span>
-<span class="source-line-no">159</span><span id="line-159">         return;</span>
-<span class="source-line-no">160</span><span id="line-160">      }</span>
-<span class="source-line-no">161</span><span id="line-161">      // Single-quoted field name.</span>
-<span class="source-line-no">162</span><span id="line-162">      if (c == '\'') {</span>
-<span class="source-line-no">163</span><span id="line-163">         r.unread();</span>
-<span class="source-line-no">164</span><span id="line-164">         currentFieldName = maybeTrimString(readString());</span>
-<span class="source-line-no">165</span><span id="line-165">         currentToken = TokenType.FIELD_NAME;</span>
-<span class="source-line-no">166</span><span id="line-166">         state = S02_expectColon;</span>
-<span class="source-line-no">167</span><span id="line-167">         return;</span>
-<span class="source-line-no">168</span><span id="line-168">      }</span>
-<span class="source-line-no">169</span><span id="line-169">      // Bare identifier field name.</span>
-<span class="source-line-no">170</span><span id="line-170">      if (isBareStart(c)) {</span>
-<span class="source-line-no">171</span><span id="line-171">         r.unread();</span>
-<span class="source-line-no">172</span><span id="line-172">         currentFieldName = maybeTrimString(readBareWord());</span>
-<span class="source-line-no">173</span><span id="line-173">         currentToken = TokenType.FIELD_NAME;</span>
-<span class="source-line-no">174</span><span id="line-174">         state = S02_expectColon;</span>
-<span class="source-line-no">175</span><span id="line-175">         return;</span>
-<span class="source-line-no">176</span><span id="line-176">      }</span>
-<span class="source-line-no">177</span><span id="line-177">      super.readFieldNameOrEndObject(c);</span>
-<span class="source-line-no">178</span><span id="line-178">   }</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">181</span><span id="line-181">   protected void readCommaOrEndArray(int c) throws IOException, ParseException {</span>
-<span class="source-line-no">182</span><span id="line-182">      if (c == ']') {</span>
-<span class="source-line-no">183</span><span id="line-183">         popContainer();</span>
-<span class="source-line-no">184</span><span id="line-184">         currentToken = TokenType.END_ARRAY;</span>
-<span class="source-line-no">185</span><span id="line-185">         afterValue();</span>
-<span class="source-line-no">186</span><span id="line-186">         return;</span>
-<span class="source-line-no">187</span><span id="line-187">      }</span>
-<span class="source-line-no">188</span><span id="line-188">      if (c != ',')</span>
-<span class="source-line-no">189</span><span id="line-189">         throw parseException("Expected , or ] but got '%s'", (char) c);</span>
-<span class="source-line-no">190</span><span id="line-190">      var c2 = readSkipWsAndComments();</span>
-<span class="source-line-no">191</span><span id="line-191">      if (c2 == -1)</span>
-<span class="source-line-no">192</span><span id="line-192">         throw parseException("Unexpected end of input after ','");</span>
-<span class="source-line-no">193</span><span id="line-193">      // JSON5 trailing comma: `[1,]` is legal — `]` here closes the array.</span>
-<span class="source-line-no">194</span><span id="line-194">      if (c2 == ']') {</span>
-<span class="source-line-no">195</span><span id="line-195">         popContainer();</span>
-<span class="source-line-no">196</span><span id="line-196">         currentToken = TokenType.END_ARRAY;</span>
-<span class="source-line-no">197</span><span id="line-197">         afterValue();</span>
-<span class="source-line-no">198</span><span id="line-198">         return;</span>
-<span class="source-line-no">199</span><span id="line-199">      }</span>
-<span class="source-line-no">200</span><span id="line-200">      state = S00_expectValue;</span>
-<span class="source-line-no">201</span><span id="line-201">      readValueStart(c2);</span>
-<span class="source-line-no">202</span><span id="line-202">   }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">205</span><span id="line-205">   protected void readCommaOrEndObject(int c) throws IOException, ParseException {</span>
-<span class="source-line-no">206</span><span id="line-206">      if (c == '}') {</span>
-<span class="source-line-no">207</span><span id="line-207">         popContainer();</span>
-<span class="source-line-no">208</span><span id="line-208">         currentToken = TokenType.END_OBJECT;</span>
-<span class="source-line-no">209</span><span id="line-209">         afterValue();</span>
-<span class="source-line-no">210</span><span id="line-210">         return;</span>
-<span class="source-line-no">211</span><span id="line-211">      }</span>
-<span class="source-line-no">212</span><span id="line-212">      if (c != ',')</span>
-<span class="source-line-no">213</span><span id="line-213">         throw parseException("Expected , or } but got '%s'", (char) c);</span>
-<span class="source-line-no">214</span><span id="line-214">      var c2 = readSkipWsAndComments();</span>
-<span class="source-line-no">215</span><span id="line-215">      if (c2 == -1)</span>
-<span class="source-line-no">216</span><span id="line-216">         throw parseException("Unexpected end of input after ','");</span>
-<span class="source-line-no">217</span><span id="line-217">      // JSON5 trailing comma: `{a:1,}` is legal — `}` here closes the object.</span>
-<span class="source-line-no">218</span><span id="line-218">      if (c2 == '}') {</span>
-<span class="source-line-no">219</span><span id="line-219">         popContainer();</span>
-<span class="source-line-no">220</span><span id="line-220">         currentToken = TokenType.END_OBJECT;</span>
-<span class="source-line-no">221</span><span id="line-221">         afterValue();</span>
-<span class="source-line-no">222</span><span id="line-222">         return;</span>
-<span class="source-line-no">223</span><span id="line-223">      }</span>
-<span class="source-line-no">224</span><span id="line-224">      state = S01_expectFieldName;</span>
-<span class="source-line-no">225</span><span id="line-225">      readFieldNameOrEndObject(c2);</span>
-<span class="source-line-no">226</span><span id="line-226">   }</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">229</span><span id="line-229">   @SuppressWarnings({</span>
-<span class="source-line-no">230</span><span id="line-230">      "java:S2677", // r.read() consumes the already-peeked '\n' of a CRLF line continuation; cannot hit EOF.</span>
-<span class="source-line-no">231</span><span id="line-231">      "java:S3776" // Cognitive complexity acceptable for JSON5 quoted-string escape-handling state machine.</span>
-<span class="source-line-no">232</span><span id="line-232">   })</span>
-<span class="source-line-no">233</span><span id="line-233">   protected String readString() throws IOException, ParseException {</span>
-<span class="source-line-no">234</span><span id="line-234">      // JSON5 strings may be single- or double-quoted, and a backslash before a line</span>
-<span class="source-line-no">235</span><span id="line-235">      // terminator is a line-continuation (the terminator is omitted from the value).</span>
-<span class="source-line-no">236</span><span id="line-236">      r.mark();</span>
-<span class="source-line-no">237</span><span id="line-237">      var qc = r.read();</span>
-<span class="source-line-no">238</span><span id="line-238">      if (qc != '"' &amp;&amp; qc != '\'')</span>
-<span class="source-line-no">239</span><span id="line-239">         throw parseException("Did not find quote character marking beginning of string");</span>
-<span class="source-line-no">240</span><span id="line-240">      String s = null;</span>
-<span class="source-line-no">241</span><span id="line-241">      var inEscape = false;</span>
-<span class="source-line-no">242</span><span id="line-242">      var c = 0;</span>
-<span class="source-line-no">243</span><span id="line-243">      while (c != -1) {</span>
-<span class="source-line-no">244</span><span id="line-244">         c = r.read();</span>
-<span class="source-line-no">245</span><span id="line-245">         if (inEscape) {</span>
-<span class="source-line-no">246</span><span id="line-246">            switch (c) {</span>
-<span class="source-line-no">247</span><span id="line-247">               case 'n': r.replace('\n'); break;</span>
-<span class="source-line-no">248</span><span id="line-248">               case 'r': r.replace('\r'); break;</span>
-<span class="source-line-no">249</span><span id="line-249">               case 't': r.replace('\t'); break;</span>
-<span class="source-line-no">250</span><span id="line-250">               case 'f': r.replace('\f'); break;</span>
-<span class="source-line-no">251</span><span id="line-251">               case 'b': r.replace('\b'); break;</span>
-<span class="source-line-no">252</span><span id="line-252">               case '\\': r.replace('\\'); break;</span>
-<span class="source-line-no">253</span><span id="line-253">               case '/': r.replace('/'); break;</span>
-<span class="source-line-no">254</span><span id="line-254">               case '\'': r.replace('\''); break;</span>
-<span class="source-line-no">255</span><span id="line-255">               case '"': r.replace('"'); break;</span>
-<span class="source-line-no">256</span><span id="line-256">               case '\n':</span>
-<span class="source-line-no">257</span><span id="line-257">                  r.delete();</span>
-<span class="source-line-no">258</span><span id="line-258">                  break;</span>
-<span class="source-line-no">259</span><span id="line-259">               case '\r':</span>
-<span class="source-line-no">260</span><span id="line-260">                  r.delete();</span>
-<span class="source-line-no">261</span><span id="line-261">                  if (r.peek() == '\n') {</span>
-<span class="source-line-no">262</span><span id="line-262">                     r.read();</span>
-<span class="source-line-no">263</span><span id="line-263">                     r.delete();</span>
-<span class="source-line-no">264</span><span id="line-264">                  }</span>
-<span class="source-line-no">265</span><span id="line-265">                  break;</span>
-<span class="source-line-no">266</span><span id="line-266">               case 'u': {</span>
-<span class="source-line-no">267</span><span id="line-267">                  var hex = r.read(4);</span>
-<span class="source-line-no">268</span><span id="line-268">                  try {</span>
-<span class="source-line-no">269</span><span id="line-269">                     r.replace(Integer.parseInt(hex, 16), 6);</span>
-<span class="source-line-no">270</span><span id="line-270">                  } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
-<span class="source-line-no">271</span><span id="line-271">                     throw parseException("Invalid Unicode escape sequence in string");</span>
-<span class="source-line-no">272</span><span id="line-272">                  }</span>
-<span class="source-line-no">273</span><span id="line-273">                  break;</span>
-<span class="source-line-no">274</span><span id="line-274">               }</span>
-<span class="source-line-no">275</span><span id="line-275">               default:</span>
-<span class="source-line-no">276</span><span id="line-276">                  throw parseException("Invalid escape sequence in string");</span>
-<span class="source-line-no">277</span><span id="line-277">            }</span>
-<span class="source-line-no">278</span><span id="line-278">            inEscape = false;</span>
-<span class="source-line-no">279</span><span id="line-279">         } else {</span>
-<span class="source-line-no">280</span><span id="line-280">            if (c &lt;= 0x1F &amp;&amp; c != -1)</span>
-<span class="source-line-no">281</span><span id="line-281">               throw parseException("Unescaped control character encountered: '0x%s'", String.format("%04X", c));</span>
-<span class="source-line-no">282</span><span id="line-282">            if (c == '\\') {</span>
-<span class="source-line-no">283</span><span id="line-283">               inEscape = true;</span>
-<span class="source-line-no">284</span><span id="line-284">               r.delete();</span>
-<span class="source-line-no">285</span><span id="line-285">            } else if (c == qc) {</span>
-<span class="source-line-no">286</span><span id="line-286">               s = r.getMarked(1, -1);</span>
-<span class="source-line-no">287</span><span id="line-287">               break;</span>
-<span class="source-line-no">288</span><span id="line-288">            }</span>
-<span class="source-line-no">289</span><span id="line-289">         }</span>
-<span class="source-line-no">290</span><span id="line-290">      }</span>
-<span class="source-line-no">291</span><span id="line-291">      if (s == null)</span>
-<span class="source-line-no">292</span><span id="line-292">         throw parseException("Unterminated string");</span>
-<span class="source-line-no">293</span><span id="line-293">      return s;</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   private String readBareWord() throws IOException, ParseException {</span>
-<span class="source-line-no">297</span><span id="line-297">      // The leading char was already validated via isBareStart(); since every bare-start char is</span>
-<span class="source-line-no">298</span><span id="line-298">      // also a valid bare-continuation char, the loop consumes it on the first iteration.</span>
-<span class="source-line-no">299</span><span id="line-299">      r.mark();</span>
-<span class="source-line-no">300</span><span id="line-300">      while (true) {</span>
-<span class="source-line-no">301</span><span id="line-301">         var c = r.read();</span>
-<span class="source-line-no">302</span><span id="line-302">         if (c == -1 || !isBareCont(c)) {</span>
-<span class="source-line-no">303</span><span id="line-303">            if (c != -1) r.unread();</span>
-<span class="source-line-no">304</span><span id="line-304">            return r.getMarked();</span>
-<span class="source-line-no">305</span><span id="line-305">         }</span>
-<span class="source-line-no">306</span><span id="line-306">      }</span>
-<span class="source-line-no">307</span><span id="line-307">   }</span>
-<span class="source-line-no">308</span><span id="line-308"></span>
-<span class="source-line-no">309</span><span id="line-309">   private static boolean isBareStart(int c) {</span>
-<span class="source-line-no">310</span><span id="line-310">      return Character.isLetter(c) || c == '_' || c == '$';</span>
-<span class="source-line-no">311</span><span id="line-311">   }</span>
-<span class="source-line-no">312</span><span id="line-312"></span>
-<span class="source-line-no">313</span><span id="line-313">   private static boolean isBareCont(int c) {</span>
-<span class="source-line-no">314</span><span id="line-314">      return Character.isLetterOrDigit(c) || c == '_' || c == '$';</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   // Local trim helper — the parent's maybeTrim is private and not visible to this subclass.</span>
-<span class="source-line-no">318</span><span id="line-318">   private String maybeTrimString(String s) {</span>
-<span class="source-line-no">319</span><span id="line-319">      if (s == null || !settings.trimStrings())</span>
-<span class="source-line-no">320</span><span id="line-320">         return s;</span>
-<span class="source-line-no">321</span><span id="line-321">      return s.trim();</span>
-<span class="source-line-no">322</span><span id="line-322">   }</span>
-<span class="source-line-no">323</span><span id="line-323">}</span>
+<span class="source-line-no">082</span><span id="line-82">   // JSON5 dialect relaxations</span>
+<span class="source-line-no">083</span><span id="line-83">   // =================================================================================</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">086</span><span id="line-86">   protected boolean allowsTrailingComma() {</span>
+<span class="source-line-no">087</span><span id="line-87">      return true;</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">091</span><span id="line-91">   protected void readNumberValue() throws IOException, ParseException {</span>
+<span class="source-line-no">092</span><span id="line-92">      var s = Json5ParserSession.readJson5NumberLexeme(r);</span>
+<span class="source-line-no">093</span><span id="line-93">      if (s.isEmpty())</span>
+<span class="source-line-no">094</span><span id="line-94">         throw parseException("Invalid JSON5 number: '%s'", s);</span>
+<span class="source-line-no">095</span><span id="line-95">      currentNumberLexeme = s;</span>
+<span class="source-line-no">096</span><span id="line-96">      currentToken = TokenType.VALUE_NUMBER;</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   @Override /* TokenReader */</span>
+<span class="source-line-no">100</span><span id="line-100">   public Number getNumber() throws ParseException {</span>
+<span class="source-line-no">101</span><span id="line-101">      if (currentToken != TokenType.VALUE_NUMBER)</span>
+<span class="source-line-no">102</span><span id="line-102">         throw new IllegalStateException("Current token is not VALUE_NUMBER (was " + currentToken + ")");</span>
+<span class="source-line-no">103</span><span id="line-103">      return Json5ParserSession.parseJson5Number(currentNumberLexeme, null);</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">107</span><span id="line-107">   protected void readValueStart(int c) throws IOException, ParseException {</span>
+<span class="source-line-no">108</span><span id="line-108">      // Missing-value: a leading comma or container-end at value position emits VALUE_NULL and</span>
+<span class="source-line-no">109</span><span id="line-109">      // re-injects the structural char so the next state transition picks it up.</span>
+<span class="source-line-no">110</span><span id="line-110">      if (c == ',' || c == ']' || c == '}') {</span>
+<span class="source-line-no">111</span><span id="line-111">         r.unread();</span>
+<span class="source-line-no">112</span><span id="line-112">         currentToken = TokenType.VALUE_NULL;</span>
+<span class="source-line-no">113</span><span id="line-113">         afterValue();</span>
+<span class="source-line-no">114</span><span id="line-114">         return;</span>
+<span class="source-line-no">115</span><span id="line-115">      }</span>
+<span class="source-line-no">116</span><span id="line-116">      // Single-quoted strings (JSON5).</span>
+<span class="source-line-no">117</span><span id="line-117">      if (c == '\'') {</span>
+<span class="source-line-no">118</span><span id="line-118">         r.unread();</span>
+<span class="source-line-no">119</span><span id="line-119">         currentString = maybeTrimString(readString());</span>
+<span class="source-line-no">120</span><span id="line-120">         currentToken = TokenType.VALUE_STRING;</span>
+<span class="source-line-no">121</span><span id="line-121">         afterValue();</span>
+<span class="source-line-no">122</span><span id="line-122">         return;</span>
+<span class="source-line-no">123</span><span id="line-123">      }</span>
+<span class="source-line-no">124</span><span id="line-124">      // JSON5 numbers that JSON itself would not start: leading '+', leading '.', Infinity, NaN.</span>
+<span class="source-line-no">125</span><span id="line-125">      if (c == '+' || c == '.') {</span>
+<span class="source-line-no">126</span><span id="line-126">         r.unread();</span>
+<span class="source-line-no">127</span><span id="line-127">         readNumberValue();</span>
+<span class="source-line-no">128</span><span id="line-128">         afterValue();</span>
+<span class="source-line-no">129</span><span id="line-129">         return;</span>
+<span class="source-line-no">130</span><span id="line-130">      }</span>
+<span class="source-line-no">131</span><span id="line-131">      // Bare identifier as a string value (e.g. `[foo, bar]` -&gt; ["foo", "bar"]).</span>
+<span class="source-line-no">132</span><span id="line-132">      if (isBareStart(c)) {</span>
+<span class="source-line-no">133</span><span id="line-133">         r.unread();</span>
+<span class="source-line-no">134</span><span id="line-134">         // Bare identifiers might also be the keyword literals true/false/null — distinguish.</span>
+<span class="source-line-no">135</span><span id="line-135">         var word = readBareWord();</span>
+<span class="source-line-no">136</span><span id="line-136">         switch (word) {</span>
+<span class="source-line-no">137</span><span id="line-137">            case "true":  currentBoolean = true;  currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;</span>
+<span class="source-line-no">138</span><span id="line-138">            case "false": currentBoolean = false; currentToken = TokenType.VALUE_BOOLEAN; afterValue(); return;</span>
+<span class="source-line-no">139</span><span id="line-139">            case "null":  currentToken = TokenType.VALUE_NULL; afterValue(); return;</span>
+<span class="source-line-no">140</span><span id="line-140">            case "Infinity", "NaN":</span>
+<span class="source-line-no">141</span><span id="line-141">               currentNumberLexeme = word;</span>
+<span class="source-line-no">142</span><span id="line-142">               currentToken = TokenType.VALUE_NUMBER;</span>
+<span class="source-line-no">143</span><span id="line-143">               afterValue();</span>
+<span class="source-line-no">144</span><span id="line-144">               return;</span>
+<span class="source-line-no">145</span><span id="line-145">            default:</span>
+<span class="source-line-no">146</span><span id="line-146">               currentString = maybeTrimString(word);</span>
+<span class="source-line-no">147</span><span id="line-147">               currentToken = TokenType.VALUE_STRING;</span>
+<span class="source-line-no">148</span><span id="line-148">               afterValue();</span>
+<span class="source-line-no">149</span><span id="line-149">               return;</span>
+<span class="source-line-no">150</span><span id="line-150">         }</span>
+<span class="source-line-no">151</span><span id="line-151">      }</span>
+<span class="source-line-no">152</span><span id="line-152">      super.readValueStart(c);</span>
+<span class="source-line-no">153</span><span id="line-153">   }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">156</span><span id="line-156">   protected void readFieldNameOrEndObject(int c) throws IOException, ParseException {</span>
+<span class="source-line-no">157</span><span id="line-157">      if (c == '}') {</span>
+<span class="source-line-no">158</span><span id="line-158">         popContainer();</span>
+<span class="source-line-no">159</span><span id="line-159">         currentToken = TokenType.END_OBJECT;</span>
+<span class="source-line-no">160</span><span id="line-160">         afterValue();</span>
+<span class="source-line-no">161</span><span id="line-161">         return;</span>
+<span class="source-line-no">162</span><span id="line-162">      }</span>
+<span class="source-line-no">163</span><span id="line-163">      // Single-quoted field name.</span>
+<span class="source-line-no">164</span><span id="line-164">      if (c == '\'') {</span>
+<span class="source-line-no">165</span><span id="line-165">         r.unread();</span>
+<span class="source-line-no">166</span><span id="line-166">         currentFieldName = maybeTrimString(readString());</span>
+<span class="source-line-no">167</span><span id="line-167">         currentToken = TokenType.FIELD_NAME;</span>
+<span class="source-line-no">168</span><span id="line-168">         state = S02_expectColon;</span>
+<span class="source-line-no">169</span><span id="line-169">         return;</span>
+<span class="source-line-no">170</span><span id="line-170">      }</span>
+<span class="source-line-no">171</span><span id="line-171">      // Bare identifier field name.</span>
+<span class="source-line-no">172</span><span id="line-172">      if (isBareStart(c)) {</span>
+<span class="source-line-no">173</span><span id="line-173">         r.unread();</span>
+<span class="source-line-no">174</span><span id="line-174">         currentFieldName = maybeTrimString(readBareWord());</span>
+<span class="source-line-no">175</span><span id="line-175">         currentToken = TokenType.FIELD_NAME;</span>
+<span class="source-line-no">176</span><span id="line-176">         state = S02_expectColon;</span>
+<span class="source-line-no">177</span><span id="line-177">         return;</span>
+<span class="source-line-no">178</span><span id="line-178">      }</span>
+<span class="source-line-no">179</span><span id="line-179">      super.readFieldNameOrEndObject(c);</span>
+<span class="source-line-no">180</span><span id="line-180">   }</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">183</span><span id="line-183">   protected void readCommaOrEndArray(int c) throws IOException, ParseException {</span>
+<span class="source-line-no">184</span><span id="line-184">      if (c == ']') {</span>
+<span class="source-line-no">185</span><span id="line-185">         popContainer();</span>
+<span class="source-line-no">186</span><span id="line-186">         currentToken = TokenType.END_ARRAY;</span>
+<span class="source-line-no">187</span><span id="line-187">         afterValue();</span>
+<span class="source-line-no">188</span><span id="line-188">         return;</span>
+<span class="source-line-no">189</span><span id="line-189">      }</span>
+<span class="source-line-no">190</span><span id="line-190">      if (c != ',')</span>
+<span class="source-line-no">191</span><span id="line-191">         throw parseException("Expected , or ] but got '%s'", (char) c);</span>
+<span class="source-line-no">192</span><span id="line-192">      var c2 = readSkipWsAndComments();</span>
+<span class="source-line-no">193</span><span id="line-193">      if (c2 == -1)</span>
+<span class="source-line-no">194</span><span id="line-194">         throw parseException("Unexpected end of input after ','");</span>
+<span class="source-line-no">195</span><span id="line-195">      // JSON5 trailing comma: `[1,]` is legal — `]` here closes the array.</span>
+<span class="source-line-no">196</span><span id="line-196">      if (c2 == ']') {</span>
+<span class="source-line-no">197</span><span id="line-197">         popContainer();</span>
+<span class="source-line-no">198</span><span id="line-198">         currentToken = TokenType.END_ARRAY;</span>
+<span class="source-line-no">199</span><span id="line-199">         afterValue();</span>
+<span class="source-line-no">200</span><span id="line-200">         return;</span>
+<span class="source-line-no">201</span><span id="line-201">      }</span>
+<span class="source-line-no">202</span><span id="line-202">      state = S00_expectValue;</span>
+<span class="source-line-no">203</span><span id="line-203">      readValueStart(c2);</span>
+<span class="source-line-no">204</span><span id="line-204">   }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">207</span><span id="line-207">   protected void readCommaOrEndObject(int c) throws IOException, ParseException {</span>
+<span class="source-line-no">208</span><span id="line-208">      if (c == '}') {</span>
+<span class="source-line-no">209</span><span id="line-209">         popContainer();</span>
+<span class="source-line-no">210</span><span id="line-210">         currentToken = TokenType.END_OBJECT;</span>
+<span class="source-line-no">211</span><span id="line-211">         afterValue();</span>
+<span class="source-line-no">212</span><span id="line-212">         return;</span>
+<span class="source-line-no">213</span><span id="line-213">      }</span>
+<span class="source-line-no">214</span><span id="line-214">      if (c != ',')</span>
+<span class="source-line-no">215</span><span id="line-215">         throw parseException("Expected , or } but got '%s'", (char) c);</span>
+<span class="source-line-no">216</span><span id="line-216">      var c2 = readSkipWsAndComments();</span>
+<span class="source-line-no">217</span><span id="line-217">      if (c2 == -1)</span>
+<span class="source-line-no">218</span><span id="line-218">         throw parseException("Unexpected end of input after ','");</span>
+<span class="source-line-no">219</span><span id="line-219">      // JSON5 trailing comma: `{a:1,}` is legal — `}` here closes the object.</span>
+<span class="source-line-no">220</span><span id="line-220">      if (c2 == '}') {</span>
+<span class="source-line-no">221</span><span id="line-221">         popContainer();</span>
+<span class="source-line-no">222</span><span id="line-222">         currentToken = TokenType.END_OBJECT;</span>
+<span class="source-line-no">223</span><span id="line-223">         afterValue();</span>
+<span class="source-line-no">224</span><span id="line-224">         return;</span>
+<span class="source-line-no">225</span><span id="line-225">      }</span>
+<span class="source-line-no">226</span><span id="line-226">      state = S01_expectFieldName;</span>
+<span class="source-line-no">227</span><span id="line-227">      readFieldNameOrEndObject(c2);</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">231</span><span id="line-231">   @SuppressWarnings({</span>
+<span class="source-line-no">232</span><span id="line-232">      "java:S2677", // r.read() consumes the already-peeked '\n' of a CRLF line continuation; cannot hit EOF.</span>
+<span class="source-line-no">233</span><span id="line-233">      "java:S3776" // Cognitive complexity acceptable for JSON5 quoted-string escape-handling state machine.</span>
+<span class="source-line-no">234</span><span id="line-234">   })</span>
+<span class="source-line-no">235</span><span id="line-235">   protected String readString() throws IOException, ParseException {</span>
+<span class="source-line-no">236</span><span id="line-236">      // JSON5 strings may be single- or double-quoted, and a backslash before a line</span>
+<span class="source-line-no">237</span><span id="line-237">      // terminator is a line-continuation (the terminator is omitted from the value).</span>
+<span class="source-line-no">238</span><span id="line-238">      r.mark();</span>
+<span class="source-line-no">239</span><span id="line-239">      var qc = r.read();</span>
+<span class="source-line-no">240</span><span id="line-240">      if (qc != '"' &amp;&amp; qc != '\'')</span>
+<span class="source-line-no">241</span><span id="line-241">         throw parseException("Did not find quote character marking beginning of string");</span>
+<span class="source-line-no">242</span><span id="line-242">      String s = null;</span>
+<span class="source-line-no">243</span><span id="line-243">      var inEscape = false;</span>
+<span class="source-line-no">244</span><span id="line-244">      var c = 0;</span>
+<span class="source-line-no">245</span><span id="line-245">      while (c != -1) {</span>
+<span class="source-line-no">246</span><span id="line-246">         c = r.read();</span>
+<span class="source-line-no">247</span><span id="line-247">         if (inEscape) {</span>
+<span class="source-line-no">248</span><span id="line-248">            switch (c) {</span>
+<span class="source-line-no">249</span><span id="line-249">               case 'n': r.replace('\n'); break;</span>
+<span class="source-line-no">250</span><span id="line-250">               case 'r': r.replace('\r'); break;</span>
+<span class="source-line-no">251</span><span id="line-251">               case 't': r.replace('\t'); break;</span>
+<span class="source-line-no">252</span><span id="line-252">               case 'f': r.replace('\f'); break;</span>
+<span class="source-line-no">253</span><span id="line-253">               case 'b': r.replace('\b'); break;</span>
+<span class="source-line-no">254</span><span id="line-254">               case '\\': r.replace('\\'); break;</span>
+<span class="source-line-no">255</span><span id="line-255">               case '/': r.replace('/'); break;</span>
+<span class="source-line-no">256</span><span id="line-256">               case '\'': r.replace('\''); break;</span>
+<span class="source-line-no">257</span><span id="line-257">               case '"': r.replace('"'); break;</span>
+<span class="source-line-no">258</span><span id="line-258">               case '\n':</span>
+<span class="source-line-no">259</span><span id="line-259">                  r.delete();</span>
+<span class="source-line-no">260</span><span id="line-260">                  break;</span>
+<span class="source-line-no">261</span><span id="line-261">               case '\r':</span>
+<span class="source-line-no">262</span><span id="line-262">                  r.delete();</span>
+<span class="source-line-no">263</span><span id="line-263">                  if (r.peek() == '\n') {</span>
+<span class="source-line-no">264</span><span id="line-264">                     r.read();</span>
+<span class="source-line-no">265</span><span id="line-265">                     r.delete();</span>
+<span class="source-line-no">266</span><span id="line-266">                  }</span>
+<span class="source-line-no">267</span><span id="line-267">                  break;</span>
+<span class="source-line-no">268</span><span id="line-268">               case 'u': {</span>
+<span class="source-line-no">269</span><span id="line-269">                  var hex = r.read(4);</span>
+<span class="source-line-no">270</span><span id="line-270">                  try {</span>
+<span class="source-line-no">271</span><span id="line-271">                     r.replace(Integer.parseInt(hex, 16), 6);</span>
+<span class="source-line-no">272</span><span id="line-272">                  } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
+<span class="source-line-no">273</span><span id="line-273">                     throw parseException("Invalid Unicode escape sequence in string");</span>
+<span class="source-line-no">274</span><span id="line-274">                  }</span>
+<span class="source-line-no">275</span><span id="line-275">                  break;</span>
+<span class="source-line-no">276</span><span id="line-276">               }</span>
+<span class="source-line-no">277</span><span id="line-277">               default:</span>
+<span class="source-line-no">278</span><span id="line-278">                  throw parseException("Invalid escape sequence in string");</span>
+<span class="source-line-no">279</span><span id="line-279">            }</span>
+<span class="source-line-no">280</span><span id="line-280">            inEscape = false;</span>
+<span class="source-line-no">281</span><span id="line-281">         } else {</span>
+<span class="source-line-no">282</span><span id="line-282">            if (c &lt;= 0x1F &amp;&amp; c != -1)</span>
+<span class="source-line-no">283</span><span id="line-283">               throw parseException("Unescaped control character encountered: '0x%s'", f("%04X", c));</span>
+<span class="source-line-no">284</span><span id="line-284">            if (c == '\\') {</span>
+<span class="source-line-no">285</span><span id="line-285">               inEscape = true;</span>
+<span class="source-line-no">286</span><span id="line-286">               r.delete();</span>
+<span class="source-line-no">287</span><span id="line-287">            } else if (c == qc) {</span>
+<span class="source-line-no">288</span><span id="line-288">               s = r.getMarked(1, -1);</span>
+<span class="source-line-no">289</span><span id="line-289">               break;</span>
+<span class="source-line-no">290</span><span id="line-290">            }</span>
+<span class="source-line-no">291</span><span id="line-291">         }</span>
+<span class="source-line-no">292</span><span id="line-292">      }</span>
+<span class="source-line-no">293</span><span id="line-293">      if (s == null)</span>
+<span class="source-line-no">294</span><span id="line-294">         throw parseException("Unterminated string");</span>
+<span class="source-line-no">295</span><span id="line-295">      return s;</span>
+<span class="source-line-no">296</span><span id="line-296">   }</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   private String readBareWord() throws IOException, ParseException {</span>
+<span class="source-line-no">299</span><span id="line-299">      // The leading char was already validated via isBareStart(); since every bare-start char is</span>
+<span class="source-line-no">300</span><span id="line-300">      // also a valid bare-continuation char, the loop consumes it on the first iteration.</span>
+<span class="source-line-no">301</span><span id="line-301">      r.mark();</span>
+<span class="source-line-no">302</span><span id="line-302">      while (true) {</span>
+<span class="source-line-no">303</span><span id="line-303">         var c = r.read();</span>
+<span class="source-line-no">304</span><span id="line-304">         if (c == -1 || !isBareCont(c)) {</span>
+<span class="source-line-no">305</span><span id="line-305">            if (c != -1) r.unread();</span>
+<span class="source-line-no">306</span><span id="line-306">            return r.getMarked();</span>
+<span class="source-line-no">307</span><span id="line-307">         }</span>
+<span class="source-line-no">308</span><span id="line-308">      }</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   private static boolean isBareStart(int c) {</span>
+<span class="source-line-no">312</span><span id="line-312">      return Character.isLetter(c) || c == '_' || c == '$';</span>
+<span class="source-line-no">313</span><span id="line-313">   }</span>
+<span class="source-line-no">314</span><span id="line-314"></span>
+<span class="source-line-no">315</span><span id="line-315">   private static boolean isBareCont(int c) {</span>
+<span class="source-line-no">316</span><span id="line-316">      return Character.isLetterOrDigit(c) || c == '_' || c == '$';</span>
+<span class="source-line-no">317</span><span id="line-317">   }</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">   // Local trim helper — the parent's maybeTrim is private and not visible to this subclass.</span>
+<span class="source-line-no">320</span><span id="line-320">   private String maybeTrimString(String s) {</span>
+<span class="source-line-no">321</span><span id="line-321">      if (s == null || !settings.trimStrings())</span>
+<span class="source-line-no">322</span><span id="line-322">         return s;</span>
+<span class="source-line-no">323</span><span id="line-323">      return s.trim();</span>
+<span class="source-line-no">324</span><span id="line-324">   }</span>
+<span class="source-line-no">325</span><span id="line-325">}</span>
 
 
 

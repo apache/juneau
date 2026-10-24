@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * 	value.</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> <a name="ThymeleafView" href="../../../../../../../org/apache/juneau/rest/server/view/thymeleaf/ThymeleafView.html#ThymeleafView">ThymeleafView</a> attrs(Map&lt;String,?&gt; values) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong> || values.isEmpty())
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (ie(values))
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> copy = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(attributes);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		values.forEach((k, v) -&gt; {

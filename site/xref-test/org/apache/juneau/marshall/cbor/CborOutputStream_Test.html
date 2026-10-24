@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Test
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">void</strong> a01_positiveFixint() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt;= 23; i++)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			enc(i, String.format(<span class="jxr_string">"%02X"</span>, i));
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			enc(i, f(<span class="jxr_string">"%02X"</span>, i));
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> s = <span class="jxr_string">"a"</span>.repeat(24);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> b = CborSerializer.DEFAULT.write(s);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(26, b.length);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(<span class="jxr_string">"78"</span>, String.format(<span class="jxr_string">"%02X"</span>, b[0] &amp; 0xFF));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(<span class="jxr_string">"78"</span>, f(<span class="jxr_string">"%02X"</span>, b[0] &amp; 0xFF));
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(24, b[1] &amp; 0xFF);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 

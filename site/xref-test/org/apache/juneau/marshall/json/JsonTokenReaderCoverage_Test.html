@@ -670,7 +670,7 @@
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 					seen.add(r.read(Bean.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 				assertEquals(TokenType.END_ARRAY, r.next());
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 			}
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			assertEquals(2, seen.size());
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			assertSize(2, seen);
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 			assertBean(seen.get(0), <span class="jxr_string">"name,age"</span>, <span class="jxr_string">"a,1"</span>);
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 			assertBean(seen.get(1), <span class="jxr_string">"name,age"</span>, <span class="jxr_string">"b,2"</span>);
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 		}

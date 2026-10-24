@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<em class="jxr_comment">// Holds the stream's two subscriber slots open on a slow job, then asks for a third.</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OVER_THE_CAP = <span class="jxr_string">"(async () =&gt; {"</span>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		+ <span class="jxr_string">" const ref = await "</span> + start(4000) + <span class="jxr_string">";"</span>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		+ <span class="jxr_string">" const ref = await "</span> + start(2500) + <span class="jxr_string">";"</span>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		+ <span class="jxr_string">" window.__refs = [ref];"</span>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		+ <span class="jxr_string">" const open = () =&gt; new Promise((res, rej) =&gt; { const es = new EventSource(ref.streamUrl);"</span>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		+ <span class="jxr_string">"   es.onopen = () =&gt; res(es); setTimeout(() =&gt; { es.close(); rej(new Error('stream did not open')); }, 8000); });"</span>
@@ -151,33 +151,33 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"cancel-early"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/ops/jobs"</span>,
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000),
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, PET_COUNT + <span class="jxr_string">".then(n =&gt; { window.__before = n; })"</span>), wait(<span class="jxr_string">"window.__before != null"</span>, 8000),
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 					slowMs(3000), Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__posted = Date.now()"</span>), SUBMIT, line(<span class="jxr_string">"Waiting"</span>, 8000),
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 					slowMs(2000), Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__posted = Date.now()"</span>), SUBMIT, line(<span class="jxr_string">"Waiting"</span>, 8000),
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 					wait(<span class="jxr_string">"!document.querySelector('"</span> + J + <span class="jxr_string">" .jc-joblog-submit').disabled"</span>, 8000), SUBMIT,
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 					phase(<span class="jxr_string">"done"</span>, 10000),
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 					<em class="jxr_comment">// A worker that ignored the cancel would restock once its wait ran out, so count only after that.</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 					wait(<span class="jxr_string">"Date.now() - window.__posted &gt; 3500"</span>, 8000),
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 					wait(<span class="jxr_string">"Date.now() - window.__posted &gt; 2500"</span>, 8000),
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, PET_COUNT + <span class="jxr_string">".then(n =&gt; { window.__after = n; })"</span>), wait(<span class="jxr_string">"window.__after != null"</span>, 8000)),
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"lines"</span>, CARD_QUERIES.get(<span class="jxr_string">"lines"</span>), <span class="jxr_string">"banner"</span>, CARD_QUERIES.get(<span class="jxr_string">"banner"</span>),
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 					<span class="jxr_string">"pets"</span>, <span class="jxr_string">"[window.__before, window.__after]"</span>)),
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"cancel-late"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/ops/jobs"</span>,
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<em class="jxr_comment">// The 6 s hold keeps the job cancellable well past the Added line and ends 6 s short of the 12 s hard</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<em class="jxr_comment">// The 2.5 s hold keeps the job cancellable past the Added line and ends 2.5 s short of the 5 s hard</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<em class="jxr_comment">// timeout, so the cancel always lands in the hold.</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000), holdMs(6000), SUBMIT, line(<span class="jxr_string">"Added"</span>, 8000), SUBMIT, phase(<span class="jxr_string">"done"</span>, 10000)),
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000), holdMs(2500), SUBMIT, line(<span class="jxr_string">"Added"</span>, 8000), SUBMIT, phase(<span class="jxr_string">"done"</span>, 10000)),
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				<span class="jxr_string">"queries"</span>, CARD_QUERIES),
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<em class="jxr_comment">// The third subscriber's 429 is expected.</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"subscriber-cap"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/ops/jobs"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000), Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__cap = "</span> + OVER_THE_CAP)),
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"cap"</span>, <span class="jxr_string">"window.__cap"</span>)),
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<em class="jxr_comment">// The job would run 20 s; the 12 s timeout lands in its hold.  This passes even against a scheduler that fires</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<em class="jxr_comment">// The job would run 8 s; the 5 s timeout lands in its hold.  This passes even against a scheduler that fires</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<em class="jxr_comment">// its timeout task a little late; the early- and on-the-deadline firing it once hung on is pinned</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<em class="jxr_comment">// deterministically by AsyncJobRegistry_Test's k group.</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"timeout"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/ops/jobs"</span>,
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000), slowMs(10000), holdMs(10000), SUBMIT, phase(<span class="jxr_string">"done"</span>, 25000)),
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000), slowMs(3000), holdMs(5000), SUBMIT, phase(<span class="jxr_string">"done"</span>, 12000)),
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<span class="jxr_string">"queries"</span>, CARD_QUERIES),
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<em class="jxr_comment">// The two fetched jobs fill the limit, so the card's own submit is refused with 429.</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"limit"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/ops/jobs"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<span class="jxr_string">"actions"</span>, List.of(phase(<span class="jxr_string">"idle"</span>, 8000),
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__started = Promise.all(["</span> + start(4000) + <span class="jxr_string">", "</span> + start(4000) + <span class="jxr_string">"]).then(r =&gt; { window.__refs = r; })"</span>),
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__started = Promise.all(["</span> + start(2500) + <span class="jxr_string">", "</span> + start(2500) + <span class="jxr_string">"]).then(r =&gt; { window.__refs = r; })"</span>),
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 					wait(<span class="jxr_string">"window.__refs &amp;&amp; window.__refs.length === 2"</span>, 8000),
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					SUBMIT,
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 					wait(<span class="jxr_string">"document.querySelector('"</span> + J + <span class="jxr_string">" .jc-joblog-banner.jc-joblog-error:not([hidden])')"</span>, 8000),
@@ -197,68 +197,74 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertContains(id, query(c, <span class="jxr_string">"row"</span>));
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// fetches values are {status, body}.</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	@Test <strong class="jxr_keyword">void</strong> a03_unknownJobIs404() {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) assertClean(report, <span class="jxr_string">"jobs"</span>).get(<span class="jxr_string">"fetches"</span>)).get(<span class="jxr_string">"unknown"</span>);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertBean(f, <span class="jxr_string">"status"</span>, <span class="jxr_string">"404"</span>);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertContains(<span class="jxr_string">"Unknown job 'no-such-job'"</span>, f.get(<span class="jxr_string">"body"</span>));
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_comment">// b - the restock job-log card</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// fetches values are {status, body}.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	})
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> a03_unknownJobIs404() {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) assertClean(report, <span class="jxr_string">"jobs"</span>).get(<span class="jxr_string">"fetches"</span>)).get(<span class="jxr_string">"unknown"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertBean(f, <span class="jxr_string">"status"</span>, <span class="jxr_string">"404"</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertContains(<span class="jxr_string">"Unknown job 'no-such-job'"</span>, f.get(<span class="jxr_string">"body"</span>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// lines is a JSON array of strings.</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; lines(Map&lt;String,Object&gt; c) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;) query(c, <span class="jxr_string">"lines"</span>);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@Test <strong class="jxr_keyword">void</strong> b01_cardSubmitStreamsProgressToDone() {
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"card-submit"</span>);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertContains(<span class="jxr_string">"Done. Restocked 1 pets"</span>, query(c, <span class="jxr_string">"banner"</span>));
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertContains(<span class="jxr_string">"Restocking 1 pets"</span>, lines(c));
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertTrue(lines(c).stream().anyMatch(x -&gt; x.startsWith(<span class="jxr_string">"Added DOG #"</span>)), () -&gt; <span class="jxr_string">"no Added line: "</span> + lines(c));
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertContains(<span class="jxr_string">"job="</span>, query(c, <span class="jxr_string">"search"</span>));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// fetches values are {status, body}.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> b02_unknownStreamIs404() {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) assertClean(report, <span class="jxr_string">"card-submit"</span>).get(<span class="jxr_string">"fetches"</span>)).get(<span class="jxr_string">"unknownStream"</span>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertBean(f, <span class="jxr_string">"status"</span>, <span class="jxr_string">"404"</span>);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Test <strong class="jxr_keyword">void</strong> b03_reloadReattachesAndReplaysTheLog() {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"reattach"</span>);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertContains(<span class="jxr_string">"job="</span>, query(c, <span class="jxr_string">"search"</span>));
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertTrue(lines(c).stream().anyMatch(x -&gt; x.startsWith(<span class="jxr_string">"Waiting 1500 ms"</span>)), () -&gt; <span class="jxr_string">"no replayed history: "</span> + lines(c));
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertContains(<span class="jxr_string">"Done. Restocked 1 pets"</span>, query(c, <span class="jxr_string">"banner"</span>));
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	@Test <strong class="jxr_keyword">void</strong> b04_cancelBeforeTheEffectChangesNothing() {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"cancel-early"</span>);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertString(<span class="jxr_string">"Cancelled."</span>, query(c, <span class="jxr_string">"banner"</span>));
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertTrue(lines(c).stream().noneMatch(x -&gt; x.startsWith(<span class="jxr_string">"Added"</span>)), () -&gt; <span class="jxr_string">"restocked anyway: "</span> + lines(c));
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> pets = (List&lt;?&gt;) query(c, <span class="jxr_string">"pets"</span>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertNotNull(pets.get(0));
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(pets.get(0), pets.get(1), <span class="jxr_string">"the pet count changed after a cancel before the effect"</span>);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Test <strong class="jxr_keyword">void</strong> b05_cancelAfterTheEffectSaysSo() {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertString(<span class="jxr_string">"Cancelled after the job had already made changes."</span>, query(assertClean(report, <span class="jxr_string">"cancel-late"</span>), <span class="jxr_string">"banner"</span>));
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@Test <strong class="jxr_keyword">void</strong> b06_streamRefusesASubscriberOverTheCap() {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertBean(query(assertClean(report, <span class="jxr_string">"subscriber-cap"</span>), <span class="jxr_string">"cap"</span>), <span class="jxr_string">"open,third"</span>, <span class="jxr_string">"[1,1],429"</span>);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	@Test <strong class="jxr_keyword">void</strong> b07_hardTimeoutEndsAsUnknown() {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertString(<span class="jxr_string">"The job ended with an unknown outcome. app:hard-timeout-exceeded"</span>, query(assertClean(report, <span class="jxr_string">"timeout"</span>), <span class="jxr_string">"banner"</span>));
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Test <strong class="jxr_keyword">void</strong> b08_jobLimitIsShownOnTheCard() {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertString(<span class="jxr_string">"Job limit reached; '2' running"</span>, query(assertClean(report, <span class="jxr_string">"limit"</span>), <span class="jxr_string">"banner"</span>));
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> }
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<em class="jxr_comment">// b - the restock job-log card</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// lines is a JSON array of strings.</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	})
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; lines(Map&lt;String,Object&gt; c) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;) query(c, <span class="jxr_string">"lines"</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> b01_cardSubmitStreamsProgressToDone() {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"card-submit"</span>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertContains(<span class="jxr_string">"Done. Restocked 1 pets"</span>, query(c, <span class="jxr_string">"banner"</span>));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertContains(<span class="jxr_string">"Restocking 1 pets"</span>, lines(c));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertTrue(lines(c).stream().anyMatch(x -&gt; x.startsWith(<span class="jxr_string">"Added DOG #"</span>)), () -&gt; <span class="jxr_string">"no Added line: "</span> + lines(c));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertContains(<span class="jxr_string">"job="</span>, query(c, <span class="jxr_string">"search"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// fetches values are {status, body}.</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	})
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test <strong class="jxr_keyword">void</strong> b02_unknownStreamIs404() {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;) ((Map&lt;String,Object&gt;) assertClean(report, <span class="jxr_string">"card-submit"</span>).get(<span class="jxr_string">"fetches"</span>)).get(<span class="jxr_string">"unknownStream"</span>);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertBean(f, <span class="jxr_string">"status"</span>, <span class="jxr_string">"404"</span>);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	@Test <strong class="jxr_keyword">void</strong> b03_reloadReattachesAndReplaysTheLog() {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"reattach"</span>);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertContains(<span class="jxr_string">"job="</span>, query(c, <span class="jxr_string">"search"</span>));
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertTrue(lines(c).stream().anyMatch(x -&gt; x.startsWith(<span class="jxr_string">"Waiting 1500 ms"</span>)), () -&gt; <span class="jxr_string">"no replayed history: "</span> + lines(c));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertContains(<span class="jxr_string">"Done. Restocked 1 pets"</span>, query(c, <span class="jxr_string">"banner"</span>));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> b04_cancelBeforeTheEffectChangesNothing() {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"cancel-early"</span>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertString(<span class="jxr_string">"Cancelled."</span>, query(c, <span class="jxr_string">"banner"</span>));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertTrue(lines(c).stream().noneMatch(x -&gt; x.startsWith(<span class="jxr_string">"Added"</span>)), () -&gt; <span class="jxr_string">"restocked anyway: "</span> + lines(c));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> pets = (List&lt;?&gt;) query(c, <span class="jxr_string">"pets"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertNotNull(pets.get(0));
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertEquals(pets.get(0), pets.get(1), <span class="jxr_string">"the pet count changed after a cancel before the effect"</span>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	@Test <strong class="jxr_keyword">void</strong> b05_cancelAfterTheEffectSaysSo() {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertString(<span class="jxr_string">"Cancelled after the job had already made changes."</span>, query(assertClean(report, <span class="jxr_string">"cancel-late"</span>), <span class="jxr_string">"banner"</span>));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Test <strong class="jxr_keyword">void</strong> b06_streamRefusesASubscriberOverTheCap() {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertBean(query(assertClean(report, <span class="jxr_string">"subscriber-cap"</span>), <span class="jxr_string">"cap"</span>), <span class="jxr_string">"open,third"</span>, <span class="jxr_string">"[1,1],429"</span>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	}
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	@Test <strong class="jxr_keyword">void</strong> b07_hardTimeoutEndsAsUnknown() {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertString(<span class="jxr_string">"The job ended with an unknown outcome. app:hard-timeout-exceeded"</span>, query(assertClean(report, <span class="jxr_string">"timeout"</span>), <span class="jxr_string">"banner"</span>));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	@Test <strong class="jxr_keyword">void</strong> b08_jobLimitIsShownOnTheCard() {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertString(<span class="jxr_string">"Job limit reached; '2' running"</span>, query(assertClean(report, <span class="jxr_string">"limit"</span>), <span class="jxr_string">"banner"</span>));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

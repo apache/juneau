@@ -625,7 +625,7 @@
 <span class="source-line-no">612</span><span id="line-612">    * @return &lt;jk&gt;true&lt;/jk&gt; if the URI is safe to redirect to.</span>
 <span class="source-line-no">613</span><span id="line-613">    */</span>
 <span class="source-line-no">614</span><span id="line-614">   static boolean isSafeRedirectUri(String uri, String...allowedHosts) {</span>
-<span class="source-line-no">615</span><span id="line-615">      if (uri == null || uri.isEmpty())</span>
+<span class="source-line-no">615</span><span id="line-615">      if (ie(uri))</span>
 <span class="source-line-no">616</span><span id="line-616">         return true;</span>
 <span class="source-line-no">617</span><span id="line-617">      if (uri.charAt(0) == '/' &amp;&amp; ! uri.startsWith("//"))</span>
 <span class="source-line-no">618</span><span id="line-618">         return true;</span>
@@ -917,7 +917,7 @@
 <span class="source-line-no">904</span><span id="line-904">   }</span>
 <span class="source-line-no">905</span><span id="line-905"></span>
 <span class="source-line-no">906</span><span id="line-906">   /**</span>
-<span class="source-line-no">907</span><span id="line-907">    * Sets the &lt;c&gt;Cache-Control&lt;/c&gt; response header from a {@link org.apache.juneau.http.header.CacheControl.Builder}.</span>
+<span class="source-line-no">907</span><span id="line-907">    * Sets the &lt;c&gt;Cache-Control&lt;/c&gt; response header from a {@link org.apache.juneau.http.header.CacheControl.Builder CacheControl.Builder}.</span>
 <span class="source-line-no">908</span><span id="line-908">    *</span>
 <span class="source-line-no">909</span><span id="line-909">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">910</span><span id="line-910">    * &lt;p class='bjava'&gt;</span>

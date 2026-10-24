@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test <strong class="jxr_keyword">void</strong> a04_options_replacesExistingAndRejectsNulls() {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> i = Input.of(<span class="jxr_string">"n"</span>, <span class="jxr_string">"N"</span>, <span class="jxr_string">"select"</span>).option(<span class="jxr_string">"a"</span>, <span class="jxr_string">"A"</span>);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		i.options(Option.of(<span class="jxr_string">"b"</span>, <span class="jxr_string">"B"</span>), Option.of(<span class="jxr_string">"c"</span>, <span class="jxr_string">"C"</span>));
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(2, i.options.size());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertSize(2, i.options);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertEquals(<span class="jxr_string">"b"</span>, i.options.get(0).value);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertRejected(() -&gt; i.options((Option[]) <strong class="jxr_keyword">null</strong>), <span class="jxr_string">"options must not be null"</span>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertRejected(() -&gt; i.options(Option.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"X"</span>), <strong class="jxr_keyword">null</strong>), <span class="jxr_string">"option must not be null"</span>);
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> i = Input.of(<span class="jxr_string">"n"</span>, <span class="jxr_string">"N"</span>, <span class="jxr_string">"select"</span>);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertNull(i.options);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		i.option(<span class="jxr_string">"a"</span>, <span class="jxr_string">"A"</span>).option(<span class="jxr_string">"b"</span>, <span class="jxr_string">"B"</span>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(2, i.options.size());
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertSize(2, i.options);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a06_action_nullRef_rejected() {
@@ -192,7 +192,7 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertNull(s.fields);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertRejected(() -&gt; s.field(<strong class="jxr_keyword">null</strong>), <span class="jxr_string">"field must not be null"</span>);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		s.field(Input.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"A"</span>, <span class="jxr_string">"text"</span>)).field(Input.of(<span class="jxr_string">"b"</span>, <span class="jxr_string">"B"</span>, <span class="jxr_string">"text"</span>));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertEquals(2, s.fields.size());
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertSize(2, s.fields);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	@Test <strong class="jxr_keyword">void</strong> c02_section_validate_rejections() {

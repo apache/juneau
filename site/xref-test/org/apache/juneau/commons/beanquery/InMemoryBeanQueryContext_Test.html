@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">void</strong> d04_blankExpressionIgnored() {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = context().getSession(ROWS)) {
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">var</strong> q = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name="</span>);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			assertEquals(4, s.find(q).rows().size());
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			assertSize(4, s.find(q).rows());
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		}
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 
@@ -273,7 +273,7 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">var</strong> ctx = InMemoryBeanQueryContext.&lt;Map&lt;String,Object&gt;&gt;create().column(<span class="jxr_string">"k"</span>, SearchType.TEXT).build();
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = ctx.getSession(rows)) {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">var</strong> q = BeanQuery.create().eq(<span class="jxr_string">"k"</span>, <span class="jxr_string">"x"</span>).build();
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			assertEquals(1, s.find(q).rows().size());
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			assertSize(1, s.find(q).rows());
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 	}
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 
@@ -441,15 +441,15 @@
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">void</strong> g04_limitClamped() {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> many = IntStream.range(0, 150).mapToObj(i -&gt; <strong class="jxr_keyword">new</strong> Rec(<span class="jxr_string">"n"</span> + i, i, <span class="jxr_string">"1.0"</span>)).toList();
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = context().getSession(many)) {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			assertEquals(100, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());          <em class="jxr_comment">// defaultLimit</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			assertEquals(150, s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setLimit(-1)).rows().size());  <em class="jxr_comment">// maxLimit 1000 &gt; 150</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			assertSize(100, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());          <em class="jxr_comment">// defaultLimit</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			assertSize(150, s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setLimit(-1)).rows());  <em class="jxr_comment">// maxLimit 1000 &gt; 150</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 		}
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = builder().maxLimit(120).build().getSession(many)) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertEquals(120, s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setLimit(5000)).rows().size());
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			assertEquals(120, s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setLimit(-1)).rows().size());
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertSize(120, s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setLimit(5000)).rows());
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			assertSize(120, s.find(<strong class="jxr_keyword">new</strong> BeanQuery().setLimit(-1)).rows());
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = context().createSession().rows(many).defaultLimit(10).build()) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			assertEquals(10, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			assertSize(10, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		}
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 	}
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 
@@ -607,7 +607,7 @@
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<em class="jxr_comment">// Narrowing ONLY maxLimit, below the context's inherited defaultLimit, must not throw: defaultLimit was</em>
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<em class="jxr_comment">// never explicitly chosen for this session, so it auto-narrows alongside maxLimit.</em>
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = ctx.createSession().rows(many).maxLimit(50).build()) {
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			assertEquals(50, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());  <em class="jxr_comment">// defaultLimit auto-narrowed to 50, not left at 100.</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			assertSize(50, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());  <em class="jxr_comment">// defaultLimit auto-narrowed to 50, not left at 100.</em>
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 		}
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 	}
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 
@@ -626,7 +626,7 @@
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> ctx = context();
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<em class="jxr_comment">// Explicit defaultLimit, already consistent with the later maxLimit narrowing: no auto-narrowing applied.</em>
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = ctx.createSession().rows(many).defaultLimit(30).maxLimit(50).build()) {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			assertEquals(30, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			assertSize(30, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 		}
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 	}
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 
@@ -639,7 +639,7 @@
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">var</strong> many = IntStream.range(0, 150).mapToObj(i -&gt; <strong class="jxr_keyword">new</strong> Rec(<span class="jxr_string">"n"</span> + i, i, <span class="jxr_string">"1.0"</span>)).toList();
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<em class="jxr_comment">// defaultLimit was never touched on this builder -- it is still QuerySettings' own baseline default (100).</em>
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = builder().maxLimit(50).build().getSession(many)) {
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			assertEquals(50, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());  <em class="jxr_comment">// No exception; auto-narrowed, not left at 100.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			assertSize(50, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());  <em class="jxr_comment">// No exception; auto-narrowed, not left at 100.</em>
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		}
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 
@@ -651,7 +651,7 @@
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<em class="jxr_comment">// copy() is the documented way to derive a variant (see the class Javadoc example); narrowing only maxLimit</em>
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<em class="jxr_comment">// on the copy, without repeating defaultLimit, must not throw.</em>
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = base.copy().maxLimit(50).build().getSession(many)) {
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			assertEquals(50, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			assertSize(50, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 		}
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 	}
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 
@@ -667,12 +667,12 @@
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">var</strong> many = IntStream.range(0, 150).mapToObj(i -&gt; <strong class="jxr_keyword">new</strong> Rec(<span class="jxr_string">"n"</span> + i, i, <span class="jxr_string">"1.0"</span>)).toList();
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<em class="jxr_comment">// Explicit defaultLimit, already consistent with the later maxLimit narrowing: no auto-narrowing applied.</em>
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = builder().defaultLimit(30).maxLimit(50).build().getSession(many)) {
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			assertEquals(30, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows().size());
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			assertSize(30, s.find(<strong class="jxr_keyword">new</strong> BeanQuery()).rows());
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 		}
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 	}
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<em class="jxr_comment">// Juneau bean parity (phase 1)</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<em class="jxr_comment">// Juneau bean parity</em>
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Fielded {

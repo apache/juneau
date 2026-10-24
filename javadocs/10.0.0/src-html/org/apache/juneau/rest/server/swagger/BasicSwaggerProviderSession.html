@@ -839,473 +839,475 @@
 <span class="source-line-no">826</span><span id="line-826">   // HTT: package-private only so a unit test can check that example/default values are not walked.</span>
 <span class="source-line-no">827</span><span id="line-827">   static &lt;T&gt; T renameWriteOnly(T schema) {</span>
 <span class="source-line-no">828</span><span id="line-828">      if (schema instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">829</span><span id="line-829">         @SuppressWarnings("unchecked")</span>
-<span class="source-line-no">830</span><span id="line-830">         var m2 = (Map&lt;String,Object&gt;)m;</span>
-<span class="source-line-no">831</span><span id="line-831">         if (Boolean.TRUE.equals(m2.get("writeOnly"))) {</span>
-<span class="source-line-no">832</span><span id="line-832">            m2.remove("writeOnly");</span>
-<span class="source-line-no">833</span><span id="line-833">            m2.put("x-writeOnly", true);</span>
-<span class="source-line-no">834</span><span id="line-834">         }</span>
-<span class="source-line-no">835</span><span id="line-835">         for (var k : new String[]{"properties", "patternProperties", "definitions", "$defs"}) {</span>
-<span class="source-line-no">836</span><span id="line-836">            if (m2.get(k) instanceof Map&lt;?,?&gt; children)</span>
-<span class="source-line-no">837</span><span id="line-837">               children.values().forEach(BasicSwaggerProviderSession::renameWriteOnly);</span>
-<span class="source-line-no">838</span><span id="line-838">         }</span>
-<span class="source-line-no">839</span><span id="line-839">         for (var k : new String[]{"items", "additionalProperties", "not"})</span>
-<span class="source-line-no">840</span><span id="line-840">            renameWriteOnly(m2.get(k));</span>
-<span class="source-line-no">841</span><span id="line-841">         for (var k : new String[]{"allOf", "anyOf", "oneOf", "items"}) {</span>
-<span class="source-line-no">842</span><span id="line-842">            if (m2.get(k) instanceof List&lt;?&gt; l)</span>
-<span class="source-line-no">843</span><span id="line-843">               l.forEach(BasicSwaggerProviderSession::renameWriteOnly);</span>
-<span class="source-line-no">844</span><span id="line-844">         }</span>
-<span class="source-line-no">845</span><span id="line-845">      }</span>
-<span class="source-line-no">846</span><span id="line-846">      return schema;</span>
-<span class="source-line-no">847</span><span id="line-847">   }</span>
-<span class="source-line-no">848</span><span id="line-848"></span>
-<span class="source-line-no">849</span><span id="line-849">   private static boolean isMulti(Header h) {</span>
-<span class="source-line-no">850</span><span id="line-850">      return eq(h.name(), "*") || eq(h.value(), "*");</span>
-<span class="source-line-no">851</span><span id="line-851">   }</span>
-<span class="source-line-no">852</span><span id="line-852"></span>
-<span class="source-line-no">853</span><span id="line-853">   private static MarshalledList merge(MarshalledList...lists) {</span>
-<span class="source-line-no">854</span><span id="line-854">      var l = lists[0];</span>
-<span class="source-line-no">855</span><span id="line-855">      for (var i = 1; i &lt; lists.length; i++) {</span>
-<span class="source-line-no">856</span><span id="line-856">         if (nn(lists[i])) {</span>
-<span class="source-line-no">857</span><span id="line-857">            if (l == null)</span>
-<span class="source-line-no">858</span><span id="line-858">               l = new Json5List();</span>
-<span class="source-line-no">859</span><span id="line-859">            l.addAll(lists[i]);</span>
-<span class="source-line-no">860</span><span id="line-860">         }</span>
-<span class="source-line-no">861</span><span id="line-861">      }</span>
-<span class="source-line-no">862</span><span id="line-862">      return l;</span>
-<span class="source-line-no">863</span><span id="line-863">   }</span>
-<span class="source-line-no">864</span><span id="line-864"></span>
-<span class="source-line-no">865</span><span id="line-865">   private static MarshalledMap merge(MarshalledMap...maps) {</span>
-<span class="source-line-no">866</span><span id="line-866">      var m = maps[0];</span>
-<span class="source-line-no">867</span><span id="line-867">      for (var i = 1; i &lt; maps.length; i++) {</span>
-<span class="source-line-no">868</span><span id="line-868">         if (nn(maps[i])) {</span>
-<span class="source-line-no">869</span><span id="line-869">            if (m == null)</span>
-<span class="source-line-no">870</span><span id="line-870">               m = new Json5Map();</span>
-<span class="source-line-no">871</span><span id="line-871">            m.putAll(maps[i]);</span>
-<span class="source-line-no">872</span><span id="line-872">         }</span>
-<span class="source-line-no">873</span><span id="line-873">      }</span>
-<span class="source-line-no">874</span><span id="line-874">      return m;</span>
-<span class="source-line-no">875</span><span id="line-875">   }</span>
-<span class="source-line-no">876</span><span id="line-876"></span>
-<span class="source-line-no">877</span><span id="line-877">   private MarshalledMap merge(MarshalledMap om, ExternalDocs a) {</span>
-<span class="source-line-no">878</span><span id="line-878">      if (ExternalDocsAnnotation.empty(a))</span>
-<span class="source-line-no">879</span><span id="line-879">         return om;</span>
-<span class="source-line-no">880</span><span id="line-880">      om = newMap(om);</span>
-<span class="source-line-no">881</span><span id="line-881">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">882</span><span id="line-882">      // @formatter:off</span>
-<span class="source-line-no">883</span><span id="line-883">      return om</span>
-<span class="source-line-no">884</span><span id="line-884">         .appendIf(ne, "description", resolve(a.description()))</span>
-<span class="source-line-no">885</span><span id="line-885">         .appendIf(ne, "url", a.url())</span>
-<span class="source-line-no">886</span><span id="line-886">      ;</span>
-<span class="source-line-no">887</span><span id="line-887">      // @formatter:on</span>
-<span class="source-line-no">888</span><span id="line-888">   }</span>
-<span class="source-line-no">889</span><span id="line-889"></span>
-<span class="source-line-no">890</span><span id="line-890">   private MarshalledMap merge(MarshalledMap om, Header[] a) {</span>
-<span class="source-line-no">891</span><span id="line-891">      if (a.length == 0)</span>
-<span class="source-line-no">892</span><span id="line-892">         return om;</span>
-<span class="source-line-no">893</span><span id="line-893">      om = newMap(om);</span>
-<span class="source-line-no">894</span><span id="line-894">      for (var aa : a) {</span>
-<span class="source-line-no">895</span><span id="line-895">         var name = StringUtils.firstNonEmpty(aa.name(), aa.value());</span>
-<span class="source-line-no">896</span><span id="line-896">         if (isEmpty(name))</span>
-<span class="source-line-no">897</span><span id="line-897">            throw iaex("@Header used without name or value.");</span>
-<span class="source-line-no">898</span><span id="line-898">         merge(om.getMap(name, true), aa.schema());</span>
-<span class="source-line-no">899</span><span id="line-899">      }</span>
-<span class="source-line-no">900</span><span id="line-900">      return om;</span>
-<span class="source-line-no">901</span><span id="line-901">   }</span>
-<span class="source-line-no">902</span><span id="line-902"></span>
-<span class="source-line-no">903</span><span id="line-903">   private MarshalledMap merge(MarshalledMap om, Items a) throws ParseException {</span>
-<span class="source-line-no">904</span><span id="line-904">      if (ItemsAnnotation.empty(a))</span>
-<span class="source-line-no">905</span><span id="line-905">         return om;</span>
-<span class="source-line-no">906</span><span id="line-906">      om = newMap(om);</span>
-<span class="source-line-no">907</span><span id="line-907">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">908</span><span id="line-908">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
-<span class="source-line-no">909</span><span id="line-909">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
-<span class="source-line-no">910</span><span id="line-910">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
-<span class="source-line-no">911</span><span id="line-911">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
-<span class="source-line-no">912</span><span id="line-912">      // @formatter:off</span>
-<span class="source-line-no">913</span><span id="line-913">      return om</span>
-<span class="source-line-no">914</span><span id="line-914">         .appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())</span>
-<span class="source-line-no">915</span><span id="line-915">         .appendIf(ne, "default", joinnl(a.default_(), a.df()))</span>
-<span class="source-line-no">916</span><span id="line-916">         .appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))</span>
-<span class="source-line-no">917</span><span id="line-917">         .appendFirst(ne, "format", a.format(), a.f())</span>
-<span class="source-line-no">918</span><span id="line-918">         .appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())</span>
-<span class="source-line-no">919</span><span id="line-919">         .appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())</span>
-<span class="source-line-no">920</span><span id="line-920">         .appendIf(nem, "items", merge(om.getMap("items"), a.items()))</span>
-<span class="source-line-no">921</span><span id="line-921">         .appendFirst(ne, "maximum", a.maximum(), a.max())</span>
-<span class="source-line-no">922</span><span id="line-922">         .appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())</span>
-<span class="source-line-no">923</span><span id="line-923">         .appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())</span>
-<span class="source-line-no">924</span><span id="line-924">         .appendFirst(ne, "minimum", a.minimum(), a.min())</span>
-<span class="source-line-no">925</span><span id="line-925">         .appendFirst(nm1, "minItems", a.minItems(), a.mini())</span>
-<span class="source-line-no">926</span><span id="line-926">         .appendFirst(nm1, "minLength", a.minLength(), a.minl())</span>
-<span class="source-line-no">927</span><span id="line-927">         .appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())</span>
-<span class="source-line-no">928</span><span id="line-928">         .appendFirst(ne, "pattern", a.pattern(), a.p())</span>
-<span class="source-line-no">929</span><span id="line-929">         .appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())</span>
-<span class="source-line-no">930</span><span id="line-930">         .appendFirst(ne, "type", a.type(), a.t())</span>
-<span class="source-line-no">931</span><span id="line-931">         .appendIf(ne, "$ref", a.$ref())</span>
-<span class="source-line-no">932</span><span id="line-932">      ;</span>
-<span class="source-line-no">933</span><span id="line-933">      // @formatter:on</span>
-<span class="source-line-no">934</span><span id="line-934">   }</span>
-<span class="source-line-no">935</span><span id="line-935"></span>
-<span class="source-line-no">936</span><span id="line-936">   private MarshalledMap merge(MarshalledMap om, Response a) throws ParseException {</span>
-<span class="source-line-no">937</span><span id="line-937">      if (ResponseAnnotation.empty(a))</span>
-<span class="source-line-no">938</span><span id="line-938">         return om;</span>
-<span class="source-line-no">939</span><span id="line-939">      om = newMap(om);</span>
-<span class="source-line-no">940</span><span id="line-940">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
-<span class="source-line-no">941</span><span id="line-941">      if (! SchemaAnnotation.empty(a.schema()))</span>
-<span class="source-line-no">942</span><span id="line-942">         merge(om, a.schema());</span>
-<span class="source-line-no">943</span><span id="line-943">      // @formatter:off</span>
-<span class="source-line-no">944</span><span id="line-944">      return om</span>
-<span class="source-line-no">945</span><span id="line-945">         .appendIf(nem, "examples", parseMap(a.examples()))</span>
-<span class="source-line-no">946</span><span id="line-946">         .appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))</span>
-<span class="source-line-no">947</span><span id="line-947">         .appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))</span>
-<span class="source-line-no">948</span><span id="line-948">      ;</span>
-<span class="source-line-no">949</span><span id="line-949">      // @formatter:on</span>
-<span class="source-line-no">950</span><span id="line-950">   }</span>
-<span class="source-line-no">951</span><span id="line-951"></span>
-<span class="source-line-no">952</span><span id="line-952">   private MarshalledMap merge(MarshalledMap om, Schema a) {</span>
-<span class="source-line-no">953</span><span id="line-953">      try {</span>
-<span class="source-line-no">954</span><span id="line-954">         if (SchemaAnnotation.empty(a))</span>
-<span class="source-line-no">955</span><span id="line-955">            return om;</span>
-<span class="source-line-no">956</span><span id="line-956">         om = newMap(om);</span>
-<span class="source-line-no">957</span><span id="line-957">         Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">958</span><span id="line-958">         Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
-<span class="source-line-no">959</span><span id="line-959">         Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
-<span class="source-line-no">960</span><span id="line-960">         Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
-<span class="source-line-no">961</span><span id="line-961">         Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
-<span class="source-line-no">962</span><span id="line-962">         // @formatter:off</span>
-<span class="source-line-no">963</span><span id="line-963">         return om</span>
-<span class="source-line-no">964</span><span id="line-964">            .appendIf(ne, "allOf", joinnl(a.allOf()))</span>
-<span class="source-line-no">965</span><span id="line-965">            .appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())</span>
-<span class="source-line-no">966</span><span id="line-966">            .appendIf(ne, "default", joinnl(a.default_(), a.df()))</span>
-<span class="source-line-no">967</span><span id="line-967">            .appendIf(ne, "discriminator", a.discriminator())</span>
-<span class="source-line-no">968</span><span id="line-968">            .appendIf(ne, "description", resolve(a.description(), a.d()))</span>
-<span class="source-line-no">969</span><span id="line-969">            .appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))</span>
-<span class="source-line-no">970</span><span id="line-970">            .appendIf(nf, "exclusiveMaximum", a.emax())</span>
-<span class="source-line-no">971</span><span id="line-971">            .appendIf(nf, "exclusiveMinimum", a.emin())</span>
-<span class="source-line-no">972</span><span id="line-972">            .appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))</span>
-<span class="source-line-no">973</span><span id="line-973">            .appendFirst(ne, "format", a.format(), a.f())</span>
-<span class="source-line-no">974</span><span id="line-974">            .appendIf(ne, "ignore", a.ignore() ? "true" : null)</span>
-<span class="source-line-no">975</span><span id="line-975">            .appendIf(nem, "items", merge(om.getMap("items"), a.items()))</span>
-<span class="source-line-no">976</span><span id="line-976">            .appendFirst(ne, "maximum", a.maximum(), a.max())</span>
-<span class="source-line-no">977</span><span id="line-977">            .appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())</span>
-<span class="source-line-no">978</span><span id="line-978">            .appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())</span>
-<span class="source-line-no">979</span><span id="line-979">            .appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())</span>
-<span class="source-line-no">980</span><span id="line-980">            .appendFirst(ne, "minimum", a.minimum(), a.min())</span>
-<span class="source-line-no">981</span><span id="line-981">            .appendFirst(nm1, "minItems", a.minItems(), a.mini())</span>
-<span class="source-line-no">982</span><span id="line-982">            .appendFirst(nm1, "minLength", a.minLength(), a.minl())</span>
-<span class="source-line-no">983</span><span id="line-983">            .appendFirst(nm1, "minProperties", a.minProperties(), a.minp())</span>
-<span class="source-line-no">984</span><span id="line-984">            .appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())</span>
-<span class="source-line-no">985</span><span id="line-985">            .appendFirst(ne, "pattern", a.pattern(), a.p())</span>
-<span class="source-line-no">986</span><span id="line-986">            .appendIf(nf, "readOnly", a.readOnly() || a.ro())</span>
-<span class="source-line-no">987</span><span id="line-987">            .appendIf(nf, "required", a.required() || a.r())</span>
-<span class="source-line-no">988</span><span id="line-988">            .appendIf(ne, "summary", resolve(firstNonEmpty(a.summary(), a.su())))</span>
-<span class="source-line-no">989</span><span id="line-989">            .appendIf(ne, "title", a.title())</span>
-<span class="source-line-no">990</span><span id="line-990">            .appendFirst(ne, "type", a.type(), a.t())</span>
-<span class="source-line-no">991</span><span id="line-991">            .appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())</span>
-<span class="source-line-no">992</span><span id="line-992">            .appendIf(ne, "xml", joinnl(a.xml()))</span>
-<span class="source-line-no">993</span><span id="line-993">            .appendIf(ne, "$ref", a.$ref())</span>
-<span class="source-line-no">994</span><span id="line-994">         ;</span>
-<span class="source-line-no">995</span><span id="line-995">         // @formatter:on</span>
-<span class="source-line-no">996</span><span id="line-996">      } catch (ParseException e) {</span>
-<span class="source-line-no">997</span><span id="line-997">         throw iaex(e);</span>
-<span class="source-line-no">998</span><span id="line-998">      }</span>
-<span class="source-line-no">999</span><span id="line-999">   }</span>
-<span class="source-line-no">1000</span><span id="line-1000"></span>
-<span class="source-line-no">1001</span><span id="line-1001">   private MarshalledMap merge(MarshalledMap om, SubItems a) throws ParseException {</span>
-<span class="source-line-no">1002</span><span id="line-1002">      if (SubItemsAnnotation.empty(a))</span>
-<span class="source-line-no">1003</span><span id="line-1003">         return om;</span>
-<span class="source-line-no">1004</span><span id="line-1004">      om = newMap(om);</span>
-<span class="source-line-no">1005</span><span id="line-1005">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">1006</span><span id="line-1006">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
-<span class="source-line-no">1007</span><span id="line-1007">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
-<span class="source-line-no">1008</span><span id="line-1008">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
-<span class="source-line-no">1009</span><span id="line-1009">      // @formatter:off</span>
-<span class="source-line-no">1010</span><span id="line-1010">      return om</span>
-<span class="source-line-no">1011</span><span id="line-1011">         .appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())</span>
-<span class="source-line-no">1012</span><span id="line-1012">         .appendIf(ne, "default", joinnl(a.default_(), a.df()))</span>
-<span class="source-line-no">1013</span><span id="line-1013">         .appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))</span>
-<span class="source-line-no">1014</span><span id="line-1014">         .appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())</span>
-<span class="source-line-no">1015</span><span id="line-1015">         .appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())</span>
-<span class="source-line-no">1016</span><span id="line-1016">         .appendFirst(ne, "format", a.format(), a.f())</span>
-<span class="source-line-no">1017</span><span id="line-1017">         .appendFirst(ne, "maximum", a.maximum(), a.max())</span>
-<span class="source-line-no">1018</span><span id="line-1018">         .appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())</span>
-<span class="source-line-no">1019</span><span id="line-1019">         .appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())</span>
-<span class="source-line-no">1020</span><span id="line-1020">         .appendFirst(ne, "minimum", a.minimum(), a.min())</span>
-<span class="source-line-no">1021</span><span id="line-1021">         .appendFirst(nm1, "minItems", a.minItems(), a.mini())</span>
-<span class="source-line-no">1022</span><span id="line-1022">         .appendFirst(nm1, "minLength", a.minLength(), a.minl())</span>
-<span class="source-line-no">1023</span><span id="line-1023">         .appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())</span>
-<span class="source-line-no">1024</span><span id="line-1024">         .appendFirst(ne, "pattern", a.pattern(), a.p())</span>
-<span class="source-line-no">1025</span><span id="line-1025">         .appendFirst(ne, "type", a.type(), a.t())</span>
-<span class="source-line-no">1026</span><span id="line-1026">         .appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())</span>
-<span class="source-line-no">1027</span><span id="line-1027">         .appendIf(ne, "$ref", a.$ref())</span>
-<span class="source-line-no">1028</span><span id="line-1028">      ;</span>
-<span class="source-line-no">1029</span><span id="line-1029">      // @formatter:on</span>
-<span class="source-line-no">1030</span><span id="line-1030">   }</span>
-<span class="source-line-no">1031</span><span id="line-1031"></span>
-<span class="source-line-no">1032</span><span id="line-1032">   private MarshalledList parseList(Object o, String location, Object...locationArgs) throws ParseException {</span>
-<span class="source-line-no">1033</span><span id="line-1033">      try {</span>
-<span class="source-line-no">1034</span><span id="line-1034">         if (o == null)</span>
-<span class="source-line-no">1035</span><span id="line-1035">            return null;</span>
-<span class="source-line-no">1036</span><span id="line-1036">         var s = (o instanceof String[] o2 ? joinnl(o2) : o.toString());</span>
-<span class="source-line-no">1037</span><span id="line-1037">         if (s.isEmpty())</span>
-<span class="source-line-no">1038</span><span id="line-1038">            return null;</span>
-<span class="source-line-no">1039</span><span id="line-1039">         s = resolve(s);</span>
-<span class="source-line-no">1040</span><span id="line-1040">         if (! isProbablyJsonArray(s, true))</span>
-<span class="source-line-no">1041</span><span id="line-1041">            s = "[" + s + "]";</span>
-<span class="source-line-no">1042</span><span id="line-1042">         return Json5List.ofString(s);</span>
-<span class="source-line-no">1043</span><span id="line-1043">      } catch (ParseException e) {</span>
-<span class="source-line-no">1044</span><span id="line-1044">         throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);</span>
-<span class="source-line-no">1045</span><span id="line-1045">      }</span>
-<span class="source-line-no">1046</span><span id="line-1046">   }</span>
-<span class="source-line-no">1047</span><span id="line-1047"></span>
-<span class="source-line-no">1048</span><span id="line-1048">   private MarshalledList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {</span>
-<span class="source-line-no">1049</span><span id="line-1049">      try {</span>
-<span class="source-line-no">1050</span><span id="line-1050">         if (o == null)</span>
-<span class="source-line-no">1051</span><span id="line-1051">            return null;</span>
-<span class="source-line-no">1052</span><span id="line-1052">         var s = (o instanceof String[] o2 ? joinnl(o2) : o.toString());</span>
-<span class="source-line-no">1053</span><span id="line-1053">         if (s.isEmpty())</span>
-<span class="source-line-no">1054</span><span id="line-1054">            return null;</span>
-<span class="source-line-no">1055</span><span id="line-1055">         s = resolve(s);</span>
-<span class="source-line-no">1056</span><span id="line-1056">         return Json5List.ofJson5OrCdl(s);</span>
-<span class="source-line-no">1057</span><span id="line-1057">      } catch (ParseException e) {</span>
-<span class="source-line-no">1058</span><span id="line-1058">         throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);</span>
-<span class="source-line-no">1059</span><span id="line-1059">      }</span>
-<span class="source-line-no">1060</span><span id="line-1060">   }</span>
-<span class="source-line-no">1061</span><span id="line-1061"></span>
-<span class="source-line-no">1062</span><span id="line-1062">   private MarshalledMap parseMap(Object o) throws ParseException {</span>
-<span class="source-line-no">1063</span><span id="line-1063">      if (o == null)</span>
-<span class="source-line-no">1064</span><span id="line-1064">         return null;</span>
-<span class="source-line-no">1065</span><span id="line-1065">      if (o instanceof String[] o2)</span>
-<span class="source-line-no">1066</span><span id="line-1066">         o = joinnl(o2);</span>
-<span class="source-line-no">1067</span><span id="line-1067">      if (o instanceof String o2) {</span>
-<span class="source-line-no">1068</span><span id="line-1068">         if (o2.isEmpty())</span>
-<span class="source-line-no">1069</span><span id="line-1069">            return null;</span>
-<span class="source-line-no">1070</span><span id="line-1070">         o2 = resolve(o2);</span>
-<span class="source-line-no">1071</span><span id="line-1071">         if (eqic("IGNORE", o2))</span>
-<span class="source-line-no">1072</span><span id="line-1072">            return Json5Map.of("ignore", true);</span>
-<span class="source-line-no">1073</span><span id="line-1073">         if (! isProbablyJsonObject(o2, true))</span>
-<span class="source-line-no">1074</span><span id="line-1074">            o2 = "{" + o2 + "}";</span>
-<span class="source-line-no">1075</span><span id="line-1075">         return Json5Map.ofString(o2);</span>
-<span class="source-line-no">1076</span><span id="line-1076">      }</span>
-<span class="source-line-no">1077</span><span id="line-1077">      if (o instanceof Json5Map o2)</span>
-<span class="source-line-no">1078</span><span id="line-1078">         return o2;</span>
-<span class="source-line-no">1079</span><span id="line-1079">      if (o instanceof MarshalledMap o2)</span>
-<span class="source-line-no">1080</span><span id="line-1080">         return new Json5Map(o2);</span>
-<span class="source-line-no">1081</span><span id="line-1081">      throw new SwaggerException(null, "Unexpected data type '%s'.  Expected Map or String.", cn(o));</span>
-<span class="source-line-no">1082</span><span id="line-1082">   }</span>
-<span class="source-line-no">1083</span><span id="line-1083"></span>
-<span class="source-line-no">1084</span><span id="line-1084">   private MarshalledMap parseMap(String o, String location, Object...args) throws ParseException {</span>
-<span class="source-line-no">1085</span><span id="line-1085">      try {</span>
-<span class="source-line-no">1086</span><span id="line-1086">         return parseMap(o);</span>
-<span class="source-line-no">1087</span><span id="line-1087">      } catch (ParseException e) {</span>
-<span class="source-line-no">1088</span><span id="line-1088">         throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);</span>
-<span class="source-line-no">1089</span><span id="line-1089">      }</span>
-<span class="source-line-no">1090</span><span id="line-1090">   }</span>
-<span class="source-line-no">1091</span><span id="line-1091"></span>
-<span class="source-line-no">1092</span><span id="line-1092">   private MarshalledMap parseMap(String[] o, String location, Object...args) throws ParseException {</span>
-<span class="source-line-no">1093</span><span id="line-1093">      if (o.length == 0)</span>
-<span class="source-line-no">1094</span><span id="line-1094">         return Json5Map.EMPTY_MAP;</span>
-<span class="source-line-no">1095</span><span id="line-1095">      try {</span>
-<span class="source-line-no">1096</span><span id="line-1096">         return parseMap(o);</span>
-<span class="source-line-no">1097</span><span id="line-1097">      } catch (ParseException e) {</span>
-<span class="source-line-no">1098</span><span id="line-1098">         throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);</span>
-<span class="source-line-no">1099</span><span id="line-1099">      }</span>
-<span class="source-line-no">1100</span><span id="line-1100">   }</span>
-<span class="source-line-no">1101</span><span id="line-1101"></span>
-<span class="source-line-no">1102</span><span id="line-1102">   private static MarshalledMap pushupSchemaFields(RestPartType type, MarshalledMap param, MarshalledMap schema) {</span>
-<span class="source-line-no">1103</span><span id="line-1103">      // @formatter:off</span>
-<span class="source-line-no">1104</span><span id="line-1104">      Predicate&lt;Object&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">1105</span><span id="line-1105">      if (nn(schema) &amp;&amp; ! schema.isEmpty()) {</span>
-<span class="source-line-no">1106</span><span id="line-1106">         if (type == BODY || type == RESPONSE) {</span>
-<span class="source-line-no">1107</span><span id="line-1107">            param</span>
-<span class="source-line-no">1108</span><span id="line-1108">               .appendIf(ne, "description", schema.remove("description"));</span>
-<span class="source-line-no">1109</span><span id="line-1109">         } else {</span>
-<span class="source-line-no">1110</span><span id="line-1110">            param</span>
-<span class="source-line-no">1111</span><span id="line-1111">               .appendIfAbsentIf(ne, "collectionFormat", schema.remove("collectionFormat"))</span>
-<span class="source-line-no">1112</span><span id="line-1112">               .appendIfAbsentIf(ne, "default", schema.remove("default"))</span>
-<span class="source-line-no">1113</span><span id="line-1113">               .appendIfAbsentIf(ne, "description", schema.remove("description"))</span>
-<span class="source-line-no">1114</span><span id="line-1114">               .appendIfAbsentIf(ne, "enum", schema.remove("enum"))</span>
-<span class="source-line-no">1115</span><span id="line-1115">               .appendIfAbsentIf(ne, "example", schema.remove("example"))</span>
-<span class="source-line-no">1116</span><span id="line-1116">               .appendIfAbsentIf(ne, "exclusiveMaximum", schema.remove("exclusiveMaximum"))</span>
-<span class="source-line-no">1117</span><span id="line-1117">               .appendIfAbsentIf(ne, "exclusiveMinimum", schema.remove("exclusiveMinimum"))</span>
-<span class="source-line-no">1118</span><span id="line-1118">               .appendIfAbsentIf(ne, "format", schema.remove("format"))</span>
-<span class="source-line-no">1119</span><span id="line-1119">               .appendIfAbsentIf(ne, "items", schema.remove("items"))</span>
-<span class="source-line-no">1120</span><span id="line-1120">               .appendIfAbsentIf(ne, "maximum", schema.remove("maximum"))</span>
-<span class="source-line-no">1121</span><span id="line-1121">               .appendIfAbsentIf(ne, "maxItems", schema.remove("maxItems"))</span>
-<span class="source-line-no">1122</span><span id="line-1122">               .appendIfAbsentIf(ne, "maxLength", schema.remove("maxLength"))</span>
-<span class="source-line-no">1123</span><span id="line-1123">               .appendIfAbsentIf(ne, "minimum", schema.remove("minimum"))</span>
-<span class="source-line-no">1124</span><span id="line-1124">               .appendIfAbsentIf(ne, "minItems", schema.remove("minItems"))</span>
-<span class="source-line-no">1125</span><span id="line-1125">               .appendIfAbsentIf(ne, "minLength", schema.remove("minLength"))</span>
-<span class="source-line-no">1126</span><span id="line-1126">               .appendIfAbsentIf(ne, "multipleOf", schema.remove("multipleOf"))</span>
-<span class="source-line-no">1127</span><span id="line-1127">               .appendIfAbsentIf(ne, "pattern", schema.remove("pattern"))</span>
-<span class="source-line-no">1128</span><span id="line-1128">               .appendIfAbsentIf(ne, "required", schema.remove("required"))</span>
-<span class="source-line-no">1129</span><span id="line-1129">               .appendIfAbsentIf(ne, "type", schema.remove("type"))</span>
-<span class="source-line-no">1130</span><span id="line-1130">               .appendIfAbsentIf(ne, "uniqueItems", schema.remove("uniqueItems"));</span>
-<span class="source-line-no">1131</span><span id="line-1131"></span>
-<span class="source-line-no">1132</span><span id="line-1132">            if (eq(param.getString("type"), "object") &amp;&amp; ! schema.isEmpty())</span>
-<span class="source-line-no">1133</span><span id="line-1133">               param.put("schema", schema);</span>
-<span class="source-line-no">1134</span><span id="line-1134">         }</span>
-<span class="source-line-no">1135</span><span id="line-1135">      }</span>
-<span class="source-line-no">1136</span><span id="line-1136"></span>
-<span class="source-line-no">1137</span><span id="line-1137">      return param;</span>
-<span class="source-line-no">1138</span><span id="line-1138">      // @formatter:on</span>
-<span class="source-line-no">1139</span><span id="line-1139">   }</span>
-<span class="source-line-no">1140</span><span id="line-1140"></span>
-<span class="source-line-no">1141</span><span id="line-1141">   private MarshalledList resolve(MarshalledList om) throws ParseException {</span>
-<span class="source-line-no">1142</span><span id="line-1142">      var ol2 = new Json5List();</span>
-<span class="source-line-no">1143</span><span id="line-1143">      for (var val : om) {</span>
-<span class="source-line-no">1144</span><span id="line-1144">         if (val instanceof MarshalledMap val2) {</span>
-<span class="source-line-no">1145</span><span id="line-1145">            val = resolve(val2);</span>
-<span class="source-line-no">1146</span><span id="line-1146">         } else if (val instanceof MarshalledList val2) {</span>
+<span class="source-line-no">829</span><span id="line-829">         @SuppressWarnings({</span>
+<span class="source-line-no">830</span><span id="line-830">            "unchecked" // The instanceof Map&lt;?,?&gt; match is a JSON-model map, whose keys are strings.</span>
+<span class="source-line-no">831</span><span id="line-831">         })</span>
+<span class="source-line-no">832</span><span id="line-832">         var m2 = (Map&lt;String,Object&gt;)m;</span>
+<span class="source-line-no">833</span><span id="line-833">         if (Boolean.TRUE.equals(m2.get("writeOnly"))) {</span>
+<span class="source-line-no">834</span><span id="line-834">            m2.remove("writeOnly");</span>
+<span class="source-line-no">835</span><span id="line-835">            m2.put("x-writeOnly", true);</span>
+<span class="source-line-no">836</span><span id="line-836">         }</span>
+<span class="source-line-no">837</span><span id="line-837">         for (var k : new String[]{"properties", "patternProperties", "definitions", "$defs"}) {</span>
+<span class="source-line-no">838</span><span id="line-838">            if (m2.get(k) instanceof Map&lt;?,?&gt; children)</span>
+<span class="source-line-no">839</span><span id="line-839">               children.values().forEach(BasicSwaggerProviderSession::renameWriteOnly);</span>
+<span class="source-line-no">840</span><span id="line-840">         }</span>
+<span class="source-line-no">841</span><span id="line-841">         for (var k : new String[]{"items", "additionalProperties", "not"})</span>
+<span class="source-line-no">842</span><span id="line-842">            renameWriteOnly(m2.get(k));</span>
+<span class="source-line-no">843</span><span id="line-843">         for (var k : new String[]{"allOf", "anyOf", "oneOf", "items"}) {</span>
+<span class="source-line-no">844</span><span id="line-844">            if (m2.get(k) instanceof List&lt;?&gt; l)</span>
+<span class="source-line-no">845</span><span id="line-845">               l.forEach(BasicSwaggerProviderSession::renameWriteOnly);</span>
+<span class="source-line-no">846</span><span id="line-846">         }</span>
+<span class="source-line-no">847</span><span id="line-847">      }</span>
+<span class="source-line-no">848</span><span id="line-848">      return schema;</span>
+<span class="source-line-no">849</span><span id="line-849">   }</span>
+<span class="source-line-no">850</span><span id="line-850"></span>
+<span class="source-line-no">851</span><span id="line-851">   private static boolean isMulti(Header h) {</span>
+<span class="source-line-no">852</span><span id="line-852">      return eq(h.name(), "*") || eq(h.value(), "*");</span>
+<span class="source-line-no">853</span><span id="line-853">   }</span>
+<span class="source-line-no">854</span><span id="line-854"></span>
+<span class="source-line-no">855</span><span id="line-855">   private static MarshalledList merge(MarshalledList...lists) {</span>
+<span class="source-line-no">856</span><span id="line-856">      var l = lists[0];</span>
+<span class="source-line-no">857</span><span id="line-857">      for (var i = 1; i &lt; lists.length; i++) {</span>
+<span class="source-line-no">858</span><span id="line-858">         if (nn(lists[i])) {</span>
+<span class="source-line-no">859</span><span id="line-859">            if (l == null)</span>
+<span class="source-line-no">860</span><span id="line-860">               l = new Json5List();</span>
+<span class="source-line-no">861</span><span id="line-861">            l.addAll(lists[i]);</span>
+<span class="source-line-no">862</span><span id="line-862">         }</span>
+<span class="source-line-no">863</span><span id="line-863">      }</span>
+<span class="source-line-no">864</span><span id="line-864">      return l;</span>
+<span class="source-line-no">865</span><span id="line-865">   }</span>
+<span class="source-line-no">866</span><span id="line-866"></span>
+<span class="source-line-no">867</span><span id="line-867">   private static MarshalledMap merge(MarshalledMap...maps) {</span>
+<span class="source-line-no">868</span><span id="line-868">      var m = maps[0];</span>
+<span class="source-line-no">869</span><span id="line-869">      for (var i = 1; i &lt; maps.length; i++) {</span>
+<span class="source-line-no">870</span><span id="line-870">         if (nn(maps[i])) {</span>
+<span class="source-line-no">871</span><span id="line-871">            if (m == null)</span>
+<span class="source-line-no">872</span><span id="line-872">               m = new Json5Map();</span>
+<span class="source-line-no">873</span><span id="line-873">            m.putAll(maps[i]);</span>
+<span class="source-line-no">874</span><span id="line-874">         }</span>
+<span class="source-line-no">875</span><span id="line-875">      }</span>
+<span class="source-line-no">876</span><span id="line-876">      return m;</span>
+<span class="source-line-no">877</span><span id="line-877">   }</span>
+<span class="source-line-no">878</span><span id="line-878"></span>
+<span class="source-line-no">879</span><span id="line-879">   private MarshalledMap merge(MarshalledMap om, ExternalDocs a) {</span>
+<span class="source-line-no">880</span><span id="line-880">      if (ExternalDocsAnnotation.empty(a))</span>
+<span class="source-line-no">881</span><span id="line-881">         return om;</span>
+<span class="source-line-no">882</span><span id="line-882">      om = newMap(om);</span>
+<span class="source-line-no">883</span><span id="line-883">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">884</span><span id="line-884">      // @formatter:off</span>
+<span class="source-line-no">885</span><span id="line-885">      return om</span>
+<span class="source-line-no">886</span><span id="line-886">         .appendIf(ne, "description", resolve(a.description()))</span>
+<span class="source-line-no">887</span><span id="line-887">         .appendIf(ne, "url", a.url())</span>
+<span class="source-line-no">888</span><span id="line-888">      ;</span>
+<span class="source-line-no">889</span><span id="line-889">      // @formatter:on</span>
+<span class="source-line-no">890</span><span id="line-890">   }</span>
+<span class="source-line-no">891</span><span id="line-891"></span>
+<span class="source-line-no">892</span><span id="line-892">   private MarshalledMap merge(MarshalledMap om, Header[] a) {</span>
+<span class="source-line-no">893</span><span id="line-893">      if (a.length == 0)</span>
+<span class="source-line-no">894</span><span id="line-894">         return om;</span>
+<span class="source-line-no">895</span><span id="line-895">      om = newMap(om);</span>
+<span class="source-line-no">896</span><span id="line-896">      for (var aa : a) {</span>
+<span class="source-line-no">897</span><span id="line-897">         var name = StringUtils.firstNonEmpty(aa.name(), aa.value());</span>
+<span class="source-line-no">898</span><span id="line-898">         if (isEmpty(name))</span>
+<span class="source-line-no">899</span><span id="line-899">            throw iaex("@Header used without name or value.");</span>
+<span class="source-line-no">900</span><span id="line-900">         merge(om.getMap(name, true), aa.schema());</span>
+<span class="source-line-no">901</span><span id="line-901">      }</span>
+<span class="source-line-no">902</span><span id="line-902">      return om;</span>
+<span class="source-line-no">903</span><span id="line-903">   }</span>
+<span class="source-line-no">904</span><span id="line-904"></span>
+<span class="source-line-no">905</span><span id="line-905">   private MarshalledMap merge(MarshalledMap om, Items a) throws ParseException {</span>
+<span class="source-line-no">906</span><span id="line-906">      if (ItemsAnnotation.empty(a))</span>
+<span class="source-line-no">907</span><span id="line-907">         return om;</span>
+<span class="source-line-no">908</span><span id="line-908">      om = newMap(om);</span>
+<span class="source-line-no">909</span><span id="line-909">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">910</span><span id="line-910">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">911</span><span id="line-911">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
+<span class="source-line-no">912</span><span id="line-912">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">913</span><span id="line-913">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
+<span class="source-line-no">914</span><span id="line-914">      // @formatter:off</span>
+<span class="source-line-no">915</span><span id="line-915">      return om</span>
+<span class="source-line-no">916</span><span id="line-916">         .appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())</span>
+<span class="source-line-no">917</span><span id="line-917">         .appendIf(ne, "default", joinnl(a.default_(), a.df()))</span>
+<span class="source-line-no">918</span><span id="line-918">         .appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))</span>
+<span class="source-line-no">919</span><span id="line-919">         .appendFirst(ne, "format", a.format(), a.f())</span>
+<span class="source-line-no">920</span><span id="line-920">         .appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())</span>
+<span class="source-line-no">921</span><span id="line-921">         .appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())</span>
+<span class="source-line-no">922</span><span id="line-922">         .appendIf(nem, "items", merge(om.getMap("items"), a.items()))</span>
+<span class="source-line-no">923</span><span id="line-923">         .appendFirst(ne, "maximum", a.maximum(), a.max())</span>
+<span class="source-line-no">924</span><span id="line-924">         .appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())</span>
+<span class="source-line-no">925</span><span id="line-925">         .appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())</span>
+<span class="source-line-no">926</span><span id="line-926">         .appendFirst(ne, "minimum", a.minimum(), a.min())</span>
+<span class="source-line-no">927</span><span id="line-927">         .appendFirst(nm1, "minItems", a.minItems(), a.mini())</span>
+<span class="source-line-no">928</span><span id="line-928">         .appendFirst(nm1, "minLength", a.minLength(), a.minl())</span>
+<span class="source-line-no">929</span><span id="line-929">         .appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())</span>
+<span class="source-line-no">930</span><span id="line-930">         .appendFirst(ne, "pattern", a.pattern(), a.p())</span>
+<span class="source-line-no">931</span><span id="line-931">         .appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())</span>
+<span class="source-line-no">932</span><span id="line-932">         .appendFirst(ne, "type", a.type(), a.t())</span>
+<span class="source-line-no">933</span><span id="line-933">         .appendIf(ne, "$ref", a.$ref())</span>
+<span class="source-line-no">934</span><span id="line-934">      ;</span>
+<span class="source-line-no">935</span><span id="line-935">      // @formatter:on</span>
+<span class="source-line-no">936</span><span id="line-936">   }</span>
+<span class="source-line-no">937</span><span id="line-937"></span>
+<span class="source-line-no">938</span><span id="line-938">   private MarshalledMap merge(MarshalledMap om, Response a) throws ParseException {</span>
+<span class="source-line-no">939</span><span id="line-939">      if (ResponseAnnotation.empty(a))</span>
+<span class="source-line-no">940</span><span id="line-940">         return om;</span>
+<span class="source-line-no">941</span><span id="line-941">      om = newMap(om);</span>
+<span class="source-line-no">942</span><span id="line-942">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
+<span class="source-line-no">943</span><span id="line-943">      if (! SchemaAnnotation.empty(a.schema()))</span>
+<span class="source-line-no">944</span><span id="line-944">         merge(om, a.schema());</span>
+<span class="source-line-no">945</span><span id="line-945">      // @formatter:off</span>
+<span class="source-line-no">946</span><span id="line-946">      return om</span>
+<span class="source-line-no">947</span><span id="line-947">         .appendIf(nem, "examples", parseMap(a.examples()))</span>
+<span class="source-line-no">948</span><span id="line-948">         .appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))</span>
+<span class="source-line-no">949</span><span id="line-949">         .appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))</span>
+<span class="source-line-no">950</span><span id="line-950">      ;</span>
+<span class="source-line-no">951</span><span id="line-951">      // @formatter:on</span>
+<span class="source-line-no">952</span><span id="line-952">   }</span>
+<span class="source-line-no">953</span><span id="line-953"></span>
+<span class="source-line-no">954</span><span id="line-954">   private MarshalledMap merge(MarshalledMap om, Schema a) {</span>
+<span class="source-line-no">955</span><span id="line-955">      try {</span>
+<span class="source-line-no">956</span><span id="line-956">         if (SchemaAnnotation.empty(a))</span>
+<span class="source-line-no">957</span><span id="line-957">            return om;</span>
+<span class="source-line-no">958</span><span id="line-958">         om = newMap(om);</span>
+<span class="source-line-no">959</span><span id="line-959">         Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">960</span><span id="line-960">         Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">961</span><span id="line-961">         Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
+<span class="source-line-no">962</span><span id="line-962">         Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">963</span><span id="line-963">         Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
+<span class="source-line-no">964</span><span id="line-964">         // @formatter:off</span>
+<span class="source-line-no">965</span><span id="line-965">         return om</span>
+<span class="source-line-no">966</span><span id="line-966">            .appendIf(ne, "allOf", joinnl(a.allOf()))</span>
+<span class="source-line-no">967</span><span id="line-967">            .appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())</span>
+<span class="source-line-no">968</span><span id="line-968">            .appendIf(ne, "default", joinnl(a.default_(), a.df()))</span>
+<span class="source-line-no">969</span><span id="line-969">            .appendIf(ne, "discriminator", a.discriminator())</span>
+<span class="source-line-no">970</span><span id="line-970">            .appendIf(ne, "description", resolve(a.description(), a.d()))</span>
+<span class="source-line-no">971</span><span id="line-971">            .appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))</span>
+<span class="source-line-no">972</span><span id="line-972">            .appendIf(nf, "exclusiveMaximum", a.emax())</span>
+<span class="source-line-no">973</span><span id="line-973">            .appendIf(nf, "exclusiveMinimum", a.emin())</span>
+<span class="source-line-no">974</span><span id="line-974">            .appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))</span>
+<span class="source-line-no">975</span><span id="line-975">            .appendFirst(ne, "format", a.format(), a.f())</span>
+<span class="source-line-no">976</span><span id="line-976">            .appendIf(ne, "ignore", a.ignore() ? "true" : null)</span>
+<span class="source-line-no">977</span><span id="line-977">            .appendIf(nem, "items", merge(om.getMap("items"), a.items()))</span>
+<span class="source-line-no">978</span><span id="line-978">            .appendFirst(ne, "maximum", a.maximum(), a.max())</span>
+<span class="source-line-no">979</span><span id="line-979">            .appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())</span>
+<span class="source-line-no">980</span><span id="line-980">            .appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())</span>
+<span class="source-line-no">981</span><span id="line-981">            .appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())</span>
+<span class="source-line-no">982</span><span id="line-982">            .appendFirst(ne, "minimum", a.minimum(), a.min())</span>
+<span class="source-line-no">983</span><span id="line-983">            .appendFirst(nm1, "minItems", a.minItems(), a.mini())</span>
+<span class="source-line-no">984</span><span id="line-984">            .appendFirst(nm1, "minLength", a.minLength(), a.minl())</span>
+<span class="source-line-no">985</span><span id="line-985">            .appendFirst(nm1, "minProperties", a.minProperties(), a.minp())</span>
+<span class="source-line-no">986</span><span id="line-986">            .appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())</span>
+<span class="source-line-no">987</span><span id="line-987">            .appendFirst(ne, "pattern", a.pattern(), a.p())</span>
+<span class="source-line-no">988</span><span id="line-988">            .appendIf(nf, "readOnly", a.readOnly() || a.ro())</span>
+<span class="source-line-no">989</span><span id="line-989">            .appendIf(nf, "required", a.required() || a.r())</span>
+<span class="source-line-no">990</span><span id="line-990">            .appendIf(ne, "summary", resolve(firstNonEmpty(a.summary(), a.su())))</span>
+<span class="source-line-no">991</span><span id="line-991">            .appendIf(ne, "title", a.title())</span>
+<span class="source-line-no">992</span><span id="line-992">            .appendFirst(ne, "type", a.type(), a.t())</span>
+<span class="source-line-no">993</span><span id="line-993">            .appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())</span>
+<span class="source-line-no">994</span><span id="line-994">            .appendIf(ne, "xml", joinnl(a.xml()))</span>
+<span class="source-line-no">995</span><span id="line-995">            .appendIf(ne, "$ref", a.$ref())</span>
+<span class="source-line-no">996</span><span id="line-996">         ;</span>
+<span class="source-line-no">997</span><span id="line-997">         // @formatter:on</span>
+<span class="source-line-no">998</span><span id="line-998">      } catch (ParseException e) {</span>
+<span class="source-line-no">999</span><span id="line-999">         throw iaex(e);</span>
+<span class="source-line-no">1000</span><span id="line-1000">      }</span>
+<span class="source-line-no">1001</span><span id="line-1001">   }</span>
+<span class="source-line-no">1002</span><span id="line-1002"></span>
+<span class="source-line-no">1003</span><span id="line-1003">   private MarshalledMap merge(MarshalledMap om, SubItems a) throws ParseException {</span>
+<span class="source-line-no">1004</span><span id="line-1004">      if (SubItemsAnnotation.empty(a))</span>
+<span class="source-line-no">1005</span><span id="line-1005">         return om;</span>
+<span class="source-line-no">1006</span><span id="line-1006">      om = newMap(om);</span>
+<span class="source-line-no">1007</span><span id="line-1007">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1008</span><span id="line-1008">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">1009</span><span id="line-1009">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">1010</span><span id="line-1010">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
+<span class="source-line-no">1011</span><span id="line-1011">      // @formatter:off</span>
+<span class="source-line-no">1012</span><span id="line-1012">      return om</span>
+<span class="source-line-no">1013</span><span id="line-1013">         .appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())</span>
+<span class="source-line-no">1014</span><span id="line-1014">         .appendIf(ne, "default", joinnl(a.default_(), a.df()))</span>
+<span class="source-line-no">1015</span><span id="line-1015">         .appendFirst(nec, "enum", toSet(a.enum_()), toSet(a.e()))</span>
+<span class="source-line-no">1016</span><span id="line-1016">         .appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())</span>
+<span class="source-line-no">1017</span><span id="line-1017">         .appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())</span>
+<span class="source-line-no">1018</span><span id="line-1018">         .appendFirst(ne, "format", a.format(), a.f())</span>
+<span class="source-line-no">1019</span><span id="line-1019">         .appendFirst(ne, "maximum", a.maximum(), a.max())</span>
+<span class="source-line-no">1020</span><span id="line-1020">         .appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())</span>
+<span class="source-line-no">1021</span><span id="line-1021">         .appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())</span>
+<span class="source-line-no">1022</span><span id="line-1022">         .appendFirst(ne, "minimum", a.minimum(), a.min())</span>
+<span class="source-line-no">1023</span><span id="line-1023">         .appendFirst(nm1, "minItems", a.minItems(), a.mini())</span>
+<span class="source-line-no">1024</span><span id="line-1024">         .appendFirst(nm1, "minLength", a.minLength(), a.minl())</span>
+<span class="source-line-no">1025</span><span id="line-1025">         .appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())</span>
+<span class="source-line-no">1026</span><span id="line-1026">         .appendFirst(ne, "pattern", a.pattern(), a.p())</span>
+<span class="source-line-no">1027</span><span id="line-1027">         .appendFirst(ne, "type", a.type(), a.t())</span>
+<span class="source-line-no">1028</span><span id="line-1028">         .appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())</span>
+<span class="source-line-no">1029</span><span id="line-1029">         .appendIf(ne, "$ref", a.$ref())</span>
+<span class="source-line-no">1030</span><span id="line-1030">      ;</span>
+<span class="source-line-no">1031</span><span id="line-1031">      // @formatter:on</span>
+<span class="source-line-no">1032</span><span id="line-1032">   }</span>
+<span class="source-line-no">1033</span><span id="line-1033"></span>
+<span class="source-line-no">1034</span><span id="line-1034">   private MarshalledList parseList(Object o, String location, Object...locationArgs) throws ParseException {</span>
+<span class="source-line-no">1035</span><span id="line-1035">      try {</span>
+<span class="source-line-no">1036</span><span id="line-1036">         if (o == null)</span>
+<span class="source-line-no">1037</span><span id="line-1037">            return null;</span>
+<span class="source-line-no">1038</span><span id="line-1038">         var s = (o instanceof String[] o2 ? joinnl(o2) : o.toString());</span>
+<span class="source-line-no">1039</span><span id="line-1039">         if (s.isEmpty())</span>
+<span class="source-line-no">1040</span><span id="line-1040">            return null;</span>
+<span class="source-line-no">1041</span><span id="line-1041">         s = resolve(s);</span>
+<span class="source-line-no">1042</span><span id="line-1042">         if (! isProbablyJsonArray(s, true))</span>
+<span class="source-line-no">1043</span><span id="line-1043">            s = "[" + s + "]";</span>
+<span class="source-line-no">1044</span><span id="line-1044">         return Json5List.ofString(s);</span>
+<span class="source-line-no">1045</span><span id="line-1045">      } catch (ParseException e) {</span>
+<span class="source-line-no">1046</span><span id="line-1046">         throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);</span>
+<span class="source-line-no">1047</span><span id="line-1047">      }</span>
+<span class="source-line-no">1048</span><span id="line-1048">   }</span>
+<span class="source-line-no">1049</span><span id="line-1049"></span>
+<span class="source-line-no">1050</span><span id="line-1050">   private MarshalledList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {</span>
+<span class="source-line-no">1051</span><span id="line-1051">      try {</span>
+<span class="source-line-no">1052</span><span id="line-1052">         if (o == null)</span>
+<span class="source-line-no">1053</span><span id="line-1053">            return null;</span>
+<span class="source-line-no">1054</span><span id="line-1054">         var s = (o instanceof String[] o2 ? joinnl(o2) : o.toString());</span>
+<span class="source-line-no">1055</span><span id="line-1055">         if (s.isEmpty())</span>
+<span class="source-line-no">1056</span><span id="line-1056">            return null;</span>
+<span class="source-line-no">1057</span><span id="line-1057">         s = resolve(s);</span>
+<span class="source-line-no">1058</span><span id="line-1058">         return Json5List.ofJson5OrCdl(s);</span>
+<span class="source-line-no">1059</span><span id="line-1059">      } catch (ParseException e) {</span>
+<span class="source-line-no">1060</span><span id="line-1060">         throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);</span>
+<span class="source-line-no">1061</span><span id="line-1061">      }</span>
+<span class="source-line-no">1062</span><span id="line-1062">   }</span>
+<span class="source-line-no">1063</span><span id="line-1063"></span>
+<span class="source-line-no">1064</span><span id="line-1064">   private MarshalledMap parseMap(Object o) throws ParseException {</span>
+<span class="source-line-no">1065</span><span id="line-1065">      if (o == null)</span>
+<span class="source-line-no">1066</span><span id="line-1066">         return null;</span>
+<span class="source-line-no">1067</span><span id="line-1067">      if (o instanceof String[] o2)</span>
+<span class="source-line-no">1068</span><span id="line-1068">         o = joinnl(o2);</span>
+<span class="source-line-no">1069</span><span id="line-1069">      if (o instanceof String o2) {</span>
+<span class="source-line-no">1070</span><span id="line-1070">         if (o2.isEmpty())</span>
+<span class="source-line-no">1071</span><span id="line-1071">            return null;</span>
+<span class="source-line-no">1072</span><span id="line-1072">         o2 = resolve(o2);</span>
+<span class="source-line-no">1073</span><span id="line-1073">         if (eqic("IGNORE", o2))</span>
+<span class="source-line-no">1074</span><span id="line-1074">            return Json5Map.of("ignore", true);</span>
+<span class="source-line-no">1075</span><span id="line-1075">         if (! isProbablyJsonObject(o2, true))</span>
+<span class="source-line-no">1076</span><span id="line-1076">            o2 = "{" + o2 + "}";</span>
+<span class="source-line-no">1077</span><span id="line-1077">         return Json5Map.ofString(o2);</span>
+<span class="source-line-no">1078</span><span id="line-1078">      }</span>
+<span class="source-line-no">1079</span><span id="line-1079">      if (o instanceof Json5Map o2)</span>
+<span class="source-line-no">1080</span><span id="line-1080">         return o2;</span>
+<span class="source-line-no">1081</span><span id="line-1081">      if (o instanceof MarshalledMap o2)</span>
+<span class="source-line-no">1082</span><span id="line-1082">         return new Json5Map(o2);</span>
+<span class="source-line-no">1083</span><span id="line-1083">      throw new SwaggerException(null, "Unexpected data type '%s'.  Expected Map or String.", cn(o));</span>
+<span class="source-line-no">1084</span><span id="line-1084">   }</span>
+<span class="source-line-no">1085</span><span id="line-1085"></span>
+<span class="source-line-no">1086</span><span id="line-1086">   private MarshalledMap parseMap(String o, String location, Object...args) throws ParseException {</span>
+<span class="source-line-no">1087</span><span id="line-1087">      try {</span>
+<span class="source-line-no">1088</span><span id="line-1088">         return parseMap(o);</span>
+<span class="source-line-no">1089</span><span id="line-1089">      } catch (ParseException e) {</span>
+<span class="source-line-no">1090</span><span id="line-1090">         throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);</span>
+<span class="source-line-no">1091</span><span id="line-1091">      }</span>
+<span class="source-line-no">1092</span><span id="line-1092">   }</span>
+<span class="source-line-no">1093</span><span id="line-1093"></span>
+<span class="source-line-no">1094</span><span id="line-1094">   private MarshalledMap parseMap(String[] o, String location, Object...args) throws ParseException {</span>
+<span class="source-line-no">1095</span><span id="line-1095">      if (o.length == 0)</span>
+<span class="source-line-no">1096</span><span id="line-1096">         return Json5Map.EMPTY_MAP;</span>
+<span class="source-line-no">1097</span><span id="line-1097">      try {</span>
+<span class="source-line-no">1098</span><span id="line-1098">         return parseMap(o);</span>
+<span class="source-line-no">1099</span><span id="line-1099">      } catch (ParseException e) {</span>
+<span class="source-line-no">1100</span><span id="line-1100">         throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);</span>
+<span class="source-line-no">1101</span><span id="line-1101">      }</span>
+<span class="source-line-no">1102</span><span id="line-1102">   }</span>
+<span class="source-line-no">1103</span><span id="line-1103"></span>
+<span class="source-line-no">1104</span><span id="line-1104">   private static MarshalledMap pushupSchemaFields(RestPartType type, MarshalledMap param, MarshalledMap schema) {</span>
+<span class="source-line-no">1105</span><span id="line-1105">      // @formatter:off</span>
+<span class="source-line-no">1106</span><span id="line-1106">      Predicate&lt;Object&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1107</span><span id="line-1107">      if (nn(schema) &amp;&amp; ! schema.isEmpty()) {</span>
+<span class="source-line-no">1108</span><span id="line-1108">         if (type == BODY || type == RESPONSE) {</span>
+<span class="source-line-no">1109</span><span id="line-1109">            param</span>
+<span class="source-line-no">1110</span><span id="line-1110">               .appendIf(ne, "description", schema.remove("description"));</span>
+<span class="source-line-no">1111</span><span id="line-1111">         } else {</span>
+<span class="source-line-no">1112</span><span id="line-1112">            param</span>
+<span class="source-line-no">1113</span><span id="line-1113">               .appendIfAbsentIf(ne, "collectionFormat", schema.remove("collectionFormat"))</span>
+<span class="source-line-no">1114</span><span id="line-1114">               .appendIfAbsentIf(ne, "default", schema.remove("default"))</span>
+<span class="source-line-no">1115</span><span id="line-1115">               .appendIfAbsentIf(ne, "description", schema.remove("description"))</span>
+<span class="source-line-no">1116</span><span id="line-1116">               .appendIfAbsentIf(ne, "enum", schema.remove("enum"))</span>
+<span class="source-line-no">1117</span><span id="line-1117">               .appendIfAbsentIf(ne, "example", schema.remove("example"))</span>
+<span class="source-line-no">1118</span><span id="line-1118">               .appendIfAbsentIf(ne, "exclusiveMaximum", schema.remove("exclusiveMaximum"))</span>
+<span class="source-line-no">1119</span><span id="line-1119">               .appendIfAbsentIf(ne, "exclusiveMinimum", schema.remove("exclusiveMinimum"))</span>
+<span class="source-line-no">1120</span><span id="line-1120">               .appendIfAbsentIf(ne, "format", schema.remove("format"))</span>
+<span class="source-line-no">1121</span><span id="line-1121">               .appendIfAbsentIf(ne, "items", schema.remove("items"))</span>
+<span class="source-line-no">1122</span><span id="line-1122">               .appendIfAbsentIf(ne, "maximum", schema.remove("maximum"))</span>
+<span class="source-line-no">1123</span><span id="line-1123">               .appendIfAbsentIf(ne, "maxItems", schema.remove("maxItems"))</span>
+<span class="source-line-no">1124</span><span id="line-1124">               .appendIfAbsentIf(ne, "maxLength", schema.remove("maxLength"))</span>
+<span class="source-line-no">1125</span><span id="line-1125">               .appendIfAbsentIf(ne, "minimum", schema.remove("minimum"))</span>
+<span class="source-line-no">1126</span><span id="line-1126">               .appendIfAbsentIf(ne, "minItems", schema.remove("minItems"))</span>
+<span class="source-line-no">1127</span><span id="line-1127">               .appendIfAbsentIf(ne, "minLength", schema.remove("minLength"))</span>
+<span class="source-line-no">1128</span><span id="line-1128">               .appendIfAbsentIf(ne, "multipleOf", schema.remove("multipleOf"))</span>
+<span class="source-line-no">1129</span><span id="line-1129">               .appendIfAbsentIf(ne, "pattern", schema.remove("pattern"))</span>
+<span class="source-line-no">1130</span><span id="line-1130">               .appendIfAbsentIf(ne, "required", schema.remove("required"))</span>
+<span class="source-line-no">1131</span><span id="line-1131">               .appendIfAbsentIf(ne, "type", schema.remove("type"))</span>
+<span class="source-line-no">1132</span><span id="line-1132">               .appendIfAbsentIf(ne, "uniqueItems", schema.remove("uniqueItems"));</span>
+<span class="source-line-no">1133</span><span id="line-1133"></span>
+<span class="source-line-no">1134</span><span id="line-1134">            if (eq(param.getString("type"), "object") &amp;&amp; ! schema.isEmpty())</span>
+<span class="source-line-no">1135</span><span id="line-1135">               param.put("schema", schema);</span>
+<span class="source-line-no">1136</span><span id="line-1136">         }</span>
+<span class="source-line-no">1137</span><span id="line-1137">      }</span>
+<span class="source-line-no">1138</span><span id="line-1138"></span>
+<span class="source-line-no">1139</span><span id="line-1139">      return param;</span>
+<span class="source-line-no">1140</span><span id="line-1140">      // @formatter:on</span>
+<span class="source-line-no">1141</span><span id="line-1141">   }</span>
+<span class="source-line-no">1142</span><span id="line-1142"></span>
+<span class="source-line-no">1143</span><span id="line-1143">   private MarshalledList resolve(MarshalledList om) throws ParseException {</span>
+<span class="source-line-no">1144</span><span id="line-1144">      var ol2 = new Json5List();</span>
+<span class="source-line-no">1145</span><span id="line-1145">      for (var val : om) {</span>
+<span class="source-line-no">1146</span><span id="line-1146">         if (val instanceof MarshalledMap val2) {</span>
 <span class="source-line-no">1147</span><span id="line-1147">            val = resolve(val2);</span>
-<span class="source-line-no">1148</span><span id="line-1148">         } else if (val instanceof String val2) {</span>
+<span class="source-line-no">1148</span><span id="line-1148">         } else if (val instanceof MarshalledList val2) {</span>
 <span class="source-line-no">1149</span><span id="line-1149">            val = resolve(val2);</span>
-<span class="source-line-no">1150</span><span id="line-1150">         }</span>
-<span class="source-line-no">1151</span><span id="line-1151">         ol2.add(val);</span>
-<span class="source-line-no">1152</span><span id="line-1152">      }</span>
-<span class="source-line-no">1153</span><span id="line-1153">      return ol2;</span>
-<span class="source-line-no">1154</span><span id="line-1154">   }</span>
-<span class="source-line-no">1155</span><span id="line-1155"></span>
-<span class="source-line-no">1156</span><span id="line-1156">   private MarshalledMap resolve(MarshalledMap om) throws ParseException {</span>
-<span class="source-line-no">1157</span><span id="line-1157">      MarshalledMap om2 = null;</span>
-<span class="source-line-no">1158</span><span id="line-1158">      if (om.containsKey("_value")) {</span>
-<span class="source-line-no">1159</span><span id="line-1159">         om = om.modifiable();</span>
-<span class="source-line-no">1160</span><span id="line-1160">         om2 = parseMap(om.remove("_value"));</span>
-<span class="source-line-no">1161</span><span id="line-1161">      } else {</span>
-<span class="source-line-no">1162</span><span id="line-1162">         om2 = new Json5Map();</span>
-<span class="source-line-no">1163</span><span id="line-1163">      }</span>
-<span class="source-line-no">1164</span><span id="line-1164">      for (var e : om.entrySet()) {</span>
-<span class="source-line-no">1165</span><span id="line-1165">         var val = e.getValue();</span>
-<span class="source-line-no">1166</span><span id="line-1166">         if (val instanceof MarshalledMap val2) {</span>
-<span class="source-line-no">1167</span><span id="line-1167">            val = resolve(val2);</span>
-<span class="source-line-no">1168</span><span id="line-1168">         } else if (val instanceof MarshalledList val2) {</span>
+<span class="source-line-no">1150</span><span id="line-1150">         } else if (val instanceof String val2) {</span>
+<span class="source-line-no">1151</span><span id="line-1151">            val = resolve(val2);</span>
+<span class="source-line-no">1152</span><span id="line-1152">         }</span>
+<span class="source-line-no">1153</span><span id="line-1153">         ol2.add(val);</span>
+<span class="source-line-no">1154</span><span id="line-1154">      }</span>
+<span class="source-line-no">1155</span><span id="line-1155">      return ol2;</span>
+<span class="source-line-no">1156</span><span id="line-1156">   }</span>
+<span class="source-line-no">1157</span><span id="line-1157"></span>
+<span class="source-line-no">1158</span><span id="line-1158">   private MarshalledMap resolve(MarshalledMap om) throws ParseException {</span>
+<span class="source-line-no">1159</span><span id="line-1159">      MarshalledMap om2 = null;</span>
+<span class="source-line-no">1160</span><span id="line-1160">      if (om.containsKey("_value")) {</span>
+<span class="source-line-no">1161</span><span id="line-1161">         om = om.modifiable();</span>
+<span class="source-line-no">1162</span><span id="line-1162">         om2 = parseMap(om.remove("_value"));</span>
+<span class="source-line-no">1163</span><span id="line-1163">      } else {</span>
+<span class="source-line-no">1164</span><span id="line-1164">         om2 = new Json5Map();</span>
+<span class="source-line-no">1165</span><span id="line-1165">      }</span>
+<span class="source-line-no">1166</span><span id="line-1166">      for (var e : om.entrySet()) {</span>
+<span class="source-line-no">1167</span><span id="line-1167">         var val = e.getValue();</span>
+<span class="source-line-no">1168</span><span id="line-1168">         if (val instanceof MarshalledMap val2) {</span>
 <span class="source-line-no">1169</span><span id="line-1169">            val = resolve(val2);</span>
-<span class="source-line-no">1170</span><span id="line-1170">         } else if (val instanceof String val2) {</span>
+<span class="source-line-no">1170</span><span id="line-1170">         } else if (val instanceof MarshalledList val2) {</span>
 <span class="source-line-no">1171</span><span id="line-1171">            val = resolve(val2);</span>
-<span class="source-line-no">1172</span><span id="line-1172">         }</span>
-<span class="source-line-no">1173</span><span id="line-1173">         om2.put(e.getKey(), val);</span>
-<span class="source-line-no">1174</span><span id="line-1174">      }</span>
-<span class="source-line-no">1175</span><span id="line-1175">      return om2;</span>
-<span class="source-line-no">1176</span><span id="line-1176">   }</span>
-<span class="source-line-no">1177</span><span id="line-1177"></span>
-<span class="source-line-no">1178</span><span id="line-1178">   private String resolve(String s) {</span>
-<span class="source-line-no">1179</span><span id="line-1179">      if (s == null)</span>
-<span class="source-line-no">1180</span><span id="line-1180">         return null;</span>
-<span class="source-line-no">1181</span><span id="line-1181">      return vr.resolve(s.trim());</span>
-<span class="source-line-no">1182</span><span id="line-1182">   }</span>
-<span class="source-line-no">1183</span><span id="line-1183"></span>
-<span class="source-line-no">1184</span><span id="line-1184">   private String resolve(String[]...s) {</span>
-<span class="source-line-no">1185</span><span id="line-1185">      for (var ss : s) {</span>
-<span class="source-line-no">1186</span><span id="line-1186">         if (ss.length != 0)</span>
-<span class="source-line-no">1187</span><span id="line-1187">            return resolve(joinnl(ss));</span>
-<span class="source-line-no">1188</span><span id="line-1188">      }</span>
-<span class="source-line-no">1189</span><span id="line-1189">      return null;</span>
-<span class="source-line-no">1190</span><span id="line-1190">   }</span>
-<span class="source-line-no">1191</span><span id="line-1191"></span>
-<span class="source-line-no">1192</span><span id="line-1192">   private MarshalledMap resolveRef(MarshalledMap m) {</span>
-<span class="source-line-no">1193</span><span id="line-1193">      if (m == null)</span>
-<span class="source-line-no">1194</span><span id="line-1194">         return null;</span>
-<span class="source-line-no">1195</span><span id="line-1195">      if (m.containsKey("$ref") &amp;&amp; nn(js.getBeanDefs())) {</span>
-<span class="source-line-no">1196</span><span id="line-1196">         var ref = m.getString("$ref");</span>
-<span class="source-line-no">1197</span><span id="line-1197">         if (ref.startsWith("#/definitions/"))</span>
-<span class="source-line-no">1198</span><span id="line-1198">            return js.getBeanDefs().get(ref.substring(14));</span>
-<span class="source-line-no">1199</span><span id="line-1199">      }</span>
-<span class="source-line-no">1200</span><span id="line-1200">      return m;</span>
-<span class="source-line-no">1201</span><span id="line-1201">   }</span>
-<span class="source-line-no">1202</span><span id="line-1202"></span>
-<span class="source-line-no">1203</span><span id="line-1203">   private MarshalledList toList(Tag[] aa) {</span>
-<span class="source-line-no">1204</span><span id="line-1204">      if (aa.length == 0)</span>
-<span class="source-line-no">1205</span><span id="line-1205">         return null;</span>
-<span class="source-line-no">1206</span><span id="line-1206">      var ol = new Json5List();</span>
-<span class="source-line-no">1207</span><span id="line-1207">      for (var a : aa)</span>
-<span class="source-line-no">1208</span><span id="line-1208">         ol.add(toMap(a));</span>
-<span class="source-line-no">1209</span><span id="line-1209">      return nullIfEmpty(ol);</span>
-<span class="source-line-no">1210</span><span id="line-1210">   }</span>
-<span class="source-line-no">1211</span><span id="line-1211"></span>
-<span class="source-line-no">1212</span><span id="line-1212">   private MarshalledMap toMap(Contact a) {</span>
-<span class="source-line-no">1213</span><span id="line-1213">      if (ContactAnnotation.empty(a))</span>
-<span class="source-line-no">1214</span><span id="line-1214">         return null;</span>
-<span class="source-line-no">1215</span><span id="line-1215">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">1216</span><span id="line-1216">      // @formatter:off</span>
-<span class="source-line-no">1217</span><span id="line-1217">      var om = Json5Map.create()</span>
-<span class="source-line-no">1218</span><span id="line-1218">         .appendIf(ne, "name", resolve(a.name()))</span>
-<span class="source-line-no">1219</span><span id="line-1219">         .appendIf(ne, "url", resolve(a.url()))</span>
-<span class="source-line-no">1220</span><span id="line-1220">         .appendIf(ne, "email", resolve(a.email()));</span>
-<span class="source-line-no">1221</span><span id="line-1221">      // @formatter:on</span>
-<span class="source-line-no">1222</span><span id="line-1222">      return nullIfEmpty(om);</span>
-<span class="source-line-no">1223</span><span id="line-1223">   }</span>
-<span class="source-line-no">1224</span><span id="line-1224"></span>
-<span class="source-line-no">1225</span><span id="line-1225">   private MarshalledMap toMap(ExternalDocs a) {</span>
-<span class="source-line-no">1226</span><span id="line-1226">      if (ExternalDocsAnnotation.empty(a))</span>
-<span class="source-line-no">1227</span><span id="line-1227">         return null;</span>
-<span class="source-line-no">1228</span><span id="line-1228">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">1229</span><span id="line-1229">      // @formatter:off</span>
-<span class="source-line-no">1230</span><span id="line-1230">      var om = Json5Map.create()</span>
-<span class="source-line-no">1231</span><span id="line-1231">         .appendIf(ne, "description", resolve(joinnl(a.description())))</span>
-<span class="source-line-no">1232</span><span id="line-1232">         .appendIf(ne, "url", resolve(a.url()));</span>
-<span class="source-line-no">1233</span><span id="line-1233">      // @formatter:on</span>
-<span class="source-line-no">1234</span><span id="line-1234">      return nullIfEmpty(om);</span>
-<span class="source-line-no">1235</span><span id="line-1235">   }</span>
-<span class="source-line-no">1236</span><span id="line-1236"></span>
-<span class="source-line-no">1237</span><span id="line-1237">   private MarshalledMap toMap(License a) {</span>
-<span class="source-line-no">1238</span><span id="line-1238">      if (LicenseAnnotation.empty(a))</span>
-<span class="source-line-no">1239</span><span id="line-1239">         return null;</span>
-<span class="source-line-no">1240</span><span id="line-1240">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">1241</span><span id="line-1241">      // @formatter:off</span>
-<span class="source-line-no">1242</span><span id="line-1242">      var om = Json5Map.create()</span>
-<span class="source-line-no">1243</span><span id="line-1243">         .appendIf(ne, "name", resolve(a.name()))</span>
-<span class="source-line-no">1244</span><span id="line-1244">         .appendIf(ne, "url", resolve(a.url()));</span>
-<span class="source-line-no">1245</span><span id="line-1245">      // @formatter:on</span>
-<span class="source-line-no">1246</span><span id="line-1246">      return nullIfEmpty(om);</span>
-<span class="source-line-no">1247</span><span id="line-1247">   }</span>
-<span class="source-line-no">1248</span><span id="line-1248"></span>
-<span class="source-line-no">1249</span><span id="line-1249">   private MarshalledMap toMap(Tag a) {</span>
-<span class="source-line-no">1250</span><span id="line-1250">      var om = Json5Map.create();</span>
-<span class="source-line-no">1251</span><span id="line-1251">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
-<span class="source-line-no">1252</span><span id="line-1252">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
-<span class="source-line-no">1253</span><span id="line-1253">      // @formatter:off</span>
-<span class="source-line-no">1254</span><span id="line-1254">      om</span>
-<span class="source-line-no">1255</span><span id="line-1255">         .appendIf(ne, "name", resolve(a.name()))</span>
-<span class="source-line-no">1256</span><span id="line-1256">         .appendIf(ne, "description", resolve(joinnl(a.description())))</span>
-<span class="source-line-no">1257</span><span id="line-1257">         .appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs())));</span>
-<span class="source-line-no">1258</span><span id="line-1258">      // @formatter:on</span>
-<span class="source-line-no">1259</span><span id="line-1259">      return nullIfEmpty(om);</span>
-<span class="source-line-no">1260</span><span id="line-1260">   }</span>
-<span class="source-line-no">1261</span><span id="line-1261"></span>
-<span class="source-line-no">1262</span><span id="line-1262">   private static Optional&lt;String&gt; findAnnotationName(AnnotationProvider ap, Class&lt;? extends java.lang.annotation.Annotation&gt; type, ParameterInfo pi) {</span>
-<span class="source-line-no">1263</span><span id="line-1263">      // @formatter:off</span>
-<span class="source-line-no">1264</span><span id="line-1264">      return ap.find(type, pi)</span>
-<span class="source-line-no">1265</span><span id="line-1265">         .stream()</span>
-<span class="source-line-no">1266</span><span id="line-1266">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">1267</span><span id="line-1267">         .filter(x -&gt; {</span>
-<span class="source-line-no">1268</span><span id="line-1268">            var nv = getNameValue(x);</span>
-<span class="source-line-no">1269</span><span id="line-1269">            return isAnyNotBlank(nv[0], nv[1]);</span>
-<span class="source-line-no">1270</span><span id="line-1270">         })</span>
-<span class="source-line-no">1271</span><span id="line-1271">         .findFirst()</span>
-<span class="source-line-no">1272</span><span id="line-1272">         .map(x -&gt; {</span>
-<span class="source-line-no">1273</span><span id="line-1273">            var nv = getNameValue(x);</span>
-<span class="source-line-no">1274</span><span id="line-1274">            return firstNonBlank(nv[0], nv[1]);</span>
-<span class="source-line-no">1275</span><span id="line-1275">         });</span>
-<span class="source-line-no">1276</span><span id="line-1276">      // @formatter:on</span>
-<span class="source-line-no">1277</span><span id="line-1277">   }</span>
-<span class="source-line-no">1278</span><span id="line-1278"></span>
-<span class="source-line-no">1279</span><span id="line-1279">   private static String[] getNameValue(java.lang.annotation.Annotation a) {</span>
-<span class="source-line-no">1280</span><span id="line-1280">      if (a instanceof Query a2) return new String[]{a2.name(), a2.value()};</span>
-<span class="source-line-no">1281</span><span id="line-1281">      if (a instanceof Header a2) return new String[]{a2.name(), a2.value()};</span>
-<span class="source-line-no">1282</span><span id="line-1282">      if (a instanceof FormData a2) return new String[]{a2.name(), a2.value()};</span>
-<span class="source-line-no">1283</span><span id="line-1283">      if (a instanceof Path a2) return new String[]{a2.name(), a2.value()};</span>
-<span class="source-line-no">1284</span><span id="line-1284">      return new String[]{"", ""};</span>
-<span class="source-line-no">1285</span><span id="line-1285">   }</span>
-<span class="source-line-no">1286</span><span id="line-1286"></span>
-<span class="source-line-no">1287</span><span id="line-1287">   private static Set&lt;String&gt; toSet(String[] ss) {</span>
-<span class="source-line-no">1288</span><span id="line-1288">      if (ss.length == 0)</span>
-<span class="source-line-no">1289</span><span id="line-1289">         return null;</span>
-<span class="source-line-no">1290</span><span id="line-1290">      Set&lt;String&gt; set = set();</span>
-<span class="source-line-no">1291</span><span id="line-1291">      for (var s : ss)</span>
-<span class="source-line-no">1292</span><span id="line-1292">         split(s, set::add);</span>
-<span class="source-line-no">1293</span><span id="line-1293">      return set.isEmpty() ? null : set;</span>
-<span class="source-line-no">1294</span><span id="line-1294">   }</span>
-<span class="source-line-no">1295</span><span id="line-1295">}</span>
+<span class="source-line-no">1172</span><span id="line-1172">         } else if (val instanceof String val2) {</span>
+<span class="source-line-no">1173</span><span id="line-1173">            val = resolve(val2);</span>
+<span class="source-line-no">1174</span><span id="line-1174">         }</span>
+<span class="source-line-no">1175</span><span id="line-1175">         om2.put(e.getKey(), val);</span>
+<span class="source-line-no">1176</span><span id="line-1176">      }</span>
+<span class="source-line-no">1177</span><span id="line-1177">      return om2;</span>
+<span class="source-line-no">1178</span><span id="line-1178">   }</span>
+<span class="source-line-no">1179</span><span id="line-1179"></span>
+<span class="source-line-no">1180</span><span id="line-1180">   private String resolve(String s) {</span>
+<span class="source-line-no">1181</span><span id="line-1181">      if (s == null)</span>
+<span class="source-line-no">1182</span><span id="line-1182">         return null;</span>
+<span class="source-line-no">1183</span><span id="line-1183">      return vr.resolve(s.trim());</span>
+<span class="source-line-no">1184</span><span id="line-1184">   }</span>
+<span class="source-line-no">1185</span><span id="line-1185"></span>
+<span class="source-line-no">1186</span><span id="line-1186">   private String resolve(String[]...s) {</span>
+<span class="source-line-no">1187</span><span id="line-1187">      for (var ss : s) {</span>
+<span class="source-line-no">1188</span><span id="line-1188">         if (ss.length != 0)</span>
+<span class="source-line-no">1189</span><span id="line-1189">            return resolve(joinnl(ss));</span>
+<span class="source-line-no">1190</span><span id="line-1190">      }</span>
+<span class="source-line-no">1191</span><span id="line-1191">      return null;</span>
+<span class="source-line-no">1192</span><span id="line-1192">   }</span>
+<span class="source-line-no">1193</span><span id="line-1193"></span>
+<span class="source-line-no">1194</span><span id="line-1194">   private MarshalledMap resolveRef(MarshalledMap m) {</span>
+<span class="source-line-no">1195</span><span id="line-1195">      if (m == null)</span>
+<span class="source-line-no">1196</span><span id="line-1196">         return null;</span>
+<span class="source-line-no">1197</span><span id="line-1197">      if (m.containsKey("$ref") &amp;&amp; nn(js.getBeanDefs())) {</span>
+<span class="source-line-no">1198</span><span id="line-1198">         var ref = m.getString("$ref");</span>
+<span class="source-line-no">1199</span><span id="line-1199">         if (ref.startsWith("#/definitions/"))</span>
+<span class="source-line-no">1200</span><span id="line-1200">            return js.getBeanDefs().get(ref.substring(14));</span>
+<span class="source-line-no">1201</span><span id="line-1201">      }</span>
+<span class="source-line-no">1202</span><span id="line-1202">      return m;</span>
+<span class="source-line-no">1203</span><span id="line-1203">   }</span>
+<span class="source-line-no">1204</span><span id="line-1204"></span>
+<span class="source-line-no">1205</span><span id="line-1205">   private MarshalledList toList(Tag[] aa) {</span>
+<span class="source-line-no">1206</span><span id="line-1206">      if (aa.length == 0)</span>
+<span class="source-line-no">1207</span><span id="line-1207">         return null;</span>
+<span class="source-line-no">1208</span><span id="line-1208">      var ol = new Json5List();</span>
+<span class="source-line-no">1209</span><span id="line-1209">      for (var a : aa)</span>
+<span class="source-line-no">1210</span><span id="line-1210">         ol.add(toMap(a));</span>
+<span class="source-line-no">1211</span><span id="line-1211">      return nullIfEmpty(ol);</span>
+<span class="source-line-no">1212</span><span id="line-1212">   }</span>
+<span class="source-line-no">1213</span><span id="line-1213"></span>
+<span class="source-line-no">1214</span><span id="line-1214">   private MarshalledMap toMap(Contact a) {</span>
+<span class="source-line-no">1215</span><span id="line-1215">      if (ContactAnnotation.empty(a))</span>
+<span class="source-line-no">1216</span><span id="line-1216">         return null;</span>
+<span class="source-line-no">1217</span><span id="line-1217">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1218</span><span id="line-1218">      // @formatter:off</span>
+<span class="source-line-no">1219</span><span id="line-1219">      var om = Json5Map.create()</span>
+<span class="source-line-no">1220</span><span id="line-1220">         .appendIf(ne, "name", resolve(a.name()))</span>
+<span class="source-line-no">1221</span><span id="line-1221">         .appendIf(ne, "url", resolve(a.url()))</span>
+<span class="source-line-no">1222</span><span id="line-1222">         .appendIf(ne, "email", resolve(a.email()));</span>
+<span class="source-line-no">1223</span><span id="line-1223">      // @formatter:on</span>
+<span class="source-line-no">1224</span><span id="line-1224">      return nullIfEmpty(om);</span>
+<span class="source-line-no">1225</span><span id="line-1225">   }</span>
+<span class="source-line-no">1226</span><span id="line-1226"></span>
+<span class="source-line-no">1227</span><span id="line-1227">   private MarshalledMap toMap(ExternalDocs a) {</span>
+<span class="source-line-no">1228</span><span id="line-1228">      if (ExternalDocsAnnotation.empty(a))</span>
+<span class="source-line-no">1229</span><span id="line-1229">         return null;</span>
+<span class="source-line-no">1230</span><span id="line-1230">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1231</span><span id="line-1231">      // @formatter:off</span>
+<span class="source-line-no">1232</span><span id="line-1232">      var om = Json5Map.create()</span>
+<span class="source-line-no">1233</span><span id="line-1233">         .appendIf(ne, "description", resolve(joinnl(a.description())))</span>
+<span class="source-line-no">1234</span><span id="line-1234">         .appendIf(ne, "url", resolve(a.url()));</span>
+<span class="source-line-no">1235</span><span id="line-1235">      // @formatter:on</span>
+<span class="source-line-no">1236</span><span id="line-1236">      return nullIfEmpty(om);</span>
+<span class="source-line-no">1237</span><span id="line-1237">   }</span>
+<span class="source-line-no">1238</span><span id="line-1238"></span>
+<span class="source-line-no">1239</span><span id="line-1239">   private MarshalledMap toMap(License a) {</span>
+<span class="source-line-no">1240</span><span id="line-1240">      if (LicenseAnnotation.empty(a))</span>
+<span class="source-line-no">1241</span><span id="line-1241">         return null;</span>
+<span class="source-line-no">1242</span><span id="line-1242">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1243</span><span id="line-1243">      // @formatter:off</span>
+<span class="source-line-no">1244</span><span id="line-1244">      var om = Json5Map.create()</span>
+<span class="source-line-no">1245</span><span id="line-1245">         .appendIf(ne, "name", resolve(a.name()))</span>
+<span class="source-line-no">1246</span><span id="line-1246">         .appendIf(ne, "url", resolve(a.url()));</span>
+<span class="source-line-no">1247</span><span id="line-1247">      // @formatter:on</span>
+<span class="source-line-no">1248</span><span id="line-1248">      return nullIfEmpty(om);</span>
+<span class="source-line-no">1249</span><span id="line-1249">   }</span>
+<span class="source-line-no">1250</span><span id="line-1250"></span>
+<span class="source-line-no">1251</span><span id="line-1251">   private MarshalledMap toMap(Tag a) {</span>
+<span class="source-line-no">1252</span><span id="line-1252">      var om = Json5Map.create();</span>
+<span class="source-line-no">1253</span><span id="line-1253">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1254</span><span id="line-1254">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
+<span class="source-line-no">1255</span><span id="line-1255">      // @formatter:off</span>
+<span class="source-line-no">1256</span><span id="line-1256">      om</span>
+<span class="source-line-no">1257</span><span id="line-1257">         .appendIf(ne, "name", resolve(a.name()))</span>
+<span class="source-line-no">1258</span><span id="line-1258">         .appendIf(ne, "description", resolve(joinnl(a.description())))</span>
+<span class="source-line-no">1259</span><span id="line-1259">         .appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs())));</span>
+<span class="source-line-no">1260</span><span id="line-1260">      // @formatter:on</span>
+<span class="source-line-no">1261</span><span id="line-1261">      return nullIfEmpty(om);</span>
+<span class="source-line-no">1262</span><span id="line-1262">   }</span>
+<span class="source-line-no">1263</span><span id="line-1263"></span>
+<span class="source-line-no">1264</span><span id="line-1264">   private static Optional&lt;String&gt; findAnnotationName(AnnotationProvider ap, Class&lt;? extends java.lang.annotation.Annotation&gt; type, ParameterInfo pi) {</span>
+<span class="source-line-no">1265</span><span id="line-1265">      // @formatter:off</span>
+<span class="source-line-no">1266</span><span id="line-1266">      return ap.find(type, pi)</span>
+<span class="source-line-no">1267</span><span id="line-1267">         .stream()</span>
+<span class="source-line-no">1268</span><span id="line-1268">         .map(AnnotationInfo::inner)</span>
+<span class="source-line-no">1269</span><span id="line-1269">         .filter(x -&gt; {</span>
+<span class="source-line-no">1270</span><span id="line-1270">            var nv = getNameValue(x);</span>
+<span class="source-line-no">1271</span><span id="line-1271">            return isAnyNotBlank(nv[0], nv[1]);</span>
+<span class="source-line-no">1272</span><span id="line-1272">         })</span>
+<span class="source-line-no">1273</span><span id="line-1273">         .findFirst()</span>
+<span class="source-line-no">1274</span><span id="line-1274">         .map(x -&gt; {</span>
+<span class="source-line-no">1275</span><span id="line-1275">            var nv = getNameValue(x);</span>
+<span class="source-line-no">1276</span><span id="line-1276">            return firstNonBlank(nv[0], nv[1]);</span>
+<span class="source-line-no">1277</span><span id="line-1277">         });</span>
+<span class="source-line-no">1278</span><span id="line-1278">      // @formatter:on</span>
+<span class="source-line-no">1279</span><span id="line-1279">   }</span>
+<span class="source-line-no">1280</span><span id="line-1280"></span>
+<span class="source-line-no">1281</span><span id="line-1281">   private static String[] getNameValue(java.lang.annotation.Annotation a) {</span>
+<span class="source-line-no">1282</span><span id="line-1282">      if (a instanceof Query a2) return new String[]{a2.name(), a2.value()};</span>
+<span class="source-line-no">1283</span><span id="line-1283">      if (a instanceof Header a2) return new String[]{a2.name(), a2.value()};</span>
+<span class="source-line-no">1284</span><span id="line-1284">      if (a instanceof FormData a2) return new String[]{a2.name(), a2.value()};</span>
+<span class="source-line-no">1285</span><span id="line-1285">      if (a instanceof Path a2) return new String[]{a2.name(), a2.value()};</span>
+<span class="source-line-no">1286</span><span id="line-1286">      return new String[]{"", ""};</span>
+<span class="source-line-no">1287</span><span id="line-1287">   }</span>
+<span class="source-line-no">1288</span><span id="line-1288"></span>
+<span class="source-line-no">1289</span><span id="line-1289">   private static Set&lt;String&gt; toSet(String[] ss) {</span>
+<span class="source-line-no">1290</span><span id="line-1290">      if (ss.length == 0)</span>
+<span class="source-line-no">1291</span><span id="line-1291">         return null;</span>
+<span class="source-line-no">1292</span><span id="line-1292">      Set&lt;String&gt; set = set();</span>
+<span class="source-line-no">1293</span><span id="line-1293">      for (var s : ss)</span>
+<span class="source-line-no">1294</span><span id="line-1294">         split(s, set::add);</span>
+<span class="source-line-no">1295</span><span id="line-1295">      return set.isEmpty() ? null : set;</span>
+<span class="source-line-no">1296</span><span id="line-1296">   }</span>
+<span class="source-line-no">1297</span><span id="line-1297">}</span>
 
 
 

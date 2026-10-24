@@ -2463,7 +2463,7 @@
 <a class="jxr_linenumber" name="L2455" href="#L2455">2455</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> 		<strong class="jxr_keyword">var</strong> prefix = description != <strong class="jxr_keyword">null</strong> ? (description + <span class="jxr_string">" ("</span> + beanType.getName() + <span class="jxr_string">")"</span>) : beanType.getName();
 <a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> 		logger.fine(prefix + <span class="jxr_string">": "</span> + message, args);
-<a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> 		debug.ifPresent(x -&gt; x.add(args.length == 0 ? message : String.format(message, args)));
+<a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> 		debug.ifPresent(x -&gt; x.add(args.length == 0 ? message : f(message, args)));
 <a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> 	}
 <a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> 
 <a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> 	T runPostCreateHooks(T bean) {

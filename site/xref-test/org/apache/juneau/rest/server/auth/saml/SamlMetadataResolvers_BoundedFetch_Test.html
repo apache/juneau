@@ -166,8 +166,8 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_javadoccomment">/** Instantiates the private bounded body subscriber, so no production seam is needed to drive it. */</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<span class="jxr_string">"unchecked"</span>,
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<span class="jxr_string">"java:S3011"</span> <em class="jxr_comment">// Reflective access to the private nested subscriber is test-only; it avoids a production seam.</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<span class="jxr_string">"java:S3011"</span>, <em class="jxr_comment">// Reflective access to the private nested subscriber is test-only; it avoids a production seam.</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// The reflectively created subscriber is cast to its known BodySubscriber&lt;byte[]&gt; type.</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	})
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpResponse.BodySubscriber&lt;byte[]&gt; boundedSubscriber(<strong class="jxr_keyword">long</strong> maxBytes) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> c = Class.forName(SamlMetadataResolvers.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">"$BoundedByteArraySubscriber"</span>).getDeclaredConstructor(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>);

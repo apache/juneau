@@ -445,7 +445,7 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">var</strong> bean = bc(A07_BeanWithMap.<strong class="jxr_keyword">class</strong>).run();
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertEquals(2, bean.getServices().size());
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			assertSize(2, bean.getServices());
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 			assertSame(service1, bean.getServices().get(<span class="jxr_string">""</span>)); <em class="jxr_comment">// Unnamed bean uses empty string as key</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 			assertSame(service2, bean.getServices().get(<span class="jxr_string">"service2"</span>));
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		}
@@ -501,7 +501,7 @@
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 				.addBean(TestService.<strong class="jxr_keyword">class</strong>, service2, <span class="jxr_string">"service2"</span>)
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 				.run();
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			assertEquals(2, bean.getServices().size());
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			assertSize(2, bean.getServices());
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 			assertSame(service1, bean.getServices().get(<span class="jxr_string">""</span>)); <em class="jxr_comment">// Unnamed bean uses empty string as key</em>
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 			assertSame(service2, bean.getServices().get(<span class="jxr_string">"service2"</span>));
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 		}
@@ -3613,7 +3613,7 @@
 <a class="jxr_linenumber" name="L3605" href="#L3605">3605</a> 			<strong class="jxr_keyword">var</strong> creator = bc(SimpleBean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3606" href="#L3606">3606</a> 			<strong class="jxr_keyword">var</strong> beanSubTypes = creator.getBeanSubTypes();
 <a class="jxr_linenumber" name="L3607" href="#L3607">3607</a> 
-<a class="jxr_linenumber" name="L3608" href="#L3608">3608</a> 			assertEquals(1, beanSubTypes.size());
+<a class="jxr_linenumber" name="L3608" href="#L3608">3608</a> 			assertSize(1, beanSubTypes);
 <a class="jxr_linenumber" name="L3609" href="#L3609">3609</a> 			assertEquals(SimpleBean.<strong class="jxr_keyword">class</strong>.getName(), beanSubTypes.get(0).getName());
 <a class="jxr_linenumber" name="L3610" href="#L3610">3610</a> 		}
 <a class="jxr_linenumber" name="L3611" href="#L3611">3611</a> 
@@ -3716,7 +3716,7 @@
 <a class="jxr_linenumber" name="L3708" href="#L3708">3708</a> 			creator.getBuilder(); <em class="jxr_comment">// Trigger builder detection</em>
 <a class="jxr_linenumber" name="L3709" href="#L3709">3709</a> 			<strong class="jxr_keyword">var</strong> builderTypes = creator.getBuilderTypes();
 <a class="jxr_linenumber" name="L3710" href="#L3710">3710</a> 
-<a class="jxr_linenumber" name="L3711" href="#L3711">3711</a> 			assertEquals(1, builderTypes.size());
+<a class="jxr_linenumber" name="L3711" href="#L3711">3711</a> 			assertSize(1, builderTypes);
 <a class="jxr_linenumber" name="L3712" href="#L3712">3712</a> 			assertEquals(BeanWithBuilder.Builder.<strong class="jxr_keyword">class</strong>.getName(), builderTypes.get(0).getName());
 <a class="jxr_linenumber" name="L3713" href="#L3713">3713</a> 		}
 <a class="jxr_linenumber" name="L3714" href="#L3714">3714</a> 
@@ -3979,10 +3979,10 @@
 <a class="jxr_linenumber" name="L3971" href="#L3971">3971</a> 	}
 <a class="jxr_linenumber" name="L3972" href="#L3972">3972</a> 
 <a class="jxr_linenumber" name="L3973" href="#L3973">3973</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L3974" href="#L3974">3974</a> 	<em class="jxr_comment">// R - Phase 4 general-purpose API: silent, description, wrap, validate, copy, scope, or</em>
+<a class="jxr_linenumber" name="L3974" href="#L3974">3974</a> 	<em class="jxr_comment">// R - general-purpose API: silent, description, wrap, validate, copy, scope, or</em>
 <a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L3976" href="#L3976">3976</a> 	@Nested
-<a class="jxr_linenumber" name="L3977" href="#L3977">3977</a> 	@DisplayName(<span class="jxr_string">"R - Phase 4 general-purpose API"</span>)
+<a class="jxr_linenumber" name="L3977" href="#L3977">3977</a> 	@DisplayName(<span class="jxr_string">"R - General-purpose API"</span>)
 <a class="jxr_linenumber" name="L3978" href="#L3978">3978</a> 	<strong class="jxr_keyword">class</strong> R_phase4Api {
 <a class="jxr_linenumber" name="L3979" href="#L3979">3979</a> 
 <a class="jxr_linenumber" name="L3980" href="#L3980">3980</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_SimpleBean {
@@ -4112,10 +4112,10 @@
 <a class="jxr_linenumber" name="L4104" href="#L4104">4104</a> 	}
 <a class="jxr_linenumber" name="L4105" href="#L4105">4105</a> 
 <a class="jxr_linenumber" name="L4106" href="#L4106">4106</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L4107" href="#L4107">4107</a> 	<em class="jxr_comment">// S - Phase 5: pre-registered builder in bean store wins over static factory</em>
+<a class="jxr_linenumber" name="L4107" href="#L4107">4107</a> 	<em class="jxr_comment">// S - pre-registered builder in bean store wins over static factory</em>
 <a class="jxr_linenumber" name="L4108" href="#L4108">4108</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L4109" href="#L4109">4109</a> 	@Nested
-<a class="jxr_linenumber" name="L4110" href="#L4110">4110</a> 	@DisplayName(<span class="jxr_string">"S - Phase 5 builder bean store lookup"</span>)
+<a class="jxr_linenumber" name="L4110" href="#L4110">4110</a> 	@DisplayName(<span class="jxr_string">"S - Builder bean store lookup"</span>)
 <a class="jxr_linenumber" name="L4111" href="#L4111">4111</a> 	<strong class="jxr_keyword">class</strong> S_phase5BuilderInStore {
 <a class="jxr_linenumber" name="L4112" href="#L4112">4112</a> 
 <a class="jxr_linenumber" name="L4113" href="#L4113">4113</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> S_Bean {
@@ -4149,10 +4149,10 @@
 <a class="jxr_linenumber" name="L4141" href="#L4141">4141</a> 	}
 <a class="jxr_linenumber" name="L4142" href="#L4142">4142</a> 
 <a class="jxr_linenumber" name="L4143" href="#L4143">4143</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L4144" href="#L4144">4144</a> 	<em class="jxr_comment">// T - Phase 6: builderInitializer / injectBuilder / autoWireBuilder</em>
+<a class="jxr_linenumber" name="L4144" href="#L4144">4144</a> 	<em class="jxr_comment">// T - builderInitializer / injectBuilder / autoWireBuilder</em>
 <a class="jxr_linenumber" name="L4145" href="#L4145">4145</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L4146" href="#L4146">4146</a> 	@Nested
-<a class="jxr_linenumber" name="L4147" href="#L4147">4147</a> 	@DisplayName(<span class="jxr_string">"T - Phase 6 builder hooks and auto-wire"</span>)
+<a class="jxr_linenumber" name="L4147" href="#L4147">4147</a> 	@DisplayName(<span class="jxr_string">"T - Builder hooks and auto-wire"</span>)
 <a class="jxr_linenumber" name="L4148" href="#L4148">4148</a> 	<strong class="jxr_keyword">class</strong> T_phase6BuilderHooks {
 <a class="jxr_linenumber" name="L4149" href="#L4149">4149</a> 
 <a class="jxr_linenumber" name="L4150" href="#L4150">4150</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> T_Bean {

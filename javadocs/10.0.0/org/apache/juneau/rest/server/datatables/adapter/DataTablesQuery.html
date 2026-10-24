@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
       search, an <code>order[]</code> entry, or global-search eligibility), so a render-only column with an unresolvable
       <code>data</code> never errors.
    <li>Each searchable column's non-blank <code>search.value</code> becomes one raw <code>column=expression</code> condition
-      (<a href="../../../../commons/beanquery/BeanQuery.Builder.html#search(java.lang.String,java.lang.String)"><code>BeanQuery.Builder.search(String, String)</code></a>); two DataTables columns resolving to the same key merge
+      (<a href="../../../../commons/beanquery/BeanQuery.Builder.html#search(java.lang.String,java.lang.String)"><code>BeanQuery.Builder#search(String, String)</code></a>); two DataTables columns resolving to the same key merge
       into one <code>$and</code>.
    <li>A non-blank global <code>search.value</code> becomes a top-level <code>$or</code> of one leaf per eligible column
       (searchable, resolvable), the leaf chosen by that column's <a href="../../../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery"><code>SearchType</code></a>:

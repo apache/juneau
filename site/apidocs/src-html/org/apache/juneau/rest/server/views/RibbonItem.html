@@ -190,7 +190,7 @@
 <span class="source-line-no">177</span><span id="line-177">    * @throws IllegalArgumentException If {@code actionId} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">178</span><span id="line-178">    */</span>
 <span class="source-line-no">179</span><span id="line-179">   public static RibbonItem dialog(String actionId) {</span>
-<span class="source-line-no">180</span><span id="line-180">      if (actionId == null || actionId.isBlank())</span>
+<span class="source-line-no">180</span><span id="line-180">      if (ib(actionId))</span>
 <span class="source-line-no">181</span><span id="line-181">         throw iaex("RibbonItem dialog action id must not be null or blank.");</span>
 <span class="source-line-no">182</span><span id="line-182">      var r = new RibbonItem("dialog");</span>
 <span class="source-line-no">183</span><span id="line-183">      r.id = actionId;</span>
@@ -209,7 +209,7 @@
 <span class="source-line-no">196</span><span id="line-196">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">197</span><span id="line-197">    */</span>
 <span class="source-line-no">198</span><span id="line-198">   public static RibbonItem option(String id) {</span>
-<span class="source-line-no">199</span><span id="line-199">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">199</span><span id="line-199">      if (ib(id))</span>
 <span class="source-line-no">200</span><span id="line-200">         throw iaex("RibbonItem option id must not be null or blank.");</span>
 <span class="source-line-no">201</span><span id="line-201">      var r = new RibbonItem("option");</span>
 <span class="source-line-no">202</span><span id="line-202">      r.id = id;</span>
@@ -230,7 +230,7 @@
 <span class="source-line-no">217</span><span id="line-217">    *    holds anything other than an {@code option}.</span>
 <span class="source-line-no">218</span><span id="line-218">    */</span>
 <span class="source-line-no">219</span><span id="line-219">   public static RibbonItem optionGroup(String id, RibbonItem...members) {</span>
-<span class="source-line-no">220</span><span id="line-220">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">220</span><span id="line-220">      if (ib(id))</span>
 <span class="source-line-no">221</span><span id="line-221">         throw iaex("RibbonItem optionGroup id must not be null or blank.");</span>
 <span class="source-line-no">222</span><span id="line-222">      if (members.length == 0)</span>
 <span class="source-line-no">223</span><span id="line-223">         throw iaex("RibbonItem optionGroup '%s' requires at least one option.", id);</span>
@@ -255,9 +255,9 @@
 <span class="source-line-no">242</span><span id="line-242">    * @throws IllegalArgumentException If {@code title} or {@code topic} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">243</span><span id="line-243">    */</span>
 <span class="source-line-no">244</span><span id="line-244">   public static RibbonItem publish(String title, String topic, Map&lt;String,Object&gt; payload) {</span>
-<span class="source-line-no">245</span><span id="line-245">      if (title == null || title.isBlank())</span>
+<span class="source-line-no">245</span><span id="line-245">      if (ib(title))</span>
 <span class="source-line-no">246</span><span id="line-246">         throw iaex("RibbonItem publish requires a title.");</span>
-<span class="source-line-no">247</span><span id="line-247">      if (topic == null || topic.isBlank())</span>
+<span class="source-line-no">247</span><span id="line-247">      if (ib(topic))</span>
 <span class="source-line-no">248</span><span id="line-248">         throw iaex("RibbonItem publish '%s' requires a topic.", title);</span>
 <span class="source-line-no">249</span><span id="line-249">      var i = new RibbonItem("publish");</span>
 <span class="source-line-no">250</span><span id="line-250">      i.title = title;</span>
@@ -309,7 +309,7 @@
 <span class="source-line-no">296</span><span id="line-296">    * @throws IllegalArgumentException If {@code v} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">297</span><span id="line-297">    */</span>
 <span class="source-line-no">298</span><span id="line-298">   public RibbonItem id(String v) {</span>
-<span class="source-line-no">299</span><span id="line-299">      if (v == null || v.isBlank())</span>
+<span class="source-line-no">299</span><span id="line-299">      if (ib(v))</span>
 <span class="source-line-no">300</span><span id="line-300">         throw iaex("RibbonItem %s id must not be null or blank.", type);</span>
 <span class="source-line-no">301</span><span id="line-301">      id = v;</span>
 <span class="source-line-no">302</span><span id="line-302">      return this;</span>

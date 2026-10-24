@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * against a live embedded-Jetty server whose tools pause/resume via the server-side (same-named)</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * {@code ElicitationRequests}/{@code ElicitationResponses} &amp;mdash; proving the full typed path works across a</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * real wire boundary, complementing {@link McpMrtrIntegration_Test}'s generic (untyped) PAUSE/RESUME coverage</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * and Phase 7's {@code Characterization_Test} in-process replay fixtures.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * and {@code Characterization_Test}'s in-process replay fixtures.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  @org.apache.juneau.testing.JettyMicroserviceTest
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">class</strong> <a name="McpElicitationIntegration_Test" href="../../../../../../../org/apache/juneau/rest/client/mcp/v20260728/McpElicitationIntegration_Test.html#McpElicitationIntegration_Test">McpElicitationIntegration_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">var</strong> paused = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"confirmTwo"</span>).setArguments(Map.of()));
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">var</strong> requests = ElicitationRequests.requests(paused);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertEquals(2, requests.size());
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertSize(2, requests);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertTrue(requests.containsKey(<span class="jxr_string">"confirm"</span>));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			assertTrue(requests.containsKey(<span class="jxr_string">"reason"</span>));
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
