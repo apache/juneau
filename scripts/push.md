@@ -49,6 +49,8 @@ The commit message is optional on the command line. It is prompted for when omit
 
 Progress is a board view. Full logs go under `~/.cache/juneau-run/`, and the session header prints the `tail -f` line for the log. Test timings are appended to `~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl`.
 
+The commit and push steps run under a PTY with a 20-second watchdog. If git goes silent after a partial line, such as an ssh passphrase or pinentry prompt, that line appears on the board as a prompt. Type the answer as usual.
+
 | Code | Meaning |
 |---|---|
 | 0 | Pushed, nothing to push, `--dry-run`, `--test-only` passed, or `--docs-only` with no changes. |

@@ -856,6 +856,33 @@ def test_the_commit_and_the_push_run_with_a_tty(push_mod, console, monkeypatch):
     assert [(c["step_id"], c["tty"]) for c in calls] == [("commit", True), ("push", True)]
 
 
+def test_the_commit_and_the_push_run_with_the_watchdog(push_mod, console, monkeypatch):
+    """A prompt git raises (ssh passphrase, pinentry) is a partial line; the watchdog puts it on the board."""
+    run, _ = console
+    stub_push_flow(push_mod, monkeypatch)
+    calls = routed_calls(run, monkeypatch)
+    push_mod.commit_and_push(Path("."), "msg", 5)
+    assert [(c["step_id"], c["watchdog"]) for c in calls] == [
+        ("commit", push_mod.WATCHDOG_SECONDS), ("push", push_mod.WATCHDOG_SECONDS)]
+
+
+def test_a_git_passphrase_prompt_reaches_the_board(push_mod, console, monkeypatch, tmp_path):
+    """End to end through the real run_tool: a git that prints a prompt with no newline and waits."""
+    run, events = console
+    stub_push_flow(push_mod, monkeypatch)
+    monkeypatch.setattr(push_mod, "WATCHDOG_SECONDS", 0.3)
+    fake = tmp_path / "fakegit.py"
+    fake.write_text("import sys, time\n"
+                    "sys.stdout.write(\"Enter passphrase for key '/x/id_ed25519': \")\n"
+                    "sys.stdout.flush()\ntime.sleep(1.5)\nprint()\n")
+    prompts = []
+    real = run.publish
+    monkeypatch.setattr(run, "publish", lambda kind, **k: prompts.append((kind, k.get("text"))) or real(kind, **k))
+    push_mod.run_command([sys.executable, str(fake)], "Pushing", step_id="push", title="Push", tty=True,
+                         watchdog=push_mod.WATCHDOG_SECONDS)
+    assert ("prompt", "Enter passphrase for key '/x/id_ed25519':") in [(k, t and t.strip()) for k, t in prompts]
+
+
 def test_the_push_summary_names_the_upstream(push_mod, console, monkeypatch):
     run, _ = console
     stub_push_flow(push_mod, monkeypatch)

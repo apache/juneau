@@ -242,13 +242,39 @@ class SetupRowTest(unittest.TestCase):
             b.apply("unit_start", dict(step="mvn", id=f"mvn/{m}", title=m))
         self.assertEqual(self.bar(r), "~~" + jr.PENDING * 3)
         self.assertEqual(self.bar(r, jr.NO_COLOR_GLYPHS), "▒▒" + jr.PENDING * 3)
-        self.assertEqual(self.bar(r, jr.COLOR_GLYPHS), "\x1b[33m█\x1b[0m" * 2 + jr.PENDING * 3)
+        self.assertEqual(self.bar(r, jr.COLOR_GLYPHS), "\x1b[36m█\x1b[0m" * 2 + jr.PENDING * 3)
+        self.assertNotEqual(jr.COLOR_GLYPHS["run"], jr.COLOR_GLYPHS["warn"])
         b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
         self.assertEqual(self.bar(r), "#~" + jr.PENDING * 3)        # a finished (counted), b still running
         b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=(1, 0, 0, 0)))
         b.apply("step_end", dict(id="mvn", status="ok", ms=2000, exit=0, summary=None, totals=None))
         self.assertNotIn("~", self.bar(r))                           # a finished row shows no in-flight cells
+
+    def test_a_pom_in_flight_alone_shows_one_run_cell_until_it_ends(self):
+        b, ids = self.board(poms=1, total=4)
+        r = b.rows["mvn"]
+        b.apply("unit_start", dict(step="mvn", id=ids[0], title="root"))
+        self.assertEqual(self.bar(r), "~" + jr.PENDING * 2)
+        b.apply("unit_end", dict(step="mvn", id=ids[0], status="ok", ms=1, totals=None))
+        self.assertEqual(self.bar(r), jr.PENDING * 3)
+
+    def test_a_pom_in_flight_adds_no_run_cell_beside_a_running_module(self):
+        b, ids = self.board(poms=1, total=4)
+        r = b.rows["mvn"]
+        b.apply("unit_start", dict(step="mvn", id=ids[0], title="root"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="a"))
+        self.assertEqual(self.bar(r), "~" + jr.PENDING * 2)
+
+    def test_a_module_compiled_before_it_starts_is_not_counted_until_its_end(self):
+        b, _ = self.board(poms=0, total=2)
+        r = b.rows["mvn"]
+        b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=True))
+        self.assertEqual(r.units_done, 0)
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="A"))
+        self.assertEqual((r.units_done, self.bar(r)), (0, "~" + jr.PENDING))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=None))
+        self.assertEqual((r.units_done, self.bar(r)), (1, "#" + jr.PENDING))
 
     def test_a_modules_bar_without_unit_start_never_shows_in_flight(self):
         b, r = self.mk_tests_board(3)

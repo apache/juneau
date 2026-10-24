@@ -579,11 +579,12 @@ LIVE_ENV = "JUNEAU_RUN_LIVE"
 CANCEL_ENV = "JUNEAU_RUN_CANCEL"     # a command that cancels this run, shown as the header's Cancel: row
 HEARTBEAT_SECONDS = 15.0
 # "run" is a unit that has started but not ended (distinct from PENDING, which has not started)
-# "warn" is a checks unit that would refuse or only warns; a checks bar never shows "run", so the two yellows can't meet
+# "warn" is a checks unit that would refuse or only warns; "run" is cyan, the board's colour for active work, so it never
+# reads as a warning
 PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": ".", "run": "~", "warn": "!"}
 NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·", "run": "▒", "warn": "!"}
 COLOR_GLYPHS = {"pass": "\x1b[32m█\x1b[0m", "fail": "\x1b[31m█\x1b[0m", "skip": "\x1b[2m█\x1b[0m",
-                "run": "\x1b[33m█\x1b[0m", "warn": "\x1b[33m█\x1b[0m"}
+                "run": "\x1b[36m█\x1b[0m", "warn": "\x1b[33m█\x1b[0m"}
 PENDING = "░"
 DOT_GLYPHS = {"pass": "•", "fail": "F", "skip": "·"}
 COLOR_DOT_GLYPHS = {"pass": "\x1b[32m•\x1b[0m", "fail": "\x1b[31m✗\x1b[0m", "skip": "\x1b[2m•\x1b[0m"}
@@ -1023,6 +1024,8 @@ class _Row:
         if self.unit_kind == "modules":
             running = sum(1 for m in self.units.values() if m.src in BAR_SRCS and m.started and m.status is None
                           and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
+            if not running and any(m.started and m.status is None and m.id in self.poms for m in self.units.values()):
+                running = 1       # only a pom is in flight (the root's aggregate javadoc and reports): it has no cell, so the row shows one
         elif self.unit_kind == "files":
             running = sum(1 for m in self.units.values() if m.src == "file" and m.in_progress)
         else:
@@ -1503,7 +1506,8 @@ class Board:
                 self._count_unit(r, m, "fail")
         elif not r.tests_mode and m.box is None:
             self._grant(r, m, "pass")
-            self._count_unit(r, m, "pass")
+            if m.started:         # a module an aggregate goal fork-compiles has not started: it counts at its own unit_end
+                self._count_unit(r, m, "pass")
         return []
 
     def _on_module_tested(self, f):

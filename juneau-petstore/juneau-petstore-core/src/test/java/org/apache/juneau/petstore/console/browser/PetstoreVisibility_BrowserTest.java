@@ -81,8 +81,10 @@ class PetstoreVisibility_BrowserTest extends TestBase {
 					Map.of("click", ".juneau-view-action-item[data-action-id=sell]"),
 					wait("document.querySelector('" + CONFIRM + "')"),
 					Map.of("click", CONFIRM),
-					wait("document.querySelector('#pet-body tbody')?.textContent.toUpperCase().includes('SOLD')")),
-				"queries", Map.of("before", "window.__before", "pencils", PENCILS,
+					// the status pill cell only holds SOLD once the redrawn row paints; the outcome banner lives in the actions cell of the old row
+					wait("[...document.querySelectorAll('#pet-body tbody td.pill-cell')].some(td => td.textContent.toUpperCase().includes('SOLD'))")),
+				// ordered: 'trigger' and 'pencils' must read the same (redrawn) row, in a fixed sequence
+				"queries", JsonMap.of("before", "window.__before", "pencils", PENCILS,
 					"trigger", "(() => { const t = document.querySelector('" + TRIGGER + "'); return !!t && !t.hidden && !t.disabled; })()")),
 			Map.of("name", "photo", "waitUntil", "networkidle", "path", "/console/pets/1/photo", "allowFailedLoads", true,
 				"queries", Map.of("viewer", "!!document.querySelector('" + UPLOAD + "')",

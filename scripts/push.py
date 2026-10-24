@@ -43,6 +43,11 @@ if str(Path(__file__).resolve().parent) not in sys.path:
 import _juneau  # noqa: E402
 
 
+# git commit and git push run under a PTY so ssh, pinentry or a credential helper can prompt.  After this many silent
+# seconds, a partial line is shown on the board as a prompt (as in release.py).
+WATCHDOG_SECONDS = 20
+
+
 def toolkit(name):
     """A juneau_scripts module (git, run, notify, prompt, proc) from the in-tree toolkit."""
     _juneau.load()
@@ -119,7 +124,7 @@ def run_marked(step_id, title, cmd, description, cwd=None, tool=None, label=None
 
 
 def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None, n=None, parent=None, *,
-                label=None, capture=False, tty=False, summarize=None):
+                label=None, capture=False, tty=False, summarize=None, watchdog=None):
     """
     Run a shell command and handle errors.
 
@@ -131,7 +136,7 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
             when markers are on
         step_id, title, n, parent, label: the step fields.  With a console view active, a list cmd with a
             step_id also runs through run_tool (tool defaults to "generic"), so its output stays off the screen
-        capture, tty, summarize: passed to run_tool
+        capture, tty, summarize, watchdog: passed to run_tool
 
     Returns:
         True if successful, False otherwise
@@ -151,7 +156,8 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
             (tool is not None and run.enabled()) or (step_id is not None and console))
         if routed:
             result = run.run_tool(cmd, tool or "generic", step_id, title or description.strip(), n=n, parent=parent,
-                                  cwd=cwd, capture=capture, tty=tty, summarize=summarize, label=label)
+                                  cwd=cwd, capture=capture, tty=tty, summarize=summarize, label=label,
+                                  watchdog=watchdog)
             if result.exit != 0:
                 raise subprocess.CalledProcessError(result.exit, cmd)
         else:
@@ -668,7 +674,7 @@ def commit_index(repo_dir, message, step_num, label, step_prefix, row_labels):
         f"  Creating commit{label}...",
         repo_dir,
         step_id=f"{step_prefix}commit", title=f"Commit{label}", label=row_labels[0],
-        capture=True, tty=True, summarize=commit_summary,
+        capture=True, tty=True, summarize=commit_summary, watchdog=WATCHDOG_SECONDS,
     ):
         aborted(f"\n❌ git commit failed{label} -- aborting.")
         return False
@@ -690,7 +696,7 @@ def push_to_upstream(git, repo_dir, step_num, label, step_prefix, row_labels):
         f"🚀 Step {step_num}: Pushing changes to remote repository{label}...",
         repo_dir,
         step_id=f"{step_prefix}push", title=f"Push{label}", label=row_labels[1],
-        tty=True, summarize=lambda _text: f"{upstream} ✓" if upstream else None,
+        tty=True, summarize=lambda _text: f"{upstream} ✓" if upstream else None, watchdog=WATCHDOG_SECONDS,
     ):
         aborted(f"\n❌ git push failed{label}.")
         say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
