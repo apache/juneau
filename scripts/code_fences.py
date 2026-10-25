@@ -46,5 +46,6 @@ def iter_fences(text):
 
 
 def page_files(docs_root):
-    """Every Markdown page under <docs_root>/pages, sorted."""
-    return sorted(Path(docs_root, 'pages').rglob('*.md'))
+    """Every Markdown page under <docs_root>/pages, then every MDX page under src/pages/about, each sorted."""
+    return (sorted(Path(docs_root, 'pages').rglob('*.md'))
+            + sorted(Path(docs_root, 'src/pages/about').glob('*.mdx')))

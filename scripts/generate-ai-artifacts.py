@@ -30,9 +30,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import project_index
+
 
 TOPIC_GLOB = "pages/topics/*.md"
 RELEASE_NOTES_GLOB = "pages/release-notes/*.md"
+ABOUT_GLOB = "src/pages/about/*.mdx"
 SIDEBARS_FILE = "sidebars.ts"
 SITE_URL = "https://juneau.apache.org"
 LLMS_SUMMARY_MAX = 200
@@ -195,6 +198,54 @@ def build_doc_record(path: Path, docs_root: Path, source_type: str, default_vers
     }
 
 
+def about_body(content: str) -> str:
+    """An about page's Markdown without front matter, import lines and the <ProjectLayout> wrapper tags."""
+    body = remove_frontmatter(content)
+    body = re.sub(r"^import .*\n", "", body, flags=re.MULTILINE)
+    body = re.sub(r"^\s*</?ProjectLayout\b[^>]*>\s*\n", "", body, flags=re.MULTILINE)
+    return body.strip()
+
+
+def build_about_records(config: ExtractConfig, current_release: str) -> list[dict[str, Any]]:
+    """One record per /about page: `about-<slug>` for a project page, `about` for the overview."""
+    pages = sorted(config.docs_root.glob(ABOUT_GLOB))
+    if not pages:
+        return []
+    _, projects = project_index.load(config.docs_root)
+    by_slug = {p["slug"]: p for p in projects}
+    records = []
+    for path in pages:
+        content = read_text(path)
+        fm = parse_frontmatter(content)
+        body = about_body(content)
+        project = by_slug.get(path.stem)
+        if project is not None:
+            record_id, title, summary = f"about-{project['slug']}", project["name"], project["tagline"]
+            module = project["modules"][0]
+            # The module line comes before the body so the 2000-character cut can never drop it.
+            description = "\n\n".join([title, summary, "Modules: " + ", ".join(project["modules"]), body])
+        else:
+            record_id, title, summary = "about", fm.get("title") or path.stem, fm.get("description") or ""
+            module = "general"
+            description = body
+        if len(description) > 2000:
+            description = description[:1997] + "..."
+        records.append({
+            "id": record_id,
+            "title": title,
+            "summary": summary,
+            "description": description,
+            "module": module,
+            "source_type": "about",
+            "source_path": str(path.relative_to(config.docs_root)),
+            "version": current_release,
+            "tags": ["about", module],
+            "related_ids": [],
+            "updated_at": "source-controlled",
+        })
+    return records
+
+
 def extract_api_metadata_records(juneau_root: Path, default_version: str) -> list[dict[str, Any]]:
     patterns = [
         r"\bsummary\s*\(\)\s*default\s*\"\"",
@@ -349,6 +400,18 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
             lines.extend(entries)
             lines.append("")
 
+    about = {r["id"]: r for r in records if r["source_type"] == "about"}
+    if about:
+        lines.append("## About")
+        lines.append("")
+        if "about" in about:
+            lines.append(f"- [{about['about']['title']}]({SITE_URL}/about/): {one_line(about['about']['summary'])}")
+        for project in project_index.load(docs_root)[1]:
+            rec = about.get(f"about-{project['slug']}")
+            if rec is not None:
+                lines.append(f"- [{rec['title']}]({SITE_URL}/about/{project['slug']}/): {one_line(rec['summary'])}")
+        lines.append("")
+
     migration = next((r for r in records if r["source_path"].endswith("27.V10MigrationGuide.md")), None)
     lines.append("## Resources")
     lines.append("")
@@ -360,7 +423,7 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
     lines.append(f"- [Javadocs {current_release}]({SITE_URL}/javadocs/{current_release}/index.html): "
                  "API reference for the current release.")
     lines.append(f"- [Knowledge base (JSONL)]({SITE_URL}/ai/juneau-knowledge.jsonl): "
-                 "Machine-readable records of all topics, release notes and API metadata, for RAG pipelines.")
+                 "Machine-readable records of all topics, release notes, About project pages and API metadata, for RAG pipelines.")
     lines.append(f"- [Knowledge base manifest]({SITE_URL}/ai/manifest.json): "
                  "Version, record count and source commits for the knowledge base.")
     lines.append("")
@@ -373,6 +436,7 @@ def build_records(config: ExtractConfig, current_release: str) -> list[dict[str,
         records.append(build_doc_record(path, config.docs_root, "topic", current_release))
     for path in sorted(config.docs_root.glob(RELEASE_NOTES_GLOB)):
         records.append(build_doc_record(path, config.docs_root, "release-note", current_release))
+    records.extend(build_about_records(config, current_release))
 
     records.extend(extract_api_metadata_records(config.juneau_root, current_release))
     records.sort(key=lambda r: (r["source_type"], r["source_path"], r["id"]))

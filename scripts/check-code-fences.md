@@ -19,11 +19,11 @@ python3 scripts/check-code-fences.py --docs-root ~/git/apache/juneau-docs
 
 | Option | Argument | Default | Meaning |
 |---|---|---|---|
-| `--docs-root` | directory | parent of the `scripts/` folder | The docs checkout whose `pages/` tree is scanned. |
+| `--docs-root` | directory | parent of the `scripts/` folder | The docs checkout whose `pages/` tree (plus the `*.mdx` pages in `src/pages/about/`) is scanned. |
 
 ## What it does
 
-1. Reads every `*.md` under `pages/` and extracts its fenced blocks (backtick or tilde fences, indented or inside admonitions) with `code_fences.iter_fences`.
+1. Reads every `*.md` under `pages/`, plus every `*.mdx` under `src/pages/about/`, and extracts its fenced blocks (backtick or tilde fences, indented or inside admonitions) with `code_fences.iter_fences`.
 2. Flags each line in a block whose first non-blank text is `<a ... href=`.
 3. Prints `file:line: HTML anchor in code fence: <line>` for each hit.
 

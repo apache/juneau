@@ -18,7 +18,7 @@ from pathlib import Path
 import pytest
 
 from conftest import load_script
-from code_fences import iter_fences
+from code_fences import iter_fences, page_files
 
 check_code_fences = load_script('check-code-fences.py')
 check_java_fences = load_script('check-java-fences.py')
@@ -30,6 +30,15 @@ def write_page(root, name, text):
     page = Path(root, 'pages', 'topics', name)
     page.parent.mkdir(parents=True, exist_ok=True)
     page.write_text(text)
+
+
+def test_page_files_includes_about_mdx(tmp_path):
+    write_page(tmp_path, 'A.md', 'x\n')
+    about = Path(tmp_path, 'src', 'pages', 'about')
+    about.mkdir(parents=True)
+    (about / 'marshall.mdx').write_text('```java\nint x;\n```\n')
+    names = [p.relative_to(tmp_path).as_posix() for p in page_files(tmp_path)]
+    assert names == ['pages/topics/A.md', 'src/pages/about/marshall.mdx']
 
 
 def test_iter_fences_reports_line_info_and_body():

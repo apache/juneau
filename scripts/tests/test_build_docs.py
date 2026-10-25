@@ -166,3 +166,38 @@ def test_links_stage_runs_every_checker_in_order(monkeypatch, tmp_path):
     assert build_docs.build(args, tmp_path / 'juneau', tmp_path) == 0
     assert calls == ['check_topic_links', 'check_ai_artifacts', 'check_code_fences', 'check_java_fences',
                      'check_guide_snippets']
+
+
+def test_verify_docs_runs_as_a_child_of_verify(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    build_docs.verify_docs_integrity(tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('verify-docs.py')
+    assert kw['id'] == 'verify-docs' and kw['label'] == 'Integrity' and kw['parent'] == 'verify'
+
+
+def test_check_project_pages_runs_as_a_child_of_verify(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    build_docs.check_project_pages(tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('check-project-pages.py')
+    assert cmd[2:] == ['--docs-dir', str(tmp_path)]
+    assert kw['id'] == 'verify-projects' and kw['label'] == 'Project pages'
+    assert kw['parent'] == 'verify' and kw['cwd'] == tmp_path
+
+
+def test_verify_stage_runs_the_integrity_checker(monkeypatch, tmp_path):
+    args = argparse.Namespace(skip_npm=True, skip_maven=False, skip_verify=False, skip_copy=True, staging=False)
+    monkeypatch.setattr(build_docs, 'DRY_RUN', True)
+    real_plan = build_docs.row_plan
+    monkeypatch.setattr(build_docs, 'row_plan', lambda a, d=None: [
+        (id, label, reason if id == 'verify' else 'skipped') for id, label, reason in real_plan(a, d)])
+    for name in ('generate_artifact_paths', 'get_current_release', 'ensure_apidocs_symlink', 'resolve_javadocs_version'):
+        monkeypatch.setattr(build_docs, name, lambda *a, **kw: None)
+    calls = []
+    for name in ('verify_docs_integrity',):
+        monkeypatch.setattr(build_docs, name, lambda *a, n=name: calls.append(n))
+    assert build_docs.build(args, tmp_path / 'juneau', tmp_path) == 0
+    assert calls == ['verify_docs_integrity']  # check_project_pages is re-hooked with the About pages

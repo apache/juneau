@@ -46,7 +46,7 @@ Run from the docs checkout root.
 8. Regenerates `artifact-packages.json` (module to base javadoc package), then points `static/site/apidocs` at the committed `static/javadocs/<version>` with a relative symlink.
 9. **Docs build:** runs `npm run build`, setting `JUNEAU_VERSION` and, with `--staging`, `SITE_URL`.
 10. Copies the Juneau checkout's `.asf.yaml` into `build/` (not with `--skip-copy` or `--skip-maven`).
-11. **Verify:** runs `verify-docs.py`.
+11. **Verify:** runs `verify-docs.py` (Integrity), a child row of the Verify stage. `check-project-pages.py` is not hooked in yet; it runs by hand until the About pages land.
 12. **Links:** runs `check-topic-links.py --juneau-root <root>`, `check-ai-artifacts.py --juneau-root <root>`, `check-code-fences.py --docs-root <docs>`, `check-java-fences.py --docs-root <docs> --strict` (a ` ```java ` fence that does not parse fails the build unless it is marked ` ```java fragment `) and `check-guide-snippets.py --juneau-root <root>` (every ` guide=FILE#REGION ` fence must match its region in the Juneau checkout's `juneau-examples/juneau-examples-guides` module).
 13. Prints the location of the build and, after a complete build with no skips, the stage and release commands.
 

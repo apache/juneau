@@ -543,8 +543,19 @@ def verify_docs_integrity(docs_dir):
         return
     # run_command uses check=True, so a non-zero exit (errors found) raises
     # CalledProcessError and fails the build in main()'s handler.
-    run_command(['python3', str(checker_script)], cwd=docs_dir, id='verify', label='Verify',
-                title="Verifying documentation integrity", tool='generic')
+    run_command(['python3', str(checker_script)], cwd=docs_dir, id='verify-docs', label='Integrity',
+                title="Verifying documentation integrity", tool='generic', parent='verify')
+
+def check_project_pages(docs_dir):
+    """Run the project-pages checker (a child row of Verify): the About pages match src/data/projects.ts."""
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-project-pages.py'
+    if not checker_script.exists():
+        say(f"WARNING: Project pages checker not found at {checker_script}", 'warn')
+        return
+    run_command(['python3', str(checker_script), '--docs-dir', str(docs_dir)], cwd=docs_dir,
+                id='verify-projects', label='Project pages', title="Checking project pages", tool='generic',
+                parent='verify')
 
 def check_ai_artifacts(master_root, docs_dir):
     """Run AI artifact drift checks (a child row of Links)."""
@@ -680,12 +691,14 @@ def build(args, master_root, docs_dir):
             stage_banner("Copying .asf.yaml to build directory")
             shutil.copy2(asf_yaml, build_dir)
 
-    # Documentation-integrity check — needs only the docs checkout, so it runs
+    # Documentation-integrity and project-page checks — need only the docs checkout, so they run
     # even in --skip-maven CI smoke runs. Fails the build if errors are found.
     if rows['verify']:
-        VIEW.skip('verify', 'Verify', "documentation-integrity check", rows['verify'])
+        VIEW.skip('verify', 'Verify', "documentation checks", rows['verify'])
     else:
-        verify_docs_integrity(docs_dir)
+        with VIEW.stage('verify', 'Verify', "Verifying documentation"):
+            verify_docs_integrity(docs_dir)
+            # check_project_pages(docs_dir) is re-hooked together with the About pages.
 
     # Checks that require sibling repos — skip in --skip-maven / CI smoke runs
     # where only the docs repo is checked out.

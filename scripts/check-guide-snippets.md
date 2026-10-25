@@ -20,11 +20,11 @@ python3 scripts/check-guide-snippets.py --juneau-root ~/git/apache/juneau --docs
 | Option | Argument | Default | Meaning |
 |---|---|---|---|
 | `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | The Juneau checkout holding `juneau-examples/juneau-examples-guides`. |
-| `--docs-root` | directory | parent of the `scripts/` folder | The docs checkout whose `pages/` tree is scanned. |
+| `--docs-root` | directory | parent of the `scripts/` folder | The docs checkout whose `pages/` tree (plus the `*.mdx` pages in `src/pages/about/`) is scanned. |
 
 ## What it does
 
-1. Reads every fence in `pages/**/*.md` (`code_fences.iter_fences`) and splits its info string on whitespace. A word `guide=FILE#REGION` is a pointer; at most one per fence. Other words (`fragment`, `title="..."`, `{1,3}`, `showLineNumbers`) are ignored.
+1. Reads every fence in `pages/**/*.md` and `src/pages/about/*.mdx` (`code_fences.iter_fences`) and splits its info string on whitespace. A word `guide=FILE#REGION` is a pointer; at most one per fence. Other words (`fragment`, `title="..."`, `{1,3}`, `showLineNumbers`) are ignored.
 2. Resolves `FILE` under the module's `src/test/java` and `src/test/resources`. A bare basename (`PetResource.java`) must match exactly one file; a relative path (`SpringBootRestApi/pom.xml`) is tried under each root. Sample POMs and config files live in `src/test/resources/<GuideSlug>/` and are always named by relative path.
 3. Finds the region between marker lines `region NAME` and `endregion NAME`, written as a `//`, `#` or `<!-- -->` comment. A region may start above the `package` line. Region names are unique in a file and regions do not nest; every closer names its region.
 4. Normalizes the fence body and the region body the same way: CRLF to LF, tabs expanded to four-column stops, trailing whitespace stripped, common indentation removed, leading and trailing blank lines dropped. They must be equal.

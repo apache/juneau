@@ -20,7 +20,7 @@ python3 scripts/check-java-fences.py --java /path/to/jdk/bin/java
 
 | Option | Argument | Default | Meaning |
 |---|---|---|---|
-| `--docs-root` | directory | parent of the `scripts/` folder | The docs checkout whose `pages/` tree is scanned. |
+| `--docs-root` | directory | parent of the `scripts/` folder | The docs checkout whose `pages/` tree (plus the `*.mdx` pages in `src/pages/about/`) is scanned. |
 | `--java` | file | `~/jdk/default/bin/java` | The `java` launcher to run `JavaFenceParse.java` with (JDK 17 or later). |
 | `--strict` | none | off | Exit 1 when any fence fails to parse. Without it the exit code is 0 whatever was found. |
 

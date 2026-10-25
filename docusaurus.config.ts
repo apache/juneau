@@ -264,6 +264,7 @@ const config: Config = {
         indexDocs: true,
         indexBlog: false,
         indexPages: true,
+        ignoreCssSelectors: ['.juneau-project-rail', '.juneau-project-strip'],
         docsRouteBasePath: '/docs',
         // Contributor material and release history get their own indexes so a reader
         // searching from the user docs does not see them (search from those pages instead).

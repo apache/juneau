@@ -118,3 +118,86 @@ def test_is_stale_ignores_nothing_outside_manifest(tmp_path):
     path = tmp_path / 'taxonomy.json'
     expected = gen.render_json({'source_commit': 'x'})
     assert gen.is_stale(path, gen.render_json({'source_commit': 'y'}), expected) is True
+
+
+PROJECTS_TS = """export const GROUPS: Group[] = [
+  {
+    id: 'data',
+    label: 'Data',
+  },
+];
+
+export const PROJECTS: Project[] = [
+  {
+    slug: 'marshall',
+    name: 'Juneau Marshall',
+    group: 'data',
+    tagline: 'One bean. Every format.',
+    modules: ['juneau-marshall', 'juneau-marshall-rdf'],
+    docs: ['Alpha'],
+  },
+];
+"""
+
+IMPORT_LAYOUT = "import ProjectLayout from '@site/src/components/ProjectLayout';\n"
+
+
+def add_about(docs):
+    (docs / 'src' / 'data').mkdir(parents=True)
+    (docs / 'src' / 'data' / 'projects.ts').write_text(PROJECTS_TS, encoding='utf-8')
+    about = docs / 'src' / 'pages' / 'about'
+    about.mkdir(parents=True)
+    (about / 'index.mdx').write_text(
+        f"---\ntitle: About Apache Juneau\ndescription: The overview.\n---\n\n{IMPORT_LAYOUT}\n"
+        "<ProjectLayout>\n\nHello overview.\n\n</ProjectLayout>\n", encoding='utf-8')
+    (about / 'marshall.mdx').write_text(
+        f"---\ntitle: Juneau Marshall\ndescription: One bean. Every format.\n---\n\n{IMPORT_LAYOUT}\n"
+        '<ProjectLayout slug="marshall">\n\n```java\nJson.of(bean);\n```\n\n</ProjectLayout>\n', encoding='utf-8')
+
+
+def test_about_pages_become_records(layout):
+    docs, juneau, _ = layout
+    add_about(docs)
+    config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
+    recs = [r for r in gen.build_records(config, '10.0.0') if r['source_type'] == 'about']
+    by_id = {r['id']: r for r in recs}
+    assert set(by_id) == {'about', 'about-marshall'}
+    m = by_id['about-marshall']
+    assert m['title'] == 'Juneau Marshall' and m['summary'] == 'One bean. Every format.'
+    assert m['module'] == 'juneau-marshall'
+    assert m['source_path'] == 'src/pages/about/marshall.mdx'
+    assert 'Modules: juneau-marshall, juneau-marshall-rdf' in m['description']
+    assert 'Json.of(bean);' in m['description']
+    assert 'import ProjectLayout' not in m['description'] and '<ProjectLayout' not in m['description']
+    gen.validate_records(recs)
+    o = by_id['about']
+    assert o['module'] == 'general' and o['source_path'] == 'src/pages/about/index.mdx'
+    assert o['title'] == 'About Apache Juneau' and o['summary'] == 'The overview.'
+
+
+def test_long_about_page_keeps_its_modules_line(layout):
+    docs, juneau, _ = layout
+    add_about(docs)
+    page = docs / 'src' / 'pages' / 'about' / 'marshall.mdx'
+    page.write_text(page.read_text(encoding='utf-8') + 'word ' * 1000, encoding='utf-8')
+    config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
+    rec = next(r for r in gen.build_records(config, '10.0.0') if r['id'] == 'about-marshall')
+    assert len(rec['description']) == 2000 and rec['description'].endswith('...')
+    assert 'Modules: juneau-marshall' in rec['description']
+
+
+def test_llms_txt_has_an_about_section(layout):
+    docs, juneau, _ = layout
+    add_about(docs)
+    config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
+    text = gen.render_llms_txt(config, gen.build_records(config, '10.0.0'), '10.0.0')
+    assert '## About' in text
+    assert '- [About Apache Juneau](https://juneau.apache.org/about/): The overview.' in text
+    assert '- [Juneau Marshall](https://juneau.apache.org/about/marshall/): One bean. Every format.' in text
+    assert text.index('## About') < text.index('## Resources')
+
+
+def test_no_about_pages_means_no_about_section(layout):
+    docs, juneau, _ = layout
+    config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
+    assert '## About' not in gen.render_llms_txt(config, gen.build_records(config, '10.0.0'), '10.0.0')
