@@ -61,229 +61,224 @@
 <span class="source-line-no">048</span><span id="line-48"> *       .build();</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;/p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">053</span><span id="line-53"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">054</span><span id="line-54"> * (and possibly earlier).</span>
-<span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;/ul&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * @since 9.2.1</span>
-<span class="source-line-no">061</span><span id="line-61"> */</span>
-<span class="source-line-no">062</span><span id="line-62">@SuppressWarnings({</span>
-<span class="source-line-no">063</span><span id="line-63">   "resource" // execute()/of()/build() return Closeable types; caller must close TransportResponse / MockHttpTransport</span>
-<span class="source-line-no">064</span><span id="line-64">})</span>
-<span class="source-line-no">065</span><span id="line-65">public final class MockHttpTransport implements HttpTransport {</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * A handler that maps an incoming {@link TransportRequest} to a {@link TransportResponse}.</span>
-<span class="source-line-no">069</span><span id="line-69">    *</span>
-<span class="source-line-no">070</span><span id="line-70">    * @since 9.2.1</span>
-<span class="source-line-no">071</span><span id="line-71">    */</span>
-<span class="source-line-no">072</span><span id="line-72">   @FunctionalInterface</span>
-<span class="source-line-no">073</span><span id="line-73">   public interface RequestHandler {</span>
-<span class="source-line-no">074</span><span id="line-74">      /**</span>
-<span class="source-line-no">075</span><span id="line-75">       * Handles the request.</span>
-<span class="source-line-no">076</span><span id="line-76">       *</span>
-<span class="source-line-no">077</span><span id="line-77">       * @param request The incoming request. Never {@code null}.</span>
-<span class="source-line-no">078</span><span id="line-78">       * @return The response to return. Never {@code null}.</span>
-<span class="source-line-no">079</span><span id="line-79">       * @throws TransportException If the handler wants to simulate a network error.</span>
-<span class="source-line-no">080</span><span id="line-80">       */</span>
-<span class="source-line-no">081</span><span id="line-81">      TransportResponse handle(TransportRequest request) throws TransportException;</span>
-<span class="source-line-no">082</span><span id="line-82">   }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   private final List&lt;Route&gt; routes;</span>
-<span class="source-line-no">085</span><span id="line-85">   private final RequestHandler fallback;</span>
-<span class="source-line-no">086</span><span id="line-86">   private final List&lt;TransportRequest&gt; recordedRequests;</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   private MockHttpTransport(Builder builder) {</span>
-<span class="source-line-no">089</span><span id="line-89">      this.routes = List.copyOf(builder.routes);</span>
-<span class="source-line-no">090</span><span id="line-90">      this.fallback = builder.fallback;</span>
-<span class="source-line-no">091</span><span id="line-91">      this.recordedRequests = builder.recordRequests ? new CopyOnWriteArrayList&lt;&gt;() : null;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;/ul&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> * @since 9.2.1</span>
+<span class="source-line-no">056</span><span id="line-56"> */</span>
+<span class="source-line-no">057</span><span id="line-57">@SuppressWarnings({</span>
+<span class="source-line-no">058</span><span id="line-58">   "resource" // execute()/of()/build() return Closeable types; caller must close TransportResponse / MockHttpTransport</span>
+<span class="source-line-no">059</span><span id="line-59">})</span>
+<span class="source-line-no">060</span><span id="line-60">public final class MockHttpTransport implements HttpTransport {</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">   /**</span>
+<span class="source-line-no">063</span><span id="line-63">    * A handler that maps an incoming {@link TransportRequest} to a {@link TransportResponse}.</span>
+<span class="source-line-no">064</span><span id="line-64">    *</span>
+<span class="source-line-no">065</span><span id="line-65">    * @since 9.2.1</span>
+<span class="source-line-no">066</span><span id="line-66">    */</span>
+<span class="source-line-no">067</span><span id="line-67">   @FunctionalInterface</span>
+<span class="source-line-no">068</span><span id="line-68">   public interface RequestHandler {</span>
+<span class="source-line-no">069</span><span id="line-69">      /**</span>
+<span class="source-line-no">070</span><span id="line-70">       * Handles the request.</span>
+<span class="source-line-no">071</span><span id="line-71">       *</span>
+<span class="source-line-no">072</span><span id="line-72">       * @param request The incoming request. Never {@code null}.</span>
+<span class="source-line-no">073</span><span id="line-73">       * @return The response to return. Never {@code null}.</span>
+<span class="source-line-no">074</span><span id="line-74">       * @throws TransportException If the handler wants to simulate a network error.</span>
+<span class="source-line-no">075</span><span id="line-75">       */</span>
+<span class="source-line-no">076</span><span id="line-76">      TransportResponse handle(TransportRequest request) throws TransportException;</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   private final List&lt;Route&gt; routes;</span>
+<span class="source-line-no">080</span><span id="line-80">   private final RequestHandler fallback;</span>
+<span class="source-line-no">081</span><span id="line-81">   private final List&lt;TransportRequest&gt; recordedRequests;</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   private MockHttpTransport(Builder builder) {</span>
+<span class="source-line-no">084</span><span id="line-84">      this.routes = List.copyOf(builder.routes);</span>
+<span class="source-line-no">085</span><span id="line-85">      this.fallback = builder.fallback;</span>
+<span class="source-line-no">086</span><span id="line-86">      this.recordedRequests = builder.recordRequests ? new CopyOnWriteArrayList&lt;&gt;() : null;</span>
+<span class="source-line-no">087</span><span id="line-87">   }</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /** Returns a new {@link Builder}. */</span>
+<span class="source-line-no">090</span><span id="line-90">   public static Builder builder() {</span>
+<span class="source-line-no">091</span><span id="line-91">      return new Builder();</span>
 <span class="source-line-no">092</span><span id="line-92">   }</span>
 <span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /** Returns a new {@link Builder}. */</span>
-<span class="source-line-no">095</span><span id="line-95">   public static Builder builder() {</span>
-<span class="source-line-no">096</span><span id="line-96">      return new Builder();</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /**</span>
-<span class="source-line-no">100</span><span id="line-100">    * Creates a simple mock transport that always returns the given status code and body string.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param statusCode The HTTP status code to return.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param body The body string to return (UTF-8 encoded). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">104</span><span id="line-104">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">105</span><span id="line-105">    */</span>
-<span class="source-line-no">106</span><span id="line-106">   public static MockHttpTransport of(int statusCode, String body) {</span>
-<span class="source-line-no">107</span><span id="line-107">      return builder()</span>
-<span class="source-line-no">108</span><span id="line-108">         .fallback((RequestHandler) req -&gt; TransportResponse.builder()</span>
-<span class="source-line-no">109</span><span id="line-109">            .statusCode(statusCode)</span>
-<span class="source-line-no">110</span><span id="line-110">            .body(body != null ? new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)) : null)</span>
-<span class="source-line-no">111</span><span id="line-111">            .build())</span>
-<span class="source-line-no">112</span><span id="line-112">         .build();</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   @Override /* HttpTransport */</span>
-<span class="source-line-no">116</span><span id="line-116">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">117</span><span id="line-117">      if (request.isSsrfGuardActive())</span>
-<span class="source-line-no">118</span><span id="line-118">         return PolicyEnforcedRedirects.execute(request, this::dispatchWithTimeout);</span>
-<span class="source-line-no">119</span><span id="line-119">      return dispatchWithTimeout(request);</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   // Simulates TransportRequest.getTimeout(): when set, the matched handler runs on a daemon thread and the call fails</span>
-<span class="source-line-no">123</span><span id="line-123">   // with a TransportException (cause: TimeoutException) if the handler has not returned within the timeout.  With no</span>
-<span class="source-line-no">124</span><span id="line-124">   // timeout the handler runs inline on the calling thread, exactly as before.</span>
-<span class="source-line-no">125</span><span id="line-125">   private TransportResponse dispatchWithTimeout(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">126</span><span id="line-126">      var timeout = request.getTimeout();</span>
-<span class="source-line-no">127</span><span id="line-127">      if (timeout == null)</span>
-<span class="source-line-no">128</span><span id="line-128">         return dispatch(request);</span>
-<span class="source-line-no">129</span><span id="line-129">      var task = new FutureTask&lt;TransportResponse&gt;(() -&gt; dispatch(request));</span>
-<span class="source-line-no">130</span><span id="line-130">      var thread = new Thread(task, "juneau-mock-transport");</span>
-<span class="source-line-no">131</span><span id="line-131">      thread.setDaemon(true);</span>
-<span class="source-line-no">132</span><span id="line-132">      thread.start();</span>
-<span class="source-line-no">133</span><span id="line-133">      try {</span>
-<span class="source-line-no">134</span><span id="line-134">         return task.get(Math.max(1, timeout.toMillis()), TimeUnit.MILLISECONDS);</span>
-<span class="source-line-no">135</span><span id="line-135">      } catch (TimeoutException e) {</span>
-<span class="source-line-no">136</span><span id="line-136">         task.cancel(true);</span>
-<span class="source-line-no">137</span><span id="line-137">         throw new TransportException("HTTP request timed out", e);</span>
-<span class="source-line-no">138</span><span id="line-138">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">139</span><span id="line-139">         task.cancel(true);</span>
-<span class="source-line-no">140</span><span id="line-140">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">141</span><span id="line-141">         throw new TransportException("HTTP request interrupted", e);</span>
-<span class="source-line-no">142</span><span id="line-142">      } catch (ExecutionException e) {</span>
-<span class="source-line-no">143</span><span id="line-143">         var cause = e.getCause();</span>
-<span class="source-line-no">144</span><span id="line-144">         if (cause instanceof TransportException te)</span>
-<span class="source-line-no">145</span><span id="line-145">            throw te;</span>
-<span class="source-line-no">146</span><span id="line-146">         if (cause instanceof RuntimeException re)</span>
-<span class="source-line-no">147</span><span id="line-147">            throw re;</span>
-<span class="source-line-no">148</span><span id="line-148">         throw new TransportException("HTTP transport error: " + cause.getMessage(), cause);</span>
-<span class="source-line-no">149</span><span id="line-149">      }</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   @Override /* HttpTransport */</span>
-<span class="source-line-no">153</span><span id="line-153">   public boolean supportsUrlPolicy() {</span>
-<span class="source-line-no">154</span><span id="line-154">      // There is no real DNS resolution or socket connect to pin-on-connect: routing is an in-process dispatch</span>
-<span class="source-line-no">155</span><span id="line-155">      // to registered handlers, so the "cannot honor the connect-time contract" rationale for failing closed</span>
-<span class="source-line-no">156</span><span id="line-156">      // does not apply here. The deny-private lexical pre-check (RemoteUrlPolicy.requireAllowedUrl) still runs</span>
-<span class="source-line-no">157</span><span id="line-157">      // upstream in the @Remote proxy engine before any request reaches this transport.</span>
-<span class="source-line-no">158</span><span id="line-158">      return true;</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   private TransportResponse dispatch(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">162</span><span id="line-162">      if (recordedRequests != null)</span>
-<span class="source-line-no">163</span><span id="line-163">         recordedRequests.add(request);</span>
-<span class="source-line-no">164</span><span id="line-164"></span>
-<span class="source-line-no">165</span><span id="line-165">      var path = request.getUri().getPath();</span>
-<span class="source-line-no">166</span><span id="line-166">      var method = request.getMethod();</span>
+<span class="source-line-no">094</span><span id="line-94">   /**</span>
+<span class="source-line-no">095</span><span id="line-95">    * Creates a simple mock transport that always returns the given status code and body string.</span>
+<span class="source-line-no">096</span><span id="line-96">    *</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param statusCode The HTTP status code to return.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param body The body string to return (UTF-8 encoded). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">099</span><span id="line-99">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public static MockHttpTransport of(int statusCode, String body) {</span>
+<span class="source-line-no">102</span><span id="line-102">      return builder()</span>
+<span class="source-line-no">103</span><span id="line-103">         .fallback((RequestHandler) req -&gt; TransportResponse.builder()</span>
+<span class="source-line-no">104</span><span id="line-104">            .statusCode(statusCode)</span>
+<span class="source-line-no">105</span><span id="line-105">            .body(body != null ? new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)) : null)</span>
+<span class="source-line-no">106</span><span id="line-106">            .build())</span>
+<span class="source-line-no">107</span><span id="line-107">         .build();</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   @Override /* HttpTransport */</span>
+<span class="source-line-no">111</span><span id="line-111">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">112</span><span id="line-112">      if (request.isSsrfGuardActive())</span>
+<span class="source-line-no">113</span><span id="line-113">         return PolicyEnforcedRedirects.execute(request, this::dispatchWithTimeout);</span>
+<span class="source-line-no">114</span><span id="line-114">      return dispatchWithTimeout(request);</span>
+<span class="source-line-no">115</span><span id="line-115">   }</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   // Simulates TransportRequest.getTimeout(): when set, the matched handler runs on a daemon thread and the call fails</span>
+<span class="source-line-no">118</span><span id="line-118">   // with a TransportException (cause: TimeoutException) if the handler has not returned within the timeout.  With no</span>
+<span class="source-line-no">119</span><span id="line-119">   // timeout the handler runs inline on the calling thread, exactly as before.</span>
+<span class="source-line-no">120</span><span id="line-120">   private TransportResponse dispatchWithTimeout(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">121</span><span id="line-121">      var timeout = request.getTimeout();</span>
+<span class="source-line-no">122</span><span id="line-122">      if (timeout == null)</span>
+<span class="source-line-no">123</span><span id="line-123">         return dispatch(request);</span>
+<span class="source-line-no">124</span><span id="line-124">      var task = new FutureTask&lt;TransportResponse&gt;(() -&gt; dispatch(request));</span>
+<span class="source-line-no">125</span><span id="line-125">      var thread = new Thread(task, "juneau-mock-transport");</span>
+<span class="source-line-no">126</span><span id="line-126">      thread.setDaemon(true);</span>
+<span class="source-line-no">127</span><span id="line-127">      thread.start();</span>
+<span class="source-line-no">128</span><span id="line-128">      try {</span>
+<span class="source-line-no">129</span><span id="line-129">         return task.get(Math.max(1, timeout.toMillis()), TimeUnit.MILLISECONDS);</span>
+<span class="source-line-no">130</span><span id="line-130">      } catch (TimeoutException e) {</span>
+<span class="source-line-no">131</span><span id="line-131">         task.cancel(true);</span>
+<span class="source-line-no">132</span><span id="line-132">         throw new TransportException("HTTP request timed out", e);</span>
+<span class="source-line-no">133</span><span id="line-133">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">134</span><span id="line-134">         task.cancel(true);</span>
+<span class="source-line-no">135</span><span id="line-135">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">136</span><span id="line-136">         throw new TransportException("HTTP request interrupted", e);</span>
+<span class="source-line-no">137</span><span id="line-137">      } catch (ExecutionException e) {</span>
+<span class="source-line-no">138</span><span id="line-138">         var cause = e.getCause();</span>
+<span class="source-line-no">139</span><span id="line-139">         if (cause instanceof TransportException te)</span>
+<span class="source-line-no">140</span><span id="line-140">            throw te;</span>
+<span class="source-line-no">141</span><span id="line-141">         if (cause instanceof RuntimeException re)</span>
+<span class="source-line-no">142</span><span id="line-142">            throw re;</span>
+<span class="source-line-no">143</span><span id="line-143">         throw new TransportException("HTTP transport error: " + cause.getMessage(), cause);</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   @Override /* HttpTransport */</span>
+<span class="source-line-no">148</span><span id="line-148">   public boolean supportsUrlPolicy() {</span>
+<span class="source-line-no">149</span><span id="line-149">      // There is no real DNS resolution or socket connect to pin-on-connect: routing is an in-process dispatch</span>
+<span class="source-line-no">150</span><span id="line-150">      // to registered handlers, so the "cannot honor the connect-time contract" rationale for failing closed</span>
+<span class="source-line-no">151</span><span id="line-151">      // does not apply here. The deny-private lexical pre-check (RemoteUrlPolicy.requireAllowedUrl) still runs</span>
+<span class="source-line-no">152</span><span id="line-152">      // upstream in the @Remote proxy engine before any request reaches this transport.</span>
+<span class="source-line-no">153</span><span id="line-153">      return true;</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   private TransportResponse dispatch(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">157</span><span id="line-157">      if (recordedRequests != null)</span>
+<span class="source-line-no">158</span><span id="line-158">         recordedRequests.add(request);</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">      var path = request.getUri().getPath();</span>
+<span class="source-line-no">161</span><span id="line-161">      var method = request.getMethod();</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">      for (var route : routes) {</span>
+<span class="source-line-no">164</span><span id="line-164">         if (route.matches(method, path))</span>
+<span class="source-line-no">165</span><span id="line-165">            return route.handler().handle(request);</span>
+<span class="source-line-no">166</span><span id="line-166">      }</span>
 <span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">      for (var route : routes) {</span>
-<span class="source-line-no">169</span><span id="line-169">         if (route.matches(method, path))</span>
-<span class="source-line-no">170</span><span id="line-170">            return route.handler().handle(request);</span>
-<span class="source-line-no">171</span><span id="line-171">      }</span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">      if (fallback != null)</span>
-<span class="source-line-no">174</span><span id="line-174">         return fallback.handle(request);</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">      return TransportResponse.builder()</span>
-<span class="source-line-no">177</span><span id="line-177">         .statusCode(404)</span>
-<span class="source-line-no">178</span><span id="line-178">         .reasonPhrase("Not Found")</span>
-<span class="source-line-no">179</span><span id="line-179">         .body(new ByteArrayInputStream(("No mock route matched: " + method + " " + path).getBytes(StandardCharsets.UTF_8)))</span>
-<span class="source-line-no">180</span><span id="line-180">         .build();</span>
-<span class="source-line-no">181</span><span id="line-181">   }</span>
-<span class="source-line-no">182</span><span id="line-182"></span>
-<span class="source-line-no">183</span><span id="line-183">   /**</span>
-<span class="source-line-no">184</span><span id="line-184">    * Returns an unmodifiable view of all requests received since creation (only available when recording is enabled).</span>
-<span class="source-line-no">185</span><span id="line-185">    *</span>
-<span class="source-line-no">186</span><span id="line-186">    * @return The recorded requests. Empty if recording is disabled.</span>
-<span class="source-line-no">187</span><span id="line-187">    */</span>
-<span class="source-line-no">188</span><span id="line-188">   public List&lt;TransportRequest&gt; getRecordedRequests() {</span>
-<span class="source-line-no">189</span><span id="line-189">      return recordedRequests != null ? u(recordedRequests) : List.of();</span>
-<span class="source-line-no">190</span><span id="line-190">   }</span>
-<span class="source-line-no">191</span><span id="line-191"></span>
-<span class="source-line-no">192</span><span id="line-192">   /**</span>
-<span class="source-line-no">193</span><span id="line-193">    * Clears the list of recorded requests.</span>
-<span class="source-line-no">194</span><span id="line-194">    */</span>
-<span class="source-line-no">195</span><span id="line-195">   public void clearRecordedRequests() {</span>
-<span class="source-line-no">196</span><span id="line-196">      if (recordedRequests != null)</span>
-<span class="source-line-no">197</span><span id="line-197">         recordedRequests.clear();</span>
-<span class="source-line-no">198</span><span id="line-198">   }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">201</span><span id="line-201">   // Inner types</span>
-<span class="source-line-no">202</span><span id="line-202">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   private record Route(String method, String path, RequestHandler handler) {</span>
-<span class="source-line-no">205</span><span id="line-205">      boolean matches(String m, String p) {</span>
-<span class="source-line-no">206</span><span id="line-206">         return (method == null || eqic(method, m)) &amp;&amp; (path == null || path.equals(p));</span>
-<span class="source-line-no">207</span><span id="line-207">      }</span>
-<span class="source-line-no">208</span><span id="line-208">   }</span>
-<span class="source-line-no">209</span><span id="line-209"></span>
-<span class="source-line-no">210</span><span id="line-210">   /**</span>
-<span class="source-line-no">211</span><span id="line-211">    * Fluent builder for {@link MockHttpTransport}.</span>
-<span class="source-line-no">212</span><span id="line-212">    *</span>
-<span class="source-line-no">213</span><span id="line-213">    * @since 9.2.1</span>
-<span class="source-line-no">214</span><span id="line-214">    */</span>
-<span class="source-line-no">215</span><span id="line-215">   public static final class Builder {</span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">      final List&lt;Route&gt; routes = l();</span>
-<span class="source-line-no">218</span><span id="line-218">      RequestHandler fallback;</span>
-<span class="source-line-no">219</span><span id="line-219">      boolean recordRequests;</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">      private Builder() {}</span>
-<span class="source-line-no">222</span><span id="line-222"></span>
-<span class="source-line-no">223</span><span id="line-223">      /**</span>
-<span class="source-line-no">224</span><span id="line-224">       * Registers a handler for the given HTTP method and path.</span>
-<span class="source-line-no">225</span><span id="line-225">       *</span>
-<span class="source-line-no">226</span><span id="line-226">       * @param method The HTTP method (e.g. {@code "GET"}). {@code null} matches any method.</span>
-<span class="source-line-no">227</span><span id="line-227">       * @param path The exact request path (e.g. {@code "/api/users"}). {@code null} matches any path.</span>
-<span class="source-line-no">228</span><span id="line-228">       * @param handler The handler. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">229</span><span id="line-229">       * @return This object.</span>
-<span class="source-line-no">230</span><span id="line-230">       */</span>
-<span class="source-line-no">231</span><span id="line-231">      public Builder on(String method, String path, RequestHandler handler) {</span>
-<span class="source-line-no">232</span><span id="line-232">         reqnn("handler", handler);</span>
-<span class="source-line-no">233</span><span id="line-233">         routes.add(new Route(method, path, handler));</span>
-<span class="source-line-no">234</span><span id="line-234">         return this;</span>
-<span class="source-line-no">235</span><span id="line-235">      }</span>
-<span class="source-line-no">236</span><span id="line-236"></span>
-<span class="source-line-no">237</span><span id="line-237">      /**</span>
-<span class="source-line-no">238</span><span id="line-238">       * Sets a fallback handler used when no route matches.</span>
-<span class="source-line-no">239</span><span id="line-239">       *</span>
-<span class="source-line-no">240</span><span id="line-240">       * &lt;p&gt;</span>
-<span class="source-line-no">241</span><span id="line-241">       * Without a fallback, unmatched requests receive a {@code 404} response.</span>
-<span class="source-line-no">242</span><span id="line-242">       *</span>
-<span class="source-line-no">243</span><span id="line-243">       * @param value</span>
-<span class="source-line-no">244</span><span id="line-244">       *    The fallback handler.</span>
-<span class="source-line-no">245</span><span id="line-245">       *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; — a &lt;jk&gt;null&lt;/jk&gt; fallback is the intentional default (unmatched requests get a {@code 404}).</span>
-<span class="source-line-no">246</span><span id="line-246">       * @return This object.</span>
-<span class="source-line-no">247</span><span id="line-247">       */</span>
-<span class="source-line-no">248</span><span id="line-248">      public Builder fallback(RequestHandler value) {</span>
-<span class="source-line-no">249</span><span id="line-249">         fallback = value;</span>
-<span class="source-line-no">250</span><span id="line-250">         return this;</span>
-<span class="source-line-no">251</span><span id="line-251">      }</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">      /**</span>
-<span class="source-line-no">254</span><span id="line-254">       * Enables recording of all received requests so they can be retrieved via</span>
-<span class="source-line-no">255</span><span id="line-255">       * {@link MockHttpTransport#getRecordedRequests()}.</span>
-<span class="source-line-no">256</span><span id="line-256">       *</span>
-<span class="source-line-no">257</span><span id="line-257">       * @return This object.</span>
-<span class="source-line-no">258</span><span id="line-258">       */</span>
-<span class="source-line-no">259</span><span id="line-259">      public Builder recordRequests() {</span>
-<span class="source-line-no">260</span><span id="line-260">         recordRequests = true;</span>
-<span class="source-line-no">261</span><span id="line-261">         return this;</span>
-<span class="source-line-no">262</span><span id="line-262">      }</span>
-<span class="source-line-no">263</span><span id="line-263"></span>
-<span class="source-line-no">264</span><span id="line-264">      /**</span>
-<span class="source-line-no">265</span><span id="line-265">       * Builds and returns the {@link MockHttpTransport}.</span>
-<span class="source-line-no">266</span><span id="line-266">       *</span>
-<span class="source-line-no">267</span><span id="line-267">       * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">268</span><span id="line-268">       */</span>
-<span class="source-line-no">269</span><span id="line-269">      public MockHttpTransport build() {</span>
-<span class="source-line-no">270</span><span id="line-270">         return new MockHttpTransport(this);</span>
-<span class="source-line-no">271</span><span id="line-271">      }</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273">}</span>
+<span class="source-line-no">168</span><span id="line-168">      if (fallback != null)</span>
+<span class="source-line-no">169</span><span id="line-169">         return fallback.handle(request);</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">      return TransportResponse.builder()</span>
+<span class="source-line-no">172</span><span id="line-172">         .statusCode(404)</span>
+<span class="source-line-no">173</span><span id="line-173">         .reasonPhrase("Not Found")</span>
+<span class="source-line-no">174</span><span id="line-174">         .body(new ByteArrayInputStream(("No mock route matched: " + method + " " + path).getBytes(StandardCharsets.UTF_8)))</span>
+<span class="source-line-no">175</span><span id="line-175">         .build();</span>
+<span class="source-line-no">176</span><span id="line-176">   }</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">   /**</span>
+<span class="source-line-no">179</span><span id="line-179">    * Returns an unmodifiable view of all requests received since creation (only available when recording is enabled).</span>
+<span class="source-line-no">180</span><span id="line-180">    *</span>
+<span class="source-line-no">181</span><span id="line-181">    * @return The recorded requests. Empty if recording is disabled.</span>
+<span class="source-line-no">182</span><span id="line-182">    */</span>
+<span class="source-line-no">183</span><span id="line-183">   public List&lt;TransportRequest&gt; getRecordedRequests() {</span>
+<span class="source-line-no">184</span><span id="line-184">      return recordedRequests != null ? u(recordedRequests) : List.of();</span>
+<span class="source-line-no">185</span><span id="line-185">   }</span>
+<span class="source-line-no">186</span><span id="line-186"></span>
+<span class="source-line-no">187</span><span id="line-187">   /**</span>
+<span class="source-line-no">188</span><span id="line-188">    * Clears the list of recorded requests.</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   public void clearRecordedRequests() {</span>
+<span class="source-line-no">191</span><span id="line-191">      if (recordedRequests != null)</span>
+<span class="source-line-no">192</span><span id="line-192">         recordedRequests.clear();</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">196</span><span id="line-196">   // Inner types</span>
+<span class="source-line-no">197</span><span id="line-197">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   private record Route(String method, String path, RequestHandler handler) {</span>
+<span class="source-line-no">200</span><span id="line-200">      boolean matches(String m, String p) {</span>
+<span class="source-line-no">201</span><span id="line-201">         return (method == null || eqic(method, m)) &amp;&amp; (path == null || path.equals(p));</span>
+<span class="source-line-no">202</span><span id="line-202">      }</span>
+<span class="source-line-no">203</span><span id="line-203">   }</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">   /**</span>
+<span class="source-line-no">206</span><span id="line-206">    * Fluent builder for {@link MockHttpTransport}.</span>
+<span class="source-line-no">207</span><span id="line-207">    *</span>
+<span class="source-line-no">208</span><span id="line-208">    * @since 9.2.1</span>
+<span class="source-line-no">209</span><span id="line-209">    */</span>
+<span class="source-line-no">210</span><span id="line-210">   public static final class Builder {</span>
+<span class="source-line-no">211</span><span id="line-211"></span>
+<span class="source-line-no">212</span><span id="line-212">      final List&lt;Route&gt; routes = l();</span>
+<span class="source-line-no">213</span><span id="line-213">      RequestHandler fallback;</span>
+<span class="source-line-no">214</span><span id="line-214">      boolean recordRequests;</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">      private Builder() {}</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">      /**</span>
+<span class="source-line-no">219</span><span id="line-219">       * Registers a handler for the given HTTP method and path.</span>
+<span class="source-line-no">220</span><span id="line-220">       *</span>
+<span class="source-line-no">221</span><span id="line-221">       * @param method The HTTP method (e.g. {@code "GET"}). {@code null} matches any method.</span>
+<span class="source-line-no">222</span><span id="line-222">       * @param path The exact request path (e.g. {@code "/api/users"}). {@code null} matches any path.</span>
+<span class="source-line-no">223</span><span id="line-223">       * @param handler The handler. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">224</span><span id="line-224">       * @return This object.</span>
+<span class="source-line-no">225</span><span id="line-225">       */</span>
+<span class="source-line-no">226</span><span id="line-226">      public Builder on(String method, String path, RequestHandler handler) {</span>
+<span class="source-line-no">227</span><span id="line-227">         reqnn("handler", handler);</span>
+<span class="source-line-no">228</span><span id="line-228">         routes.add(new Route(method, path, handler));</span>
+<span class="source-line-no">229</span><span id="line-229">         return this;</span>
+<span class="source-line-no">230</span><span id="line-230">      }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">      /**</span>
+<span class="source-line-no">233</span><span id="line-233">       * Sets a fallback handler used when no route matches.</span>
+<span class="source-line-no">234</span><span id="line-234">       *</span>
+<span class="source-line-no">235</span><span id="line-235">       * &lt;p&gt;</span>
+<span class="source-line-no">236</span><span id="line-236">       * Without a fallback, unmatched requests receive a {@code 404} response.</span>
+<span class="source-line-no">237</span><span id="line-237">       *</span>
+<span class="source-line-no">238</span><span id="line-238">       * @param value</span>
+<span class="source-line-no">239</span><span id="line-239">       *    The fallback handler.</span>
+<span class="source-line-no">240</span><span id="line-240">       *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; — a &lt;jk&gt;null&lt;/jk&gt; fallback is the intentional default (unmatched requests get a {@code 404}).</span>
+<span class="source-line-no">241</span><span id="line-241">       * @return This object.</span>
+<span class="source-line-no">242</span><span id="line-242">       */</span>
+<span class="source-line-no">243</span><span id="line-243">      public Builder fallback(RequestHandler value) {</span>
+<span class="source-line-no">244</span><span id="line-244">         fallback = value;</span>
+<span class="source-line-no">245</span><span id="line-245">         return this;</span>
+<span class="source-line-no">246</span><span id="line-246">      }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">      /**</span>
+<span class="source-line-no">249</span><span id="line-249">       * Enables recording of all received requests so they can be retrieved via</span>
+<span class="source-line-no">250</span><span id="line-250">       * {@link MockHttpTransport#getRecordedRequests()}.</span>
+<span class="source-line-no">251</span><span id="line-251">       *</span>
+<span class="source-line-no">252</span><span id="line-252">       * @return This object.</span>
+<span class="source-line-no">253</span><span id="line-253">       */</span>
+<span class="source-line-no">254</span><span id="line-254">      public Builder recordRequests() {</span>
+<span class="source-line-no">255</span><span id="line-255">         recordRequests = true;</span>
+<span class="source-line-no">256</span><span id="line-256">         return this;</span>
+<span class="source-line-no">257</span><span id="line-257">      }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">      /**</span>
+<span class="source-line-no">260</span><span id="line-260">       * Builds and returns the {@link MockHttpTransport}.</span>
+<span class="source-line-no">261</span><span id="line-261">       *</span>
+<span class="source-line-no">262</span><span id="line-262">       * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">263</span><span id="line-263">       */</span>
+<span class="source-line-no">264</span><span id="line-264">      public MockHttpTransport build() {</span>
+<span class="source-line-no">265</span><span id="line-265">         return new MockHttpTransport(this);</span>
+<span class="source-line-no">266</span><span id="line-266">      }</span>
+<span class="source-line-no">267</span><span id="line-267">   }</span>
+<span class="source-line-no">268</span><span id="line-268">}</span>
 
 
 

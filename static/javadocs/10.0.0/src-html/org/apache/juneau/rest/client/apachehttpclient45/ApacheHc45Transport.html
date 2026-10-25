@@ -64,320 +64,315 @@
 <span class="source-line-no">051</span><span id="line-51"> *       .build();</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">056</span><span id="line-56"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">057</span><span id="line-57"> * (and possibly earlier).</span>
-<span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * @since 9.2.1</span>
-<span class="source-line-no">064</span><span id="line-64"> */</span>
-<span class="source-line-no">065</span><span id="line-65">@SuppressWarnings({</span>
-<span class="source-line-no">066</span><span id="line-66">   "resource" // httpClient is owned by this transport and closed in close()</span>
-<span class="source-line-no">067</span><span id="line-67">})</span>
-<span class="source-line-no">068</span><span id="line-68">public final class ApacheHc45Transport implements HttpTransport {</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   private final CloseableHttpClient httpClient;</span>
-<span class="source-line-no">071</span><span id="line-71">   private final CloseableHttpClient pinnedHttpClient;</span>
-<span class="source-line-no">072</span><span id="line-72">   private final BasicCookieStore cookieStore;</span>
-<span class="source-line-no">073</span><span id="line-73">   // One further pinned client (own connection pool) per distinct non-empty per-client allow-list, created on first use,</span>
-<span class="source-line-no">074</span><span id="line-74">   // so a connection opened under one allow-list can never be handed to a request with another.</span>
-<span class="source-line-no">075</span><span id="line-75">   private final Map&lt;RemoteUrlPolicy.AllowedRanges,CloseableHttpClient&gt; rangedPinnedHttpClients = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   ApacheHc45Transport(ApacheHc45TransportBuilder builder) {</span>
-<span class="source-line-no">078</span><span id="line-78">      if (builder.httpClient != null) {</span>
-<span class="source-line-no">079</span><span id="line-79">         // A caller-supplied client cannot be given pin-on-connect, so supportsUrlPolicy() reports false for it.</span>
-<span class="source-line-no">080</span><span id="line-80">         this.httpClient = builder.httpClient;</span>
-<span class="source-line-no">081</span><span id="line-81">         this.pinnedHttpClient = null;</span>
-<span class="source-line-no">082</span><span id="line-82">         this.cookieStore = null;</span>
-<span class="source-line-no">083</span><span id="line-83">      } else {</span>
-<span class="source-line-no">084</span><span id="line-84">         // Two clients, one per connection pool, sharing a cookie store so that cookies behave as on one client.</span>
-<span class="source-line-no">085</span><span id="line-85">         this.cookieStore = new BasicCookieStore();</span>
-<span class="source-line-no">086</span><span id="line-86">         this.httpClient = createDefaultHttpClient(cookieStore);</span>
-<span class="source-line-no">087</span><span id="line-87">         this.pinnedHttpClient = createPinnedHttpClient(cookieStore, PolicyPinningDnsResolver.INSTANCE);</span>
-<span class="source-line-no">088</span><span id="line-88">      }</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   // The client for ordinary (non-@Remote) requests: system DNS and HttpClient's own redirect handling.</span>
-<span class="source-line-no">092</span><span id="line-92">   private static CloseableHttpClient createDefaultHttpClient(BasicCookieStore cookieStore) {</span>
-<span class="source-line-no">093</span><span id="line-93">      return HttpClients.custom()</span>
-<span class="source-line-no">094</span><span id="line-94">         .setDefaultCookieStore(cookieStore)</span>
-<span class="source-line-no">095</span><span id="line-95">         .setRedirectStrategy(new UserInfoRefusingRedirectStrategy())</span>
-<span class="source-line-no">096</span><span id="line-96">         .build();</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   // A redirect Location with user info would make HttpClient replace the client's stored credentials for the target's scope</span>
-<span class="source-line-no">100</span><span id="line-100">   // with the user info's, so it is refused (the policy path refuses it too, in PolicyEnforcedRedirects).</span>
-<span class="source-line-no">101</span><span id="line-101">   private static final class UserInfoRefusingRedirectStrategy extends DefaultRedirectStrategy {</span>
-<span class="source-line-no">102</span><span id="line-102">      @Override /* DefaultRedirectStrategy */</span>
-<span class="source-line-no">103</span><span id="line-103">      public URI getLocationURI(HttpRequest request, HttpResponse response, org.apache.http.protocol.HttpContext context) throws org.apache.http.ProtocolException {</span>
-<span class="source-line-no">104</span><span id="line-104">         var uri = super.getLocationURI(request, response, context);</span>
-<span class="source-line-no">105</span><span id="line-105">         if (uri.getRawUserInfo() != null)</span>
-<span class="source-line-no">106</span><span id="line-106">            throw new org.apache.http.ProtocolException("Redirect Location carries user info, which is refused: " + uri.getHost());</span>
-<span class="source-line-no">107</span><span id="line-107">         return uri;</span>
-<span class="source-line-no">108</span><span id="line-108">      }</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   // The client for SSRF-guard-active @Remote requests.  Its connection manager is its own and resolves every host</span>
-<span class="source-line-no">112</span><span id="line-112">   // through PolicyPinningDnsResolver, so every connection in its pool was opened through the pin; a guarded request</span>
-<span class="source-line-no">113</span><span id="line-113">   // can never be handed an idle connection that an unguarded request opened.  Redirect handling is disabled so that</span>
-<span class="source-line-no">114</span><span id="line-114">   // PolicyEnforcedRedirects can revalidate every hop.</span>
-<span class="source-line-no">115</span><span id="line-115">   private static CloseableHttpClient createPinnedHttpClient(BasicCookieStore cookieStore, PolicyPinningDnsResolver resolver) {</span>
-<span class="source-line-no">116</span><span id="line-116">      var registry = RegistryBuilder.&lt;ConnectionSocketFactory&gt;create()</span>
-<span class="source-line-no">117</span><span id="line-117">         .register("http", PlainConnectionSocketFactory.getSocketFactory())</span>
-<span class="source-line-no">118</span><span id="line-118">         .register("https", SSLConnectionSocketFactory.getSocketFactory())</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *</span>
+<span class="source-line-no">058</span><span id="line-58"> * @since 9.2.1</span>
+<span class="source-line-no">059</span><span id="line-59"> */</span>
+<span class="source-line-no">060</span><span id="line-60">@SuppressWarnings({</span>
+<span class="source-line-no">061</span><span id="line-61">   "resource" // httpClient is owned by this transport and closed in close()</span>
+<span class="source-line-no">062</span><span id="line-62">})</span>
+<span class="source-line-no">063</span><span id="line-63">public final class ApacheHc45Transport implements HttpTransport {</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   private final CloseableHttpClient httpClient;</span>
+<span class="source-line-no">066</span><span id="line-66">   private final CloseableHttpClient pinnedHttpClient;</span>
+<span class="source-line-no">067</span><span id="line-67">   private final BasicCookieStore cookieStore;</span>
+<span class="source-line-no">068</span><span id="line-68">   // One further pinned client (own connection pool) per distinct non-empty per-client allow-list, created on first use,</span>
+<span class="source-line-no">069</span><span id="line-69">   // so a connection opened under one allow-list can never be handed to a request with another.</span>
+<span class="source-line-no">070</span><span id="line-70">   private final Map&lt;RemoteUrlPolicy.AllowedRanges,CloseableHttpClient&gt; rangedPinnedHttpClients = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">   ApacheHc45Transport(ApacheHc45TransportBuilder builder) {</span>
+<span class="source-line-no">073</span><span id="line-73">      if (builder.httpClient != null) {</span>
+<span class="source-line-no">074</span><span id="line-74">         // A caller-supplied client cannot be given pin-on-connect, so supportsUrlPolicy() reports false for it.</span>
+<span class="source-line-no">075</span><span id="line-75">         this.httpClient = builder.httpClient;</span>
+<span class="source-line-no">076</span><span id="line-76">         this.pinnedHttpClient = null;</span>
+<span class="source-line-no">077</span><span id="line-77">         this.cookieStore = null;</span>
+<span class="source-line-no">078</span><span id="line-78">      } else {</span>
+<span class="source-line-no">079</span><span id="line-79">         // Two clients, one per connection pool, sharing a cookie store so that cookies behave as on one client.</span>
+<span class="source-line-no">080</span><span id="line-80">         this.cookieStore = new BasicCookieStore();</span>
+<span class="source-line-no">081</span><span id="line-81">         this.httpClient = createDefaultHttpClient(cookieStore);</span>
+<span class="source-line-no">082</span><span id="line-82">         this.pinnedHttpClient = createPinnedHttpClient(cookieStore, PolicyPinningDnsResolver.INSTANCE);</span>
+<span class="source-line-no">083</span><span id="line-83">      }</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   // The client for ordinary (non-@Remote) requests: system DNS and HttpClient's own redirect handling.</span>
+<span class="source-line-no">087</span><span id="line-87">   private static CloseableHttpClient createDefaultHttpClient(BasicCookieStore cookieStore) {</span>
+<span class="source-line-no">088</span><span id="line-88">      return HttpClients.custom()</span>
+<span class="source-line-no">089</span><span id="line-89">         .setDefaultCookieStore(cookieStore)</span>
+<span class="source-line-no">090</span><span id="line-90">         .setRedirectStrategy(new UserInfoRefusingRedirectStrategy())</span>
+<span class="source-line-no">091</span><span id="line-91">         .build();</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   // A redirect Location with user info would make HttpClient replace the client's stored credentials for the target's scope</span>
+<span class="source-line-no">095</span><span id="line-95">   // with the user info's, so it is refused (the policy path refuses it too, in PolicyEnforcedRedirects).</span>
+<span class="source-line-no">096</span><span id="line-96">   private static final class UserInfoRefusingRedirectStrategy extends DefaultRedirectStrategy {</span>
+<span class="source-line-no">097</span><span id="line-97">      @Override /* DefaultRedirectStrategy */</span>
+<span class="source-line-no">098</span><span id="line-98">      public URI getLocationURI(HttpRequest request, HttpResponse response, org.apache.http.protocol.HttpContext context) throws org.apache.http.ProtocolException {</span>
+<span class="source-line-no">099</span><span id="line-99">         var uri = super.getLocationURI(request, response, context);</span>
+<span class="source-line-no">100</span><span id="line-100">         if (uri.getRawUserInfo() != null)</span>
+<span class="source-line-no">101</span><span id="line-101">            throw new org.apache.http.ProtocolException("Redirect Location carries user info, which is refused: " + uri.getHost());</span>
+<span class="source-line-no">102</span><span id="line-102">         return uri;</span>
+<span class="source-line-no">103</span><span id="line-103">      }</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   // The client for SSRF-guard-active @Remote requests.  Its connection manager is its own and resolves every host</span>
+<span class="source-line-no">107</span><span id="line-107">   // through PolicyPinningDnsResolver, so every connection in its pool was opened through the pin; a guarded request</span>
+<span class="source-line-no">108</span><span id="line-108">   // can never be handed an idle connection that an unguarded request opened.  Redirect handling is disabled so that</span>
+<span class="source-line-no">109</span><span id="line-109">   // PolicyEnforcedRedirects can revalidate every hop.</span>
+<span class="source-line-no">110</span><span id="line-110">   private static CloseableHttpClient createPinnedHttpClient(BasicCookieStore cookieStore, PolicyPinningDnsResolver resolver) {</span>
+<span class="source-line-no">111</span><span id="line-111">      var registry = RegistryBuilder.&lt;ConnectionSocketFactory&gt;create()</span>
+<span class="source-line-no">112</span><span id="line-112">         .register("http", PlainConnectionSocketFactory.getSocketFactory())</span>
+<span class="source-line-no">113</span><span id="line-113">         .register("https", SSLConnectionSocketFactory.getSocketFactory())</span>
+<span class="source-line-no">114</span><span id="line-114">         .build();</span>
+<span class="source-line-no">115</span><span id="line-115">      return HttpClients.custom()</span>
+<span class="source-line-no">116</span><span id="line-116">         .setConnectionManager(new PoolingHttpClientConnectionManager(registry, resolver))</span>
+<span class="source-line-no">117</span><span id="line-117">         .setDefaultCookieStore(cookieStore)</span>
+<span class="source-line-no">118</span><span id="line-118">         .disableRedirectHandling()</span>
 <span class="source-line-no">119</span><span id="line-119">         .build();</span>
-<span class="source-line-no">120</span><span id="line-120">      return HttpClients.custom()</span>
-<span class="source-line-no">121</span><span id="line-121">         .setConnectionManager(new PoolingHttpClientConnectionManager(registry, resolver))</span>
-<span class="source-line-no">122</span><span id="line-122">         .setDefaultCookieStore(cookieStore)</span>
-<span class="source-line-no">123</span><span id="line-123">         .disableRedirectHandling()</span>
-<span class="source-line-no">124</span><span id="line-124">         .build();</span>
-<span class="source-line-no">125</span><span id="line-125">   }</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   /**</span>
-<span class="source-line-no">128</span><span id="line-128">    * Returns a new builder for this transport.</span>
-<span class="source-line-no">129</span><span id="line-129">    *</span>
-<span class="source-line-no">130</span><span id="line-130">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">131</span><span id="line-131">    */</span>
-<span class="source-line-no">132</span><span id="line-132">   public static ApacheHc45TransportBuilder builder() {</span>
-<span class="source-line-no">133</span><span id="line-133">      return new ApacheHc45TransportBuilder();</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   /**</span>
-<span class="source-line-no">137</span><span id="line-137">    * Returns a new instance backed by a default {@link CloseableHttpClient}.</span>
-<span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">140</span><span id="line-140">    */</span>
-<span class="source-line-no">141</span><span id="line-141">   public static ApacheHc45Transport create() {</span>
-<span class="source-line-no">142</span><span id="line-142">      return builder().build();</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   @Override /* HttpTransport */</span>
-<span class="source-line-no">146</span><span id="line-146">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">147</span><span id="line-147">      if (request.isSsrfGuardActive())</span>
-<span class="source-line-no">148</span><span id="line-148">         return executeWithPolicy(request);</span>
-<span class="source-line-no">149</span><span id="line-149">      try {</span>
-<span class="source-line-no">150</span><span id="line-150">         return sendOnce(request, httpClient, Hc45RedirectCredentialGuard.newGuardingContext());</span>
-<span class="source-line-no">151</span><span id="line-151">      } catch (StaleConnectionException e) {</span>
-<span class="source-line-no">152</span><span id="line-152">         // A pooled keep-alive connection was torn down by the server before any response was received.</span>
-<span class="source-line-no">153</span><span id="line-153">         // Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).</span>
-<span class="source-line-no">154</span><span id="line-154">         if (! request.isSafeToReplay())</span>
-<span class="source-line-no">155</span><span id="line-155">            throw e.asTransportException();</span>
-<span class="source-line-no">156</span><span id="line-156">         try {</span>
-<span class="source-line-no">157</span><span id="line-157">            return sendOnce(request, httpClient, Hc45RedirectCredentialGuard.newGuardingContext());</span>
-<span class="source-line-no">158</span><span id="line-158">         } catch (StaleConnectionException e2) {</span>
-<span class="source-line-no">159</span><span id="line-159">            throw e2.asTransportException();</span>
-<span class="source-line-no">160</span><span id="line-160">         }</span>
-<span class="source-line-no">161</span><span id="line-161">      }</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   /**</span>
+<span class="source-line-no">123</span><span id="line-123">    * Returns a new builder for this transport.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   public static ApacheHc45TransportBuilder builder() {</span>
+<span class="source-line-no">128</span><span id="line-128">      return new ApacheHc45TransportBuilder();</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   /**</span>
+<span class="source-line-no">132</span><span id="line-132">    * Returns a new instance backed by a default {@link CloseableHttpClient}.</span>
+<span class="source-line-no">133</span><span id="line-133">    *</span>
+<span class="source-line-no">134</span><span id="line-134">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">135</span><span id="line-135">    */</span>
+<span class="source-line-no">136</span><span id="line-136">   public static ApacheHc45Transport create() {</span>
+<span class="source-line-no">137</span><span id="line-137">      return builder().build();</span>
+<span class="source-line-no">138</span><span id="line-138">   }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">   @Override /* HttpTransport */</span>
+<span class="source-line-no">141</span><span id="line-141">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">142</span><span id="line-142">      if (request.isSsrfGuardActive())</span>
+<span class="source-line-no">143</span><span id="line-143">         return executeWithPolicy(request);</span>
+<span class="source-line-no">144</span><span id="line-144">      try {</span>
+<span class="source-line-no">145</span><span id="line-145">         return sendOnce(request, httpClient, Hc45RedirectCredentialGuard.newGuardingContext());</span>
+<span class="source-line-no">146</span><span id="line-146">      } catch (StaleConnectionException e) {</span>
+<span class="source-line-no">147</span><span id="line-147">         // A pooled keep-alive connection was torn down by the server before any response was received.</span>
+<span class="source-line-no">148</span><span id="line-148">         // Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).</span>
+<span class="source-line-no">149</span><span id="line-149">         if (! request.isSafeToReplay())</span>
+<span class="source-line-no">150</span><span id="line-150">            throw e.asTransportException();</span>
+<span class="source-line-no">151</span><span id="line-151">         try {</span>
+<span class="source-line-no">152</span><span id="line-152">            return sendOnce(request, httpClient, Hc45RedirectCredentialGuard.newGuardingContext());</span>
+<span class="source-line-no">153</span><span id="line-153">         } catch (StaleConnectionException e2) {</span>
+<span class="source-line-no">154</span><span id="line-154">            throw e2.asTransportException();</span>
+<span class="source-line-no">155</span><span id="line-155">         }</span>
+<span class="source-line-no">156</span><span id="line-156">      }</span>
+<span class="source-line-no">157</span><span id="line-157">   }</span>
+<span class="source-line-no">158</span><span id="line-158"></span>
+<span class="source-line-no">159</span><span id="line-159">   @Override /* HttpTransport */</span>
+<span class="source-line-no">160</span><span id="line-160">   public boolean supportsUrlPolicy() {</span>
+<span class="source-line-no">161</span><span id="line-161">      return pinnedHttpClient != null;</span>
 <span class="source-line-no">162</span><span id="line-162">   }</span>
 <span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   @Override /* HttpTransport */</span>
-<span class="source-line-no">165</span><span id="line-165">   public boolean supportsUrlPolicy() {</span>
-<span class="source-line-no">166</span><span id="line-166">      return pinnedHttpClient != null;</span>
-<span class="source-line-no">167</span><span id="line-167">   }</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">   // Juneau-controlled redirect revalidation for a guarded request; every hop goes through sendOncePinned.</span>
-<span class="source-line-no">170</span><span id="line-170">   private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">171</span><span id="line-171">      // One guarding context for the whole chain: each hop is a separate execute, and the guard must remember the first origin.</span>
-<span class="source-line-no">172</span><span id="line-172">      var context = Hc45RedirectCredentialGuard.newGuardingContext();</span>
-<span class="source-line-no">173</span><span id="line-173">      return PolicyEnforcedRedirects.execute(request, hop -&gt; sendOncePinned(hop, context));</span>
-<span class="source-line-no">174</span><span id="line-174">   }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">   // Performs one pin-on-connect hop on the pinned client.  A caller-supplied client has no pinned client, so its hops</span>
-<span class="source-line-no">177</span><span id="line-177">   // are sent unpinned on that client; RestRequest never routes a guarded request there (supportsUrlPolicy() is false).</span>
-<span class="source-line-no">178</span><span id="line-178">   // PolicyPinningDnsResolver refuses a host whose every address is denied with an IllegalArgumentException, which</span>
-<span class="source-line-no">179</span><span id="line-179">   // HttpClient propagates unchanged; it is reported as the documented TransportException.</span>
-<span class="source-line-no">180</span><span id="line-180">   private TransportResponse sendOncePinned(TransportRequest request, HttpClientContext context) throws TransportException {</span>
-<span class="source-line-no">181</span><span id="line-181">      try {</span>
-<span class="source-line-no">182</span><span id="line-182">         return sendOnce(request, pinnedClientFor(request), context);</span>
-<span class="source-line-no">183</span><span id="line-183">      } catch (StaleConnectionException e) {</span>
-<span class="source-line-no">184</span><span id="line-184">         throw e.asTransportException();</span>
-<span class="source-line-no">185</span><span id="line-185">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">186</span><span id="line-186">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
-<span class="source-line-no">187</span><span id="line-187">      }</span>
-<span class="source-line-no">188</span><span id="line-188">   }</span>
-<span class="source-line-no">189</span><span id="line-189"></span>
-<span class="source-line-no">190</span><span id="line-190">   // The pinned client for the request's per-client allow-list: the shared one when it allows nothing, else a dedicated</span>
-<span class="source-line-no">191</span><span id="line-191">   // one (own pool, own resolver) per distinct allow-list.  A caller-supplied client has none, and is used as is.</span>
-<span class="source-line-no">192</span><span id="line-192">   private CloseableHttpClient pinnedClientFor(TransportRequest request) {</span>
-<span class="source-line-no">193</span><span id="line-193">      if (pinnedHttpClient == null)</span>
-<span class="source-line-no">194</span><span id="line-194">         return httpClient;</span>
-<span class="source-line-no">195</span><span id="line-195">      var ranges = request.getAllowedAddressRanges();</span>
-<span class="source-line-no">196</span><span id="line-196">      if (ranges.isEmpty())</span>
-<span class="source-line-no">197</span><span id="line-197">         return pinnedHttpClient;</span>
-<span class="source-line-no">198</span><span id="line-198">      return rangedPinnedHttpClients.computeIfAbsent(ranges, r -&gt; createPinnedHttpClient(cookieStore, new PolicyPinningDnsResolver(r)));</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">   // Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a</span>
-<span class="source-line-no">202</span><span id="line-202">   // pre-response stale-connection failure; throws TransportException for every other failure.  Every request is sent with a</span>
-<span class="source-line-no">203</span><span id="line-203">   // context that applies the redirect credential guard, so transport-built and caller-supplied clients behave the same.  A legacy AbstractHttpClient is refused by the builder because</span>
-<span class="source-line-no">204</span><span id="line-204">   // it never sets the request again before it is written, so the wire-stage strip could not run for it.</span>
-<span class="source-line-no">205</span><span id="line-205">   private static TransportResponse sendOnce(TransportRequest request, CloseableHttpClient client, HttpClientContext context) throws TransportException, StaleConnectionException {</span>
-<span class="source-line-no">206</span><span id="line-206">      var hcRequest = buildHcRequest(request, client);</span>
-<span class="source-line-no">207</span><span id="line-207">      CloseableHttpResponse hcResponse;</span>
-<span class="source-line-no">208</span><span id="line-208">      try {</span>
-<span class="source-line-no">209</span><span id="line-209">         hcResponse = client.execute(hcRequest, context);</span>
-<span class="source-line-no">210</span><span id="line-210">      } catch (IOException e) {</span>
-<span class="source-line-no">211</span><span id="line-211">         // httpClient.execute() only returns once response headers have been read, so any IOException here</span>
-<span class="source-line-no">212</span><span id="line-212">         // occurred before any response bytes were received.</span>
-<span class="source-line-no">213</span><span id="line-213">         if (isStaleConnectionFailure(e))</span>
-<span class="source-line-no">214</span><span id="line-214">            throw new StaleConnectionException(e);</span>
-<span class="source-line-no">215</span><span id="line-215">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
-<span class="source-line-no">216</span><span id="line-216">      }</span>
-<span class="source-line-no">217</span><span id="line-217">      try {</span>
-<span class="source-line-no">218</span><span id="line-218">         return buildTransportResponse(hcResponse);</span>
-<span class="source-line-no">219</span><span id="line-219">      } catch (TransportException | RuntimeException e) {</span>
-<span class="source-line-no">220</span><span id="line-220">         // If response wiring fails the closeCallback never runs, so close here to release the leased connection.</span>
-<span class="source-line-no">221</span><span id="line-221">         closeQuietly(hcResponse);</span>
-<span class="source-line-no">222</span><span id="line-222">         throw e;</span>
-<span class="source-line-no">223</span><span id="line-223">      }</span>
-<span class="source-line-no">224</span><span id="line-224">   }</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">   // A failure is a stale-connection (pre-response) failure when the server closed the pooled connection before</span>
-<span class="source-line-no">227</span><span id="line-227">   // sending any response.  Apache HttpClient 4.5 surfaces this as a NoHttpResponseException ("failed to respond")</span>
-<span class="source-line-no">228</span><span id="line-228">   // or a connection-reset SocketException.  HttpClient 4.5's default retry handler does not retry these for</span>
-<span class="source-line-no">229</span><span id="line-229">   // entity-enclosing idempotent methods (e.g. PUT) or for POST, so the transport applies its own idempotency-safe</span>
-<span class="source-line-no">230</span><span id="line-230">   // retry here.</span>
-<span class="source-line-no">231</span><span id="line-231">   private static boolean isStaleConnectionFailure(IOException e) {</span>
-<span class="source-line-no">232</span><span id="line-232">      return e instanceof NoHttpResponseException</span>
-<span class="source-line-no">233</span><span id="line-233">         || (e instanceof SocketException &amp;&amp; e.getMessage() != null &amp;&amp; e.getMessage().toLowerCase(Locale.ROOT).contains("reset"));</span>
-<span class="source-line-no">234</span><span id="line-234">   }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">   private static void closeQuietly(CloseableHttpResponse hcResponse) {</span>
-<span class="source-line-no">237</span><span id="line-237">      try {</span>
-<span class="source-line-no">238</span><span id="line-238">         hcResponse.close();</span>
-<span class="source-line-no">239</span><span id="line-239">      } catch (IOException e) {</span>
-<span class="source-line-no">240</span><span id="line-240">         // Best-effort cleanup on an already-failing path; nothing more can be done.</span>
-<span class="source-line-no">241</span><span id="line-241">      }</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">   @Override /* Closeable */</span>
-<span class="source-line-no">245</span><span id="line-245">   public void close() throws IOException {</span>
-<span class="source-line-no">246</span><span id="line-246">      try {</span>
-<span class="source-line-no">247</span><span id="line-247">         httpClient.close();</span>
-<span class="source-line-no">248</span><span id="line-248">      } finally {</span>
-<span class="source-line-no">249</span><span id="line-249">         try {</span>
-<span class="source-line-no">250</span><span id="line-250">            if (pinnedHttpClient != null)</span>
-<span class="source-line-no">251</span><span id="line-251">               pinnedHttpClient.close();</span>
-<span class="source-line-no">252</span><span id="line-252">         } finally {</span>
-<span class="source-line-no">253</span><span id="line-253">            for (var c : rangedPinnedHttpClients.values())</span>
-<span class="source-line-no">254</span><span id="line-254">               c.close();</span>
-<span class="source-line-no">255</span><span id="line-255">         }</span>
-<span class="source-line-no">256</span><span id="line-256">      }</span>
-<span class="source-line-no">257</span><span id="line-257">   }</span>
-<span class="source-line-no">258</span><span id="line-258"></span>
-<span class="source-line-no">259</span><span id="line-259">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">260</span><span id="line-260">   // Internal helpers</span>
-<span class="source-line-no">261</span><span id="line-261">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">   // The effective default config to layer the per-request timeouts on: the client's default if any, else the</span>
-<span class="source-line-no">264</span><span id="line-264">   // HttpClient defaults -- so client-level settings (redirects, cookie spec, ...) survive.</span>
-<span class="source-line-no">265</span><span id="line-265">   private static RequestConfig baseConfig(CloseableHttpClient client) {</span>
-<span class="source-line-no">266</span><span id="line-266">      if (client instanceof Configurable c &amp;&amp; c.getConfig() != null)</span>
-<span class="source-line-no">267</span><span id="line-267">         return c.getConfig();</span>
-<span class="source-line-no">268</span><span id="line-268">      return RequestConfig.DEFAULT;</span>
-<span class="source-line-no">269</span><span id="line-269">   }</span>
-<span class="source-line-no">270</span><span id="line-270"></span>
-<span class="source-line-no">271</span><span id="line-271">   private static HttpUriRequest buildHcRequest(TransportRequest request, CloseableHttpClient client) {</span>
-<span class="source-line-no">272</span><span id="line-272">      var builder = RequestBuilder.create(request.getMethod()).setUri(request.getUri());</span>
-<span class="source-line-no">273</span><span id="line-273">      for (var h : request.getHeaders())</span>
-<span class="source-line-no">274</span><span id="line-274">         builder.addHeader(h.name(), h.value());</span>
-<span class="source-line-no">275</span><span id="line-275">      var timeout = request.getTimeout();</span>
-<span class="source-line-no">276</span><span id="line-276">      if (timeout != null) {</span>
-<span class="source-line-no">277</span><span id="line-277">         // Per-request socket (read) and connect timeouts; overrides the client's default RequestConfig for this call only.</span>
-<span class="source-line-no">278</span><span id="line-278">         var ms = (int)Math.min(Integer.MAX_VALUE, Math.max(1, timeout.toMillis()));</span>
-<span class="source-line-no">279</span><span id="line-279">         builder.setConfig(RequestConfig.copy(baseConfig(client)).setSocketTimeout(ms).setConnectTimeout(ms).build());</span>
-<span class="source-line-no">280</span><span id="line-280">      }</span>
-<span class="source-line-no">281</span><span id="line-281">      var body = request.getBody();</span>
-<span class="source-line-no">282</span><span id="line-282">      if (body != null)</span>
-<span class="source-line-no">283</span><span id="line-283">         builder.setEntity(new TransportBodyEntity(body));</span>
-<span class="source-line-no">284</span><span id="line-284">      return builder.build();</span>
-<span class="source-line-no">285</span><span id="line-285">   }</span>
-<span class="source-line-no">286</span><span id="line-286"></span>
-<span class="source-line-no">287</span><span id="line-287">   private static TransportResponse buildTransportResponse(CloseableHttpResponse hcResponse) throws TransportException {</span>
-<span class="source-line-no">288</span><span id="line-288">      var statusLine = hcResponse.getStatusLine();</span>
-<span class="source-line-no">289</span><span id="line-289">      var builder = TransportResponse.builder()</span>
-<span class="source-line-no">290</span><span id="line-290">         .statusCode(statusLine.getStatusCode())</span>
-<span class="source-line-no">291</span><span id="line-291">         .reasonPhrase(statusLine.getReasonPhrase())</span>
-<span class="source-line-no">292</span><span id="line-292">         .closeCallback(hcResponse);</span>
-<span class="source-line-no">293</span><span id="line-293">      for (var h : hcResponse.getAllHeaders())</span>
-<span class="source-line-no">294</span><span id="line-294">         builder.header(h.getName(), h.getValue());</span>
-<span class="source-line-no">295</span><span id="line-295">      var entity = hcResponse.getEntity();</span>
-<span class="source-line-no">296</span><span id="line-296">      if (entity != null) {</span>
-<span class="source-line-no">297</span><span id="line-297">         try {</span>
-<span class="source-line-no">298</span><span id="line-298">            builder.body(entity.getContent());</span>
-<span class="source-line-no">299</span><span id="line-299">         } catch (IOException e) {</span>
-<span class="source-line-no">300</span><span id="line-300">            throw new TransportException("Failed to read response body: " + e.getMessage(), e);</span>
-<span class="source-line-no">301</span><span id="line-301">         }</span>
-<span class="source-line-no">302</span><span id="line-302">      }</span>
-<span class="source-line-no">303</span><span id="line-303">      return builder.build();</span>
-<span class="source-line-no">304</span><span id="line-304">   }</span>
-<span class="source-line-no">305</span><span id="line-305"></span>
-<span class="source-line-no">306</span><span id="line-306">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">307</span><span id="line-307">   // TransportBodyEntity — bridges TransportBody to Apache HttpEntity</span>
-<span class="source-line-no">308</span><span id="line-308">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   // Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the</span>
-<span class="source-line-no">311</span><span id="line-311">   // original cause so the caller can build the user-visible TransportException if the retry is not attempted or</span>
-<span class="source-line-no">312</span><span id="line-312">   // also fails.</span>
-<span class="source-line-no">313</span><span id="line-313">   private static final class StaleConnectionException extends Exception {</span>
-<span class="source-line-no">314</span><span id="line-314">      private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">315</span><span id="line-315"></span>
-<span class="source-line-no">316</span><span id="line-316">      StaleConnectionException(Throwable cause) {</span>
-<span class="source-line-no">317</span><span id="line-317">         super(cause);</span>
-<span class="source-line-no">318</span><span id="line-318">      }</span>
+<span class="source-line-no">164</span><span id="line-164">   // Juneau-controlled redirect revalidation for a guarded request; every hop goes through sendOncePinned.</span>
+<span class="source-line-no">165</span><span id="line-165">   private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">166</span><span id="line-166">      // One guarding context for the whole chain: each hop is a separate execute, and the guard must remember the first origin.</span>
+<span class="source-line-no">167</span><span id="line-167">      var context = Hc45RedirectCredentialGuard.newGuardingContext();</span>
+<span class="source-line-no">168</span><span id="line-168">      return PolicyEnforcedRedirects.execute(request, hop -&gt; sendOncePinned(hop, context));</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   // Performs one pin-on-connect hop on the pinned client.  A caller-supplied client has no pinned client, so its hops</span>
+<span class="source-line-no">172</span><span id="line-172">   // are sent unpinned on that client; RestRequest never routes a guarded request there (supportsUrlPolicy() is false).</span>
+<span class="source-line-no">173</span><span id="line-173">   // PolicyPinningDnsResolver refuses a host whose every address is denied with an IllegalArgumentException, which</span>
+<span class="source-line-no">174</span><span id="line-174">   // HttpClient propagates unchanged; it is reported as the documented TransportException.</span>
+<span class="source-line-no">175</span><span id="line-175">   private TransportResponse sendOncePinned(TransportRequest request, HttpClientContext context) throws TransportException {</span>
+<span class="source-line-no">176</span><span id="line-176">      try {</span>
+<span class="source-line-no">177</span><span id="line-177">         return sendOnce(request, pinnedClientFor(request), context);</span>
+<span class="source-line-no">178</span><span id="line-178">      } catch (StaleConnectionException e) {</span>
+<span class="source-line-no">179</span><span id="line-179">         throw e.asTransportException();</span>
+<span class="source-line-no">180</span><span id="line-180">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">181</span><span id="line-181">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
+<span class="source-line-no">182</span><span id="line-182">      }</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184"></span>
+<span class="source-line-no">185</span><span id="line-185">   // The pinned client for the request's per-client allow-list: the shared one when it allows nothing, else a dedicated</span>
+<span class="source-line-no">186</span><span id="line-186">   // one (own pool, own resolver) per distinct allow-list.  A caller-supplied client has none, and is used as is.</span>
+<span class="source-line-no">187</span><span id="line-187">   private CloseableHttpClient pinnedClientFor(TransportRequest request) {</span>
+<span class="source-line-no">188</span><span id="line-188">      if (pinnedHttpClient == null)</span>
+<span class="source-line-no">189</span><span id="line-189">         return httpClient;</span>
+<span class="source-line-no">190</span><span id="line-190">      var ranges = request.getAllowedAddressRanges();</span>
+<span class="source-line-no">191</span><span id="line-191">      if (ranges.isEmpty())</span>
+<span class="source-line-no">192</span><span id="line-192">         return pinnedHttpClient;</span>
+<span class="source-line-no">193</span><span id="line-193">      return rangedPinnedHttpClients.computeIfAbsent(ranges, r -&gt; createPinnedHttpClient(cookieStore, new PolicyPinningDnsResolver(r)));</span>
+<span class="source-line-no">194</span><span id="line-194">   }</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">   // Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a</span>
+<span class="source-line-no">197</span><span id="line-197">   // pre-response stale-connection failure; throws TransportException for every other failure.  Every request is sent with a</span>
+<span class="source-line-no">198</span><span id="line-198">   // context that applies the redirect credential guard, so transport-built and caller-supplied clients behave the same.  A legacy AbstractHttpClient is refused by the builder because</span>
+<span class="source-line-no">199</span><span id="line-199">   // it never sets the request again before it is written, so the wire-stage strip could not run for it.</span>
+<span class="source-line-no">200</span><span id="line-200">   private static TransportResponse sendOnce(TransportRequest request, CloseableHttpClient client, HttpClientContext context) throws TransportException, StaleConnectionException {</span>
+<span class="source-line-no">201</span><span id="line-201">      var hcRequest = buildHcRequest(request, client);</span>
+<span class="source-line-no">202</span><span id="line-202">      CloseableHttpResponse hcResponse;</span>
+<span class="source-line-no">203</span><span id="line-203">      try {</span>
+<span class="source-line-no">204</span><span id="line-204">         hcResponse = client.execute(hcRequest, context);</span>
+<span class="source-line-no">205</span><span id="line-205">      } catch (IOException e) {</span>
+<span class="source-line-no">206</span><span id="line-206">         // httpClient.execute() only returns once response headers have been read, so any IOException here</span>
+<span class="source-line-no">207</span><span id="line-207">         // occurred before any response bytes were received.</span>
+<span class="source-line-no">208</span><span id="line-208">         if (isStaleConnectionFailure(e))</span>
+<span class="source-line-no">209</span><span id="line-209">            throw new StaleConnectionException(e);</span>
+<span class="source-line-no">210</span><span id="line-210">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
+<span class="source-line-no">211</span><span id="line-211">      }</span>
+<span class="source-line-no">212</span><span id="line-212">      try {</span>
+<span class="source-line-no">213</span><span id="line-213">         return buildTransportResponse(hcResponse);</span>
+<span class="source-line-no">214</span><span id="line-214">      } catch (TransportException | RuntimeException e) {</span>
+<span class="source-line-no">215</span><span id="line-215">         // If response wiring fails the closeCallback never runs, so close here to release the leased connection.</span>
+<span class="source-line-no">216</span><span id="line-216">         closeQuietly(hcResponse);</span>
+<span class="source-line-no">217</span><span id="line-217">         throw e;</span>
+<span class="source-line-no">218</span><span id="line-218">      }</span>
+<span class="source-line-no">219</span><span id="line-219">   }</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">   // A failure is a stale-connection (pre-response) failure when the server closed the pooled connection before</span>
+<span class="source-line-no">222</span><span id="line-222">   // sending any response.  Apache HttpClient 4.5 surfaces this as a NoHttpResponseException ("failed to respond")</span>
+<span class="source-line-no">223</span><span id="line-223">   // or a connection-reset SocketException.  HttpClient 4.5's default retry handler does not retry these for</span>
+<span class="source-line-no">224</span><span id="line-224">   // entity-enclosing idempotent methods (e.g. PUT) or for POST, so the transport applies its own idempotency-safe</span>
+<span class="source-line-no">225</span><span id="line-225">   // retry here.</span>
+<span class="source-line-no">226</span><span id="line-226">   private static boolean isStaleConnectionFailure(IOException e) {</span>
+<span class="source-line-no">227</span><span id="line-227">      return e instanceof NoHttpResponseException</span>
+<span class="source-line-no">228</span><span id="line-228">         || (e instanceof SocketException &amp;&amp; e.getMessage() != null &amp;&amp; e.getMessage().toLowerCase(Locale.ROOT).contains("reset"));</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   private static void closeQuietly(CloseableHttpResponse hcResponse) {</span>
+<span class="source-line-no">232</span><span id="line-232">      try {</span>
+<span class="source-line-no">233</span><span id="line-233">         hcResponse.close();</span>
+<span class="source-line-no">234</span><span id="line-234">      } catch (IOException e) {</span>
+<span class="source-line-no">235</span><span id="line-235">         // Best-effort cleanup on an already-failing path; nothing more can be done.</span>
+<span class="source-line-no">236</span><span id="line-236">      }</span>
+<span class="source-line-no">237</span><span id="line-237">   }</span>
+<span class="source-line-no">238</span><span id="line-238"></span>
+<span class="source-line-no">239</span><span id="line-239">   @Override /* Closeable */</span>
+<span class="source-line-no">240</span><span id="line-240">   public void close() throws IOException {</span>
+<span class="source-line-no">241</span><span id="line-241">      try {</span>
+<span class="source-line-no">242</span><span id="line-242">         httpClient.close();</span>
+<span class="source-line-no">243</span><span id="line-243">      } finally {</span>
+<span class="source-line-no">244</span><span id="line-244">         try {</span>
+<span class="source-line-no">245</span><span id="line-245">            if (pinnedHttpClient != null)</span>
+<span class="source-line-no">246</span><span id="line-246">               pinnedHttpClient.close();</span>
+<span class="source-line-no">247</span><span id="line-247">         } finally {</span>
+<span class="source-line-no">248</span><span id="line-248">            for (var c : rangedPinnedHttpClients.values())</span>
+<span class="source-line-no">249</span><span id="line-249">               c.close();</span>
+<span class="source-line-no">250</span><span id="line-250">         }</span>
+<span class="source-line-no">251</span><span id="line-251">      }</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">255</span><span id="line-255">   // Internal helpers</span>
+<span class="source-line-no">256</span><span id="line-256">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">   // The effective default config to layer the per-request timeouts on: the client's default if any, else the</span>
+<span class="source-line-no">259</span><span id="line-259">   // HttpClient defaults -- so client-level settings (redirects, cookie spec, ...) survive.</span>
+<span class="source-line-no">260</span><span id="line-260">   private static RequestConfig baseConfig(CloseableHttpClient client) {</span>
+<span class="source-line-no">261</span><span id="line-261">      if (client instanceof Configurable c &amp;&amp; c.getConfig() != null)</span>
+<span class="source-line-no">262</span><span id="line-262">         return c.getConfig();</span>
+<span class="source-line-no">263</span><span id="line-263">      return RequestConfig.DEFAULT;</span>
+<span class="source-line-no">264</span><span id="line-264">   }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">   private static HttpUriRequest buildHcRequest(TransportRequest request, CloseableHttpClient client) {</span>
+<span class="source-line-no">267</span><span id="line-267">      var builder = RequestBuilder.create(request.getMethod()).setUri(request.getUri());</span>
+<span class="source-line-no">268</span><span id="line-268">      for (var h : request.getHeaders())</span>
+<span class="source-line-no">269</span><span id="line-269">         builder.addHeader(h.name(), h.value());</span>
+<span class="source-line-no">270</span><span id="line-270">      var timeout = request.getTimeout();</span>
+<span class="source-line-no">271</span><span id="line-271">      if (timeout != null) {</span>
+<span class="source-line-no">272</span><span id="line-272">         // Per-request socket (read) and connect timeouts; overrides the client's default RequestConfig for this call only.</span>
+<span class="source-line-no">273</span><span id="line-273">         var ms = (int)Math.min(Integer.MAX_VALUE, Math.max(1, timeout.toMillis()));</span>
+<span class="source-line-no">274</span><span id="line-274">         builder.setConfig(RequestConfig.copy(baseConfig(client)).setSocketTimeout(ms).setConnectTimeout(ms).build());</span>
+<span class="source-line-no">275</span><span id="line-275">      }</span>
+<span class="source-line-no">276</span><span id="line-276">      var body = request.getBody();</span>
+<span class="source-line-no">277</span><span id="line-277">      if (body != null)</span>
+<span class="source-line-no">278</span><span id="line-278">         builder.setEntity(new TransportBodyEntity(body));</span>
+<span class="source-line-no">279</span><span id="line-279">      return builder.build();</span>
+<span class="source-line-no">280</span><span id="line-280">   }</span>
+<span class="source-line-no">281</span><span id="line-281"></span>
+<span class="source-line-no">282</span><span id="line-282">   private static TransportResponse buildTransportResponse(CloseableHttpResponse hcResponse) throws TransportException {</span>
+<span class="source-line-no">283</span><span id="line-283">      var statusLine = hcResponse.getStatusLine();</span>
+<span class="source-line-no">284</span><span id="line-284">      var builder = TransportResponse.builder()</span>
+<span class="source-line-no">285</span><span id="line-285">         .statusCode(statusLine.getStatusCode())</span>
+<span class="source-line-no">286</span><span id="line-286">         .reasonPhrase(statusLine.getReasonPhrase())</span>
+<span class="source-line-no">287</span><span id="line-287">         .closeCallback(hcResponse);</span>
+<span class="source-line-no">288</span><span id="line-288">      for (var h : hcResponse.getAllHeaders())</span>
+<span class="source-line-no">289</span><span id="line-289">         builder.header(h.getName(), h.getValue());</span>
+<span class="source-line-no">290</span><span id="line-290">      var entity = hcResponse.getEntity();</span>
+<span class="source-line-no">291</span><span id="line-291">      if (entity != null) {</span>
+<span class="source-line-no">292</span><span id="line-292">         try {</span>
+<span class="source-line-no">293</span><span id="line-293">            builder.body(entity.getContent());</span>
+<span class="source-line-no">294</span><span id="line-294">         } catch (IOException e) {</span>
+<span class="source-line-no">295</span><span id="line-295">            throw new TransportException("Failed to read response body: " + e.getMessage(), e);</span>
+<span class="source-line-no">296</span><span id="line-296">         }</span>
+<span class="source-line-no">297</span><span id="line-297">      }</span>
+<span class="source-line-no">298</span><span id="line-298">      return builder.build();</span>
+<span class="source-line-no">299</span><span id="line-299">   }</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">302</span><span id="line-302">   // TransportBodyEntity — bridges TransportBody to Apache HttpEntity</span>
+<span class="source-line-no">303</span><span id="line-303">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">   // Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the</span>
+<span class="source-line-no">306</span><span id="line-306">   // original cause so the caller can build the user-visible TransportException if the retry is not attempted or</span>
+<span class="source-line-no">307</span><span id="line-307">   // also fails.</span>
+<span class="source-line-no">308</span><span id="line-308">   private static final class StaleConnectionException extends Exception {</span>
+<span class="source-line-no">309</span><span id="line-309">      private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">      StaleConnectionException(Throwable cause) {</span>
+<span class="source-line-no">312</span><span id="line-312">         super(cause);</span>
+<span class="source-line-no">313</span><span id="line-313">      }</span>
+<span class="source-line-no">314</span><span id="line-314"></span>
+<span class="source-line-no">315</span><span id="line-315">      TransportException asTransportException() {</span>
+<span class="source-line-no">316</span><span id="line-316">         return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());</span>
+<span class="source-line-no">317</span><span id="line-317">      }</span>
+<span class="source-line-no">318</span><span id="line-318">   }</span>
 <span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">      TransportException asTransportException() {</span>
-<span class="source-line-no">321</span><span id="line-321">         return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());</span>
-<span class="source-line-no">322</span><span id="line-322">      }</span>
-<span class="source-line-no">323</span><span id="line-323">   }</span>
-<span class="source-line-no">324</span><span id="line-324"></span>
-<span class="source-line-no">325</span><span id="line-325">   /**</span>
-<span class="source-line-no">326</span><span id="line-326">    * Bridges a {@link TransportBody} to Apache HttpClient's {@link AbstractHttpEntity}.</span>
-<span class="source-line-no">327</span><span id="line-327">    *</span>
-<span class="source-line-no">328</span><span id="line-328">    * &lt;p&gt;Package-protected (rather than {@code private}) so {@code ApacheHc45Transport_TransportBodyEntity_Test}</span>
-<span class="source-line-no">329</span><span id="line-329">    * (same package) can construct it directly and assert its {@code getContent()} contract.</span>
-<span class="source-line-no">330</span><span id="line-330">    */</span>
-<span class="source-line-no">331</span><span id="line-331">   static final class TransportBodyEntity extends AbstractHttpEntity {</span>
-<span class="source-line-no">332</span><span id="line-332"></span>
-<span class="source-line-no">333</span><span id="line-333">      private final TransportBody body;</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">      TransportBodyEntity(TransportBody body) {</span>
-<span class="source-line-no">336</span><span id="line-336">         this.body = body;</span>
-<span class="source-line-no">337</span><span id="line-337">         var ct = body.getContentType();</span>
-<span class="source-line-no">338</span><span id="line-338">         if (ct != null)</span>
-<span class="source-line-no">339</span><span id="line-339">            setContentType(ct);</span>
+<span class="source-line-no">320</span><span id="line-320">   /**</span>
+<span class="source-line-no">321</span><span id="line-321">    * Bridges a {@link TransportBody} to Apache HttpClient's {@link AbstractHttpEntity}.</span>
+<span class="source-line-no">322</span><span id="line-322">    *</span>
+<span class="source-line-no">323</span><span id="line-323">    * &lt;p&gt;Package-protected (rather than {@code private}) so {@code ApacheHc45Transport_TransportBodyEntity_Test}</span>
+<span class="source-line-no">324</span><span id="line-324">    * (same package) can construct it directly and assert its {@code getContent()} contract.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   static final class TransportBodyEntity extends AbstractHttpEntity {</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">      private final TransportBody body;</span>
+<span class="source-line-no">329</span><span id="line-329"></span>
+<span class="source-line-no">330</span><span id="line-330">      TransportBodyEntity(TransportBody body) {</span>
+<span class="source-line-no">331</span><span id="line-331">         this.body = body;</span>
+<span class="source-line-no">332</span><span id="line-332">         var ct = body.getContentType();</span>
+<span class="source-line-no">333</span><span id="line-333">         if (ct != null)</span>
+<span class="source-line-no">334</span><span id="line-334">            setContentType(ct);</span>
+<span class="source-line-no">335</span><span id="line-335">      }</span>
+<span class="source-line-no">336</span><span id="line-336"></span>
+<span class="source-line-no">337</span><span id="line-337">      @Override /* HttpEntity */</span>
+<span class="source-line-no">338</span><span id="line-338">      public boolean isRepeatable() {</span>
+<span class="source-line-no">339</span><span id="line-339">         return body.isRepeatable();</span>
 <span class="source-line-no">340</span><span id="line-340">      }</span>
 <span class="source-line-no">341</span><span id="line-341"></span>
 <span class="source-line-no">342</span><span id="line-342">      @Override /* HttpEntity */</span>
-<span class="source-line-no">343</span><span id="line-343">      public boolean isRepeatable() {</span>
-<span class="source-line-no">344</span><span id="line-344">         return body.isRepeatable();</span>
+<span class="source-line-no">343</span><span id="line-343">      public long getContentLength() {</span>
+<span class="source-line-no">344</span><span id="line-344">         return body.getContentLength();</span>
 <span class="source-line-no">345</span><span id="line-345">      }</span>
 <span class="source-line-no">346</span><span id="line-346"></span>
 <span class="source-line-no">347</span><span id="line-347">      @Override /* HttpEntity */</span>
-<span class="source-line-no">348</span><span id="line-348">      public long getContentLength() {</span>
-<span class="source-line-no">349</span><span id="line-349">         return body.getContentLength();</span>
+<span class="source-line-no">348</span><span id="line-348">      public InputStream getContent() throws UnsupportedOperationException {</span>
+<span class="source-line-no">349</span><span id="line-349">         throw new UnsupportedOperationException("Use writeTo(OutputStream) instead");</span>
 <span class="source-line-no">350</span><span id="line-350">      }</span>
 <span class="source-line-no">351</span><span id="line-351"></span>
 <span class="source-line-no">352</span><span id="line-352">      @Override /* HttpEntity */</span>
-<span class="source-line-no">353</span><span id="line-353">      public InputStream getContent() throws UnsupportedOperationException {</span>
-<span class="source-line-no">354</span><span id="line-354">         throw new UnsupportedOperationException("Use writeTo(OutputStream) instead");</span>
+<span class="source-line-no">353</span><span id="line-353">      public void writeTo(OutputStream out) throws IOException {</span>
+<span class="source-line-no">354</span><span id="line-354">         body.writeTo(out);</span>
 <span class="source-line-no">355</span><span id="line-355">      }</span>
 <span class="source-line-no">356</span><span id="line-356"></span>
 <span class="source-line-no">357</span><span id="line-357">      @Override /* HttpEntity */</span>
-<span class="source-line-no">358</span><span id="line-358">      public void writeTo(OutputStream out) throws IOException {</span>
-<span class="source-line-no">359</span><span id="line-359">         body.writeTo(out);</span>
+<span class="source-line-no">358</span><span id="line-358">      public boolean isStreaming() {</span>
+<span class="source-line-no">359</span><span id="line-359">         return !body.isRepeatable();</span>
 <span class="source-line-no">360</span><span id="line-360">      }</span>
-<span class="source-line-no">361</span><span id="line-361"></span>
-<span class="source-line-no">362</span><span id="line-362">      @Override /* HttpEntity */</span>
-<span class="source-line-no">363</span><span id="line-363">      public boolean isStreaming() {</span>
-<span class="source-line-no">364</span><span id="line-364">         return !body.isRepeatable();</span>
-<span class="source-line-no">365</span><span id="line-365">      }</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367">}</span>
+<span class="source-line-no">361</span><span id="line-361">   }</span>
+<span class="source-line-no">362</span><span id="line-362">}</span>
 
 
 

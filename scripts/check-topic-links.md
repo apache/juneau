@@ -1,6 +1,6 @@
 # check-topic-links.py
 
-Scans the Juneau source tree for links to documentation topics (`https://juneau.apache.org/docs/topics/<slug>">Title</a>`) and reports any whose slug does not exist whose `#anchor` suffix names no heading in the target page, or whose link text differs from the topic's title.
+Scans the Juneau source tree for links to documentation topics (`https://juneau.apache.org/docs/topics/<slug>">Title</a>`) and reports any whose slug does not exist whose `#anchor` suffix names no heading in the target page, or whose link text differs from the topic's title (or, for an anchored link, from its anchor's heading text).
 
 ## When to use
 
@@ -25,9 +25,9 @@ python3 scripts/check-topic-links.py --juneau-root ~/git/apache/juneau
 ## What it does
 
 1. Resolves the Juneau checkout with `juneau_root.find_juneau_root` (exits 1 if none is found).
-2. Reads every `pages/topics/*.md` except `README.md` and records `slug` and `title` from the frontmatter, plus the page's heading ids (`extract_topic_info`): an explicit `{#id}` or the generated Docusaurus id, ignoring code fences. Pages missing either one produce a warning line.
+2. Reads every `pages/topics/*.md` except `README.md` and records `slug` and `title` from the frontmatter, plus the page's headings (`extract_topic_info`) as a map of heading id to heading text: an explicit `{#id}` or the generated Docusaurus id, ignoring code fences. Pages missing either one produce a warning line.
 3. Walks the Juneau checkout (`find_topic_links`), skipping dot-directories and `target`, `node_modules`, `build`, `dist` and `scripts`, and reads `.java`, `.md`, `.xml`, `.properties`, `.txt`, `.adoc` and `.rst` files. In Markdown files, code blocks and inline code are removed first.
-4. Matches the pattern `https://juneau.apache.org/docs/topics/<slug>">Title</a>` and compares each hit with the topic table (`check_links`): an unknown slug is `UNKNOWN SLUG`, a different title is `TITLE MISMATCH`. A slug may end in `#anchor`: the slug part is resolved first, and an anchor that is not a heading id of that page is `MISSING ANCHOR` (a separate category; an unknown slug with an anchor stays `UNKNOWN SLUG`).
+4. Matches the pattern `https://juneau.apache.org/docs/topics/<slug>">Title</a>` and compares each hit with the topic table (`check_links`): an unknown slug is `UNKNOWN SLUG`, a different title is `TITLE MISMATCH`. A slug may end in `#anchor`: the slug part is resolved first, and an anchor that is not a heading id of that page is `MISSING ANCHOR` (a separate category; an unknown slug with an anchor stays `UNKNOWN SLUG`). A link whose anchor resolves may read either the page title or that anchor's heading text (backticks removed); a plain-slug link must read the page title.
 5. Prints each finding with file and line, then the total.
 
 ## Output and exit codes

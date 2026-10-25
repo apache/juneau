@@ -32,8 +32,11 @@ def github_anchor(heading):
 
 
 def heading_anchors(content):
-    """Return the set of heading ids in a page: explicit {#id} or generated, skipping code fences."""
-    anchors = set()
+    """Return a dict of heading id -> heading text for a page (explicit {#id} or generated id), skipping code fences.
+
+    The heading text has any {#id} suffix and backticks removed.
+    """
+    anchors = {}
     seen = {}
     in_fence = False
     for line in content.split('\n'):
@@ -48,19 +51,19 @@ def heading_anchors(content):
         text = m.group(1)
         explicit = re.search(r'\s*\{#([^}\s]+)\}\s*$', text)
         if explicit:
-            anchors.add(explicit.group(1))
+            anchors[explicit.group(1)] = text[:explicit.start()].replace('`', '').strip()
             continue
         base = github_anchor(text)
         n = seen.get(base, 0)
         seen[base] = n + 1
-        anchors.add(base if n == 0 else f"{base}-{n}")
+        anchors[base if n == 0 else f"{base}-{n}"] = text.replace('`', '').strip()
     return anchors
 
 
 def extract_topic_info(docs_dir, anchors_out=None):
     """Extract slug and title information from all topic markdown files.
 
-    When anchors_out is a dict, it is filled with slug -> set of heading ids.
+    When anchors_out is a dict, it is filled with slug -> {heading id: heading text}.
     """
     topics = {}
     topics_dir = Path(docs_dir) / "pages" / "topics"
@@ -157,7 +160,8 @@ def check_links(links, topics, anchors=None):
     """Check if the found links match the expected slug/title combinations.
 
     A slug may carry a "#anchor" suffix: the slug part is resolved as usual, then the
-    anchor must be a heading id of the target page (when anchors is given).
+    anchor must be a heading id of the target page (when anchors is given). A link with a
+    resolving anchor may read either the page title or that anchor's heading text.
     """
     warnings = []
     
@@ -166,7 +170,7 @@ def check_links(links, topics, anchors=None):
         slug, _, anchor = full_slug.partition('#')
         title = link['title']
         
-        if slug in topics and anchor and anchors is not None and anchor not in anchors.get(slug, set()):
+        if slug in topics and anchor and anchors is not None and anchor not in anchors.get(slug, {}):
             warnings.append({
                 'type': 'missing_anchor',
                 'file': link['file'],
@@ -177,13 +181,15 @@ def check_links(links, topics, anchors=None):
             })
         elif slug in topics:
             expected_title = topics[slug]
-            if title != expected_title:
+            heading = anchors.get(slug, {}).get(anchor) if anchor and anchors is not None else None
+            if title != expected_title and title != heading:
                 warnings.append({
                     'type': 'title_mismatch',
                     'file': link['file'],
                     'line': link['line'],
                     'slug': slug,
                     'expected_title': expected_title,
+                    'expected_heading': heading,
                     'actual_title': title,
                     'full_match': link['full_match']
                 })
@@ -249,6 +255,8 @@ def main():
                 print(f"  File: {warning['file']}:{warning['line']}")
                 print(f"  Slug: {warning['slug']}")
                 print(f"  Expected title: '{warning['expected_title']}'")
+                if warning['expected_heading']:
+                    print(f"  Or heading:     '{warning['expected_heading']}'")
                 print(f"  Actual title:   '{warning['actual_title']}'")
                 print(f"  Link: {warning['full_match']}")
                 print()

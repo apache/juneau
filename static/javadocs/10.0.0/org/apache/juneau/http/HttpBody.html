@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="entity/ByteArrayBody.html" title="class in org.apache.juneau.http.entity">ByteArrayBody</a></code>, <code><a href="entity/FileBody.html" title="class in org.apache.juneau.http.entity">FileBody</a></code>, <code><a href="entity/HttpBodyBean.html" title="class in org.apache.juneau.http.entity">HttpBodyBean</a></code>, <code><a href="resource/HttpResourceBean.html" title="class in org.apache.juneau.http.resource">HttpResourceBean</a></code>, <code><a href="entity/MultipartBody.html" title="class in org.apache.juneau.http.entity">MultipartBody</a></code>, <code><a href="part/PartList.html" title="class in org.apache.juneau.http.part">PartList</a></code>, <code><a href="entity/ReaderBody.html" title="class in org.apache.juneau.http.entity">ReaderBody</a></code>, <code><a href="../rest/client/RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></code>, <code><a href="../rest/client/SerializerBody.html" title="class in org.apache.juneau.rest.client">SerializerBody</a></code>, <code><a href="entity/StreamBody.html" title="class in org.apache.juneau.http.entity">StreamBody</a></code>, <code><a href="entity/StringBody.html" title="class in org.apache.juneau.http.entity">StringBody</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-43">HttpBody</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-36">HttpBody</a></span></div>
 <div class="block">An HTTP message body (entity), providing content and its associated metadata.
 
  <p>
@@ -91,13 +91,6 @@ loadScripts(document, 'script');</script>
  buffering the entire body in memory.  Implementations that can determine the content length without buffering
  may return a non-negative value from <a href="#getContentLength()"><code>getContentLength()</code></a>, which allows transports to set
  <code>Content-Length</code> headers efficiently.
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- (and possibly earlier).
- For production use cases that require long-term binary stability, continue using the existing
- <code>juneau-rest-client</code> and <code>juneau-rest-common</code> APIs until the <code>ng</code> stack is declared stable.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
@@ -157,7 +150,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentType()">
 <h3>getContentType</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-50">getContentType</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-43">getContentType</a></span>()</div>
 <div class="block">Returns the MIME content type of this body, e.g. <code>"application/json; charset=UTF-8"</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -168,7 +161,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentLength()">
 <h3>getContentLength</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-61">getContentLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-54">getContentLength</a></span>()</div>
 <div class="block">Returns the content length in bytes, or <code>-1</code> if unknown.
 
  <p>
@@ -183,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeTo(java.io.OutputStream)">
 <h3>writeTo</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-74">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out)</span>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-67">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out)</span>
       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes the body content to the given output stream.
 
@@ -200,7 +193,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRepeatable()">
 <h3>isRepeatable</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-85">isRepeatable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpBody.html#line-78">isRepeatable</a></span>()</div>
 <div class="block">Returns <code>true</code> if this body can be written more than once.
 
  <p>

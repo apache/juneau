@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-62">McpClient</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-58">McpClient</a></span>
 <span class="extends-implements">extends <a href="../AbstractMcpClient.html" title="class in org.apache.juneau.rest.client.mcp">AbstractMcpClient</a></span></div>
 <div class="block">Typed <c>2026-07-28</c> Model Context Protocol (MCP) client facade.
 
@@ -104,11 +104,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  A server-initiated request delivered over the duplex event-stream channel is routed through the
- <a href="../McpDuplexDispatcher.html" title="class in org.apache.juneau.rest.client.mcp"><code>McpDuplexDispatcher</code></a> registered via <a href="#setServerRequestHandler(org.apache.juneau.rest.client.mcp.McpServerRequestHandler)"><code>setServerRequestHandler(McpServerRequestHandler)</code></a>.
-
- <p>
- <b>Beta — API subject to change:</b> This class builds directly on <code>org.apache.juneau.rest.client.mcp</code>,
- which is itself Beta.</div>
+ <a href="../McpDuplexDispatcher.html" title="class in org.apache.juneau.rest.client.mcp"><code>McpDuplexDispatcher</code></a> registered via <a href="#setServerRequestHandler(org.apache.juneau.rest.client.mcp.McpServerRequestHandler)"><code>setServerRequestHandler(McpServerRequestHandler)</code></a>.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>
@@ -341,7 +337,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_ELICITATION_ROUNDS">
 <h3>DEFAULT_MAX_ELICITATION_ROUNDS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-382">DEFAULT_MAX_ELICITATION_ROUNDS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-378">DEFAULT_MAX_ELICITATION_ROUNDS</a></span></div>
 <div class="block">Default maximum number of <code>input_required</code> resume rounds the <code>*WithElicitation</code> helpers will
  drive before throwing <a href="McpElicitationLimitException.html" title="class in org.apache.juneau.rest.client.mcp.v20260728"><code>McpElicitationLimitException</code></a>.</div>
 <dl class="notes">
@@ -365,7 +361,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-106">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-102">builder</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -376,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="connect(java.lang.String)">
 <h3>connect</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-126">connect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;endpoint)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-122">connect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;endpoint)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Builds a client for <code>endpoint</code> with default settings and performs its one mandatory handshake call,
  returning a ready-to-use client.
@@ -401,7 +397,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="connect(org.apache.juneau.rest.client.mcp.v20260728.McpClient.Builder)">
 <h3>connect</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-144">connect</a></span><wbr><span class="parameters">(<a href="McpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient.Builder</a>&nbsp;builder)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-140">connect</a></span><wbr><span class="parameters">(<a href="McpClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient.Builder</a>&nbsp;builder)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Builds a client from a caller-configured builder and performs its one mandatory handshake call, returning a
  ready-to-use client.
@@ -424,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serverDiscover()">
 <h3>serverDiscover</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ServerDiscoverResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ServerDiscoverResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-191">serverDiscover</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ServerDiscoverResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ServerDiscoverResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-187">serverDiscover</a></span>()
                                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#SERVER_DISCOVER">"server/discover"</a>.
 
@@ -444,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="discoveredServer()">
 <h3>discoveredServer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ServerDiscoverResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ServerDiscoverResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-208">discoveredServer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ServerDiscoverResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ServerDiscoverResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-204">discoveredServer</a></span>()</div>
 <div class="block">Returns the <a href="../../../../bean/mcp/v20260728/ServerDiscoverResult.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>ServerDiscoverResult</code></a> cached from the most recent <a href="#serverDiscover()"><code>serverDiscover()</code></a> call.
 
  <p>
@@ -461,7 +457,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ping()">
 <h3>ping</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/PingResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">PingResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-219">ping</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/PingResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">PingResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-215">ping</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#PING">"ping"</a> to verify server liveness.</div>
 <dl class="notes">
@@ -476,7 +472,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listTools()">
 <h3>listTools</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListToolsResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListToolsResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-230">listTools</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListToolsResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListToolsResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-226">listTools</a></span>()
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#TOOLS_LIST">"tools/list"</a>.</div>
 <dl class="notes">
@@ -491,7 +487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="callTool(java.lang.String,java.util.Map)">
 <h3>callTool</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CallToolResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-243">callTool</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CallToolResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-239">callTool</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
@@ -510,7 +506,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="callToolText(java.lang.String,java.util.Map)">
 <h3>callToolText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-263">callToolText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-259">callToolText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience for <a href="#callTool(java.lang.String,java.util.Map)"><code>callTool(java.lang.String, java.util.Map&lt;java.lang.String, java.lang.Object&gt;)</code></a> followed by <a href="../../../../bean/mcp/v20260728/CallToolResult.html#firstText()"><code>CallToolResult.firstText()</code></a>.
@@ -535,7 +531,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listPrompts()">
 <h3>listPrompts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListPromptsResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListPromptsResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-275">listPrompts</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListPromptsResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListPromptsResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-271">listPrompts</a></span>()
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#PROMPTS_LIST">"prompts/list"</a>.</div>
 <dl class="notes">
@@ -550,7 +546,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPrompt(java.lang.String,java.util.Map)">
 <h3>getPrompt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-288">getPrompt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-284">getPrompt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
@@ -569,7 +565,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listResources()">
 <h3>listResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListResourcesResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListResourcesResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-301">listResources</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListResourcesResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListResourcesResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-297">listResources</a></span>()
                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#RESOURCES_LIST">"resources/list"</a>.</div>
 <dl class="notes">
@@ -585,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readResource(java.lang.String)">
 <h3>readResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-314">readResource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-310">readResource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span>
                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
 <dl class="notes">
@@ -603,7 +599,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listResourceTemplates()">
 <h3>listResourceTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListResourceTemplatesResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListResourceTemplatesResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-326">listResourceTemplates</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ListResourceTemplatesResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ListResourceTemplatesResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-322">listResourceTemplates</a></span>()
                                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#RESOURCES_TEMPLATES_LIST">"resources/templates/list"</a>.</div>
 <dl class="notes">
@@ -619,7 +615,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="complete(org.apache.juneau.bean.mcp.v20260728.CompletionReference,java.lang.String,java.lang.String,java.util.Map)">
 <h3>complete</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CompleteResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CompleteResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-342">complete</a></span><wbr><span class="parameters">(<a href="../../../../bean/mcp/v20260728/CompletionReference.html" title="interface in org.apache.juneau.bean.mcp.v20260728">CompletionReference</a>&nbsp;ref,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CompleteResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CompleteResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-338">complete</a></span><wbr><span class="parameters">(<a href="../../../../bean/mcp/v20260728/CompletionReference.html" title="interface in org.apache.juneau.bean.mcp.v20260728">CompletionReference</a>&nbsp;ref,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;argumentName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;argumentValue,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;contextArguments)</span>
@@ -643,7 +639,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="callRaw(java.lang.String,org.apache.juneau.bean.mcp.v20260728.RequestParams)">
 <h3>callRaw</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-371">callRaw</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-367">callRaw</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="../../../../bean/mcp/v20260728/RequestParams.html" title="class in org.apache.juneau.bean.mcp.v20260728">RequestParams</a>&lt;?&gt;&nbsp;params)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Performs a JSON-RPC call using a caller-supplied, fully-populated request bean, returning the raw result
@@ -674,7 +670,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="callToolWithElicitation(java.lang.String,java.util.Map,org.apache.juneau.rest.client.mcp.v20260728.McpElicitationHandler)">
 <h3>callToolWithElicitation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CallToolResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-407">callToolWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CallToolResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-403">callToolWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
  <a href="McpElicitationHandler.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpElicitationHandler</a>&nbsp;handler)</span>
                                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -708,7 +704,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="callToolWithElicitation(java.lang.String,java.util.Map,org.apache.juneau.rest.client.mcp.v20260728.McpElicitationHandler,int)">
 <h3>callToolWithElicitation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CallToolResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-428">callToolWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/CallToolResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-424">callToolWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
  <a href="McpElicitationHandler.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpElicitationHandler</a>&nbsp;handler,
  int&nbsp;maxRounds)</span>
@@ -737,7 +733,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPromptWithElicitation(java.lang.String,java.util.Map,org.apache.juneau.rest.client.mcp.v20260728.McpElicitationHandler)">
 <h3>getPromptWithElicitation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-450">getPromptWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-446">getPromptWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
  <a href="McpElicitationHandler.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpElicitationHandler</a>&nbsp;handler)</span>
                                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -764,7 +760,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPromptWithElicitation(java.lang.String,java.util.Map,org.apache.juneau.rest.client.mcp.v20260728.McpElicitationHandler,int)">
 <h3>getPromptWithElicitation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-471">getPromptWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-467">getPromptWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
  <a href="McpElicitationHandler.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpElicitationHandler</a>&nbsp;handler,
  int&nbsp;maxRounds)</span>
@@ -793,7 +789,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readResourceWithElicitation(java.lang.String,org.apache.juneau.rest.client.mcp.v20260728.McpElicitationHandler)">
 <h3>readResourceWithElicitation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-492">readResourceWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-488">readResourceWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
  <a href="McpElicitationHandler.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpElicitationHandler</a>&nbsp;handler)</span>
                                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Invokes <a href="../../../../bean/mcp/v20260728/McpMethods.html#RESOURCES_READ">"resources/read"</a>, transparently answering any <code>input_required</code> elicitation
@@ -818,7 +814,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readResourceWithElicitation(java.lang.String,org.apache.juneau.rest.client.mcp.v20260728.McpElicitationHandler,int)">
 <h3>readResourceWithElicitation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-512">readResourceWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../bean/mcp/v20260728/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-508">readResourceWithElicitation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
  <a href="McpElicitationHandler.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpElicitationHandler</a>&nbsp;handler,
  int&nbsp;maxRounds)</span>
                                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -845,7 +841,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listen(org.apache.juneau.bean.mcp.v20260728.SubscriptionFilter,org.apache.juneau.rest.client.mcp.v20260728.McpSubscriptionListener)">
 <h3>listen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionHandle.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpSubscriptionHandle</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-590">listen</a></span><wbr><span class="parameters">(<a href="../../../../bean/mcp/v20260728/SubscriptionFilter.html" title="class in org.apache.juneau.bean.mcp.v20260728">SubscriptionFilter</a>&nbsp;filter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpSubscriptionHandle.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpSubscriptionHandle</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-586">listen</a></span><wbr><span class="parameters">(<a href="../../../../bean/mcp/v20260728/SubscriptionFilter.html" title="class in org.apache.juneau.bean.mcp.v20260728">SubscriptionFilter</a>&nbsp;filter,
  <a href="McpSubscriptionListener.html" title="interface in org.apache.juneau.rest.client.mcp.v20260728">McpSubscriptionListener</a>&nbsp;listener)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends <a href="../../../../bean/mcp/v20260728/McpMethods.html#SUBSCRIPTIONS_LISTEN">"subscriptions/listen"</a>, opening a managed, held-open notification stream on a
@@ -875,7 +871,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setServerRequestHandler(org.apache.juneau.rest.client.mcp.McpServerRequestHandler)">
 <h3>setServerRequestHandler</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-821">setServerRequestHandler</a></span><wbr><span class="parameters">(<a href="../McpServerRequestHandler.html" title="interface in org.apache.juneau.rest.client.mcp">McpServerRequestHandler</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClient.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">McpClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/v20260728/McpClient.html#line-817">setServerRequestHandler</a></span><wbr><span class="parameters">(<a href="../McpServerRequestHandler.html" title="interface in org.apache.juneau.rest.client.mcp">McpServerRequestHandler</a>&nbsp;value)</span></div>
 <div class="block">Registers the handler invoked for server-initiated requests delivered over the duplex event-stream
  channel (see <a href="../McpDuplexDispatcher.html" title="class in org.apache.juneau.rest.client.mcp"><code>McpDuplexDispatcher</code></a>).</div>
 <dl class="notes">

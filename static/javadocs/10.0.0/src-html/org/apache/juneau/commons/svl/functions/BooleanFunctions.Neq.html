@@ -126,15 +126,18 @@
 <span class="source-line-no">113</span><span id="line-113">   }</span>
 <span class="source-line-no">114</span><span id="line-114"></span>
 <span class="source-line-no">115</span><span id="line-115">   /** Same truthiness table as {@link ArgCoercer}, exposed for variadic use in {@link And}/{@link Or}. */</span>
-<span class="source-line-no">116</span><span id="line-116">   private static boolean parseBool(String s) {</span>
-<span class="source-line-no">117</span><span id="line-117">      var t = s == null ? "" : s.trim();</span>
-<span class="source-line-no">118</span><span id="line-118">      if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))</span>
-<span class="source-line-no">119</span><span id="line-119">         return true;</span>
-<span class="source-line-no">120</span><span id="line-120">      if (t.isEmpty() || eqic(t, "false") || eq(t, "0") || eqic(t, "no") || eqic(t, "off"))</span>
-<span class="source-line-no">121</span><span id="line-121">         return false;</span>
-<span class="source-line-no">122</span><span id="line-122">      throw iaex("cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)", s);</span>
-<span class="source-line-no">123</span><span id="line-123">   }</span>
-<span class="source-line-no">124</span><span id="line-124">}</span>
+<span class="source-line-no">116</span><span id="line-116">   @SuppressWarnings({</span>
+<span class="source-line-no">117</span><span id="line-117">      "javabugs:S2259" // The trimmed value is never null; a null input is mapped to the empty string first.</span>
+<span class="source-line-no">118</span><span id="line-118">   })</span>
+<span class="source-line-no">119</span><span id="line-119">   private static boolean parseBool(String s) {</span>
+<span class="source-line-no">120</span><span id="line-120">      var t = s == null ? "" : s.trim();</span>
+<span class="source-line-no">121</span><span id="line-121">      if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))</span>
+<span class="source-line-no">122</span><span id="line-122">         return true;</span>
+<span class="source-line-no">123</span><span id="line-123">      if (t.isEmpty() || eqic(t, "false") || eq(t, "0") || eqic(t, "no") || eqic(t, "off"))</span>
+<span class="source-line-no">124</span><span id="line-124">         return false;</span>
+<span class="source-line-no">125</span><span id="line-125">      throw iaex("cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)", s);</span>
+<span class="source-line-no">126</span><span id="line-126">   }</span>
+<span class="source-line-no">127</span><span id="line-127">}</span>
 
 
 

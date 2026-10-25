@@ -88,16 +88,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-33">RestCallException</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-30">RestCallException</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Exception thrown when an HTTP call fails at the REST client level (e.g. unexpected status code, body
  deserialization failure, or interceptor rejection).
 
  <p>
- Network-level failures are reported as <a href="TransportException.html" title="class in org.apache.juneau.rest.client"><code>TransportException</code></a>.
-
- <p>
- <b>Beta — API subject to change.</b></div>
+ Network-level failures are reported as <a href="TransportException.html" title="class in org.apache.juneau.rest.client"><code>TransportException</code></a>.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>9.2.1</dd>
@@ -177,7 +174,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Throwable)">
 <h3>RestCallException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-45">RestCallException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-42">RestCallException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
 <div class="block">Constructor — for cases without an HTTP status code (e.g. deserialization failure).</div>
 <dl class="notes">
@@ -190,7 +187,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(int,java.lang.String)">
 <h3>RestCallException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-56">RestCallException</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-53">RestCallException</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span></div>
 <div class="block">Constructor — for cases with an HTTP status code (e.g. unexpected 4xx/5xx).</div>
 <dl class="notes">
@@ -203,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(int,java.lang.String,java.lang.Throwable)">
 <h3>RestCallException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-68">RestCallException</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-65">RestCallException</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
 <div class="block">Constructor — for cases with an HTTP status code and a cause.</div>
@@ -226,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-78">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallException.html#line-75">getStatusCode</a></span>()</div>
 <div class="block">Returns the HTTP status code, or <code>-1</code> if not applicable.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -64,6 +64,26 @@ def test_code_fence_heading_is_not_an_anchor(tmp_path):
     assert [w['type'] for w in warnings] == ['missing_anchor']
 
 
+def test_anchor_heading_text_is_accepted(tmp_path):
+    topics, anchors = build(tmp_path)
+    links = [link('Swaps#old-id', 'Per-media-type swaps'), link('Swaps#using-swap-now', 'Using @Swap Now')]
+    assert ctl.check_links(links, topics, anchors) == []
+
+
+def test_heading_text_does_not_apply_to_plain_slug(tmp_path):
+    topics, anchors = build(tmp_path)
+    warnings = ctl.check_links([link('Swaps', 'Per-media-type swaps')], topics, anchors)
+    assert [w['type'] for w in warnings] == ['title_mismatch']
+
+
+def test_anchor_text_must_match_its_own_heading(tmp_path):
+    topics, anchors = build(tmp_path)
+    warnings = ctl.check_links([link('Swaps#old-id', 'Using @Swap Now')], topics, anchors)
+    assert [w['type'] for w in warnings] == ['title_mismatch']
+    assert warnings[0]['expected_title'] == 'Swap'
+    assert warnings[0]['expected_heading'] == 'Per-media-type swaps'
+
+
 def test_title_mismatch_still_reported_with_anchor(tmp_path):
     topics, anchors = build(tmp_path)
     warnings = ctl.check_links([link('Swaps#old-id', 'Wrong')], topics, anchors)

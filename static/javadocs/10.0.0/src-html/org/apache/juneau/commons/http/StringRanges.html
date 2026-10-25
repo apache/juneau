@@ -132,122 +132,125 @@
 <span class="source-line-no">119</span><span id="line-119">    *</span>
 <span class="source-line-no">120</span><span id="line-120">    * @param e The parsed string range header value.</span>
 <span class="source-line-no">121</span><span id="line-121">    */</span>
-<span class="source-line-no">122</span><span id="line-122">   public StringRanges(HeaderElement...e) {</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      value = new StringRange[e.length];</span>
-<span class="source-line-no">125</span><span id="line-125">      for (var i = 0; i &lt; e.length; i++)</span>
-<span class="source-line-no">126</span><span id="line-126">         value[i] = new StringRange(e[i]);</span>
-<span class="source-line-no">127</span><span id="line-127">      Arrays.sort(value, RANGE_COMPARATOR);</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">      this.string = value.length == 1 ? value[0].toString() : join(value, ", ");</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">122</span><span id="line-122">   @SuppressWarnings({</span>
+<span class="source-line-no">123</span><span id="line-123">      "javabugs:S2259" // The header element array must not be null, per the Javadoc contract.</span>
+<span class="source-line-no">124</span><span id="line-124">   })</span>
+<span class="source-line-no">125</span><span id="line-125">   public StringRanges(HeaderElement...e) {</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">      value = new StringRange[e.length];</span>
+<span class="source-line-no">128</span><span id="line-128">      for (var i = 0; i &lt; e.length; i++)</span>
+<span class="source-line-no">129</span><span id="line-129">         value[i] = new StringRange(e[i]);</span>
+<span class="source-line-no">130</span><span id="line-130">      Arrays.sort(value, RANGE_COMPARATOR);</span>
 <span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Constructor.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param value The string range header value.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} is thrown.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   public StringRanges(String value) {</span>
-<span class="source-line-no">138</span><span id="line-138">      this(parse(value));</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   /**</span>
-<span class="source-line-no">142</span><span id="line-142">    * Constructor.</span>
-<span class="source-line-no">143</span><span id="line-143">    *</span>
-<span class="source-line-no">144</span><span id="line-144">    * @param value The string range header value.</span>
-<span class="source-line-no">145</span><span id="line-145">    */</span>
-<span class="source-line-no">146</span><span id="line-146">   public StringRanges(StringRange...value) {</span>
-<span class="source-line-no">147</span><span id="line-147">      this.string = join(value, ", ");</span>
-<span class="source-line-no">148</span><span id="line-148">      this.value = cp(value);</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   /**</span>
-<span class="source-line-no">152</span><span id="line-152">    * Performs an action on the string ranges that make up this object.</span>
-<span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param action The action to perform.</span>
-<span class="source-line-no">155</span><span id="line-155">    * @return This object.</span>
-<span class="source-line-no">156</span><span id="line-156">    */</span>
-<span class="source-line-no">157</span><span id="line-157">   public StringRanges forEachRange(Consumer&lt;StringRange&gt; action) {</span>
-<span class="source-line-no">158</span><span id="line-158">      for (var r : value)</span>
-<span class="source-line-no">159</span><span id="line-159">         action.accept(r);</span>
-<span class="source-line-no">160</span><span id="line-160">      return this;</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   /**</span>
-<span class="source-line-no">164</span><span id="line-164">    * Returns the {@link MediaRange} at the specified index.</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * @param index The index position of the media range.</span>
-<span class="source-line-no">167</span><span id="line-167">    * @return The {@link MediaRange} at the specified index or &lt;jk&gt;null&lt;/jk&gt; if the index is out of range.</span>
-<span class="source-line-no">168</span><span id="line-168">    */</span>
-<span class="source-line-no">169</span><span id="line-169">   public StringRange getRange(int index) {</span>
-<span class="source-line-no">170</span><span id="line-170">      if (index &lt; 0 || index &gt;= value.length)</span>
-<span class="source-line-no">171</span><span id="line-171">         return null;</span>
-<span class="source-line-no">172</span><span id="line-172">      return value[index];</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">   /**</span>
-<span class="source-line-no">176</span><span id="line-176">    * Given a list of media types, returns the best match for this string range header.</span>
-<span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * &lt;p&gt;</span>
-<span class="source-line-no">179</span><span id="line-179">    * Note that fuzzy matching is allowed on the media types where the string range header may</span>
-<span class="source-line-no">180</span><span id="line-180">    * contain additional subtype parts.</span>
-<span class="source-line-no">181</span><span id="line-181">    * &lt;br&gt;For example, given identical q-values and an string range value of &lt;js&gt;"text/json+activity"&lt;/js&gt;,</span>
-<span class="source-line-no">182</span><span id="line-182">    * the media type &lt;js&gt;"text/json"&lt;/js&gt; will match if &lt;js&gt;"text/json+activity"&lt;/js&gt; or &lt;js&gt;"text/activity+json"&lt;/js&gt;</span>
-<span class="source-line-no">183</span><span id="line-183">    * isn't found.</span>
-<span class="source-line-no">184</span><span id="line-184">    * &lt;br&gt;The purpose for this is to allow serializers to match when artifacts such as &lt;c&gt;id&lt;/c&gt; properties are</span>
-<span class="source-line-no">185</span><span id="line-185">    * present in the header.</span>
-<span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * &lt;p&gt;</span>
-<span class="source-line-no">188</span><span id="line-188">    * See &lt;a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects"&gt;ActivityPub / Retrieving Objects&lt;/a&gt;</span>
+<span class="source-line-no">132</span><span id="line-132">      this.string = value.length == 1 ? value[0].toString() : join(value, ", ");</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   /**</span>
+<span class="source-line-no">136</span><span id="line-136">    * Constructor.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param value The string range header value.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} is thrown.</span>
+<span class="source-line-no">139</span><span id="line-139">    */</span>
+<span class="source-line-no">140</span><span id="line-140">   public StringRanges(String value) {</span>
+<span class="source-line-no">141</span><span id="line-141">      this(parse(value));</span>
+<span class="source-line-no">142</span><span id="line-142">   }</span>
+<span class="source-line-no">143</span><span id="line-143"></span>
+<span class="source-line-no">144</span><span id="line-144">   /**</span>
+<span class="source-line-no">145</span><span id="line-145">    * Constructor.</span>
+<span class="source-line-no">146</span><span id="line-146">    *</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param value The string range header value.</span>
+<span class="source-line-no">148</span><span id="line-148">    */</span>
+<span class="source-line-no">149</span><span id="line-149">   public StringRanges(StringRange...value) {</span>
+<span class="source-line-no">150</span><span id="line-150">      this.string = join(value, ", ");</span>
+<span class="source-line-no">151</span><span id="line-151">      this.value = cp(value);</span>
+<span class="source-line-no">152</span><span id="line-152">   }</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   /**</span>
+<span class="source-line-no">155</span><span id="line-155">    * Performs an action on the string ranges that make up this object.</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * @param action The action to perform.</span>
+<span class="source-line-no">158</span><span id="line-158">    * @return This object.</span>
+<span class="source-line-no">159</span><span id="line-159">    */</span>
+<span class="source-line-no">160</span><span id="line-160">   public StringRanges forEachRange(Consumer&lt;StringRange&gt; action) {</span>
+<span class="source-line-no">161</span><span id="line-161">      for (var r : value)</span>
+<span class="source-line-no">162</span><span id="line-162">         action.accept(r);</span>
+<span class="source-line-no">163</span><span id="line-163">      return this;</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   /**</span>
+<span class="source-line-no">167</span><span id="line-167">    * Returns the {@link MediaRange} at the specified index.</span>
+<span class="source-line-no">168</span><span id="line-168">    *</span>
+<span class="source-line-no">169</span><span id="line-169">    * @param index The index position of the media range.</span>
+<span class="source-line-no">170</span><span id="line-170">    * @return The {@link MediaRange} at the specified index or &lt;jk&gt;null&lt;/jk&gt; if the index is out of range.</span>
+<span class="source-line-no">171</span><span id="line-171">    */</span>
+<span class="source-line-no">172</span><span id="line-172">   public StringRange getRange(int index) {</span>
+<span class="source-line-no">173</span><span id="line-173">      if (index &lt; 0 || index &gt;= value.length)</span>
+<span class="source-line-no">174</span><span id="line-174">         return null;</span>
+<span class="source-line-no">175</span><span id="line-175">      return value[index];</span>
+<span class="source-line-no">176</span><span id="line-176">   }</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">   /**</span>
+<span class="source-line-no">179</span><span id="line-179">    * Given a list of media types, returns the best match for this string range header.</span>
+<span class="source-line-no">180</span><span id="line-180">    *</span>
+<span class="source-line-no">181</span><span id="line-181">    * &lt;p&gt;</span>
+<span class="source-line-no">182</span><span id="line-182">    * Note that fuzzy matching is allowed on the media types where the string range header may</span>
+<span class="source-line-no">183</span><span id="line-183">    * contain additional subtype parts.</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;br&gt;For example, given identical q-values and an string range value of &lt;js&gt;"text/json+activity"&lt;/js&gt;,</span>
+<span class="source-line-no">185</span><span id="line-185">    * the media type &lt;js&gt;"text/json"&lt;/js&gt; will match if &lt;js&gt;"text/json+activity"&lt;/js&gt; or &lt;js&gt;"text/activity+json"&lt;/js&gt;</span>
+<span class="source-line-no">186</span><span id="line-186">    * isn't found.</span>
+<span class="source-line-no">187</span><span id="line-187">    * &lt;br&gt;The purpose for this is to allow serializers to match when artifacts such as &lt;c&gt;id&lt;/c&gt; properties are</span>
+<span class="source-line-no">188</span><span id="line-188">    * present in the header.</span>
 <span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * @param names The names to match against.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} may be thrown.</span>
-<span class="source-line-no">191</span><span id="line-191">    * @return The index into the array of the best match, or &lt;c&gt;-1&lt;/c&gt; if no suitable matches could be found.</span>
-<span class="source-line-no">192</span><span id="line-192">    */</span>
-<span class="source-line-no">193</span><span id="line-193">   public int match(List&lt;String&gt; names) {</span>
-<span class="source-line-no">194</span><span id="line-194">      if (string.isEmpty())</span>
-<span class="source-line-no">195</span><span id="line-195">         return -1;</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">      int matchQuant = 0;</span>
-<span class="source-line-no">198</span><span id="line-198">      int matchIndex = -1;</span>
-<span class="source-line-no">199</span><span id="line-199">      var q = 0f;</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">      // Media ranges are ordered by 'q'.</span>
-<span class="source-line-no">202</span><span id="line-202">      // So we only need to search until we've found a match.</span>
-<span class="source-line-no">203</span><span id="line-203">      for (var mr : value) {</span>
-<span class="source-line-no">204</span><span id="line-204">         var q2 = mr.getQValue();</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">         if (q2 &lt; q || q2 == 0)</span>
-<span class="source-line-no">207</span><span id="line-207">            break;</span>
+<span class="source-line-no">190</span><span id="line-190">    * &lt;p&gt;</span>
+<span class="source-line-no">191</span><span id="line-191">    * See &lt;a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects"&gt;ActivityPub / Retrieving Objects&lt;/a&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    *</span>
+<span class="source-line-no">193</span><span id="line-193">    * @param names The names to match against.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} may be thrown.</span>
+<span class="source-line-no">194</span><span id="line-194">    * @return The index into the array of the best match, or &lt;c&gt;-1&lt;/c&gt; if no suitable matches could be found.</span>
+<span class="source-line-no">195</span><span id="line-195">    */</span>
+<span class="source-line-no">196</span><span id="line-196">   public int match(List&lt;String&gt; names) {</span>
+<span class="source-line-no">197</span><span id="line-197">      if (string.isEmpty())</span>
+<span class="source-line-no">198</span><span id="line-198">         return -1;</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">      int matchQuant = 0;</span>
+<span class="source-line-no">201</span><span id="line-201">      int matchIndex = -1;</span>
+<span class="source-line-no">202</span><span id="line-202">      var q = 0f;</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">      // Media ranges are ordered by 'q'.</span>
+<span class="source-line-no">205</span><span id="line-205">      // So we only need to search until we've found a match.</span>
+<span class="source-line-no">206</span><span id="line-206">      for (var mr : value) {</span>
+<span class="source-line-no">207</span><span id="line-207">         var q2 = mr.getQValue();</span>
 <span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">         for (var i = 0; i &lt; names.size(); i++) {</span>
-<span class="source-line-no">210</span><span id="line-210">            var mt = names.get(i);</span>
-<span class="source-line-no">211</span><span id="line-211">            var matchQuant2 = mr.match(mt);</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">            if (matchQuant2 &gt; matchQuant) {</span>
-<span class="source-line-no">214</span><span id="line-214">               matchIndex = i;</span>
-<span class="source-line-no">215</span><span id="line-215">               matchQuant = matchQuant2;</span>
-<span class="source-line-no">216</span><span id="line-216">               q = q2;</span>
-<span class="source-line-no">217</span><span id="line-217">            }</span>
-<span class="source-line-no">218</span><span id="line-218">         }</span>
-<span class="source-line-no">219</span><span id="line-219">      }</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">      return matchIndex;</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
+<span class="source-line-no">209</span><span id="line-209">         if (q2 &lt; q || q2 == 0)</span>
+<span class="source-line-no">210</span><span id="line-210">            break;</span>
+<span class="source-line-no">211</span><span id="line-211"></span>
+<span class="source-line-no">212</span><span id="line-212">         for (var i = 0; i &lt; names.size(); i++) {</span>
+<span class="source-line-no">213</span><span id="line-213">            var mt = names.get(i);</span>
+<span class="source-line-no">214</span><span id="line-214">            var matchQuant2 = mr.match(mt);</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">            if (matchQuant2 &gt; matchQuant) {</span>
+<span class="source-line-no">217</span><span id="line-217">               matchIndex = i;</span>
+<span class="source-line-no">218</span><span id="line-218">               matchQuant = matchQuant2;</span>
+<span class="source-line-no">219</span><span id="line-219">               q = q2;</span>
+<span class="source-line-no">220</span><span id="line-220">            }</span>
+<span class="source-line-no">221</span><span id="line-221">         }</span>
+<span class="source-line-no">222</span><span id="line-222">      }</span>
 <span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   /**</span>
-<span class="source-line-no">225</span><span id="line-225">    * Returns the string ranges that make up this object.</span>
-<span class="source-line-no">226</span><span id="line-226">    *</span>
-<span class="source-line-no">227</span><span id="line-227">    * @return The string ranges that make up this object.</span>
-<span class="source-line-no">228</span><span id="line-228">    */</span>
-<span class="source-line-no">229</span><span id="line-229">   public List&lt;StringRange&gt; toList() {</span>
-<span class="source-line-no">230</span><span id="line-230">      return l(value);</span>
-<span class="source-line-no">231</span><span id="line-231">   }</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">234</span><span id="line-234">   public String toString() {</span>
-<span class="source-line-no">235</span><span id="line-235">      return string;</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237">}</span>
+<span class="source-line-no">224</span><span id="line-224">      return matchIndex;</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   /**</span>
+<span class="source-line-no">228</span><span id="line-228">    * Returns the string ranges that make up this object.</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * @return The string ranges that make up this object.</span>
+<span class="source-line-no">231</span><span id="line-231">    */</span>
+<span class="source-line-no">232</span><span id="line-232">   public List&lt;StringRange&gt; toList() {</span>
+<span class="source-line-no">233</span><span id="line-233">      return l(value);</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">237</span><span id="line-237">   public String toString() {</span>
+<span class="source-line-no">238</span><span id="line-238">      return string;</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240">}</span>
 
 
 
