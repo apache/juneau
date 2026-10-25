@@ -101,17 +101,17 @@ public class Swagger extends SwaggerElement {
 	private String basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
-	private Set<String> schemes = st();
-	private Set<MediaType> consumes = st();
-	private Set<MediaType> produces = st();
-	private Set<Tag> tags = st();
-	private List<Map<String,List<String>>> security = list();
-	private Map<String,JsonMap> definitions = map();
-	private Map<String,ParameterInfo> parameters = map();
-	private Map<String,ResponseInfo> responses = map();
-	private Map<String,SecurityScheme> securityDefinitions = map();
+	private final Set<String> schemes = st();
+	private final Set<MediaType> consumes = st();
+	private final Set<MediaType> produces = st();
+	private final Set<Tag> tags = st();
+	private final List<Map<String,List<String>>> security = list();
+	private final Map<String,JsonMap> definitions = map();
+	private final Map<String,ParameterInfo> parameters = map();
+	private final Map<String,ResponseInfo> responses = map();
+	private final Map<String,SecurityScheme> securityDefinitions = map();
 
-	private Map<String,OperationMap> paths = new TreeMap<>(PATH_COMPARATOR);
+	private final Map<String,OperationMap> paths = new TreeMap<>(PATH_COMPARATOR);
 
 	/**
 	 * Default constructor.

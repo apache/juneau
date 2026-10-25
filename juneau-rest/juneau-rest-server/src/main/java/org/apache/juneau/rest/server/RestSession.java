@@ -66,7 +66,7 @@ public class RestSession extends ContextSession {
 		private HttpServletRequest req;
 		private HttpServletResponse res;
 		private Object resource;
-		private RestContext ctx;
+		private final RestContext ctx;
 		private String pathInfoUndecoded;
 		private UrlPath urlPath;
 

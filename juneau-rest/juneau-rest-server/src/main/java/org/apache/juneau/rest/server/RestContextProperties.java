@@ -53,6 +53,9 @@ import org.apache.juneau.commons.inject.*;
  * @since 10.0.0
  */
 @ConfigProperties(prefix = "RestContext")
+@SuppressWarnings({
+	"java:S9438" // Fields are bound reflectively from config sources by @ConfigProperties; making them final breaks binding.
+})
 public class RestContextProperties {
 
 	private static final String FALSE = "false";

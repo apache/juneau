@@ -233,8 +233,7 @@ class ConsoleDashboard_Test extends TestBase {
 	}
 
 	private static Map<String,Object> row(String value, String count, boolean checked, boolean missing) {
-		Map<String,Object> m = map("value", value, "count", count, "checked", checked, "missing", missing);
-		return m;
+		return map("value", value, "count", count, "checked", checked, "missing", missing);
 	}
 
 	@Test void a14_choice_dictCountsCapAndAllSelected() {
@@ -278,8 +277,7 @@ class ConsoleDashboard_Test extends TestBase {
 	private static final String NOT_CACHED = "The browser would not store this data, so it is held in memory and reloads with the page.";
 
 	private static Map<String,Object> st(String text, String tone, String title) {
-		Map<String,Object> m = map("text", text, "tone", tone, "title", title);
-		return m;
+		return map("text", text, "tone", tone, "title", title);
 	}
 
 	@Test void a16_statusText_formats() {

@@ -52,7 +52,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 */
 	public static class Builder extends OutputStreamSerializerSession.Builder<Builder> {
 
-		private ParquetSerializer ctx;
+		private final ParquetSerializer ctx;
 
 		protected Builder(ParquetSerializer ctx) {
 			super(reqnn("ctx", ctx));

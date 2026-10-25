@@ -65,7 +65,7 @@ def test_launcher_prefers_python_module_when_pytest_importable(monkeypatch, test
 def test_launcher_falls_back_to_uv(monkeypatch, test_mod):
     monkeypatch.setattr(test_mod.shutil, "which", _fake_which({"python3", "uv"}))
     _fake_import(monkeypatch, test_mod, False)
-    assert test_mod.script_tests_launcher() == ["uv", "run", "--native-tls", "--with", "pytest", "pytest"]
+    assert test_mod.script_tests_launcher() == ["uv", "run", "--native-tls", "--with", "pytest", "--with", "pyyaml", "pytest"]
 
 
 def test_launcher_none_without_pytest_or_uv(monkeypatch, test_mod):
@@ -75,7 +75,7 @@ def test_launcher_none_without_pytest_or_uv(monkeypatch, test_mod):
 
 
 def test_command_targets_scripts_tests(test_mod):
-    cmd = test_mod.script_tests_command(["uv", "run", "--native-tls", "--with", "pytest", "pytest"])
+    cmd = test_mod.script_tests_command(["uv", "run", "--native-tls", "--with", "pytest", "--with", "pyyaml", "pytest"])
     assert cmd[-1] == "scripts/tests"
     assert "-q" in cmd
 
@@ -134,7 +134,7 @@ def test_child_environment_carries_the_guard(monkeypatch, test_mod):
 
 # ---- push.py plan ----------------------------------------------------------------------------------------------------
 def test_push_plan_lists_the_row_after_tests(push_mod):
-    args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False, js_tests=False)
+    args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False, js_tests=False)
     ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
     assert ids.index("py-tests") == ids.index("perf") + 1 == ids.index("tests") + 2
     assert push_mod.PLAN_LABELS["py-tests"] == "Python Tests"

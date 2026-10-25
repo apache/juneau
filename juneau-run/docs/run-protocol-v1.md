@@ -81,7 +81,7 @@ An adopting `push.py` accepts `--test-only`:
 - It runs only the build and test gates: the container-tags and BOM checks, the test run and the install build.
   There is no identity check, commit, push or docs follow-up, and the commit message is optional.
 - It emits `run` with `mode: "test"`.
-- It cannot be combined with `--docs-only`, `--sonarqube`, `--tracker-audit` or `--skip-tests`.
+- It cannot be combined with `--docs-only`, `--audit` or `--skip-tests`.
 
 ## Consumer rules
 

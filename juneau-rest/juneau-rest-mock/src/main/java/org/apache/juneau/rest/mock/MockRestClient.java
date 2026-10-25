@@ -313,7 +313,7 @@ public final class MockRestClient implements Closeable {
 				var servletPath = toValidContextPath(restContext.getFullPath());
 				var fullContextPath = emptyIfNull(contextPath) + emptyIfNull(servletPath);
 
-			var transport = new JuneauRestTransport(restContext, servletPath);
+			var transport = new JuneauRestTransport(restContext, emptyIfNull(contextPath), servletPath);
 			var clientBuilder = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://localhost" + fullContextPath)
@@ -344,11 +344,13 @@ public final class MockRestClient implements Closeable {
 
 		private final RestContext restContext;
 		private final Object restObject;
+		private final String contextPath;
 		private final String servletPath;
 
-		JuneauRestTransport(RestContext restContext, String servletPath) {
+		JuneauRestTransport(RestContext restContext, String contextPath, String servletPath) {
 			this.restContext = restContext;
 			this.restObject = restContext.getResource();
+			this.contextPath = contextPath;
 			this.servletPath = servletPath;
 		}
 
@@ -377,7 +379,7 @@ public final class MockRestClient implements Closeable {
 
 				var servletReq = MockServletRequest.create(method, uri)
 					.servletPath(servletPath)
-					.contextPath("");
+					.contextPath(contextPath);
 
 				for (var h : request.getHeaders())
 					servletReq.header(h.name(), h.value());

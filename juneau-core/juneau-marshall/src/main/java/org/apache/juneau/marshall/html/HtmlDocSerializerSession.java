@@ -52,7 +52,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends HtmlStrippedDocSerializerSession.Builder<SELF> {
 
-		private HtmlDocSerializer ctx;
+		private final HtmlDocSerializer ctx;
 		private String nonce;
 
 		/**

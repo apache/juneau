@@ -229,7 +229,7 @@ def test_skip_row_is_a_skipped_browser_tests_row(test_mod, monkeypatch):
 
 @pytest.mark.parametrize("js_tests", [False, True])
 def test_push_always_plans_the_browser_tests_row(push_mod, js_tests):
-    args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False, js_tests=js_tests)
+    args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False, js_tests=js_tests)
     ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
     assert ids.index("js-tests") == ids.index("py-tests") + 1
 

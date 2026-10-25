@@ -118,10 +118,10 @@ public class RestAnnotation {
 		private String[] defaultResponseHeaders = {};
 		private String[] produces = {};
 		private String[] title = {};
-		private Query[] queryParams = new Query[0];
-		private Header[] headerParams = new Header[0];
-		private Path[] pathParams = new Path[0];
-		private FormData[] formDataParams = new FormData[0];
+		private final Query[] queryParams = new Query[0];
+		private final Header[] headerParams = new Header[0];
+		private final Path[] pathParams = new Path[0];
+		private final FormData[] formDataParams = new FormData[0];
 
 		/**
 		 * Constructor.

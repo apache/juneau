@@ -114,7 +114,7 @@ public abstract class Context {
 		private Cache<HashKey,? extends Context> cache;
 		private Class<? extends Context> type;
 		private Context impl;
-		private List<Annotation> annotations;
+		private final List<Annotation> annotations;
 		private final List<Object> builders = list();
 
 		/**

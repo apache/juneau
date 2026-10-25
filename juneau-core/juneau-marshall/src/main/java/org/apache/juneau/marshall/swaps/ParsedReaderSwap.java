@@ -116,7 +116,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 	}
 
 	/** The parser to use to parse the contents of the Reader. */
-	private ReaderParser parser;
+	private final ReaderParser parser;
 
 	/**
 	 * Constructor.

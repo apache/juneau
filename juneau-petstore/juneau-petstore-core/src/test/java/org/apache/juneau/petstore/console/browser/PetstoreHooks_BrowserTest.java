@@ -102,7 +102,7 @@ class PetstoreHooks_BrowserTest extends TestBase {
 			else
 				ids.add(m.getLong("id"));
 		}
-		Collections.sort(ids);
+		ids.sort(null);
 		cancelled = ids.get(0);
 		deleted = ids.get(1);
 		report = run("hooks", base, List.of(

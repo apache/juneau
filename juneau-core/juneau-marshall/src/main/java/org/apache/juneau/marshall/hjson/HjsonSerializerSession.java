@@ -50,7 +50,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private HjsonSerializer ctx;
+		private final HjsonSerializer ctx;
 
 		protected Builder(HjsonSerializer ctx) {
 			super(reqnn("ctx", ctx));

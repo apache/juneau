@@ -82,7 +82,7 @@ public class OAuthFlow extends OpenApiElement {
 	private String authorizationUrl;
 	private String tokenUrl;
 	private String refreshUrl;
-	private Map<String,String> scopes = map();
+	private final Map<String,String> scopes = map();
 
 	/**
 	 * Default constructor.

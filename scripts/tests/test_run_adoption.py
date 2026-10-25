@@ -278,7 +278,7 @@ def test_push_without_message_still_requires_one(push_mod, gates, monkeypatch):
     assert exc.value.code == 1
 
 
-@pytest.mark.parametrize("flag", ["--docs-only", "--sonarqube", "--tracker-audit", "--skip-tests"])
+@pytest.mark.parametrize("flag", ["--docs-only", "--tracker-audit", "--skip-tests"])
 def test_push_test_only_rejects_flags_that_commit_or_gate(push_mod, gates, monkeypatch, flag):
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", flag])
     with pytest.raises(SystemExit) as exc:
@@ -973,12 +973,10 @@ def test_the_skipped_install_is_not_repeated_as_a_note_under_a_console(push_mod,
     assert not [text for _, text in say_events(events) if "already done by test.py" in text]
 
 
-@pytest.mark.parametrize("gate", ["sonar", "tracker"])
-def test_a_gate_that_could_not_run_points_at_the_full_log_under_a_console(push_mod, gates, standalone, monkeypatch, gate):
+def test_a_gate_that_could_not_run_points_at_the_full_log_under_a_console(push_mod, gates, standalone, monkeypatch):
     _, events, _ = standalone
-    monkeypatch.setattr(push_mod, "run_sonarqube_gate", lambda root, n: "error")
     monkeypatch.setattr(push_mod, "run_tracker_audit_gate", lambda root, n: "error")
-    monkeypatch.setattr(sys, "argv", ["push.py", "msg", "--sonarqube" if gate == "sonar" else "--tracker-audit"])
+    monkeypatch.setattr(sys, "argv", ["push.py", "msg", "--tracker-audit"])
     assert push_mod.main() == 1
     # the failed row says what stopped; the fix goes out as a hint
     texts = [text for _, text in say_events(events)] + [line for f in events.of("hint") for line in f["lines"]]
@@ -988,8 +986,8 @@ def test_a_gate_that_could_not_run_points_at_the_full_log_under_a_console(push_m
 
 
 def test_a_gate_that_could_not_run_still_points_above_without_a_console(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setattr(push_mod, "run_sonarqube_gate", lambda root, n: "error")
-    monkeypatch.setattr(sys, "argv", ["push.py", "msg", "--sonarqube"])
+    monkeypatch.setattr(push_mod, "run_tracker_audit_gate", lambda root, n: "error")
+    monkeypatch.setattr(sys, "argv", ["push.py", "msg", "--tracker-audit"])
     assert push_mod.main() == 1
     assert "Fix the issue reported above" in capsys.readouterr().out
 
@@ -1108,9 +1106,9 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
     for name in ("test.py", "check-bom-completeness.py", "push-timings.py"):
         (script_dir / name).touch()
     (tmp_path / "juneau-docs").mkdir()
-    args = argparse.Namespace(sonarqube=True, tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
+    args = argparse.Namespace(tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
     assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
-        "prechecks", "sonar", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "install", "commit", "push",
+        "prechecks", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "install", "commit", "push",
         "docs-smoke", "docs-commit", "docs-push"]  
 
 

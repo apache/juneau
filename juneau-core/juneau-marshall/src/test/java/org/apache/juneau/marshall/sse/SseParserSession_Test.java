@@ -36,7 +36,7 @@ class SseParserSession_Test {
 
 	private static final String WIRE = "event: progress\ndata: step 1\nid: 42\nretry: 1000\n\n";
 
-	@Test void a02_objectType_returnsListOfEvents() throws Exception {
+	@Test void a02_objectType_returnsListOfEvents() {
 		Object v = SseParser.DEFAULT.read(WIRE, Object.class);
 		assertTrue(v instanceof List, "Expected List, got: " + v);
 	}
@@ -52,7 +52,7 @@ class SseParserSession_Test {
 		assertBean(v, "event,data,id,retry", "progress,step 1,42,1000");
 	}
 
-	@Test void a05_singleSseEventType_noEvents_returnsNull() throws Exception {
+	@Test void a05_singleSseEventType_noEvents_returnsNull() {
 		var v = SseParser.DEFAULT.read("", SseEvent.class);
 		assertNull(v);
 	}

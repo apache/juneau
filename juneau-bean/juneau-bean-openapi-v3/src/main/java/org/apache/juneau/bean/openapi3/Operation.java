@@ -94,18 +94,18 @@ import org.apache.juneau.commons.collections.*;
 })
 public class Operation extends OpenApiElement {
 
-	private List<String> tags = list();
+	private final List<String> tags = list();
 	private String summary;
 	private String description;
 	private String operationId;
 	private ExternalDocumentation externalDocs;
-	private List<Parameter> parameters = list();
+	private final List<Parameter> parameters = list();
 	private RequestBodyInfo requestBody;
-	private Map<String,Response> responses = map();
-	private Map<String,Callback> callbacks = map();
+	private final Map<String,Response> responses = map();
+	private final Map<String,Callback> callbacks = map();
 	private Boolean deprecated;
-	private List<SecurityRequirement> security = list();
-	private List<Server> servers = list();
+	private final List<SecurityRequirement> security = list();
+	private final List<Server> servers = list();
 
 	/**
 	 * Default constructor.

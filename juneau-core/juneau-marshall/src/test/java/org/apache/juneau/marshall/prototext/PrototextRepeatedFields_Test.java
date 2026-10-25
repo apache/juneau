@@ -206,7 +206,7 @@ class PrototextRepeatedFields_Test {
 		});
 	}
 
-	@Test void b01_compactHasSeparatorAfterClosingBrace() throws Exception {
+	@Test void b01_compactHasSeparatorAfterClosingBrace() {
 		var b = new Mixed();
 		b.first = new Beans();
 		b.first.ins = List.of(new Inner("z", 9));
@@ -215,14 +215,14 @@ class PrototextRepeatedFields_Test {
 		assertFalse(proto.matches("(?s).*\\}[A-Za-z\"].*"), proto);
 	}
 
-	@Test void b02_exactOutput() throws Exception {
+	@Test void b02_exactOutput() {
 		var b = new Mixed();
 		b.ins = List.of(new Inner("a", 1), new Inner("b", 2));
 		b.nums = List.of(4);
 		assertEquals("ins {n: 1\nname: \"a\"\n}\nins {n: 2\nname: \"b\"\n}\nnums: [4]\n", COMPACT.write(b));
 	}
 
-	@Test void b03_nestedListOutput() throws Exception {
+	@Test void b03_nestedListOutput() {
 		var b = new Nested();
 		b.grid = List.of(List.of(1), List.of(2, 3), List.of());
 		assertEquals("grid {_value: [1]\n}\ngrid {_value: [2, 3]\n}\ngrid {_value: []\n}\n", COMPACT.write(b));

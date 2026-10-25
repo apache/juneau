@@ -63,7 +63,7 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private PrototextSerializer ctx;
+		private final PrototextSerializer ctx;
 
 		protected Builder(PrototextSerializer ctx) {
 			super(reqnn("ctx", ctx));

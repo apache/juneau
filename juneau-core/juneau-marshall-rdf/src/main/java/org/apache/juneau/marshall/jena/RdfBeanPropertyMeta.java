@@ -40,6 +40,9 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public static final RdfBeanPropertyMeta DEFAULT = new RdfBeanPropertyMeta();
 
+	@SuppressWarnings({
+		"java:S9438" // Reassigned inside a lambda in the constructor; cannot be final
+	})
 	private RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 	private Namespace namespace;
 	private boolean isBeanUri;

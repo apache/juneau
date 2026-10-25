@@ -20,8 +20,6 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.*;
-
 
 /**
  * Used for assertion calls against byte arrays.

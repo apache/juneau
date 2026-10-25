@@ -73,7 +73,7 @@ public class CachingClientCredentialsFlow {
 		private URI tokenEndpoint;
 		private String clientId;
 		private Supplier<String> clientSecretSupplier;
-		private Set<String> scopes = st();
+		private final Set<String> scopes = st();
 		private TokenCache tokenCache;
 		private Duration cacheSkew = Duration.ofSeconds(30);
 		private Consumer<HTTPRequest> httpRequestConfigurator;

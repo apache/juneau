@@ -71,7 +71,7 @@ public class DataTablesRequest {
 	private Search search;
 	private List<Column> columns;
 	private List<Order> order;
-	private Map<String,Object> extra = new LinkedHashMap<>();
+	private final Map<String,Object> extra = new LinkedHashMap<>();
 
 	/**
 	 * Returns the draw counter echoed back on the response.

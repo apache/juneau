@@ -1093,7 +1093,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
 
 		private BeanInstantiator.Builder<RestCallHandler> callHandler;
-		private WritableBeanStore beanStore = new BasicBeanStore();
+		private final WritableBeanStore beanStore = new BasicBeanStore();
 		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 		private boolean detectLeaks;
 		private boolean allowPrivateUrls;

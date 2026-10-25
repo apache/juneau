@@ -67,13 +67,12 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 	}
 
 	private static Map<String,String> goodWriteHeaders() {
-		Map<String,String> m = map(
+		return map(
 			"Host", AUTHORITY,
 			"Origin", "http://" + AUTHORITY,
 			"Sec-Fetch-Site", "same-origin",
 			"X-Csrf-Token", TOKEN.value()
 		);
-		return m;
 	}
 
 	/** A response paired with the body the filter wrote to it and the headers it ended up with. */

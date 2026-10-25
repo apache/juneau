@@ -123,10 +123,10 @@ public class BeanMeta<T> {
 	 * Temporary getter/setter method struct used for calculating bean methods.
 	 */
 	private static class BeanMethod {
-		private String propertyName;
-		private MethodType methodType;
-		private Method method;
-		private ClassInfo type;
+		private final String propertyName;
+		private final MethodType methodType;
+		private final Method method;
+		private final ClassInfo type;
 
 		private BeanMethod(String propertyName, MethodType type, Method method) {
 			this.propertyName = propertyName;

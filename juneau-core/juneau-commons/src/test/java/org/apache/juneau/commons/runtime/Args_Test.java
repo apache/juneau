@@ -182,6 +182,13 @@ class Args_Test extends TestBase {
 		assertTrue(x.has("FoO"));
 	}
 
+	@Test void c08b_caseInsensitiveNullKey() {
+		var x = Args.create().caseSensitive(false).build(a("-foo", "value"));
+		assertTrue(x.get(null).isEmpty());
+		assertEquals(l(), x.getAll(null));
+		assertFalse(x.has(null));
+	}
+
 	@Test void c09_customPrefix() {
 		var x = Args.create().customPrefix("/").build(a("/key", "value", "/flag"));
 		assertEquals("value", x.get("key").orElse(null));

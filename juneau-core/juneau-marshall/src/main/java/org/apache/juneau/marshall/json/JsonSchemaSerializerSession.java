@@ -46,7 +46,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 */
 	public static class Builder extends JsonSerializerSession.Builder<Builder> {
 
-		private JsonSchemaSerializer ctx;
+		private final JsonSchemaSerializer ctx;
 
 		/**
 		 * Constructor

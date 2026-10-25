@@ -83,7 +83,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 */
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
-		private ParquetParser ctx;
+		private final ParquetParser ctx;
 
 		/**
 		 * Constructor.

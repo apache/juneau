@@ -21,9 +21,15 @@ package org.apache.juneau.commons.settings;
  */
 public class ManifestFilePropertySourceProvider implements PropertySourceProvider {
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * The result is wrapped in a {@link CachingPropertySource}: this source's answers never change after construction.
+	 */
 	@Override
 	public PropertySource create() {
-		return ManifestFilePropertySource.createDefault();
+		return CachingPropertySource.of(ManifestFilePropertySource.createDefault());
 	}
 
 	@Override

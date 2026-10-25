@@ -50,7 +50,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 	 */
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
-		private HoconParser hoconParser;
+		private final HoconParser hoconParser;
 
 		protected Builder(HoconParser ctx) {
 			super(reqnn("ctx", ctx));

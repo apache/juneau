@@ -21,9 +21,15 @@ package org.apache.juneau.commons.settings;
  */
 public class DotenvPropertySourceProvider implements PropertySourceProvider {
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * The result is wrapped in a {@link CachingPropertySource}: this source's answers never change after construction.
+	 */
 	@Override
 	public PropertySource create() {
-		return new DotenvPropertySource();
+		return CachingPropertySource.of(new DotenvPropertySource());
 	}
 
 	@Override

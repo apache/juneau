@@ -28,7 +28,6 @@ import os
 import platform
 import re
 import shlex
-import shutil
 import signal
 import subprocess
 import sys
@@ -183,103 +182,6 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
 PUSH_NO_SOUND_ENV = "JUNEAU_PUSH_NO_SOUND"
 
 
-def _python310():
-    """
-    Locate a Python >= 3.10 interpreter, regardless of how push.py itself was launched.
-
-    scripts/sonarqube.py uses 3.10+ syntax (e.g. `dict | None`), so this can't just
-    reuse sys.executable when push.py was invoked under an older interpreter (e.g. the
-    macOS system /usr/bin/python3, which is 3.9).
-
-    Returns:
-        Path to a suitable interpreter (str), or None if none could be found.
-    """
-    if sys.version_info >= (3, 10):
-        return sys.executable
-
-    for name in ("python3.13", "python3.12", "python3.11", "python3.10", "python3"):
-        candidate = shutil.which(name)
-        if not candidate:
-            continue
-        try:
-            probe = subprocess.run(
-                [candidate, "-c", "import sys;print(1 if sys.version_info>=(3,10) else 0)"],
-                capture_output=True,
-                text=True,
-                timeout=5,
-                check=False
-            )
-            if probe.returncode == 0 and probe.stdout.strip() == "1":
-                return candidate
-        except Exception:
-            continue
-
-    fallback = "/opt/homebrew/bin/python3"
-    if os.path.exists(fallback):
-        return fallback
-
-    return None
-
-
-def run_sonarqube_gate(juneau_root, step_num):
-    """
-    Run scripts/sonarqube.py in whole-repo fresh-fetch mode and block the push if
-    SonarCloud currently reports ANY issue (all severities) for the branch being
-    pushed.
-
-    This is a REPORT gate, not a diff gate: it reflects SonarCloud's last
-    CI-analyzed commit for the current branch, not the local working tree — i.e.
-    it's a ratchet against that branch's overall issue count. Honors SONAR_TOKEN
-    from the environment if set (sonarqube.py reads it directly).
-
-    Branch wiring: the gate resolves the current git branch and passes
-    it through as `--branch <current-branch>` so the gate reflects the branch
-    actually being pushed rather than always `master`. On `master` (or when the
-    branch can't be resolved) it runs exactly as before — no `--branch` argument.
-    If SonarCloud has no analysis for the current branch yet (a brand-new branch
-    CI hasn't scanned), sonarqube.py exits 3 and this gate degrades to a
-    non-blocking warning/skip instead of failing the push.
-
-    Args:
-        juneau_root: Repository root (cwd for the subprocess).
-        step_num: The current step number (for output formatting).
-
-    Returns:
-        One of the status strings:
-          "pass"  — SonarCloud reports zero issues for this scope (proceed).
-          "fail"  — the gate is blocked by open issues (abort the push).
-          "skip"  — no SonarCloud analysis for this branch yet (warn, proceed).
-          "error" — could not run the gate (no interpreter / unexpected error);
-                    treated as a blocking failure by the caller.
-    """
-    branch = current_branch(juneau_root)
-    scoped_to_branch = branch not in ("master", "unknown")
-    scope_desc = f"branch '{branch}'" if scoped_to_branch else "master"
-
-    cmd_suffix = f" --branch {branch}" if scoped_to_branch else ""
-    say(f"\n🔎 Step {step_num}: Running SonarQube gate (scripts/sonarqube.py --all --run --fail-on-issues{cmd_suffix})...")
-    say(f"   ⚠ Caveat: this reflects SonarCloud's last CI-analyzed commit for {scope_desc}, NOT your local diff (it's a ratchet).", "warn")
-
-    py310 = _python310()
-    if not py310:
-        say(
-            "\n❌ Could not find a Python >= 3.10 interpreter to run scripts/sonarqube.py "
-            "(requires 3.10+; e.g. the macOS system python3 is too old). Install one "
-            "(e.g. `brew install python3`) so it's discoverable as python3.1x/python3 on "
-            "PATH, or make sure /opt/homebrew/bin/python3 exists, then retry.",
-            "error",
-        )
-        return "error"
-
-    sonarqube_script = Path(__file__).parent / "sonarqube.py"
-    cmd = [py310, str(sonarqube_script), "--all", "--run", "--fail-on-issues"]
-    if scoped_to_branch:
-        cmd += ["--branch", branch]
-    # Exit-code contract (see sonarqube.py): 0 clean, 2 issues, 3 no-analysis, else error -- the toolkit's default
-    # gate codes.
-    return toolkit("run").gate(cmd, title="SonarQube gate", id="sonar", label="Sonar", cwd=juneau_root).status
-
-
 def run_tracker_audit_gate(juneau_root, step_num):
     """
     Run ~/Project Work/scripts/todo-status-audit.py --project juneau against this repo's
@@ -287,7 +189,7 @@ def run_tracker_audit_gate(juneau_root, step_num):
     file as inconsistent — a stale/misplaced status header, or a declared `Counts:` claim
     that no longer re-derives from committed (HEAD) content.
 
-    Unlike the SonarQube gate, this is a pure local check (no network, no external
+    This is a pure local check (no network, no external
     service): it re-derives every declared count via `git cat-file --batch` against
     the CURRENT HEAD, so it reflects exactly what's about to be pushed rather than a
     ratchet against a prior CI-analyzed commit.
@@ -327,7 +229,7 @@ def maybe_run_tracker_audit_gate(args, juneau_root, step_num):
     zero-side-effect no-op.
 
     Extracted as its own function (rather than inlining `if args.tracker_audit: ...`
-    directly in main(), as run_sonarqube_gate's call site does) so the off path is
+    directly in main()) so the off path is
     unit-testable in isolation, without exercising the rest of main()'s
     build/test/commit/push flow: a test can assert this returns None and invokes
     run_tracker_audit_gate zero times when args.tracker_audit is False — the
@@ -440,11 +342,72 @@ def report_unreviewed(unreviewed_paths, label, outcome, lead="ERROR"):
     say("     git stash pop", "error")
 
 
+WORKFLOWS_DIR = Path(".github") / "workflows"
+
+
+def workflow_yaml_problems(repo_dir):
+    """
+    Parse every .github/workflows/*.yml and *.yaml under repo_dir (the working tree, which the unreviewed-changes
+    refusal guarantees equals the index) and return one `<path>:<line>:<col>: <problem>` line per file that is not
+    valid YAML.  GitHub rejects such a workflow outright (commit 650edf477e shipped an unquoted `run:` with a `: `
+    in it), and only after the push.  A repo with no workflow files passes without needing PyYAML.
+
+    Raises:
+        ImportError: workflow files exist but PyYAML is not importable.  Fails closed -- a silent skip would
+            recreate the hole this guards.
+    """
+    files = sorted([*(repo_dir / WORKFLOWS_DIR).glob("*.yml"), *(repo_dir / WORKFLOWS_DIR).glob("*.yaml")])
+    if not files:
+        return []
+    import yaml  # lazy: the rest of this script is stdlib-only
+    problems = []
+    for path in files:
+        rel = path.relative_to(repo_dir).as_posix()
+        try:
+            yaml.safe_load(path.read_text(encoding="utf-8"))
+        except yaml.YAMLError as e:
+            mark = getattr(e, "problem_mark", None)
+            where = f"{rel}:{mark.line + 1}:{mark.column + 1}" if mark else rel
+            detail = " ".join(part for part in (getattr(e, "context", None), getattr(e, "problem", None) or str(e))
+                              if part)
+            problems.append(f"{where}: {detail}")
+    return problems
+
+
+def report_workflow_problems(problems, label, outcome, lead="ERROR"):
+    """Print the invalid-workflow refusal: the `file:line:col: problem` lines and `outcome`."""
+    say(f"\n❌ {lead}: A GitHub workflow file{label} is not valid YAML; GitHub would reject it:", "error")
+    for problem in problems:
+        say(f"   {problem}", "error")
+    say(f"\n   {outcome} Fix the YAML (a plain scalar containing ': ' needs quoting), then stage the fix.", "error")
+
+
+PYYAML_HINT = "PyYAML is required to validate .github/workflows (pip install pyyaml, or run via `uv run --with pyyaml`)."
+
+
+def workflow_yaml_check(repo_dir, outcome):
+    """The Prechecks row's `workflows` check: fails on invalid workflow YAML, and (closed) when PyYAML is missing."""
+    checks = toolkit("checks")
+
+    def fn():
+        try:
+            problems = workflow_yaml_problems(repo_dir)
+        except ImportError:
+            return checks.Verdict("fail", "PyYAML is not installed", (PYYAML_HINT, outcome))
+        if not problems:
+            return checks.PASS
+        count = len(problems)
+        return checks.Verdict("fail", f"{count} workflow file{'s' if count != 1 else ''} not valid YAML",
+                              (*problems, outcome))
+    return checks.Check("workflows", fn)
+
+
 def prechecks(juneau_root, *, dry_run=False, docs=True):
     """
     The Prechecks row's checks, which refuse before any build or test gate a push that commit_and_push() would
-    only refuse at the end: git's user.email isn't the ASF committer identity, the tree has unreviewed changes, or
-    the branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed).
+    only refuse at the end: git's user.email isn't the ASF committer identity, the tree has unreviewed changes, the
+    branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed), or a
+    .github/workflows file is not valid YAML (or PyYAML is missing).
     With docs and the juneau-docs sibling present and active -- something staged, or commits ahead of its upstream
     (docs_active) -- the same three for juneau-docs follow (docs_prechecks); an idle juneau-docs is not checked, so
     its dirt doesn't block a juneau push.  The late checks stay (upstream can move during the long build); these
@@ -454,7 +417,8 @@ def prechecks(juneau_root, *, dry_run=False, docs=True):
     outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
     listed = [checks.identity(juneau_root, required=REQUIRED_GIT_EMAIL),
               checks.unreviewed(juneau_root, outcome=outcome),
-              checks.upstream(juneau_root)]
+              checks.upstream(juneau_root),
+              workflow_yaml_check(juneau_root, outcome)]
     docs_root = juneau_root.parent / "juneau-docs"
     if docs and docs_root.exists() and docs_active(docs_root):
         listed += docs_prechecks(docs_root, dry_run=dry_run)
@@ -817,6 +781,16 @@ def commit_and_push(
         report_unreviewed(unreviewed_paths, label, "Nothing was committed or pushed.")
         return ("error", step_num)
 
+    # A workflow edited during the long build is still caught; a push-only run can push a broken one too.
+    try:
+        workflow_problems = workflow_yaml_problems(repo_dir)
+    except ImportError:
+        say(f"\n❌ ERROR: {PYYAML_HINT} Nothing was committed or pushed.", "error")
+        return ("error", step_num)
+    if workflow_problems:
+        report_workflow_problems(workflow_problems, label, "Nothing was committed or pushed.")
+        return ("error", step_num)
+
     if pre_flight_hook is not None and not pre_flight_hook():
         return ("error", step_num)
 
@@ -945,9 +919,9 @@ def run_docs_only(args, juneau_root):
         print(f"Docs directory: {docs_root}")
         print(f"Commit message: '{args.message}'")
         print("📚 DOCS-ONLY MODE (--docs-only) — skipping juneau Java build/test/push entirely.")
-        if args.skip_tests or args.sonarqube:
-            print("⚠ Note: --skip-tests/--sonarqube only apply to the juneau code path, which "
-                  "--docs-only skips entirely; ignoring them.")
+        if args.skip_tests:
+            print("⚠ Note: --skip-tests only applies to the juneau code path, which "
+                  "--docs-only skips entirely; ignoring it.")
         if args.dry_run:
             print("🔍 DRY RUN MODE - No actual changes will be made")
         print("=" * 70)
@@ -1053,7 +1027,7 @@ def main():
 #: Each step's row label, for the labelled plan (a pending row until the step starts).  build, tests and js-tests
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
-    "prechecks": "Prechecks", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
+    "prechecks": "Prechecks", "tracker": "Tracker", "container-tags": "Tags",
     "bom": "BOM", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
     "js-tests": "Browser Tests", "timing": "Timing",
     "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": DOCS_BUILD_LABEL,
@@ -1068,8 +1042,6 @@ def push_plan(args, script_dir, juneau_root, console):
     """The top-level steps this run will take, in order, as (id, label) pairs, for the console's pending rows and
     Overall figure."""
     ids = [] if args.test_only else ["prechecks"]
-    if args.sonarqube:
-        ids.append("sonar")
     if args.tracker_audit:
         ids.append("tracker")
     if args.skip_tests:
@@ -1123,7 +1095,6 @@ Examples:
   python3 push.py "Fixed bug in RestClient"
   python3 push.py "Updated documentation" --skip-tests
   python3 push.py "Quick fix" --skip-tests
-  python3 push.py "Fixed bug in RestClient" --sonarqube
   python3 push.py "Fixed bug in RestClient" --tracker-audit
   python3 push.py "Updated topic page" --docs-only
   python3 push.py "Tweaked console JS" --js-tests
@@ -1177,17 +1148,6 @@ Examples:
     )
 
     parser.add_argument(
-        "--sonarqube", "--sonar",
-        action="store_true",
-        dest="sonarqube",
-        help=(
-            "Opt-in gate: run scripts/sonarqube.py in whole-repo fresh-fetch mode and "
-            "block the push if SonarCloud currently reports any issue (all severities). "
-            "Reflects SonarCloud's last CI-analyzed commit, not the local diff (a ratchet)."
-        )
-    )
-
-    parser.add_argument(
         "--tracker-audit", "--todo-audit",
         action="store_true",
         dest="tracker_audit",
@@ -1232,8 +1192,8 @@ Examples:
     args = parser.parse_args(argv)
     if args.js_tests and args.no_js_tests:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
-    if args.test_only and (args.docs_only or args.sonarqube or args.tracker_audit or args.skip_tests):
-        parser.error("--test-only cannot be combined with --docs-only, --sonarqube, --tracker-audit or --skip-tests")
+    if args.test_only and (args.docs_only or args.tracker_audit or args.skip_tests):
+        parser.error("--test-only cannot be combined with --docs-only, --tracker-audit or --skip-tests")
     toolkit("run").export_console(args.console)    # precedence: flag > environment > board
     try:
         _juneau.load()[0].export_detail(args.detail)
@@ -1270,8 +1230,6 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             print(f"Commit message: '{args.message}'")
         if args.skip_tests:
             print("⚠ Tests will be SKIPPED")
-        if args.sonarqube:
-            print("🔎 SonarQube gate ENABLED (--sonarqube)")
         if args.tracker_audit:
             print("📋 Tracker audit gate ENABLED (--tracker-audit)")
         if args.js_tests:
@@ -1289,11 +1247,6 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             print(f"  {step_num}. Prechecks: refuse unless git user.email is {REQUIRED_GIT_EMAIL}, the tree has no unreviewed "
                   "(unstaged/untracked) changes and the branch isn't behind upstream (git fetch + compare) -- juneau, and "
                   "juneau-docs when present -- before any gate runs; the last two are checked again before the commit")
-            step_num += 1
-        if args.sonarqube:
-            _branch = current_branch(juneau_root)
-            _branch_arg = f" --branch {_branch}" if _branch not in ("master", "unknown") else ""
-            print(f"  {step_num}. Run SonarQube gate: python3 scripts/sonarqube.py --all --run --fail-on-issues{_branch_arg} (blocks push if any issues; skips gracefully if this branch has no SonarCloud analysis yet)")
             step_num += 1
         if args.tracker_audit:
             print(f"  {step_num}. Run tracker audit gate: python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau (blocks push if any plan file is flagged)")
@@ -1343,26 +1296,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     if console and args.skip_tests:
         say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
 
-    # Step 0 (opt-in, --sonarqube/--sonar): SonarQube report gate. Runs first so it
-    # aborts cheaply, before the container-tags/BOM checks, tests, and build.
-    if args.sonarqube:
-        gate_status = run_sonarqube_gate(juneau_root, step_num)
-        if gate_status == "fail":
-            return aborted("\n❌ Push aborted: SonarCloud currently reports open issues for this branch.",
-                           "   Note: this reflects SonarCloud's last CI-analyzed commit (a ratchet), not your local diff.",
-                           "   Resolve/triage the reported issues, or omit --sonarqube to push without this gate.")
-        if gate_status == "error":
-            return aborted("\n❌ Push aborted: the SonarQube gate could not be run.",
-                           f"   Fix the issue {'in the full log' if console else 'reported above'} "
-                           "(e.g. install a Python >= 3.10 interpreter), or omit --sonarqube to push without this gate.")
-        if gate_status == "skip":
-            say(f"⚠ Step {step_num}: SonarQube gate skipped — SonarCloud has no analysis for this "
-                "branch yet (a new branch CI hasn't scanned). Continuing without the Sonar gate.", "warn")
-        else:  # "pass"
-            say(f"✅ Step {step_num}: SonarQube gate passed — SonarCloud reports zero issues for this branch.")
-        step_num += 1
-
-    # Step 0b (opt-in, --tracker-audit/--todo-audit): TODO tracker audit gate. Also runs
+    # Step 0 (opt-in, --tracker-audit/--todo-audit): TODO tracker audit gate. Also runs
     # before the container-tags/BOM checks, tests, and build, so it aborts cheaply.
     tracker_gate_status = maybe_run_tracker_audit_gate(args, juneau_root, step_num)
     if tracker_gate_status is not None:

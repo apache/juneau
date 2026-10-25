@@ -72,9 +72,9 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 		return l;
 	}
 
-	private Constructor<F> constructor;
+	private final Constructor<F> constructor;
 
-	private Method unswapMethod;
+	private final Method unswapMethod;
 
 	/**
 	 * Constructor.

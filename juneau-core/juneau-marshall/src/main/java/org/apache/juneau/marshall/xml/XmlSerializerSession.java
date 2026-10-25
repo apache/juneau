@@ -76,7 +76,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		private String defaultNamespace;
 		private boolean enableNamespaces;
 		private String textNodeDelimiter;
-		private XmlSerializer ctx;
+		private final XmlSerializer ctx;
 
 		/**
 		 * Constructor

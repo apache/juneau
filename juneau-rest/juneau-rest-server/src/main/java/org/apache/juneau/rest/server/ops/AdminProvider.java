@@ -253,14 +253,13 @@ public class AdminProvider {
 	}
 
 	private static Map<String,Object> describeRateLimitGuard(RateLimitGuard g) {
-		Map<String,Object> m = m(
+		return m(
 			"class", cn(g),
 			"limit", g.getCapacity(),
 			"permitsPerSecond", g.getPermitsPerSecond(),
 			"xForwardedForAware", g.isXForwardedForAware(),
 			"exemptPaths", g.getExemptPaths().stream().sorted().toList()
 		);
-		return m;
 	}
 
 	private static void writeJson(RestResponse res, Object payload) throws IOException {

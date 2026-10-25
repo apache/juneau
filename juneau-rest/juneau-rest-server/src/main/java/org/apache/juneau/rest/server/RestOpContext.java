@@ -117,9 +117,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	static class Builder extends Context.Builder {
 
-		private Method restMethod;
-		private RestContext restContext;
-		private Supplier<Object> restResourceSupplier;
+		private final Method restMethod;
+		private final RestContext restContext;
+		private final Supplier<Object> restResourceSupplier;
 
 		Builder(Method method, RestContext context) {
 			this(method, context, null);

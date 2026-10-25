@@ -20,8 +20,6 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.*;
-
 
 /**
  * Used for assertion calls against lists.

@@ -241,10 +241,10 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private ClassFormat classFormat;
 		private ClassLoader classLoader;
 		private Class<? extends PropertyNamer> propertyNamer;
-		private List<ClassInfo> beanDictionary;
-		private List<Object> swaps;
-		private Set<ClassInfo> notBeanClasses;
-		private Set<String> notBeanPackages;
+		private final List<ClassInfo> beanDictionary;
+		private final List<Object> swaps;
+		private final Set<ClassInfo> notBeanClasses;
+		private final Set<String> notBeanPackages;
 		private BeanStore beanStore;
 		private String activeView;
 		private boolean disableDefaultViewInclusion;

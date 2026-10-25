@@ -175,8 +175,8 @@ public class Maps<K,V> {
 	private Comparator<K> comparator;
 
 	private BiPredicate<K,V> filter;
-	private Class<K> keyType;
-	private Class<V> valueType;
+	private final Class<K> keyType;
+	private final Class<V> valueType;
 
 	private Function<Object,K> keyFunction;
 	private Function<Object,V> valueFunction;

@@ -695,7 +695,7 @@ public @interface RestPost {
 	 * Use {@link #noInherit()} to replace rather than extend the resource-level list.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -712,7 +712,7 @@ public @interface RestPost {
 	 * Use {@link #noInherit()} to replace rather than extend the resource-level list.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

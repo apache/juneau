@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
  */
 class HtmlDocSerializer_Nonce_Test extends TestBase {
 
-	private static String serialize(String nonce, Object o) throws Exception {
+	private static String serialize(String nonce, Object o) {
 		var s = HtmlDocSerializer.create().build();
 		return s.createSession().nonce(nonce).build().writeToString(o);
 	}

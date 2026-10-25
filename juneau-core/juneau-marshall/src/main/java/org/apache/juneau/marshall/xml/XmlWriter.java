@@ -43,8 +43,8 @@ import org.apache.juneau.marshall.serializer.*;
 })
 public abstract class XmlWriter<SELF extends XmlWriter<SELF>> extends SerializerWriter<SELF> {
 
-	private String defaultNsPrefix;
-	private boolean enableNs;
+	private final String defaultNsPrefix;
+	private final boolean enableNs;
 
 	/**
 	 * Constructor.

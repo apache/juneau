@@ -173,8 +173,8 @@ public class BeanDiff {
 		return new Builder<T>().first(first).second(second);
 	}
 
-	private JsonMap v1 = new JsonMap();
-	private JsonMap v2 = new JsonMap();
+	private final JsonMap v1 = new JsonMap();
+	private final JsonMap v2 = new JsonMap();
 
 	/**
 	 * Constructor.

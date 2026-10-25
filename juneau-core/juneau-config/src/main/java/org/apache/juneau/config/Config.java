@@ -74,7 +74,7 @@ public class Config extends Context implements ConfigEventListener {
 		private boolean readOnly;
 		private ConfigStore store;
 		private int binaryLineLength;
-		private Map<Character,Mod> mods;
+		private final Map<Character,Mod> mods;
 		private ReaderParser parser;
 		private String name;
 		private ConfigFormat format;

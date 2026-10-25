@@ -69,7 +69,7 @@ public class ProtobufClassMeta extends ExtendedClassMeta {
 		if (bm != null) {
 			// R2:  compute the alphabetical property-name ordering locally, independent of BeanMeta ordering.
 			var names = new ArrayList<>(bm.getProperties().keySet());
-			Collections.sort(names);
+			names.sort(null);
 
 			// Pass 1:  reserve all explicit field numbers.
 			var used = new HashSet<Integer>();

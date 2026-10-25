@@ -93,8 +93,8 @@ public class LogEntryFormatter extends Formatter {
 
 	private ConcurrentHashMap<String,AtomicInteger> hashes;
 	private final DateFormat df;
-	private String format;
-	private Pattern rePattern;
+	private final String format;
+	private final Pattern rePattern;
 
 	private Map<String,Integer> fieldIndexes;
 

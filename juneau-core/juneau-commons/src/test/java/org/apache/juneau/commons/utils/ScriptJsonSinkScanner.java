@@ -144,7 +144,7 @@ final class ScriptJsonSinkScanner {
 				throw e;
 			}
 		});
-		Collections.sort(files);
+		files.sort(null);
 		for (var f : files) {
 			var r = scan(repoRoot.relativize(f).toString(), Files.readString(f));
 			sinks.addAll(r.sinks());

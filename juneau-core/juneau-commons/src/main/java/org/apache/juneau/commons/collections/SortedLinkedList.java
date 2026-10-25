@@ -139,7 +139,7 @@ public class SortedLinkedList<E> extends AbstractList<E> {
 	public SortedLinkedList(Comparator<? super E> comparator, Collection<? extends E> c) {
 		this.comparator = reqnn("comparator", comparator);
 		this.list = new LinkedList<>(c);
-		Collections.sort(this.list, this.comparator);
+		this.list.sort(this.comparator);
 	}
 
 	/**

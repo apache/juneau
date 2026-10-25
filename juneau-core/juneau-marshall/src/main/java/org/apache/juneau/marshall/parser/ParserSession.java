@@ -84,7 +84,7 @@ public class ParserSession extends MarshallingSession {
 		private boolean trimStrings;
 		private Nulls nulls;
 		private int maxParseDepth = DEFAULT_MAX_PARSE_DEPTH;
-		private Parser ctx;
+		private final Parser ctx;
 
 		/**
 		 * Constructor
@@ -328,7 +328,7 @@ public class ParserSession extends MarshallingSession {
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 	private Object parentBean;
-	private Position mark = new Position(-1);
+	private final Position mark = new Position(-1);
 	private ParserPipe pipe;
 	private int parseDepth;
 

@@ -38,9 +38,9 @@ public class RestChildMatch {
 		return new RestChildMatch(pathMatch, childContext);
 	}
 
-	private UrlPathMatch pathMatch;
+	private final UrlPathMatch pathMatch;
 
-	private RestContext childContext;
+	private final RestContext childContext;
 
 	/**
 	 * Constructor.

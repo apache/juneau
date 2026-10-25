@@ -93,12 +93,12 @@ public class RoundTrip_Tester {
 	protected String label;
 	protected Serializer s;
 	protected Parser p;
-	private boolean validateXmlWhitespace;
+	private final boolean validateXmlWhitespace;
 	protected boolean returnOriginalObject;
-	private boolean validateXml;
+	private final boolean validateXml;
 	public boolean debug;
-	private Predicate<Object> skipIf;
-	private boolean ignoreErrors;
+	private final Predicate<Object> skipIf;
+	private final boolean ignoreErrors;
 
 	private RoundTrip_Tester(Builder b) {
 		label = "[" + b.index + "] " + b.label;

@@ -89,7 +89,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 			add(new ResourceDescription(e.getKey(), title));
 		}
 		if (sort)
-			Collections.sort(this);
+			this.sort(null);
 	}
 
 	/**

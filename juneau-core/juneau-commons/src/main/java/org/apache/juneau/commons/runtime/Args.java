@@ -225,7 +225,7 @@ public class Args {
 	}
 
 	private String normalize(String key) {
-		return caseSensitive ? key : key.toLowerCase(Locale.ROOT);
+		return caseSensitive || key == null ? key : key.toLowerCase(Locale.ROOT);
 	}
 
 	/**

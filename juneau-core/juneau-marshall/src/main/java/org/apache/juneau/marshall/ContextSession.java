@@ -65,8 +65,8 @@ public abstract class ContextSession {
 
 		private Boolean debug;
 		private boolean unmodifiable;
-		private Context ctx;
-		private Memoizer<LinkedHashMap<String,Object>> properties;
+		private final Context ctx;
+		private final Memoizer<LinkedHashMap<String,Object>> properties;
 
 		/**
 		 * Convenience method for converting values using {@link BasicConverter}.

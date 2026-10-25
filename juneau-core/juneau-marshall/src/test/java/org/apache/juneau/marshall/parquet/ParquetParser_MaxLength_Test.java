@@ -271,7 +271,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 	 * single page a default-sized write produces.  Every individual page stays far under the (huge
 	 * default) {@code maxLength} bound; only their aggregate decompressed size is at risk.
 	 */
-	private static byte[] manyPagesBytes(int n) throws Exception {
+	private static byte[] manyPagesBytes(int n) {
 		return ParquetSerializer.create().pageSize(1024).build().write(beans(n));
 	}
 

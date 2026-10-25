@@ -63,7 +63,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends ContextSession.Builder<SELF> {
 
-		private MarshallingContext ctx;
+		private final MarshallingContext ctx;
 		private Locale locale;
 		private MediaType mediaType;
 		private TimeZone timeZone;

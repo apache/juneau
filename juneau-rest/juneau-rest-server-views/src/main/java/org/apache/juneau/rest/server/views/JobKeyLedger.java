@@ -306,13 +306,12 @@ public final class JobKeyLedger {
 	 */
 	public static Map<String,Object> response(IdempotencyKey key) {
 		reqnn("key", key);
-		Map<String,Object> m = m(
+		return m(
 			"contractVersion", CONTRACT_VERSION,
 			"action", key.action(),
 			"targetId", key.targetId(),
 			"idempotencyKey", key.value()
 		);
-		return m;
 	}
 
 	@Override /* Object */

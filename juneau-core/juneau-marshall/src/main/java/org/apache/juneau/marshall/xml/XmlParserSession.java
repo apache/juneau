@@ -71,7 +71,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 
 		private boolean preserveRootElement;
 		private boolean validating;
-		private XmlParser ctx;
+		private final XmlParser ctx;
 
 		/**
 		 * Constructor

@@ -76,7 +76,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		private boolean detectLinksInStrings;
 		private String labelParameter;
 		private AnchorText uriAnchorText;
-		private HtmlSerializer ctx;
+		private final HtmlSerializer ctx;
 
 		/**
 		 * Constructor

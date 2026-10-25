@@ -43,7 +43,7 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	})
 	private static class ListSet<E> extends AbstractSet<E> {
 
-		private List<E> entries;
+		private final List<E> entries;
 
 		public ListSet(List<E> entries) {
 			this.entries = entries;

@@ -51,7 +51,7 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	})
 	public static class Builder extends JsonSerializerSession.Builder<Builder> {
 
-		private JsonlSerializer ctx;
+		private final JsonlSerializer ctx;
 
 		/**
 		 * Constructor

@@ -132,7 +132,7 @@ enum HtmlTag {
 		return t;
 	}
 
-	private Map<Integer,HtmlTag> cache = m();
+	private final Map<Integer,HtmlTag> cache = m();
 
 	int id;
 

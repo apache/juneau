@@ -89,11 +89,11 @@ public class OpenApi extends OpenApiElement {
 	})
 	private String openapi = "3.0.0";
 	private Info info;
-	private List<Server> servers = list();
+	private final List<Server> servers = list();
 	private Map<String,PathItem> paths;
 	private Components components;
 	private List<SecurityRequirement> security = list();
-	private List<Tag> tags = list();
+	private final List<Tag> tags = list();
 	private ExternalDocumentation externalDocs;
 
 	/**

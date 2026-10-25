@@ -164,7 +164,7 @@ public abstract class ObjectSwap<T,S> {
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Swap</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
 	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
 	 */
@@ -179,7 +179,7 @@ public abstract class ObjectSwap<T,S> {
 	 * Sets the media types that this swap is associated with.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Swap</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
 	 * </ul>
 	 *
 	 * @param mediaTypes The media types that this swap is associated with. Can be <jk>null</jk> to make this swap applicable to all media types.

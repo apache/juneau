@@ -52,7 +52,7 @@ Environment:
 
 Python Tests:
     After the Maven tests pass, scripts/tests (the tooling's own pytest suite) runs as its own row.  The launcher is
-    `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest` when uv is on the PATH; with neither,
+    `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest --with pyyaml` when uv is on the PATH; with neither,
     the step prints a notice and skips.  Nothing is installed.
 
 Browser Tests:
@@ -671,7 +671,7 @@ SCRIPT_TESTS_ACTIVE = "JUNEAU_SCRIPT_TESTS_ACTIVE"
 
 def script_tests_launcher():
 	"""The command prefix that runs pytest, or None.  `python3 -m pytest` when pytest is importable, else
-	`uv run --native-tls --with pytest` when uv is on the PATH.  Nothing is ever installed."""
+	`uv run --native-tls --with pytest --with pyyaml` when uv is on the PATH.  Nothing is ever installed."""
 	python = shutil.which("python3") or sys.executable
 	try:
 		importable = subprocess.run([python, "-c", "import pytest"], capture_output=True).returncode == 0
@@ -680,7 +680,7 @@ def script_tests_launcher():
 	if importable:
 		return [python, "-m", "pytest"]
 	if shutil.which("uv"):
-		return ["uv", "run", "--native-tls", "--with", "pytest", "pytest"]
+		return ["uv", "run", "--native-tls", "--with", "pytest", "--with", "pyyaml", "pytest"]
 	return None
 
 
@@ -696,7 +696,7 @@ def script_tests(launcher=None, runner=None):
 		return 0
 	launcher = launcher or script_tests_launcher()
 	if launcher is None:
-		say("\n⚠️  Skipping Python Tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
+		say("\n⚠️  Skipping Python Tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest --with pyyaml).", "warn")
 		skip_py_tests_row("neither pytest nor uv found")
 		return 0
 	cmd = script_tests_command(launcher)

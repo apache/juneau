@@ -72,7 +72,7 @@ public class Link extends OpenApiElement {
 	private String description;
 	private Object requestBody;
 	private Server server;
-	private Map<String,Object> parameters = map();
+	private final Map<String,Object> parameters = map();
 
 	/**
 	 * Default constructor.

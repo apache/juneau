@@ -143,7 +143,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var paths = pathsOf(entries);
 		var sorted = new ArrayList<>(paths);
-		Collections.sort(sorted);
+		sorted.sort(null);
 		Assertions.assertEquals(sorted, paths,
 			"Entries should already be sorted by path ascending; got: " + paths);
 	}

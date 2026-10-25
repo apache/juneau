@@ -72,7 +72,7 @@ public class ParserPipe implements Closeable {
 	private InputStream inputStream;
 	private Reader reader;
 	private boolean doClose;
-	private BinaryFormat binaryFormat;
+	private final BinaryFormat binaryFormat;
 	private Positionable positionable;
 
 	/**

@@ -18,7 +18,7 @@ the operator's record of having reviewed a path, so this script commits the inde
 it finds it and never runs `git add .`).
 
 Juneau-specific exception to this directory's usual byte-for-byte-identical-across-repos rule
-(see README.md): push.py's --sonarqube-style opt-in gate pattern only exists in juneau's
+(see README.md): push.py's opt-in gate pattern (`--tracker-audit`) only exists in juneau's
 push.py (release-manager's push.py is a bare add/commit/push helper with no gates at all;
 sandbox-support-console has no push.py). This file is therefore NOT copied to the other two
 repos, unlike everything else in scripts/tests/.
@@ -190,7 +190,7 @@ def juneau_root(tmp_path: Path, docs_repo: Path) -> Path:
 
 def _docs_args(message: str = "docs message") -> argparse.Namespace:
     """Just enough of push.py's parsed-args surface for run_docs_only()."""
-    return argparse.Namespace(message=message, dry_run=False, skip_tests=False, sonarqube=False)
+    return argparse.Namespace(message=message, dry_run=False, skip_tests=False)
 
 
 @pytest.fixture
@@ -281,7 +281,7 @@ class TestOnPathDelegatesToTheGate:
 
 
 class TestRunTrackerAuditGateExitCodeMapping:
-    """run_tracker_audit_gate()'s exit-code contract, mirroring run_sonarqube_gate's shape."""
+    """run_tracker_audit_gate()'s exit-code contract."""
 
     @pytest.mark.parametrize(
         ("returncode", "expected_status"),
@@ -1209,17 +1209,9 @@ def test_refusal_guard_fails_closed_on_a_git_error(push_module, toolkit_git, rep
 # The opt-in gates run through the toolkit's run.gate; each keeps its own exit-code contract.
 # ---------------------------------------------------------------------------------------
 def _gate_exits(push_module, monkeypatch, returncode):
-    monkeypatch.setattr(push_module, "_python310", lambda: push_module.sys.executable)
     monkeypatch.setattr(push_module, "current_branch", lambda root: "master")
     monkeypatch.setattr(push_module.subprocess, "run",
                         lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, returncode))
-
-
-@pytest.mark.parametrize(("returncode", "expected"), [(0, "pass"), (2, "fail"), (3, "skip"), (1, "error"),
-                                                      (77, "error")])
-def test_sonar_gate_maps_0_2_3_and_other_to_error(push_module, monkeypatch, returncode, expected):
-    _gate_exits(push_module, monkeypatch, returncode)
-    assert push_module.run_sonarqube_gate(Path("/repo"), 1) == expected
 
 
 @pytest.mark.parametrize(("returncode", "expected"), [(0, "pass"), (1, "fail"), (2, "error"), (3, "error"),
@@ -1239,10 +1231,8 @@ def test_the_gates_go_through_the_toolkit_gate(push_module, monkeypatch):
         return real(cmd, **kw)
     monkeypatch.setattr(run, "gate", spy)
     _gate_exits(push_module, monkeypatch, 0)
-    push_module.run_sonarqube_gate(Path("/repo"), 1)
     push_module.run_tracker_audit_gate(Path("/repo"), 1)
     assert seen == [
-        {"title": "SonarQube gate", "id": "sonar", "label": "Sonar", "cwd": Path("/repo"), "codes": None},
         {"title": "Tracker audit", "id": "tracker", "label": "Tracker", "cwd": Path("/repo"),
          "codes": {0: "pass", 1: "fail"}},
     ]
@@ -1573,7 +1563,7 @@ class TestPushPlanTestPyRows:
         scripts = tmp_path / "scripts"
         scripts.mkdir()
         (scripts / "test.py").write_text("", encoding="utf-8")
-        args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False)
+        args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False)
         return [step_id for step_id, _ in push_module.push_plan(args, scripts, tmp_path / "juneau", False)]
 
     def test_perf_is_a_pending_row_between_java_and_python_tests(self, push_module, tmp_path):
@@ -1586,3 +1576,97 @@ class TestPushPlanTestPyRows:
         numbered = [i for i in ids[ids.index("build"):ids.index("js-tests") + 1] if i != "perf"]
         assert list(push_module.TEST_PY_NUMBERED_STEPS) == numbered
         assert "handoff(reserve=len(TEST_PY_NUMBERED_STEPS))" in (SCRIPTS_DIR / "push.py").read_text(encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------------------
+# Workflow YAML guard: a .github/workflows file GitHub cannot parse refuses before the build and before the commit.
+# ---------------------------------------------------------------------------------------
+GOOD_WORKFLOW = "name: ok\non: push\njobs:\n  t:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo hi\n"
+# The exact line commit 650edf477e shipped at maven.yml:221 (a `: ` inside a plain scalar).
+BAD_RUN_LINE = "      - run: python -m pip install --only-binary :all: pytest\n"
+BAD_WORKFLOW = GOOD_WORKFLOW + BAD_RUN_LINE
+
+
+def _write_workflow(root: Path, text: str, name: str = "maven.yml") -> None:
+    workflows = root / ".github" / "workflows"
+    workflows.mkdir(parents=True, exist_ok=True)
+    (workflows / name).write_text(text, encoding="utf-8")
+
+
+class TestWorkflowYamlGuard:
+    def test_valid_workflows_and_a_missing_directory_pass(self, push_module, repo):
+        assert push_module.workflow_yaml_problems(repo) == []
+        _write_workflow(repo, GOOD_WORKFLOW)
+        assert push_module.workflow_yaml_problems(repo) == []
+
+    def test_the_shipped_bad_line_is_named_by_file_and_line(self, push_module, repo):
+        _write_workflow(repo, BAD_WORKFLOW)
+        bad_line = BAD_WORKFLOW.splitlines().index(BAD_RUN_LINE.rstrip("\n")) + 1
+
+        [problem] = push_module.workflow_yaml_problems(repo)
+
+        assert problem.startswith(f".github/workflows/maven.yml:{bad_line}:")
+
+    def test_the_quoted_form_of_the_bad_line_passes(self, push_module, repo):
+        _write_workflow(repo, GOOD_WORKFLOW + "      - run: 'python -m pip install --only-binary :all: pytest'\n")
+        assert push_module.workflow_yaml_problems(repo) == []
+
+    def test_yml_and_yaml_are_both_scanned(self, push_module, repo):
+        _write_workflow(repo, BAD_WORKFLOW, "a.yml")
+        _write_workflow(repo, BAD_WORKFLOW, "b.yaml")
+        problems = push_module.workflow_yaml_problems(repo)
+        assert [p.split(":")[0] for p in problems] == [".github/workflows/a.yml", ".github/workflows/b.yaml"]
+
+    def test_missing_pyyaml_fails_closed_with_an_install_hint(self, push_module, repo, monkeypatch):
+        _write_workflow(repo, GOOD_WORKFLOW)
+        monkeypatch.setitem(sys.modules, "yaml", None)    # makes `import yaml` raise ImportError
+
+        with pytest.raises(ImportError):
+            push_module.workflow_yaml_problems(repo)
+        verdict = push_module.toolkit("checks").evaluate(push_module.workflow_yaml_check(repo, "Nothing ran."))
+        assert verdict.status == "fail"
+        assert "pip install pyyaml" in " ".join(verdict.hint)
+
+    def test_missing_pyyaml_is_irrelevant_without_workflow_files(self, push_module, repo, monkeypatch):
+        monkeypatch.setitem(sys.modules, "yaml", None)
+        assert push_module.workflow_yaml_problems(repo) == []
+
+    def test_prechecks_include_the_workflows_check(self, push_module, repo):
+        _run(repo, "git", "config", "user.email", push_module.REQUIRED_GIT_EMAIL)
+        _write_workflow(repo, BAD_WORKFLOW)
+        _run(repo, "git", "add", "-A")
+        checks = push_module.toolkit("checks")
+
+        listed = {c.name: c for c in push_module.prechecks(repo)}
+
+        verdict = checks.evaluate(listed["workflows"])
+        assert verdict.status == "fail"
+        assert ".github/workflows/maven.yml:" in " ".join(verdict.hint)
+        assert checks.evaluate(listed["workflows"], dry_run=True).status == "warn"
+
+    def test_the_late_recheck_catches_a_workflow_changed_after_the_prechecks(self, push_module, repo, capsys):
+        _run(repo, "git", "config", "user.email", push_module.REQUIRED_GIT_EMAIL)
+        _write_workflow(repo, GOOD_WORKFLOW)
+        _run(repo, "git", "add", "-A")
+        checks = push_module.toolkit("checks")
+        assert all(checks.evaluate(c).status == "pass" for c in push_module.prechecks(repo))
+        head = _run(repo, "git", "rev-parse", "HEAD")
+
+        _write_workflow(repo, BAD_WORKFLOW)            # edited during the long build, and staged
+        _run(repo, "git", "add", "-A")
+        status, _ = push_module.commit_and_push(repo, "message", 4)
+
+        assert status == "error"
+        assert _run(repo, "git", "rev-parse", "HEAD") == head
+        assert ".github/workflows/maven.yml:" in capsys.readouterr().out
+
+    def test_the_late_recheck_also_guards_a_push_only_run(self, push_module, repo, capsys):
+        _write_workflow(repo, BAD_WORKFLOW)
+        _commit(repo, "broken workflow")               # committed locally, nothing staged, ahead of upstream
+        remote_head = _run(repo, "git", "ls-remote", "origin", "master").split()[0]
+
+        status, _ = push_module.commit_and_push(repo, "message", 4)
+
+        assert status == "error"
+        assert _run(repo, "git", "ls-remote", "origin", "master").split()[0] == remote_head
+        assert "not valid YAML" in capsys.readouterr().out

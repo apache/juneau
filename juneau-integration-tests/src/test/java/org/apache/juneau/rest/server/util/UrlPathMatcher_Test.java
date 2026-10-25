@@ -61,7 +61,7 @@ class UrlPathMatcher_Test extends TestBase {
 		l.add(of("*.txt"));
 		l.add(of("foo.*"));
 
-		Collections.sort(l);
+		l.sort(null);
 		assertEquals("['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", Json5Serializer.DEFAULT.toString(l));
 	}
 
@@ -84,7 +84,7 @@ class UrlPathMatcher_Test extends TestBase {
 		l.add(of("*"));
 		l.add(of(""));
 
-		Collections.sort(l);
+		l.sort(null);
 		assertEquals("['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']", Json5Serializer.DEFAULT.toString(l));
 	}
 
@@ -94,7 +94,7 @@ class UrlPathMatcher_Test extends TestBase {
 		l.add(of("/foo"));
 		l.add(of("/foo"));
 
-		Collections.sort(l);
+		l.sort(null);
 		assertEquals("['/foo','/foo']", Json5Serializer.DEFAULT.toString(l));
 	}
 

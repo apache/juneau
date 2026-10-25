@@ -79,7 +79,7 @@ public class VarResolver {
 	 */
 	public static class Builder {
 
-		private WritableBeanStore beanStore;
+		private final WritableBeanStore beanStore;
 		final VarList vars;
 		final LinkedHashMap<Class<?>,Object> userBeans;
 		final List<VarFunction> functions;

@@ -55,5 +55,4 @@ Per file: branch and instruction percentages, missed counts, and the uncovered l
 
 ## See also
 
-- `sonarqube.py`
 - `test.py`

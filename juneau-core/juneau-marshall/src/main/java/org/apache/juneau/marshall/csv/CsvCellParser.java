@@ -42,7 +42,7 @@ public final class CsvCellParser {
 	private final String input;
 	private final String nullMarker;
 	private int pos;
-	private int length;
+	private final int length;
 
 	private CsvCellParser(String input, String nullMarker) {
 		this.input = input != null ? input.trim() : "";

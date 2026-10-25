@@ -72,7 +72,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParserSession.Builder<SELF> {
 
 		private boolean validateEnd;
-		private JsonParser ctx;
+		private final JsonParser ctx;
 
 		/**
 		 * Constructor

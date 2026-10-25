@@ -49,7 +49,7 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 2. Build: `mvn clean install -T1C -DskipTests` (`build`).
 3. Tests: `mvn test -T1C -Drat.skip=true`, plus `-DexcludedGroups=container` with `--no-container` (`test`). Per-module Surefire times and Maven's reactor times are recorded in the run history (`_record_buckets`).
 4. Perf guard: compares the suite wall clock with the `suite` line of `perf-baseline.txt`, and each module's reactor time with its `[modules]` entry. The report is written to `target/perf-guard.txt` (`run_perf_guard`).
-5. Python tests: runs `scripts/tests` with `python3 -m pytest`, or `uv run --native-tls --with pytest pytest` when pytest is not importable (`script_tests`).
+5. Python tests: runs `scripts/tests` with `python3 -m pytest`, or `uv run --native-tls --with pytest --with pyyaml pytest` when pytest is not importable (`script_tests`).
 6. Browser tests: with `-Pjs-tests` in the views, petstore-core and terminal modules (`maybe_run_js_tests`). Without `--js-tests` or `--no-js-tests`, they run automatically when a `.js`, `.cjs`, `.css` or `.ftl` file under a `src/` tree differs from `origin/master`.
 7. `--profile` runs `mvn test -Drat.skip=true -Djacoco.skip=true` from the module's directory, with the JFR flags (including `stackdepth=1024`) appended to the module's own `-Dsurefire.extraArgs`. It writes one `hotspot-pid-<pid>-id-<n>-<time>.jfr` per forked JVM under `<repo>/target/profile-results/<module>-<timestamp>/`, and fails if Maven passes but no file exists (`profile`). Read a recording with `jfr print --json --stack-depth 300 <file>`; the default depth of 5 hides every Juneau frame.
 

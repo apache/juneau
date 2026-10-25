@@ -1636,7 +1636,7 @@ public class CollectionUtils {
 	 */
 	public static <E> List<E> sortedList(Comparator<E> comparator, Collection<E> value) {
 		List<E> l = toList(value);
-		Collections.sort(l, comparator);
+		l.sort(comparator);
 		return l;
 	}
 
@@ -1650,7 +1650,7 @@ public class CollectionUtils {
 	 */
 	public static <E> List<E> sortedList(Comparator<E> comparator, E[] values) {
 		List<E> l = list(values);
-		Collections.sort(l, comparator);
+		l.sort(comparator);
 		return l;
 	}
 
@@ -1664,7 +1664,7 @@ public class CollectionUtils {
 	@SafeVarargs
 	public static <E> List<E> sortedList(E...values) {
 		List<E> l = list(values);
-		Collections.sort((List<Comparable>)l);
+		((List<Comparable>)l).sort(null);
 		return l;
 	}
 

@@ -62,7 +62,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	public static class Builder extends UonParserSession.Builder<Builder> {
 
 		private boolean expandedParams;
-		private UrlEncodingParser ctx;
+		private final UrlEncodingParser ctx;
 
 		/**
 		 * Constructor

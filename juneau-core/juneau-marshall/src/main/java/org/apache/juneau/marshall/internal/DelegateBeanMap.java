@@ -54,9 +54,9 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		public Object getValue() { return value; }
 	}
 
-	private Set<String> keys = set();
+	private final Set<String> keys = set();
 
-	private JsonMap overrideValues = new JsonMap();
+	private final JsonMap overrideValues = new JsonMap();
 
 	/**
 	 * Constructor.

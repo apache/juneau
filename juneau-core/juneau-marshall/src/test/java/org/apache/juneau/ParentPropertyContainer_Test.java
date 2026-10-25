@@ -116,7 +116,7 @@ class ParentPropertyContainer_Test extends TestBase {
 		);
 	}
 
-	static Object write(Serializer s, Object o) throws Exception {
+	static Object write(Serializer s, Object o) {
 		if (s instanceof WriterSerializer ws)
 			return ws.write(o);
 		return ((OutputStreamSerializer)s).write(o);

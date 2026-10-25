@@ -807,6 +807,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Duration unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
+				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
+				if (Duration.class.isInstance(o))
+					return (Duration) o;
 				return format.parse(o.toString());
 			}
 		};
@@ -826,6 +829,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Period unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
+				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
+				if (Period.class.isInstance(o))
+					return (Period) o;
 				return format.parse(o.toString());
 			}
 		};
@@ -845,6 +851,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Calendar unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
+				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
+				if (Calendar.class.isInstance(o))
+					return (Calendar) o;
 				return format.parse(o.toString(), session.getTimeZoneId());
 			}
 		};
@@ -864,6 +873,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Date unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
+				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
+				if (Date.class.isInstance(o))
+					return (Date) o;
+				if (o instanceof Calendar)
+					return (Date) session.convertToType(o, hint != null ? (ClassMeta<?>) hint : session.getClassMeta(Date.class));
 				return format.parse(o.toString(), session.getTimeZoneId());
 			}
 		};
@@ -889,6 +903,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Temporal unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
+				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
+				if (temporalType.isInstance(o))
+					return (Temporal) o;
+				if (o instanceof Calendar)
+					return (Temporal) session.convertToType(o, hint != null ? (ClassMeta<?>) hint : session.getClassMeta(temporalType));
 				return format.parse(o.toString(), temporalType, session.getTimeZoneId());
 			}
 		};
@@ -914,6 +933,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public TemporalAccessor unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
+				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
+				if (temporalType.isInstance(o))
+					return (TemporalAccessor) o;
+				if (o instanceof Calendar)
+					return (TemporalAccessor) session.convertToType(o, hint != null ? (ClassMeta<?>) hint : session.getClassMeta(temporalType));
 				return format.parse(o.toString(), temporalType, session.getTimeZoneId());
 			}
 		};

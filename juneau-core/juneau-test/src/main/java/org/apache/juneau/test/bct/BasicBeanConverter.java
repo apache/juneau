@@ -275,12 +275,12 @@ public class BasicBeanConverter implements BeanConverter {
 	 * @see PropertyExtractor
 	 */
 	public static class Builder {
-		private Map<String,Object> settings = map();
-		private List<StringifierEntry<?>> stringifiers = list();
-		private List<ListifierEntry<?>> listifiers = list();
-		private List<SizerEntry<?>> sizers = list();
-		private List<SwapperEntry<?>> swappers = list();
-		private List<PropertyExtractor> propertyExtractors = list();
+		private final Map<String,Object> settings = map();
+		private final List<StringifierEntry<?>> stringifiers = list();
+		private final List<ListifierEntry<?>> listifiers = list();
+		private final List<SizerEntry<?>> sizers = list();
+		private final List<SwapperEntry<?>> swappers = list();
+		private final List<PropertyExtractor> propertyExtractors = list();
 
 		/**
 		 * Registers a custom listifier for a specific type.
@@ -502,8 +502,8 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	static class ListifierEntry<T> {
-		private Class<T> forClass;
-		private Listifier<T> function;
+		private final Class<T> forClass;
+		private final Listifier<T> function;
 
 		private ListifierEntry(Class<T> forClass, Listifier<T> function) {
 			this.forClass = forClass;
@@ -512,8 +512,8 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	static class SizerEntry<T> {
-		private Class<T> forClass;
-		private Sizer<T> function;
+		private final Class<T> forClass;
+		private final Sizer<T> function;
 
 		private SizerEntry(Class<T> forClass, Sizer<T> function) {
 			this.forClass = forClass;
@@ -522,8 +522,8 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	static class StringifierEntry<T> {
-		private Class<T> forClass;
-		private Stringifier<T> function;
+		private final Class<T> forClass;
+		private final Stringifier<T> function;
 
 		private StringifierEntry(Class<T> forClass, Stringifier function) {
 			this.forClass = forClass;
@@ -532,8 +532,8 @@ public class BasicBeanConverter implements BeanConverter {
 	}
 
 	static class SwapperEntry<T> {
-		private Class<T> forClass;
-		private Swapper<T> function;
+		private final Class<T> forClass;
+		private final Swapper<T> function;
 
 		private SwapperEntry(Class<T> forClass, Swapper<T> function) {
 			this.forClass = forClass;

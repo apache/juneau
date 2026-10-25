@@ -56,8 +56,7 @@ class LoopbackBoundary_Test extends TestBase {
 	 * header spoiled, so a failure isolates the rule that broke.
 	 */
 	private static Map<String,String> goodWriteHeaders() {
-		Map<String,String> m = map("Host", AUTHORITY, "Origin", ORIGIN, "Sec-Fetch-Site", "same-origin", "X-Csrf-Token", TOKEN.value());
-		return m;
+		return map("Host", AUTHORITY, "Origin", ORIGIN, "Sec-Fetch-Site", "same-origin", "X-Csrf-Token", TOKEN.value());
 	}
 
 	private static HttpServletRequest req(String method, Map<String,String> headers) {

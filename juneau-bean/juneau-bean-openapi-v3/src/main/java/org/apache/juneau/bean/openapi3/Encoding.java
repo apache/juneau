@@ -78,7 +78,7 @@ public class Encoding extends OpenApiElement {
 
 	private String contentType;
 	private String style;
-	private Map<String,HeaderInfo> headers = map();
+	private final Map<String,HeaderInfo> headers = map();
 	private Boolean explode;
 	private Boolean allowReserved;
 

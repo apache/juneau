@@ -201,7 +201,7 @@ public @interface MarshalledConfig {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Swap</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OneWaySwaps">One-way Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapAnnotation">@Swap Annotation</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AutoSwaps">Auto-detected swaps</a>

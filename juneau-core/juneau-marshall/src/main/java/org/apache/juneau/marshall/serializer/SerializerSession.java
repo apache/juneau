@@ -94,7 +94,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 
 		private HttpPartSchema schema;
 		private Method javaMethod;
-		private Serializer ctx;
+		private final Serializer ctx;
 		private UriContext uriContext;
 		private VarResolverSession resolver;
 		private boolean keepNullProperties;

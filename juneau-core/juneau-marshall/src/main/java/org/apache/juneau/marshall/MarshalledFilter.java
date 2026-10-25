@@ -88,7 +88,7 @@ public class MarshalledFilter implements BeanFilter {
 	 */
 	public static class Builder {
 
-		private ClassInfoTyped<?> beanClass;
+		private final ClassInfoTyped<?> beanClass;
 		private String typeName;
 		private String example;
 		private Set<String> properties = set();

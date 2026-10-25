@@ -91,7 +91,7 @@ public class OAuthAuthorizationCodeFlow {
 		private String clientId;
 		private Supplier<String> clientSecretSupplier;
 		private URI redirectUri;
-		private Set<String> scopes = st();
+		private final Set<String> scopes = st();
 		private URI resource;
 		private Duration httpTimeout = Flows.DEFAULT_HTTP_TIMEOUT;
 		private Consumer<HTTPRequest> httpRequestConfigurator;

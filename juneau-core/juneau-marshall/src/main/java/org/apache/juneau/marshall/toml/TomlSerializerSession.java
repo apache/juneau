@@ -50,7 +50,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private TomlSerializer ctx;
+		private final TomlSerializer ctx;
 
 		protected Builder(TomlSerializer ctx) {
 			super(reqnn("ctx", ctx));

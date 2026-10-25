@@ -240,7 +240,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	// Constructor initialized.
-	private HttpServletRequest inner;
+	private final HttpServletRequest inner;
 	private final RestContext context;
 	private final RestOpContext opContext;
 	private final RequestContent content;

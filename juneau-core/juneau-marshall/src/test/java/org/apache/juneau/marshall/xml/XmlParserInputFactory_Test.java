@@ -85,7 +85,7 @@ class XmlParserInputFactory_Test {
 		assertEquals(Boolean.FALSE, f.getProperty(XMLInputFactory.IS_VALIDATING));
 	}
 
-	@Test void c01_repeatedParsesShareFactory() throws Exception {
+	@Test void c01_repeatedParsesShareFactory() {
 		var p = XmlParser.create().build();
 		for (var i = 0; i < 3; i++)
 			assertEquals(Map.of("a", "b"), new HashMap<>((Map<?,?>)p.read("<A><a>b</a></A>", Object.class)));

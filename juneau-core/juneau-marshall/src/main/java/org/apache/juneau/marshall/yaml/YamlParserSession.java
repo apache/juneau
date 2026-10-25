@@ -65,7 +65,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	 */
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
-		private YamlParser ctx;
+		private final YamlParser ctx;
 
 		/**
 		 * Constructor

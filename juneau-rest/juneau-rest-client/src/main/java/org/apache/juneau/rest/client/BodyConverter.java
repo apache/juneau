@@ -18,7 +18,6 @@ package org.apache.juneau.rest.client;
 
 import java.io.*;
 
-import org.apache.juneau.http.*;
 
 /**
  * Converts a Java object passed to {@link RestRequest#body(Object)} into a {@link TransportBody}.

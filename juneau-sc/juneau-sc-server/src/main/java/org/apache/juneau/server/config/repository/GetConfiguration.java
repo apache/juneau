@@ -38,13 +38,13 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	private static final String PROJECT = "PROJECT";
 	private static final String EXT = ".cfg";
 
-	private Map<String,ConfigItem> configs = new HashMap<>();
+	private final Map<String,ConfigItem> configs = new HashMap<>();
 
 	@SuppressWarnings({
 		"java:S1845" // Field name intentionally differs only by case from static field PROJECT
 	})
 	private String project;
-	private String branch;
+	private final String branch;
 
 	/**
 	 * Constructor.

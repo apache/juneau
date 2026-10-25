@@ -85,10 +85,10 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	private String method = "GET";
-	private Map<String,String[]> queryDataMap = map();
+	private final Map<String,String[]> queryDataMap = map();
 	private Map<String,String[]> formDataMap;
-	private Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-	private Map<String,Object> attributeMap = map();
+	private final Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private final Map<String,Object> attributeMap = map();
 	private String characterEncoding = "UTF-8";
 	private byte[] content = {};
 	private String protocol = "HTTP/1.1";
@@ -102,7 +102,7 @@ public class MockServletRequest implements HttpServletRequest {
 	private String localName;
 	private String localAddr;
 	private int localPort;
-	private Map<String,RequestDispatcher> requestDispatcher = map();
+	private final Map<String,RequestDispatcher> requestDispatcher = map();
 	private ServletContext servletContext;
 	private DispatcherType dispatcherType;
 	private String authType;

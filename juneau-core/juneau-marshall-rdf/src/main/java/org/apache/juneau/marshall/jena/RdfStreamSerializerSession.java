@@ -65,7 +65,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 	 */
 	public static class Builder extends OutputStreamSerializerSession.Builder<Builder> {
 
-		private RdfStreamSerializer ctx;
+		private final RdfStreamSerializer ctx;
 
 		protected Builder(RdfStreamSerializer ctx) {
 			super(reqnn("ctx", ctx));

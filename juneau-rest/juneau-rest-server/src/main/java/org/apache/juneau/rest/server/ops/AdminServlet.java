@@ -18,7 +18,6 @@ package org.apache.juneau.rest.server.ops;
 
 import java.io.*;
 
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.servlet.*;

@@ -168,14 +168,14 @@ public class Operation extends SwaggerElement {
 	private String operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
-	private Set<String> tags = st();
-	private Set<String> schemes = st();
-	private Set<MediaType> consumes = st();
-	private Set<MediaType> produces = st();
+	private final Set<String> tags = st();
+	private final Set<String> schemes = st();
+	private final Set<MediaType> consumes = st();
+	private final Set<MediaType> produces = st();
 	private List<ParameterInfo> parameters = list();
 	private List<Map<String,List<String>>> security = list();
 
-	private Map<String,ResponseInfo> responses = map();
+	private final Map<String,ResponseInfo> responses = map();
 
 	/**
 	 * Default constructor.

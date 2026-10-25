@@ -50,7 +50,7 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private HoconSerializer ctx;
+		private final HoconSerializer ctx;
 
 		protected Builder(HoconSerializer ctx) {
 			super(reqnn("ctx", ctx));

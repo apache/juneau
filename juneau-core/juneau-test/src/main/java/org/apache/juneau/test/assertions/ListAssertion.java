@@ -21,8 +21,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.commons.function.*;
-
 
 /**
  * Used for assertion calls against lists.

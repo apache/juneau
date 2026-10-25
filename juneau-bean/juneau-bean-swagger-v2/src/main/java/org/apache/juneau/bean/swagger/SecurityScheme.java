@@ -93,7 +93,7 @@ public class SecurityScheme extends SwaggerElement {
 	private String flow;
 	private String authorizationUrl;
 	private String tokenUrl;
-	private Map<String,String> scopes = map();
+	private final Map<String,String> scopes = map();
 
 	/**
 	 * Default constructor.

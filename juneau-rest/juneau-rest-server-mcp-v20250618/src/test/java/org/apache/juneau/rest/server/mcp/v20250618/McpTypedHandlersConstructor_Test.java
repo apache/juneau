@@ -18,7 +18,6 @@ package org.apache.juneau.rest.server.mcp.v20250618;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
 
 /**

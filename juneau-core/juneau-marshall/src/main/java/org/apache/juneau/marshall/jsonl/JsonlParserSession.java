@@ -53,7 +53,7 @@ public class JsonlParserSession extends JsonParserSession {
 	})
 	public static class Builder extends JsonParserSession.Builder<Builder> {
 
-		private JsonlParser ctx;
+		private final JsonlParser ctx;
 
 		/**
 		 * Constructor

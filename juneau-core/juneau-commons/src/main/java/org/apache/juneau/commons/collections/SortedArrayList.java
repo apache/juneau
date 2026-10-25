@@ -158,7 +158,7 @@ public class SortedArrayList<E> extends AbstractList<E> implements RandomAccess 
 	public SortedArrayList(Comparator<? super E> comparator, Collection<? extends E> c) {
 		this.comparator = reqnn("comparator", comparator);
 		this.list = new ArrayList<>(c);
-		Collections.sort(this.list, this.comparator);
+		this.list.sort(this.comparator);
 	}
 
 	/**

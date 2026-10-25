@@ -101,8 +101,8 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		private Supplier<String> clientSecretSupplier;
 		private TokenCache tokenCache;
 		private Duration cacheTtl = DEFAULT_CACHE_TTL;
-		private Set<String> requiredScopes = st();
-		private Set<String> expectedAudiences = st();
+		private final Set<String> requiredScopes = st();
+		private final Set<String> expectedAudiences = st();
 		private Clock clock = Clock.systemUTC();
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 

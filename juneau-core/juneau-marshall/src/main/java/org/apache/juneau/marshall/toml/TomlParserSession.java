@@ -62,7 +62,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	 */
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
-		private TomlParser ctx;
+		private final TomlParser ctx;
 
 		protected Builder(TomlParser ctx) {
 			super(reqnn("ctx", ctx));

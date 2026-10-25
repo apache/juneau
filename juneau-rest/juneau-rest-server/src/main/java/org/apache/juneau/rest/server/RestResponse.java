@@ -133,7 +133,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	private static final String HEADER_ContentType = "Content-Type";
 	private static final Pattern ENCODING_DISABLED_PATTERN = Pattern.compile("(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0)");
 
-	private HttpServletResponse inner;
+	private final HttpServletResponse inner;
 	private final RestRequest request;
 
 	private Optional<Object> content;  // The POJO being sent to the output.
@@ -141,7 +141,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
 	private ResponseBeanMeta responseBeanMeta;
-	private RestOpContext opContext;
+	private final RestOpContext opContext;
 	private Optional<HttpPartSchema> contentSchema;
 	private Serializer serializer;
 	private Optional<SerializerMatch> serializerMatch;

@@ -22,7 +22,7 @@ public enum TestEnumToString {
 
 	ONE("one"), TWO("two"), THREE("three");
 
-	private String val;
+	private final String val;
 
 	TestEnumToString(String val) {
 		this.val = val;

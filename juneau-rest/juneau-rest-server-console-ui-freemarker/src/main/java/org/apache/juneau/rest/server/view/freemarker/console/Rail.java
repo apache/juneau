@@ -98,7 +98,6 @@ public final class Rail {
 	/** @return The rail JSON. */
 	Map<String,Object> toMap() {
 		var list = sections.stream().map(Section::toMap).toList();
-		Map<String,Object> m = map("side", side, "width", width, "sections", list);
-		return m;
+		return map("side", side, "width", width, "sections", list);
 	}
 }

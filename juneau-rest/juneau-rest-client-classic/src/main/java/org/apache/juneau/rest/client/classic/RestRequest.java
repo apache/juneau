@@ -213,18 +213,18 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	private HttpHost target;
 	private HttpPartSchema contentSchema;
 	private HttpPartSerializerSession partSerializerSession;
-	private HeaderList headerData;
+	private final HeaderList headerData;
 	private List<Class<? extends Throwable>> rethrow;
 	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
 	private Object content;
 	private Parser parser;
-	private PartList formData;
-	private PartList pathData;
-	private PartList queryData;
+	private final PartList formData;
+	private final PartList pathData;
+	private final PartList queryData;
 	private Predicate<Integer> errorCodes;
 	private RestResponse response;                         // The response.
 	private Serializer serializer;
-	private URIBuilder uriBuilder;
+	private final URIBuilder uriBuilder;
 
 	private final Map<HttpPartSerializer,HttpPartSerializerSession> partSerializerSessions = new IdentityHashMap<>();
 

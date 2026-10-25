@@ -46,7 +46,7 @@ import org.junit.jupiter.api.*;
  */
 class MsgPackConformance_Test extends TestBase {
 
-	private static byte[] mp(Object o) throws Exception {
+	private static byte[] mp(Object o) {
 		return MsgPackSerializer.DEFAULT.write(o);
 	}
 

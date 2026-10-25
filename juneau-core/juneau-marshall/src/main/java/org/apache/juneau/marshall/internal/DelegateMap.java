@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.collections.*;
 public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
-	private transient ClassMeta<T> classMeta;
+	private final transient ClassMeta<T> classMeta;
 
 	/**
 	 * Constructor.

@@ -48,7 +48,7 @@ public class ReaderParserSession extends ParserSession {
 	public abstract static class Builder<SELF extends Builder<SELF>> extends ParserSession.Builder<SELF> {
 
 		private Charset streamCharset;
-		private ReaderParser ctx;
+		private final ReaderParser ctx;
 
 		/**
 		 * Constructor

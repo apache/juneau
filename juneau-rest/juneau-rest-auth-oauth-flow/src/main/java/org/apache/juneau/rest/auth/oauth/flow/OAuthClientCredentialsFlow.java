@@ -77,7 +77,7 @@ public class OAuthClientCredentialsFlow {
 		private URI tokenEndpoint;
 		private String clientId;
 		private Supplier<String> clientSecretSupplier;
-		private Set<String> scopes = st();
+		private final Set<String> scopes = st();
 		private URI resource;
 		private Duration httpTimeout = Flows.DEFAULT_HTTP_TIMEOUT;
 		private Consumer<HTTPRequest> httpRequestConfigurator;

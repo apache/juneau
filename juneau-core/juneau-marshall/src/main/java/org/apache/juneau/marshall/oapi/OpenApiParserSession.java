@@ -62,7 +62,7 @@ public class OpenApiParserSession extends UonParserSession {
 	 */
 	public static class Builder extends UonParserSession.Builder<Builder> {
 
-		private OpenApiParser ctx;
+		private final OpenApiParser ctx;
 
 		/**
 		 * Constructor

@@ -18,7 +18,7 @@ purpose). Two easy ways to run this suite without installing anything globally:
 
 ```bash
 # Option A -- uv (fastest, no setup, nothing left behind):
-uv run --with pytest pytest scripts/tests
+uv run --with pytest --with pyyaml pytest scripts/tests
 
 # Option B -- a local venv:
 python3 -m venv .venv
@@ -37,7 +37,8 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   gates at all; sandbox-support-console has no `push.py`). Its central assertion is that the
   off path never reaches `subprocess.run` at all -- not just that it returns early -- which is
   the strongest available proof the gate cannot affect push behavior, including runtime, while
-  disabled.
+  disabled. It also covers the workflow-YAML guard (`TestWorkflowYamlGuard`), which needs PyYAML:
+  run it with `uv run --with pytest --with pyyaml pytest scripts/tests/test_push.py`.
 
 - `test_js_tests_flags.py` -- the `--js-tests` / `--no-js-tests` support in `scripts/test.py` and
   `scripts/push.py`: flag parsing (incl. conflict rejection and push.py forwarding the

@@ -62,7 +62,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private RdfSerializer ctx;
+		private final RdfSerializer ctx;
 
 		/**
 		 * Constructor

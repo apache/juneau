@@ -128,7 +128,7 @@ public class RestOperations {
 	}
 
 	private final Map<String,List<RestOpContext>> map;
-	private RestOpContext[] list;
+	private final RestOpContext[] list;
 
 	/**
 	 * Constructor.

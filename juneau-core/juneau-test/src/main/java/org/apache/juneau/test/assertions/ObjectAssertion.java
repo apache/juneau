@@ -19,8 +19,6 @@ package org.apache.juneau.test.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.*;
-
 
 /**
  * Used for assertion calls against arbitrary POJOs.

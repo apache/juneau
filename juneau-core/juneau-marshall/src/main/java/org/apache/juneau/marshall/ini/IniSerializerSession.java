@@ -51,7 +51,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private IniSerializer ctx;
+		private final IniSerializer ctx;
 
 		protected Builder(IniSerializer ctx) {
 			super(reqnn("ctx", ctx));

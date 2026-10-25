@@ -58,7 +58,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	public static class Builder extends UonSerializerSession.Builder<Builder> {
 
 		private boolean expandedParams;
-		private UrlEncodingSerializer ctx;
+		private final UrlEncodingSerializer ctx;
 
 		/**
 		 * Constructor

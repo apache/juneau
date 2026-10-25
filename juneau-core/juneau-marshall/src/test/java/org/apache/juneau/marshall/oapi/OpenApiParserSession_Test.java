@@ -348,4 +348,46 @@ class OpenApiParserSession_Test extends TestBase {
 		var r = (Map<?,?>) p(T_OBJECT, "a=1", Object.class);
 		assertEquals("1", r.get("a"));
 	}
+
+	// ============================================================
+	// j01-j06: bean properties of Calendar/Date/ZonedDateTime type
+	// ============================================================
+
+	public static class J01_Bean {
+		public Calendar f1;
+		public Date f2;
+		public java.time.ZonedDateTime f3;
+	}
+
+	private static HttpPartSchema j01Schema(HttpPartFormat f) {
+		return tObject().p("f1", tString().format(f)).p("f2", tString().format(f)).p("f3", tString().format(f)).build();
+	}
+
+	@Test
+	void j01_beanCalendarPropertyDateTimeFormat() throws Exception {
+		var r = p(j01Schema(HttpPartFormat.DATE_TIME), "f1=2020-01-02T03:04:05Z,f2=2020-01-02T03:04:05Z,f3=2020-01-02T03:04:05Z", J01_Bean.class);
+		assertEquals(2020, r.f1.get(Calendar.YEAR));
+		assertEquals(2020, r.f2.toInstant().atZone(java.time.ZoneOffset.UTC).getYear());
+		assertEquals(2020, r.f3.getYear());
+	}
+
+	@Test
+	void j02_beanCalendarPropertyDateFormat() throws Exception {
+		var r = p(j01Schema(HttpPartFormat.DATE), "f1=2020-01-02,f2=2020-01-02,f3=2020-01-02", J01_Bean.class);
+		assertEquals(2020, r.f1.get(Calendar.YEAR));
+		assertNotNull(r.f2);
+		assertEquals(2, r.f3.getDayOfMonth());
+	}
+
+	@Test
+	void j03_beanCalendarPropertyNoFormat() throws Exception {
+		var r = p(tObject().p("f1", tString()).build(), "f1=2020-01-02T03:04:05Z", J01_Bean.class);
+		assertEquals(2020, r.f1.get(Calendar.YEAR));
+	}
+
+	@Test
+	void j04_beanCalendarPropertyViaDefaultSchema() throws Exception {
+		var r = DP.read(null, null, "f1=2020-01-02T03:04:05Z", DP.getClassMeta(J01_Bean.class));
+		assertEquals(2020, r.f1.get(Calendar.YEAR));
+	}
 }

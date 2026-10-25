@@ -75,8 +75,8 @@ public class MediaType extends OpenApiElement {
 
 	private SchemaInfo schema;
 	private Object example;
-	private Map<String,Example> examples = map();
-	private Map<String,Encoding> encoding = map();
+	private final Map<String,Example> examples = map();
+	private final Map<String,Encoding> encoding = map();
 
 	/**
 	 * Default constructor.

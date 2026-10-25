@@ -74,13 +74,12 @@ final class ConsoleBusBrowserSupport {
 	}
 
 	private static Map<String,Map<String,String>> assets() throws IOException {
-		Map<String,Map<String,String>> m = m(
+		return m(
 			ConsoleBrowserFixture.SHELL, Map.of("type", "text/javascript", "body", ConsoleBrowserFixture.resource(ConsoleChromeMixin.CONSOLE_JS_RESOURCE)),
 			ConsoleBrowserFixture.CHROME_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource("/org/apache/juneau/console/chrome.css")),
 			ConsoleBrowserFixture.THEME_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource("/org/apache/juneau/console/juneau-theme-open.css")),
 			ConsoleBrowserFixture.VIEWS_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource(ViewsMixin.VIEWS_CSS_RESOURCE))
 		);
-		return m;
 	}
 
 	static String page(String contractResource, boolean withBus, String configJson) throws IOException {

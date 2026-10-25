@@ -77,7 +77,7 @@ public class Server extends OpenApiElement {
 
 	private URI url;
 	private String description;
-	private Map<String,ServerVariable> variables = map();
+	private final Map<String,ServerVariable> variables = map();
 
 	/**
 	 * Default constructor.

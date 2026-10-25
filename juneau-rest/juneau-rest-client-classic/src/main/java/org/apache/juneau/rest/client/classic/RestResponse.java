@@ -87,7 +87,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	private boolean isClosed;
 	private HeaderList headers;
 
-	private Map<HttpPartParser,HttpPartParserSession> partParserSessions = new IdentityHashMap<>();
+	private final Map<HttpPartParser,HttpPartParserSession> partParserSessions = new IdentityHashMap<>();
 	private HttpPartParserSession partParserSession;
 
 	/**

@@ -89,7 +89,7 @@ class PetsRest_Test extends TestBase {
 		var ids = new java.util.ArrayList<Long>();
 		for (var m : r.getList("data").elements(JsonMap.class))
 			ids.add(m.getLong("id"));
-		java.util.Collections.sort(ids);
+		ids.sort(null);
 		return ids;
 	}
 

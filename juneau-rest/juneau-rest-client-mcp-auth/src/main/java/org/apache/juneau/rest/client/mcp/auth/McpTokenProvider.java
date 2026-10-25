@@ -286,6 +286,9 @@ public class McpTokenProvider implements Supplier<String> {
 
 	private final Object lock = new Object();
 	private OAuthToken currentToken;
+	@SuppressWarnings({
+		"java:S9438" // Reassigned inside a lambda in the token-fetch path; Sonar misses the lambda assignment.
+	})
 	private String currentRefreshToken;
 	private boolean refreshTerminallyRejected;
 

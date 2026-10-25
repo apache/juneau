@@ -56,7 +56,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends SerializerSession.Builder<SELF> {
 
-		private OutputStreamSerializer ctx;
+		private final OutputStreamSerializer ctx;
 
 		/**
 		 * Constructor

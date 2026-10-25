@@ -218,6 +218,6 @@ jobs:
       with:
         python-version: '3.12'
     - name: Install pytest
-      run: python -m pip install --only-binary :all: pytest
+      run: 'python -m pip install --only-binary :all: pytest'
     - name: Run script tests
       run: python -m pytest -q scripts/tests

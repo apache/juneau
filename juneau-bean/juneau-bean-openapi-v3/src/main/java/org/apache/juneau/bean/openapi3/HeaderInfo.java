@@ -89,7 +89,7 @@ public class HeaderInfo extends OpenApiElement {
 	private Boolean allowReserved;
 	private SchemaInfo schema;
 	private Object example;
-	private Map<String,Example> examples = map();
+	private final Map<String,Example> examples = map();
 
 	/**
 	 * Default constructor.

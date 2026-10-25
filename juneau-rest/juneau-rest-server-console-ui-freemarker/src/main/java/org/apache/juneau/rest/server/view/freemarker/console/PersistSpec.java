@@ -152,13 +152,12 @@ public final class PersistSpec {
 
 	/** @return The persist JSON. */
 	Map<String,Object> toMap() {
-		Map<String,Object> m = map(
+		return map(
 			"ns", ns,
 			"version", version,
 			"topics", List.copyOf(topics),
 			"shareLink", shareLink,
 			"decoders", List.copyOf(decoders)
 		);
-		return m;
 	}
 }

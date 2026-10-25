@@ -400,4 +400,31 @@ class OpenApiSerializerSession_Test extends TestBase {
 		var s = w(ps, List.of(List.of("a", "b")));
 		assertEquals("@('a\tb')", s);
 	}
+
+	// ============================================================
+	// j01-j02: POJO with a toX() conversion method to an array type
+	// ============================================================
+
+	public static class J_ToArrayPojo {
+		public Long[][] toLongArrayArray() {
+			return new Long[][]{{1L, 2L}, {3L, 4L}};
+		}
+	}
+
+	public static class J_NoMutaterPojo {
+		public int x = 1;
+	}
+
+	@Test
+	void j01_pojoWithToArrayMethod() throws Exception {
+		var ps = tArrayPipes(tArrayCsv(tInt64().min(0).max(100))).build();
+		assertEquals("1,2|3,4", DS.write(HttpPartType.QUERY, ps, new J_ToArrayPojo()));
+	}
+
+	@Test
+	void j02_pojoWithoutArrayMutater() {
+		var ps = tArrayPipes(tArrayCsv(tInt64().min(0).max(100))).build();
+		var e = assertThrows(Exception.class, () -> DS.write(HttpPartType.QUERY, ps, new J_NoMutaterPojo()));
+		assertTrue(e.getMessage().contains("Input is not a valid array type"), e.getMessage());
+	}
 }

@@ -59,7 +59,7 @@ class ConsoleBusTrace_BrowserTest extends TestBase {
 			var run = new ArrayList<String>();
 			while (i < topics.size() && topics.get(i).startsWith("redraw:"))
 				run.add(topics.get(i++));
-			Collections.sort(run);
+			run.sort(null);
 			out.addAll(run);
 		}
 		return out;

@@ -424,7 +424,7 @@ public class ConfigMap implements ConfigStoreListener {
 		var cs = st.entries().get(section);
 		var ce = cs == null ? null : cs.entries.get(key);
 
-		if (ce == null)
+		if (ce == null && ! st.imports().isEmpty())
 			ce = st.imports().stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(Shorts::nn).findFirst().orElse(null);
 
 		return ce;

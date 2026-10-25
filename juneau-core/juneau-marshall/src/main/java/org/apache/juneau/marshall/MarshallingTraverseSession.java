@@ -62,7 +62,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingSession.Builder<SELF> {
 
-		private MarshallingTraverseContext ctx;
+		private final MarshallingTraverseContext ctx;
 		private int initialDepth;
 
 		/**

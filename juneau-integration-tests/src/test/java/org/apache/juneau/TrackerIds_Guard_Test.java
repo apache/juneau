@@ -71,7 +71,7 @@ class TrackerIds_Guard_Test extends TestBase {
 			}
 		});
 
-		Collections.sort(offenders);
+		offenders.sort(null);
 		assertTrue(offenders.isEmpty(), () -> "Tracker ids found in source trees (state what the code does instead of citing a work item): " + offenders.stream().collect(Collectors.joining("\n  ", "\n  ", "")));
 	}
 

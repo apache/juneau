@@ -203,7 +203,7 @@ public @interface Rest {
 	 * Children are <b>isolated from the parent's resolution chain</b> by design — a child's serializers, parsers,
 	 * guards, hooks, etc. are all resolved against the child's own {@link RestContext} only, NOT walked
 	 * through the parent.  This is the opposite of how {@link #mixins() mixins} resolve.  See the
-	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">REST Server — Mixin Sub-Contexts</a>
+	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin-vs-child divergence</a>
 	 * topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers
 	 * sharing the host's URL namespace and resolution chain).
 	 *
@@ -255,7 +255,7 @@ public @interface Rest {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Child}
 	 * 	<li class='jm'>{@link #children()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Child Resources</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Host-side seeding with @Child (10.0.0)</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -303,7 +303,7 @@ public @interface Rest {
 	 * Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.
 	 * {@link #children() Children} are independently-mounted resources isolated from the host's resolution chain.
 	 * See the
-	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">REST Server — Mixin Sub-Contexts</a>
+	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin-vs-child divergence</a>
 	 * topic for the rationale.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
@@ -533,7 +533,7 @@ public @interface Rest {
 	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -552,7 +552,7 @@ public @interface Rest {
 	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

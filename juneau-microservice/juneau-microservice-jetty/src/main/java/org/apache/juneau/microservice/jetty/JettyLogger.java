@@ -90,7 +90,7 @@ public class JettyLogger implements LocationAwareLogger {
 	/**
 	 * The underlying Java Util Logger instance.
 	 */
-	private Logger logger;
+	private final Logger logger;
 
 	/**
 	 * Default constructor.

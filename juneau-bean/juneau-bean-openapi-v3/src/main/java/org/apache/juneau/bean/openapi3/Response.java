@@ -78,9 +78,9 @@ import org.apache.juneau.commons.collections.*;
 public class Response extends OpenApiElement {
 
 	private String description;
-	private Map<String,HeaderInfo> headers = map();
-	private Map<String,MediaType> content = map();
-	private Map<String,Link> links = map();
+	private final Map<String,HeaderInfo> headers = map();
+	private final Map<String,MediaType> content = map();
+	private final Map<String,Link> links = map();
 
 	/**
 	 * Default constructor.

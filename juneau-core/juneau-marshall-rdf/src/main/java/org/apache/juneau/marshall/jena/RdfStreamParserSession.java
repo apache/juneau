@@ -61,7 +61,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	 */
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
-		private RdfStreamParser ctx;
+		private final RdfStreamParser ctx;
 
 		/**
 		 * Constructor

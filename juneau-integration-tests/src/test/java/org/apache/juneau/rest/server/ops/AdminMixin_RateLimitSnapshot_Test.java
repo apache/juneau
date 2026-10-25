@@ -202,7 +202,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		Assertions.assertTrue(keys.contains("10.0.0.20"));
 		Assertions.assertTrue(keys.contains("10.0.0.30"));
 		var sorted = new ArrayList<>(keys);
-		Collections.sort(sorted);
+		sorted.sort(null);
 		Assertions.assertEquals(sorted, keys, "snapshot entries should be sorted ascending by key");
 	}
 

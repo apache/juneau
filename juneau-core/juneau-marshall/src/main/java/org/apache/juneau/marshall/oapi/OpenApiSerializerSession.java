@@ -63,7 +63,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	 */
 	public static class Builder extends UonSerializerSession.Builder<Builder> {
 
-		private OpenApiSerializer ctx;
+		private final OpenApiSerializer ctx;
 
 		/**
 		 * Constructor

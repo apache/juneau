@@ -58,7 +58,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 */
 	public static class Builder extends MarshallingTraverseSession.Builder<Builder> {
 
-		private JsonSchemaGenerator ctx;
+		private final JsonSchemaGenerator ctx;
 
 		/**
 		 * Constructor

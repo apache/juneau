@@ -73,7 +73,7 @@ import org.apache.juneau.commons.collections.*;
 })
 public class ServerVariable extends OpenApiElement {
 
-	private List<Object> enum_ = list();
+	private final List<Object> enum_ = list();
 	private String default_;
 	private String description;
 

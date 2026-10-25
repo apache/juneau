@@ -50,7 +50,7 @@ public class SerializerPipe implements Closeable {
 
 	private OutputStream outputStream;
 	private Writer writer;
-	private Charset charset;
+	private final Charset charset;
 
 	/**
 	 * Stream-based constructor.

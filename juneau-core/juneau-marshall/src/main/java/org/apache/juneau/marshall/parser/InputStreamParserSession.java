@@ -47,7 +47,7 @@ public class InputStreamParserSession extends ParserSession {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends ParserSession.Builder<SELF> {
 
-		private InputStreamParser ctx;
+		private final InputStreamParser ctx;
 
 		/**
 		 * Constructor

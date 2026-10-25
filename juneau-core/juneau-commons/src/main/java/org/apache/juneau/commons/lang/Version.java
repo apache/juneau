@@ -57,7 +57,7 @@ public class Version implements Comparable<Version> {
 		return new Version(value);
 	}
 
-	private int[] parts;
+	private final int[] parts;
 
 	/**
 	 * Constructor

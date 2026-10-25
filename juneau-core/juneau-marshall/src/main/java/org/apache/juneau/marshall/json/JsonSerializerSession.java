@@ -61,7 +61,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializerSession.Builder<SELF> {
 
 		private boolean escapeSolidus;
-		private JsonSerializer ctx;
+		private final JsonSerializer ctx;
 
 		/**
 		 * Constructor

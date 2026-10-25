@@ -21,9 +21,15 @@ package org.apache.juneau.commons.settings;
  */
 public class SystemEnvPropertySourceProvider implements PropertySourceProvider {
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * The result is wrapped in a {@link CachingPropertySource}: this source's answers never change after construction.
+	 */
 	@Override
 	public PropertySource create() {
-		return new SystemEnvPropertySource();
+		return CachingPropertySource.of(new SystemEnvPropertySource());
 	}
 
 	@Override

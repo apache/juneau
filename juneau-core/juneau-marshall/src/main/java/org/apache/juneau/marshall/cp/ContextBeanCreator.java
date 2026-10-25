@@ -49,7 +49,7 @@ public class ContextBeanCreator<T> {
 		return new ContextBeanCreator<>(type);
 	}
 
-	private Class<T> type;
+	private final Class<T> type;
 	private T impl;
 	private Context.Builder<?> builder;
 

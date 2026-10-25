@@ -499,11 +499,11 @@ public class BeanInstantiator<T> {
 	boolean autoWireUnwrapSuppliers = true;
 	private boolean noBuilder = false;
 
-	private Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());
-	private Memoizer<List<ClassInfo>> builderTypes = memoizer(() -> findBuilderTypes());
-	private Memoizer<List<ClassInfo>> beanSubTypes = memoizer(() -> findBeanSubTypes());
-	private Memoizer<Object> builderMemoizer = memoizer(() -> findBuilder());
-	private Memoizer<T> beanImpl = memoizer(() -> processBean(findBeanImpl()));
+	private final Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());
+	private final Memoizer<List<ClassInfo>> builderTypes = memoizer(() -> findBuilderTypes());
+	private final Memoizer<List<ClassInfo>> beanSubTypes = memoizer(() -> findBeanSubTypes());
+	private final Memoizer<Object> builderMemoizer = memoizer(() -> findBuilder());
+	private final Memoizer<T> beanImpl = memoizer(() -> processBean(findBeanImpl()));
 
 	/**
 	 * Constructor.

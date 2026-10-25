@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.settings;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * A {@link PropertySource} decorator that adds <b>relaxed binding</b> over a delegate source.
@@ -84,14 +85,34 @@ public class RelaxedPropertySource implements PropertySource {
 		return PropertyLookupResult.missing();
 	}
 
+	private static final ConcurrentHashMap<String,List<String>> CANDIDATES = new ConcurrentHashMap<>();
+
 	/**
 	 * Generates the ordered, de-duplicated list of candidate names for a requested name (verbatim first).
 	 *
-	 * @param name The requested property name.
-	 * @return The candidate names to probe, in priority order.
+	 * <p>
+	 * The result is <b>unmodifiable</b> and memoized per name, with the same soft cap and pass-through rule as
+	 * {@link CachingPropertySource} (names beyond {@link CachingPropertySource#MAX_ENTRIES} are computed on every call).
+	 *
+	 * @param name The requested property name.  Must not be <jk>null</jk>.
+	 * @return The candidate names to probe, in priority order.  Unmodifiable.
+	 * @throws NullPointerException If <c>name</c> is <jk>null</jk>.
 	 * @since 10.0.0
 	 */
 	public static List<String> candidates(String name) {
+		var cached = CANDIDATES.get(name);  // throws NullPointerException for a null name
+		if (cached != null)
+			return cached;
+		var computed = compute(name);
+		if (CANDIDATES.size() < CachingPropertySource.MAX_ENTRIES) {
+			var previous = CANDIDATES.putIfAbsent(name, computed);
+			if (previous != null)
+				return previous;
+		}
+		return computed;
+	}
+
+	private static List<String> compute(String name) {
 		var out = new ArrayList<String>(3);
 		out.add(name);
 		var tokens = tokenize(name);
@@ -99,7 +120,7 @@ public class RelaxedPropertySource implements PropertySource {
 			addIfNew(out, String.join("_", tokens).toUpperCase(Locale.ROOT));
 			addIfNew(out, String.join(".", tokens).toLowerCase(Locale.ROOT));
 		}
-		return out;
+		return List.copyOf(out);
 	}
 
 	/**

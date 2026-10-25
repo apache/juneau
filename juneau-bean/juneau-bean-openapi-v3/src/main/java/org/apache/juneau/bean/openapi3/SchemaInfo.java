@@ -130,11 +130,11 @@ public class SchemaInfo extends OpenApiElement {
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private List<Object> allOf = list();
-	private List<Object> oneOf = list();
-	private List<Object> anyOf = list();
-	private List<Object> enum_ = list();
-	private List<String> required = list();
+	private final List<Object> allOf = list();
+	private final List<Object> oneOf = list();
+	private final List<Object> anyOf = list();
+	private final List<Object> enum_ = list();
+	private final List<String> required = list();
 	private Discriminator discriminator;
 	private Map<String,SchemaInfo> properties;
 	private SchemaInfo additionalProperties;

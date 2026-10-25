@@ -50,7 +50,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link BeanIgnore}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation#format-side-marshalledignore">@BeanIgnore Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation#format-side-marshalledignore">Format Side: @MarshalledIgnore</a>
  * </ul>
  */
 @Documented

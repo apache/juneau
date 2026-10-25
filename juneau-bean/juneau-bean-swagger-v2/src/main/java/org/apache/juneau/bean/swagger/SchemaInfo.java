@@ -129,10 +129,10 @@ public class SchemaInfo extends SwaggerElement {
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private Set<Object> enum_ = st();
-	private Set<SchemaInfo> allOf = st();
-	private Set<String> requiredProperties = st();
-	private Map<String,SchemaInfo> properties = map();
+	private final Set<Object> enum_ = st();
+	private final Set<SchemaInfo> allOf = st();
+	private final Set<String> requiredProperties = st();
+	private final Map<String,SchemaInfo> properties = map();
 	private SchemaInfo additionalProperties;
 
 	/**

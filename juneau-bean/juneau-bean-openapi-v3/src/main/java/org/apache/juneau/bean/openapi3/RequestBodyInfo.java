@@ -68,7 +68,7 @@ import org.apache.juneau.commons.collections.*;
 public class RequestBodyInfo extends OpenApiElement {
 
 	private String description;
-	private Map<String,MediaType> content = map();
+	private final Map<String,MediaType> content = map();
 	private Boolean required;
 
 	/**

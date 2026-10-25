@@ -46,10 +46,19 @@ import org.apache.juneau.commons.reflect.*;
  * <ol>
  * 	<li>Per-thread store (if set via {@link #setLocal(String, String)})
  * 	<li>Global store (if set via {@link #setGlobal(String, String)})
- * 	<li>Sources in reverse order (last source added via {@link Builder#addSource(PropertySource)} is checked first)
- * 	<li>System property source (default, always second-to-last)
- * 	<li>System environment variable source (default, always last)
+ * 	<li>Sources added at runtime through {@link #addSource(PropertySource)}, newest first
+ * 	<li>The system-default <c>Config</c>, when juneau-config is on the classpath (SPI order 100)
+ * 	<li>Command-line args (SPI order 50)
+ * 	<li>Java system properties (SPI order 40)
+ * 	<li>Environment variables, verbatim (SPI order 30)
+ * 	<li>The <c>.env</c> file (SPI order 20)
+ * 	<li>The jar manifest (SPI order 10)
+ * 	<li>Environment variables, relaxed spelling (registered first, so checked last)
  * </ol>
+ *
+ * <p>
+ * If SPI registered no system-property source (a shaded jar that does not merge <c>META-INF/services</c>, for example),
+ * a fallback system-property source sits just above the relaxed environment source.
  *
  * <h5 class='section'>Sources vs Stores:</h5>
  * <ul class='spaced-list'>
@@ -156,9 +165,13 @@ public class Settings {
 	 * This is the env source used by the default {@link #get() singleton}.  It is verbatim-first, so exact-match
 	 * behavior is unchanged &mdash; a relaxed variant is only probed when the exact name misses.
 	 *
+	 * <p>
+	 * Its runtime class is a {@link CachingPropertySource} wrapping the relaxed source.  The environment is immutable
+	 * inside the JVM, so caching is safe, and every chain that uses this constant shares one cache.
+	 *
 	 * @since 10.0.0
 	 */
-	public static final PropertySource RELAXED_SYSTEM_ENV_SOURCE = new RelaxedPropertySource(SYSTEM_ENV_SOURCE);
+	public static final PropertySource RELAXED_SYSTEM_ENV_SOURCE = CachingPropertySource.of(new RelaxedPropertySource(SYSTEM_ENV_SOURCE));
 
 	private static final String DISABLE_GLOBAL_PROP = "juneau.settings.disableGlobal";
 	private static final String MSG_globalDisabled = "Global settings not enabled";
@@ -280,14 +293,29 @@ public class Settings {
 		 * @return This builder for method chaining.
 		 */
 		public Builder useServiceLoader() {
-			ServiceLoader.load(PropertySourceProvider.class)
-				.stream()
-				.map(ServiceLoader.Provider::get)
+			return addProviders(ServiceLoader.load(PropertySourceProvider.class).stream().map(ServiceLoader.Provider::get).toList());
+		}
+
+		/** Sorts the providers by {@link PropertySourceProvider#order()} ascending, creates their sources and appends the non-null ones. */
+		Builder addProviders(Collection<? extends PropertySourceProvider> providers) {
+			providers.stream()
 				.sorted(Comparator.comparingInt(PropertySourceProvider::order))
 				.map(PropertySourceProvider::create)
 				.filter(Objects::nonNull)
 				.forEach(this::addSource);
 			return this;
+		}
+
+		/** Inserts a source at the given index. */
+		Builder insertSource(int index, PropertySource source) {
+			reqnn("source", source);
+			this.sources.add(index, source);
+			return this;
+		}
+
+		/** An unmodifiable view of the sources registered so far. */
+		List<PropertySource> sourceList() {
+			return Collections.unmodifiableList(sources);
 		}
 
 		/**
@@ -333,10 +361,26 @@ public class Settings {
 		}
 	}
 
-	private static final Settings INSTANCE = new Builder()
+	/**
+	 * Builds the default chain: the relaxed env source, then the SPI providers sorted by order, then (only when no SPI
+	 * provider registered a system-property source) {@link #SYSTEM_PROPERTY_SOURCE} at index 1.
+	 *
+	 * <p>
+	 * Detection may fail safe (keep a duplicate) but must never fail unsafe (drop the only system-property source).
+	 */
+	static Builder defaultBuilder(Collection<PropertySourceProvider> providers) {
+		var b = new Builder().setSources(RELAXED_SYSTEM_ENV_SOURCE).addProviders(providers);
+		if (b.sourceList().stream().noneMatch(Settings::isSpiSystemPropertySource))
+			b.insertSource(1, SYSTEM_PROPERTY_SOURCE);  // no SPI sysprop source: keep today's fallback at today's index
+		return b;
+	}
+
+	private static boolean isSpiSystemPropertySource(PropertySource s) {
+		return s.getClass().getName().equals(SystemPropertyPropertySource.class.getName());  // exact class name, any loader
+	}
+
+	private static final Settings INSTANCE = defaultBuilder(ServiceLoader.load(PropertySourceProvider.class).stream().map(ServiceLoader.Provider::get).toList())
 		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -> null : MapStore::new)
-		.setSources(RELAXED_SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
-		.useServiceLoader()
 		.build();
 
 	/**
@@ -396,6 +440,15 @@ public class Settings {
 	}
 
 	/**
+	 * Returns a live, read-only view of the registered sources, in registration order.  Package-private, for tests.
+	 *
+	 * @return An unmodifiable view; later {@link #addSource} / {@link #removeSource} calls show through.
+	 */
+	List<PropertySource> sources() {
+		return Collections.unmodifiableList(sources);
+	}
+
+	/**
 	 * Removes a previously-added property source.
 	 *
 	 * <p>
@@ -433,37 +486,53 @@ public class Settings {
 	 * <ol>
 	 * 	<li>Per-thread override (if set via {@link #setLocal(String, String)})
 	 * 	<li>Global override (if set via {@link #setGlobal(String, String)})
-	 * 	<li>Sources in reverse order (last source added via {@link Builder#addSource(PropertySource)} is checked first)
-	 * 	<li>System property source (default, always second-to-last)
-	 * 	<li>System environment variable source (default, always last)
+	 * 	<li>Sources added at runtime through {@link #addSource(PropertySource)}, newest first
+	 * 	<li>The system-default <c>Config</c>, when juneau-config is on the classpath (SPI order 100)
+	 * 	<li>Command-line args (SPI order 50)
+	 * 	<li>Java system properties (SPI order 40)
+	 * 	<li>Environment variables, verbatim (SPI order 30)
+	 * 	<li>The <c>.env</c> file (SPI order 20)
+	 * 	<li>The jar manifest (SPI order 10)
+	 * 	<li>Environment variables, relaxed spelling (registered first, so checked last)
 	 * </ol>
+	 *
+	 * <p>
+	 * If SPI registered no system-property source (a shaded jar that does not merge <c>META-INF/services</c>, for example),
+	 * a fallback system-property source sits just above the relaxed environment source.
 	 *
 	 * @param name The property name. Must not be <jk>null</jk>.
 	 * @return A {@link StringSetting} that provides the resolved property value.
 	 */
 	public StringSetting get(String name) {
 		reqnn("name", name);
-		return new StringSetting(this, () -> {
-			// 1. Check thread-local override
-			var v = localStore.get().get(name);
-			if (v.isPresent())
-				return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
+		return new StringSetting(this, () -> resolve(name));
+	}
 
-			// 2. Check global override
-			v = globalLookup(name);
-			if (v.isPresent())
-				return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
+	/**
+	 * Walks the thread-local store, the global store, then every source newest first. The one copy of the lookup order.
+	 *
+	 * @return The resolved value, or <jk>null</jk> when no store or source defines the name or the winner is an explicit null.
+	 */
+	private String resolve(String name) {
+		// 1. Check thread-local override
+		var v = localStore.get().get(name);
+		if (v.isPresent())
+			return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
 
-			// 3. Check sources in reverse order (last added first)
-			for (int i = sources.size() - 1; i >= 0; i--) {
-				var source = sources.get(i);
-				var result = source.get(name);
-				if (result.isPresent())
-					return result.value().orElse(null);
-			}
+		// 2. Check global override
+		v = globalLookup(name);
+		if (v.isPresent())
+			return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
 
-			return null;
-		});
+		// 3. Check sources in reverse order (last added first)
+		for (int i = sources.size() - 1; i >= 0; i--) {
+			var source = sources.get(i);
+			var result = source.get(name);
+			if (result.isPresent())
+				return result.value().orElse(null);
+		}
+
+		return null;
 	}
 
 	/**
@@ -560,7 +629,12 @@ public class Settings {
 	 */
 	public <T> T get(String name, T def) {
 		reqnn("def", def);
-		return get(name).asType((Class<T>)def.getClass()).orElse(def);
+		reqnn("name", name);
+		var v = resolve(name);
+		if (v == null)
+			return def;
+		var t = toType(v, (Class<T>)def.getClass());
+		return t == null ? def : t;  // matches the filter(Objects::nonNull) in StringSetting.asType
 	}
 
 	/**

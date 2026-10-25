@@ -298,6 +298,26 @@ class MockRestClient_Test {
 	}
 
 	@Test
+	void e02b_contextPath_nonEmpty() throws Exception {
+		try (var client = MockRestClient.builder(RootResource.class).contextPath("/app").build()) {
+			try (var response = client.get("/").run()) {
+				assertEquals(200, response.getStatusCode());
+				assertTrue(response.getBodyAsString().contains("root-ok"));
+			}
+		}
+	}
+
+	@Test
+	void e02c_contextPath_withServletPath() throws Exception {
+		try (var client = MockRestClient.builder(EchoResource.class).contextPath("/app").build()) {
+			try (var response = client.get("/").run()) {
+				assertEquals(200, response.getStatusCode());
+				assertTrue(response.getBodyAsString().contains("got"));
+			}
+		}
+	}
+
+	@Test
 	void e03_createWithInstance_isClassFalse() throws Exception {
 		// Use InstanceOnlyResource (never passed as a Class) to exercise the isClass=false branch
 		var instance = new InstanceOnlyResource();

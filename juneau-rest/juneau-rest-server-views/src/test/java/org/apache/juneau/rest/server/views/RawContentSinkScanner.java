@@ -295,7 +295,7 @@ final class RawContentSinkScanner {
 				}
 			}
 		}
-		Collections.sort(found);
+		found.sort(null);
 		return found;
 	}
 

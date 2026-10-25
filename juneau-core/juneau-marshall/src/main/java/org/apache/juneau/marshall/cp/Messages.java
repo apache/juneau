@@ -368,10 +368,10 @@ public class Messages extends ResourceBundle {
 		return new Messages(c.c, c.rb, c.locale, spliceLeafParent(c.parent2, newLeafParent));
 	}
 
-	private ResourceBundle rb;
-	private Class<?> c;
-	private Messages parent2;
-	private Locale locale;
+	private final ResourceBundle rb;
+	private final Class<?> c;
+	private final Messages parent2;
+	private final Locale locale;
 
 	// Cache of message bundles per locale.
 	private final ConcurrentHashMap<Locale,Messages> localizedMessages = new ConcurrentHashMap<>();

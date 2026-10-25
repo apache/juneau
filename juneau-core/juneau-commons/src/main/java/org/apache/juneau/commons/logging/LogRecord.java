@@ -69,7 +69,7 @@ import java.util.logging.*;
 public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;
-	private transient MessageGenerator generator;
+	private final transient MessageGenerator generator;
 
 	/**
 	 * Constructor.

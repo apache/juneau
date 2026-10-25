@@ -42,7 +42,7 @@ import jakarta.servlet.http.*;
  */
 public abstract class RestResource {
 
-	private AtomicReference<RestContext> context = new AtomicReference<>();
+	private final AtomicReference<RestContext> context = new AtomicReference<>();
 
 	/**
 	 * The programmatic configuration builder stashed on this instance, or <jk>null</jk> when the

@@ -147,7 +147,7 @@ public class AnnotationObject implements Annotation {
 	 */
 	public static class Builder {
 
-		private Class<? extends Annotation> annotationType;
+		private final Class<? extends Annotation> annotationType;
 
 		/**
 		 * Constructor.
@@ -171,7 +171,7 @@ public class AnnotationObject implements Annotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Class<? extends Annotation> annotationType;
-	private Supplier<Integer> hashCode = memoize(() -> AnnotationUtils.hash(this));
+	private final Supplier<Integer> hashCode = memoize(() -> AnnotationUtils.hash(this));
 
 	/**
 	 * Constructor.

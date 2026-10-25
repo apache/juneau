@@ -70,9 +70,9 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 */
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
-		private CsvByteArrayCellFormat byteArrayFormat;
-		private boolean allowNestedStructures;
-		private String nullValue;
+		private final CsvByteArrayCellFormat byteArrayFormat;
+		private final boolean allowNestedStructures;
+		private final String nullValue;
 
 		/**
 		 * Constructor

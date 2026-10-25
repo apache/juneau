@@ -58,12 +58,11 @@ public final class FlavorPets {
 	}
 
 	private static Map<String,String> row(Pet p) {
-		Map<String,String> m = map(
+		return map(
 			"name", p.getName(),
 			"species", String.valueOf(p.getSpecies()),
 			"price", String.format(Locale.ROOT, "%.2f", p.getPrice()),
 			"status", String.valueOf(p.getStatus())
 		);
-		return m;
 	}
 }

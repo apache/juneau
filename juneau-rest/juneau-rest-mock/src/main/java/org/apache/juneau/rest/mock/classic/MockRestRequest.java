@@ -54,8 +54,8 @@ import jakarta.servlet.http.*;
 	"resource" // MockRestRequest manages Closeable resources
 })
 public class MockRestRequest extends RestRequest {
-	private Map<String,Object> attributeMap = map();
-	private Map<String,RequestDispatcher> requestDispatcherMap = map();
+	private final Map<String,Object> attributeMap = map();
+	private final Map<String,RequestDispatcher> requestDispatcherMap = map();
 	private String characterEncoding;
 	private String protocol;
 	private String scheme;
