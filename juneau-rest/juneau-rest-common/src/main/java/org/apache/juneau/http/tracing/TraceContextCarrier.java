@@ -47,7 +47,7 @@ package org.apache.juneau.http.tracing;
  * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TraceContexts}
  * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TracerHook}
  * 	<li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * </ul>
  *
  * @since 10.0.0

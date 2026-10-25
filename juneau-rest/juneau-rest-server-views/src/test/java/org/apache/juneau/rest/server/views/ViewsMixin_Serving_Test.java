@@ -385,7 +385,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var served = MockRestClient.buildLax(WithDataTablesMixin.class).get(DataTablesMixin.GLUE_PATH).run()
 			.assertStatus(200).getContent().asBytes();
 		var v = DataTablesMixin.class.getPackage().getImplementationVersion();
-		assertEquals(DataTablesMixin.GLUE_PATH, ViewsMixin.DATATABLES_JS_PATH);
+		assertEquals(ViewsMixin.DATATABLES_JS_PATH, DataTablesMixin.GLUE_PATH);
 		assertEquals("servlet:" + DataTablesMixin.GLUE_PATH + "?v=" + (v == null ? "dev" : v) + "-" + ChecksumUtils.hash8(served),
 			ViewsMixin.viewAssetUrl(ViewsMixin.DATATABLES_JS_PATH));
 		cWithMixin.get(ViewsMixin.DATATABLES_JS_PATH).run().assertStatus(404);
@@ -412,10 +412,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 * runtimes lives in {@code juneau-rest-server-widgets}; this pin is the views leftover.
 	 */
 	@Test void d03_widgetContractReexports_trackWidgetsMixinAndStayDistinctFromViewMeta() {
-		assertEquals(WidgetsMixin.HEADER_CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
+		assertEquals(ViewsMixin.HEADER_CONTRACT_VERSION, WidgetsMixin.HEADER_CONTRACT_VERSION);
 		assertEquals("1", ViewsMixin.HEADER_CONTRACT_VERSION);
-		assertEquals(WidgetsMixin.BAR_CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
-		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
+		assertEquals(ViewsMixin.BAR_CONTRACT_VERSION, WidgetsMixin.BAR_CONTRACT_VERSION);
+		assertEquals(ViewsMixin.BAR_CONTRACT_VERSION, BarSlot.CONTRACT_VERSION);
 		assertEquals("1", ViewsMixin.SLOT_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
@@ -1257,7 +1257,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	@Test void q03_consoleJsPath_singleSourceOfTruth() {
 		assertEquals("/juneau-console.js", ViewsMixin.CONSOLE_JS_PATH);
-		assertEquals(org.apache.juneau.rest.server.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED, ViewsMixin.CONSOLE_JS_PATH);
+		assertEquals(ViewsMixin.CONSOLE_JS_PATH, org.apache.juneau.rest.server.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED);
 	}
 
 	@Test void q02_hostWithoutMixin_consoleJsRouteIs404() throws Exception {

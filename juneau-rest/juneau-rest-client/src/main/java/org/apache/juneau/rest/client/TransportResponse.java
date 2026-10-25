@@ -32,9 +32,6 @@ import java.util.*;
  * Callers <b>must</b> close this object (it implements {@link Closeable}) after consuming the response body;
  * transport implementations use the close callback to release connection-pool resources.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 @SuppressWarnings({

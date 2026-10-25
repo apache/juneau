@@ -67,11 +67,6 @@ import org.apache.juneau.rest.client.*;
  * 	String <jv>user</jv> = <jv>svc</jv>.getUser(<js>"42"</js>);
  * </p>
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
@@ -573,7 +568,7 @@ public final class RemoteClient {
 		 * @param adder Sink that records a single name/value part on the request.
 		 */
 		@SuppressWarnings({
-			"java:S107" // The 9 parameters form one cohesive HTTP-part binding descriptor (type/schema/name/default/value/serializer/sink) threaded through internal dispatch; a holder object would add indirection without improving this beta reflective-proxy code.
+			"java:S107" // The 9 parameters form one cohesive HTTP-part binding descriptor (type/schema/name/default/value/serializer/sink) threaded through internal dispatch; a holder object would add indirection without improving this reflective-proxy code.
 		})
 		private static void bindParts(HttpPartType partType, HttpPartSchema schema, String annValue, String annName, String def, Object arg, String fallbackName, HttpPartSerializer serializer, BiConsumer<String,String> adder) {
 			var explicit = firstNonEmpty(annValue, annName);

@@ -63,7 +63,7 @@ import jakarta.validation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ValidationException}
  * 	<li class='jc'>{@link ValidationViolation}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">REST Server &mdash; Jakarta Validation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>
  * </ul>
  *
  * @since 10.0.0

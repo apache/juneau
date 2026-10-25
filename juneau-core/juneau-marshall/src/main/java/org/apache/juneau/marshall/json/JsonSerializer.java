@@ -96,7 +96,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
- * 	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
+ * 	JsonSerializer <jv>serializer</jv> = Json5Serializer.<jsm>create</jsm>().build();
  *
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
  * 	<jv>serializer</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.copy().sq().build();
@@ -235,9 +235,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = Json5Serializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.simple()
 		 * 		.escapeSolidus()
 		 * 		.build();
 		 *

@@ -31,9 +31,6 @@ import java.util.*;
  * 	<li>{@link #formatBody(RestRequest, RestResponse)} added at {@code FINEST}.
  * </ul>
  *
- * <p>
- * <b>Beta - API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 10.0.0
  */
 public interface RestClientDebugFormatter {

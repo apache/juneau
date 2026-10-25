@@ -19,10 +19,6 @@
  * Next-generation HTTP header implementations.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack.
- * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
- *
- * <p>
  * {@link org.apache.juneau.http.header.HttpHeaderBean HttpHeaderBean} is the root concrete class for all header types.
  * Typed sub-classes (e.g. {@code HttpStringHeader}, {@code HttpDateHeader}) extend it to provide
  * strongly-typed accessors.

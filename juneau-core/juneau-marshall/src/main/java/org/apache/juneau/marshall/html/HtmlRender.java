@@ -28,8 +28,8 @@ import org.apache.juneau.marshall.serializer.*;
  * Using this class, you can alter the CSS style and HTML content of the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlRenderAnnotation">@Html(render) Annotation</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlAnnotation#htmlrender-annotation">@Html Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
  * </ul>
  *
  * @param <T> The bean property type.

@@ -100,7 +100,7 @@ import org.apache.juneau.rest.server.util.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestPathParam}
  * 	<li class='ja'>{@link Path}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
 */
 @SuppressWarnings({

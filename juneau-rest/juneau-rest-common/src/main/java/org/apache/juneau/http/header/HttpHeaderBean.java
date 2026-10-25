@@ -41,13 +41,6 @@ import org.apache.juneau.http.*;
  * 	HttpHeader <jv>h2</jv> = HttpHeaderBean.<jsm>of</jsm>(<js>"Authorization"</js>, () -> tokenSupplier.get());
  * </p>
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- * For production use cases that require long-term binary stability, continue using the existing
- * {@code juneau-rest-client} and {@code juneau-rest-common} APIs until the {@code ng} stack is declared stable.
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>

@@ -62,7 +62,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li class='jc'>{@link Consumer2} - Two-argument consumer
  * 	<li class='jc'>{@link Consumer3} - Three-argument consumer
  * 	<li class='jc'>{@link Consumer5} - Five-argument consumer
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons</a>
  * </ul>
  *
  * @param <A> The type of the first argument to the operation.

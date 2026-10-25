@@ -95,7 +95,7 @@ import org.apache.juneau.commons.beanquery.*;
  * 	<li class='ja'>{@link Request}
  * 	<li class='ja'>{@link Query}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsBeanQuery">BeanQuery</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsBeanQuery">BeanQuery Package</a>
  * </ul>
  *
  * @since 10.0.0

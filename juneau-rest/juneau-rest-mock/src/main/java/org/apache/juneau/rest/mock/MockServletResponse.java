@@ -33,7 +33,7 @@ import jakarta.servlet.http.*;
  * An implementation of {@link HttpServletResponse} for mocking purposes.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock</a>
  * </ul>
 */
 @SuppressWarnings({

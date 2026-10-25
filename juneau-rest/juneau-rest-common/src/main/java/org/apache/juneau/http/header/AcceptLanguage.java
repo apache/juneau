@@ -28,9 +28,6 @@ import org.apache.juneau.commons.http.*;
  * <p>
  * Acceptable languages for the response.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 public class AcceptLanguage extends HttpStringRangesHeader {

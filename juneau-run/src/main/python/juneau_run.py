@@ -2076,7 +2076,8 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     """A step row fitted to cols.  When it is too wide the bar gives way first, keeping its newest cells behind an
     ellipsis, so the label, count, totals and elapsed survive; only a row too wide even then is cut from the right.
     With wrap (a unit bar, one cell per unit) the bar never gives way: the cells that don't fit beside the label and
-    count continue on extra lines indented to the bar's column, and the result holds several lines joined by "\n"."""
+    count continue on extra lines indented to the bar's column and filling the width from there, and the result holds
+    several lines joined by "\n"."""
     if " / ~" in elapsed:       # the "M:SS / ~M:SS" timer gives way to plain elapsed when even the bare row won't fit
         bare = _vlen(label + ("  " + rest if rest else "")) + len(elapsed) + 2
         if bare > cols:
@@ -2087,7 +2088,7 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
     if wrap and room >= 1:
         indent = _vlen(label) + 2
-        per = room          # every line holds as many cells as the first
+        per = cols - indent     # the continuation lines carry no text, so they use the full width
         first, more = cells[:room], cells[room:]
         lines = [_fit(label + "  " + "".join(first) + "  " + rest, elapsed, cols)]
         lines += [" " * indent + "".join(more[i:i + per]) for i in range(0, len(more), per)]

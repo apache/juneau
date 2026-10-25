@@ -72,7 +72,7 @@ import java.time.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link NoOpMetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * </ul>
  *
  * @since 10.0.0

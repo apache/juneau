@@ -113,6 +113,9 @@ public final class BooleanFunctions {
 	}
 
 	/** Same truthiness table as {@link ArgCoercer}, exposed for variadic use in {@link And}/{@link Or}. */
+	@SuppressWarnings({
+		"javabugs:S2259" // The trimmed value is never null; a null input is mapped to the empty string first.
+	})
 	private static boolean parseBool(String s) {
 		var t = s == null ? "" : s.trim();
 		if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))

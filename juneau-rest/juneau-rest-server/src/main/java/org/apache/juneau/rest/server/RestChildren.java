@@ -49,7 +49,7 @@ import jakarta.servlet.*;
  * (path prefix matcher) is always populated at startup; only the full context build is deferred.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  * </ul>
  */
 @SuppressWarnings({

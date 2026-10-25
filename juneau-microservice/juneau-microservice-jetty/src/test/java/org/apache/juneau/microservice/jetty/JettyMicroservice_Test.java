@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
-import java.nio.file.*;
 import java.util.stream.*;
 
 import org.apache.juneau.microservice.*;
@@ -74,8 +73,6 @@ class JettyMicroservice_Test {
 		"resource" // ms is a server-lifetime resource stopped in the finally block; try-with-resources is not applicable.
 	})
 	void runStartsServerServesRequestAndStops() throws Exception {
-		// Pre-create the working-dir logs/ that the bundled jetty.xml's CustomRequestLog writes to.
-		Files.createDirectories(Path.of("logs"));
 		// Pre-publish a free ephemeral port; JettyServerComponent's @Value("${availablePort}") sentinel
 		// honors a pre-set value, and the bundled jetty.xml binds the connector to $S{availablePort}.
 		var port = reserveFreePort();

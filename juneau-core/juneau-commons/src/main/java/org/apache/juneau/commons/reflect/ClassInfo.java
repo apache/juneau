@@ -76,6 +76,7 @@ import org.apache.juneau.commons.inject.*;
 	"java:S1452", // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
 	"java:S3776", // appendNameFormatted(), getParameterType() and findToString() resolve class names/type variables/toString methods through many branching cases
 	"java:S6539", // Monster class; ClassInfo is intentionally a single cohesive reflection-metadata facade over Class
+	"javabugs:S2259", // of(Object) requires a non-null object, and findParents() loops only while nn(pc) holds; list() is never null.
 	"rawtypes", // Raw types necessary for generic type handling
 	"unchecked" // Type erasure requires unchecked casts
 })

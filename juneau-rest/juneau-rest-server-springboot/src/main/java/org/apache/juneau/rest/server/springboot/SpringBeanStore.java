@@ -50,7 +50,7 @@ import org.springframework.context.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>
  * 	<li class='jc'>{@link BasicBeanStore}
  * 	<li class='jic'>{@link BeanStore}
  * </ul>

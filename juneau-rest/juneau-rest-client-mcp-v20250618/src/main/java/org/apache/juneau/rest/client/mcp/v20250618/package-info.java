@@ -19,10 +19,6 @@
  * Typed <c>2025-06-18</c> Model Context Protocol (MCP) client facade.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This package builds directly on {@code org.apache.juneau.rest.client.mcp},
- * which is itself Beta.
- *
- * <p>
  * Key types:
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.client.mcp.v20250618.McpClient McpClient} — the typed <c>2025-06-18</c> client facade,

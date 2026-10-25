@@ -31,11 +31,6 @@ import org.apache.juneau.rest.client.assertion.*;
  * Wraps the transport-layer {@link TransportResponse} and provides higher-level accessors.
  * Callers <b>must</b> close this response (it implements {@link Closeable}) to release transport resources.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * @since 9.2.1
  */
 @SuppressWarnings({
@@ -86,11 +81,6 @@ public final class RestResponse implements Closeable {
 
 	/**
 	 * Returns the client that produced this response.
-	 *
-	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
-	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
-	 * (and possibly earlier).
 	 *
 	 * @return The client that produced this response. Never <jk>null</jk>.
 	 */

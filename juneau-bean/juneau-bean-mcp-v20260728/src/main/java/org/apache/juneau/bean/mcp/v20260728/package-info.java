@@ -23,7 +23,7 @@
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanMcp">juneau-bean-mcp-v20260728</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanMcp">juneau-bean-mcp-v20250618</a>
  * </ul>
  */
 package org.apache.juneau.bean.mcp.v20260728;

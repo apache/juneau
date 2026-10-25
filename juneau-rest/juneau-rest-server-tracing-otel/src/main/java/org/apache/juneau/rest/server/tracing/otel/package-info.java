@@ -45,7 +45,7 @@
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.otel.OtelTracerHook OtelTracerHook}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * 	<li class='link'><a class="doclink" href="https://opentelemetry.io/docs/specs/semconv/http/http-spans/">OpenTelemetry HTTP semantic conventions</a>
  * 	<li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>
  * </ul>

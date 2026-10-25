@@ -46,11 +46,6 @@ import org.apache.juneau.http.*;
  * 		.build();
  * </p>
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
@@ -59,7 +54,7 @@ import org.apache.juneau.http.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"java:S2326" // 'T' is a phantom type parameter binding a converter to its handled type for type-safe registration (BodyConverter<?> lists) and the of() factory; removing it would break this public (beta) API.
+	"java:S2326" // 'T' is a phantom type parameter binding a converter to its handled type for type-safe registration (BodyConverter<?> lists) and the of() factory; removing it would break this public API.
 })
 public interface BodyConverter<T> {
 

@@ -19,10 +19,6 @@
  * Next-generation HTTP response types.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack.
- * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
- *
- * <p>
  * Key types:
  * <ul>
  * 	<li>{@link org.apache.juneau.http.HttpStatusLine} — parsed HTTP status line (interface; lives in {@code org.apache.juneau.http})

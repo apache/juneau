@@ -51,7 +51,7 @@
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf">SAML 2.0 Core (OASIS)</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SamlAuthSupport">SAML Auth Support</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SamlAuthSupport">SAML 2.0 AuthN Support (juneau-rest-server-auth-saml)</a>
  * </ul>
  *
  * @since 10.0.0

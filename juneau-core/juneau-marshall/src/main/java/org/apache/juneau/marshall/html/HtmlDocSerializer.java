@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
 
  * </ul>
  */
@@ -226,7 +226,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	<li class='note'>
 		 * 		Format: HTML
 		 * 	<li class='note'>
-		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * 	<li class='note'>
 		 * 		A value of <js>"NONE"</js> can be used to force no value.

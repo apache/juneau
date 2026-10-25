@@ -29,9 +29,6 @@ import java.util.*;
  * This exception wraps the underlying transport library's exception so that callers do not need to handle
  * Apache HttpClient, OkHttp, or JDK {@code HttpClient} exceptions directly.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 public class TransportException extends IOException {

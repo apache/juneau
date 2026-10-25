@@ -80,7 +80,7 @@ import org.apache.juneau.marshall.json.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonlSupport">JSONL Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonlSupport">JSONL</a>
  * </ul>
  */
 @SuppressWarnings({

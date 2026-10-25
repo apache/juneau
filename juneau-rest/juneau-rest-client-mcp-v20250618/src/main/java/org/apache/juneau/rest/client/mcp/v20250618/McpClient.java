@@ -36,10 +36,6 @@ import org.apache.juneau.rest.client.mcp.*;
  * <c>result</c> re-marshaled into its typed v1 result bean, or throws an {@link McpException} built from the
  * response's <c>error</c>.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This class builds directly on {@code org.apache.juneau.rest.client.mcp},
- * which is itself Beta.
- *
  * @since 10.0.0
  */
 public class McpClient extends AbstractMcpClient {

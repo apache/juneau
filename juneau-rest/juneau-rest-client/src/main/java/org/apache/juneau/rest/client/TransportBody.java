@@ -30,9 +30,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * Transport implementations call {@link HttpBody#writeTo(OutputStream)} to stream the body directly to the
  * underlying connection, avoiding full in-memory buffering.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 public final class TransportBody {

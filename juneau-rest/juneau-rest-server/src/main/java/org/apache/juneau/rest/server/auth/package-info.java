@@ -77,8 +77,8 @@
  * {@link org.apache.juneau.rest.server.auth.TokenValidator TokenValidator} SPI from this package).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards — Bearer / API-Key / JWT</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  * </ul>
  *
  * @since 10.0.0

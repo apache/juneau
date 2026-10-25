@@ -26,9 +26,6 @@ import java.util.function.*;
  * <p>
  * The date and time at which the message was originated.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 public class Date extends HttpDateHeader {

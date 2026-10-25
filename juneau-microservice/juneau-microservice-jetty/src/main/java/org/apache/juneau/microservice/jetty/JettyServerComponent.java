@@ -26,6 +26,7 @@ import static org.apache.juneau.marshall.collections.JsonMap.*;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -112,6 +113,23 @@ public class JettyServerComponent implements MicroserviceListener {
 	 */
 	@Value("${juneau.serverPort}")
 	Optional<String> serverPortEnv = oe();
+
+	/**
+	 * Creates the directory the bundled <c>jetty.xml</c>'s request log writes into, so a fresh working directory starts.
+	 *
+	 * <p>
+	 * A failure is logged rather than thrown; Jetty reports the unusable directory when the request log starts.
+	 *
+	 * @param dir The log directory (<c>Logging/logDir</c>).
+	 * @param logger The logger to report a failure to.
+	 */
+	static void createLogDir(String dir, Logger logger) {
+		try {
+			Files.createDirectories(Path.of(dir));
+		} catch (IOException | InvalidPathException e) {
+			logger.warning("Could not create log directory '" + dir + "': " + e);
+		}
+	}
 
 	private static int[] parseIntArray(String csv) {
 		if (ie(csv))
@@ -241,6 +259,8 @@ public class JettyServerComponent implements MicroserviceListener {
 					jettyXml = vr.resolve(jettyXml);
 
 				ms.getLogger().config(jettyXml);
+
+				createLogDir(cf.get("Logging/logDir").orElse("logs"), ms.getLogger());
 
 				try {
 					server.set(factory.create(jettyXml));

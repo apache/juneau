@@ -33,7 +33,7 @@ import org.apache.juneau.http.remote.*;
  * members without introducing a cross-module dependency on freshly-installed common code.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * </ul>
  */
 public class RemoteProxyUtils {

@@ -56,7 +56,7 @@ import jakarta.servlet.http.*;
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6750">RFC 6750 &mdash; Bearer Token Usage</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  * </ul>
  *
  * @since 10.0.0

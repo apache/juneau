@@ -29,11 +29,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * {@link #getContentLength()} returns the file size, allowing transports to set {@code Content-Length}.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * @since 9.2.1
  */
 public final class FileBody implements HttpBody {

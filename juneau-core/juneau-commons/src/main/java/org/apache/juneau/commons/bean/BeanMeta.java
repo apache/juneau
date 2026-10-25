@@ -94,6 +94,7 @@ import org.apache.juneau.commons.utils.*;
 	"java:S1200", // Central bean-introspection type; high coupling to annotations/reflect/utils is inherent to its role
 	"java:S3776", // findBeanMethods() and the BeanMeta constructor apply the bean getter/setter/field discovery rules in a single pass; splitting them would scatter those rules
 	"java:S6539", // Monster class; BeanMeta is intentionally a single cohesive bean-introspection metadata cache
+	"javabugs:S2259", // The annotation lookups are guarded by isType()/hasConstructor() checks that flow analysis does not track.
 	"rawtypes", // Raw Class is used in the BeanFactory instantiation ((Class)fc) and in Class[]::new for record constructor lookup
 	"unchecked" // Casts to T/BeanFactory in the factory-create, Proxy.newProxyInstance and BeanInstantiator paths are guaranteed by the bean class being instantiated
 })

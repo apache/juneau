@@ -49,10 +49,6 @@ import org.apache.juneau.rest.client.*;
  * {@link #send(JsonRpcRequest)} creates a fresh request/response scope. Builders are single-use value assemblers:
  * calling {@code build()} twice creates two clients and both use the same explicitly configured transport instance.
  *
- * <p>
- * <b>Beta - API subject to change:</b> This class builds directly on {@code org.apache.juneau.rest.client}, which
- * is itself Beta.
- *
  * @since 10.0.0
  */
 @SuppressWarnings({

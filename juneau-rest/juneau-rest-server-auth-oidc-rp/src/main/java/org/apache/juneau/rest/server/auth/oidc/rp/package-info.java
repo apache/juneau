@@ -31,7 +31,7 @@
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oidc.rp.OidcRelyingParty OidcRelyingParty}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)</a>
  * 	<li class='link'><a class="doclink" href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a>
  * </ul>
  */

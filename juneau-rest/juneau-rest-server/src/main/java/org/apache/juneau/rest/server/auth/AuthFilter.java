@@ -55,7 +55,7 @@ import jakarta.servlet.http.*;
  * 	<li class='jc'>{@link AuthFilterChain}
  * 	<li class='jc'>{@link AuthResult}
  * 	<li class='jc'>{@link AuthenticatedRequestWrapper}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  * </ul>
  *
  * @since 10.0.0

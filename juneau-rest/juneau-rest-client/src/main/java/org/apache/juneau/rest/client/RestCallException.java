@@ -25,9 +25,6 @@ import java.io.*;
  * <p>
  * Network-level failures are reported as {@link TransportException}.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 public class RestCallException extends IOException {

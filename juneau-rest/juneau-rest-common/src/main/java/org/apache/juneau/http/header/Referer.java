@@ -26,9 +26,6 @@ import java.util.function.*;
  * <p>
  * The address of the previous web page.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 public class Referer extends HttpUriHeader {

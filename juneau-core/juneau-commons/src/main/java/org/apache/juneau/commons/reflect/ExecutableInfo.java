@@ -454,6 +454,9 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * @param name The name to test for.
 	 * @return <jk>true</jk> if this method has this name.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // getNameSimple() returns the declared name or the declaring class simple name and is never null.
+	})
 	public final boolean hasName(String name) {
 		return getNameSimple().equals(name);
 	}

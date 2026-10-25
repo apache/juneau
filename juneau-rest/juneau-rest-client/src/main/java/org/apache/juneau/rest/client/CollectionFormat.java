@@ -26,9 +26,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * When a parameter value is an {@link Iterable} or array, the elements are joined using the delimiter
  * corresponding to the selected format.  {@link #REPEATED} instead emits one name=value pair per element.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 public enum CollectionFormat {

@@ -219,6 +219,9 @@ public enum HttpPartFormat {
 	 * @param value The enum name.  Must not be <jk>null</jk>.
 	 * @return The enum.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The value must not be null, per the Javadoc contract; ucr() returns null only for a null input.
+	})
 	public static HttpPartFormat fromString(String value) {
 		value = ucr(value).replace('-', '_');
 		return valueOf(value);

@@ -58,7 +58,7 @@ import org.apache.juneau.rest.server.*;
  * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
  * </ul>
  */
 public class FileVar extends DefaultingVar {

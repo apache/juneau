@@ -157,6 +157,9 @@ final class ArgCoercer {
 	 * Parse the explicit truthiness table. Throws {@link IllegalArgumentException}
 	 * on inputs that don't match any TRUE or FALSE token.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The trimmed value comes from String.trim() and is never null.
+	})
 	private static boolean parseBoolean(String fnName, int argIndex, String s) {
 		var t = s.trim();
 		if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))

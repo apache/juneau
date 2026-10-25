@@ -108,7 +108,7 @@ import jakarta.servlet.http.Part;
  * 	<li class='jc'>{@link RequestFormParam}
  * 	<li class='ja'>{@link FormData}
  * 	<li class='ja'>{@link HasFormData}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */
 @SuppressWarnings({

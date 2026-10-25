@@ -45,7 +45,7 @@ package org.apache.juneau.rest.server.view;
  * override's own Javadoc for the exact per-engine behavior.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>
  *
  * @param <B> The implementing builder's own concrete type.

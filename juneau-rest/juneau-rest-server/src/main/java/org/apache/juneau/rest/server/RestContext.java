@@ -4286,7 +4286,7 @@ public class RestContext extends Context {
 	 * 		empty array) wins over the annotation default.
 	 * 	<li><b>Annotation default</b> &mdash; {@link Rest#paths()}, walked top-down across the resource-class
 	 * 		hierarchy with the most-derived non-empty value winning. Each element is
-	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>-resolved
+	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>-resolved
 	 * 		against the bootstrap {@link VarResolver VarResolver}, then comma-split (trim
 	 * 		each piece, drop empties).  A single element like {@code "$C{health.paths}"} can therefore expand
 	 * 		to multiple mount paths.
@@ -4688,7 +4688,7 @@ public class RestContext extends Context {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * </ul>
 	 *
 	 * @return The var resolver in use by this resource.

@@ -36,7 +36,7 @@ package org.apache.juneau.marshall.swap.spi;
  * 	}
  *
  * 	<jc>// Use it to serialize a byte array.</jc>
- * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+ * 	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsm>create</jsm>().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
  * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *

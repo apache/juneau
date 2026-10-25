@@ -81,12 +81,7 @@ public final class WebJarResolver {
 	 */
 	public static String version(String groupId, String artifactId) {
 		var key = groupId + ":" + artifactId;
-		var v = VERSIONS.get(key);
-		if (v == null) {
-			v = readVersion(groupId, artifactId);
-			VERSIONS.put(key, v);
-		}
-		return v;
+		return VERSIONS.computeIfAbsent(key, k -> readVersion(groupId, artifactId));
 	}
 
 	/**

@@ -73,7 +73,7 @@ import org.apache.juneau.http.remote.*;
  * with the default {@link Redirect#NEVER} (the JDK default) to let this transport's own redirect loop apply.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 9.2.1

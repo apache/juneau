@@ -26,9 +26,6 @@ import org.apache.juneau.commons.http.*;
 /**
  * Base type for headers whose value is a single {@link MediaType} (e.g. {@code Content-Type}).
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 @SuppressWarnings({

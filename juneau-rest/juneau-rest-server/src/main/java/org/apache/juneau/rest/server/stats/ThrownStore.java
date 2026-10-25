@@ -234,6 +234,9 @@ public class ThrownStore {
 	 * @param e The exception to add.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The exception must not be null, per the Javadoc contract; find() returns null only for a null input.
+	})
 	public ThrownStats add(Throwable e) {
 		ThrownStats s = find(e);
 		s.increment();

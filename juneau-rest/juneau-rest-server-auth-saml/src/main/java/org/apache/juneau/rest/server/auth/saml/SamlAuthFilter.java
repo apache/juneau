@@ -86,7 +86,7 @@ import jakarta.servlet.http.*;
  * 	<li class='jc'>{@link SamlAssertionValidator}
  * 	<li class='jc'>{@link SamlBinding}
  * 	<li class='link'><a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf">SAML 2.0 Bindings (OASIS)</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  * </ul>
  *
  * @since 10.0.0

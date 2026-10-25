@@ -38,7 +38,7 @@
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerReactive">REST Server &mdash; Reactive Streams</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerReactive">Reactive-Streams Returns</a>
  * </ul>
  *
  * @since 10.0.0

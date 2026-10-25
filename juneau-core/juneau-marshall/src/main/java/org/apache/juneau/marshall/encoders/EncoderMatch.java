@@ -20,7 +20,7 @@ package org.apache.juneau.marshall.encoders;
  * Represents a encoder and encoding that matches an HTTP <c>Accept-Encoding</c> header value.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallEncoders">Encoders</a>
  * </ul>
  */
 public class EncoderMatch {

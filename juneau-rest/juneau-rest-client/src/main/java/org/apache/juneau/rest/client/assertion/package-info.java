@@ -18,9 +18,6 @@
 /**
  * Fluent assertion classes for HTTP response validation in the REST client.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack.
- *
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseAssertion ResponseAssertion} — root assertion for status, headers, body
  * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseHeaderAssertion ResponseHeaderAssertion} — header-level assertions

@@ -69,7 +69,7 @@ import org.apache.juneau.rest.server.processor.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link TracerHook}
  * 	<li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * </ul>
  *
  * @since 10.0.0

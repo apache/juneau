@@ -90,13 +90,10 @@ class StaticFilesMixin_AsMixin_Test extends TestBase {
 		head.assertContent().is("");
 
 		// Header parity (RFC 7231 §4.3.2).
-		var headContentType = head.getHeader("Content-Type").asString().orElse("");
-		var headContentLength = head.getHeader("Content-Length").asString().orElse("");
 		if (!getContentType.isEmpty())
 			head.assertHeader("Content-Type").is(getContentType);
 		if (!getContentLength.isEmpty())
 			head.assertHeader("Content-Length").is(getContentLength);
-		assert headContentType != null && headContentLength != null;
 	}
 
 	@Test void a05_headMissingFileReturns404() throws Exception {

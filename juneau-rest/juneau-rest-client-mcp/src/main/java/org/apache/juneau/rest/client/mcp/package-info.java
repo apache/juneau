@@ -20,11 +20,6 @@
  * auth-token seam, and the pluggable response cache that per-revision {@code McpClient} facades build on.
  *
  * <p>
- * <b>Beta - API subject to change:</b> This package builds directly on {@code org.apache.juneau.rest.client},
- * which is itself Beta. Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau
- * release (and possibly earlier).
- *
- * <p>
  * Key types:
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.client.mcp.AbstractMcpClient AbstractMcpClient} - neutral base class; per-revision

@@ -170,7 +170,7 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContexts">Bean Context Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContexts">Bean Contexts</a>
  * </ul>
  */
 @SuppressWarnings({

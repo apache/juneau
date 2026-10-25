@@ -98,17 +98,45 @@ public class ArgsPropertySource implements PropertySource {
 		var args = argsSupplier.get();
 		if (args == null)
 			return PropertyLookupResult.missing();
-		try {
-			var index = Integer.parseInt(name);
-			var v = args.get(index);
-			return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();
-		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			// Fall through.
+		if (isIndex(name)) {
+			try {
+				var v = args.get(Integer.parseInt(name));
+				return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();
+			} catch (@SuppressWarnings("unused") NumberFormatException e) {
+				// Out of int range; fall through.
+			}
 		}
 		var values = args.getAll(name);
 		if (! values.isEmpty())
 			return PropertyLookupResult.present(o(String.join(",", values)));
 		var v = args.get(name);
 		return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the name has the shape of an integer (optional sign followed by digits).
+	 *
+	 * <p>
+	 * Guards {@link Integer#parseInt(String)} so that ordinary non-numeric keys do not pay for a thrown exception.
+	 */
+	static boolean isIndex(String name) {
+		if (name == null)
+			return false;
+		var n = name.length();
+		if (n == 0)
+			return false;
+		var i = 0;
+		var c = name.charAt(0);
+		if (c == '-' || c == '+') {
+			if (n == 1)
+				return false;
+			i = 1;
+		}
+		for (; i < n; i++) {
+			c = name.charAt(i);
+			if (c < '0' || c > '9')
+				return false;
+		}
+		return true;
 	}
 }

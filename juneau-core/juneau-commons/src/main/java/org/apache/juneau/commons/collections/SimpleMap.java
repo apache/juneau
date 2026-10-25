@@ -119,7 +119,8 @@ import org.apache.juneau.commons.utils.*;
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
-	"java:S3740" // Raw Map/Iterator types used in simple map structural operations where key/value types are erased
+	"java:S3740", // Raw Map/Iterator types used in simple map structural operations where key/value types are erased
+	"javabugs:S2259" // entrySet() never returns null under the Map contract.
 })
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
 

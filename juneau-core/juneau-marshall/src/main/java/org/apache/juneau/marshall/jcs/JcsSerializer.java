@@ -94,7 +94,7 @@ import org.apache.juneau.marshall.stream.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Jcs">JCS topic</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Jcs">JCS</a>
  * 	<li class='jc'>{@link Jcs}
  * 	<li class='jc'>{@link JsonParser}
  * </ul>

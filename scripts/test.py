@@ -853,18 +853,43 @@ def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installe
 	return code
 
 
+def module_surefire_extra_args(module_dir):
+	"""The module pom's own <surefire.extraArgs> value (e.g. the mockito agent), or "" when it sets none."""
+	match = re.search(r"<surefire\.extraArgs>(.*?)</surefire\.extraArgs>", (module_dir / "pom.xml").read_text(), re.S)
+	return match.group(1).strip() if match else ""
+
+
+def profile_command(module, output_path):
+	"""The mvn command that profiles one module, run from that module's directory.
+
+	The jacoco agent is skipped, because its prepare-agent goal rewrites argLine after any -DargLine, and the JFR flags
+	ride on -Dsurefire.extraArgs (which the surefire argLine already appends) after the module's own value.
+	"""
+	module_dir = REPO_ROOT / module
+	jfr = f"-XX:FlightRecorderOptions:stackdepth=1024 -XX:StartFlightRecording=filename={output_path},settings=profile,dumponexit=true"
+	extra = " ".join(part for part in (module_surefire_extra_args(module_dir), jfr) if part)
+	mvn = f"mvn test -Drat.skip=true -Djacoco.skip=true {shlex.quote('-Dsurefire.extraArgs=' + extra)}"
+	return f"cd {shlex.quote(str(module_dir))} && {wrap_mvn_command(mvn)}"
+
+
 def profile(module):
 	ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-	profile_dir = Path("target/profile-results")
+	profile_dir = (REPO_ROOT / "target" / "profile-results").resolve()
 	profile_dir.mkdir(parents=True, exist_ok=True)
 	safe_module = module.replace("/", "-")
-	output_file = profile_dir / f"{safe_module}-{ts}.jfr"
-	# Overriding argLine deliberately drops the JaCoCo agent so instrumentation doesn't skew the profile.
-	argline = f"-XX:StartFlightRecording=filename={output_file},settings=profile,dumponexit=true"
-	cmd = f"mvn test -pl {module} -Drat.skip=true -DargLine='{argline}'"
-	code, out = run_command(cmd, "profile", "Profile", label="Profile")
-	if code == 0:
-		say(f"\n✅ JFR profile captured at {output_file}", "warn")
+	# An absolute directory, so it does not resolve against each forked JVM's working directory.  JFR writes one
+	# hotspot-pid-<pid>-id-<n>-<timestamp>.jfr into it per JVM, so executions and forks never overwrite each other.
+	output_dir = profile_dir / f"{safe_module}-{ts}"
+	output_dir.mkdir()
+	code, out = run_command(profile_command(module, output_dir), "profile", "Profile", label="Profile")
+	if code != 0:
+		return code, out
+	written = sorted(output_dir.glob("*.jfr"))
+	if not written:
+		say(f"\n❌ mvn passed but no JFR file was written under {output_dir}.", "error")
+		return 1, out
+	for jfr_file in written:
+		say(f"\n✅ JFR profile captured at {jfr_file}", "warn")
 	return code, out
 
 

@@ -59,7 +59,7 @@ import org.springframework.core.env.*;
  * Spring context is built (e.g. from a user-provided microservice {@code Config}) still win.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">{@code @Value} basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">@Value Annotation Basics</a>
  * 	<li class='jc'>{@link SpringBeanStore}
  * </ul>
  */

@@ -22,9 +22,6 @@ package org.apache.juneau.http.header;
  * <p>
  * Request precondition on entity tags.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 import java.util.function.*;

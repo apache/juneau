@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.collections.*;
  * 	}
  *
  * 	<jc>// Use it to serialize a byte array.</jc>
- * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
+ * 	WriterSerializer <jv>serializer</jv> = Json5Serializer.<jsm>create</jsm>().swaps(MyBeanSwap.<jk>class</jk>).build();
  * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
  * </p>
  *

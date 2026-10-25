@@ -119,6 +119,9 @@ public class StringRanges {
 	 *
 	 * @param e The parsed string range header value.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The header element array must not be null, per the Javadoc contract.
+	})
 	public StringRanges(HeaderElement...e) {
 
 		value = new StringRange[e.length];

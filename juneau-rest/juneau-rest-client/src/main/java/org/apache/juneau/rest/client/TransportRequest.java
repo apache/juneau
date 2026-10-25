@@ -36,9 +36,6 @@ import org.apache.juneau.http.remote.*;
  * Transport implementations receive a {@link TransportRequest} and are responsible for executing it against
  * the remote server, returning a {@link TransportResponse}.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 public final class TransportRequest {
@@ -213,9 +210,6 @@ public final class TransportRequest {
 
 	/**
 	 * Fluent builder for {@link TransportRequest}.
-	 *
-	 * <p>
-	 * <b>Beta — API subject to change.</b>
 	 *
 	 * @since 9.2.1
 	 */

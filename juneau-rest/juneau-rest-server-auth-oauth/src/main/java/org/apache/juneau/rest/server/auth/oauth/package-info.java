@@ -44,7 +44,7 @@
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6749">RFC 6749 &mdash; OAuth 2.0</a>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7662">RFC 7662 &mdash; Token Introspection</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OAuthAuthSupport">OAuth Auth Support</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OAuthAuthSupport">OAuth 2.0 / OIDC AuthN Support (juneau-rest-server-auth-oauth)</a>
  * </ul>
  *
  * @since 10.0.0

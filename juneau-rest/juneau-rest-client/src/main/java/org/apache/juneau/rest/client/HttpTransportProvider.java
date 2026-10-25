@@ -27,9 +27,6 @@ package org.apache.juneau.rest.client;
  * When no transport is explicitly set, {@code RestClient} uses {@link java.util.ServiceLoader} to load all
  * available providers and selects the first one whose {@link #isAvailable()} returns {@code true}.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @since 9.2.1
  */
 public interface HttpTransportProvider {

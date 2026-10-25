@@ -359,6 +359,9 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The parser is null-checked by reqnn() in the delegating constructor call.
+	})
 	public MarshalledMap(java.io.Reader in, Parser p) throws ParseException {
 		this(reqnn("p", p).getMarshallingContext().getSession());
 		p.readIntoMap(in, this, bs().string(), bs().object());

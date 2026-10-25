@@ -29,11 +29,6 @@ import org.apache.juneau.rest.client.*;
  * <p>
  * Obtain instances via {@link ResponseAssertion#body()}.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
@@ -62,7 +57,7 @@ public final class ResponseBodyAssertion {
 	 * @throws UncheckedIOException If reading the body throws {@link IOException}.
 	 */
 	@SuppressWarnings({
-		"java:S1201" // 'equals(String)' is an intentional fluent-assertion DSL method (asserts body equality), not an override of Object.equals(Object); renaming would break this public (beta) API.
+		"java:S1201" // 'equals(String)' is an intentional fluent-assertion DSL method (asserts body equality), not an override of Object.equals(Object); renaming would break this public API.
 	})
 	public ResponseBodyAssertion equals(String expected) {
 		var actual = readBodyAsString();

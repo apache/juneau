@@ -51,7 +51,8 @@ import org.apache.juneau.commons.bean.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S110" // Inherited hierarchy depth from ParseException; acceptable for a specific parse failure.
+	"java:S110", // Inherited hierarchy depth from ParseException; acceptable for a specific parse failure.
+	"java:S2166" // ParseException extends BasicRuntimeException, so the class is a runtime exception and the name is accurate.
 })
 public class MissingRequiredPropertyException extends ParseException {
 

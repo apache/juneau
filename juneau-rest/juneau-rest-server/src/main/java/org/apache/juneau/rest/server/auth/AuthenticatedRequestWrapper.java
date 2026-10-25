@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='jc'>{@link AuthFilterChain}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  * </ul>
  *
  * @since 10.0.0

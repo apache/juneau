@@ -124,6 +124,9 @@ final class PeerRanges {
 
 	// An IPv4-mapped IPv6 address is the IPv4 address it carries.  InetAddress.getByName and getByAddress(byte[]) collapse
 	// it already; Inet6Address.getByAddress(host, bytes, scope) does not.
+	@SuppressWarnings({
+		"java:S1168" // A null address means "no peer address" and contains() tests for it; an empty array would be a different, invalid address.
+	})
 	private static byte[] unwrap(byte[] a) {
 		if (a == null)
 			return null;

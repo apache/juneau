@@ -132,6 +132,59 @@ class PropertySources_Test extends TestBase {
 	}
 
 	@Test
+	void c05a_args_isIndex_onlyForParseableIntegers() {
+		assertTrue(ArgsPropertySource.isIndex("0"));
+		assertTrue(ArgsPropertySource.isIndex("12"));
+		assertTrue(ArgsPropertySource.isIndex("-1"));
+		assertTrue(ArgsPropertySource.isIndex("+3"));
+		assertFalse(ArgsPropertySource.isIndex(null));
+		assertFalse(ArgsPropertySource.isIndex(""));
+		assertFalse(ArgsPropertySource.isIndex("-"));
+		assertFalse(ArgsPropertySource.isIndex("port"));
+		assertFalse(ArgsPropertySource.isIndex("1a"));
+		assertFalse(ArgsPropertySource.isIndex("a.b.c"));
+	}
+
+	@Test
+	void c05b_args_nonNumericKey_missingWithoutNumberFormatException() {
+		var src = new ArgsPropertySource(() -> new Args("pos0"));
+		assertFalse(src.get("not.a.number").isPresent());
+		assertFalse(src.get("1a").isPresent());
+		assertFalse(src.get("").isPresent());
+	}
+
+	@Test
+	void c05e_args_nullKey_fallsThroughToNamedLookupAsBefore() {
+		var args = new Args("-port 8080");
+		var src = new ArgsPropertySource(() -> args);
+		// Before the guard, parseInt(null) threw NumberFormatException and fell through to the named lookup.
+		boolean expectedThrows;
+		try {
+			args.getAll(null);
+			expectedThrows = false;
+		} catch (NullPointerException e) {
+			expectedThrows = true;
+		}
+		if (expectedThrows)
+			assertThrows(NullPointerException.class, () -> src.get(null));
+		else
+			assertFalse(src.get(null).isPresent());
+	}
+
+	@Test
+	void c05c_args_overflowingNumericKey_stillMissing() {
+		var src = new ArgsPropertySource(() -> new Args("pos0"));
+		assertFalse(src.get("99999999999999999999").isPresent());
+	}
+
+	@Test
+	void c05d_args_negativeIndex_behavesAsBefore() {
+		var args = new Args("pos0");
+		var src = new ArgsPropertySource(() -> args);
+		assertEquals(args.get(-1).isPresent(), src.get("-1").isPresent());
+	}
+
+	@Test
 	void c06_args_multiValueOption_joinedWithComma() {
 		var src = new ArgsPropertySource(() -> new Args("-tag a -tag b -tag c"));
 		var r = src.get("tag");

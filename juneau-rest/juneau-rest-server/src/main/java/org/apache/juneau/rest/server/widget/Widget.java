@@ -165,7 +165,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * </ul>
 	 *
 	 * @param req The current HTTP request. Must not be <jk>null</jk>.
@@ -204,7 +204,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * </ul>
 	 *
 	 * @param req The current HTTP request. Must not be <jk>null</jk>.
@@ -243,7 +243,7 @@ public abstract class Widget implements HtmlWidget {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * </ul>
 	 *
 	 * @param req The current HTTP request. Must not be <jk>null</jk>.

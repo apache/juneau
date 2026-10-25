@@ -324,6 +324,9 @@ public class CborTokenWriter implements TokenWriter {
 			stackAwaitingKey[depth - 1] = true;  // next emit inside this map should be a key
 	}
 
+	@SuppressWarnings({
+		"javabugs:S6466" // The stack arrays start at 16 and double whenever depth reaches their length, so depth always indexes a live slot.
+	})
 	private void pushContainer(boolean isMap) {
 		if (depth == stackIsMap.length) {
 			var n = depth * 2;

@@ -94,7 +94,7 @@ import jakarta.servlet.http.*;
  * and {@link java.util.Locale} are request-scoped and survive correctly.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsyncDispatch">Async Response Handling</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsyncDispatch">Async Returns + Virtual-Thread Dispatch</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  *

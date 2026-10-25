@@ -53,7 +53,7 @@ import org.apache.juneau.commons.settings.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsUtils">juneau-commons - Utils Package</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsUtils">Utils Package</a>
  * </ul>
  */
 @SuppressWarnings({

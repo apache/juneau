@@ -61,6 +61,9 @@ public class StringRange {
 	 *
 	 * @param e The parsed string range element.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The header element must not be null, per the Javadoc contract.
+	})
 	public StringRange(HeaderElement e) {
 		Float qValue2 = 1f;
 

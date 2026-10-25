@@ -79,7 +79,7 @@ import jakarta.servlet.*;
  * the automatic mount.  It must be the injected instance; a new instance is a second, separate filter.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty</a>
  * </ul>
  *
  * @since 10.0.0

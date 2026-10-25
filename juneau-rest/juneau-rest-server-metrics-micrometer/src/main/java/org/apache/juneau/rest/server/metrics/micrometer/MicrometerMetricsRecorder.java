@@ -91,7 +91,7 @@ import io.micrometer.core.instrument.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link MetricsRecorder}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * 	<li class='link'><a class="doclink" href="https://micrometer.io/docs/concepts">Micrometer Concepts</a>
  * </ul>
  *

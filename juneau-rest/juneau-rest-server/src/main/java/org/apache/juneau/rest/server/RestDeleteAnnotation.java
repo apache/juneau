@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.matcher.*;
  * Utility classes and methods for the {@link RestDelete @RestDelete} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
  * </ul>
  */
 public class RestDeleteAnnotation {

@@ -904,7 +904,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 	}
 
 	@Test void a35_timeZone() throws Exception {
-		var x = client().timeZone(TimeZone.getTimeZone("Z")).build().post("/echoBody",A35.get()).run().cacheContent().assertContent("{foo:1}").getContent().as(A35.class);
+		var x = client().timeZone(TimeZone.getTimeZone("GMT")).build().post("/echoBody",A35.get()).run().cacheContent().assertContent("{foo:1}").getContent().as(A35.class);
 		assertEquals(1,x.foo);
 	}
 

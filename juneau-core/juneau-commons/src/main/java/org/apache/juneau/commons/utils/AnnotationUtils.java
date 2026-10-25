@@ -153,6 +153,9 @@ public class AnnotationUtils {
 		return Arrays.hashCode((Object[])o);
 	}
 
+	@SuppressWarnings({
+		"javabugs:S2259" // Class.getDeclaredMethods() never returns null, so fixedSizeList() never returns null here.
+	})
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
 		return fixedSizeList(type.getDeclaredMethods()).stream();
 	}

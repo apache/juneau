@@ -24,11 +24,6 @@ import org.apache.juneau.rest.client.*;
  * <p>
  * Obtain instances via {@link ResponseAssertion#header(String)}.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
@@ -70,8 +65,9 @@ public final class ResponseHeaderAssertion {
 	 * @throws AssertionError If the header is present.
 	 */
 	public ResponseHeaderAssertion isAbsent() {
-		if (response.getFirstHeader(name) != null)
-			throw new AssertionError("Expected header '" + name + "' to be absent but was present with value: " + response.getFirstHeader(name).value());
+		var h = response.getFirstHeader(name);
+		if (h != null)
+			throw new AssertionError("Expected header '" + name + "' to be absent but was present with value: " + h.value());
 		return this;
 	}
 
@@ -83,7 +79,7 @@ public final class ResponseHeaderAssertion {
 	 * @throws AssertionError If the value does not match.
 	 */
 	@SuppressWarnings({
-		"java:S1201" // 'equals(String)' is an intentional fluent-assertion DSL method (asserts header equality), not an override of Object.equals(Object); renaming would break this public (beta) API.
+		"java:S1201" // 'equals(String)' is an intentional fluent-assertion DSL method (asserts header equality), not an override of Object.equals(Object); renaming would break this public API.
 	})
 	public ResponseHeaderAssertion equals(String expected) {
 		var h = response.getFirstHeader(name);

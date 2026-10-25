@@ -46,7 +46,7 @@ import java.util.*;
  * 	<li class='jc'>{@link OidcSession}
  * 	<li class='jc'>{@link InMemorySessionStore}
  * 	<li class='jc'>{@link SignedCookieSessionStore}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)</a>
  * </ul>
  *
  * @since 10.0.0

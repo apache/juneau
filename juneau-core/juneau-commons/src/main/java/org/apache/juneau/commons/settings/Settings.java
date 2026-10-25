@@ -450,7 +450,7 @@ public class Settings {
 				return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
 
 			// 2. Check global override
-			v = globalStore.get().get(name);
+			v = globalLookup(name);
 			if (v.isPresent())
 				return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
 
@@ -501,7 +501,7 @@ public class Settings {
 		var v = localStore.get().get(name);
 		if (v.isPresent())
 			return v.value();
-		v = globalStore.get().get(name);
+		v = globalLookup(name);
 		if (v.isPresent())
 			return v.value();
 		return oe();
@@ -521,7 +521,13 @@ public class Settings {
 	 */
 	public boolean isOverridden(String name) {
 		reqnn("name", name);
-		return localStore.get().get(name).isPresent() || globalStore.get().get(name).isPresent();
+		return localStore.get().get(name).isPresent() || globalLookup(name).isPresent();
+	}
+
+	/** Looks up an override in the global store, which is absent (null) when global overrides are disabled. */
+	private PropertyLookupResult globalLookup(String name) {
+		var store = globalStore.get();
+		return n(store) ? PropertyLookupResult.missing() : store.get(name);
 	}
 
 	/**

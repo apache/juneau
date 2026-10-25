@@ -29,7 +29,7 @@ import org.apache.juneau.test.assertions.*;
  * Implementation of a named object.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */
 @Marshalled(as=MarshalledAs.STRING)

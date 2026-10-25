@@ -51,7 +51,7 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 4. Perf guard: compares the suite wall clock with the `suite` line of `perf-baseline.txt`, and each module's reactor time with its `[modules]` entry. The report is written to `target/perf-guard.txt` (`run_perf_guard`).
 5. Python tests: runs `scripts/tests` with `python3 -m pytest`, or `uv run --native-tls --with pytest pytest` when pytest is not importable (`script_tests`).
 6. Browser tests: with `-Pjs-tests` in the views, petstore-core and terminal modules (`maybe_run_js_tests`). Without `--js-tests` or `--no-js-tests`, they run automatically when a `.js`, `.cjs`, `.css` or `.ftl` file under a `src/` tree differs from `origin/master`.
-7. `--profile` runs `mvn test -pl <module> -Drat.skip=true` with a JFR `argLine` and writes `target/profile-results/<module>-<timestamp>.jfr` (`profile`).
+7. `--profile` runs `mvn test -Drat.skip=true -Djacoco.skip=true` from the module's directory, with the JFR flags (including `stackdepth=1024`) appended to the module's own `-Dsurefire.extraArgs`. It writes one `hotspot-pid-<pid>-id-<n>-<time>.jfr` per forked JVM under `<repo>/target/profile-results/<module>-<timestamp>/`, and fails if Maven passes but no file exists (`profile`). Read a recording with `jfr print --json --stack-depth 300 <file>`; the default depth of 5 hides every Juneau frame.
 
 ## Output and exit codes
 
@@ -72,7 +72,7 @@ Maven output, a status line per step, and the perf-guard report. The run header 
 - The pytest step is skipped with a notice when neither pytest nor `uv` is available. Nothing is installed.
 - The browser tests download Playwright and Chromium on the first run, so they need network access.
 - `JUNEAU_RUN_HISTORY=0` turns off the run history, which `--rebaseline` and `push-timings.py` depend on.
-- `--profile` replaces `argLine`, which drops the JaCoCo agent so it does not skew the profile.
+- `--profile` skips JaCoCo with `-Djacoco.skip=true`, because its `prepare-agent` goal rewrites `argLine` after any `-DargLine`. Upstream modules are not built or tested: the run starts in the module directory, not from the root with `-pl`.
 - The default mode runs `mvn clean install`, which replaces the Juneau artifacts in `~/.m2`.
 
 ## See also

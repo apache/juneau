@@ -355,7 +355,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 	}
 
 	private Object decodeMapComponent(ClassMeta<?> cm, ProtobufReader is) throws IOException, ParseException, ExecutableException {
-		var swap = cm == null ? null : cm.getSwap(this);
+		var swap = cm.getSwap(this);
 		if (swap != null)
 			return decodeSwapped(swap, cm, is, null);
 		if (cm.isBean() || cm.isMap())

@@ -64,7 +64,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * auto-wired (explicit-over-magic).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>
  *
  * @serial exclude

@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.httppart.*;
  * Represents the information needed to serialize a response part such as a response header or content.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */
 public class ResponsePartMeta {

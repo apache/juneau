@@ -94,7 +94,7 @@ import org.apache.juneau.rest.server.*;
  * {@link Clock} (default {@link Clock#systemUTC()}), likewise overridable through a package-private constructor.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">REST Server — Rate-Limiting and Request-Id Propagation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">Rate-Limiting and Request-Id Propagation</a>
  * </ul>
  *
  * @since 10.0.0

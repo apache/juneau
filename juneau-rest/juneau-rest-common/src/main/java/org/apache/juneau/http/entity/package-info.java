@@ -19,10 +19,6 @@
  * Next-generation HTTP body (entity) implementations.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack.
- * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
- *
- * <p>
  * Concrete body types:
  * <ul>
  * 	<li>{@link org.apache.juneau.http.entity.StringBody StringBody} — UTF-8 string content

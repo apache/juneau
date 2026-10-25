@@ -163,6 +163,9 @@ public class Lists<E> {
 	 * @param value The value to add to this list.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // list() called with no arguments always returns a new list.
+	})
 	public Lists<E> add(E value) {
 		if (list == null)
 			list = list();

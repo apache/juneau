@@ -61,6 +61,9 @@ import org.apache.juneau.rest.server.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated literals read more clearly inline than as constants.
+})
 public final class PageContractAssert {
 
 	private static final Pattern ISLAND = Pattern.compile(

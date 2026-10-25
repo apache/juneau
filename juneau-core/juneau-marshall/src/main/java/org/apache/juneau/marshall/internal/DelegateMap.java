@@ -47,6 +47,7 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	 * @param session The current bean session.
 	 */
 	@SuppressWarnings({
+		"javabugs:S2259", // The map must not be null, per the constructor contract.
 		"unchecked" // Type erasure requires cast for Map operations
 	})
 	public DelegateMap(T m, MarshallingSession session) {

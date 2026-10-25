@@ -50,7 +50,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link BeanProp}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledPropAnnotation">@MarshalledProp Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanPropAnnotation">@BeanProp Annotation</a>
  * </ul>
  */
 @Documented
@@ -104,7 +104,7 @@ public @interface MarshalledProp {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#activeView(String)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ViewProjection">View-based Projection</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ViewProjection">View-Based Projection</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.

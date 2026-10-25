@@ -25,9 +25,6 @@ import java.util.function.*;
  * <p>
  * Response fields that determine cache matching.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 @SuppressWarnings({

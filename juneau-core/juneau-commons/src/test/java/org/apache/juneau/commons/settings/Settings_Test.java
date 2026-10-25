@@ -858,6 +858,23 @@ class Settings_Test extends TestBase {
 		assertThrows(IllegalStateException.class, settings::clearGlobal);
 	}
 
+	@Test
+	void s04_lookups_whenGlobalStoreDisabled() {
+		// Create Settings with null global store (disabled)
+		var settings = Settings.create()
+			.globalStore(NullableSupplier.empty())
+			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
+			.build();
+
+		// Lookups skip the missing global store instead of failing
+		assertFalse(settings.isOverridden(TEST_PROP));
+		assertTrue(settings.getOverride(TEST_PROP).isEmpty());
+		assertFalse(settings.get(TEST_PROP).isPresent());
+
+		System.setProperty(TEST_PROP, "system-value");
+		assertEquals("system-value", settings.get(TEST_PROP).get());
+	}
+
 	//====================================================================================================
 	// MapStore.unset() - Coverage for line 134 (when map is null)
 	//====================================================================================================

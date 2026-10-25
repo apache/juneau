@@ -50,7 +50,7 @@ import java.util.*;
  * 	<li class='jc'>{@link JulLogBackend}
  * 	<li class='jc'>{@link LoggersManager}
  * 	<li class='jc'>{@link LoggersSettings}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>
  *
  * @since 10.0.0

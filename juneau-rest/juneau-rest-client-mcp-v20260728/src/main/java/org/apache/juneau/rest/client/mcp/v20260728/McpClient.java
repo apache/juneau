@@ -53,10 +53,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * A server-initiated request delivered over the duplex event-stream channel is routed through the
  * {@link McpDuplexDispatcher} registered via {@link #setServerRequestHandler(McpServerRequestHandler)}.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This class builds directly on {@code org.apache.juneau.rest.client.mcp},
- * which is itself Beta.
- *
  * @since 10.0.0
  */
 @SuppressWarnings({

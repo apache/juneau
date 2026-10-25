@@ -36,7 +36,7 @@ import jakarta.servlet.http.*;
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='jc'>{@link AuthFilterChain}
  * 	<li class='jc'>{@link RestAuthenticator}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator — Resource-Level Authentication</a>
  * </ul>
  *
  * @since 10.0.0

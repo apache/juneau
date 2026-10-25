@@ -38,11 +38,6 @@ import org.apache.juneau.marshall.sse.*;
  * <p>
  * Obtain instances from the {@link RestClient} factory methods (e.g. {@link RestClient#get(String)}).
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * @since 9.2.1
  */
 @SuppressWarnings({

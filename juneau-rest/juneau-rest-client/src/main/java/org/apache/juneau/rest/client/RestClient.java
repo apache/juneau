@@ -277,11 +277,6 @@ public final class RestClient implements Closeable {
 	 * Only an explicit default set via {@link Builder#defaultSerializer(Serializer)} is honored — there is no implicit
 	 * JSON fallback and no lone-registered-entry fallback.  A fully-unconfigured client returns {@link Optional#empty()}.
 	 *
-	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
-	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
-	 * (and possibly earlier).
-	 *
 	 * @return The configured default serializer, or {@link Optional#empty()} if none was set.
 	 */
 	public Optional<Serializer> getDefaultSerializer() {
@@ -296,11 +291,6 @@ public final class RestClient implements Closeable {
 	 * explicitly-configured {@link Builder#defaultParser(Parser) default parser} is used; otherwise
 	 * {@link Optional#empty()} is returned.  There is no implicit JSON fallback and no lone-registered-entry fallback,
 	 * so a fully-unconfigured client resolves to empty (callers throw <c>415 Unsupported Media Type</c>).
-	 *
-	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
-	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
-	 * (and possibly earlier).
 	 *
 	 * @param contentType The response {@code Content-Type} header value. May be <jk>null</jk>.
 	 * @return The matching parser, or {@link Optional#empty()} if nothing matched and no default parser is configured.
@@ -324,9 +314,6 @@ public final class RestClient implements Closeable {
 	 * serializer but still send the overridden {@code Content-Type} label).  An explicitly-configured single default
 	 * serializer is also consulted when no set is registered.
 	 *
-	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
-	 *
 	 * @param mediaType The desired request media type. May be <jk>null</jk>/empty.
 	 * @return The matching serializer, or {@link Optional#empty()} if no registered serializer matches.
 	 */
@@ -344,9 +331,6 @@ public final class RestClient implements Closeable {
 	 * response {@code Content-Type} matched no registered parser (or the response was unlabeled).  Returns
 	 * {@link Optional#empty()} on no match so the caller can fall back to the default parser.
 	 *
-	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
-	 *
 	 * @param mediaType The desired parse media type. May be <jk>null</jk>/empty.
 	 * @return The matching parser, or {@link Optional#empty()} if no registered parser matches.
 	 */
@@ -358,11 +342,6 @@ public final class RestClient implements Closeable {
 
 	/**
 	 * Returns the default {@code Accept} header value advertising what this client can read.
-	 *
-	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
-	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
-	 * (and possibly earlier).
 	 *
 	 * @return The default {@code Accept} header value, or <jk>null</jk> if no parsers and no default parser are
 	 * 	configured (no implicit {@code application/json} fallback).
@@ -412,9 +391,6 @@ public final class RestClient implements Closeable {
 
 	/**
 	 * Fluent builder for {@link RestClient}.
-	 *
-	 * <p>
-	 * <b>Beta — API subject to change.</b>
 	 *
 	 * @since 9.2.1
 	 */

@@ -44,7 +44,7 @@ import jakarta.servlet.http.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link OidcRelyingParty}
  * 	<li class='jc'>{@link AuthFilter}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)</a>
  * </ul>
  *
  * @since 10.0.0

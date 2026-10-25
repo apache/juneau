@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='jc'>{@link TraceContextCarrier}
  * 	<li class='jc'>{@link TraceOperation}
  * 	<li class='jc'>{@link TracerHook}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * </ul>
  *
  * @since 10.0.0

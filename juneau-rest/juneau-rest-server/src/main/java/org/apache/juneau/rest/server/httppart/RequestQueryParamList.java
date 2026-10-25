@@ -109,7 +109,7 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='jc'>{@link RequestQueryParam}
  * 	<li class='ja'>{@link Query}
  * 	<li class='ja'>{@link HasQuery}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */
 @SuppressWarnings({

@@ -379,6 +379,9 @@ public class CborTokenReader implements TokenReader {
 		consumedOneElement();
 	}
 
+	@SuppressWarnings({
+		"javabugs:S6466" // The stack arrays grow with every push, so depth minus one always indexes a live slot.
+	})
 	private void consumedOneElement() {
 		if (depth == 0)
 			return;

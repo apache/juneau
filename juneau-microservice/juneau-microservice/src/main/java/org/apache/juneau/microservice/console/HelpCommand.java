@@ -29,7 +29,7 @@ import org.apache.juneau.microservice.*;
  * Implements the 'help' console command to provide help on other commands.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  * </ul>
  */
 public class HelpCommand extends ConsoleCommand {

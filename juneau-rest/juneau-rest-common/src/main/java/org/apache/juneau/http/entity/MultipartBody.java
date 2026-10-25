@@ -44,13 +44,6 @@ import org.apache.juneau.http.*;
  * {@link #isRepeatable()} returns {@code false} when any part wraps a one-shot stream, and {@code true}
  * when all parts are repeatable (e.g. strings, files, byte arrays).
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- * For production use cases that require long-term binary stability, continue using the existing
- * {@code juneau-rest-client} and {@code juneau-rest-common} APIs until the {@code ng} stack is declared stable.
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578">RFC 7578 — Returning Values from Forms: multipart/form-data</a>
@@ -262,9 +255,6 @@ public final class MultipartBody implements HttpBody {
 
 	/**
 	 * Fluent builder for {@link MultipartBody}.
-	 *
-	 * <p>
-	 * <b>Beta — API subject to change.</b>
 	 *
 	 * @since 9.2.1
 	 */

@@ -25,9 +25,6 @@ import java.util.function.*;
  * <p>
  * The size of the entity-body in bytes.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- *
  * @since 9.2.1
  */
 public class ContentLength extends HttpLongHeader {

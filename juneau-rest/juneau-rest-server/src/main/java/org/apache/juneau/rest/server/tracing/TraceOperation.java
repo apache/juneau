@@ -66,7 +66,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li class='jc'>{@link TraceContextExtractor}
  * 	<li class='jc'>{@link TracerHook}
  * 	<li class='link'><a class="doclink" href="https://github.com/open-telemetry/semantic-conventions-genai/tree/c739977ae690961f36e435504e5c1febaef1f7f3">OpenTelemetry GenAI semantic conventions (pinned snapshot)</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * </ul>
  *
  * @since 10.0.0

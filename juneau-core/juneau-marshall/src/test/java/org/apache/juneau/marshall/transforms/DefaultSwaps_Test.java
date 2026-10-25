@@ -591,7 +591,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(TimeZone.class, ...) - inline anonymous StringSwap<TimeZone> in DefaultSwaps
 	//------------------------------------------------------------------------------------------------------------------
-	private static final TimeZone G = TimeZone.getTimeZone("Z");
+	private static final TimeZone G = TimeZone.getTimeZone("GMT");
 
 	public static class GSwap extends StringSwap<TimeZone> {
 		@Override /* ObjectSwap */

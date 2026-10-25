@@ -47,7 +47,7 @@ import org.apache.juneau.http.response.*;
  * 	<li class='jc'>{@link ValidationViolation}
  * 	<li class='jc'>{@link BeanValidator}
  * 	<li class='jc'>{@link BadRequest}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">REST Server &mdash; Jakarta Validation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>
  * </ul>
  *
  * @since 10.0.0

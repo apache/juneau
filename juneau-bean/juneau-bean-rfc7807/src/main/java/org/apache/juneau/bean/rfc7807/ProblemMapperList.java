@@ -48,7 +48,7 @@ import java.util.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ProblemMapper}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">REST Server &mdash; RFC 7807 problem-details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">RFC 7807 / 9457 Problem Details</a>
  * </ul>
  */
 public class ProblemMapperList {

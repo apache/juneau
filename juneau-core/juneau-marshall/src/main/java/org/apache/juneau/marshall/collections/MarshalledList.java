@@ -440,6 +440,9 @@ public class MarshalledList extends LinkedList<Object> {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The parser is null-checked by reqnn() in the delegating constructor call.
+	})
 	public MarshalledList(java.io.Reader in, Parser p) throws ParseException {
 		this(reqnn("p", p).getMarshallingContext().getSession());
 		p.readIntoCollection(in, this, bs().object());

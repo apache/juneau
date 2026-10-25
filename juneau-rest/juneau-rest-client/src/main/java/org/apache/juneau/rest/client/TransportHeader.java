@@ -27,9 +27,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * suppliers have already been invoked and {@code null}-valued headers have already been filtered out before
  * a {@link TransportRequest} is constructed.
  *
- * <p>
- * <b>Beta — API subject to change.</b>
- *
  * @param name The header name. Never {@code null}.
  * @param value The header value. Never {@code null}.
  *

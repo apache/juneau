@@ -75,6 +75,9 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * 	If <jk>true</jk>, list will be ordered by name alphabetically.
 	 * 	Default is to maintain the order as specified in the annotation.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // The RestChildren bean is registered during context initialization and is always present once a request is served.
+	})
 	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
 		for (var e : context.getRestChildren().asMap().entrySet()) {
 			String title = null;

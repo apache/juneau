@@ -35,11 +35,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * The caller is responsible for closing the wrapped reader after the response has been consumed.
  *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- *
  * @since 9.2.1
  */
 @SuppressWarnings({

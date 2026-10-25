@@ -71,7 +71,7 @@ package org.apache.juneau.bean.rfc7807;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link Problem}
  * 	<li class='jc'>{@link ProblemException}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">REST Server &mdash; RFC 7807 problem-details</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">RFC 7807 / 9457 Problem Details</a>
  * </ul>
  *
  * @param <T> The {@link Throwable} subtype this mapper handles.

@@ -49,7 +49,7 @@
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder MetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.NoOpMetricsRecorder NoOpMetricsRecorder}
  * 	<li class='jp'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * </ul>
  *
  * @since 10.0.0

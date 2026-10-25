@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
  * </ul>
  */
 public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {

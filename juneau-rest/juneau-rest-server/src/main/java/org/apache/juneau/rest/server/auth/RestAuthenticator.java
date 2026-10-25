@@ -40,7 +40,7 @@ import jakarta.servlet.http.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link Authenticator}
  * 	<li class='jc'>{@link AuthResult}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator — Resource-Level Authentication</a>
  * </ul>
  *
  * @since 10.0.0

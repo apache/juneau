@@ -170,8 +170,7 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public StringBuilderWriter append(CharSequence csq, int start, int end) {
-		CharSequence cs = or(csq, "null");
-		write(cs.subSequence(start, end).toString());
+		write((csq == null ? "null" : csq).subSequence(start, end).toString());
 		return this;
 	}
 
