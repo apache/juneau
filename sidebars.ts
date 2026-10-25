@@ -61,16 +61,6 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/00.04.GettingStartedClient',
 							label: '4. Your First Client',
 						},
-						{
-							type: 'ref',
-							id: 'topics/24.StarterProjects',
-							label: 'Starter Projects',
-						},
-						{
-							type: 'ref',
-							id: 'topics/27.V10MigrationGuide',
-							label: 'v10.0 Migration Guide',
-						},
 					],
 				},
 				{
