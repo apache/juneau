@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -59,20 +60,24 @@ public class SpringBeanStore extends BasicBeanStore {
 
 	private final ApplicationContext appContext;
 
-	// Captured so clear() can deregister the bridge from the process-wide Settings singleton and
-	// avoid cross-test bleed when multiple Spring contexts come and go in the same JVM.
-	private final SpringEnvironmentPropertySource environmentSource;
+	// The shared Environment bridge for appContext (null when appContext is null).  One per context,
+	// reference-counted across stores; see SpringEnvironmentBridges.
+	private final SpringEnvironmentBridges.Registration registration;
+
+	// clear() may be called repeatedly; this store releases its reference at most once.
+	private final AtomicBoolean released = new AtomicBoolean();
 
 	/**
 	 * Constructor.
 	 *
 	 * <p>
-	 * If {@code appContext} is non-null, this constructor also installs a
-	 * {@link SpringEnvironmentPropertySource} on the process-wide {@link Settings} singleton so that
-	 * {@link Value @Value("&#123;...&#125;")} placeholders resolve against
-	 * the Spring {@link org.springframework.core.env.Environment Environment} (i.e. against
-	 * {@code application.yaml}, env vars, system properties, etc.).  The source is removed by
-	 * {@link #clear()}.
+	 * If {@code appContext} is non-null, this constructor also makes sure the process-wide {@link Settings} singleton
+	 * holds a {@link SpringEnvironmentPropertySource} for it, so that {@link Value @Value("&#123;...&#125;")}
+	 * placeholders resolve against the Spring {@link org.springframework.core.env.Environment Environment} (i.e. against
+	 * {@code application.yaml}, env vars, system properties, etc.).  There is one such source per application context,
+	 * shared by every store built on it and kept at the position of the first registration.  It is removed when every
+	 * store on the context has been {@link #clear() cleared}, or when the context closes (for a
+	 * {@link org.springframework.context.ConfigurableApplicationContext ConfigurableApplicationContext}).
 	 *
 	 * @param appContext The Spring application context used to resolve beans. Can be <jk>null</jk> (no Spring environment bridge is installed).
 	 * @param parent The parent bean store. Can be <jk>null</jk> for a root store with no parent chain.
@@ -80,16 +85,9 @@ public class SpringBeanStore extends BasicBeanStore {
 	public SpringBeanStore(ApplicationContext appContext, BeanStore parent) {
 		super(parent);
 		this.appContext = appContext;
-		// Register a lazy bridge to Spring's Environment. The supplier form defers the
-		// appContext.getEnvironment() call to first @Value("${...}") lookup, so the constructor has
-		// no observable interaction with the application context — important for callers (and
-		// tests) that don't actually use Spring properties.  Null appContext means no bridge.
-		if (nn(appContext)) {
-			this.environmentSource = new SpringEnvironmentPropertySource(appContext::getEnvironment);
-			Settings.get().addSource(this.environmentSource);
-		} else {
-			this.environmentSource = null;
-		}
+		// The bridge resolves appContext.getEnvironment() lazily on the first @Value("${...}") lookup, so the
+		// constructor has no observable interaction with the application context.  Null appContext means no bridge.
+		this.registration = nn(appContext) ? SpringEnvironmentBridges.acquire(appContext) : null;
 	}
 
 	@Override
@@ -97,10 +95,40 @@ public class SpringBeanStore extends BasicBeanStore {
 		"resource" // super.clear() returns this; the discarded return is the store we already own
 	})
 	public SpringBeanStore clear() {
-		super.clear();
-		if (nn(environmentSource))
-			Settings.get().removeSource(environmentSource);
+		try {
+			super.clear();
+		} finally {
+			// Release even when super.clear() throws (it does once this store is closed), so the reference cannot leak.
+			// Defensive: registration is null until this constructor finishes (BasicBeanStore's constructors do not call clear() today).
+			if (nn(registration) && released.compareAndSet(false, true))
+				SpringEnvironmentBridges.release(registration);
+		}
 		return this;
+	}
+
+	/**
+	 * Returns the shared Environment bridge this store acquired.
+	 *
+	 * @return The bridge, or <jk>null</jk> if this store has no application context.
+	 */
+	SpringEnvironmentPropertySource environmentSource() {
+		return registration == null ? null : registration.source;
+	}
+
+	/**
+	 * Clears the miss cache of the Spring {@code Environment} bridge registered for the given application context.
+	 *
+	 * <p>
+	 * Needed only after a Spring property source's contents change in place for a key that is not a valid Spring Boot
+	 * property name and that Juneau already looked up and missed; see {@link SpringEnvironmentPropertySource#invalidate()}.
+	 * The bridge is shared by every {@code SpringBeanStore} on the context, so this affects all of them.
+	 *
+	 * @param appContext The application context.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the context had a registered bridge.
+	 * @since 10.0.0
+	 */
+	public static boolean invalidateEnvironmentCache(ApplicationContext appContext) {
+		return SpringEnvironmentBridges.invalidate(appContext);
 	}
 
 	@Override

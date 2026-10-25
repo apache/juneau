@@ -54,7 +54,7 @@ import jakarta.servlet.*;
 public final class SecuredExampleServer implements AutoCloseable {
 
 	/** Default listen port used by {@link #main(String[])} when none is supplied. */
-	public static final int DEFAULT_PORT = 5001;
+	public static final int DEFAULT_PORT = 10001;
 
 	private final Microservice microservice;
 	private final OfflineAuthorizationServer authServer;
@@ -120,7 +120,7 @@ public final class SecuredExampleServer implements AutoCloseable {
 	}
 
 	/**
-	 * Returns the root URL the secured MCP server is listening on (e.g. {@code http://localhost:5001/}).
+	 * Returns the root URL the secured MCP server is listening on (e.g. {@code http://localhost:10001/}).
 	 *
 	 * @return The root URL. Never <jk>null</jk>.
 	 */

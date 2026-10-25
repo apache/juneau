@@ -4693,7 +4693,7 @@ public class StringUtils {
 			i++;
 		}
 
-		return !result.isEmpty() ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
+		return result.isEmpty() ? upper.substring(0, Math.min(1, upper.length())) : result.toString();
 	}
 
 	/**

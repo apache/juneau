@@ -3719,7 +3719,7 @@ public class RestContext extends Context {
 	 * @return {@code true} if parent values should be included.
 	 */
 	protected boolean isInherited(String property) {
-		return RestContext.this.parentContext != null && !noInherit.get().contains(property);
+		return parentContext != null && !noInherit.get().contains(property);
 	}
 
 	/**

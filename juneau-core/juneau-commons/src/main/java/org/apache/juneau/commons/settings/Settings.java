@@ -464,10 +464,14 @@ public class Settings {
 		reqnn("source", source);
 		// Identity-based removal so that PropertySource impls without a sensible equals() still
 		// round-trip cleanly through add/remove pairs.
-		for (var i = 0; i < sources.size(); i++) {
-			if (sources.get(i) == source) {
-				sources.remove(i);
-				return true;
+		// Removals are serialized so the index found in the snapshot is still valid when removed; addSource only appends.
+		synchronized (sources) {
+			var snapshot = sources.toArray(new PropertySource[0]);
+			for (var i = 0; i < snapshot.length; i++) {
+				if (snapshot[i] == source) {
+					sources.remove(i);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -525,8 +529,10 @@ public class Settings {
 			return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.
 
 		// 3. Check sources in reverse order (last added first)
-		for (int i = sources.size() - 1; i >= 0; i--) {
-			var source = sources.get(i);
+		// Iterate one snapshot so a concurrent removeSource() can't shrink the list between size() and get(i).
+		var snapshot = sources.toArray(new PropertySource[0]);
+		for (int i = snapshot.length - 1; i >= 0; i--) {
+			var source = snapshot[i];
 			var result = source.get(name);
 			if (result.isPresent())
 				return result.value().orElse(null);

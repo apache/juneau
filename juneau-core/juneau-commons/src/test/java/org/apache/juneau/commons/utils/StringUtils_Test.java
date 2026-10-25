@@ -5679,37 +5679,37 @@ class StringUtils_Test extends TestBase {
 		assertArrayEquals(new String[0], splita(new String[0], ','));
 
 		// Array with no delimiters
-		String[] array1 = new String[]{"a", "b", "c"};
+		String[] array1 = {"a", "b", "c"};
 		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array1, ','));
 
 		// Array with delimiters
-		String[] array2 = new String[]{"a,b", "c"};
+		String[] array2 = {"a,b", "c"};
 		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array2, ','));
-		String[] array3 = new String[]{"a,b", "c,d"};
+		String[] array3 = {"a,b", "c,d"};
 		assertArrayEquals(new String[]{"a", "b", "c", "d"}, splita(array3, ','));
 
 		// Array with null elements
-		String[] array4 = new String[]{"a", null, "c"};
+		String[] array4 = {"a", null, "c"};
 		assertArrayEquals(new String[]{"a", null, "c"}, splita(array4, ','));
 
 		// Array with elements containing delimiter
-		String[] array5 = new String[]{"a,b,c"};
+		String[] array5 = {"a,b,c"};
 		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array5, ','));
-		String[] array6 = new String[]{"a,b", "c,d,e"};
+		String[] array6 = {"a,b", "c,d,e"};
 		assertArrayEquals(new String[]{"a", "b", "c", "d", "e"}, splita(array6, ','));
 
 		// Different delimiter
-		String[] array7 = new String[]{"a|b|c"};
+		String[] array7 = {"a|b|c"};
 		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array7, '|'));
-		String[] array8 = new String[]{"a;b;c"};
+		String[] array8 = {"a;b;c"};
 		assertArrayEquals(new String[]{"a", "b", "c"}, splita(array8, ';'));
 
 		// Mixed: some with delimiter, some without
-		String[] array9 = new String[]{"a,b", "c", "d"};
+		String[] array9 = {"a,b", "c", "d"};
 		assertArrayEquals(new String[]{"a", "b", "c", "d"}, splita(array9, ','));
 
 		// Nested splitting (recursive)
-		String[] array10 = new String[]{"a,b", "c,d"};
+		String[] array10 = {"a,b", "c,d"};
 		assertArrayEquals(new String[]{"a", "b", "c", "d"}, splita(array10, ','));
 	}
 

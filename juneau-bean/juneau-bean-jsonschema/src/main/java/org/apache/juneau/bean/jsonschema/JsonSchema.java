@@ -230,7 +230,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(Boolean.class));
+			var cm = session.getClassMeta(o instanceof Collection ? JsonSchemaArray.class : Boolean.class);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -257,7 +257,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (o instanceof Boolean ? session.getClassMeta(Boolean.class) : session.getClassMeta(JsonSchema.class));
+			var cm = session.getClassMeta(o instanceof Boolean ? Boolean.class : JsonSchema.class);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -284,7 +284,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(JsonSchema.class));
+			var cm = session.getClassMeta(o instanceof Collection ? JsonSchemaArray.class : JsonSchema.class);
 			return session.convertToType(o, cm);
 		}
 	}
@@ -311,7 +311,7 @@ public class JsonSchema<SELF extends JsonSchema<SELF>> {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (o instanceof Collection ? session.getClassMeta(JsonTypeArray.class) : session.getClassMeta(JsonType.class));
+			var cm = session.getClassMeta(o instanceof Collection ? JsonTypeArray.class : JsonType.class);
 			return session.convertToType(o, cm);
 		}
 	}

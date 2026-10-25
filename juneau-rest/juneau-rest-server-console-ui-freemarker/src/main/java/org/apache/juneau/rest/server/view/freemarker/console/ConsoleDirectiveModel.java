@@ -108,7 +108,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			throw FtlAttrLists.reject("<@console> unknown scheme '" + schemeAttr + "'.  Schemes: "
 				+ String.join(", ", ConsoleChromeMixin.SCHEMES) + ".");
 		var capScheme = nn(cap.scheme()) ? cap.scheme() : ConsoleChromeMixin.SCHEMES.get(0);
-		var scheme = ! schemeAttr.isEmpty() ? schemeAttr : capScheme;
+		var scheme = schemeAttr.isEmpty() ? capScheme : schemeAttr;
 		var schemeToggle = FtlAttrLists.strictBoolean(p, NAME, "schemeToggle", cap.schemeToggle());
 
 		var icon = FtlAttrLists.scalar(p, "icon");
@@ -119,7 +119,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		var factsAttr = FtlAttrLists.map(p, NAME, "facts");
 
 		// Document <title>: a title seeded by a page spec wins; else the title= attribute, else brand=; omitted when none.
-		var docTitle = ! titleAttr.isEmpty() ? titleAttr : brand;
+		var docTitle = titleAttr.isEmpty() ? brand : titleAttr;
 		cap.titleDefault(docTitle);
 		cap.header(h -> {
 			if (! brand.isEmpty())
@@ -158,7 +158,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 
 		if (n(cap.themeCssUrl)) {
 			// No <@theme> ran: an explicit theme= wins, else a theme seeded by a page spec is inherited, else the default.
-			var themeName = ! themeAttr.isEmpty() ? themeAttr : cap.themeOrNull();
+			var themeName = themeAttr.isEmpty() ? cap.themeOrNull() : themeAttr;
 			if (themeName == null)
 				themeName = ConsoleChromeMixin.BUILTIN_THEME_NAMES.get(0);
 			cap.themeCssUrl = ConsoleChromeMixin.themeAssetUrl(req, themeName);

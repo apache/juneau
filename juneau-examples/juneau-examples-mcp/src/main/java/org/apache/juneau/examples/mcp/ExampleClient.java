@@ -30,7 +30,7 @@ import org.apache.juneau.rest.client.mcp.v20260728.*;
  *
  * <p>
  * Run {@link #main(String[]) main} (optionally passing the server endpoint; defaults to
- * {@code http://localhost:5000/}) after starting {@link ExampleServer}. Each numbered step prints
+ * {@code http://localhost:10000/}) after starting {@link ExampleServer}. Each numbered step prints
  * what it is doing and what it got back, so the transcript reads top-to-bottom like a tutorial.
  *
  * <p>
@@ -60,7 +60,7 @@ public final class ExampleClient {
 	/**
 	 * Runs the walkthrough against a running {@link ExampleServer}.
 	 *
-	 * @param args Optional single argument: the server endpoint (defaults to {@code http://localhost:5000/}).
+	 * @param args Optional single argument: the server endpoint (defaults to {@code http://localhost:10000/}).
 	 * @throws Exception If any step fails.
 	 */
 	public static void main(String[] args) throws Exception {

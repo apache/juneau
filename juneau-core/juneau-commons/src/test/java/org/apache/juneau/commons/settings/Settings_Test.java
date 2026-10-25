@@ -495,6 +495,71 @@ class Settings_Test extends TestBase {
 	}
 
 	@Test
+	void o01b_resolve_sourceRemovedDuringLookup() {
+		// A lookup must iterate one snapshot of the sources, so removing sources mid-lookup can't throw.
+		var settings = Settings.create().build();
+		var a = new MapStore();
+		var b = new MapStore();
+		a.set(TEST_PROP, "a-value");
+		PropertySource c = name -> {
+			settings.removeSource(a);
+			settings.removeSource(b);
+			return PropertyLookupResult.missing();
+		};
+		settings.addSource(a).addSource(b).addSource(c);
+
+		assertEquals("a-value", settings.get(TEST_PROP).get());
+		assertEquals(1, settings.sourceCount());
+	}
+
+	@Test
+	void o01c_removeSource_duplicateRemovesOnlyFirstCopy() {
+		var settings = Settings.create().build();
+		var a = new MapStore();
+		var b = new MapStore();
+		settings.addSource(a).addSource(b).addSource(a);
+
+		assertTrue(settings.removeSource(a));
+		assertEquals(2, settings.sourceCount());
+		assertSame(b, settings.sources().get(0));
+		assertSame(a, settings.sources().get(1));
+		assertTrue(settings.removeSource(a));
+		assertFalse(settings.removeSource(a));
+		assertEquals(1, settings.sourceCount());
+	}
+
+	@Test
+	void o01d_removeSource_concurrentDuplicateRemovals() throws Exception {
+		for (var round = 0; round < 200; round++) {
+			var settings = Settings.create().build();
+			var a = new MapStore();
+			settings.addSource(a).addSource(a);
+			var start = new java.util.concurrent.CountDownLatch(1);
+			var removed = new AtomicInteger();
+			var errors = new AtomicInteger();
+			var threads = new Thread[3];
+			for (var i = 0; i < threads.length; i++) {
+				threads[i] = new Thread(() -> {
+					try {
+						start.await();
+						if (settings.removeSource(a))
+							removed.incrementAndGet();
+					} catch (Throwable e) {
+						errors.incrementAndGet();
+					}
+				});
+				threads[i].start();
+			}
+			start.countDown();
+			for (var t : threads)
+				t.join();
+			assertEquals(0, errors.get());
+			assertEquals(2, removed.get());
+			assertEquals(0, settings.sourceCount());
+		}
+	}
+
+	@Test
 	void o02_addSource_reverseOrder() {
 		var source1 = new MapStore();
 		source1.set(TEST_PROP, "source1-value");

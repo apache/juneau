@@ -20,8 +20,10 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.springframework.boot.context.properties.source.*;
 import org.springframework.core.env.*;
 
 /**
@@ -37,11 +39,23 @@ import org.springframework.core.env.*;
  *
  * <h5 class='section'>Lifecycle:</h5>
  * <p>
- * Instances are auto-registered by {@link SpringBeanStore#SpringBeanStore(org.springframework.context.ApplicationContext,
- * org.apache.juneau.commons.inject.BeanStore) SpringBeanStore}'s constructor and removed from
- * {@link org.apache.juneau.commons.settings.Settings#removeSource(org.apache.juneau.commons.settings.PropertySource)
- * Settings} when {@link SpringBeanStore#clear()} is called.  Callers that want explicit lifecycle
- * control can construct the source directly and add it via {@code Settings.get().addSource(...)}.
+ * {@link SpringBeanStore} registers one instance per {@link org.springframework.context.ApplicationContext} in
+ * {@link org.apache.juneau.commons.settings.Settings Settings}, shared by every store on that context.  It is removed
+ * when every such store has been {@link SpringBeanStore#clear() cleared}, or when the context closes (for a
+ * {@link org.springframework.context.ConfigurableApplicationContext ConfigurableApplicationContext}).  Callers that
+ * want explicit lifecycle control can construct the source directly and add it via {@code Settings.get().addSource(...)};
+ * such instances are not shared.
+ *
+ * <h5 class='section'>Miss cache:</h5>
+ * <p>
+ * Juneau's builder keys (e.g. {@code MarshallingContext.unsortedProperties}) are not valid Spring Boot property names,
+ * so Spring walks every raw property source for each of them.  This source remembers up to 4096 such keys that were
+ * absent.  Every lookup checks the Environment's property-source list by identity (an added, removed or replaced
+ * source drops the cache) and re-checks {@link System#getProperty(String)} for a cached key.  Valid Boot names and
+ * {@code juneau.profiles.active} are never cached, and hits are never cached.  A source whose <em>contents</em> change
+ * in place (a mutated map, {@code MockEnvironment.setProperty}) is not detected for a key already cached as missing;
+ * call {@link #invalidate()} after such a change.  Setting {@code juneau.spring.missCache.disable=true} in the Spring
+ * Environment before the first lookup turns the cache off.
  *
  * <h5 class='section'>Lazy resolution:</h5>
  * <p>
@@ -65,14 +79,24 @@ import org.springframework.core.env.*;
  */
 public class SpringEnvironmentPropertySource implements org.apache.juneau.commons.settings.PropertySource {
 
+	/** Soft cap on cached misses per bridge; same policy as J1037's source cache (copied, not referenced). */
+	static final int MISS_CACHE_MAX_ENTRIES = 4096;
+
+	/** Opt-out switch, read once at first resolve from the bridged Environment itself (never through Settings). */
+	private static final String MISS_CACHE_DISABLE_KEY = "juneau.spring.missCache.disable";
+
 	private final Supplier<Environment> envSupplier;
 
-	// Guarded by the synchronized block in get(...); volatile reads cover the fast-path check.
+	// Written inside resolve() before resolved; readers read resolved first, so plain fields are safely published.
 	private volatile boolean resolved;
 	@SuppressWarnings({
-		"java:S3077" // Publish-once reference: env is fully resolved before its single assignment (constructor or inside the synchronized block) and is never compound-mutated, so volatile visibility is sufficient.
+		"java:S3077" // Publish-once reference: env is assigned before resolved is set (constructor or resolve()) and is never compound-mutated, so volatile visibility is sufficient.
 	})
 	private volatile Environment env;
+	private boolean cacheEnabled;
+
+	// The miss set for the source list it was built from; replaced, never edited, when the list changes.
+	private volatile MissGeneration generation;
 
 	/**
 	 * Constructor that bridges a pre-built {@link Environment}.
@@ -82,7 +106,6 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 	public SpringEnvironmentPropertySource(Environment env) {
 		this.env = Objects.requireNonNull(env, "env");
 		this.envSupplier = null;
-		this.resolved = true;
 	}
 
 	/**
@@ -101,24 +124,23 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		this.envSupplier = Objects.requireNonNull(envSupplier, "envSupplier");
 	}
 
+	private synchronized void resolve() {
+		if (resolved)  // HTT: another thread resolved between the caller's check and lock acquisition; a single-threaded test cannot force it
+			return;
+		// safeOpt swallows exceptions thrown by the supplier, e.g. a mocked ApplicationContext that returns null or
+		// throws during getEnvironment().
+		var e = nn(envSupplier) ? safeOpt(envSupplier::get).orElse(null) : env;
+		env = e;
+		cacheEnabled = e instanceof ConfigurableEnvironment && ! safeOpt(() -> e.getProperty(MISS_CACHE_DISABLE_KEY)).map(Boolean::parseBoolean).orElse(false);
+		resolved = true;
+	}
+
 	@Override
-	@SuppressWarnings({
-		"java:S2589" // Double-checked locking: the inner resolved re-check and its else branch look redundant under Sonar's single-threaded symbolic execution, but are essential for correctness under concurrency — another thread can flip resolved to true between the outer and inner checks.
-	})
 	public org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {
+		if (! resolved)
+			resolve();
+		// Read env only after resolved: reading it first could see null, then resolved == true, and miss wrongly.
 		var e = env;
-		if (! resolved) {
-			synchronized (this) {
-				if (! resolved) {  // HTT: double-checked locking second check; false only when another thread resolves between the outer check and lock acquisition, which a single-threaded test cannot force
-					// safeOpt swallows exceptions thrown by the supplier — e.g. a mocked
-					// ApplicationContext that returns null or throws during getEnvironment().
-					env = e = safeOpt(envSupplier::get).orElse(null);
-					resolved = true;
-				} else {
-					e = env;  // HTT: double-checked locking else branch; reachable only under a concurrent resolve race
-				}
-			}
-		}
 		if (e == null)
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
 		// Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a
@@ -130,12 +152,84 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 				return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(String.join(",", active)));
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
 		}
-		if (! e.containsProperty(name))
+		var g = cacheEnabled && nn(name) ? currentGeneration((ConfigurableEnvironment)e) : null;
+		if (nn(g) && g.misses.contains(name)) {
+			// For an invalid Boot name, the raw systemProperties source (exact key) is the only one whose contents
+			// can change without a source-list change; systemEnvironment wraps System.getenv(), which cannot.
+			if (! g.hasSystemProperties || System.getProperty(name) == null)
+				return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
+			g.misses.remove(name);
+		}
+		if (! e.containsProperty(name)) {
+			// Valid Boot names are never cached: Boot's relaxed binding can answer them from a changed source.
+			// isValid allocates, so it runs only here, on an uncached miss.
+			if (nn(g) && g.misses.size() < MISS_CACHE_MAX_ENTRIES && ! ConfigurationPropertyName.isValid(name))
+				g.misses.add(name);
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
-		// Spring's getProperty() returns null only for unresolved placeholders, which
-		// containsProperty() already filtered out.  Wrap defensively anyway.
+		}
+		// Spring's getProperty() returns null for a key mapped to an explicit null value, and throws
+		// IllegalArgumentException for an unresolvable nested placeholder.  o() maps the null to an empty value.
 		var v = e.getProperty(name);
 		return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(v));
+	}
+
+	/**
+	 * Clears this bridge's miss cache.
+	 *
+	 * <p>
+	 * Needed only after a property source's contents change in place (for example a mutated
+	 * {@code MapPropertySource} map, or {@code MockEnvironment.setProperty} in a test) for a key that is not a valid
+	 * Spring Boot property name and that was already looked up and missed.  Adding, removing or replacing a property
+	 * source, and setting a system property, are detected without it.  A lookup already in progress on another thread
+	 * may still answer from the old cache; lookups that start after this method returns do not.
+	 *
+	 * @since 10.0.0
+	 */
+	public void invalidate() {
+		generation = null;
+	}
+
+	/** @return The number of cached misses (tests). */
+	int missCount() {
+		var g = generation;
+		return g == null ? 0 : g.misses.size();
+	}
+
+	private MissGeneration currentGeneration(ConfigurableEnvironment e) {
+		var live = e.getPropertySources();
+		var g = generation;
+		if (nn(g) && g.matches(live))
+			return g;
+		// Racing threads may each build one; the loser's misses go to an unused generation, which only costs a walk.
+		g = new MissGeneration(live);
+		generation = g;
+		return g;
+	}
+
+	/**
+	 * Cached misses for one snapshot of the Environment's property-source list.  A new generation replaces the old one
+	 * when the list changes, so a miss computed against an old list can only land in a generation nobody reads.
+	 */
+	private static final class MissGeneration {
+		final org.springframework.core.env.PropertySource<?>[] sources;
+		final boolean hasSystemProperties;
+		final Set<String> misses = ConcurrentHashMap.newKeySet();
+
+		MissGeneration(MutablePropertySources live) {
+			sources = live.stream().toArray(org.springframework.core.env.PropertySource<?>[]::new);
+			hasSystemProperties = Arrays.stream(sources).anyMatch(x -> StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME.equals(x.getName()));
+		}
+
+		// Identity, element by element, then count.  MutablePropertySources iterates its copy-on-write array without copying.
+		boolean matches(MutablePropertySources live) {
+			var i = 0;
+			for (var s : live) {
+				if (i >= sources.length || s != sources[i])
+					return false;
+				i++;
+			}
+			return i == sources.length;
+		}
 	}
 
 	/** The Juneau config-profile activation key that piggybacks on Spring's active profiles. */

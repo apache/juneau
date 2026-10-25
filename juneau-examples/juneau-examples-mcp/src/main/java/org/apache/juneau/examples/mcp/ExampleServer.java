@@ -30,7 +30,7 @@ import jakarta.servlet.*;
  * Boots {@link ExampleMcpServer} on an embedded Jetty server.
  *
  * <p>
- * Run {@link #main(String[]) main} to start the server on a fixed port (default {@code 5000}, or pass a
+ * Run {@link #main(String[]) main} to start the server on a fixed port (default {@code 10000}, or pass a
  * port as the first argument) and leave it running so you can point {@link ExampleClient} (or any MCP
  * client) at it. The in-process end-to-end test uses {@link #start(int) start(0)} to boot on an
  * OS-assigned ephemeral port instead.
@@ -49,7 +49,7 @@ import jakarta.servlet.*;
 public final class ExampleServer implements AutoCloseable {
 
 	/** Default listen port used by {@link #main(String[])} when none is supplied. */
-	public static final int DEFAULT_PORT = 5000;
+	public static final int DEFAULT_PORT = 10000;
 
 	private final Microservice microservice;
 	private final URI rootUrl;
@@ -87,7 +87,7 @@ public final class ExampleServer implements AutoCloseable {
 	}
 
 	/**
-	 * Returns the root URL the server is listening on (e.g. {@code http://localhost:5000/}).
+	 * Returns the root URL the server is listening on (e.g. {@code http://localhost:10000/}).
 	 *
 	 * @return The root URL. Never <jk>null</jk>.
 	 */

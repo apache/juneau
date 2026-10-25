@@ -498,7 +498,7 @@ class DarkScheme_BrowserTest extends TestBase {
 		for (var s : surfaces) {
 			var w = worst(caseName, s[0]);
 			var errors = errors(caseName, s[0]);
-			lines.add(caseName + " " + s[0] + " (" + s[2] + "): " + (! errors.isEmpty() ? "errors " + errors : w == null ? "nothing rendered" : w.get("fg") + " on " + w.get("bg") + " = " + w.get("ratio")));
+			lines.add(caseName + " " + s[0] + " (" + s[2] + "): " + (errors.isEmpty() ? w == null ? "nothing rendered" : w.get("fg") + " on " + w.get("bg") + " = " + w.get("ratio") : "errors " + errors));
 		}
 		lines.forEach(System.out::println);
 		return lines;

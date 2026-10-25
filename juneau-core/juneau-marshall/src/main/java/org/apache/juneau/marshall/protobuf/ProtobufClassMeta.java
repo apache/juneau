@@ -119,7 +119,7 @@ public class ProtobufClassMeta extends ExtendedClassMeta {
 		var kind = kindOf(propType, elementScalarType(propType, override));
 		ProtobufScalarType st;
 		switch (kind) {
-			case SCALAR -> st = override != ProtobufScalarType.AUTO ? override : defaultScalarType(propType);
+			case SCALAR -> st = override == ProtobufScalarType.AUTO ? defaultScalarType(propType) : override;
 			case PACKED_REPEATED, TAGGED_REPEATED -> st = elementScalarType(propType, override);
 			default -> st = ProtobufScalarType.AUTO;
 		}

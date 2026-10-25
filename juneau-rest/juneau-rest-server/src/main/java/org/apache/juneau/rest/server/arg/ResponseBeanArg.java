@@ -90,7 +90,7 @@ public class ResponseBeanArg implements RestOpArg {
 			RestResponse res = opSession.getResponse();
 			ResponseBeanMeta meta2 = req.getOpContext().getResponseBeanMeta(o);
 			if (meta2 == null)
-				meta2 = ResponseBeanArg.this.meta;
+				meta2 = meta;
 			res.setResponseBeanMeta(meta2);
 			res.setContent(o);
 		});

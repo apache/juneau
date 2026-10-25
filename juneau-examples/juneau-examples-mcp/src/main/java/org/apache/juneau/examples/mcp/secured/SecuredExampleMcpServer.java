@@ -115,7 +115,7 @@ public class SecuredExampleMcpServer extends ExampleMcpServer {
 	 * @param authServer The offline authorization server this instance validates bearer tokens against
 	 * 	(its {@link OfflineAuthorizationServer#jwkSource() public key} and
 	 * 	{@link OfflineAuthorizationServer#issuerUri() issuer}). Must not be <jk>null</jk>.
-	 * @param resource This server's own canonical root URL (e.g. {@code http://localhost:5001/}), known and
+	 * @param resource This server's own canonical root URL (e.g. {@code http://localhost:10001/}), known and
 	 * 	fixed before construction &mdash; see the class javadoc's "one wrinkle" section for why this cannot be
 	 * 	supplied later. Must not be <jk>null</jk>.
 	 */

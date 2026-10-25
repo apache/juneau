@@ -71,6 +71,9 @@ class SymbolSprite_StemIds_Test extends TestBase {
 		return ids;
 	}
 
+	@SuppressWarnings({
+		"java:S4030" // removed/added are read only by the failure-message lambda, which Sonar does not count as a use.
+	})
 	@Test void a01_stemIdSetIsPinned() throws Exception {
 		var actual = actualIds();
 		var removed = new TreeSet<>(EXPECTED_IDS);

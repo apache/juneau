@@ -53,12 +53,13 @@ import org.springframework.context.*;
  */
 @org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
+	"java:S2093", // Stores are released with clear() (bridge deregistration), not close(); try-with-resources would call the wrong method.
 	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
 	"unchecked" // ApplicationContext.getBeanProvider(Class) is unchecked-bound in the Spring API.
 })
 class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 
-	// Tests intentionally leave resources open; try-with-resources would obscure the test intent.
+	// Callers must clear() the returned store: it registers a Spring Environment bridge in the Settings singleton.
 	private static SpringBeanStore emptySpringBeanStore() {
 		var appContext = mock(ApplicationContext.class);
 		// Generic empty provider for any class lookup — keeps the bean store consistent with a Spring Boot
@@ -69,6 +70,18 @@ class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 			return empty;
 		});
 		return new SpringBeanStore(appContext, null);
+	}
+
+	private int bridgesBefore;
+
+	@BeforeEach
+	void recordBridges() {
+		bridgesBefore = SpringEnvironmentBridges.size();
+	}
+
+	@AfterEach
+	void assertNoLeakedBridge() {
+		assertEquals(bridgesBefore, SpringEnvironmentBridges.size(), "A test left an emptySpringBeanStore() store uncleared");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -84,10 +97,14 @@ class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 	@Test
 	void a01_getterBeatsAnnotation_underSpring() {
 		var store = emptySpringBeanStore();
-		var paths = RestContext.resolveTopLevelPaths(A_GetterOverride.class, new A_GetterOverride(), store);
+		try {
+			var paths = RestContext.resolveTopLevelPaths(A_GetterOverride.class, new A_GetterOverride(), store);
 
-		assertArrayEquals(new String[]{"/from-springboot-getter"}, paths,
-			"Under SpringBeanStore, the getter override should beat the @Rest(paths) annotation default");
+			assertArrayEquals(new String[]{"/from-springboot-getter"}, paths,
+				"Under SpringBeanStore, the getter override should beat the @Rest(paths) annotation default");
+		} finally {
+			store.clear();
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -102,10 +119,14 @@ class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 	@Test
 	void b01_annotationOnly_fallsThroughCleanly() {
 		var store = emptySpringBeanStore();
-		var paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.class, new B_AnnotationOnly(), store);
+		try {
+			var paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.class, new B_AnnotationOnly(), store);
 
-		assertArrayEquals(new String[]{"/from-annotation-1", "/from-annotation-2"}, paths,
-			"With no override available, resolution should fall through to the @Rest(paths) annotation default");
+			assertArrayEquals(new String[]{"/from-annotation-1", "/from-annotation-2"}, paths,
+				"With no override available, resolution should fall through to the @Rest(paths) annotation default");
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -161,12 +182,16 @@ class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 	void e01_springBeanStore_parityWith_plainBeanStore() {
 		var resource = new A_GetterOverride();
 		var springStore = emptySpringBeanStore();
-		var plainStore = new BasicBeanStore();
+		try {
+			var plainStore = new BasicBeanStore();
 
-		var underSpring = RestContext.resolveTopLevelPaths(A_GetterOverride.class, resource, springStore);
-		var underPlain = RestContext.resolveTopLevelPaths(A_GetterOverride.class, resource, plainStore);
+			var underSpring = RestContext.resolveTopLevelPaths(A_GetterOverride.class, resource, springStore);
+			var underPlain = RestContext.resolveTopLevelPaths(A_GetterOverride.class, resource, plainStore);
 
-		assertArrayEquals(underPlain, underSpring,
-			"Mixin/resource override behavior must be identical when registered via Juneau BeanStore (microservice path) and via SpringBeanStore (Spring Boot path)");
+			assertArrayEquals(underPlain, underSpring,
+				"Mixin/resource override behavior must be identical when registered via Juneau BeanStore (microservice path) and via SpringBeanStore (Spring Boot path)");
+		} finally {
+			springStore.clear();
+		}
 	}
 }

@@ -65,8 +65,8 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		protected Builder() {
 			streamCharset = UTF8;
 			maxIndent = env("WriterSerializer.maxIndent", 100);
-			quoteChar = env("WriterSerializer.quoteChar").map(x -> (!x.isEmpty() ? x.charAt(0) : null)).orElse(null);
-			quoteCharOverride = env("WriterSerializer.quoteCharOverride").map(x -> (!x.isEmpty() ? x.charAt(0) : null)).orElse(null);
+			quoteChar = env("WriterSerializer.quoteChar").map(x -> (x.isEmpty() ? null : x.charAt(0))).orElse(null);
+			quoteCharOverride = env("WriterSerializer.quoteCharOverride").map(x -> (x.isEmpty() ? null : x.charAt(0))).orElse(null);
 			useWhitespace = env("WriterSerializer.useWhitespace", false);
 		}
 

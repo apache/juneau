@@ -75,7 +75,7 @@ class TerminalNudges_Test extends TestBase {
 		boolean closed, armClockFailure, requireStart, started;
 		Runnable onStart;
 		private long seq;
-		private final PriorityQueue<long[]> queue = new PriorityQueue<>((a, b) -> a[0] != b[0] ? Long.compare(a[0], b[0]) : Long.compare(a[1], b[1]));
+		private final PriorityQueue<long[]> queue = new PriorityQueue<>((a, b) -> a[0] == b[0] ? Long.compare(a[1], b[1]) : Long.compare(a[0], b[0]));
 		private final Map<Long,Runnable> tasks = new HashMap<>();
 
 		@Override public void start() {

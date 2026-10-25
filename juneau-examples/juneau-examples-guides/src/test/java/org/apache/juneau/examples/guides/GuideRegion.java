@@ -119,7 +119,7 @@ public final class GuideRegion {
 		var indent = lines.stream().filter(x -> ! x.isEmpty()).mapToInt(x -> x.length() - x.stripLeading().length()).min().orElse(0);
 		var sb = new StringBuilder();
 		for (var line : lines) {
-			if (sb.length() > 0)
+			if (! sb.isEmpty())
 				sb.append('\n');
 			sb.append(line.isEmpty() ? line : line.substring(indent));
 		}

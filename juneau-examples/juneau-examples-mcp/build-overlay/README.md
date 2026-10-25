@@ -61,13 +61,13 @@ mvn clean install
 
 ### 1. The embedded-Jetty server + client walkthrough
 
-Start the server (defaults to port `5000`; pass a port to override):
+Start the server (defaults to port `10000`; pass a port to override):
 
 ```bash
 mvn exec:java -Dexec.mainClass=org.apache.juneau.examples.mcp.ExampleServer
 ```
 
-In another terminal, run the client walkthrough (defaults to `http://localhost:5000/`):
+In another terminal, run the client walkthrough (defaults to `http://localhost:10000/`):
 
 ```bash
 mvn exec:java -Dexec.mainClass=org.apache.juneau.examples.mcp.ExampleClient
@@ -127,7 +127,7 @@ tokens, no user auth).
 > client should read its secret from an environment variable or a file it controls, never accept
 > it as a CLI argument (`argv` is visible to every other process on the host via `/proc` or `ps`).
 
-Start the secured server (defaults to port `5001`; pass a port to override). It prints a startup
+Start the secured server (defaults to port `10001`; pass a port to override). It prints a startup
 banner with everything the client needs — copy those three values:
 
 ```bash

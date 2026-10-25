@@ -34,6 +34,7 @@ import org.springframework.context.*;
  */
 @org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
+	"java:S2093", // Stores are released with clear() (bridge deregistration), not close(); try-with-resources would call the wrong method.
 	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
 	"unchecked" // getBean(String, Class) invocation in test
 })
@@ -50,9 +51,11 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 
 	@AfterEach
 	void tearDown() {
-		// Each SpringBeanStore constructor installs a SpringEnvironmentPropertySource on the
-		// process-wide Settings.  Clear it after every test to prevent cross-test bleed.
+		// Each SpringBeanStore on a non-null context shares one SpringEnvironmentPropertySource per context in the
+		// process-wide Settings.  Every store a test builds on mockAppContext must be cleared, or the bridge leaks.
 		beanStore.clear();
+		assertFalse(SpringEnvironmentBridges.isRegistered(mockAppContext),
+			"A test built a SpringBeanStore on mockAppContext without clearing it");
 	}
 
 	//====================================================================================================
@@ -93,14 +96,22 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 	@Test
 	void a02_constructorWithNullParent() {
 		var store = new SpringBeanStore(mockAppContext, null);
-		assertNotNull(store);
+		try {
+			assertNotNull(store);
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
 	void a03_constructorWithParent() {
 		var parent = new BasicBeanStore(null);
 		var store = new SpringBeanStore(mockAppContext, parent);
-		assertNotNull(store);
+		try {
+			assertNotNull(store);
+		} finally {
+			store.clear();
+		}
 	}
 
 	//====================================================================================================
@@ -126,11 +137,15 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 		parent.addBean(TestService.class, service);
 
 		var store = new SpringBeanStore(mockAppContext, parent);
-		var result = store.getBean(TestService.class);
+		try {
+			var result = store.getBean(TestService.class);
 
-		assertTrue(result.isPresent());
-		assertSame(service, result.get());
-		verifyNoInteractions(mockAppContext);
+			assertTrue(result.isPresent());
+			assertSame(service, result.get());
+			verifyNoInteractions(mockAppContext);
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -141,13 +156,17 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 
 		var localService = new TestService("local");
 		var store = new SpringBeanStore(mockAppContext, parent);
-		store.addBean(TestService.class, localService);
+		try {
+			store.addBean(TestService.class, localService);
 
-		var result = store.getBean(TestService.class);
+			var result = store.getBean(TestService.class);
 
-		assertTrue(result.isPresent());
-		assertSame(localService, result.get());
-		verifyNoInteractions(mockAppContext);
+			assertTrue(result.isPresent());
+			assertSame(localService, result.get());
+			verifyNoInteractions(mockAppContext);
+		} finally {
+			store.clear();
+		}
 	}
 
 	//====================================================================================================
@@ -237,11 +256,15 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 		parent.addBean(TestService.class, service, "myBean");
 
 		var store = new SpringBeanStore(mockAppContext, parent);
-		var result = store.getBean(TestService.class, "myBean");
+		try {
+			var result = store.getBean(TestService.class, "myBean");
 
-		assertTrue(result.isPresent());
-		assertSame(service, result.get());
-		verifyNoInteractions(mockAppContext);
+			assertTrue(result.isPresent());
+			assertSame(service, result.get());
+			verifyNoInteractions(mockAppContext);
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -297,11 +320,15 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 	@Test
 	void e04_getBeanNamed_nullNameSkipsSpring() {
 		var store = new SpringBeanStore(mockAppContext, null);
+		try {
 
-		var result = store.getBean(TestService.class, null);
+			var result = store.getBean(TestService.class, null);
 
-		assertFalse(result.isPresent());
-		verifyNoInteractions(mockAppContext);
+			assertFalse(result.isPresent());
+			verifyNoInteractions(mockAppContext);
+		} finally {
+			store.clear();
+		}
 	}
 
 	//====================================================================================================
@@ -376,14 +403,18 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 		parent.addBean(TestService.class, parentService, "parent");
 
 		var store = new SpringBeanStore(mockAppContext, parent);
-		var localService = new TestService("local");
-		store.addBean(TestService.class, localService, "local");
+		try {
+			var localService = new TestService("local");
+			store.addBean(TestService.class, localService, "local");
 
-		var result = store.getBeansOfType(TestService.class);
+			var result = store.getBeansOfType(TestService.class);
 
-		assertSize(2, result);
-		assertSame(parentService, result.get("parent"));
-		assertSame(localService, result.get("local"));
+			assertSize(2, result);
+			assertSame(parentService, result.get("parent"));
+			assertSame(localService, result.get("local"));
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -422,9 +453,13 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 		parent.addBean(TestService.class, new TestService("parent"));
 
 		var store = new SpringBeanStore(mockAppContext, parent);
+		try {
 
-		assertTrue(store.hasBean(TestService.class));
-		verifyNoInteractions(mockAppContext);
+			assertTrue(store.hasBean(TestService.class));
+			verifyNoInteractions(mockAppContext);
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -473,9 +508,13 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 		parent.addBean(TestService.class, new TestService("parent"), "myBean");
 
 		var store = new SpringBeanStore(mockAppContext, parent);
+		try {
 
-		assertTrue(store.hasBean(TestService.class, "myBean"));
-		verifyNoInteractions(mockAppContext);
+			assertTrue(store.hasBean(TestService.class, "myBean"));
+			verifyNoInteractions(mockAppContext);
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -684,10 +723,14 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 	@Test
 	void j08_getBeanSupplierNamed_nullName() {
 		var store = new SpringBeanStore(mockAppContext, null);
+		try {
 
-		var supplier = store.getBeanSupplier(TestService.class, null);
+			var supplier = store.getBeanSupplier(TestService.class, null);
 
-		assertFalse(supplier.isPresent());
+			assertFalse(supplier.isPresent());
+		} finally {
+			store.clear();
+		}
 	}
 
 	@Test
@@ -752,16 +795,20 @@ class SpringBeanStore_Springboot_Test extends TestBase {
 		parent.addBean(TestService.class, service2, "bean2");
 
 		var child = new SpringBeanStore(mockAppContext, parent);
-		var service3 = new TestService("child");
-		child.addBean(TestService.class, service3, "bean3");
+		try {
+			var service3 = new TestService("child");
+			child.addBean(TestService.class, service3, "bean3");
 
-		// Test: child can see all three levels
-		var result = child.getBeansOfType(TestService.class);
+			// Test: child can see all three levels
+			var result = child.getBeansOfType(TestService.class);
 
-		assertSize(3, result);
-		assertSame(service1, result.get("bean1"));
-		assertSame(service2, result.get("bean2"));
-		assertSame(service3, result.get("bean3"));
+			assertSize(3, result);
+			assertSame(service1, result.get("bean1"));
+			assertSame(service2, result.get("bean2"));
+			assertSame(service3, result.get("bean3"));
+		} finally {
+			child.clear();
+		}
 	}
 
 	@Test

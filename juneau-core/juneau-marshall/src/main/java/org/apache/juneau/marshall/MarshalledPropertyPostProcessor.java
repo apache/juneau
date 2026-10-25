@@ -883,6 +883,14 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
+	private static Temporal fromZonedDateTime(ZonedDateTime z, Class<? extends Temporal> temporalType) {
+		try {
+			return (Temporal) temporalType.getMethod("from", TemporalAccessor.class).invoke(null, z);
+		} catch (ReflectiveOperationException e) {
+			throw new ParseException(e, "Cannot convert Calendar to {0}", temporalType.getName());
+		}
+	}
+
 	private static ObjectSwap<?,?> temporalSwap(TemporalFormat format, Class<?> propertyClass) {
 		var temporalType = (Class<? extends Temporal>) propertyClass;
 		return new ObjectSwap<>(Temporal.class, Object.class) {
@@ -906,8 +914,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
 				if (temporalType.isInstance(o))
 					return (Temporal) o;
-				if (o instanceof Calendar)
-					return (Temporal) session.convertToType(o, hint != null ? (ClassMeta<?>) hint : session.getClassMeta(temporalType));
+				// Typed parsers hand over a Calendar for any date/date-time format; the converter has no Calendar -> LocalDate-style paths, so go through ZonedDateTime and the target's static from(TemporalAccessor).
+				if (o instanceof Calendar c)
+					return fromZonedDateTime(c.toInstant().atZone(c.getTimeZone().toZoneId()), temporalType);
 				return format.parse(o.toString(), temporalType, session.getTimeZoneId());
 			}
 		};

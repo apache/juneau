@@ -1200,7 +1200,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return Stream.empty();
 		return Arrays.stream(values)
 			.filter(Objects::nonNull)
-			.map(s -> RestOpContext.this.context.getVarResolver().resolve(s))
+			.map(s -> context.getVarResolver().resolve(s))
 			.map(StringUtils::split)
 			.flatMap(Collection::stream)
 			.map(String::trim)
