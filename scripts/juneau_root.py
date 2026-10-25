@@ -14,8 +14,8 @@
 """
 Shared lookup for the Juneau source checkout that the docs scripts run against.
 
-Used by build-docs.py, check-topic-links.py and create-mvn-site.py so they all resolve
-the checkout the same way.
+Used by build-docs.py, check-topic-links.py, check-guide-snippets.py and create-mvn-site.py
+so they all resolve the checkout the same way.
 """
 
 import os

@@ -14,6 +14,7 @@ juneau-test-marshall-utils
 juneau-microservice-test
 juneau-microservice-examples
 juneau-rest-server-console-ui-freemarker-tests
+juneau-examples-guides
 
 # --- Petstore submodules: /about intentionally shows one rolled-up "juneau-petstore"
 #     row rather than breaking out the three deployment variants. ---

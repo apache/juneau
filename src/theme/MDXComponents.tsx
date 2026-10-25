@@ -13,9 +13,11 @@
 
 import MDXComponents from '@theme-original/MDXComponents';
 import DependencyInfo from '@site/src/components/DependencyInfo';
+import DocCardList from '@theme/DocCardList';
 
 // Register components that should be usable in .md/.mdx files without a per-page import.
 export default {
   ...MDXComponents,
   DependencyInfo,
+  DocCardList,
 };

@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+# * with the License.  You may obtain a copy of the License at                                                              *
+# *                                                                                                                         *
+# *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+# *                                                                                                                         *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+# * specific language governing permissions and limitations under the License.                                              *
+# ***************************************************************************************************************************
 """
 Mechanical bulk URL/text substitution pass for the docs pages, driven by renames-table.json.
 
 Full docs: apply-renames.md
 """
 
+import argparse
 import json
 import os
 import re
@@ -14,32 +27,8 @@ import sys
 # Configuration
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DOCS_ROOT = os.path.dirname(SCRIPT_DIR)  # juneau-docs/
-RENAMES_TABLE = os.path.join(SCRIPT_DIR, "renames-table.json")
-
-# Files/directories to walk
-PAGES_DIR = os.path.join(DOCS_ROOT, "pages")
-EXTRA_FILES = [
-    os.path.join(DOCS_ROOT, "README.md"),
-    os.path.join(DOCS_ROOT, "src", "pages", "downloads.md"),
-]
-
-# Carve-out: files being renamed/deleted by a concurrent agent — skip entirely
-# (relative to PAGES_DIR)
-CARVE_OUT_REL = {
-    "topics/JuneauPetstoreOverview.md",
-    "topics/22.01.V9.0-migration-guide.md",
-    "topics/24.01.V10.0-migration-guide.md",
-    "topics/03.Module-juneau-marshall-rdf.md",
-    "topics/03.01.RdfBasics.md",
-    "topics/03.02.RdfSerializers.md",
-    "topics/03.03.RdfParsers.md",
-    "topics/02.34.BestPractices.md",
-    "topics/16.01.MyJettyMicroserviceBasics.md",
-    "topics/16.02.MyJettyMicroserviceInstalling.md",
-    "topics/16.03.MyJettyMicroserviceRunning.md",
-    "topics/16.04.MyJettyMicroserviceBuilding.md",
-}
+DEFAULT_DOCS_ROOT = os.path.dirname(SCRIPT_DIR)  # juneau-docs/
+DEFAULT_TABLE = os.path.join(SCRIPT_DIR, "renames-table.json")
 
 
 # ---------------------------------------------------------------------------
@@ -124,7 +113,7 @@ def mask_code(text):
 
 
 def restore_code(text, restore_map):
-    for placeholder, original in restore_map:
+    for placeholder, original in reversed(restore_map):
         text = text.replace(placeholder, original)
     return text
 
@@ -144,21 +133,32 @@ def apply_rules_to_text(text, rules):
     return text, total
 
 
-def process_file(path, rules, carve_out_abs):
+def target_files(docs_root):
+    """Every *.md under pages/, every *.md, *.mdx and *.tsx under src/pages/ (the site pages that link
+    /docs/topics/...), and README.md when present, sorted."""
+    files = []
+    for base, suffixes in (("pages", (".md",)), (os.path.join("src", "pages"), (".md", ".mdx", ".tsx"))):
+        for dirpath, _dirnames, filenames in os.walk(os.path.join(docs_root, base)):
+            for fn in filenames:
+                if fn.endswith(suffixes):
+                    files.append(os.path.join(dirpath, fn))
+    readme = os.path.join(docs_root, "README.md")
+    if os.path.isfile(readme):
+        files.append(readme)
+    return sorted(files)
+
+
+def is_historical(path, pages_dir):
+    """Release notes other than 10.x are historical and never rewritten."""
+    rel_pages = os.path.relpath(path, pages_dir)
+    return rel_pages.startswith("release-notes" + os.sep) and not os.path.basename(path).startswith("10.")
+
+
+def process_file(path, rules, dry_run=False):
     """
-    Read, apply rules (skipping code regions), write back if changed.
+    Read, apply rules (skipping code regions), write back if changed (unless dry_run).
     Returns (changed: bool, n_substitutions: int).
     """
-    if path in carve_out_abs:
-        return False, 0
-
-    # Check release-notes skip: only process 10.x files
-    rel_pages = os.path.relpath(path, PAGES_DIR)
-    if rel_pages.startswith("release-notes" + os.sep):
-        fname = os.path.basename(path)
-        if not fname.startswith("10."):
-            return False, 0
-
     try:
         with open(path, "r", encoding="utf-8") as fh:
             original = fh.read()
@@ -173,8 +173,9 @@ def process_file(path, rules, carve_out_abs):
     if restored == original:
         return False, 0
 
-    with open(path, "w", encoding="utf-8") as fh:
-        fh.write(restored)
+    if not dry_run:
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(restored)
     return True, n
 
 
@@ -182,74 +183,62 @@ def process_file(path, rules, carve_out_abs):
 # Main
 # ---------------------------------------------------------------------------
 
-def main():
-    rules = load_rules(RENAMES_TABLE)
-    print(f"Loaded {len(rules)} substitution rules from {RENAMES_TABLE}")
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description="Bulk URL/text substitution pass across the docs pages.")
+    parser.add_argument("--table", default=DEFAULT_TABLE,
+                        help="Rules file (default: renames-table.json beside this script).")
+    parser.add_argument("--dry-run", action="store_true", help="Report what would change; write nothing.")
+    parser.add_argument("--docs-dir", default=DEFAULT_DOCS_ROOT,
+                        help="Docs root (default: the parent of scripts/).")
+    return parser.parse_args(argv)
 
-    # Build carve-out absolute paths
-    carve_out_abs = set()
-    for rel in CARVE_OUT_REL:
-        carve_out_abs.add(os.path.join(PAGES_DIR, rel.replace("/", os.sep)))
 
-    # Collect all target files
-    target_files = []
+def main(argv=None):
+    args = parse_args(argv)
+    docs_root = os.path.abspath(args.docs_dir)
+    pages_dir = os.path.join(docs_root, "pages")
+    if not os.path.isfile(args.table):
+        print(f"ERROR: rules table not found: {args.table}", file=sys.stderr)
+        return 2
+    if not os.path.isdir(pages_dir):
+        print(f"ERROR: pages directory not found: {pages_dir}", file=sys.stderr)
+        return 2
 
-    # Walk pages/
-    for dirpath, _dirnames, filenames in os.walk(PAGES_DIR):
-        for fn in filenames:
-            if fn.endswith(".md"):
-                target_files.append(os.path.join(dirpath, fn))
+    rules = load_rules(args.table)
+    print(f"Loaded {len(rules)} substitution rules from {args.table}")
 
-    # Extra top-level files
-    for extra in EXTRA_FILES:
-        if os.path.isfile(extra):
-            target_files.append(extra)
-
-    target_files.sort()
-
-    # Process
     changed_files = []
-    skipped_carveout = []
     skipped_historical = []
     total_subs = 0
 
-    for path in target_files:
-        # Carve-out check
-        if path in carve_out_abs:
-            skipped_carveout.append(path)
+    for path in target_files(docs_root):
+        if is_historical(path, pages_dir):
+            skipped_historical.append(path)
             continue
 
-        # Release-notes historical check
-        rel_pages = os.path.relpath(path, PAGES_DIR)
-        if rel_pages.startswith("release-notes" + os.sep):
-            fname = os.path.basename(path)
-            if not fname.startswith("10."):
-                skipped_historical.append(path)
-                continue
-
-        changed, n = process_file(path, rules, carve_out_abs)
+        changed, n = process_file(path, rules, args.dry_run)
         if changed:
-            rel = os.path.relpath(path, DOCS_ROOT)
-            changed_files.append((rel, n))
+            changed_files.append((os.path.relpath(path, docs_root), n))
             total_subs += n
 
     # Summary
     print()
     print("=" * 72)
-    print("SUBSTITUTION SUMMARY")
+    print("SUBSTITUTION SUMMARY" + (" (dry run, nothing written)" if args.dry_run else ""))
     print("=" * 72)
     if changed_files:
-        print(f"\nFiles modified ({len(changed_files)}):")
+        verb = "would change" if args.dry_run else "modified"
+        print(f"\nFiles {verb} ({len(changed_files)}):")
         for rel, n in changed_files:
             print(f"  {n:4d}  {rel}")
     else:
         print("\n  (no files modified)")
 
     print(f"\nTotal substitutions: {total_subs}")
-    print(f"Carve-out files skipped: {len(skipped_carveout)}")
     print(f"Historical release-notes skipped: {len(skipped_historical)}")
     print()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

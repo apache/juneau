@@ -4,13 +4,18 @@
 
 ## Getting Started
 
-- [Getting Started](https://juneau.apache.org/docs/topics/GettingStarted): New to Juneau? Work through these four short pages in order. Each builds on the previous one and takes a few minutes.
+- [Getting Started](https://juneau.apache.org/docs/topics/GettingStarted): New to Juneau? Work through these four short pages in order. They build one small project, a `Pet` bean, a REST resource that serves it, and a client that calls it, and every code block is...
 - [1. Install Juneau](https://juneau.apache.org/docs/topics/GettingStartedInstall): Juneau requires Java 17+. All modules are published to Maven Central under the group id `org.apache.juneau`.
-- [2. Your First Serializer](https://juneau.apache.org/docs/topics/GettingStartedSerializer): With `juneau-marshall` on the classpath, the `Json` marshaller turns a bean into JSON and back in one call.
+- [2. Your First Serializer](https://juneau.apache.org/docs/topics/GettingStartedSerializer): With `juneau-marshall` on the classpath (the project from the previous page has it), the `Json` marshaller turns a bean into JSON and back in one call.
 - [3. Your First REST App](https://juneau.apache.org/docs/topics/GettingStartedRestApp): A Juneau REST resource is a plain class annotated with `@Rest`. Methods annotated with `@RestGet`, `@RestPost`, and friends become endpoints, and return values are serialized according to the...
-- [4. Your First Client](https://juneau.apache.org/docs/topics/GettingStartedClient): The REST client calls the service from the previous page and parses the response into the same `Pet` bean.
+- [4. Your First Client](https://juneau.apache.org/docs/topics/GettingStartedClient): The REST client calls the service from the previous page and parses the response into the same `Pet` bean. With that server still running, create `src/main/java/com/example/demo/Client.java`:
 - [Starter Projects](https://juneau.apache.org/docs/topics/StarterProjects): Apache Juneau provides three minimal, clone-and-go "Hello World" starter projects — one per deployment type. They are deliberately simpler than the petstore showcase: entry-point templates you can...
 - [v10.0 Migration Guide](https://juneau.apache.org/docs/topics/V10MigrationGuide): The following guide can be used to help migrate your code to v10.0. Note that you can also refer to the Release Notes for changes as well.
+
+## Guides
+
+- [Building a Console Page](https://juneau.apache.org/docs/topics/BuildingAConsolePage): This is the end-to-end tutorial for adding a page to an admin console built on Juneau: a resource that serves the chrome, a navigation tree, a sortable and searchable table backed by a server-side...
+- [MCP Quickstart](https://juneau.apache.org/docs/topics/JuneauMcpQuickstart): Get a working Model Context Protocol (MCP) server and client talking to each other in about 5 minutes, using MCP revision `2026-07-28` (the current revision — see Choosing your MCP setup if you...
 
 ## About Juneau
 
@@ -73,7 +78,6 @@
 - [Swap](https://juneau.apache.org/docs/topics/Swaps): Swaps are a critical component of Juneau. They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
 - [Default Swaps](https://juneau.apache.org/docs/topics/DefaultSwaps): By default, all serializers and parsers have built in `ObjectSwaps` defined for the following common data types:
 - [Auto-detected swaps](https://juneau.apache.org/docs/topics/AutoSwaps): Various methods can be defined on a class directly to affect how it gets serialized. This can often be simpler than using `ObjectSwaps`.
-- [Per-media-type Swaps](https://juneau.apache.org/docs/topics/PerMediaTypeSwaps): Swaps can also be defined per-media-type.
 - [One-way Swaps](https://juneau.apache.org/docs/topics/OneWaySwaps): In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be reconstructing during parsing. However, there are certain kinds of objects that we may want to...
 - [@Swap Annotation](https://juneau.apache.org/docs/topics/SwapAnnotation): @Swap can be used to associate a swap class using an annotation. This is often cleaner than using the builder `swaps()` method since you can keep your swap class near your POJO class.
 - [Templated Swaps](https://juneau.apache.org/docs/topics/TemplatedSwaps): The @Swap(template) annotation allows you to associate arbitrary contextual strings with swaps. The primary purpose is for providing template names, such as for Apache FreeMarker, therefore the...
@@ -90,16 +94,16 @@
 - [POJO Categories](https://juneau.apache.org/docs/topics/PojoCategories): In general, Juneau allows for marshalling for a wide variety of POJO types including:
 - [Marshall Simple Variable Language](https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage): The org.apache.juneau.commons.svl package defines "Simple Variable Language" (SVL) — text containing variables of the form `$varName{varKey}` that are resolved by a
 - [SVL Variables](https://juneau.apache.org/docs/topics/SvlVariables): Variables are defined through the Var API. The API comes with several predefined variables and is easily extensible.
-- [VarResolvers and VarResolverSessions](https://juneau.apache.org/docs/topics/VarResolvers): The main class for performing variable resolution is VarResolver.
+- [VarResolvers and VarResolverSessions](https://juneau.apache.org/docs/topics/VarResolvers): The main class for performing variable resolution is VarResolver. A resolver holds a set of Var classes and context objects, and replaces each `$X{key}` in a string with the value its variable...
 - [VarResolver.DEFAULT](https://juneau.apache.org/docs/topics/DefaultVarResolver): VarResolver.DEFAULT is a reusable, thread-safe VarResolver
 - [SVL Other Notes](https://juneau.apache.org/docs/topics/SvlOtherNotes): This page collects behavioral notes and caveats for the org.apache.juneau.commons.svl resolver that are useful to know when embedding SVL in your own strings.
 - [Encoders](https://juneau.apache.org/docs/topics/MarshallEncoders): The org.apache.juneau.marshall.encoders package defines an API for handling encoding-based matching of `Accept-Encoding`/`Content-Encoding` HTTP headers.
 - [Object Tools](https://juneau.apache.org/docs/topics/ObjectTools): The org.apache.juneau.marshall.objecttools package defines convenience utility classes for accessing and manipulating POJOs.
 - [JSON](https://juneau.apache.org/docs/topics/JsonSupport): Juneau supports converting arbitrary POJOs to and from JSON using ultra-efficient serializers and parsers. The JsonSerializer converts POJOs directly to strict RFC 8259 JSON (double quotes)...
 - [JSON Methodology](https://juneau.apache.org/docs/topics/JsonMethodology): The JSON data type produced depends on the Java object type being serialized.
-- [JSON Serializers](https://juneau.apache.org/docs/topics/JsonSerializers): The JsonSerializer class is used to serialize POJOs into JSON.
+- [JSON Serializers](https://juneau.apache.org/docs/topics/JsonSerializers): The JsonSerializer class serializes POJOs (beans, collections, maps and simple values) into JSON text.
 - [JSON 5](https://juneau.apache.org/docs/topics/Json5): The Json5Serializer class can be used to serialized POJOs into JSON 5 notation.
-- [JSON Parsers](https://juneau.apache.org/docs/topics/JsonParsers): The JsonParser class is used to parse JSON into POJOs.
+- [JSON Parsers](https://juneau.apache.org/docs/topics/JsonParsers): The JsonParser class parses JSON text into POJOs: beans, collections, maps and simple values.
 - [@Json Annotation](https://juneau.apache.org/docs/topics/JsonAnnotation): The @Json annotation is used to override the behavior of JsonSerializer on individual bean classes or properties.
 - [JSON-Schema Support](https://juneau.apache.org/docs/topics/JsonSchemaDetails): Juneau provides the JsonSchemaSerializer class for generating JSON-Schema documents that describe the output generated by the JsonSerializer class.
 - [XML](https://juneau.apache.org/docs/topics/XmlSupport): Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
@@ -107,7 +111,6 @@
 - [XML Serializers](https://juneau.apache.org/docs/topics/XmlSerializers): The XmlSerializer class is used to serialize POJOs into XML.
 - [XML Parsers](https://juneau.apache.org/docs/topics/XmlParsers): The XmlParser class is used to parse XML into POJOs.
 - [@Marshalled(typeName) Annotation](https://juneau.apache.org/docs/topics/XmlBeanTypeNameAnnotation): The @Marshalled(typeName) annotation can be used to override the Juneau default name on bean elements.
-- [@Xml(childName) Annotation](https://juneau.apache.org/docs/topics/XmlChildNameAnnotation): The @Xml(childName) annotation can be used to specify the name of XML child elements for bean properties of type collection or array.
 - [@Xml(format) Annotation](https://juneau.apache.org/docs/topics/XmlFormatAnnotation): The @Xml(format) annotation tweaks how a POJO is rendered in XML. Its value is one of the enum constants defined in XmlFormat,
 - [@Xml Attribute Formats](https://juneau.apache.org/docs/topics/XmlFormatAttrs): The attribute-oriented XmlFormat values move bean-property values between XML attributes and child elements:
 - [@Xml Collapsed Format](https://juneau.apache.org/docs/topics/XmlFormatCollapsed): The XmlFormat.COLLAPSED format can be applied to bean properties of type array/`Collection`. This causes the child objects to be serialized directly inside the bean element.
@@ -121,19 +124,15 @@
 - [HTML Serializers](https://juneau.apache.org/docs/topics/HtmlSerializers): The HtmlSerializer class is used to serialize POJOs into HTML. The HtmlDocSerializer class is the same but wraps the
 - [HTML Parsers](https://juneau.apache.org/docs/topics/HtmlParsers): The HtmlParser class is used to parse HTML into POJOs. They can also parse the contents produced by HtmlDocSerializer.
 - [@Html Annotation](https://juneau.apache.org/docs/topics/HtmlAnnotation): The @Html annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
-- [@Html(render) Annotation](https://juneau.apache.org/docs/topics/HtmlRenderAnnotation): The @Html(render) annotation allows for custom rendering of bean property values when serialized as HTML. Using this class, you can alter the CSS style and HTML content of the bean property.
 - [HtmlDocSerializer](https://juneau.apache.org/docs/topics/HtmlDocSerializer): HtmlDocSerializer is an extension of HtmlSerializer that wraps serialized POJOs in a complete HTML document.
-- [BasicHtmlDocTemplate](https://juneau.apache.org/docs/topics/BasicHtmlDocTemplate): The BasicHtmlDocTemplate class defines a default template for HTML documents created by HtmlDocSerializer.
 - [Custom Templates](https://juneau.apache.org/docs/topics/HtmlCustomTemplates): When HtmlDocSerializer wraps a serialized POJO inside a complete HTML document, the layout of that document is controlled by a page template.
 - [HTML-Schema Support](https://juneau.apache.org/docs/topics/HtmlSchemaSupport): The HtmlSchemaSerializer class is the HTML-equivalent to the JsonSchemaSerializer class.
 - [UON](https://juneau.apache.org/docs/topics/UonSupport): Juneau supports converting arbitrary POJOs to and from UON strings using ultra-efficient serializers and parsers.
-- [UON Methodology](https://juneau.apache.org/docs/topics/UonMethodology): Java type JSON equivalent UON `Maps`/beans OBJECT
 - [UON Serializers](https://juneau.apache.org/docs/topics/UonSerializers): The UonSerializer class is used to serialize POJOs into UON.
 - [UON Parsers](https://juneau.apache.org/docs/topics/UonParsers): The UonParser class is used to parse UON into POJOs.
 - [URL-Encoding](https://juneau.apache.org/docs/topics/UrlEncodingSupport): Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers and parsers.
-- [URL-Encoding Methodology](https://juneau.apache.org/docs/topics/UrlEncMethodology): Java type JSON equivalent UON `Maps`/beans OBJECT
-- [URL-Encoding Serializers](https://juneau.apache.org/docs/topics/UrlEncSerializers): The UrlEncodingSerializer class is used to serialize POJOs into URL-Encoding. The class hierarchy for the builder of this serializer is:
-- [URL-Encoding Parsers](https://juneau.apache.org/docs/topics/UrlEncParsers): The UrlEncodingParser class is used to parse URL-Encoding into POJOs. The class hierarchy for the builder of this parser is:
+- [URL-Encoding Serializers](https://juneau.apache.org/docs/topics/UrlEncSerializers): The UrlEncodingSerializer class is used to serialize POJOs into URL-Encoding.
+- [URL-Encoding Parsers](https://juneau.apache.org/docs/topics/UrlEncParsers): The UrlEncodingParser class is used to parse URL-Encoding into POJOs.
 - [@UrlEncoding Annotation](https://juneau.apache.org/docs/topics/UrlEncodingAnnotation): The URL-Encoding format provides two annotations for tailoring how beans are serialized and parsed: @UrlEncoding for per-bean overrides, and @UrlEncodingConfig
 - [MessagePack](https://juneau.apache.org/docs/topics/MessagePackSupport): Juneau supports converting arbitrary POJOs to and from MessagePack using ultra-efficient serializers and parsers. MessagePack is a compact binary form of JSON.
 - [MessagePack Serializers](https://juneau.apache.org/docs/topics/MsgPackSerializers): The MsgPackSerializer class is used to serialize POJOs into MessagePack.
@@ -163,6 +162,7 @@
 - [CBOR](https://juneau.apache.org/docs/topics/Cbor): Juneau supports converting arbitrary POJOs to and from CBOR (Concise Binary Object Representation) per RFC 8949 using native serializers and parsers. CBOR is a compact binary format designed for...
 - [HOCON](https://juneau.apache.org/docs/topics/HoconSupport): Juneau supports converting arbitrary POJOs to and from HOCON (Human-Optimized Config Object Notation) using native serializers and parsers. HOCON is a superset of JSON used extensively in the JVM...
 - [INI Basics](https://juneau.apache.org/docs/topics/Ini): Juneau supports converting POJOs to and from the classic INI configuration file format using native serializers and parsers implemented without any external dependencies. INI organizes data as...
+- [PlainText](https://juneau.apache.org/docs/topics/PlainText): Juneau supports converting POJOs to and from plain text.
 - [SSE](https://juneau.apache.org/docs/topics/Sse): Juneau supports the Server-Sent Events (SSE) wire format (`text/event-stream`) via native serializer and parser implementations under org.apache.juneau.marshall.sse. SSE is the one-way push...
 - [Token & Record Streaming](https://juneau.apache.org/docs/topics/TokenRecordStreaming): Juneau exposes a public low-level streaming API that complements the POJO databind path (Serializer.write(...) / Parser.read(...)) with cursor-based push and pull primitives. Two surfaces, layered:
 - [Record Streaming](https://juneau.apache.org/docs/topics/RecordStreaming): The RecordReader / RecordWriter surface yields one whole-value record per call. It works uniformly across every Juneau format
@@ -172,14 +172,13 @@
 - [Reading Continuous Streams](https://juneau.apache.org/docs/topics/ReadingContinuousStreams): The following parsers can be configured to read continuous streams of objects from the same input stream:
 - [Large-Dataset Streaming](https://juneau.apache.org/docs/topics/LargeDatasetStreaming): Juneau supports streaming serialization and parsing of arbitrarily large datasets without loading all elements into memory. The feature is built directly into the serializer and parser APIs, so...
 - [Best Practices](https://juneau.apache.org/docs/topics/BestPractices): The following guidelines help you get the most out of the Juneau marshalling APIs in terms of performance and maintainability.
-- [PlainText](https://juneau.apache.org/docs/topics/PlainText): Juneau supports converting POJOs to and from plain text.
 - [juneau-marshall-rdf](https://juneau.apache.org/docs/topics/JuneauMarshallRdf): 
 - [RDF Basics](https://juneau.apache.org/docs/topics/Rdf): The org.apache.juneau.marshall.jena and org.apache.juneau.marshall.jena.marshaller packages provide
 - [RDF Serializers](https://juneau.apache.org/docs/topics/RdfSerializers): The RDF serializers convert POJOs into RDF representations. The module provides both character-based serializers (text formats) and stream-based serializers (RDF/THRIFT and RDF/PROTO binary formats).
 - [RDF Parsers](https://juneau.apache.org/docs/topics/RdfParsers): The RDF parsers convert RDF input (text or binary) into POJOs. The module provides character-based parsers for all text RDF formats and stream-based parsers for RDF/THRIFT and RDF/PROTO binary...
 - [juneau-bean](https://juneau.apache.org/docs/topics/JuneauBean): 
 - [juneau-bean-html5](https://juneau.apache.org/docs/topics/JuneauBeanHtml5): The Juneau HTML5 DTO beans are simply beans with fluent-style setters that allow you to quickly construct HTML fragments as Java objects. These objects can then be serialized to HTML using one of...
-- [juneau-bean-atom](https://juneau.apache.org/docs/topics/JuneauBeanAtom): The Juneau ATOM feed DTO beans are simply beans with fluent-style setters.
+- [juneau-bean-atom](https://juneau.apache.org/docs/topics/JuneauBeanAtom): The Juneau ATOM feed DTO beans are plain beans with fluent-style setters, built through AtomBuilder.
 - [juneau-bean-jsonschema](https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema): The `juneau-bean-jsonschema` module provides Java beans for working with JSON Schema documents following the JSON Schema Draft 2020-12 specification.
 - [juneau-bean-openapi-v3](https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3): The `juneau-bean-openapi-v3` module provides Java beans for working with OpenAPI 3.0 documents and user interfaces.
 - [juneau-bean-common](https://juneau.apache.org/docs/topics/JuneauBeanCommon): The `juneau-bean-common` module provides a small set of general-purpose Data Transfer Object (DTO) beans in the `org.apache.juneau.bean` package that don't belong to any single wire-format module.
@@ -194,10 +193,7 @@
 - [Config Overview](https://juneau.apache.org/docs/topics/Overview): The `juneau-config` library contains a powerful API for creating and using INI-style config files.
 - [Syntax Rules](https://juneau.apache.org/docs/topics/SyntaxRules): Each config file contains zero or more sections containing zero or more entries:
 - [Reading Entries](https://juneau.apache.org/docs/topics/ReadingEntries): Configuration files can contain entries for anything from primitive types up to complex hierarchies of POJOs consisting of `Maps`, `Collections`, and/or beans.
-- [POJOs](https://juneau.apache.org/docs/topics/Pojos): Entries can also be read as POJOs.
-- [Arrays](https://juneau.apache.org/docs/topics/Arrays): The `asStringArray()` method allows you to retrieve comma-delimited lists of values:
 - [Java Collection Framework Objects](https://juneau.apache.org/docs/topics/JCFObjects): Entries can also be read as Java Collection Framework objects.
-- [Binary Data](https://juneau.apache.org/docs/topics/BinaryData): Entries can also be accessed as binary data.
 - [Variables](https://juneau.apache.org/docs/topics/Variables): Config files can contain variables that get resolved dynamically using the previously-described VarResolver API.
 - [Logic Variables](https://juneau.apache.org/docs/topics/LogicVariables): :::note Migration The dedicated `$IF{}`/`$SW{}`/`$CO{}`/`$PM{}`/`$NE{}`/`$UC{}`/`$LC{}` variable classes described in earlier versions of this page (`IfVar`, `SwitchVar`, `CoalesceVar`...
 - [Property Sources](https://juneau.apache.org/docs/topics/PropertySources): Juneau 10.0 introduces a unified property-source model behind Settings.
@@ -205,21 +201,14 @@
 - [Sections](https://juneau.apache.org/docs/topics/Sections): Config sections can be retrieved in-bulk using the Config.getSection(String) method.
 - [Setting Values](https://juneau.apache.org/docs/topics/SettingValues): The following methods allow you to add, remove, and modify entries and sections in a config file:
 - [File System Changes](https://juneau.apache.org/docs/topics/FileSystemChanges): In general, external file modifications will be detected immediately in the `Config` object when a watcher thread is enabled (explained later). Otherwise, they are detected when a commit is performed.
-- [Custom Entry Serialization](https://juneau.apache.org/docs/topics/CustomEntrySerialization): Setter methods that take in a `Serializer` can be used to provide custom serialization of entries instead of using the predefined serializer.
-- [Setting Values in Bulk](https://juneau.apache.org/docs/topics/BulkSettingValues): The following methods can be used to bulk-load configuration values:
-- [Config Listeners](https://juneau.apache.org/docs/topics/ConfigListeners): Configuration change events can be listened for using the following methods:
-- [Serializing](https://juneau.apache.org/docs/topics/SerializingConfigs): The following methods are used for serializing `Config` objects back into their text form:
+- [Config Listeners](https://juneau.apache.org/docs/topics/ConfigListeners): Configuration change events can be listened for with `Config.addListener(ConfigEventListener)`.
 - [Imports](https://juneau.apache.org/docs/topics/Imports): Configurations can import values from other configurations using the following syntax:
 - [Config Stores](https://juneau.apache.org/docs/topics/ConfigStores): Configuration files are stored in entities called Stores.
-- [MemoryStore](https://juneau.apache.org/docs/topics/MemoryStore): The MemoryStore class is simply an in-memory storage location for configuration files.
-- [FileStore](https://juneau.apache.org/docs/topics/FileStore): The FileStore is the typical store used for configuration files.
-- [Custom ConfigStores](https://juneau.apache.org/docs/topics/CustomStores): The `ConfigStore` API has been written to allow easy development of custom configuration storage classes. The example below shows a starting point for an implementation based on polling a...
-- [ConfigStore Listeners](https://juneau.apache.org/docs/topics/StoreListeners): The `ConfigStore` class has the following listener methods:
 - [ClasspathStore](https://juneau.apache.org/docs/topics/ClasspathStore): The ClasspathStore reads configuration files from the JVM classpath (for example files packaged inside your jar or under `src/main/resources`).
 - [Read-only Configs](https://juneau.apache.org/docs/topics/ReadOnlyConfigs): The following settings can be used to create read-only `Config` objects:
 - [Closing Configs](https://juneau.apache.org/docs/topics/ClosingConfigs): In general, it's good practice to close Config if you're only creating them temporarily so that their listeners get unregistered from the underlying storage APIs.
 - [System Default Config](https://juneau.apache.org/docs/topics/SystemDefaultConfig): Each JVM has a system default config. This is a configuration file that serves as the default configuration for the system. It's accessed using the following static methods:
-- [YAML Config Files](https://juneau.apache.org/docs/topics/YamlConfigFiles): `juneau-config` now supports YAML config files as an alternative to INI/CFG files.
+- [YAML Config Files](https://juneau.apache.org/docs/topics/YamlConfigFiles): `juneau-config` supports YAML config files as an alternative to INI/CFG files.
 - [Config Profiles & Relaxed Binding](https://juneau.apache.org/docs/topics/ConfigProfilesAndRelaxedBinding): Starting in 10.0.0, Juneau's config system supports two cloud-native ergonomics borrowed from the Spring Boot world: environment profiles (`-` config overlays) and relaxed binding (one logical key...
 - [INI Config Format](https://juneau.apache.org/docs/topics/IniConfigFormat): A config file's on-disk syntax is handled by a ConfigFormat. IniConfigFormat is the INI implementation and the default.
 - [juneau-test](https://juneau.apache.org/docs/topics/JuneauTest): 
@@ -231,7 +220,7 @@
 - [Listifiers](https://juneau.apache.org/docs/topics/Listifiers): Listifiers convert collection-like objects into lists for use in BCT assertions. They provide a unified way to work with various collection types, iterators, streams, and other iterable data...
 - [Swappers](https://juneau.apache.org/docs/topics/Swappers): Swappers transform objects before they are processed by BCT assertions. They provide a way to unwrap, evaluate, or transform objects into more testable forms. Swappers are particularly useful for...
 - [Property Extractors](https://juneau.apache.org/docs/topics/PropertyExtractors): Property extractors define custom property access logic for objects that don't follow standard JavaBean patterns or require specialized property extraction. They provide a flexible way to access...
-- [JUnit Extensions](https://juneau.apache.org/docs/topics/JuneauTestJUnitExtensions): The `juneau-test` module bundles a small JUnit 5 extension (formerly the standalone `juneau-junit5` module) for test-time bean injection — swapping production beans with test doubles inside a...
+- [JUnit Extensions](https://juneau.apache.org/docs/topics/JuneauTestJUnitExtensions): The `juneau-test` module bundles a small JUnit 5 extension for test-time bean injection — swapping production beans with test doubles inside a Juneau `BeanStore` for the duration of a JUnit 5...
 
 ## REST
 
@@ -240,7 +229,7 @@
 - [Helper Classes](https://juneau.apache.org/docs/topics/HelperClasses): The org.apache.juneau.http.header package contains various convenience classes for creating standard HTTP components using static imports.
 - [Annotations](https://juneau.apache.org/docs/topics/Annotations): The org.apache.juneau.http package contains annotations for defining both server and client side APIs.
 - [HTTP Headers](https://juneau.apache.org/docs/topics/HttpHeaders): The org.apache.juneau.http.header package contains transport-neutral header beans for all common HTTP headers. These beans implement the HttpHeader interface, which mirrors
-- [HTTP Parts](https://juneau.apache.org/docs/topics/HttpParts): The org.apache.juneau.http.part package contains implementations of `org.apache.http.NameValuePair` to be used for query/form-data/path parts and part lists.
+- [HTTP Part Beans](https://juneau.apache.org/docs/topics/HttpParts): The org.apache.juneau.http.part package contains implementations of `org.apache.http.NameValuePair` to be used for query/form-data/path parts and part lists.
 - [HTTP Entities and Resources](https://juneau.apache.org/docs/topics/HttpEntitiesAndResources): The org.apache.juneau.http.classic.entity package contains implementations of `org.apache.http.HttpEntity`. These are entities that can be sent or received with an HTTP message.
 - [HTTP Responses](https://juneau.apache.org/docs/topics/HttpResponses): The org.apache.juneau.http.response package contains predefined transport-neutral HttpResponseMessage implementations for most standard HTTP responses.
 - [Remote Proxy Interfaces](https://juneau.apache.org/docs/topics/RemoteProxyInterfaces): The org.apache.juneau.http.remote package contains the annotations used for defining client-side remote proxies.
@@ -252,7 +241,7 @@
 - [Path Variables](https://juneau.apache.org/docs/topics/PathVariables): The path can contain variables that get resolved to @Path parameters or access through the RestRequest.getPathParams() method.
 - [Deployment](https://juneau.apache.org/docs/topics/Deployment): REST resources are deployed in the following ways:
 - [Lifecycle Hooks](https://juneau.apache.org/docs/topics/LifecycleHooks): Lifecycle hooks allow you to hook into lifecycle events of the servlet/resource creation and REST calls.
-- [@Rest, @RestOp and @Mixin Attributes](https://juneau.apache.org/docs/topics/RestAnnotationAttributes): This page is a consolidated reference for the attributes of the three annotations that configure a REST resource:
+- [@Rest and @RestOp](https://juneau.apache.org/docs/topics/RestAnnotationAttributes): This page is a consolidated reference for the attributes of the three annotations that configure a REST resource:
 - [@RestOp-Annotated Method](https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods): REST Java methods are identified on REST servlets using the @RestOp annotation.
 - [Inferred HTTP Methods and Paths](https://juneau.apache.org/docs/topics/InferredHttpMethodsAndPaths): When the `method` and/or `path` values are not specified, their values are inferred from the Java method name.
 - [Java Method Parameters](https://juneau.apache.org/docs/topics/JavaMethodParameters): Java methods can contain any of the following parameters in any order:
@@ -261,14 +250,12 @@
 - [Path Patterns](https://juneau.apache.org/docs/topics/PathPatterns): The @RestOp(path) annotation allows you to define URL path patterns to match against. These patterns can contain variables of the form `{xxx}` that can be passed in directly to the Java methods as...
 - [Matchers](https://juneau.apache.org/docs/topics/Matchers): RestMatcher is used to allow multiple Java methods to be tied to the same HTTP method and path but differentiated by some request attribute such as a specific header value.
 - [Overloading HTTP Methods](https://juneau.apache.org/docs/topics/OverloadingHttpMethods): Through the use of the built-in `method` GET parameter, you can implement requests beyond the basic REST http method types.
-- [Additional Information](https://juneau.apache.org/docs/topics/AdditionalInformation): Refer to the following Javadocs for more information:
-- [HTTP Part](https://juneau.apache.org/docs/topics/RestServerHttpParts): In previous examples we showed the ability to pass in annotated parameters on RestOp-annotated methods to parse standard HTTP parts:
+- [HTTP parts in REST servers](https://juneau.apache.org/docs/topics/RestServerHttpParts): In previous examples we showed the ability to pass in annotated parameters on RestOp-annotated methods to parse standard HTTP parts.
 - [Part Marshallers](https://juneau.apache.org/docs/topics/PartMarshallers): Juneau comes with three basic marshaller types for serializing and parsing Header, Query, Form, and Path parts:
 - [HTTP Part Annotations](https://juneau.apache.org/docs/topics/HttpPartAnnotations): The following annotations allow for defining part schemas based on the OpenAPI standard.
 - [Default Parts](https://juneau.apache.org/docs/topics/DefaultParts): By default, HTTP parts that don't have value (such as missing query parameters) end up with null values:
 - [Request Beans](https://juneau.apache.org/docs/topics/RequestBeans): The @Request annotation can used to define proxy interfaces against HTTP requests in combination with the following annotations used on methods:
 - [@Response Beans](https://juneau.apache.org/docs/topics/ResponseBeans): The Response annotation can be used to define beans that return HTTP response parts via annotations and methods.
-- [HTTP Part APIs](https://juneau.apache.org/docs/topics/HttpPartApis): Request HTTP parts can also be retrieved programmatically through the following classes that can be passed in as parameters or access through RestRequest bean:
 - [HTTP Part Validation](https://juneau.apache.org/docs/topics/HttpPartValidation): HTTP parts can be automatically validated against their schema definitions using format validation and Jakarta Bean Validation constraints.
 - [Marshalling](https://juneau.apache.org/docs/topics/Marshalling): :::warning Outdated examples (10.0) Examples on this page using `RestContext.Builder` is pre-10.0 and kept only for historical context. Use `@Rest(...serializers/parsers...)`, `@RestOp(...)`, or...
 - [Form Posts](https://juneau.apache.org/docs/topics/HandlingFormPosts): HTTP form posts can be handled two ways:
@@ -282,9 +269,9 @@
 - [Guards](https://juneau.apache.org/docs/topics/Guards): Guards control access to REST classes and methods.
 - [Converters](https://juneau.apache.org/docs/topics/Converters): Converters can be thought of as "post-processors" for response POJOs before they get passed to the serializer.
 - [Localized Messages](https://juneau.apache.org/docs/topics/LocalizedMessages): The @Rest(messages) annotation identifies the location of the resource bundle for a @Rest-annotated class if it's different from the class name.
-- [REST Server Encoders](https://juneau.apache.org/docs/topics/RestServerEncoders): The @Rest(encoders) annotation can be used to associate character encoders with a servlet class. Encoders can be used to enable various kinds of compression (e.g. `gzip`) on requests and responses...
+- [Encoders in REST servers](https://juneau.apache.org/docs/topics/RestServerEncoders): The @Rest(encoders) annotation can be used to associate character encoders with a servlet class. Encoders can be used to enable various kinds of compression (e.g. `gzip`) on requests and responses...
 - [Configuration Files](https://juneau.apache.org/docs/topics/ConfigurationFiles): :::warning Outdated examples (10.0) Examples on this page using `RestContext.Builder` is pre-10.0 and kept only for historical context. Use `Config` parameter injection in `@RestOp` methods...
-- [REST Server SVL Variables](https://juneau.apache.org/docs/topics/RestServerSvlVariables): :::warning Outdated examples (10.0) Examples on this page using `RestContext.Builder` / `builder.vars(...)` is pre-10.0 and kept only for historical context. Register custom vars through...
+- [REST Server SVL Variables](https://juneau.apache.org/docs/topics/RestServerSvlVariables): For the `Var` API itself, see SVL Variables.
 - [Static files](https://juneau.apache.org/docs/topics/StaticFiles): The BasicRestServlet and BasicRestResource classes come with built-in support for serving up static files through the HtdocMixin op-mixin, which provides the following REST operation:
 - [Static-Files Mixin](https://juneau.apache.org/docs/topics/StaticFilesMixin): The Juneau REST server ships with a `StaticFilesMixin` mixin in the `org.apache.juneau.rest.server.staticfile`
 - [Convention-Endpoints Mixin Pack](https://juneau.apache.org/docs/topics/ConventionEndpointsMixins): The Juneau REST server ships with a four-class convention-endpoints mixin pack in `org.apache.juneau.rest.server.convention` covering the small set of de-facto-standard URLs that every...
@@ -293,18 +280,13 @@
 - [Thymeleaf View Support](https://juneau.apache.org/docs/topics/ThymeleafViewSupport): The `juneau-rest-server-view-thymeleaf` module adds Thymeleaf view-rendering to `juneau-rest-server` without bleeding the Thymeleaf engine dependency into the core.
 - [Mustache View Support](https://juneau.apache.org/docs/topics/MustacheViewSupport): The `juneau-rest-server-view-mustache` module adds Mustache view-rendering to `juneau-rest-server` without bleeding the Mustache engine dependency into the core.
 - [FreeMarker View Support](https://juneau.apache.org/docs/topics/FreemarkerViewSupport): The `juneau-rest-server-view-freemarker` module adds Apache FreeMarker view-rendering to `juneau-rest-server` without bleeding the FreeMarker engine dependency into the core.
-- [Client Versioning](https://juneau.apache.org/docs/topics/ClientVersioning): Client version headers are used to support backwards compatibility for breaking REST interface changes. Using them, you're able to return different responses based on which client is making a request.
-- [Swagger](https://juneau.apache.org/docs/topics/Swagger): One of the most useful features of Juneau is the ability to generate Swagger-based OPTIONS pages for self-documenting designs (i.e. REST interfaces that document themselves).
+- [Swagger](https://juneau.apache.org/docs/topics/Swagger): A REST resource can generate Swagger JSON and a Swagger UI page from its own annotations, so the interface documents itself at runtime.
 - [BasicRestServlet/BasicRestResource Swagger and OpenAPI 3.1](https://juneau.apache.org/docs/topics/BasicRestServletSwagger): Any subclass of `BasicRestServlet` or `BasicRestResource` gets six auto-generated API-documentation endpoints by default:
 - [API-Docs Mixin Pack](https://juneau.apache.org/docs/topics/ApiDocsMixins): The Juneau REST server ships with a four-class api-docs mixin pack in `org.apache.juneau.rest.server.docs` that drives every built-in Swagger / OpenAPI / Redoc endpoint on `BasicRestServlet` and
 - [Basic Swagger Info](https://juneau.apache.org/docs/topics/BasicSwaggerInfo): Let's look at the various parts of the `Petstore` application Swagger UI to see how they are defined.
 - [Swagger Tags](https://juneau.apache.org/docs/topics/SwaggerTags): Tags allow you to group operations into general categories. In the user interface, these can be expanded/collapsed by clicking on the tag sections.
-- [Swagger Operations](https://juneau.apache.org/docs/topics/SwaggerOperations): @RestOp-annotated methods automatically get rendered as Swagger operations.
 - [Swagger Parameters](https://juneau.apache.org/docs/topics/SwaggerParameters): Expanding operations shows you a list of parameters.
-- [Swagger Responses](https://juneau.apache.org/docs/topics/SwaggerResponses): Under the input parameters are listed the possible responses for the resource.
 - [Swagger Models](https://juneau.apache.org/docs/topics/SwaggerModels): :::warning Outdated examples (10.0) Examples on this page using `@HookEvent(INIT)` or `RestContext.Builder` is pre-10.0 and kept only for historical context. Configure schema generation through...
-- [SwaggerUI.css](https://juneau.apache.org/docs/topics/SwaggerStylesheet): The look-and-feel of the Swagger UI is controlled via a single CSS file: `SwaggerUI.css`.
-- [REST method execution statistics](https://juneau.apache.org/docs/topics/ExecutionStatistics): Rest-annotated classes get automated timing and error statistic information for all @RestOp and lifecycle-event annotated methods on the class.
 - [@HtmlDocConfig Annotation](https://juneau.apache.org/docs/topics/HtmlDocConfigAnnotation): The @HtmlDocConfig annotation is used to customize the HTML view of POJOs serialized by HtmlDocSerializer.
 - [User Interfaces (UI) vs. Developer Interfaces (DI)](https://juneau.apache.org/docs/topics/HtmlUIvsDI): An important distinction needs to be made about the HTML representations produced by the REST API. These should not be considered User Interfaces but rather Developer Interfaces. UIs should hide...
 - [Widgets](https://juneau.apache.org/docs/topics/HtmlWidgets): The Widget class allows you to add arbitrary HTML, CSS, and Javascript to HTML pages.
@@ -316,35 +298,34 @@
 - [RFC 7807 / 9457 Problem Details](https://juneau.apache.org/docs/topics/RestServerProblemDetails): Juneau REST servers can emit machine-readable RFC 7807 — Problem Details for HTTP APIs responses (`application/problem+json`) end-to-end. The feature couples three pieces:
 - [Conditional-GET / ETag Helpers](https://juneau.apache.org/docs/topics/RestServerConditionalGet): Juneau REST servers ship a minimal but complete RFC 7232 — Conditional Requests helper layer so handlers no longer need to hand-roll `ETag` / `Last-Modified` / `If-None-Match` / `If-Match`...
 - [Rate-Limiting and Request-Id Propagation](https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId): Juneau REST servers ship two small, opt-in primitives for operational hardening:
+- [Client Versioning](https://juneau.apache.org/docs/topics/ClientVersioning): Client version headers let one REST resource return different responses depending on which version of a client is calling, so you can make breaking interface changes without breaking older clients.
+- [Jakarta Bean Validation](https://juneau.apache.org/docs/topics/RestServerValidation): Validation is opt-in and disabled by default. To enable, mark a `@Content`, `@FormData`, or `@Request`-bound parameter with `@jakarta.validation.Valid`. With no marker anywhere on a resource...
 - [Test-time Bean Injection](https://juneau.apache.org/docs/topics/RestServerTestBeanInjection): The `juneau-test` module provides a small JUnit 5 extension for swapping production beans with test doubles (mocks/fakes) inside a Juneau `BeanStore` for the duration of a JUnit 5 test — without...
 - [AuthN Guards — Bearer / API-Key / JWT](https://juneau.apache.org/docs/topics/RestServerAuthGuards): Juneau REST servers ship two opt-in authentication (AuthN) guards in org.apache.juneau.rest.server.auth plus an `@Auth Principal` argument resolver. A separate, optional sub-module —...
-- [Jakarta Bean Validation](https://juneau.apache.org/docs/topics/RestServerValidation): Validation is opt-in and disabled by default. To enable, mark a `@Content`, `@FormData`, or `@Request`-bound parameter with `@jakarta.validation.Valid`. With no marker anywhere on a resource...
-- [Observability — Micrometer + OpenTelemetry](https://juneau.apache.org/docs/topics/RestServerObservability): Observability is opt-in and disabled by default. A fresh `RestContext` built with no `MetricsRecorder` or `TracerHook` bean registered never records a metric sample, never opens a span, and never...
-- [Micrometer Metrics Bridge (juneau-rest-server-metrics-micrometer)](https://juneau.apache.org/docs/topics/RestServerMicrometerMetrics): The `juneau-rest-server-metrics-micrometer` module bridges every `@RestOp` call to a Micrometer `MeterRegistry`, enabling Prometheus / Grafana dashboards, StatsD, Datadog, New Relic, and any other...
-- [OpenTelemetry Tracing Bridge (juneau-rest-server-tracing-otel)](https://juneau.apache.org/docs/topics/RestServerOtelTracing): The `juneau-rest-server-tracing-otel` module bridges every `@RestOp` call to an OpenTelemetry `Tracer`, opening a `SERVER` span per request, propagating incoming W3C trace context, and injecting...
-- [Async Returns + Virtual-Thread Dispatch](https://juneau.apache.org/docs/topics/RestServerAsyncDispatch): `@RestOp` handler methods may return `CompletableFuture` (or any `CompletionStage`); the framework unwraps the value through the standard response-processor chain when the future resolves. A...
 - [AuthN Filter Framework — Servlet-Layer Authentication](https://juneau.apache.org/docs/topics/AuthFilterFramework): The org.apache.juneau.rest.server.auth package provides a pluggable servlet-filter authentication framework that runs at the servlet container layer — before Juneau's request routing — so a single...
 - [REST Authenticator — Resource-Level Authentication](https://juneau.apache.org/docs/topics/RestServerAuthenticator): The `RestAuthenticator` SPI provides an ergonomic, in-resource way to resolve a request's `Principal` and roles for `@Rest` resources — so `roleGuard`, `RoleBasedRestGuard`, `@Auth Principal`...
 - [SAML 2.0 AuthN Support (juneau-rest-server-auth-saml)](https://juneau.apache.org/docs/topics/SamlAuthSupport): The opt-in `juneau-rest-server-auth-saml` module adds SAML 2.0 single-sign-on (Web Browser SSO Profile) to `juneau-rest-server` by wrapping OpenSAML 5.x behind the AuthFilter / TokenValidator SPIs...
 - [OAuth 2.0 / OIDC AuthN Support (juneau-rest-server-auth-oauth)](https://juneau.apache.org/docs/topics/OAuthAuthSupport): The opt-in `juneau-rest-server-auth-oauth` module adds OAuth 2.0 + OIDC bearer-token validation, RFC 7662 token introspection, RFC 6749 client-side grant flows, and OIDC discovery to...
 - [OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)](https://juneau.apache.org/docs/topics/OidcRelyingParty): The opt-in `juneau-rest-server-auth-oidc-rp` module turns a Juneau REST server into a complete OpenID Connect Relying Party &mdash; the "Log in with Google / Okta / Entra ID / Keycloak" end-to-end...
+- [Observability — Micrometer + OpenTelemetry](https://juneau.apache.org/docs/topics/RestServerObservability): Observability is opt-in and disabled by default. A fresh `RestContext` built with no `MetricsRecorder` or `TracerHook` bean registered never records a metric sample, never opens a span, and never...
+- [Micrometer Metrics Bridge (juneau-rest-server-metrics-micrometer)](https://juneau.apache.org/docs/topics/RestServerMicrometerMetrics): The `juneau-rest-server-metrics-micrometer` module bridges every `@RestOp` call to a Micrometer `MeterRegistry`, enabling Prometheus / Grafana dashboards, StatsD, Datadog, New Relic, and any other...
+- [OpenTelemetry Tracing Bridge (juneau-rest-server-tracing-otel)](https://juneau.apache.org/docs/topics/RestServerOtelTracing): The `juneau-rest-server-tracing-otel` module bridges every `@RestOp` call to an OpenTelemetry `Tracer`, opening a `SERVER` span per request, propagating incoming W3C trace context, and injecting...
+- [REST method execution statistics](https://juneau.apache.org/docs/topics/ExecutionStatistics): Rest-annotated classes get automated timing and error statistic information for all @RestOp and lifecycle-event annotated methods on the class.
+- [Management Logging — Logback & Log4j2 Backends](https://juneau.apache.org/docs/topics/RestServerManagementLogging): The `juneau-rest-server-management-logging` module ships opt-in `LogBackend` adapters that let the `/loggers` management endpoint drive Logback or Log4j2 instead of the built-in...
+- [Async Returns + Virtual-Thread Dispatch](https://juneau.apache.org/docs/topics/RestServerAsyncDispatch): `@RestOp` handler methods may return `CompletableFuture` (or any `CompletionStage`); the framework unwraps the value through the standard response-processor chain when the future resolves. A...
 - [Reactive-Streams Returns](https://juneau.apache.org/docs/topics/RestServerReactive): `@RestOp` handler methods may return reactive-streams values. The feature is fully opt-in by adding a module to the classpath — a bare `juneau-rest-server` has zero reactive behavior and its...
 - [Built-in Parameters](https://juneau.apache.org/docs/topics/BuiltInParameters): The following URL parameters have special meaning and can be passed in through the URL of the request:
 - [Session Options via HTTP](https://juneau.apache.org/docs/topics/SessionOptions): Juneau REST supports overriding serializer and parser session properties on a per-request basis via HTTP headers or query parameters. This allows clients to control aspects of marshalling (such as...
-- [Using with OSGi](https://juneau.apache.org/docs/topics/UsingWithOsgi): Since REST servlets are basically just `HttpServlets`, incorporating them into an OSGi environment is pretty straightforward.
+- [Using with OSGi](https://juneau.apache.org/docs/topics/UsingWithOsgi): A Juneau REST servlet is an ordinary `HttpServlet`, so in OSGi you publish it as a servlet service and let the HTTP whiteboard mount it.
 - [RestContext](https://juneau.apache.org/docs/topics/RestContext): :::warning Outdated examples (10.0) Examples on this page using `RestContext.Builder` (constructor injection or `@RestInit` parameter injection) is pre-10.0 and kept only for historical context...
 - [RestOpContext](https://juneau.apache.org/docs/topics/RestOpContext): The RestOpContext object is the workhorse class for an individual RestOp-annotated method.
 - [Response Processors](https://juneau.apache.org/docs/topics/ResponseProcessors): The REST Server API uses the concept of registered response processors for converting objects returned by REST methods or set through RestResponse.setContent(Object) into appropriate HTTP responses.
 - [REST/RPC](https://juneau.apache.org/docs/topics/RestRpc): The REST/RPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
-- [Serializing URIs](https://juneau.apache.org/docs/topics/SerializingUris): Juneau serializers have sophisticated support for transforming relative URIs to absolute form. The following example shows a REST method that returns a list of URIs of various forms:
+- [Serializing URIs](https://juneau.apache.org/docs/topics/SerializingUris): Juneau serializers turn relative URIs into absolute form, using the authority, context root, servlet path and path info of the current request.
 - [Utility Beans](https://juneau.apache.org/docs/topics/UtilityBeans): The org.apache.juneau.rest.server.beans package contains a set of reusable utility beans meant to help with putting together explorable REST interfaces.
 - [Using with HTML Beans](https://juneau.apache.org/docs/topics/HtmlBeans): The `HtmlFlavorRest` class in the petstore console (the Html subtab at `/console/dev/flavors/html`) shows how HTML5 beans can be used to generate arbitrary HTML on REST endpoints.
-- [Other Notes](https://juneau.apache.org/docs/topics/OtherNotes): - Subclasses can use either HttpServlet.init(ServletConfig) or HttpServlet.init() for initialization just like any other servlet.
-- [Using LOG4J for logging](https://juneau.apache.org/docs/topics/Log4j): The REST API uses Java logging by default.
-- [Management Logging — Logback & Log4j2 Backends](https://juneau.apache.org/docs/topics/RestServerManagementLogging): The `juneau-rest-server-management-logging` module ships opt-in `LogBackend` adapters that let the `/loggers` management endpoint drive Logback or Log4j2 instead of the built-in...
 - [RDF Support (juneau-rest-server-rdf)](https://juneau.apache.org/docs/topics/RestServerRdf): The opt-in `juneau-rest-server-rdf` module adds RDF (Jena) marshalling to a `@Rest`-annotated resource by supplying a predefined config interface that mirrors the standard universal config but...
 - [Admin-Console Chrome (juneau-rest-server-console-ui)](https://juneau.apache.org/docs/topics/AdminConsoleChrome): Three new opt-in modules add a themeable, security-hardened admin-console "chrome" (CSS theme tokens, a status/domain pill component, and FreeMarker-macro composition) on top of...
-- [Building a Console Page](https://juneau.apache.org/docs/topics/BuildingAConsolePage): This is the end-to-end tutorial for adding a page to an admin console built on Juneau: a resource that serves the chrome, a navigation tree, a sortable and searchable table backed by a server-side...
 - [Card Asset Dependencies](https://juneau.apache.org/docs/topics/CardAssetDependencies): A console card can need scripts and stylesheets beyond the `views` toolkit. A datatables card needs jQuery, DataTables and Juneau's glue script. The card declares that need, and `` loads each...
 - [Chart Cards](https://juneau.apache.org/docs/topics/ChartCards): A chart card draws a line, bar or donut chart from rows of JSON. Juneau draws it as inline SVG with no third-party chart library. The script is `juneau-charts.js`, and `` loads it for you when a...
 - [Job-Log Card](https://juneau.apache.org/docs/topics/JobLogCard): A job-log card starts a long-running job and shows its progress as it runs. It has a small form and a log pane. Submitting the form posts to your endpoint, which starts an `AsyncJobsMixin` job and...
@@ -367,14 +348,13 @@
 - [Console Message Bus](https://juneau.apache.org/docs/topics/ConsoleMessageBus): The console message bus carries small JSON values between your server code and the pages of a console. The server publishes to a topic; every page that asked for the topic receives the value, and...
 - [Datatable View Settings](https://juneau.apache.org/docs/topics/DatatableViewSettings): The View Settings dialog lets a user tailor a datatable view (the `juneau-rest-server-views` table card) and keep those choices across reloads. This page covers the dialog's tabs, how settings...
 - [MCP (Model Context Protocol)](https://juneau.apache.org/docs/topics/JuneauMcp): Juneau provides both server-side and client-side support for the Model Context Protocol (MCP), a JSON-RPC 2.0 protocol that lets AI assistants and agents discover and invoke external tools...
-- [MCP Quickstart](https://juneau.apache.org/docs/topics/JuneauMcpQuickstart): Get a working Model Context Protocol (MCP) server and client talking to each other in about 5 minutes, using MCP revision `2026-07-28` (the current revision — see Choosing your MCP setup if you...
 - [Choosing your MCP setup](https://juneau.apache.org/docs/topics/JuneauMcpChoosingSetup): Three independent decisions determine which classes you extend/implement and which Maven artifacts you depend on. They can be mixed freely — e.g. `2026-07-28` + mixin + Spring Boot is a perfectly...
 - [MCP Recipes](https://juneau.apache.org/docs/topics/JuneauMcpRecipes): Copy-pasteable snippets for common MCP tasks, targeting revision `2026-07-28` unless noted. Each recipe is self-contained: assume `config` is an `McpServerConfig` you're building up (as in the...
 - [juneau-rest-server-mcp](https://juneau.apache.org/docs/topics/JuneauRestServerMcp): New to MCP in Juneau? Start with the MCP Quickstart and MCP Recipes — this page is the deep reference for lookup once you're past the basics.
 - [juneau-rest-client-mcp](https://juneau.apache.org/docs/topics/JuneauRestClientMcp): New to MCP in Juneau? Start with the MCP Quickstart and MCP Recipes — this page is the deep reference for lookup once you're past the basics.
 - [juneau-rest-server-springboot](https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot): 
 - [Spring Boot Overview](https://juneau.apache.org/docs/topics/SpringBootOverview): The Juneau REST servlet APIs are designed to work seamlessly with the Spring Boot framework.
-- [juneau-rest-client-classic](https://juneau.apache.org/docs/topics/JuneauRestClient): :::note Classic stack — module renamed in 10.0.0 This page documents the classic, Apache HttpClient 4.5–based `RestClient` (`org.apache.juneau.rest.client.classic.*`). As of Juneau 10.0.0 it ships...
+- [juneau-rest-client-classic](https://juneau.apache.org/docs/topics/JuneauRestClient): :::tip Which client? `juneau-rest-client` (`org.apache.juneau.rest.client.RestClient`) is the recommended REST client. It is generally available in 10.0.0, transport-agnostic, and uses the JDK...
 - [Choosing a REST Client](https://juneau.apache.org/docs/topics/ChoosingARestClient): Juneau 10 ships two REST client stacks in the same release. Both are supported; they differ in which HTTP library they are built on and how much of the Juneau API surface they expose.
 - [POJO Marshalling](https://juneau.apache.org/docs/topics/PojoMarshalling): By default, JSON support is provided for HTTP request and response bodies.
 - [Request Parts](https://juneau.apache.org/docs/topics/RequestParts): Per-client or per-request HTTP parts (headers, query/form data, path parameters) can be manipulated via the following methods that return back builders for those parts:
@@ -382,7 +362,6 @@
 - [Response Status](https://juneau.apache.org/docs/topics/ResponseStatus): After execution using RestRequest.run() or RestRequest.complete(), the following methods can be used to get the response status:
 - [Response Headers](https://juneau.apache.org/docs/topics/ResponseHeaders): Response headers are accessed through the following methods:
 - [Response Content](https://juneau.apache.org/docs/topics/ResponseContent): The response body is accessed through the following method:
-- [Custom Call Handlers](https://juneau.apache.org/docs/topics/CustomCallHandlers): The RestCallHandler interface provides the ability to provide custom handling of requests.
 - [Interceptors](https://juneau.apache.org/docs/topics/Interceptors): The RestCallInterceptor API provides a quick way of intercepting and manipulating requests and responses beyond the existing HttpRequestInterceptor and HttpResponseInterceptor APIs.
 - [REST Proxies](https://juneau.apache.org/docs/topics/RestProxies): One of the most powerful features of the REST client class is the ability to turn a plain Java interface into a fully-working client for a 3rd-party REST resource.
 - [@Remote](https://juneau.apache.org/docs/topics/Remote): The @Remote annotation is used on your interface class to identify it as a REST proxy interface.
@@ -396,24 +375,21 @@
 - [@Response](https://juneau.apache.org/docs/topics/Response): The @Response annotation can be applied to types returned by @RemoteOp-annotated methods.
 - [Dual-purpose (end-to-end) interfaces](https://juneau.apache.org/docs/topics/DualPurposeInterfaces): A common coding practice is to use the same Java interface to define both your server and client side REST interfaces. The advantage to this approach is that changes that you make to your REST...
 - [Logging and Debugging](https://juneau.apache.org/docs/topics/RestClientLoggingAndDebugging): The following methods provide logging of requests and responses:
-- [Customizing HttpClient](https://juneau.apache.org/docs/topics/CustomizingHttpClient): Several methods are provided for customizing the underlying HTTP client and client builder classes:
-- [Extending RestClient](https://juneau.apache.org/docs/topics/ExtendingRestClient): The RestClient API has been designed to allow for the ability to be easily extended.
-- [Authentication](https://juneau.apache.org/docs/topics/Authentication): The Juneau REST client itself does not implement any support for authentication.
-- [BASIC Authentication](https://juneau.apache.org/docs/topics/AuthenticationBASIC): The basicAuth() method can be used to quickly enable BASIC authentication support.
-- [FORM-based Authentication](https://juneau.apache.org/docs/topics/AuthenticationForm): The RestClient.Builder class does not itself provide FORM-based authentication since there is no standard way of providing such support.
-- [OIDC Authentication](https://juneau.apache.org/docs/topics/AuthenticationOIDC): The following example shows an implementation of a client that performs OIDC authentication against the IBM Jazz platform.
-- [Next-Generation REST Client (Beta)](https://juneau.apache.org/docs/topics/NextGenRestClient): :::warning Beta API The canonical types in `org.apache.juneau.rest.client.*`, `org.apache.juneau.rest.mock.*`, and `org.apache.juneau.http.*` are beta. Source- and binary-incompatible changes may...
+- [Customizing HttpClient](https://juneau.apache.org/docs/topics/CustomizingHttpClient): The classic REST client exposes the settings of the underlying Apache `HttpClient` through fluent builder methods and overridable factory methods.
+- [Extending RestClient](https://juneau.apache.org/docs/topics/ExtendingRestClient): Subclass `RestClient` to change how every request is executed, or plug in a `RestCallHandler` for the same job without subclassing.
+- [Authentication](https://juneau.apache.org/docs/topics/Authentication): The classic Juneau REST client delegates authentication to the underlying Apache HTTP Client, so you configure it with HTTP Client APIs or the builder shortcuts.
+- [Next-Generation REST Client](https://juneau.apache.org/docs/topics/NextGenRestClient): :::tip Which client? `juneau-rest-client` (`org.apache.juneau.rest.client.RestClient`) is the recommended REST client. It is generally available in 10.0.0, transport-agnostic, and uses the JDK...
 - [NG Requests](https://juneau.apache.org/docs/topics/NgRequests): A request is built fluently from a `RestClient` verb method and executed with `run()`. Each verb (`get`, `post`, `put`, `patch`, `delete`, `head`, and `request(method, url)`) returns a `RestRequest`.
 - [NG Responses](https://juneau.apache.org/docs/topics/NgResponses): `run()` returns a `RestResponse`. It is `Closeable` and holds the connection until closed, so always use try-with-resources.
 - [NG Body Converters](https://juneau.apache.org/docs/topics/NgBodyConverters): A `BodyConverter` turns an object passed to `RestRequest.body(Object)` into a transport body *before* the client falls back to the default serializer.
 - [NG Assertions](https://juneau.apache.org/docs/topics/NgAssertions): `RestResponse.assertThat()` returns a `ResponseAssertion` (package `org.apache.juneau.rest.client.assertion`) for fluent checks. Failures throw `AssertionError`, so they work directly in JUnit tests.
 - [NG Interceptors](https://juneau.apache.org/docs/topics/NgInterceptors): A `RestCallInterceptor` observes or modifies a call at three points. All methods have no-op defaults, so implement only what you need.
 - [NG Remote Proxies](https://juneau.apache.org/docs/topics/NgRemoteProxies): The next-generation engine adds a family of declarative capabilities to the REST proxy annotations (`@Remote`, `@RemoteOp`, and the verb annotations `@RemoteGet` / `@RemotePost` / `@RemotePut` /...
-- [HTTP Transport Adapters](https://juneau.apache.org/docs/topics/HttpTransportAdapters): :::warning Beta API The transport adapter framework described here is part of the next-generation REST client. It is beta: source- and binary-incompatible changes may appear before a stable...
-- [Apache HttpClient 4.5 Transport](https://juneau.apache.org/docs/topics/RestClientApacheHttpClient45): :::warning Beta API This module is part of the next-generation REST client. It is beta: source- and binary-incompatible changes may appear before a stable release. :::
-- [Apache HttpClient 5.x Transport](https://juneau.apache.org/docs/topics/RestClientApacheHttpClient50): :::warning Beta API This module is part of the next-generation REST client. It is beta: source- and binary-incompatible changes may appear before a stable release. :::
-- [OkHttp Transport](https://juneau.apache.org/docs/topics/RestClientOkHttp): :::warning Beta API This module is part of the next-generation REST client. It is beta: source- and binary-incompatible changes may appear before a stable release. :::
-- [Jetty HTTP Client Transport](https://juneau.apache.org/docs/topics/RestClientJetty): :::warning Beta API This module is part of the next-generation REST client. It is beta: source- and binary-incompatible changes may appear before a stable release. :::
+- [HTTP Transport Adapters](https://juneau.apache.org/docs/topics/HttpTransportAdapters): The canonical `RestClient` in org.apache.juneau.rest.client is transport-agnostic. Every HTTP call is routed through an `HttpTransport` SPI, which is responsible for executing a fully-resolved
+- [Apache HttpClient 4.5 Transport](https://juneau.apache.org/docs/topics/RestClientApacheHttpClient45): Add the Juneau transport module and Apache HttpClient 4.5 to your project:
+- [Apache HttpClient 5.x Transport](https://juneau.apache.org/docs/topics/RestClientApacheHttpClient50): org.apache.juneau juneau-rest-client-apache-httpclient-50 ${juneau.version}
+- [OkHttp Transport](https://juneau.apache.org/docs/topics/RestClientOkHttp): org.apache.juneau juneau-rest-client-okhttp ${juneau.version}
+- [Jetty HTTP Client Transport](https://juneau.apache.org/docs/topics/RestClientJetty): org.apache.juneau juneau-rest-client-jetty ${juneau.version}
 - [Streaming Cursors](https://juneau.apache.org/docs/topics/StreamingCursors): The `Marshaller` class exposes streaming methods that let you consume a REST response as a lazy cursor instead of materializing the full response body into a single POJO. This is the client-side...
 - [Content-Type Negotiation](https://juneau.apache.org/docs/topics/ContentTypeNegotiation): `RestClient` supports multi-format content negotiation: it automatically sets `Accept` and `Content-Type` headers based on its configured serializer/parser registry, and selects the right parser...
 - [NG Client Security](https://juneau.apache.org/docs/topics/NgClientSecurity): The NG `RestClient` protects outbound calls against server-side request forgery (SSRF) and credential leaks across redirects. This page describes what is enforced, where, and how to opt out. The...
@@ -427,10 +403,10 @@
 - [Microservice Overview](https://juneau.apache.org/docs/topics/MicroserviceOverview): Juneau microservices are self-contained, deployable REST servers built on top of the Juneau REST server framework. A microservice packages your REST resources, configuration, and an embedded HTTP...
 - [Args](https://juneau.apache.org/docs/topics/Args): Command-line arguments can be associated with a microservice using the args() method.
 - [Manifest](https://juneau.apache.org/docs/topics/Manifest): The Microservice.Builder.manifest(Object) method can be used to specify the contents or location of of the main manifest file of the executable jar.
-- [System properties](https://juneau.apache.org/docs/topics/SystemProperties): As a convenience, the `SystemProperties` section of your configuration file can be used to define system properties to set during initialization of your microservice:
-- [VarResolver](https://juneau.apache.org/docs/topics/VarResolver): The Microservice API incorporates the Simple Variable Language API. The variable resolver can be augmented through the following methods:
+- [Config](https://juneau.apache.org/docs/topics/Config): The following methods can be used to define the configuration for your microservice using the powerful `Config` API.
+- [VarResolver](https://juneau.apache.org/docs/topics/VarResolver): The Microservice API incorporates the Simple Variable Language API.
 - [Console Commands](https://juneau.apache.org/docs/topics/ConsoleCommands): The Microservice API provides support for simple console commands.
-- [Microservice Listeners](https://juneau.apache.org/docs/topics/MicroserviceCoreListeners): As mentioned previously, the lifecycle methods for the Microservice class are explicitly defined as non-final so that they can be overridden by subclasses.
+- [Microservice Listeners](https://juneau.apache.org/docs/topics/MicroserviceCoreListeners): The lifecycle methods of the Microservice class are non-final so that subclasses can override them. A listener interface offers the same hooks without subclassing.
 - [Inject-Aware Microservice](https://juneau.apache.org/docs/topics/InjectAwareMicroservice): Starting with 10.0.0, the Microservice class is inject-aware. Every microservice owns an internal WritableBeanStore (accessible via
 - [Whole-Microservice Integration Tests (@MicroserviceTest)](https://juneau.apache.org/docs/topics/MicroserviceTesting): `@MicroserviceTest` is a JUnit 5 extension that boots a whole `Microservice` — config, lifecycle, and an embedded Jetty server on an ephemeral port — for the duration of a test class, then stops...
 - [juneau-microservice-jetty](https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty): 
@@ -438,7 +414,6 @@
 - [Lifecycle Methods](https://juneau.apache.org/docs/topics/LifecycleMethods): The lifecycle methods of the Microservice class consists of the following:
 - [Resource Classes](https://juneau.apache.org/docs/topics/ResourceClasses): This section describes how to define a top-level REST resource page and deploy it in our microservice. The example is a router page that serves as a jumping off page to child resources.
 - [Predefined Resource Classes](https://juneau.apache.org/docs/topics/PredefinedResourceClasses): The following classes are reference/demo resources that illustrate common microservice admin patterns. They live in the unpublished `juneau-microservice-examples` module (package...
-- [Config](https://juneau.apache.org/docs/topics/Config): The following methods can be used to define the configuration for your microservice using the powerful `Config` API:
 - [Jetty.xml file](https://juneau.apache.org/docs/topics/JettyXml): The Jetty microservice comes with a bare-bones `jetty.xml` file which can be modified to suite any needs.
 - [UI Customization](https://juneau.apache.org/docs/topics/UiCustomization): The Microservice project contains a `files/htdocs` folder with predefined stylesheets and images. These files can be used to tailor the look-and-feel of your microservice.
 - [Customizing via @Bean](https://juneau.apache.org/docs/topics/Extending): As of 10.0, `JettyMicroservice` was reshaped — the legacy *subclass* form was retired, and a thin static-call facade was introduced to collapse the standard `Microservice` + `JettyConfiguration`...
@@ -487,7 +462,7 @@
 - [juneau-shaded-rest-server-springboot](https://juneau.apache.org/docs/topics/JuneauShadedRestServerSpringboot): The `juneau-shaded-rest-server-springboot` artifact bundles REST server functionality plus Spring Boot integration. At 3.8 MB, it provides everything needed for building Juneau REST services with...
 - [juneau-shaded-all](https://juneau.apache.org/docs/topics/JuneauShadedAll): The `juneau-shaded-all` artifact is the complete Juneau framework bundled in a single 4.0 MB JAR file. It includes all core modules, REST client, REST server, Spring Boot integration, bean DTOs...
 
-## Guides & Reference
+## Security & Migration
 
 - [Security](https://juneau.apache.org/docs/topics/Security): Security is an ongoing concern in any library. Juneau is designed so that its serializers and parsers are safe by default — POJO types are inferred from the `Class` objects you pass in rather than...
 - [Marshalling Security](https://juneau.apache.org/docs/topics/MarshallingSecurity): One common security vulnerability is the ability to create arbitrary Java object instances through crafted user input.

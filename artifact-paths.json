@@ -24,6 +24,7 @@
   "juneau-distrib": "juneau-distrib",
   "juneau-examples": "juneau-examples",
   "juneau-examples-core": "juneau-examples/juneau-examples-core/build-overlay",
+  "juneau-examples-guides": "juneau-examples/juneau-examples-guides",
   "juneau-examples-mcp": "juneau-examples/juneau-examples-mcp/build-overlay",
   "juneau-integration-tests": "juneau-integration-tests",
   "juneau-marshall": "juneau-core/juneau-marshall",

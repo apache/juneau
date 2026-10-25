@@ -25,8 +25,43 @@ from pathlib import Path
 
 from juneau_root import find_juneau_root
 
-def extract_topic_info(docs_dir):
-    """Extract slug and title information from all topic markdown files."""
+def github_anchor(heading):
+    """Docusaurus (github-slugger) heading id: lowercase, drop punctuation, spaces to hyphens."""
+    h = heading.strip().lower().replace('`', '')
+    return re.sub(r'[^a-z0-9 \-_]', '', h).replace(' ', '-')
+
+
+def heading_anchors(content):
+    """Return the set of heading ids in a page: explicit {#id} or generated, skipping code fences."""
+    anchors = set()
+    seen = {}
+    in_fence = False
+    for line in content.split('\n'):
+        if line.lstrip().startswith('```'):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        m = re.match(r'^#{1,6}\s+(.*?)\s*$', line)
+        if not m:
+            continue
+        text = m.group(1)
+        explicit = re.search(r'\s*\{#([^}\s]+)\}\s*$', text)
+        if explicit:
+            anchors.add(explicit.group(1))
+            continue
+        base = github_anchor(text)
+        n = seen.get(base, 0)
+        seen[base] = n + 1
+        anchors.add(base if n == 0 else f"{base}-{n}")
+    return anchors
+
+
+def extract_topic_info(docs_dir, anchors_out=None):
+    """Extract slug and title information from all topic markdown files.
+
+    When anchors_out is a dict, it is filled with slug -> set of heading ids.
+    """
     topics = {}
     topics_dir = Path(docs_dir) / "pages" / "topics"
     
@@ -55,6 +90,8 @@ def extract_topic_info(docs_dir):
                     title = title_match.group(1).strip()
                     slug = slug_match.group(1).strip()
                     topics[slug] = title
+                    if anchors_out is not None:
+                        anchors_out[slug] = heading_anchors(content[frontmatter_match.end():])
                     print(f"Found topic: {slug} -> {title}")
                 else:
                     print(f"WARNING: Could not extract title/slug from {md_file.name}")
@@ -116,15 +153,29 @@ def find_topic_links(source_dir):
     
     return links
 
-def check_links(links, topics):
-    """Check if the found links match the expected slug/title combinations."""
+def check_links(links, topics, anchors=None):
+    """Check if the found links match the expected slug/title combinations.
+
+    A slug may carry a "#anchor" suffix: the slug part is resolved as usual, then the
+    anchor must be a heading id of the target page (when anchors is given).
+    """
     warnings = []
     
     for link in links:
-        slug = link['slug']
+        full_slug = link['slug']
+        slug, _, anchor = full_slug.partition('#')
         title = link['title']
         
-        if slug in topics:
+        if slug in topics and anchor and anchors is not None and anchor not in anchors.get(slug, set()):
+            warnings.append({
+                'type': 'missing_anchor',
+                'file': link['file'],
+                'line': link['line'],
+                'slug': slug,
+                'anchor': anchor,
+                'full_match': link['full_match']
+            })
+        elif slug in topics:
             expected_title = topics[slug]
             if title != expected_title:
                 warnings.append({
@@ -141,7 +192,7 @@ def check_links(links, topics):
                 'type': 'unknown_slug',
                 'file': link['file'],
                 'line': link['line'],
-                'slug': slug,
+                'slug': full_slug,
                 'title': title,
                 'full_match': link['full_match']
             })
@@ -168,7 +219,8 @@ def main():
     
     # Extract topic information from docs
     print("\nExtracting topic information from docs...")
-    topics = extract_topic_info(docs_dir)
+    anchors = {}
+    topics = extract_topic_info(docs_dir, anchors)
     
     if not topics:
         print("ERROR: No topics found. Check if docs directory exists and contains topic files.")
@@ -184,7 +236,7 @@ def main():
     
     # Check for issues
     print("\nChecking links for issues...")
-    warnings = check_links(links, topics)
+    warnings = check_links(links, topics, anchors)
     
     # Report results
     if warnings:
@@ -198,6 +250,13 @@ def main():
                 print(f"  Slug: {warning['slug']}")
                 print(f"  Expected title: '{warning['expected_title']}'")
                 print(f"  Actual title:   '{warning['actual_title']}'")
+                print(f"  Link: {warning['full_match']}")
+                print()
+            elif warning['type'] == 'missing_anchor':
+                print(f"MISSING ANCHOR:")
+                print(f"  File: {warning['file']}:{warning['line']}")
+                print(f"  Slug: {warning['slug']}")
+                print(f"  Anchor: '{warning['anchor']}'")
                 print(f"  Link: {warning['full_match']}")
                 print()
             elif warning['type'] == 'unknown_slug':

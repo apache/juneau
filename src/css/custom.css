@@ -78,7 +78,7 @@
 
 /* Comments */
 .token.comment {
-  color: #3f7f5f !important;
+  color: #2f6e4f !important;
   font-style: italic !important;
 }
 
@@ -137,47 +137,49 @@
   color: #000000;
 }
 
-/* Dark theme Eclipse colors (for dark mode users) */
+/* Dark theme token palette (all colors reach 4.5:1 on the #2b2b2b code background).
+   The light rules above use !important, so these must too. */
 [data-theme='dark'] .token.keyword {
-  color: #cc7832;
-  font-weight: bold;
+  color: #e8934f !important;
+  font-weight: bold !important;
 }
 
 [data-theme='dark'] .token.string {
-  color: #6a8759;
+  color: #94bd7a !important;
 }
 
 [data-theme='dark'] .token.comment {
-  color: #808080;
-  font-style: italic;
+  color: #9aa79a !important;
+  font-style: italic !important;
 }
 
 [data-theme='dark'] .token.class-name {
-  color: #ffc66d;
+  color: #ffc66d !important;
 }
 
 [data-theme='dark'] .token.function,
 [data-theme='dark'] .token.method {
-  color: #ffc66d;
+  color: #ffc66d !important;
 }
 
 [data-theme='dark'] .token.number {
-  color: #6897bb;
+  color: #7fb2d9 !important;
 }
 
 [data-theme='dark'] .token.annotation {
-  color: #bbb529;
+  color: #d4cc3c !important;
 }
 
 [data-theme='dark'] .token.operator,
 [data-theme='dark'] .token.punctuation,
-[data-theme='dark'] .token.variable {
-  color: #a9b7c6;
+[data-theme='dark'] .token.variable,
+[data-theme='dark'] .token.generic {
+  color: #a9b7c6 !important;
 }
 
 [data-theme='dark'] .token.property,
 [data-theme='dark'] .token.constant {
-  color: #9876aa;
+  color: #b79ccb !important;
 }
 
 /* Eclipse-style code block background */
@@ -200,7 +202,7 @@
 }
 
 [data-theme='dark'] .token.annotation.juneau {
-  color: #bbb529;
+  color: #d4cc3c;
   background: rgba(187, 181, 41, 0.1);
 }
 
@@ -458,6 +460,13 @@ a[href*="apidocs"]:hover {
   margin-top: 0;
 }
 
+/* Touch screens have no hover, so keep the copy and word-wrap buttons on code blocks visible there. */
+@media (hover: none) {
+  .theme-code-block [class*='buttonGroup'] button {
+    opacity: 1;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .prism-code {
@@ -559,34 +568,3 @@ java-method-private::before { color: #CCB404; content: '\25c6\00a0'; font-weight
 java-method-annotation::before { color: #00ced1; content: '\25cf\00a0'; font-weight: bolder; font-size: x-small; }
 java-project::before { color: #ff6b35; content: '\1f4c2\00a0'; font-weight: bolder; font-size: x-large; }
 java-doc::before { color: #4a90e2; content: '\1f4d6\00a0'; font-weight: bolder; font-size: x-large; }
-
-.giscus-comments {
-  margin-block-start: 4rem;
-  margin-block-end: 4rem;
-}
-
-.giscus-comments__header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-block-end: 0.5rem;
-}
-
-.giscus-comments__divider {
-  flex: 1;
-  border: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-}
-
-.giscus-comments__label {
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ifm-color-emphasis-500);
-}
-
-.giscus-comments__description {
-  margin: 0 0 1rem;
-  color: var(--ifm-color-emphasis-600);
-  font-size: 0.95rem;
-}

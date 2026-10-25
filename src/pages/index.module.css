@@ -16,21 +16,82 @@
  * and scoped locally.
  */
 
-.heroBanner {
+.hero {
   padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+/* minmax(0, 1fr) lets a long code line scroll inside its block instead of widening the column. */
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: center;
+}
+
+.tagline {
+  font-size: 3rem;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.subline {
+  font-size: 1.25rem;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 2rem;
 }
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sample {
+  min-width: 0;
+}
+
+.strip {
+  padding: 1.25rem 0;
+  background-color: var(--ifm-color-emphasis-100);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.stripRow {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem 2rem;
+}
+
+.release {
+  margin: 0;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.community {
+  padding: 2rem 0 3rem;
+}
+
+@media screen and (max-width: 996px) {
+  .hero {
+    padding: 2rem 0;
+  }
+
+  .heroGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .tagline {
+    font-size: 2.25rem;
+  }
 }

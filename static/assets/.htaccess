@@ -1,0 +1,4 @@
+# Everything under /assets/ is content-hashed by the build, so it is safe to cache forever.
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</IfModule>

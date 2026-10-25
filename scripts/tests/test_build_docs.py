@@ -12,6 +12,7 @@
 # ***************************************************************************************************************************
 """Tests for build-docs.py: write-only-on-change artifact maps."""
 
+import argparse
 import json
 import os
 
@@ -119,3 +120,49 @@ def test_artifact_paths_written_for_root_with_jar_module(tmp_path):
     docs.mkdir()
     build_docs.generate_artifact_paths(root, docs)
     assert json.loads((docs / 'artifact-paths.json').read_text()) == {'juneau': '', 'juneau-core': 'juneau-core'}
+
+
+def test_check_code_fences_runs_as_a_child_of_links(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    build_docs.check_code_fences(tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('check-code-fences.py')
+    assert cmd[2:] == ['--docs-root', str(tmp_path)]
+    assert kw['id'] == 'links-fences' and kw['parent'] == 'links'
+
+
+def test_check_java_fences_runs_strict_as_a_child_of_links(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    build_docs.check_java_fences(tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('check-java-fences.py')
+    assert cmd[2:] == ['--docs-root', str(tmp_path), '--strict']
+    assert kw['id'] == 'links-java' and kw['parent'] == 'links'
+
+
+def test_check_guide_snippets_runs_as_a_child_of_links(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    build_docs.check_guide_snippets(tmp_path / 'juneau', tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('check-guide-snippets.py')
+    assert cmd[2:] == ['--juneau-root', str(tmp_path / 'juneau')]
+    assert kw['id'] == 'links-guides' and kw['parent'] == 'links' and kw['cwd'] == tmp_path
+
+
+def test_links_stage_runs_every_checker_in_order(monkeypatch, tmp_path):
+    # The build itself, not just the helper: a Links stage that forgets a checker must fail here.
+    args = argparse.Namespace(skip_npm=True, skip_maven=False, skip_verify=True, skip_copy=True, staging=False)
+    monkeypatch.setattr(build_docs, 'DRY_RUN', True)
+    monkeypatch.setattr(build_docs, 'row_plan', lambda a, d=None: [
+        (id, id, None if id == 'links' else 'skipped') for id, _label in build_docs.run_view.BUILD_ROWS])
+    for name in ('generate_artifact_paths', 'get_current_release', 'ensure_apidocs_symlink', 'resolve_javadocs_version'):
+        monkeypatch.setattr(build_docs, name, lambda *a, **kw: None)
+    calls = []
+    for name in ('check_topic_links', 'check_ai_artifacts', 'check_code_fences', 'check_java_fences', 'check_guide_snippets'):
+        monkeypatch.setattr(build_docs, name, lambda *a, n=name: calls.append(n))
+    assert build_docs.build(args, tmp_path / 'juneau', tmp_path) == 0
+    assert calls == ['check_topic_links', 'check_ai_artifacts', 'check_code_fences', 'check_java_fences',
+                     'check_guide_snippets']

@@ -9,7 +9,6 @@ Apache Juneau takes security seriously and uses automated tools to help identify
 
 ## Current Security Status
 
-[![Security Analysis](https://github.com/apache/juneau/workflows/CodeQL/badge.svg)](https://github.com/apache/juneau/security/code-scanning)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
@@ -17,6 +16,8 @@ Apache Juneau takes security seriously and uses automated tools to help identify
 ### Analysis Results
 - [**GitHub CodeQL Analysis →**](https://github.com/apache/juneau/security/code-scanning) - Security vulnerability detection
 - [**SonarCloud Quality Analysis →**](https://sonarcloud.io/summary/new_code?id=apache_juneau) - Code quality, security, and maintainability
+
+For how Juneau's serializers, parsers, SVL and REST layers handle untrusted input, see the [Security chapter](/docs/topics/Security) of the documentation.
 
 ## About Our Analysis Tools
 
@@ -43,7 +44,7 @@ We use [SonarCloud](https://sonarcloud.io/) for comprehensive code quality analy
 
 Our security and quality analysis runs automatically:
 
-- **CodeQL**: Every Thursday at 3:15 AM UTC
+- **CodeQL**: Weekly
 - **SonarCloud**: Every Monday at 2:00 AM UTC
 - **On every push** to the master branch
 - **On every pull request** to the master branch
@@ -95,9 +96,5 @@ We regularly monitor our dependencies for known vulnerabilities:
 For security-related questions or concerns:
 
 - **Email**: [dev@juneau.apache.org](mailto:dev@juneau.apache.org)
-- **Mailing list**: [Subscribe to our dev mailing list](https://juneau.apache.org/mailing-lists.html)
+- **Mailing list**: [Subscribe to our dev mailing list](https://lists.apache.org/list.html?dev@juneau.apache.org)
 - **GitHub**: [Create an issue](https://github.com/apache/juneau/issues)
-
----
-
-*Last updated: September 2024*

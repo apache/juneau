@@ -18,7 +18,7 @@
   - `juneau-shaded-rest-server-springboot.jar` - REST server + Spring Boot integration (3.8 MB)
   - `juneau-shaded-all.jar` - Complete framework in one JAR (4.0 MB)
 - **`/lib`** - Individual Jars
-  - `juneau-commons.jar` - Bean metadata framework, SVL string-variable resolution, and shared utilities (SVL now lives here — there is no separate `juneau-svl.jar`)
+  - `juneau-commons.jar` - Bean metadata framework, SVL string-variable resolution, and shared utilities
   - `juneau-marshall.jar` - Marshalling
   - `juneau-marshall-rdf.jar` - Marshalling RDF extension (requires Apache Jena)
   - `juneau-config.jar` - Config File
@@ -29,9 +29,10 @@
   - `juneau-bean-jsonschema.jar` - JSON Schema Data Transfer Object Beans
   - `juneau-bean-openapi-v3.jar` - OpenAPI 3 Data Transfer Object Beans
   - `juneau-bean-swagger-v2.jar` - Swagger 2 Data Transfer Object Beans
-  - `juneau-rest-server.jar` - REST Servlet (there is no `juneau-rest-server-jaxrs` module)
+  - `juneau-rest-server.jar` - REST Servlet
   - `juneau-rest-server-springboot.jar` - REST Spring Boot integration
-  - `juneau-rest-client.jar` - Canonical, transport-agnostic REST client
+  - `juneau-rest-client.jar` - Recommended, transport-agnostic REST client (generally available in 10.0.0)
+  - `juneau-rest-client-classic.jar` - Apache HttpClient 4.5 REST client, supported for existing users (not deprecated)
   - `juneau-rest-mock.jar` - REST mock testing API
 
 - **`/osgi`** - OSGi Libraries
@@ -54,51 +55,23 @@
   - `juneau-examples-core.zip` - Core libraries examples
   - `juneau-petstore-jetty.zip` - Canonical petstore showcase application starter (Jetty/Microservice deployment)
 
-### Maven
+### Maven and Gradle
+
+Add the module you need from Maven Central. The artifact ids are the ones published for 9.2.0; the full list is in the "What's Included" section above. These docs describe 10.0 (`10.0.0-SNAPSHOT`), which is not on Maven Central, so to use 10.0 snapshots see [Install Juneau](/docs/topics/GettingStartedInstall#set-the-version).
 
 ```xml
-<!-- Use the following dependency... -->
 <dependency>
 	<groupId>org.apache.juneau</groupId>
-	<artifactId>juneau-XXX</artifactId>
+	<artifactId>juneau-marshall</artifactId>
 	<version>9.2.0</version>
 </dependency>
-
-<!-- ...where the artifactId is typically... -->
-<artifactId>juneau-shaded-all</artifactId>
-
-<!-- ...but can also be any of the following (not exhaustive — see the
-     Ecosystem table on the "About" page for the complete, current module list)... -->
-<!-- Core modules -->
-<artifactId>juneau-commons</artifactId>
-<artifactId>juneau-config</artifactId>
-<artifactId>juneau-marshall</artifactId>
-<artifactId>juneau-marshall-rdf</artifactId>
-<artifactId>juneau-test</artifactId>
-<!-- Bean DTOs -->
-<artifactId>juneau-bean-atom</artifactId>
-<artifactId>juneau-bean-common</artifactId>
-<artifactId>juneau-bean-html5</artifactId>
-<artifactId>juneau-bean-jsonschema</artifactId>
-<artifactId>juneau-bean-openapi-v3</artifactId>
-<artifactId>juneau-bean-swagger-v2</artifactId>
-<!-- REST modules -->
-<artifactId>juneau-rest-client</artifactId>
-<artifactId>juneau-rest-common</artifactId>
-<artifactId>juneau-rest-mock</artifactId>
-<artifactId>juneau-rest-server</artifactId>
-<artifactId>juneau-rest-server-springboot</artifactId>
-<!-- Microservice modules -->
-<artifactId>juneau-microservice</artifactId>
-<artifactId>juneau-microservice-jetty</artifactId>
-<!-- Shaded modules -->
-<artifactId>juneau-shaded-core</artifactId>
-<artifactId>juneau-shaded-rest-client</artifactId>
-<artifactId>juneau-shaded-rest-server</artifactId>
-<artifactId>juneau-shaded-rest-server-springboot</artifactId>
 ```
 
-See the [Ecosystem table](/about#ecosystem) on the About page for the complete, current list of publishable modules — this page only calls out the most commonly-used ones.
+```groovy
+implementation 'org.apache.juneau:juneau-marshall:9.2.0'
+```
+
+For a single JAR that bundles everything, use `juneau-shaded-all`. The 9.2.0 Maven artifacts do not include `juneau-marshall-rdf`; for the 10.0 module list, see the [Juneau Ecosystem](/docs/topics/JuneauEcosystemOverview) overview.
 
 ## Verifying File Integrity
 
@@ -123,7 +96,7 @@ How to [verify downloaded files](https://www.apache.org/info/verification.html).
 - [Source](https://archive.apache.org/dist/juneau/source/juneau-9.0.0/apache-juneau-9.0.0-src.zip) ([ASC](https://archive.apache.org/dist/juneau/source/juneau-9.0.0/apache-juneau-9.0.0-src.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/source/juneau-9.0.0/apache-juneau-9.0.0-src.zip.sha512))
 
 ### 8.2.0 (Oct 14, 2020)
-- [Release Notes](/docs/release-notes/8.2.0)
+- [Release Notes](/docs/release-notes/8.x#release-8-2-0)
 - [Binaries](https://archive.apache.org/dist/juneau/binaries/juneau-8.2.0/apache-juneau-8.2.0-bin.zip) ([ASC](https://archive.apache.org/dist/juneau/binaries/juneau-8.2.0/apache-juneau-8.2.0-bin.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/binaries/juneau-8.2.0/apache-juneau-8.2.0-bin.zip.sha512))
 - [Source](https://archive.apache.org/dist/juneau/source/juneau-8.2.0/apache-juneau-8.2.0-src.zip) ([ASC](https://archive.apache.org/dist/juneau/source/juneau-8.2.0/apache-juneau-8.2.0-src.zip.asc), [SHA512](https://archive.apache.org/dist/juneau/source/juneau-8.2.0/apache-juneau-8.2.0-src.zip.sha512))
 

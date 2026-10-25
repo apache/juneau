@@ -1,0 +1,18 @@
+# Compress text assets that the default ASF httpd configuration leaves uncompressed (notably JavaScript).
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml text/plain application/xml
+</IfModule>
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript application/javascript application/json image/svg+xml text/plain application/xml
+</IfModule>
+
+# HTML must revalidate so a new deployment is picked up immediately; hashed files under /assets/ are cached
+# long-term by assets/.htaccess.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|json|txt|xml)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# Serve the themed Docusaurus 404 page (with navbar and search) for missing URLs.
+ErrorDocument 404 /404.html

@@ -15,7 +15,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import type {GiscusProps} from '@giscus/react';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -56,33 +55,20 @@ const juneauModulePaths = loadArtifactMap('JUNEAU_ARTIFACT_PATHS', 'artifact-pat
 // fallback. Artifacts absent from the map fall back to the aggregate index.
 const juneauJavadocPackages = loadArtifactMap('JUNEAU_JAVADOC_PACKAGES', 'artifact-packages.json');
 
-type GiscusThemeConfig = Partial<GiscusProps>;
-
-type ThemeConfigWithGiscus = Preset.ThemeConfig & {
-  giscus?: GiscusThemeConfig;
-};
-
 // Site URL - used for external links that need to be environment-aware
 const siteUrl = process.env.SITE_URL || 'https://juneau.apache.org';
-
-const giscusConfig: GiscusThemeConfig = {
-  repo: 'apache/juneau',
-  repoId: process.env.GISCUS_REPO_ID ?? 'MDEwOlJlcG9zaXRvcnk2NDczMjY2NQ==',
-  category: process.env.GISCUS_CATEGORY ?? 'Announcements',
-  categoryId: process.env.GISCUS_CATEGORY_ID ?? 'DIC_kwDOA9u9-c4CvzB6',
-  mapping: 'pathname',
-  reactionsEnabled: '1',
-  emitMetadata: '0',
-  strict: '0',
-  inputPosition: 'top',
-  theme: 'preferred_color_scheme',
-  lang: 'en',
-  loading: 'lazy',
-};
 
 const baseThemeConfig: Preset.ThemeConfig = {
   // Replace with your project's social card
   image: 'img/docusaurus-social-card.jpg',
+  announcementBar: {
+    id: 'prerelease-10-0',
+    content:
+      'These docs describe 10.0 (pre-release, 10.0.0-SNAPSHOT). The latest release is <a href="/downloads">9.2.0</a>.',
+    backgroundColor: '#fff3cd',
+    textColor: '#533f03',
+    isCloseable: false,
+  },
   navbar: {
     title: 'Apache Juneau',
     logo: {
@@ -97,8 +83,21 @@ const baseThemeConfig: Preset.ThemeConfig = {
         position: 'left',
         label: 'Documentation',
       },
+      {to: '/docs/guides', label: 'Guides', position: 'left', activeBasePath: '/docs/guides'},
+      {
+        type: 'docSidebar',
+        sidebarId: 'developerSidebar',
+        position: 'left',
+        label: 'Developer Info',
+      },
+      {
+        type: 'docSidebar',
+        sidebarId: 'releaseNotesSidebar',
+        position: 'left',
+        label: 'Release Notes',
+      },
       {to: '/downloads', label: 'Downloads', position: 'left'},
-      {to: '/security', label: 'Security', position: 'left'},
+      {to: '/security', label: 'Security Analysis', position: 'left'},
       {to: '/apache', label: 'Apache', position: 'left'},
       {
         href: 'https://github.com/apache/juneau',
@@ -168,7 +167,7 @@ const baseThemeConfig: Preset.ThemeConfig = {
             href: 'http://www.apache.org/licenses/',
           },
           {
-            label: 'Security',
+            label: 'ASF Security',
             href: 'http://www.apache.org/security',
           },
         ],
@@ -184,10 +183,7 @@ const baseThemeConfig: Preset.ThemeConfig = {
   },
 } satisfies Preset.ThemeConfig;
 
-const themeConfig: ThemeConfigWithGiscus = {
-  ...baseThemeConfig,
-  giscus: giscusConfig,
-};
+const themeConfig: Preset.ThemeConfig = baseThemeConfig;
 
 const config: Config = {
   title: 'Apache Juneau',
@@ -209,6 +205,8 @@ const config: Config = {
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
+  // Every page is served from <path>/index.html, so sitemap, canonical URLs and the server agree on one URL form.
+  trailingSlash: true,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -267,6 +265,12 @@ const config: Config = {
         indexBlog: false,
         indexPages: true,
         docsRouteBasePath: '/docs',
+        // Contributor material and release history get their own indexes so a reader
+        // searching from the user docs does not see them (search from those pages instead).
+        searchContextByPaths: [
+          { label: 'Developer Info', path: 'docs/developer-info' },
+          { label: 'Release Notes', path: 'docs/release-notes' },
+        ],
       },
     ],
   ],

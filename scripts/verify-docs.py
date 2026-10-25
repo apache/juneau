@@ -42,6 +42,7 @@ CHECKS = [
     (13, 'javadoc'),
     (14, 'anchors'),
     (15, 'hygiene'),
+    (16, 'guides'),
 ]
 NAME_BY_NUM = {n: name for n, name in CHECKS}
 NUM_BY_NAME = {name: n for n, name in CHECKS}
@@ -50,6 +51,11 @@ WARNING_CHECKS = {10, 13, 14, 15}
 FILENAME_RE = re.compile(r'^(\d\d(?:\.\d\d)*)\.([A-Z][A-Za-z0-9]*)\.md$')
 # Leading numeric prefix + trailing '.md' stripped => PascalCase name part.
 NAME_PART_RE = re.compile(r'^\d\d(?:\.\d\d)*\.([A-Z][A-Za-z0-9]*)\.md$')
+# The Guides section: its landing page is the category link target and is served at /docs/guides.
+GUIDES_LINK_ID = 'guides/00.Guides'
+GUIDES_LANDING_SLUG = '/guides'
+# A numbered landing row that links a topic (`8. [Title](/docs/topics/Slug)...`): a guide kept as a sidebar `ref`.
+LANDING_TOPIC_ROW_RE = re.compile(r'^\d+\. \[[^\]]*\]\(/docs/topics/([A-Za-z][A-Za-z0-9]*)\)', re.M)
 
 
 # ---------------------------------------------------------------------------
@@ -230,11 +236,16 @@ def parse_sidebars(text):
 # ---------------------------------------------------------------------------
 # Sidebar tree walkers
 # ---------------------------------------------------------------------------
+def _prefixed_id(raw, prefix):
+    """Return the effective id for a raw sidebar id under `prefix` (e.g. 'guides/'), or None if it is not one."""
+    if isinstance(raw, str) and raw.startswith(prefix):
+        return raw[len(prefix):]
+    return None
+
+
 def _topics_id(raw):
     """Return the effective id for a raw sidebar id, or None if not a topics ref."""
-    if isinstance(raw, str) and raw.startswith('topics/'):
-        return raw[len('topics/'):]
-    return None
+    return _prefixed_id(raw, 'topics/')
 
 
 def collect_sidebar(nodes):
@@ -281,6 +292,36 @@ def collect_sidebar(nodes):
 
     walk(nodes)
     return doc_refs, landing_ids, preorder, labels
+
+
+def collect_section(nodes, link_id):
+    """Find every category whose link.id is `link_id`.
+
+    Returns one list per such category: its `doc` and `ref` items as (type, raw id) pairs, depth-first, nested
+    categories included.  Separate from collect_sidebar so that checks 5-10 stay topics-only.
+    """
+    sections = []
+
+    def walk(node, out):
+        if isinstance(node, list):
+            for item in node:
+                walk(item, out)
+            return
+        if not isinstance(node, dict):
+            return
+        ntype = node.get('type')
+        if out is not None and ntype in ('doc', 'ref'):
+            out.append((ntype, node.get('id')))
+        elif ntype == 'category':
+            link = node.get('link')
+            if isinstance(link, dict) and link.get('id') == link_id:
+                out = []
+                sections.append(out)
+            for item in node.get('items', []):
+                walk(item, out)
+
+    walk(nodes, None)
+    return sections
 
 
 # ---------------------------------------------------------------------------
@@ -388,6 +429,7 @@ def _github_anchor(heading):
 # ---------------------------------------------------------------------------
 def run_checks(docs_dir, enabled, anchors_enabled, findings):
     topics_dir = docs_dir / 'pages' / 'topics'
+    guides_dir = docs_dir / 'pages' / 'guides'
     pages_dir = docs_dir / 'pages'
     sidebars_path = docs_dir / 'sidebars.ts'
     allowlist_path = docs_dir / 'scripts' / 'verify-docs-allowlist.txt'
@@ -404,6 +446,10 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
         if t.slug:
             slug_to_topic.setdefault(t.slug, t)
     all_slugs = {t.slug for t in topics if t.slug}
+
+    # Guide pages (pages/guides/*.md): checked by 16, link targets for 11.  Same file model as topics.
+    guides = [Topic(p) for p in sorted(guides_dir.glob('*.md'), key=lambda p: p.name)]
+    guide_slugs = {g.slug for g in guides if g.slug and not g.slug.startswith('/')}
 
     # Parse sidebars.ts once.
     sidebar_tree = None
@@ -574,6 +620,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
             text = page.read_text(encoding='utf-8')
             rel = page.relative_to(docs_dir).as_posix()
             in_topics = topics_dir in page.parents
+            in_guides = guides_dir in page.parents
             for line, m in _iter_lines_with(text, md_link_re):
                 target = m.group(1)
                 frag = target.split('#', 1)[0]
@@ -583,9 +630,25 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
                         findings.error(
                             11, f'Broken topic link `/docs/topics/{slug}`',
                             file=rel, line=line)
-                elif in_topics and re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', frag):
-                    # Bare relative link within a topic page -> resolves to a sibling slug.
-                    if frag not in all_slugs:
+                elif frag.startswith('/docs/guides/'):
+                    # `/docs/guides` itself (the landing) is valid with or without the trailing slash.
+                    slug = frag[len('/docs/guides/'):].rstrip('/')
+                    if slug and slug not in guide_slugs:
+                        findings.error(
+                            11, f'Broken guide link `/docs/guides/{slug}`',
+                            file=rel, line=line)
+                elif (in_topics or in_guides) and re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', frag):
+                    # Bare relative link within a topic or guide page: resolves under the trailing-slash path, so
+                    # it must be written as an absolute /docs/topics/<slug> or /docs/guides/<slug> link.
+                    if frag in all_slugs:
+                        findings.error(
+                            11, f'Relative topic link `{frag}`; use `/docs/topics/{frag}`',
+                            file=rel, line=line)
+                    elif frag in guide_slugs:
+                        findings.error(
+                            11, f'Relative guide link `{frag}`; use `/docs/guides/{frag}`',
+                            file=rel, line=line)
+                    else:
                         findings.error(
                             11, f'Broken relative topic link `{frag}`',
                             file=rel, line=line)
@@ -671,7 +734,79 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
                 if p.is_file() and not p.name.endswith('.md'):
                     findings.warning(15, 'Stray non-.md file in pages/topics/', file=p.name)
 
+    # --- 16. guides --------------------------------------------------------
+    if on(16) and guides_dir.is_dir():
+        _check_guides(guides, sidebar_tree, effid_to_topic, findings)
+
     return file_count
+
+
+def _check_guides(guides, sidebar_tree, effid_to_topic, findings):
+    """Check 16: guide frontmatter and file names, and the sidebar's Guides category."""
+    landing = _prefixed_id(GUIDES_LINK_ID, 'guides/')
+    for g in guides:
+        rel = f'guides/{g.name}'
+        for key in ('id', 'title', 'slug'):
+            if not g.frontmatter.get(key):
+                findings.error(16, f'Missing/empty frontmatter `{key}`', file=rel)
+        if g.name_part is None:
+            findings.error(16, 'File name does not match `NN.Name.md`', file=rel)
+            continue
+        stem = g.name[:-3]
+        if g.id and g.id != stem:
+            findings.error(16, f'id `{g.id}` != file stem `{stem}`', file=rel)
+        if stem == landing:
+            if g.slug and g.slug != GUIDES_LANDING_SLUG:
+                findings.error(16, f'Landing slug `{g.slug}` != `{GUIDES_LANDING_SLUG}`', file=rel)
+        elif g.slug and g.slug != g.name_part:
+            findings.error(16, f'slug `{g.slug}` != filename name part `{g.name_part}`', file=rel)
+
+    guide_ids = {g.effective_id for g in guides}
+    if landing not in guide_ids:
+        findings.error(16, f'Missing landing page pages/{GUIDES_LINK_ID}.md')
+    if sidebar_tree is None:
+        return
+    sections = collect_section(sidebar_tree, GUIDES_LINK_ID)
+    if len(sections) != 1:
+        findings.error(16, f'Expected one sidebar category linking `{GUIDES_LINK_ID}`, found {len(sections)}',
+                       file='sidebars.ts')
+        return
+    listed, ref_slugs = [], []
+    for kind, raw in sections[0]:
+        if kind == 'doc':
+            gid = _prefixed_id(raw, 'guides/')
+            if gid is None:
+                continue
+            if ref_slugs:
+                findings.error(16, f'Sidebar doc `{raw}` follows a ref; the Guides category lists its refs last',
+                               file='sidebars.ts')
+            if gid in guide_ids:
+                listed.append(gid)
+            else:
+                findings.error(16, f'Sidebar doc `{raw}` has no file in pages/guides/', file='sidebars.ts')
+        else:
+            topic = effid_to_topic.get(_topics_id(raw))
+            if topic is None:
+                findings.error(16, f'Sidebar ref `{raw}` in the Guides category does not resolve to a topic',
+                               file='sidebars.ts')
+            ref_slugs.append(topic.slug if topic else None)
+    for g in guides:
+        if g.effective_id == landing:
+            continue
+        n = listed.count(g.effective_id)
+        if n == 0:
+            findings.error(16, 'Guide is not listed in the sidebar Guides category', file=f'guides/{g.name}')
+        elif n > 1:
+            findings.error(16, f'Guide is listed {n} times in the sidebar Guides category', file=f'guides/{g.name}')
+    if listed != sorted(listed):
+        findings.error(16, f'Guides category order != file order: {listed}', file='sidebars.ts')
+    # Every topic the landing lists as a guide must stay in the category as a ref, so that a sidebar
+    # regeneration cannot drop it silently.
+    page = next((g for g in guides if g.effective_id == landing), None)
+    for slug in LANDING_TOPIC_ROW_RE.findall(page.body if page else ''):
+        if slug not in ref_slugs:
+            findings.error(16, f'Landing lists `/docs/topics/{slug}` but the Guides category has no ref to it',
+                           file='sidebars.ts')
 
 
 # ---------------------------------------------------------------------------

@@ -556,6 +556,36 @@ def check_ai_artifacts(master_root, docs_dir):
     run_command(['python3', str(checker_script), '--juneau-root', str(master_root)], cwd=docs_dir,
                 id='links-ai', label='AI artifacts', title="Checking AI artifacts", tool='generic', parent='links')
 
+def check_code_fences(docs_dir):
+    """Run the code-fence checker (a child row of Links): no HTML anchors inside fenced code blocks."""
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-code-fences.py'
+    if not checker_script.exists():
+        say(f"WARNING: Code fence checker not found at {checker_script}", 'warn')
+        return
+    run_command(['python3', str(checker_script), '--docs-root', str(docs_dir)], cwd=docs_dir,
+                id='links-fences', label='Code fences', title="Checking code fences", tool='generic', parent='links')
+
+def check_java_fences(docs_dir):
+    """Run the Java-fence parse check (a child row of Links): every ```java fence parses unless marked `fragment`."""
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-java-fences.py'
+    if not checker_script.exists():
+        say(f"WARNING: Java fence checker not found at {checker_script}", 'warn')
+        return
+    run_command(['python3', str(checker_script), '--docs-root', str(docs_dir), '--strict'], cwd=docs_dir,
+                id='links-java', label='Java fences', title="Checking Java fences", tool='generic', parent='links')
+
+def check_guide_snippets(master_root, docs_dir):
+    """Run the guide-snippet checker (a child row of Links): every guide= fence matches its region in juneau-examples-guides."""
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-guide-snippets.py'
+    if not checker_script.exists():
+        say(f"WARNING: Guide snippet checker not found at {checker_script}", 'warn')
+        return
+    run_command(['python3', str(checker_script), '--juneau-root', str(master_root)], cwd=docs_dir,
+                id='links-guides', label='Guide snippets', title="Checking guide snippets", tool='generic', parent='links')
+
 def build(args, master_root, docs_dir):
     """Every build stage, one row each; returns the exit code (failures raise or exit)."""
     rows = {id: reason for id, _label, reason in row_plan(args, None if DRY_RUN else dev_server_reason(docs_dir))}
@@ -665,6 +695,9 @@ def build(args, master_root, docs_dir):
         with VIEW.stage('links', 'Links', "Checking links"):
             check_topic_links(master_root, docs_dir)
             check_ai_artifacts(master_root, docs_dir)
+            check_code_fences(docs_dir)
+            check_java_fences(docs_dir)
+            check_guide_snippets(master_root, docs_dir)
     return 0
 
 def print_completion(args, docs_dir):
