@@ -51,907 +51,902 @@
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * Obtain instances from the {@link RestClient} factory methods (e.g. {@link RestClient#get(String)}).</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">043</span><span id="line-43"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">044</span><span id="line-44"> * (and possibly earlier).</span>
-<span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * @since 9.2.1</span>
-<span class="source-line-no">047</span><span id="line-47"> */</span>
-<span class="source-line-no">048</span><span id="line-48">@SuppressWarnings({</span>
-<span class="source-line-no">049</span><span id="line-49">   "java:S1192", // Duplicate string literals are HTTP header names and REST protocol wire values; intentional</span>
-<span class="source-line-no">050</span><span id="line-50">   "java:S3776", // Cognitive complexity acceptable for request-building and dispatch logic.</span>
-<span class="source-line-no">051</span><span id="line-51">   "resource" // client is not owned here; run() transfers RestResponse ownership to caller</span>
-<span class="source-line-no">052</span><span id="line-52">})</span>
-<span class="source-line-no">053</span><span id="line-53">public final class RestRequest {</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private final RestClient client;</span>
-<span class="source-line-no">056</span><span id="line-56">   private final String method;</span>
-<span class="source-line-no">057</span><span id="line-57">   private final String url;</span>
-<span class="source-line-no">058</span><span id="line-58">   private final List&lt;HttpHeader&gt; headers = l();</span>
-<span class="source-line-no">059</span><span id="line-59">   private final List&lt;HttpPart&gt; queryData = l();</span>
-<span class="source-line-no">060</span><span id="line-60">   private final List&lt;HttpPart&gt; formData = l();</span>
-<span class="source-line-no">061</span><span id="line-61">   private final Map&lt;String,Object&gt; pathData = m();</span>
-<span class="source-line-no">062</span><span id="line-62">   private HttpBody body;</span>
-<span class="source-line-no">063</span><span id="line-63">   private TransportBody convertedBody;</span>
-<span class="source-line-no">064</span><span id="line-64">   private URI resolvedUri;</span>
-<span class="source-line-no">065</span><span id="line-65">   private Duration timeout;</span>
-<span class="source-line-no">066</span><span id="line-66">   // Per-request interceptors, unioned with the client-level interceptors at run() time.</span>
-<span class="source-line-no">067</span><span id="line-67">   private final List&lt;RestCallInterceptor&gt; requestInterceptors = l();</span>
-<span class="source-line-no">068</span><span id="line-68">   private List&lt;TransportHeader&gt; resolvedHeaders = List.of();</span>
-<span class="source-line-no">069</span><span id="line-69">   private byte[] cachedContent;</span>
-<span class="source-line-no">070</span><span id="line-70">   private long cachedContentLength = -1;</span>
-<span class="source-line-no">071</span><span id="line-71">   private Throwable exception;</span>
-<span class="source-line-no">072</span><span id="line-72">   private Duration execTime;</span>
-<span class="source-line-no">073</span><span id="line-73">   private boolean policyEnforced;</span>
-<span class="source-line-no">074</span><span id="line-74">   private boolean allowPrivateUrls;</span>
-<span class="source-line-no">075</span><span id="line-75">   // The X-Request-Id correlation id sent on this request, captured at onInit (minted or caller-supplied).  Read at</span>
-<span class="source-line-no">076</span><span id="line-76">   // debug-emit time as a stored field — never via a live LogContext scope that may not survive to emission.</span>
-<span class="source-line-no">077</span><span id="line-77">   private String requestId;</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   RestRequest(RestClient client, String method, String url) {</span>
-<span class="source-line-no">080</span><span id="line-80">      this.client = client;</span>
-<span class="source-line-no">081</span><span id="line-81">      this.method = method;</span>
-<span class="source-line-no">082</span><span id="line-82">      this.url = url;</span>
-<span class="source-line-no">083</span><span id="line-83">      // Inherit client defaults</span>
-<span class="source-line-no">084</span><span id="line-84">      this.headers.addAll(client.defaultHeaders);</span>
-<span class="source-line-no">085</span><span id="line-85">      this.queryData.addAll(client.defaultQueryData);</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   // --------------------------------------------------</span>
-<span class="source-line-no">089</span><span id="line-89">   // Header</span>
-<span class="source-line-no">090</span><span id="line-90">   // --------------------------------------------------</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">   /**</span>
-<span class="source-line-no">093</span><span id="line-93">    * Adds request headers.</span>
-<span class="source-line-no">094</span><span id="line-94">    *</span>
-<span class="source-line-no">095</span><span id="line-95">    * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">096</span><span id="line-96">    * @return This object.</span>
-<span class="source-line-no">097</span><span id="line-97">    */</span>
-<span class="source-line-no">098</span><span id="line-98">   public RestRequest headers(HttpHeader... value) {</span>
-<span class="source-line-no">099</span><span id="line-99">      headers.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">100</span><span id="line-100">      return this;</span>
-<span class="source-line-no">101</span><span id="line-101">   }</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">   /**</span>
-<span class="source-line-no">104</span><span id="line-104">    * Adds a request header.</span>
-<span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">107</span><span id="line-107">    * @param value The header value. May be &lt;jk&gt;null&lt;/jk&gt; to omit.</span>
-<span class="source-line-no">108</span><span id="line-108">    * @return This object.</span>
-<span class="source-line-no">109</span><span id="line-109">    */</span>
-<span class="source-line-no">110</span><span id="line-110">   public RestRequest header(String name, String value) {</span>
-<span class="source-line-no">111</span><span id="line-111">      headers.add(HttpHeaderBean.of(name, value));</span>
-<span class="source-line-no">112</span><span id="line-112">      return this;</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   /**</span>
-<span class="source-line-no">116</span><span id="line-116">    * Adds a request header with a lazy value.</span>
-<span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param value Supplier for the value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">120</span><span id="line-120">    * @return This object.</span>
-<span class="source-line-no">121</span><span id="line-121">    */</span>
-<span class="source-line-no">122</span><span id="line-122">   public RestRequest header(String name, Supplier&lt;String&gt; value) {</span>
-<span class="source-line-no">123</span><span id="line-123">      headers.add(HttpHeaderBean.of(name, value));</span>
-<span class="source-line-no">124</span><span id="line-124">      return this;</span>
-<span class="source-line-no">125</span><span id="line-125">   }</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   /**</span>
-<span class="source-line-no">128</span><span id="line-128">    * Adds a &lt;c&gt;No-Trace: true&lt;/c&gt; header, asking the server to keep the stack trace of a failed call out of its log.</span>
-<span class="source-line-no">129</span><span id="line-129">    *</span>
-<span class="source-line-no">130</span><span id="line-130">    * &lt;p&gt;</span>
-<span class="source-line-no">131</span><span id="line-131">    * The server still logs the one-line access record; only the attached exception is omitted.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @return This object.</span>
-<span class="source-line-no">134</span><span id="line-134">    */</span>
-<span class="source-line-no">135</span><span id="line-135">   public RestRequest noTrace() {</span>
-<span class="source-line-no">136</span><span id="line-136">      return header(NoTrace.NAME, "true");</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   /**</span>
-<span class="source-line-no">140</span><span id="line-140">    * Returns &lt;jk&gt;true&lt;/jk&gt; if a header with the given name (case-insensitive) is already set on this request.</span>
-<span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;p&gt;</span>
-<span class="source-line-no">143</span><span id="line-143">    * Used by the next-gen remote-proxy engine to honor the precedence of a caller-supplied</span>
-<span class="source-line-no">144</span><span id="line-144">    * {@code @Header} parameter over an annotation-declared {@code accept}/{@code contentType} attribute.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">147</span><span id="line-147">    * @return &lt;jk&gt;true&lt;/jk&gt; if the header is present.</span>
-<span class="source-line-no">148</span><span id="line-148">    */</span>
-<span class="source-line-no">149</span><span id="line-149">   public boolean hasHeader(String name) {</span>
-<span class="source-line-no">150</span><span id="line-150">      return headers.stream().anyMatch(h -&gt; eqic(name, h.getName()));</span>
-<span class="source-line-no">151</span><span id="line-151">   }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">   // --------------------------------------------------</span>
-<span class="source-line-no">154</span><span id="line-154">   // Query</span>
-<span class="source-line-no">155</span><span id="line-155">   // --------------------------------------------------</span>
-<span class="source-line-no">156</span><span id="line-156"></span>
-<span class="source-line-no">157</span><span id="line-157">   /**</span>
-<span class="source-line-no">158</span><span id="line-158">    * Adds query parameters.</span>
-<span class="source-line-no">159</span><span id="line-159">    *</span>
-<span class="source-line-no">160</span><span id="line-160">    * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">161</span><span id="line-161">    * @return This object.</span>
-<span class="source-line-no">162</span><span id="line-162">    */</span>
-<span class="source-line-no">163</span><span id="line-163">   public RestRequest queryData(HttpPart... value) {</span>
-<span class="source-line-no">164</span><span id="line-164">      queryData.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">165</span><span id="line-165">      return this;</span>
-<span class="source-line-no">166</span><span id="line-166">   }</span>
-<span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">   /**</span>
-<span class="source-line-no">169</span><span id="line-169">    * Adds a query parameter.</span>
-<span class="source-line-no">170</span><span id="line-170">    *</span>
-<span class="source-line-no">171</span><span id="line-171">    * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">172</span><span id="line-172">    * @param value The parameter value. May be &lt;jk&gt;null&lt;/jk&gt; to omit.</span>
-<span class="source-line-no">173</span><span id="line-173">    * @return This object.</span>
-<span class="source-line-no">174</span><span id="line-174">    */</span>
-<span class="source-line-no">175</span><span id="line-175">   public RestRequest queryData(String name, String value) {</span>
-<span class="source-line-no">176</span><span id="line-176">      queryData.add(HttpPartBean.of(name, value));</span>
-<span class="source-line-no">177</span><span id="line-177">      return this;</span>
-<span class="source-line-no">178</span><span id="line-178">   }</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   /**</span>
-<span class="source-line-no">181</span><span id="line-181">    * Adds a query parameter with a lazy value.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">184</span><span id="line-184">    * @param value Supplier for the value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">185</span><span id="line-185">    * @return This object.</span>
-<span class="source-line-no">186</span><span id="line-186">    */</span>
-<span class="source-line-no">187</span><span id="line-187">   public RestRequest queryData(String name, Supplier&lt;String&gt; value) {</span>
-<span class="source-line-no">188</span><span id="line-188">      queryData.add(HttpPartBean.of(name, value));</span>
-<span class="source-line-no">189</span><span id="line-189">      return this;</span>
-<span class="source-line-no">190</span><span id="line-190">   }</span>
-<span class="source-line-no">191</span><span id="line-191"></span>
-<span class="source-line-no">192</span><span id="line-192">   // --------------------------------------------------</span>
-<span class="source-line-no">193</span><span id="line-193">   // Form data</span>
-<span class="source-line-no">194</span><span id="line-194">   // --------------------------------------------------</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   /**</span>
-<span class="source-line-no">197</span><span id="line-197">    * Adds form fields (for {@code application/x-www-form-urlencoded} bodies).</span>
-<span class="source-line-no">198</span><span id="line-198">    *</span>
-<span class="source-line-no">199</span><span id="line-199">    * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">200</span><span id="line-200">    * @return This object.</span>
-<span class="source-line-no">201</span><span id="line-201">    */</span>
-<span class="source-line-no">202</span><span id="line-202">   public RestRequest formData(HttpPart... value) {</span>
-<span class="source-line-no">203</span><span id="line-203">      formData.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">204</span><span id="line-204">      return this;</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   /**</span>
-<span class="source-line-no">208</span><span id="line-208">    * Adds a form field.</span>
-<span class="source-line-no">209</span><span id="line-209">    *</span>
-<span class="source-line-no">210</span><span id="line-210">    * @param name The field name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">211</span><span id="line-211">    * @param value The field value. May be &lt;jk&gt;null&lt;/jk&gt; to omit.</span>
-<span class="source-line-no">212</span><span id="line-212">    * @return This object.</span>
-<span class="source-line-no">213</span><span id="line-213">    */</span>
-<span class="source-line-no">214</span><span id="line-214">   public RestRequest formData(String name, String value) {</span>
-<span class="source-line-no">215</span><span id="line-215">      formData.add(HttpPartBean.of(name, value));</span>
-<span class="source-line-no">216</span><span id="line-216">      return this;</span>
-<span class="source-line-no">217</span><span id="line-217">   }</span>
-<span class="source-line-no">218</span><span id="line-218"></span>
-<span class="source-line-no">219</span><span id="line-219">   // --------------------------------------------------</span>
-<span class="source-line-no">220</span><span id="line-220">   // Path substitution</span>
-<span class="source-line-no">221</span><span id="line-221">   // --------------------------------------------------</span>
-<span class="source-line-no">222</span><span id="line-222"></span>
-<span class="source-line-no">223</span><span id="line-223">   /**</span>
-<span class="source-line-no">224</span><span id="line-224">    * Adds path variable substitutions for URI templates (e.g. replaces {@code {id}} in the URL).</span>
-<span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * @param value The path parts to apply. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">227</span><span id="line-227">    * @return This object.</span>
-<span class="source-line-no">228</span><span id="line-228">    */</span>
-<span class="source-line-no">229</span><span id="line-229">   public RestRequest pathData(HttpPart... value) {</span>
-<span class="source-line-no">230</span><span id="line-230">      for (var p : value)</span>
-<span class="source-line-no">231</span><span id="line-231">         pathData.put(p.getName(), p.getValue());</span>
-<span class="source-line-no">232</span><span id="line-232">      return this;</span>
-<span class="source-line-no">233</span><span id="line-233">   }</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   /**</span>
-<span class="source-line-no">236</span><span id="line-236">    * Adds a path variable.</span>
-<span class="source-line-no">237</span><span id="line-237">    *</span>
-<span class="source-line-no">238</span><span id="line-238">    * @param name The variable name (without braces). Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">239</span><span id="line-239">    * @param value The replacement value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">240</span><span id="line-240">    * @return This object.</span>
-<span class="source-line-no">241</span><span id="line-241">    */</span>
-<span class="source-line-no">242</span><span id="line-242">   public RestRequest pathData(String name, Object value) {</span>
-<span class="source-line-no">243</span><span id="line-243">      pathData.put(name, value);</span>
-<span class="source-line-no">244</span><span id="line-244">      return this;</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   // --------------------------------------------------</span>
-<span class="source-line-no">248</span><span id="line-248">   // Body</span>
-<span class="source-line-no">249</span><span id="line-249">   // --------------------------------------------------</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">   /**</span>
-<span class="source-line-no">252</span><span id="line-252">    * Sets the request body directly from an {@link HttpBody}.</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * @param value The body. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @return This object.</span>
-<span class="source-line-no">256</span><span id="line-256">    */</span>
-<span class="source-line-no">257</span><span id="line-257">   public RestRequest body(HttpBody value) {</span>
-<span class="source-line-no">258</span><span id="line-258">      body = value;</span>
-<span class="source-line-no">259</span><span id="line-259">      convertedBody = null;</span>
-<span class="source-line-no">260</span><span id="line-260">      return this;</span>
-<span class="source-line-no">261</span><span id="line-261">   }</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">   /**</span>
-<span class="source-line-no">264</span><span id="line-264">    * Sets the request body from an arbitrary Java object.</span>
+<span class="source-line-no">041</span><span id="line-41"> * @since 9.2.1</span>
+<span class="source-line-no">042</span><span id="line-42"> */</span>
+<span class="source-line-no">043</span><span id="line-43">@SuppressWarnings({</span>
+<span class="source-line-no">044</span><span id="line-44">   "java:S1192", // Duplicate string literals are HTTP header names and REST protocol wire values; intentional</span>
+<span class="source-line-no">045</span><span id="line-45">   "java:S3776", // Cognitive complexity acceptable for request-building and dispatch logic.</span>
+<span class="source-line-no">046</span><span id="line-46">   "resource" // client is not owned here; run() transfers RestResponse ownership to caller</span>
+<span class="source-line-no">047</span><span id="line-47">})</span>
+<span class="source-line-no">048</span><span id="line-48">public final class RestRequest {</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   private final RestClient client;</span>
+<span class="source-line-no">051</span><span id="line-51">   private final String method;</span>
+<span class="source-line-no">052</span><span id="line-52">   private final String url;</span>
+<span class="source-line-no">053</span><span id="line-53">   private final List&lt;HttpHeader&gt; headers = l();</span>
+<span class="source-line-no">054</span><span id="line-54">   private final List&lt;HttpPart&gt; queryData = l();</span>
+<span class="source-line-no">055</span><span id="line-55">   private final List&lt;HttpPart&gt; formData = l();</span>
+<span class="source-line-no">056</span><span id="line-56">   private final Map&lt;String,Object&gt; pathData = m();</span>
+<span class="source-line-no">057</span><span id="line-57">   private HttpBody body;</span>
+<span class="source-line-no">058</span><span id="line-58">   private TransportBody convertedBody;</span>
+<span class="source-line-no">059</span><span id="line-59">   private URI resolvedUri;</span>
+<span class="source-line-no">060</span><span id="line-60">   private Duration timeout;</span>
+<span class="source-line-no">061</span><span id="line-61">   // Per-request interceptors, unioned with the client-level interceptors at run() time.</span>
+<span class="source-line-no">062</span><span id="line-62">   private final List&lt;RestCallInterceptor&gt; requestInterceptors = l();</span>
+<span class="source-line-no">063</span><span id="line-63">   private List&lt;TransportHeader&gt; resolvedHeaders = List.of();</span>
+<span class="source-line-no">064</span><span id="line-64">   private byte[] cachedContent;</span>
+<span class="source-line-no">065</span><span id="line-65">   private long cachedContentLength = -1;</span>
+<span class="source-line-no">066</span><span id="line-66">   private Throwable exception;</span>
+<span class="source-line-no">067</span><span id="line-67">   private Duration execTime;</span>
+<span class="source-line-no">068</span><span id="line-68">   private boolean policyEnforced;</span>
+<span class="source-line-no">069</span><span id="line-69">   private boolean allowPrivateUrls;</span>
+<span class="source-line-no">070</span><span id="line-70">   // The X-Request-Id correlation id sent on this request, captured at onInit (minted or caller-supplied).  Read at</span>
+<span class="source-line-no">071</span><span id="line-71">   // debug-emit time as a stored field — never via a live LogContext scope that may not survive to emission.</span>
+<span class="source-line-no">072</span><span id="line-72">   private String requestId;</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   RestRequest(RestClient client, String method, String url) {</span>
+<span class="source-line-no">075</span><span id="line-75">      this.client = client;</span>
+<span class="source-line-no">076</span><span id="line-76">      this.method = method;</span>
+<span class="source-line-no">077</span><span id="line-77">      this.url = url;</span>
+<span class="source-line-no">078</span><span id="line-78">      // Inherit client defaults</span>
+<span class="source-line-no">079</span><span id="line-79">      this.headers.addAll(client.defaultHeaders);</span>
+<span class="source-line-no">080</span><span id="line-80">      this.queryData.addAll(client.defaultQueryData);</span>
+<span class="source-line-no">081</span><span id="line-81">   }</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   // --------------------------------------------------</span>
+<span class="source-line-no">084</span><span id="line-84">   // Header</span>
+<span class="source-line-no">085</span><span id="line-85">   // --------------------------------------------------</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /**</span>
+<span class="source-line-no">088</span><span id="line-88">    * Adds request headers.</span>
+<span class="source-line-no">089</span><span id="line-89">    *</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return This object.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   public RestRequest headers(HttpHeader... value) {</span>
+<span class="source-line-no">094</span><span id="line-94">      headers.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">095</span><span id="line-95">      return this;</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * Adds a request header.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">102</span><span id="line-102">    * @param value The header value. May be &lt;jk&gt;null&lt;/jk&gt; to omit.</span>
+<span class="source-line-no">103</span><span id="line-103">    * @return This object.</span>
+<span class="source-line-no">104</span><span id="line-104">    */</span>
+<span class="source-line-no">105</span><span id="line-105">   public RestRequest header(String name, String value) {</span>
+<span class="source-line-no">106</span><span id="line-106">      headers.add(HttpHeaderBean.of(name, value));</span>
+<span class="source-line-no">107</span><span id="line-107">      return this;</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /**</span>
+<span class="source-line-no">111</span><span id="line-111">    * Adds a request header with a lazy value.</span>
+<span class="source-line-no">112</span><span id="line-112">    *</span>
+<span class="source-line-no">113</span><span id="line-113">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @param value Supplier for the value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">115</span><span id="line-115">    * @return This object.</span>
+<span class="source-line-no">116</span><span id="line-116">    */</span>
+<span class="source-line-no">117</span><span id="line-117">   public RestRequest header(String name, Supplier&lt;String&gt; value) {</span>
+<span class="source-line-no">118</span><span id="line-118">      headers.add(HttpHeaderBean.of(name, value));</span>
+<span class="source-line-no">119</span><span id="line-119">      return this;</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   /**</span>
+<span class="source-line-no">123</span><span id="line-123">    * Adds a &lt;c&gt;No-Trace: true&lt;/c&gt; header, asking the server to keep the stack trace of a failed call out of its log.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * &lt;p&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    * The server still logs the one-line access record; only the attached exception is omitted.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @return This object.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   public RestRequest noTrace() {</span>
+<span class="source-line-no">131</span><span id="line-131">      return header(NoTrace.NAME, "true");</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   /**</span>
+<span class="source-line-no">135</span><span id="line-135">    * Returns &lt;jk&gt;true&lt;/jk&gt; if a header with the given name (case-insensitive) is already set on this request.</span>
+<span class="source-line-no">136</span><span id="line-136">    *</span>
+<span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    * Used by the next-gen remote-proxy engine to honor the precedence of a caller-supplied</span>
+<span class="source-line-no">139</span><span id="line-139">    * {@code @Header} parameter over an annotation-declared {@code accept}/{@code contentType} attribute.</span>
+<span class="source-line-no">140</span><span id="line-140">    *</span>
+<span class="source-line-no">141</span><span id="line-141">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">142</span><span id="line-142">    * @return &lt;jk&gt;true&lt;/jk&gt; if the header is present.</span>
+<span class="source-line-no">143</span><span id="line-143">    */</span>
+<span class="source-line-no">144</span><span id="line-144">   public boolean hasHeader(String name) {</span>
+<span class="source-line-no">145</span><span id="line-145">      return headers.stream().anyMatch(h -&gt; eqic(name, h.getName()));</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   // --------------------------------------------------</span>
+<span class="source-line-no">149</span><span id="line-149">   // Query</span>
+<span class="source-line-no">150</span><span id="line-150">   // --------------------------------------------------</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">   /**</span>
+<span class="source-line-no">153</span><span id="line-153">    * Adds query parameters.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">156</span><span id="line-156">    * @return This object.</span>
+<span class="source-line-no">157</span><span id="line-157">    */</span>
+<span class="source-line-no">158</span><span id="line-158">   public RestRequest queryData(HttpPart... value) {</span>
+<span class="source-line-no">159</span><span id="line-159">      queryData.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">160</span><span id="line-160">      return this;</span>
+<span class="source-line-no">161</span><span id="line-161">   }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">   /**</span>
+<span class="source-line-no">164</span><span id="line-164">    * Adds a query parameter.</span>
+<span class="source-line-no">165</span><span id="line-165">    *</span>
+<span class="source-line-no">166</span><span id="line-166">    * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">167</span><span id="line-167">    * @param value The parameter value. May be &lt;jk&gt;null&lt;/jk&gt; to omit.</span>
+<span class="source-line-no">168</span><span id="line-168">    * @return This object.</span>
+<span class="source-line-no">169</span><span id="line-169">    */</span>
+<span class="source-line-no">170</span><span id="line-170">   public RestRequest queryData(String name, String value) {</span>
+<span class="source-line-no">171</span><span id="line-171">      queryData.add(HttpPartBean.of(name, value));</span>
+<span class="source-line-no">172</span><span id="line-172">      return this;</span>
+<span class="source-line-no">173</span><span id="line-173">   }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">   /**</span>
+<span class="source-line-no">176</span><span id="line-176">    * Adds a query parameter with a lazy value.</span>
+<span class="source-line-no">177</span><span id="line-177">    *</span>
+<span class="source-line-no">178</span><span id="line-178">    * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">179</span><span id="line-179">    * @param value Supplier for the value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">180</span><span id="line-180">    * @return This object.</span>
+<span class="source-line-no">181</span><span id="line-181">    */</span>
+<span class="source-line-no">182</span><span id="line-182">   public RestRequest queryData(String name, Supplier&lt;String&gt; value) {</span>
+<span class="source-line-no">183</span><span id="line-183">      queryData.add(HttpPartBean.of(name, value));</span>
+<span class="source-line-no">184</span><span id="line-184">      return this;</span>
+<span class="source-line-no">185</span><span id="line-185">   }</span>
+<span class="source-line-no">186</span><span id="line-186"></span>
+<span class="source-line-no">187</span><span id="line-187">   // --------------------------------------------------</span>
+<span class="source-line-no">188</span><span id="line-188">   // Form data</span>
+<span class="source-line-no">189</span><span id="line-189">   // --------------------------------------------------</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   /**</span>
+<span class="source-line-no">192</span><span id="line-192">    * Adds form fields (for {@code application/x-www-form-urlencoded} bodies).</span>
+<span class="source-line-no">193</span><span id="line-193">    *</span>
+<span class="source-line-no">194</span><span id="line-194">    * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">195</span><span id="line-195">    * @return This object.</span>
+<span class="source-line-no">196</span><span id="line-196">    */</span>
+<span class="source-line-no">197</span><span id="line-197">   public RestRequest formData(HttpPart... value) {</span>
+<span class="source-line-no">198</span><span id="line-198">      formData.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">199</span><span id="line-199">      return this;</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   /**</span>
+<span class="source-line-no">203</span><span id="line-203">    * Adds a form field.</span>
+<span class="source-line-no">204</span><span id="line-204">    *</span>
+<span class="source-line-no">205</span><span id="line-205">    * @param name The field name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">206</span><span id="line-206">    * @param value The field value. May be &lt;jk&gt;null&lt;/jk&gt; to omit.</span>
+<span class="source-line-no">207</span><span id="line-207">    * @return This object.</span>
+<span class="source-line-no">208</span><span id="line-208">    */</span>
+<span class="source-line-no">209</span><span id="line-209">   public RestRequest formData(String name, String value) {</span>
+<span class="source-line-no">210</span><span id="line-210">      formData.add(HttpPartBean.of(name, value));</span>
+<span class="source-line-no">211</span><span id="line-211">      return this;</span>
+<span class="source-line-no">212</span><span id="line-212">   }</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">   // --------------------------------------------------</span>
+<span class="source-line-no">215</span><span id="line-215">   // Path substitution</span>
+<span class="source-line-no">216</span><span id="line-216">   // --------------------------------------------------</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   /**</span>
+<span class="source-line-no">219</span><span id="line-219">    * Adds path variable substitutions for URI templates (e.g. replaces {@code {id}} in the URL).</span>
+<span class="source-line-no">220</span><span id="line-220">    *</span>
+<span class="source-line-no">221</span><span id="line-221">    * @param value The path parts to apply. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">222</span><span id="line-222">    * @return This object.</span>
+<span class="source-line-no">223</span><span id="line-223">    */</span>
+<span class="source-line-no">224</span><span id="line-224">   public RestRequest pathData(HttpPart... value) {</span>
+<span class="source-line-no">225</span><span id="line-225">      for (var p : value)</span>
+<span class="source-line-no">226</span><span id="line-226">         pathData.put(p.getName(), p.getValue());</span>
+<span class="source-line-no">227</span><span id="line-227">      return this;</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   /**</span>
+<span class="source-line-no">231</span><span id="line-231">    * Adds a path variable.</span>
+<span class="source-line-no">232</span><span id="line-232">    *</span>
+<span class="source-line-no">233</span><span id="line-233">    * @param name The variable name (without braces). Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">234</span><span id="line-234">    * @param value The replacement value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">235</span><span id="line-235">    * @return This object.</span>
+<span class="source-line-no">236</span><span id="line-236">    */</span>
+<span class="source-line-no">237</span><span id="line-237">   public RestRequest pathData(String name, Object value) {</span>
+<span class="source-line-no">238</span><span id="line-238">      pathData.put(name, value);</span>
+<span class="source-line-no">239</span><span id="line-239">      return this;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   // --------------------------------------------------</span>
+<span class="source-line-no">243</span><span id="line-243">   // Body</span>
+<span class="source-line-no">244</span><span id="line-244">   // --------------------------------------------------</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   /**</span>
+<span class="source-line-no">247</span><span id="line-247">    * Sets the request body directly from an {@link HttpBody}.</span>
+<span class="source-line-no">248</span><span id="line-248">    *</span>
+<span class="source-line-no">249</span><span id="line-249">    * @param value The body. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">250</span><span id="line-250">    * @return This object.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public RestRequest body(HttpBody value) {</span>
+<span class="source-line-no">253</span><span id="line-253">      body = value;</span>
+<span class="source-line-no">254</span><span id="line-254">      convertedBody = null;</span>
+<span class="source-line-no">255</span><span id="line-255">      return this;</span>
+<span class="source-line-no">256</span><span id="line-256">   }</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">   /**</span>
+<span class="source-line-no">259</span><span id="line-259">    * Sets the request body from an arbitrary Java object.</span>
+<span class="source-line-no">260</span><span id="line-260">    *</span>
+<span class="source-line-no">261</span><span id="line-261">    * &lt;p&gt;</span>
+<span class="source-line-no">262</span><span id="line-262">    * The object is first run through the client's body converter chain. The default converters handle:</span>
+<span class="source-line-no">263</span><span id="line-263">    * {@link HttpBody} (passthrough), {@link InputStream}, {@code byte[]}, and {@link File}.</span>
+<span class="source-line-no">264</span><span id="line-264">    * Custom converters can be registered on the builder.</span>
 <span class="source-line-no">265</span><span id="line-265">    *</span>
 <span class="source-line-no">266</span><span id="line-266">    * &lt;p&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    * The object is first run through the client's body converter chain. The default converters handle:</span>
-<span class="source-line-no">268</span><span id="line-268">    * {@link HttpBody} (passthrough), {@link InputStream}, {@code byte[]}, and {@link File}.</span>
-<span class="source-line-no">269</span><span id="line-269">    * Custom converters can be registered on the builder.</span>
-<span class="source-line-no">270</span><span id="line-270">    *</span>
-<span class="source-line-no">271</span><span id="line-271">    * &lt;p&gt;</span>
-<span class="source-line-no">272</span><span id="line-272">    * If no converter matches, the object is serialized with the client's explicitly-configured default serializer</span>
-<span class="source-line-no">273</span><span id="line-273">    * ({@link RestClient#getDefaultSerializer()}) and sent as a string body using the serializer's content type.  When</span>
-<span class="source-line-no">274</span><span id="line-274">    * no default serializer is configured, an {@link IllegalStateException} is raised (there is no implicit JSON</span>
-<span class="source-line-no">275</span><span id="line-275">    * fallback) — configure one via {@link RestClient.Builder#defaultSerializer(org.apache.juneau.marshall.serializer.Serializer)}.</span>
-<span class="source-line-no">276</span><span id="line-276">    *</span>
-<span class="source-line-no">277</span><span id="line-277">    * @param value The body object. May be &lt;jk&gt;null&lt;/jk&gt; to clear the body.</span>
-<span class="source-line-no">278</span><span id="line-278">    * @return This object.</span>
-<span class="source-line-no">279</span><span id="line-279">    * @throws IOException If a converter fails or the default serializer fails.</span>
-<span class="source-line-no">280</span><span id="line-280">    * @throws IllegalStateException If no converter matches and no default serializer is configured on the client.</span>
-<span class="source-line-no">281</span><span id="line-281">    */</span>
-<span class="source-line-no">282</span><span id="line-282">   public RestRequest body(Object value) throws IOException {</span>
-<span class="source-line-no">283</span><span id="line-283">      if (value == null) {</span>
-<span class="source-line-no">284</span><span id="line-284">         body = null;</span>
-<span class="source-line-no">285</span><span id="line-285">         convertedBody = null;</span>
-<span class="source-line-no">286</span><span id="line-286">         return this;</span>
-<span class="source-line-no">287</span><span id="line-287">      }</span>
-<span class="source-line-no">288</span><span id="line-288">      for (var converter : client.bodyConverters) {</span>
-<span class="source-line-no">289</span><span id="line-289">         if (converter.canConvert(value)) {</span>
-<span class="source-line-no">290</span><span id="line-290">            convertedBody = converter.convert(value);</span>
-<span class="source-line-no">291</span><span id="line-291">            body = null;</span>
-<span class="source-line-no">292</span><span id="line-292">            return this;</span>
-<span class="source-line-no">293</span><span id="line-293">         }</span>
-<span class="source-line-no">294</span><span id="line-294">      }</span>
-<span class="source-line-no">295</span><span id="line-295">      // No converter matched: stream the POJO through the client's default serializer.</span>
-<span class="source-line-no">296</span><span id="line-296">      // Mirrors classic SerializedEntity — the serializer writes straight to the transport output stream during</span>
-<span class="source-line-no">297</span><span id="line-297">      // run() rather than being pre-materialized into a String/byte[].  Repeatable (re-serializes on resend), so a</span>
-<span class="source-line-no">298</span><span id="line-298">      // future auto-retry can resend it; streaming bodies (InputStream/Reader) remain non-repeatable.</span>
-<span class="source-line-no">299</span><span id="line-299">      var s = client.getDefaultSerializer().orElseThrow(() -&gt; new IllegalStateException(</span>
-<span class="source-line-no">300</span><span id="line-300">         "No default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...)."));</span>
-<span class="source-line-no">301</span><span id="line-301">      var mt = s.getResponseContentType();</span>
-<span class="source-line-no">302</span><span id="line-302">      body = SerializerBody.of(s, value, mt != null ? mt.toString() : "application/json");</span>
-<span class="source-line-no">303</span><span id="line-303">      convertedBody = null;</span>
-<span class="source-line-no">304</span><span id="line-304">      return this;</span>
-<span class="source-line-no">305</span><span id="line-305">   }</span>
-<span class="source-line-no">306</span><span id="line-306"></span>
-<span class="source-line-no">307</span><span id="line-307">   /**</span>
-<span class="source-line-no">308</span><span id="line-308">    * Sets the request body to a token/record-streaming cursor body.</span>
+<span class="source-line-no">267</span><span id="line-267">    * If no converter matches, the object is serialized with the client's explicitly-configured default serializer</span>
+<span class="source-line-no">268</span><span id="line-268">    * ({@link RestClient#getDefaultSerializer()}) and sent as a string body using the serializer's content type.  When</span>
+<span class="source-line-no">269</span><span id="line-269">    * no default serializer is configured, an {@link IllegalStateException} is raised (there is no implicit JSON</span>
+<span class="source-line-no">270</span><span id="line-270">    * fallback) — configure one via {@link RestClient.Builder#defaultSerializer(org.apache.juneau.marshall.serializer.Serializer)}.</span>
+<span class="source-line-no">271</span><span id="line-271">    *</span>
+<span class="source-line-no">272</span><span id="line-272">    * @param value The body object. May be &lt;jk&gt;null&lt;/jk&gt; to clear the body.</span>
+<span class="source-line-no">273</span><span id="line-273">    * @return This object.</span>
+<span class="source-line-no">274</span><span id="line-274">    * @throws IOException If a converter fails or the default serializer fails.</span>
+<span class="source-line-no">275</span><span id="line-275">    * @throws IllegalStateException If no converter matches and no default serializer is configured on the client.</span>
+<span class="source-line-no">276</span><span id="line-276">    */</span>
+<span class="source-line-no">277</span><span id="line-277">   public RestRequest body(Object value) throws IOException {</span>
+<span class="source-line-no">278</span><span id="line-278">      if (value == null) {</span>
+<span class="source-line-no">279</span><span id="line-279">         body = null;</span>
+<span class="source-line-no">280</span><span id="line-280">         convertedBody = null;</span>
+<span class="source-line-no">281</span><span id="line-281">         return this;</span>
+<span class="source-line-no">282</span><span id="line-282">      }</span>
+<span class="source-line-no">283</span><span id="line-283">      for (var converter : client.bodyConverters) {</span>
+<span class="source-line-no">284</span><span id="line-284">         if (converter.canConvert(value)) {</span>
+<span class="source-line-no">285</span><span id="line-285">            convertedBody = converter.convert(value);</span>
+<span class="source-line-no">286</span><span id="line-286">            body = null;</span>
+<span class="source-line-no">287</span><span id="line-287">            return this;</span>
+<span class="source-line-no">288</span><span id="line-288">         }</span>
+<span class="source-line-no">289</span><span id="line-289">      }</span>
+<span class="source-line-no">290</span><span id="line-290">      // No converter matched: stream the POJO through the client's default serializer.</span>
+<span class="source-line-no">291</span><span id="line-291">      // Mirrors classic SerializedEntity — the serializer writes straight to the transport output stream during</span>
+<span class="source-line-no">292</span><span id="line-292">      // run() rather than being pre-materialized into a String/byte[].  Repeatable (re-serializes on resend), so a</span>
+<span class="source-line-no">293</span><span id="line-293">      // future auto-retry can resend it; streaming bodies (InputStream/Reader) remain non-repeatable.</span>
+<span class="source-line-no">294</span><span id="line-294">      var s = client.getDefaultSerializer().orElseThrow(() -&gt; new IllegalStateException(</span>
+<span class="source-line-no">295</span><span id="line-295">         "No default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...)."));</span>
+<span class="source-line-no">296</span><span id="line-296">      var mt = s.getResponseContentType();</span>
+<span class="source-line-no">297</span><span id="line-297">      body = SerializerBody.of(s, value, mt != null ? mt.toString() : "application/json");</span>
+<span class="source-line-no">298</span><span id="line-298">      convertedBody = null;</span>
+<span class="source-line-no">299</span><span id="line-299">      return this;</span>
+<span class="source-line-no">300</span><span id="line-300">   }</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">   /**</span>
+<span class="source-line-no">303</span><span id="line-303">    * Sets the request body to a token/record-streaming cursor body.</span>
+<span class="source-line-no">304</span><span id="line-304">    *</span>
+<span class="source-line-no">305</span><span id="line-305">    * &lt;p&gt;</span>
+<span class="source-line-no">306</span><span id="line-306">    * Convenience for {@link #body(HttpBody) body(streamBody)} that documents streaming intent and avoids a cast.</span>
+<span class="source-line-no">307</span><span id="line-307">    * The {@link RecordStreamBody} writes directly to the transport output stream during {@link #run()}, so large</span>
+<span class="source-line-no">308</span><span id="line-308">    * payloads are streamed to the wire without being buffered in memory.</span>
 <span class="source-line-no">309</span><span id="line-309">    *</span>
-<span class="source-line-no">310</span><span id="line-310">    * &lt;p&gt;</span>
-<span class="source-line-no">311</span><span id="line-311">    * Convenience for {@link #body(HttpBody) body(streamBody)} that documents streaming intent and avoids a cast.</span>
-<span class="source-line-no">312</span><span id="line-312">    * The {@link RecordStreamBody} writes directly to the transport output stream during {@link #run()}, so large</span>
-<span class="source-line-no">313</span><span id="line-313">    * payloads are streamed to the wire without being buffered in memory.</span>
-<span class="source-line-no">314</span><span id="line-314">    *</span>
-<span class="source-line-no">315</span><span id="line-315">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">316</span><span id="line-316">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">317</span><span id="line-317">    *    &lt;jv&gt;client&lt;/jv&gt;.post(&lt;js&gt;"/bulk-upload"&lt;/js&gt;)</span>
-<span class="source-line-no">318</span><span id="line-318">    *       .streamBodyEntity(RecordStreamBody.&lt;jsm&gt;records&lt;/jsm&gt;(&lt;jv&gt;w&lt;/jv&gt; -&amp;gt; {</span>
-<span class="source-line-no">319</span><span id="line-319">    *          &lt;jk&gt;for&lt;/jk&gt; (Bean &lt;jv&gt;b&lt;/jv&gt; : &lt;jv&gt;source&lt;/jv&gt;())</span>
-<span class="source-line-no">320</span><span id="line-320">    *             &lt;jv&gt;w&lt;/jv&gt;.write(&lt;jv&gt;b&lt;/jv&gt;);</span>
-<span class="source-line-no">321</span><span id="line-321">    *       }))</span>
-<span class="source-line-no">322</span><span id="line-322">    *       .run();</span>
-<span class="source-line-no">323</span><span id="line-323">    * &lt;/p&gt;</span>
-<span class="source-line-no">324</span><span id="line-324">    *</span>
-<span class="source-line-no">325</span><span id="line-325">    * @param value The streaming body. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">326</span><span id="line-326">    * @return This object.</span>
-<span class="source-line-no">327</span><span id="line-327">    */</span>
-<span class="source-line-no">328</span><span id="line-328">   public RestRequest streamBodyEntity(RecordStreamBody value) {</span>
-<span class="source-line-no">329</span><span id="line-329">      return body(value);</span>
-<span class="source-line-no">330</span><span id="line-330">   }</span>
-<span class="source-line-no">331</span><span id="line-331"></span>
-<span class="source-line-no">332</span><span id="line-332">   /**</span>
-<span class="source-line-no">333</span><span id="line-333">    * Sets the request body to a raw string (UTF-8, {@code text/plain}).</span>
-<span class="source-line-no">334</span><span id="line-334">    *</span>
-<span class="source-line-no">335</span><span id="line-335">    * &lt;p&gt;</span>
-<span class="source-line-no">336</span><span id="line-336">    * Unlike {@link #body(Object)}, this bypasses the converter chain and sends the string as-is.</span>
-<span class="source-line-no">337</span><span id="line-337">    *</span>
-<span class="source-line-no">338</span><span id="line-338">    * @param value The string body. May be &lt;jk&gt;null&lt;/jk&gt; to clear the body.</span>
-<span class="source-line-no">339</span><span id="line-339">    * @return This object.</span>
-<span class="source-line-no">340</span><span id="line-340">    */</span>
-<span class="source-line-no">341</span><span id="line-341">   public RestRequest bodyString(String value) {</span>
-<span class="source-line-no">342</span><span id="line-342">      if (value == null) {</span>
-<span class="source-line-no">343</span><span id="line-343">         body = null;</span>
-<span class="source-line-no">344</span><span id="line-344">         convertedBody = null;</span>
-<span class="source-line-no">345</span><span id="line-345">      } else {</span>
-<span class="source-line-no">346</span><span id="line-346">         body = StringBody.of(value, "text/plain");</span>
-<span class="source-line-no">347</span><span id="line-347">         convertedBody = null;</span>
-<span class="source-line-no">348</span><span id="line-348">      }</span>
-<span class="source-line-no">349</span><span id="line-349">      return this;</span>
-<span class="source-line-no">350</span><span id="line-350">   }</span>
-<span class="source-line-no">351</span><span id="line-351"></span>
-<span class="source-line-no">352</span><span id="line-352">   // --------------------------------------------------</span>
-<span class="source-line-no">353</span><span id="line-353">   // Timeout / interceptors</span>
-<span class="source-line-no">354</span><span id="line-354">   // --------------------------------------------------</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">   /**</span>
-<span class="source-line-no">357</span><span id="line-357">    * Sets a per-call response timeout for this request.</span>
-<span class="source-line-no">358</span><span id="line-358">    *</span>
-<span class="source-line-no">359</span><span id="line-359">    * &lt;p&gt;</span>
-<span class="source-line-no">360</span><span id="line-360">    * Threaded onto the {@link TransportRequest}.  Intended as a response timeout; connect timeouts are otherwise a client-level setting.</span>
-<span class="source-line-no">361</span><span id="line-361">    *</span>
-<span class="source-line-no">362</span><span id="line-362">    * &lt;p&gt;</span>
-<span class="source-line-no">363</span><span id="line-363">    * &lt;b&gt;Transport support:&lt;/b&gt; every built-in transport honors this value, using its native per-request mechanism:</span>
-<span class="source-line-no">364</span><span id="line-364">    * the JDK {@code HttpRequest} timeout, an Apache HttpClient 4.5 {@code RequestConfig} (socket + connect timeout),</span>
-<span class="source-line-no">365</span><span id="line-365">    * an Apache HttpClient 5 request-scoped response timeout, an OkHttp per-call read timeout, the Jetty response-header</span>
-<span class="source-line-no">366</span><span id="line-366">    * wait, and a simulated handler deadline in the mock transport.  On expiry the transport throws a</span>
-<span class="source-line-no">367</span><span id="line-367">    * {@link TransportException}.  When set, it overrides the transport's own default for this request only.</span>
-<span class="source-line-no">368</span><span id="line-368">    *</span>
-<span class="source-line-no">369</span><span id="line-369">    * &lt;p&gt;</span>
-<span class="source-line-no">370</span><span id="line-370">    * A non-&lt;jk&gt;null&lt;/jk&gt; value must be positive; zero and negative durations are rejected (matching the JDK</span>
-<span class="source-line-no">371</span><span id="line-371">    * {@code HttpRequest.timeout} contract) so every transport behaves identically.</span>
-<span class="source-line-no">372</span><span id="line-372">    *</span>
-<span class="source-line-no">373</span><span id="line-373">    * @param value The response timeout. May be &lt;jk&gt;null&lt;/jk&gt; to use the transport default.</span>
-<span class="source-line-no">374</span><span id="line-374">    * @return This object.</span>
-<span class="source-line-no">375</span><span id="line-375">    * @throws IllegalArgumentException If &lt;c&gt;value&lt;/c&gt; is zero or negative.</span>
-<span class="source-line-no">376</span><span id="line-376">    */</span>
-<span class="source-line-no">377</span><span id="line-377">   public RestRequest timeout(Duration value) {</span>
-<span class="source-line-no">378</span><span id="line-378">      if (value != null &amp;&amp; (value.isZero() || value.isNegative()))</span>
-<span class="source-line-no">379</span><span id="line-379">         throw new IllegalArgumentException("Request timeout must be positive: " + value);</span>
-<span class="source-line-no">380</span><span id="line-380">      timeout = value;</span>
-<span class="source-line-no">381</span><span id="line-381">      return this;</span>
-<span class="source-line-no">382</span><span id="line-382">   }</span>
-<span class="source-line-no">383</span><span id="line-383"></span>
-<span class="source-line-no">384</span><span id="line-384">   /**</span>
-<span class="source-line-no">385</span><span id="line-385">    * Marks this request as a {@code @Remote}/{@code @Url} call subject to the SSRF guardrail (see</span>
-<span class="source-line-no">386</span><span id="line-386">    * {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), and records the effective {@code allowPrivateUrls}</span>
-<span class="source-line-no">387</span><span id="line-387">    * opt-in for it.</span>
-<span class="source-line-no">388</span><span id="line-388">    *</span>
-<span class="source-line-no">389</span><span id="line-389">    * &lt;p&gt;</span>
-<span class="source-line-no">390</span><span id="line-390">    * Called by the {@code @Remote}-proxy invocation handler; not intended for direct use by ordinary</span>
-<span class="source-line-no">391</span><span id="line-391">    * {@code RestClient.get(url)}-style calls, which are never policy-covered.</span>
-<span class="source-line-no">392</span><span id="line-392">    *</span>
-<span class="source-line-no">393</span><span id="line-393">    * @param enforced {@code true} if this request is policy-covered.</span>
-<span class="source-line-no">394</span><span id="line-394">    * @param allowPrivateUrls {@code true} if the {@code allowPrivateUrls} opt-in is in effect for this request.</span>
-<span class="source-line-no">395</span><span id="line-395">    * @return This object.</span>
-<span class="source-line-no">396</span><span id="line-396">    */</span>
-<span class="source-line-no">397</span><span id="line-397">   public RestRequest remoteUrlPolicy(boolean enforced, boolean allowPrivateUrls) {</span>
-<span class="source-line-no">398</span><span id="line-398">      this.policyEnforced = enforced;</span>
-<span class="source-line-no">399</span><span id="line-399">      this.allowPrivateUrls = allowPrivateUrls;</span>
-<span class="source-line-no">400</span><span id="line-400">      return this;</span>
-<span class="source-line-no">401</span><span id="line-401">   }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   /**</span>
-<span class="source-line-no">404</span><span id="line-404">    * Adds per-request lifecycle interceptors.</span>
+<span class="source-line-no">310</span><span id="line-310">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">312</span><span id="line-312">    *    &lt;jv&gt;client&lt;/jv&gt;.post(&lt;js&gt;"/bulk-upload"&lt;/js&gt;)</span>
+<span class="source-line-no">313</span><span id="line-313">    *       .streamBodyEntity(RecordStreamBody.&lt;jsm&gt;records&lt;/jsm&gt;(&lt;jv&gt;w&lt;/jv&gt; -&amp;gt; {</span>
+<span class="source-line-no">314</span><span id="line-314">    *          &lt;jk&gt;for&lt;/jk&gt; (Bean &lt;jv&gt;b&lt;/jv&gt; : &lt;jv&gt;source&lt;/jv&gt;())</span>
+<span class="source-line-no">315</span><span id="line-315">    *             &lt;jv&gt;w&lt;/jv&gt;.write(&lt;jv&gt;b&lt;/jv&gt;);</span>
+<span class="source-line-no">316</span><span id="line-316">    *       }))</span>
+<span class="source-line-no">317</span><span id="line-317">    *       .run();</span>
+<span class="source-line-no">318</span><span id="line-318">    * &lt;/p&gt;</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @param value The streaming body. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @return This object.</span>
+<span class="source-line-no">322</span><span id="line-322">    */</span>
+<span class="source-line-no">323</span><span id="line-323">   public RestRequest streamBodyEntity(RecordStreamBody value) {</span>
+<span class="source-line-no">324</span><span id="line-324">      return body(value);</span>
+<span class="source-line-no">325</span><span id="line-325">   }</span>
+<span class="source-line-no">326</span><span id="line-326"></span>
+<span class="source-line-no">327</span><span id="line-327">   /**</span>
+<span class="source-line-no">328</span><span id="line-328">    * Sets the request body to a raw string (UTF-8, {@code text/plain}).</span>
+<span class="source-line-no">329</span><span id="line-329">    *</span>
+<span class="source-line-no">330</span><span id="line-330">    * &lt;p&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    * Unlike {@link #body(Object)}, this bypasses the converter chain and sends the string as-is.</span>
+<span class="source-line-no">332</span><span id="line-332">    *</span>
+<span class="source-line-no">333</span><span id="line-333">    * @param value The string body. May be &lt;jk&gt;null&lt;/jk&gt; to clear the body.</span>
+<span class="source-line-no">334</span><span id="line-334">    * @return This object.</span>
+<span class="source-line-no">335</span><span id="line-335">    */</span>
+<span class="source-line-no">336</span><span id="line-336">   public RestRequest bodyString(String value) {</span>
+<span class="source-line-no">337</span><span id="line-337">      if (value == null) {</span>
+<span class="source-line-no">338</span><span id="line-338">         body = null;</span>
+<span class="source-line-no">339</span><span id="line-339">         convertedBody = null;</span>
+<span class="source-line-no">340</span><span id="line-340">      } else {</span>
+<span class="source-line-no">341</span><span id="line-341">         body = StringBody.of(value, "text/plain");</span>
+<span class="source-line-no">342</span><span id="line-342">         convertedBody = null;</span>
+<span class="source-line-no">343</span><span id="line-343">      }</span>
+<span class="source-line-no">344</span><span id="line-344">      return this;</span>
+<span class="source-line-no">345</span><span id="line-345">   }</span>
+<span class="source-line-no">346</span><span id="line-346"></span>
+<span class="source-line-no">347</span><span id="line-347">   // --------------------------------------------------</span>
+<span class="source-line-no">348</span><span id="line-348">   // Timeout / interceptors</span>
+<span class="source-line-no">349</span><span id="line-349">   // --------------------------------------------------</span>
+<span class="source-line-no">350</span><span id="line-350"></span>
+<span class="source-line-no">351</span><span id="line-351">   /**</span>
+<span class="source-line-no">352</span><span id="line-352">    * Sets a per-call response timeout for this request.</span>
+<span class="source-line-no">353</span><span id="line-353">    *</span>
+<span class="source-line-no">354</span><span id="line-354">    * &lt;p&gt;</span>
+<span class="source-line-no">355</span><span id="line-355">    * Threaded onto the {@link TransportRequest}.  Intended as a response timeout; connect timeouts are otherwise a client-level setting.</span>
+<span class="source-line-no">356</span><span id="line-356">    *</span>
+<span class="source-line-no">357</span><span id="line-357">    * &lt;p&gt;</span>
+<span class="source-line-no">358</span><span id="line-358">    * &lt;b&gt;Transport support:&lt;/b&gt; every built-in transport honors this value, using its native per-request mechanism:</span>
+<span class="source-line-no">359</span><span id="line-359">    * the JDK {@code HttpRequest} timeout, an Apache HttpClient 4.5 {@code RequestConfig} (socket + connect timeout),</span>
+<span class="source-line-no">360</span><span id="line-360">    * an Apache HttpClient 5 request-scoped response timeout, an OkHttp per-call read timeout, the Jetty response-header</span>
+<span class="source-line-no">361</span><span id="line-361">    * wait, and a simulated handler deadline in the mock transport.  On expiry the transport throws a</span>
+<span class="source-line-no">362</span><span id="line-362">    * {@link TransportException}.  When set, it overrides the transport's own default for this request only.</span>
+<span class="source-line-no">363</span><span id="line-363">    *</span>
+<span class="source-line-no">364</span><span id="line-364">    * &lt;p&gt;</span>
+<span class="source-line-no">365</span><span id="line-365">    * A non-&lt;jk&gt;null&lt;/jk&gt; value must be positive; zero and negative durations are rejected (matching the JDK</span>
+<span class="source-line-no">366</span><span id="line-366">    * {@code HttpRequest.timeout} contract) so every transport behaves identically.</span>
+<span class="source-line-no">367</span><span id="line-367">    *</span>
+<span class="source-line-no">368</span><span id="line-368">    * @param value The response timeout. May be &lt;jk&gt;null&lt;/jk&gt; to use the transport default.</span>
+<span class="source-line-no">369</span><span id="line-369">    * @return This object.</span>
+<span class="source-line-no">370</span><span id="line-370">    * @throws IllegalArgumentException If &lt;c&gt;value&lt;/c&gt; is zero or negative.</span>
+<span class="source-line-no">371</span><span id="line-371">    */</span>
+<span class="source-line-no">372</span><span id="line-372">   public RestRequest timeout(Duration value) {</span>
+<span class="source-line-no">373</span><span id="line-373">      if (value != null &amp;&amp; (value.isZero() || value.isNegative()))</span>
+<span class="source-line-no">374</span><span id="line-374">         throw new IllegalArgumentException("Request timeout must be positive: " + value);</span>
+<span class="source-line-no">375</span><span id="line-375">      timeout = value;</span>
+<span class="source-line-no">376</span><span id="line-376">      return this;</span>
+<span class="source-line-no">377</span><span id="line-377">   }</span>
+<span class="source-line-no">378</span><span id="line-378"></span>
+<span class="source-line-no">379</span><span id="line-379">   /**</span>
+<span class="source-line-no">380</span><span id="line-380">    * Marks this request as a {@code @Remote}/{@code @Url} call subject to the SSRF guardrail (see</span>
+<span class="source-line-no">381</span><span id="line-381">    * {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), and records the effective {@code allowPrivateUrls}</span>
+<span class="source-line-no">382</span><span id="line-382">    * opt-in for it.</span>
+<span class="source-line-no">383</span><span id="line-383">    *</span>
+<span class="source-line-no">384</span><span id="line-384">    * &lt;p&gt;</span>
+<span class="source-line-no">385</span><span id="line-385">    * Called by the {@code @Remote}-proxy invocation handler; not intended for direct use by ordinary</span>
+<span class="source-line-no">386</span><span id="line-386">    * {@code RestClient.get(url)}-style calls, which are never policy-covered.</span>
+<span class="source-line-no">387</span><span id="line-387">    *</span>
+<span class="source-line-no">388</span><span id="line-388">    * @param enforced {@code true} if this request is policy-covered.</span>
+<span class="source-line-no">389</span><span id="line-389">    * @param allowPrivateUrls {@code true} if the {@code allowPrivateUrls} opt-in is in effect for this request.</span>
+<span class="source-line-no">390</span><span id="line-390">    * @return This object.</span>
+<span class="source-line-no">391</span><span id="line-391">    */</span>
+<span class="source-line-no">392</span><span id="line-392">   public RestRequest remoteUrlPolicy(boolean enforced, boolean allowPrivateUrls) {</span>
+<span class="source-line-no">393</span><span id="line-393">      this.policyEnforced = enforced;</span>
+<span class="source-line-no">394</span><span id="line-394">      this.allowPrivateUrls = allowPrivateUrls;</span>
+<span class="source-line-no">395</span><span id="line-395">      return this;</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
+<span class="source-line-no">398</span><span id="line-398">   /**</span>
+<span class="source-line-no">399</span><span id="line-399">    * Adds per-request lifecycle interceptors.</span>
+<span class="source-line-no">400</span><span id="line-400">    *</span>
+<span class="source-line-no">401</span><span id="line-401">    * &lt;p&gt;</span>
+<span class="source-line-no">402</span><span id="line-402">    * These are unioned with the client-level interceptors when the request runs: the client-level (builder)</span>
+<span class="source-line-no">403</span><span id="line-403">    * interceptors fire first, then these in the order added.  The next-gen remote-proxy engine uses this to layer</span>
+<span class="source-line-no">404</span><span id="line-404">    * annotation-declared interface-level then method-level interceptors after the builder-configured ones.</span>
 <span class="source-line-no">405</span><span id="line-405">    *</span>
-<span class="source-line-no">406</span><span id="line-406">    * &lt;p&gt;</span>
-<span class="source-line-no">407</span><span id="line-407">    * These are unioned with the client-level interceptors when the request runs: the client-level (builder)</span>
-<span class="source-line-no">408</span><span id="line-408">    * interceptors fire first, then these in the order added.  The next-gen remote-proxy engine uses this to layer</span>
-<span class="source-line-no">409</span><span id="line-409">    * annotation-declared interface-level then method-level interceptors after the builder-configured ones.</span>
-<span class="source-line-no">410</span><span id="line-410">    *</span>
-<span class="source-line-no">411</span><span id="line-411">    * @param value The interceptors to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">412</span><span id="line-412">    * @return This object.</span>
-<span class="source-line-no">413</span><span id="line-413">    */</span>
-<span class="source-line-no">414</span><span id="line-414">   public RestRequest interceptors(RestCallInterceptor... value) {</span>
-<span class="source-line-no">415</span><span id="line-415">      requestInterceptors.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">416</span><span id="line-416">      return this;</span>
-<span class="source-line-no">417</span><span id="line-417">   }</span>
-<span class="source-line-no">418</span><span id="line-418"></span>
-<span class="source-line-no">419</span><span id="line-419">   /**</span>
-<span class="source-line-no">420</span><span id="line-420">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this request's body can be safely re-sent (retry gating).</span>
-<span class="source-line-no">421</span><span id="line-421">    *</span>
-<span class="source-line-no">422</span><span id="line-422">    * &lt;p&gt;</span>
-<span class="source-line-no">423</span><span id="line-423">    * A request with no body is trivially repeatable.  Otherwise the answer is delegated to the underlying</span>
-<span class="source-line-no">424</span><span id="line-424">    * body's {@link HttpBody#isRepeatable()} (or {@link TransportBody#isRepeatable()} for a pre-converted body):</span>
-<span class="source-line-no">425</span><span id="line-425">    * buffered bodies (string/byte[]/file/serialized POJO) are repeatable; one-shot streaming bodies</span>
-<span class="source-line-no">426</span><span id="line-426">    * ({@link InputStream}/{@link Reader}/piped) are not.</span>
-<span class="source-line-no">427</span><span id="line-427">    *</span>
-<span class="source-line-no">428</span><span id="line-428">    * @return &lt;jk&gt;true&lt;/jk&gt; if the body is absent or repeatable.</span>
-<span class="source-line-no">429</span><span id="line-429">    */</span>
-<span class="source-line-no">430</span><span id="line-430">   public boolean isBodyRepeatable() {</span>
-<span class="source-line-no">431</span><span id="line-431">      if (convertedBody != null)</span>
-<span class="source-line-no">432</span><span id="line-432">         return convertedBody.isRepeatable();</span>
-<span class="source-line-no">433</span><span id="line-433">      if (body != null)</span>
-<span class="source-line-no">434</span><span id="line-434">         return body.isRepeatable();</span>
-<span class="source-line-no">435</span><span id="line-435">      return true;</span>
-<span class="source-line-no">436</span><span id="line-436">   }</span>
-<span class="source-line-no">437</span><span id="line-437"></span>
-<span class="source-line-no">438</span><span id="line-438">   // --------------------------------------------------</span>
-<span class="source-line-no">439</span><span id="line-439">   // Accessors (for logging / interceptors)</span>
-<span class="source-line-no">440</span><span id="line-440">   // --------------------------------------------------</span>
-<span class="source-line-no">441</span><span id="line-441"></span>
-<span class="source-line-no">442</span><span id="line-442">   /**</span>
-<span class="source-line-no">443</span><span id="line-443">    * Returns the HTTP method for this request (e.g. {@code "GET"}).</span>
-<span class="source-line-no">444</span><span id="line-444">    *</span>
-<span class="source-line-no">445</span><span id="line-445">    * @return The method. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">446</span><span id="line-446">    */</span>
-<span class="source-line-no">447</span><span id="line-447">   public String getMethod() {</span>
-<span class="source-line-no">448</span><span id="line-448">      return method;</span>
-<span class="source-line-no">449</span><span id="line-449">   }</span>
-<span class="source-line-no">450</span><span id="line-450"></span>
-<span class="source-line-no">451</span><span id="line-451">   /**</span>
-<span class="source-line-no">452</span><span id="line-452">    * Returns the fully resolved URI for this request, or {@code null} if {@link #run()} has not been called yet.</span>
-<span class="source-line-no">453</span><span id="line-453">    *</span>
-<span class="source-line-no">454</span><span id="line-454">    * @return The URI, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">455</span><span id="line-455">    */</span>
-<span class="source-line-no">456</span><span id="line-456">   public URI getUri() {</span>
-<span class="source-line-no">457</span><span id="line-457">      return resolvedUri;</span>
-<span class="source-line-no">458</span><span id="line-458">   }</span>
-<span class="source-line-no">459</span><span id="line-459"></span>
-<span class="source-line-no">460</span><span id="line-460">   /**</span>
-<span class="source-line-no">461</span><span id="line-461">    * Returns the headers resolved onto the transport request.</span>
-<span class="source-line-no">462</span><span id="line-462">    *</span>
-<span class="source-line-no">463</span><span id="line-463">    * @return The resolved headers in wire order.</span>
-<span class="source-line-no">464</span><span id="line-464">    */</span>
-<span class="source-line-no">465</span><span id="line-465">   public List&lt;TransportHeader&gt; getResolvedHeaders() {</span>
-<span class="source-line-no">466</span><span id="line-466">      return resolvedHeaders;</span>
-<span class="source-line-no">467</span><span id="line-467">   }</span>
-<span class="source-line-no">468</span><span id="line-468"></span>
-<span class="source-line-no">469</span><span id="line-469">   /**</span>
-<span class="source-line-no">470</span><span id="line-470">    * Returns the first resolved request header with the given name (case-insensitive), or {@code null} if absent.</span>
-<span class="source-line-no">471</span><span id="line-471">    *</span>
-<span class="source-line-no">472</span><span id="line-472">    * &lt;p&gt;</span>
-<span class="source-line-no">473</span><span id="line-473">    * Reads from {@link #getResolvedHeaders()} — the finalized, wire-order list — not the pre-conversion header list</span>
-<span class="source-line-no">474</span><span id="line-474">    * {@link #hasHeader(String)} uses internally for its dedup check.</span>
-<span class="source-line-no">475</span><span id="line-475">    *</span>
-<span class="source-line-no">476</span><span id="line-476">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">477</span><span id="line-477">    * @return The first matching header, or &lt;jk&gt;null&lt;/jk&gt; if absent.</span>
-<span class="source-line-no">478</span><span id="line-478">    */</span>
-<span class="source-line-no">479</span><span id="line-479">   public TransportHeader getFirstHeader(String name) {</span>
-<span class="source-line-no">480</span><span id="line-480">      return resolvedHeaders.stream()</span>
-<span class="source-line-no">481</span><span id="line-481">         .filter(h -&gt; eqic(h.name(), name))</span>
-<span class="source-line-no">482</span><span id="line-482">         .findFirst()</span>
-<span class="source-line-no">483</span><span id="line-483">         .orElse(null);</span>
-<span class="source-line-no">484</span><span id="line-484">   }</span>
-<span class="source-line-no">485</span><span id="line-485"></span>
-<span class="source-line-no">486</span><span id="line-486">   /**</span>
-<span class="source-line-no">487</span><span id="line-487">    * Returns request body bytes captured for debug logging (up to the configured body cap).</span>
-<span class="source-line-no">488</span><span id="line-488">    *</span>
-<span class="source-line-no">489</span><span id="line-489">    * @return Captured request bytes, or &lt;jk&gt;null&lt;/jk&gt; if not captured.</span>
-<span class="source-line-no">490</span><span id="line-490">    */</span>
-<span class="source-line-no">491</span><span id="line-491">   public byte[] getCachedContent() {</span>
-<span class="source-line-no">492</span><span id="line-492">      return cachedContent;</span>
-<span class="source-line-no">493</span><span id="line-493">   }</span>
-<span class="source-line-no">494</span><span id="line-494"></span>
-<span class="source-line-no">495</span><span id="line-495">   /**</span>
-<span class="source-line-no">496</span><span id="line-496">    * Returns the total request body length observed during write, or {@code -1} if unknown.</span>
-<span class="source-line-no">497</span><span id="line-497">    *</span>
-<span class="source-line-no">498</span><span id="line-498">    * @return The total body length.</span>
-<span class="source-line-no">499</span><span id="line-499">    */</span>
-<span class="source-line-no">500</span><span id="line-500">   public long getCachedContentLength() {</span>
-<span class="source-line-no">501</span><span id="line-501">      return cachedContentLength;</span>
-<span class="source-line-no">502</span><span id="line-502">   }</span>
-<span class="source-line-no">503</span><span id="line-503"></span>
-<span class="source-line-no">504</span><span id="line-504">   /**</span>
-<span class="source-line-no">505</span><span id="line-505">    * Returns the terminal request exception, if any.</span>
-<span class="source-line-no">506</span><span id="line-506">    *</span>
-<span class="source-line-no">507</span><span id="line-507">    * @return The terminal exception, or &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">508</span><span id="line-508">    */</span>
-<span class="source-line-no">509</span><span id="line-509">   public Throwable getException() {</span>
-<span class="source-line-no">510</span><span id="line-510">      return exception;</span>
-<span class="source-line-no">511</span><span id="line-511">   }</span>
-<span class="source-line-no">512</span><span id="line-512"></span>
-<span class="source-line-no">513</span><span id="line-513">   /**</span>
-<span class="source-line-no">514</span><span id="line-514">    * Returns the measured request execution time.</span>
-<span class="source-line-no">515</span><span id="line-515">    *</span>
-<span class="source-line-no">516</span><span id="line-516">    * @return The request execution time, or &lt;jk&gt;null&lt;/jk&gt; if unset.</span>
-<span class="source-line-no">517</span><span id="line-517">    */</span>
-<span class="source-line-no">518</span><span id="line-518">   public Duration getExecTime() {</span>
-<span class="source-line-no">519</span><span id="line-519">      return execTime;</span>
-<span class="source-line-no">520</span><span id="line-520">   }</span>
-<span class="source-line-no">521</span><span id="line-521"></span>
-<span class="source-line-no">522</span><span id="line-522">   /**</span>
-<span class="source-line-no">523</span><span id="line-523">    * Sets the {@code X-Request-Id} correlation id for this request (pre-call).</span>
+<span class="source-line-no">406</span><span id="line-406">    * @param value The interceptors to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">407</span><span id="line-407">    * @return This object.</span>
+<span class="source-line-no">408</span><span id="line-408">    */</span>
+<span class="source-line-no">409</span><span id="line-409">   public RestRequest interceptors(RestCallInterceptor... value) {</span>
+<span class="source-line-no">410</span><span id="line-410">      requestInterceptors.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">411</span><span id="line-411">      return this;</span>
+<span class="source-line-no">412</span><span id="line-412">   }</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   /**</span>
+<span class="source-line-no">415</span><span id="line-415">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this request's body can be safely re-sent (retry gating).</span>
+<span class="source-line-no">416</span><span id="line-416">    *</span>
+<span class="source-line-no">417</span><span id="line-417">    * &lt;p&gt;</span>
+<span class="source-line-no">418</span><span id="line-418">    * A request with no body is trivially repeatable.  Otherwise the answer is delegated to the underlying</span>
+<span class="source-line-no">419</span><span id="line-419">    * body's {@link HttpBody#isRepeatable()} (or {@link TransportBody#isRepeatable()} for a pre-converted body):</span>
+<span class="source-line-no">420</span><span id="line-420">    * buffered bodies (string/byte[]/file/serialized POJO) are repeatable; one-shot streaming bodies</span>
+<span class="source-line-no">421</span><span id="line-421">    * ({@link InputStream}/{@link Reader}/piped) are not.</span>
+<span class="source-line-no">422</span><span id="line-422">    *</span>
+<span class="source-line-no">423</span><span id="line-423">    * @return &lt;jk&gt;true&lt;/jk&gt; if the body is absent or repeatable.</span>
+<span class="source-line-no">424</span><span id="line-424">    */</span>
+<span class="source-line-no">425</span><span id="line-425">   public boolean isBodyRepeatable() {</span>
+<span class="source-line-no">426</span><span id="line-426">      if (convertedBody != null)</span>
+<span class="source-line-no">427</span><span id="line-427">         return convertedBody.isRepeatable();</span>
+<span class="source-line-no">428</span><span id="line-428">      if (body != null)</span>
+<span class="source-line-no">429</span><span id="line-429">         return body.isRepeatable();</span>
+<span class="source-line-no">430</span><span id="line-430">      return true;</span>
+<span class="source-line-no">431</span><span id="line-431">   }</span>
+<span class="source-line-no">432</span><span id="line-432"></span>
+<span class="source-line-no">433</span><span id="line-433">   // --------------------------------------------------</span>
+<span class="source-line-no">434</span><span id="line-434">   // Accessors (for logging / interceptors)</span>
+<span class="source-line-no">435</span><span id="line-435">   // --------------------------------------------------</span>
+<span class="source-line-no">436</span><span id="line-436"></span>
+<span class="source-line-no">437</span><span id="line-437">   /**</span>
+<span class="source-line-no">438</span><span id="line-438">    * Returns the HTTP method for this request (e.g. {@code "GET"}).</span>
+<span class="source-line-no">439</span><span id="line-439">    *</span>
+<span class="source-line-no">440</span><span id="line-440">    * @return The method. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">441</span><span id="line-441">    */</span>
+<span class="source-line-no">442</span><span id="line-442">   public String getMethod() {</span>
+<span class="source-line-no">443</span><span id="line-443">      return method;</span>
+<span class="source-line-no">444</span><span id="line-444">   }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">   /**</span>
+<span class="source-line-no">447</span><span id="line-447">    * Returns the fully resolved URI for this request, or {@code null} if {@link #run()} has not been called yet.</span>
+<span class="source-line-no">448</span><span id="line-448">    *</span>
+<span class="source-line-no">449</span><span id="line-449">    * @return The URI, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">450</span><span id="line-450">    */</span>
+<span class="source-line-no">451</span><span id="line-451">   public URI getUri() {</span>
+<span class="source-line-no">452</span><span id="line-452">      return resolvedUri;</span>
+<span class="source-line-no">453</span><span id="line-453">   }</span>
+<span class="source-line-no">454</span><span id="line-454"></span>
+<span class="source-line-no">455</span><span id="line-455">   /**</span>
+<span class="source-line-no">456</span><span id="line-456">    * Returns the headers resolved onto the transport request.</span>
+<span class="source-line-no">457</span><span id="line-457">    *</span>
+<span class="source-line-no">458</span><span id="line-458">    * @return The resolved headers in wire order.</span>
+<span class="source-line-no">459</span><span id="line-459">    */</span>
+<span class="source-line-no">460</span><span id="line-460">   public List&lt;TransportHeader&gt; getResolvedHeaders() {</span>
+<span class="source-line-no">461</span><span id="line-461">      return resolvedHeaders;</span>
+<span class="source-line-no">462</span><span id="line-462">   }</span>
+<span class="source-line-no">463</span><span id="line-463"></span>
+<span class="source-line-no">464</span><span id="line-464">   /**</span>
+<span class="source-line-no">465</span><span id="line-465">    * Returns the first resolved request header with the given name (case-insensitive), or {@code null} if absent.</span>
+<span class="source-line-no">466</span><span id="line-466">    *</span>
+<span class="source-line-no">467</span><span id="line-467">    * &lt;p&gt;</span>
+<span class="source-line-no">468</span><span id="line-468">    * Reads from {@link #getResolvedHeaders()} — the finalized, wire-order list — not the pre-conversion header list</span>
+<span class="source-line-no">469</span><span id="line-469">    * {@link #hasHeader(String)} uses internally for its dedup check.</span>
+<span class="source-line-no">470</span><span id="line-470">    *</span>
+<span class="source-line-no">471</span><span id="line-471">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">472</span><span id="line-472">    * @return The first matching header, or &lt;jk&gt;null&lt;/jk&gt; if absent.</span>
+<span class="source-line-no">473</span><span id="line-473">    */</span>
+<span class="source-line-no">474</span><span id="line-474">   public TransportHeader getFirstHeader(String name) {</span>
+<span class="source-line-no">475</span><span id="line-475">      return resolvedHeaders.stream()</span>
+<span class="source-line-no">476</span><span id="line-476">         .filter(h -&gt; eqic(h.name(), name))</span>
+<span class="source-line-no">477</span><span id="line-477">         .findFirst()</span>
+<span class="source-line-no">478</span><span id="line-478">         .orElse(null);</span>
+<span class="source-line-no">479</span><span id="line-479">   }</span>
+<span class="source-line-no">480</span><span id="line-480"></span>
+<span class="source-line-no">481</span><span id="line-481">   /**</span>
+<span class="source-line-no">482</span><span id="line-482">    * Returns request body bytes captured for debug logging (up to the configured body cap).</span>
+<span class="source-line-no">483</span><span id="line-483">    *</span>
+<span class="source-line-no">484</span><span id="line-484">    * @return Captured request bytes, or &lt;jk&gt;null&lt;/jk&gt; if not captured.</span>
+<span class="source-line-no">485</span><span id="line-485">    */</span>
+<span class="source-line-no">486</span><span id="line-486">   public byte[] getCachedContent() {</span>
+<span class="source-line-no">487</span><span id="line-487">      return cachedContent;</span>
+<span class="source-line-no">488</span><span id="line-488">   }</span>
+<span class="source-line-no">489</span><span id="line-489"></span>
+<span class="source-line-no">490</span><span id="line-490">   /**</span>
+<span class="source-line-no">491</span><span id="line-491">    * Returns the total request body length observed during write, or {@code -1} if unknown.</span>
+<span class="source-line-no">492</span><span id="line-492">    *</span>
+<span class="source-line-no">493</span><span id="line-493">    * @return The total body length.</span>
+<span class="source-line-no">494</span><span id="line-494">    */</span>
+<span class="source-line-no">495</span><span id="line-495">   public long getCachedContentLength() {</span>
+<span class="source-line-no">496</span><span id="line-496">      return cachedContentLength;</span>
+<span class="source-line-no">497</span><span id="line-497">   }</span>
+<span class="source-line-no">498</span><span id="line-498"></span>
+<span class="source-line-no">499</span><span id="line-499">   /**</span>
+<span class="source-line-no">500</span><span id="line-500">    * Returns the terminal request exception, if any.</span>
+<span class="source-line-no">501</span><span id="line-501">    *</span>
+<span class="source-line-no">502</span><span id="line-502">    * @return The terminal exception, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">503</span><span id="line-503">    */</span>
+<span class="source-line-no">504</span><span id="line-504">   public Throwable getException() {</span>
+<span class="source-line-no">505</span><span id="line-505">      return exception;</span>
+<span class="source-line-no">506</span><span id="line-506">   }</span>
+<span class="source-line-no">507</span><span id="line-507"></span>
+<span class="source-line-no">508</span><span id="line-508">   /**</span>
+<span class="source-line-no">509</span><span id="line-509">    * Returns the measured request execution time.</span>
+<span class="source-line-no">510</span><span id="line-510">    *</span>
+<span class="source-line-no">511</span><span id="line-511">    * @return The request execution time, or &lt;jk&gt;null&lt;/jk&gt; if unset.</span>
+<span class="source-line-no">512</span><span id="line-512">    */</span>
+<span class="source-line-no">513</span><span id="line-513">   public Duration getExecTime() {</span>
+<span class="source-line-no">514</span><span id="line-514">      return execTime;</span>
+<span class="source-line-no">515</span><span id="line-515">   }</span>
+<span class="source-line-no">516</span><span id="line-516"></span>
+<span class="source-line-no">517</span><span id="line-517">   /**</span>
+<span class="source-line-no">518</span><span id="line-518">    * Sets the {@code X-Request-Id} correlation id for this request (pre-call).</span>
+<span class="source-line-no">519</span><span id="line-519">    *</span>
+<span class="source-line-no">520</span><span id="line-520">    * &lt;p&gt;</span>
+<span class="source-line-no">521</span><span id="line-521">    * Sets both the outgoing {@code X-Request-Id} header and the stored sent-id field returned by</span>
+<span class="source-line-no">522</span><span id="line-522">    * {@link #getRequestId()}.  Use this to propagate a caller-owned correlation id; otherwise the built-in auto-send</span>
+<span class="source-line-no">523</span><span id="line-523">    * interceptor mints one at request time (unless disabled via {@link RestClient.Builder#sendRequestId(boolean)}).</span>
 <span class="source-line-no">524</span><span id="line-524">    *</span>
-<span class="source-line-no">525</span><span id="line-525">    * &lt;p&gt;</span>
-<span class="source-line-no">526</span><span id="line-526">    * Sets both the outgoing {@code X-Request-Id} header and the stored sent-id field returned by</span>
-<span class="source-line-no">527</span><span id="line-527">    * {@link #getRequestId()}.  Use this to propagate a caller-owned correlation id; otherwise the built-in auto-send</span>
-<span class="source-line-no">528</span><span id="line-528">    * interceptor mints one at request time (unless disabled via {@link RestClient.Builder#sendRequestId(boolean)}).</span>
-<span class="source-line-no">529</span><span id="line-529">    *</span>
-<span class="source-line-no">530</span><span id="line-530">    * @param value The correlation id.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">531</span><span id="line-531">    * @return This object.</span>
-<span class="source-line-no">532</span><span id="line-532">    * @since 10.0.0</span>
-<span class="source-line-no">533</span><span id="line-533">    */</span>
-<span class="source-line-no">534</span><span id="line-534">   public RestRequest requestId(String value) {</span>
-<span class="source-line-no">535</span><span id="line-535">      this.requestId = reqnn("value", value);</span>
-<span class="source-line-no">536</span><span id="line-536">      return header(RequestIdConstants.HEADER, value);</span>
-<span class="source-line-no">537</span><span id="line-537">   }</span>
-<span class="source-line-no">538</span><span id="line-538"></span>
-<span class="source-line-no">539</span><span id="line-539">   /**</span>
-<span class="source-line-no">540</span><span id="line-540">    * Returns the {@code X-Request-Id} correlation id sent on this request.</span>
-<span class="source-line-no">541</span><span id="line-541">    *</span>
-<span class="source-line-no">542</span><span id="line-542">    * &lt;p&gt;</span>
-<span class="source-line-no">543</span><span id="line-543">    * Captured at request time (minted by the auto-send interceptor, or the caller-supplied value).  Read as a stored</span>
-<span class="source-line-no">544</span><span id="line-544">    * field at debug-emit time &amp;mdash; never via a live log-context scope.</span>
-<span class="source-line-no">545</span><span id="line-545">    *</span>
-<span class="source-line-no">546</span><span id="line-546">    * @return The sent correlation id, or &lt;jk&gt;null&lt;/jk&gt; if none was sent (e.g. {@code sendRequestId(false)}).</span>
-<span class="source-line-no">547</span><span id="line-547">    * @since 10.0.0</span>
-<span class="source-line-no">548</span><span id="line-548">    */</span>
-<span class="source-line-no">549</span><span id="line-549">   public String getRequestId() {</span>
-<span class="source-line-no">550</span><span id="line-550">      return requestId;</span>
-<span class="source-line-no">551</span><span id="line-551">   }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">   /**</span>
-<span class="source-line-no">554</span><span id="line-554">    * Records the correlation id actually sent on this request (auto-send interceptor internal use).</span>
-<span class="source-line-no">555</span><span id="line-555">    *</span>
-<span class="source-line-no">556</span><span id="line-556">    * @param value The sent id.</span>
-<span class="source-line-no">557</span><span id="line-557">    */</span>
-<span class="source-line-no">558</span><span id="line-558">   void setSentRequestId(String value) {</span>
-<span class="source-line-no">559</span><span id="line-559">      this.requestId = value;</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   /**</span>
-<span class="source-line-no">563</span><span id="line-563">    * Returns the current value of the {@code X-Request-Id} header set on this request (case-insensitive), or</span>
-<span class="source-line-no">564</span><span id="line-564">    * &lt;jk&gt;null&lt;/jk&gt; if none is set (auto-send interceptor internal use).</span>
-<span class="source-line-no">565</span><span id="line-565">    *</span>
-<span class="source-line-no">566</span><span id="line-566">    * @return The header value, or &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">567</span><span id="line-567">    */</span>
-<span class="source-line-no">568</span><span id="line-568">   String peekRequestIdHeader() {</span>
-<span class="source-line-no">569</span><span id="line-569">      return headers.stream()</span>
-<span class="source-line-no">570</span><span id="line-570">         .filter(h -&gt; eqic(RequestIdConstants.HEADER, h.getName()))</span>
-<span class="source-line-no">571</span><span id="line-571">         .map(HttpHeader::getValue)</span>
-<span class="source-line-no">572</span><span id="line-572">         .filter(java.util.Objects::nonNull)</span>
-<span class="source-line-no">573</span><span id="line-573">         .findFirst()</span>
-<span class="source-line-no">574</span><span id="line-574">         .orElse(null);</span>
-<span class="source-line-no">575</span><span id="line-575">   }</span>
-<span class="source-line-no">576</span><span id="line-576"></span>
-<span class="source-line-no">577</span><span id="line-577">   // --------------------------------------------------</span>
-<span class="source-line-no">578</span><span id="line-578">   // Execute</span>
-<span class="source-line-no">579</span><span id="line-579">   // --------------------------------------------------</span>
-<span class="source-line-no">580</span><span id="line-580"></span>
-<span class="source-line-no">581</span><span id="line-581">   /**</span>
-<span class="source-line-no">582</span><span id="line-582">    * Executes the request and returns the response.</span>
-<span class="source-line-no">583</span><span id="line-583">    *</span>
-<span class="source-line-no">584</span><span id="line-584">    * &lt;p&gt;</span>
-<span class="source-line-no">585</span><span id="line-585">    * The caller is responsible for closing the returned {@link RestResponse}.</span>
-<span class="source-line-no">586</span><span id="line-586">    *</span>
-<span class="source-line-no">587</span><span id="line-587">    * @return The response. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">588</span><span id="line-588">    * @throws TransportException If a network-level error occurs.</span>
-<span class="source-line-no">589</span><span id="line-589">    * @throws RestCallException If the response could not be processed.</span>
-<span class="source-line-no">590</span><span id="line-590">    */</span>
-<span class="source-line-no">591</span><span id="line-591">   @SuppressWarnings({</span>
-<span class="source-line-no">592</span><span id="line-592">      "java:S1130" // RestCallException retained for public-API/source stability: interceptors declare 'throws Exception', so a RestCallException they raise is caught by the precise-rethrow multi-catch below and propagated unchanged; Sonar's flow analysis misses this path. Removing the throws would break callers that catch RestCallException (a sibling checked exception of TransportException).</span>
-<span class="source-line-no">593</span><span id="line-593">   })</span>
-<span class="source-line-no">594</span><span id="line-594">   public RestResponse run() throws TransportException, RestCallException {</span>
-<span class="source-line-no">595</span><span id="line-595">      var start = Instant.now();</span>
-<span class="source-line-no">596</span><span id="line-596">      RestResponse response = null;</span>
-<span class="source-line-no">597</span><span id="line-597">      Throwable error = null;</span>
-<span class="source-line-no">598</span><span id="line-598">      var debugLevel = RestClientDebugPipeline.resolveTier(client.debugLogger);</span>
-<span class="source-line-no">599</span><span id="line-599">      var debugCap = client.debugFormatter.bodyCap();</span>
-<span class="source-line-no">600</span><span id="line-600">      // Union the client-level (builder) interceptors with any per-request (interface- then</span>
-<span class="source-line-no">601</span><span id="line-601">      // method-level) interceptors, preserving the order builder → interface → method.</span>
-<span class="source-line-no">602</span><span id="line-602">      var effectiveInterceptors = effectiveInterceptors();</span>
-<span class="source-line-no">603</span><span id="line-603">      try {</span>
-<span class="source-line-no">604</span><span id="line-604">         for (var interceptor : effectiveInterceptors)</span>
-<span class="source-line-no">605</span><span id="line-605">            interceptor.onInit(this);</span>
-<span class="source-line-no">606</span><span id="line-606"></span>
-<span class="source-line-no">607</span><span id="line-607">         var transportRequest = buildTransportRequest();</span>
-<span class="source-line-no">608</span><span id="line-608">         resolvedHeaders = transportRequest.getHeaders();</span>
-<span class="source-line-no">609</span><span id="line-609">         if (transportRequest.getBody() == null) {</span>
-<span class="source-line-no">610</span><span id="line-610">            cachedContentLength = 0;</span>
-<span class="source-line-no">611</span><span id="line-611">         } else {</span>
-<span class="source-line-no">612</span><span id="line-612">            cachedContentLength = transportRequest.getBody().getContentLength();</span>
-<span class="source-line-no">613</span><span id="line-613">         }</span>
-<span class="source-line-no">614</span><span id="line-614">         if (debugLevel == Level.FINEST)</span>
-<span class="source-line-no">615</span><span id="line-615">            transportRequest = captureRequestBody(transportRequest, debugCap);</span>
-<span class="source-line-no">616</span><span id="line-616">         if (transportRequest.isSsrfGuardActive() &amp;&amp; ! client.transport.supportsUrlPolicy())</span>
-<span class="source-line-no">617</span><span id="line-617">            throw new TransportException("Refusing to send a policy-covered @Remote request through a transport "</span>
-<span class="source-line-no">618</span><span id="line-618">               + "that cannot honor the SSRF guardrail's connect-time contract (pin-on-connect + redirect "</span>
-<span class="source-line-no">619</span><span id="line-619">               + "revalidation): " + cn(client.transport) + ".  Use a first-party transport that supports it, or "</span>
-<span class="source-line-no">620</span><span id="line-620">               + "set allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");</span>
-<span class="source-line-no">621</span><span id="line-621">         var transportResponse = client.transport.execute(transportRequest);</span>
-<span class="source-line-no">622</span><span id="line-622">         response = new RestResponse(transportResponse, client, this, debugLevel, debugCap);</span>
-<span class="source-line-no">623</span><span id="line-623"></span>
-<span class="source-line-no">624</span><span id="line-624">         for (var interceptor : effectiveInterceptors)</span>
-<span class="source-line-no">625</span><span id="line-625">            interceptor.onConnect(this, response);</span>
-<span class="source-line-no">626</span><span id="line-626"></span>
-<span class="source-line-no">627</span><span id="line-627">         execTime = Duration.between(start, Instant.now());</span>
-<span class="source-line-no">628</span><span id="line-628">         response.setExecTime(execTime);</span>
-<span class="source-line-no">629</span><span id="line-629">         return response;</span>
-<span class="source-line-no">630</span><span id="line-630">      } catch (TransportException | RestCallException e) {</span>
-<span class="source-line-no">631</span><span id="line-631">         error = e;</span>
-<span class="source-line-no">632</span><span id="line-632">         throw e;</span>
-<span class="source-line-no">633</span><span id="line-633">      } catch (Exception e) {</span>
-<span class="source-line-no">634</span><span id="line-634">         error = e;</span>
-<span class="source-line-no">635</span><span id="line-635">         throw new TransportException("Request failed: " + e.getMessage(), e);</span>
-<span class="source-line-no">636</span><span id="line-636">      } finally {</span>
-<span class="source-line-no">637</span><span id="line-637">         var elapsed = Duration.between(start, Instant.now());</span>
-<span class="source-line-no">638</span><span id="line-638">         execTime = elapsed;</span>
-<span class="source-line-no">639</span><span id="line-639">         exception = error;</span>
-<span class="source-line-no">640</span><span id="line-640">         RestResponse finalResponse = response;</span>
-<span class="source-line-no">641</span><span id="line-641">         if (error != null &amp;&amp; finalResponse != null) {</span>
-<span class="source-line-no">642</span><span id="line-642">            // The response was assigned but an error after that point (e.g. a throwing onConnect</span>
-<span class="source-line-no">643</span><span id="line-643">            // interceptor) means it is never returned to the caller, so the caller can never close it</span>
-<span class="source-line-no">644</span><span id="line-644">            // themselves — close it here to avoid leaking the underlying connection/body.</span>
-<span class="source-line-no">645</span><span id="line-645">            try {</span>
-<span class="source-line-no">646</span><span id="line-646">               finalResponse.setExecTime(elapsed);</span>
-<span class="source-line-no">647</span><span id="line-647">               finalResponse.close();</span>
-<span class="source-line-no">648</span><span id="line-648">            } catch (IOException closeError) { // HTT: close() failing on an already-broken response is not reliably reproducible</span>
-<span class="source-line-no">649</span><span id="line-649">               // suppress — best effort, and the original error is what propagates</span>
-<span class="source-line-no">650</span><span id="line-650">            }</span>
-<span class="source-line-no">651</span><span id="line-651">         }</span>
-<span class="source-line-no">652</span><span id="line-652">         for (var interceptor : effectiveInterceptors) {</span>
-<span class="source-line-no">653</span><span id="line-653">            try {</span>
-<span class="source-line-no">654</span><span id="line-654">               interceptor.onClose(this, finalResponse);</span>
-<span class="source-line-no">655</span><span id="line-655">            } catch (Exception e2) { // HTT: exception in onClose; hard to test reliably</span>
-<span class="source-line-no">656</span><span id="line-656">               // suppress interceptor close errors — best effort</span>
-<span class="source-line-no">657</span><span id="line-657">            }</span>
+<span class="source-line-no">525</span><span id="line-525">    * @param value The correlation id.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">526</span><span id="line-526">    * @return This object.</span>
+<span class="source-line-no">527</span><span id="line-527">    * @since 10.0.0</span>
+<span class="source-line-no">528</span><span id="line-528">    */</span>
+<span class="source-line-no">529</span><span id="line-529">   public RestRequest requestId(String value) {</span>
+<span class="source-line-no">530</span><span id="line-530">      this.requestId = reqnn("value", value);</span>
+<span class="source-line-no">531</span><span id="line-531">      return header(RequestIdConstants.HEADER, value);</span>
+<span class="source-line-no">532</span><span id="line-532">   }</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">   /**</span>
+<span class="source-line-no">535</span><span id="line-535">    * Returns the {@code X-Request-Id} correlation id sent on this request.</span>
+<span class="source-line-no">536</span><span id="line-536">    *</span>
+<span class="source-line-no">537</span><span id="line-537">    * &lt;p&gt;</span>
+<span class="source-line-no">538</span><span id="line-538">    * Captured at request time (minted by the auto-send interceptor, or the caller-supplied value).  Read as a stored</span>
+<span class="source-line-no">539</span><span id="line-539">    * field at debug-emit time &amp;mdash; never via a live log-context scope.</span>
+<span class="source-line-no">540</span><span id="line-540">    *</span>
+<span class="source-line-no">541</span><span id="line-541">    * @return The sent correlation id, or &lt;jk&gt;null&lt;/jk&gt; if none was sent (e.g. {@code sendRequestId(false)}).</span>
+<span class="source-line-no">542</span><span id="line-542">    * @since 10.0.0</span>
+<span class="source-line-no">543</span><span id="line-543">    */</span>
+<span class="source-line-no">544</span><span id="line-544">   public String getRequestId() {</span>
+<span class="source-line-no">545</span><span id="line-545">      return requestId;</span>
+<span class="source-line-no">546</span><span id="line-546">   }</span>
+<span class="source-line-no">547</span><span id="line-547"></span>
+<span class="source-line-no">548</span><span id="line-548">   /**</span>
+<span class="source-line-no">549</span><span id="line-549">    * Records the correlation id actually sent on this request (auto-send interceptor internal use).</span>
+<span class="source-line-no">550</span><span id="line-550">    *</span>
+<span class="source-line-no">551</span><span id="line-551">    * @param value The sent id.</span>
+<span class="source-line-no">552</span><span id="line-552">    */</span>
+<span class="source-line-no">553</span><span id="line-553">   void setSentRequestId(String value) {</span>
+<span class="source-line-no">554</span><span id="line-554">      this.requestId = value;</span>
+<span class="source-line-no">555</span><span id="line-555">   }</span>
+<span class="source-line-no">556</span><span id="line-556"></span>
+<span class="source-line-no">557</span><span id="line-557">   /**</span>
+<span class="source-line-no">558</span><span id="line-558">    * Returns the current value of the {@code X-Request-Id} header set on this request (case-insensitive), or</span>
+<span class="source-line-no">559</span><span id="line-559">    * &lt;jk&gt;null&lt;/jk&gt; if none is set (auto-send interceptor internal use).</span>
+<span class="source-line-no">560</span><span id="line-560">    *</span>
+<span class="source-line-no">561</span><span id="line-561">    * @return The header value, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">562</span><span id="line-562">    */</span>
+<span class="source-line-no">563</span><span id="line-563">   String peekRequestIdHeader() {</span>
+<span class="source-line-no">564</span><span id="line-564">      return headers.stream()</span>
+<span class="source-line-no">565</span><span id="line-565">         .filter(h -&gt; eqic(RequestIdConstants.HEADER, h.getName()))</span>
+<span class="source-line-no">566</span><span id="line-566">         .map(HttpHeader::getValue)</span>
+<span class="source-line-no">567</span><span id="line-567">         .filter(java.util.Objects::nonNull)</span>
+<span class="source-line-no">568</span><span id="line-568">         .findFirst()</span>
+<span class="source-line-no">569</span><span id="line-569">         .orElse(null);</span>
+<span class="source-line-no">570</span><span id="line-570">   }</span>
+<span class="source-line-no">571</span><span id="line-571"></span>
+<span class="source-line-no">572</span><span id="line-572">   // --------------------------------------------------</span>
+<span class="source-line-no">573</span><span id="line-573">   // Execute</span>
+<span class="source-line-no">574</span><span id="line-574">   // --------------------------------------------------</span>
+<span class="source-line-no">575</span><span id="line-575"></span>
+<span class="source-line-no">576</span><span id="line-576">   /**</span>
+<span class="source-line-no">577</span><span id="line-577">    * Executes the request and returns the response.</span>
+<span class="source-line-no">578</span><span id="line-578">    *</span>
+<span class="source-line-no">579</span><span id="line-579">    * &lt;p&gt;</span>
+<span class="source-line-no">580</span><span id="line-580">    * The caller is responsible for closing the returned {@link RestResponse}.</span>
+<span class="source-line-no">581</span><span id="line-581">    *</span>
+<span class="source-line-no">582</span><span id="line-582">    * @return The response. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">583</span><span id="line-583">    * @throws TransportException If a network-level error occurs.</span>
+<span class="source-line-no">584</span><span id="line-584">    * @throws RestCallException If the response could not be processed.</span>
+<span class="source-line-no">585</span><span id="line-585">    */</span>
+<span class="source-line-no">586</span><span id="line-586">   @SuppressWarnings({</span>
+<span class="source-line-no">587</span><span id="line-587">      "java:S1130" // RestCallException retained for public-API/source stability: interceptors declare 'throws Exception', so a RestCallException they raise is caught by the precise-rethrow multi-catch below and propagated unchanged; Sonar's flow analysis misses this path. Removing the throws would break callers that catch RestCallException (a sibling checked exception of TransportException).</span>
+<span class="source-line-no">588</span><span id="line-588">   })</span>
+<span class="source-line-no">589</span><span id="line-589">   public RestResponse run() throws TransportException, RestCallException {</span>
+<span class="source-line-no">590</span><span id="line-590">      var start = Instant.now();</span>
+<span class="source-line-no">591</span><span id="line-591">      RestResponse response = null;</span>
+<span class="source-line-no">592</span><span id="line-592">      Throwable error = null;</span>
+<span class="source-line-no">593</span><span id="line-593">      var debugLevel = RestClientDebugPipeline.resolveTier(client.debugLogger);</span>
+<span class="source-line-no">594</span><span id="line-594">      var debugCap = client.debugFormatter.bodyCap();</span>
+<span class="source-line-no">595</span><span id="line-595">      // Union the client-level (builder) interceptors with any per-request (interface- then</span>
+<span class="source-line-no">596</span><span id="line-596">      // method-level) interceptors, preserving the order builder → interface → method.</span>
+<span class="source-line-no">597</span><span id="line-597">      var effectiveInterceptors = effectiveInterceptors();</span>
+<span class="source-line-no">598</span><span id="line-598">      try {</span>
+<span class="source-line-no">599</span><span id="line-599">         for (var interceptor : effectiveInterceptors)</span>
+<span class="source-line-no">600</span><span id="line-600">            interceptor.onInit(this);</span>
+<span class="source-line-no">601</span><span id="line-601"></span>
+<span class="source-line-no">602</span><span id="line-602">         var transportRequest = buildTransportRequest();</span>
+<span class="source-line-no">603</span><span id="line-603">         resolvedHeaders = transportRequest.getHeaders();</span>
+<span class="source-line-no">604</span><span id="line-604">         if (transportRequest.getBody() == null) {</span>
+<span class="source-line-no">605</span><span id="line-605">            cachedContentLength = 0;</span>
+<span class="source-line-no">606</span><span id="line-606">         } else {</span>
+<span class="source-line-no">607</span><span id="line-607">            cachedContentLength = transportRequest.getBody().getContentLength();</span>
+<span class="source-line-no">608</span><span id="line-608">         }</span>
+<span class="source-line-no">609</span><span id="line-609">         if (debugLevel == Level.FINEST)</span>
+<span class="source-line-no">610</span><span id="line-610">            transportRequest = captureRequestBody(transportRequest, debugCap);</span>
+<span class="source-line-no">611</span><span id="line-611">         if (transportRequest.isSsrfGuardActive() &amp;&amp; ! client.transport.supportsUrlPolicy())</span>
+<span class="source-line-no">612</span><span id="line-612">            throw new TransportException("Refusing to send a policy-covered @Remote request through a transport "</span>
+<span class="source-line-no">613</span><span id="line-613">               + "that cannot honor the SSRF guardrail's connect-time contract (pin-on-connect + redirect "</span>
+<span class="source-line-no">614</span><span id="line-614">               + "revalidation): " + cn(client.transport) + ".  Use a first-party transport that supports it, or "</span>
+<span class="source-line-no">615</span><span id="line-615">               + "set allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");</span>
+<span class="source-line-no">616</span><span id="line-616">         var transportResponse = client.transport.execute(transportRequest);</span>
+<span class="source-line-no">617</span><span id="line-617">         response = new RestResponse(transportResponse, client, this, debugLevel, debugCap);</span>
+<span class="source-line-no">618</span><span id="line-618"></span>
+<span class="source-line-no">619</span><span id="line-619">         for (var interceptor : effectiveInterceptors)</span>
+<span class="source-line-no">620</span><span id="line-620">            interceptor.onConnect(this, response);</span>
+<span class="source-line-no">621</span><span id="line-621"></span>
+<span class="source-line-no">622</span><span id="line-622">         execTime = Duration.between(start, Instant.now());</span>
+<span class="source-line-no">623</span><span id="line-623">         response.setExecTime(execTime);</span>
+<span class="source-line-no">624</span><span id="line-624">         return response;</span>
+<span class="source-line-no">625</span><span id="line-625">      } catch (TransportException | RestCallException e) {</span>
+<span class="source-line-no">626</span><span id="line-626">         error = e;</span>
+<span class="source-line-no">627</span><span id="line-627">         throw e;</span>
+<span class="source-line-no">628</span><span id="line-628">      } catch (Exception e) {</span>
+<span class="source-line-no">629</span><span id="line-629">         error = e;</span>
+<span class="source-line-no">630</span><span id="line-630">         throw new TransportException("Request failed: " + e.getMessage(), e);</span>
+<span class="source-line-no">631</span><span id="line-631">      } finally {</span>
+<span class="source-line-no">632</span><span id="line-632">         var elapsed = Duration.between(start, Instant.now());</span>
+<span class="source-line-no">633</span><span id="line-633">         execTime = elapsed;</span>
+<span class="source-line-no">634</span><span id="line-634">         exception = error;</span>
+<span class="source-line-no">635</span><span id="line-635">         RestResponse finalResponse = response;</span>
+<span class="source-line-no">636</span><span id="line-636">         if (error != null &amp;&amp; finalResponse != null) {</span>
+<span class="source-line-no">637</span><span id="line-637">            // The response was assigned but an error after that point (e.g. a throwing onConnect</span>
+<span class="source-line-no">638</span><span id="line-638">            // interceptor) means it is never returned to the caller, so the caller can never close it</span>
+<span class="source-line-no">639</span><span id="line-639">            // themselves — close it here to avoid leaking the underlying connection/body.</span>
+<span class="source-line-no">640</span><span id="line-640">            try {</span>
+<span class="source-line-no">641</span><span id="line-641">               finalResponse.setExecTime(elapsed);</span>
+<span class="source-line-no">642</span><span id="line-642">               finalResponse.close();</span>
+<span class="source-line-no">643</span><span id="line-643">            } catch (IOException closeError) { // HTT: close() failing on an already-broken response is not reliably reproducible</span>
+<span class="source-line-no">644</span><span id="line-644">               // suppress — best effort, and the original error is what propagates</span>
+<span class="source-line-no">645</span><span id="line-645">            }</span>
+<span class="source-line-no">646</span><span id="line-646">         }</span>
+<span class="source-line-no">647</span><span id="line-647">         for (var interceptor : effectiveInterceptors) {</span>
+<span class="source-line-no">648</span><span id="line-648">            try {</span>
+<span class="source-line-no">649</span><span id="line-649">               interceptor.onClose(this, finalResponse);</span>
+<span class="source-line-no">650</span><span id="line-650">            } catch (Exception e2) { // HTT: exception in onClose; hard to test reliably</span>
+<span class="source-line-no">651</span><span id="line-651">               // suppress interceptor close errors — best effort</span>
+<span class="source-line-no">652</span><span id="line-652">            }</span>
+<span class="source-line-no">653</span><span id="line-653">         }</span>
+<span class="source-line-no">654</span><span id="line-654">         if (error != null &amp;&amp; finalResponse == null) {</span>
+<span class="source-line-no">655</span><span id="line-655">            var syntheticResponse = new RestResponse(TransportResponse.builder().statusCode(0).build(), client, this, debugLevel, debugCap);</span>
+<span class="source-line-no">656</span><span id="line-656">            syntheticResponse.setExecTime(elapsed);</span>
+<span class="source-line-no">657</span><span id="line-657">            RestClientDebugPipeline.emit(client.debugLogger, client.debugFormatter, debugLevel, this, syntheticResponse, error);</span>
 <span class="source-line-no">658</span><span id="line-658">         }</span>
-<span class="source-line-no">659</span><span id="line-659">         if (error != null &amp;&amp; finalResponse == null) {</span>
-<span class="source-line-no">660</span><span id="line-660">            var syntheticResponse = new RestResponse(TransportResponse.builder().statusCode(0).build(), client, this, debugLevel, debugCap);</span>
-<span class="source-line-no">661</span><span id="line-661">            syntheticResponse.setExecTime(elapsed);</span>
-<span class="source-line-no">662</span><span id="line-662">            RestClientDebugPipeline.emit(client.debugLogger, client.debugFormatter, debugLevel, this, syntheticResponse, error);</span>
-<span class="source-line-no">663</span><span id="line-663">         }</span>
-<span class="source-line-no">664</span><span id="line-664">      }</span>
-<span class="source-line-no">665</span><span id="line-665">   }</span>
-<span class="source-line-no">666</span><span id="line-666"></span>
-<span class="source-line-no">667</span><span id="line-667">   /**</span>
-<span class="source-line-no">668</span><span id="line-668">    * Executes this request and opens a closeable, cancellable cursor over the response as a</span>
-<span class="source-line-no">669</span><span id="line-669">    * &lt;c&gt;text/event-stream&lt;/c&gt;.</span>
-<span class="source-line-no">670</span><span id="line-670">    *</span>
-<span class="source-line-no">671</span><span id="line-671">    * &lt;p&gt;</span>
-<span class="source-line-no">672</span><span id="line-672">    * This executes {@link #run()}, asserts a 2xx response status, then opens the response body as an event stream.</span>
-<span class="source-line-no">673</span><span id="line-673">    * Non-2xx responses throw {@link RestCallException} before the body is treated as SSE.</span>
-<span class="source-line-no">674</span><span id="line-674">    *</span>
-<span class="source-line-no">675</span><span id="line-675">    * &lt;p&gt;</span>
-<span class="source-line-no">676</span><span id="line-676">    * The response content type is not validated. This is intentional so callers can branch on response type</span>
-<span class="source-line-no">677</span><span id="line-677">    * (for example &lt;c&gt;application/json&lt;/c&gt; vs &lt;c&gt;text/event-stream&lt;/c&gt;) when protocols use both.</span>
-<span class="source-line-no">678</span><span id="line-678">    *</span>
-<span class="source-line-no">679</span><span id="line-679">    * &lt;p&gt;</span>
-<span class="source-line-no">680</span><span id="line-680">    * Adds an {@code Accept: text/event-stream} header only when neither this request nor inherited client default</span>
-<span class="source-line-no">681</span><span id="line-681">    * headers already include {@code Accept}.</span>
+<span class="source-line-no">659</span><span id="line-659">      }</span>
+<span class="source-line-no">660</span><span id="line-660">   }</span>
+<span class="source-line-no">661</span><span id="line-661"></span>
+<span class="source-line-no">662</span><span id="line-662">   /**</span>
+<span class="source-line-no">663</span><span id="line-663">    * Executes this request and opens a closeable, cancellable cursor over the response as a</span>
+<span class="source-line-no">664</span><span id="line-664">    * &lt;c&gt;text/event-stream&lt;/c&gt;.</span>
+<span class="source-line-no">665</span><span id="line-665">    *</span>
+<span class="source-line-no">666</span><span id="line-666">    * &lt;p&gt;</span>
+<span class="source-line-no">667</span><span id="line-667">    * This executes {@link #run()}, asserts a 2xx response status, then opens the response body as an event stream.</span>
+<span class="source-line-no">668</span><span id="line-668">    * Non-2xx responses throw {@link RestCallException} before the body is treated as SSE.</span>
+<span class="source-line-no">669</span><span id="line-669">    *</span>
+<span class="source-line-no">670</span><span id="line-670">    * &lt;p&gt;</span>
+<span class="source-line-no">671</span><span id="line-671">    * The response content type is not validated. This is intentional so callers can branch on response type</span>
+<span class="source-line-no">672</span><span id="line-672">    * (for example &lt;c&gt;application/json&lt;/c&gt; vs &lt;c&gt;text/event-stream&lt;/c&gt;) when protocols use both.</span>
+<span class="source-line-no">673</span><span id="line-673">    *</span>
+<span class="source-line-no">674</span><span id="line-674">    * &lt;p&gt;</span>
+<span class="source-line-no">675</span><span id="line-675">    * Adds an {@code Accept: text/event-stream} header only when neither this request nor inherited client default</span>
+<span class="source-line-no">676</span><span id="line-676">    * headers already include {@code Accept}.</span>
+<span class="source-line-no">677</span><span id="line-677">    *</span>
+<span class="source-line-no">678</span><span id="line-678">    * &lt;p&gt;</span>
+<span class="source-line-no">679</span><span id="line-679">    * The caller owns the returned {@link SseEventReader}; closing it also closes the underlying</span>
+<span class="source-line-no">680</span><span id="line-680">    * {@link RestResponse} (see {@link ResponseBody#asEventStream()}). If opening the event stream fails,</span>
+<span class="source-line-no">681</span><span id="line-681">    * this method best-effort closes the response before propagating.</span>
 <span class="source-line-no">682</span><span id="line-682">    *</span>
-<span class="source-line-no">683</span><span id="line-683">    * &lt;p&gt;</span>
-<span class="source-line-no">684</span><span id="line-684">    * The caller owns the returned {@link SseEventReader}; closing it also closes the underlying</span>
-<span class="source-line-no">685</span><span id="line-685">    * {@link RestResponse} (see {@link ResponseBody#asEventStream()}). If opening the event stream fails,</span>
-<span class="source-line-no">686</span><span id="line-686">    * this method best-effort closes the response before propagating.</span>
-<span class="source-line-no">687</span><span id="line-687">    *</span>
-<span class="source-line-no">688</span><span id="line-688">    * @return A cursor over the live event stream. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">689</span><span id="line-689">    * @throws IOException If a transport-level error occurs (typically {@link TransportException}), if the response</span>
-<span class="source-line-no">690</span><span id="line-690">    *    could not be processed (typically {@link RestCallException}), or if the response has no body to open a</span>
-<span class="source-line-no">691</span><span id="line-691">    *    stream over.</span>
-<span class="source-line-no">692</span><span id="line-692">    */</span>
-<span class="source-line-no">693</span><span id="line-693">   public SseEventReader openEventStream() throws IOException {</span>
-<span class="source-line-no">694</span><span id="line-694">      if (! hasHeader("Accept"))</span>
-<span class="source-line-no">695</span><span id="line-695">         header("Accept", "text/event-stream");</span>
-<span class="source-line-no">696</span><span id="line-696">      var res = run();</span>
-<span class="source-line-no">697</span><span id="line-697">      var opened = false;</span>
-<span class="source-line-no">698</span><span id="line-698">      try {</span>
-<span class="source-line-no">699</span><span id="line-699">         var r = res.assertOk().body().asEventStream();</span>
-<span class="source-line-no">700</span><span id="line-700">         opened = true;</span>
-<span class="source-line-no">701</span><span id="line-701">         return r;</span>
-<span class="source-line-no">702</span><span id="line-702">      } finally {</span>
-<span class="source-line-no">703</span><span id="line-703">         if (! opened)</span>
-<span class="source-line-no">704</span><span id="line-704">            quiet(res::close);</span>
-<span class="source-line-no">705</span><span id="line-705">      }</span>
-<span class="source-line-no">706</span><span id="line-706">   }</span>
-<span class="source-line-no">707</span><span id="line-707"></span>
-<span class="source-line-no">708</span><span id="line-708">   /** Returns the client-level interceptors followed by the per-request ones (builder → interface → method order). */</span>
-<span class="source-line-no">709</span><span id="line-709">   private List&lt;RestCallInterceptor&gt; effectiveInterceptors() {</span>
-<span class="source-line-no">710</span><span id="line-710">      if (requestInterceptors.isEmpty())</span>
-<span class="source-line-no">711</span><span id="line-711">         return client.interceptors;</span>
-<span class="source-line-no">712</span><span id="line-712">      var l = new ArrayList&lt;RestCallInterceptor&gt;(client.interceptors.size() + requestInterceptors.size());</span>
-<span class="source-line-no">713</span><span id="line-713">      l.addAll(client.interceptors);</span>
-<span class="source-line-no">714</span><span id="line-714">      l.addAll(requestInterceptors);</span>
-<span class="source-line-no">715</span><span id="line-715">      return l;</span>
-<span class="source-line-no">716</span><span id="line-716">   }</span>
-<span class="source-line-no">717</span><span id="line-717"></span>
-<span class="source-line-no">718</span><span id="line-718">   @SuppressWarnings({</span>
-<span class="source-line-no">719</span><span id="line-719">      "java:S3776" // Request-assembly branching is intentional and cohesive; refactoring would reduce readability without benefit.</span>
-<span class="source-line-no">720</span><span id="line-720">   })</span>
-<span class="source-line-no">721</span><span id="line-721">   private TransportRequest buildTransportRequest() {</span>
-<span class="source-line-no">722</span><span id="line-722">      var resolvedUrl = applyPathSubstitutions(url);</span>
-<span class="source-line-no">723</span><span id="line-723">      resolvedUri = appendQuery(resolvedUrl);</span>
-<span class="source-line-no">724</span><span id="line-724"></span>
-<span class="source-line-no">725</span><span id="line-725">      var builder = TransportRequest.builder()</span>
-<span class="source-line-no">726</span><span id="line-726">         .method(method)</span>
-<span class="source-line-no">727</span><span id="line-727">         .uri(resolvedUri)</span>
-<span class="source-line-no">728</span><span id="line-728">         .timeout(timeout)</span>
-<span class="source-line-no">729</span><span id="line-729">         .remoteUrlPolicy(policyEnforced, allowPrivateUrls)</span>
-<span class="source-line-no">730</span><span id="line-730">         .allowedAddressRanges(client.allowedAddressRanges);</span>
-<span class="source-line-no">731</span><span id="line-731"></span>
-<span class="source-line-no">732</span><span id="line-732">      // Headers</span>
-<span class="source-line-no">733</span><span id="line-733">      for (var h : headers) {</span>
-<span class="source-line-no">734</span><span id="line-734">         var v = h.getValue();</span>
-<span class="source-line-no">735</span><span id="line-735">         if (v != null)</span>
-<span class="source-line-no">736</span><span id="line-736">            builder.header(h.getName(), v);</span>
-<span class="source-line-no">737</span><span id="line-737">      }</span>
-<span class="source-line-no">738</span><span id="line-738"></span>
-<span class="source-line-no">739</span><span id="line-739">      if (client.parsers != null || client.defaultParser != null) {</span>
-<span class="source-line-no">740</span><span id="line-740">         var hasAccept = headers.stream().anyMatch(h -&gt; eqic("Accept", h.getName()));</span>
-<span class="source-line-no">741</span><span id="line-741">         if (! hasAccept) {</span>
-<span class="source-line-no">742</span><span id="line-742">            var accept = client.getDefaultAccept();</span>
-<span class="source-line-no">743</span><span id="line-743">            if (accept != null)</span>
-<span class="source-line-no">744</span><span id="line-744">               builder.header("Accept", accept);</span>
-<span class="source-line-no">745</span><span id="line-745">         }</span>
-<span class="source-line-no">746</span><span id="line-746">      }</span>
-<span class="source-line-no">747</span><span id="line-747"></span>
-<span class="source-line-no">748</span><span id="line-748">      // A Content-Type already present in the header list (a caller-supplied @Header param, or a constant header)</span>
-<span class="source-line-no">749</span><span id="line-749">      // wins over the body's own content type, and is never duplicated by it (dedup invariant).</span>
-<span class="source-line-no">750</span><span id="line-750">      var hasContentType = hasHeader("Content-Type");</span>
-<span class="source-line-no">751</span><span id="line-751"></span>
-<span class="source-line-no">752</span><span id="line-752">      // Pre-converted body from body(Object) takes priority</span>
-<span class="source-line-no">753</span><span id="line-753">      if (convertedBody != null) {</span>
-<span class="source-line-no">754</span><span id="line-754">         if (convertedBody.getContentType() != null &amp;&amp; ! hasContentType)</span>
-<span class="source-line-no">755</span><span id="line-755">            builder.header("Content-Type", convertedBody.getContentType());</span>
-<span class="source-line-no">756</span><span id="line-756">         builder.body(convertedBody);</span>
-<span class="source-line-no">757</span><span id="line-757">      } else if (!formData.isEmpty() &amp;&amp; body == null) {</span>
-<span class="source-line-no">758</span><span id="line-758">         // Form body when form data is present and no explicit body was set</span>
-<span class="source-line-no">759</span><span id="line-759">         var formBody = buildFormBody();</span>
-<span class="source-line-no">760</span><span id="line-760">         if (! hasContentType)</span>
-<span class="source-line-no">761</span><span id="line-761">            builder.header("Content-Type", formBody.getContentType());</span>
-<span class="source-line-no">762</span><span id="line-762">         builder.body(TransportBody.of(formBody));</span>
-<span class="source-line-no">763</span><span id="line-763">      } else if (body != null) {</span>
-<span class="source-line-no">764</span><span id="line-764">         if (body.getContentType() != null &amp;&amp; ! hasContentType)</span>
-<span class="source-line-no">765</span><span id="line-765">            builder.header("Content-Type", body.getContentType());</span>
-<span class="source-line-no">766</span><span id="line-766">         builder.body(TransportBody.of(body));</span>
-<span class="source-line-no">767</span><span id="line-767">      }</span>
-<span class="source-line-no">768</span><span id="line-768"></span>
-<span class="source-line-no">769</span><span id="line-769">      return builder.build();</span>
-<span class="source-line-no">770</span><span id="line-770">   }</span>
-<span class="source-line-no">771</span><span id="line-771"></span>
-<span class="source-line-no">772</span><span id="line-772">   private TransportRequest captureRequestBody(TransportRequest request, int cap) {</span>
-<span class="source-line-no">773</span><span id="line-773">      var originalBody = request.getBody();</span>
-<span class="source-line-no">774</span><span id="line-774">      if (originalBody == null) {</span>
-<span class="source-line-no">775</span><span id="line-775">         cachedContent = null;</span>
-<span class="source-line-no">776</span><span id="line-776">         cachedContentLength = 0;</span>
-<span class="source-line-no">777</span><span id="line-777">         return request;</span>
-<span class="source-line-no">778</span><span id="line-778">      }</span>
-<span class="source-line-no">779</span><span id="line-779"></span>
-<span class="source-line-no">780</span><span id="line-780">      var wrappedBody = new HttpBody() {</span>
+<span class="source-line-no">683</span><span id="line-683">    * @return A cursor over the live event stream. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">684</span><span id="line-684">    * @throws IOException If a transport-level error occurs (typically {@link TransportException}), if the response</span>
+<span class="source-line-no">685</span><span id="line-685">    *    could not be processed (typically {@link RestCallException}), or if the response has no body to open a</span>
+<span class="source-line-no">686</span><span id="line-686">    *    stream over.</span>
+<span class="source-line-no">687</span><span id="line-687">    */</span>
+<span class="source-line-no">688</span><span id="line-688">   public SseEventReader openEventStream() throws IOException {</span>
+<span class="source-line-no">689</span><span id="line-689">      if (! hasHeader("Accept"))</span>
+<span class="source-line-no">690</span><span id="line-690">         header("Accept", "text/event-stream");</span>
+<span class="source-line-no">691</span><span id="line-691">      var res = run();</span>
+<span class="source-line-no">692</span><span id="line-692">      var opened = false;</span>
+<span class="source-line-no">693</span><span id="line-693">      try {</span>
+<span class="source-line-no">694</span><span id="line-694">         var r = res.assertOk().body().asEventStream();</span>
+<span class="source-line-no">695</span><span id="line-695">         opened = true;</span>
+<span class="source-line-no">696</span><span id="line-696">         return r;</span>
+<span class="source-line-no">697</span><span id="line-697">      } finally {</span>
+<span class="source-line-no">698</span><span id="line-698">         if (! opened)</span>
+<span class="source-line-no">699</span><span id="line-699">            quiet(res::close);</span>
+<span class="source-line-no">700</span><span id="line-700">      }</span>
+<span class="source-line-no">701</span><span id="line-701">   }</span>
+<span class="source-line-no">702</span><span id="line-702"></span>
+<span class="source-line-no">703</span><span id="line-703">   /** Returns the client-level interceptors followed by the per-request ones (builder → interface → method order). */</span>
+<span class="source-line-no">704</span><span id="line-704">   private List&lt;RestCallInterceptor&gt; effectiveInterceptors() {</span>
+<span class="source-line-no">705</span><span id="line-705">      if (requestInterceptors.isEmpty())</span>
+<span class="source-line-no">706</span><span id="line-706">         return client.interceptors;</span>
+<span class="source-line-no">707</span><span id="line-707">      var l = new ArrayList&lt;RestCallInterceptor&gt;(client.interceptors.size() + requestInterceptors.size());</span>
+<span class="source-line-no">708</span><span id="line-708">      l.addAll(client.interceptors);</span>
+<span class="source-line-no">709</span><span id="line-709">      l.addAll(requestInterceptors);</span>
+<span class="source-line-no">710</span><span id="line-710">      return l;</span>
+<span class="source-line-no">711</span><span id="line-711">   }</span>
+<span class="source-line-no">712</span><span id="line-712"></span>
+<span class="source-line-no">713</span><span id="line-713">   @SuppressWarnings({</span>
+<span class="source-line-no">714</span><span id="line-714">      "java:S3776" // Request-assembly branching is intentional and cohesive; refactoring would reduce readability without benefit.</span>
+<span class="source-line-no">715</span><span id="line-715">   })</span>
+<span class="source-line-no">716</span><span id="line-716">   private TransportRequest buildTransportRequest() {</span>
+<span class="source-line-no">717</span><span id="line-717">      var resolvedUrl = applyPathSubstitutions(url);</span>
+<span class="source-line-no">718</span><span id="line-718">      resolvedUri = appendQuery(resolvedUrl);</span>
+<span class="source-line-no">719</span><span id="line-719"></span>
+<span class="source-line-no">720</span><span id="line-720">      var builder = TransportRequest.builder()</span>
+<span class="source-line-no">721</span><span id="line-721">         .method(method)</span>
+<span class="source-line-no">722</span><span id="line-722">         .uri(resolvedUri)</span>
+<span class="source-line-no">723</span><span id="line-723">         .timeout(timeout)</span>
+<span class="source-line-no">724</span><span id="line-724">         .remoteUrlPolicy(policyEnforced, allowPrivateUrls)</span>
+<span class="source-line-no">725</span><span id="line-725">         .allowedAddressRanges(client.allowedAddressRanges);</span>
+<span class="source-line-no">726</span><span id="line-726"></span>
+<span class="source-line-no">727</span><span id="line-727">      // Headers</span>
+<span class="source-line-no">728</span><span id="line-728">      for (var h : headers) {</span>
+<span class="source-line-no">729</span><span id="line-729">         var v = h.getValue();</span>
+<span class="source-line-no">730</span><span id="line-730">         if (v != null)</span>
+<span class="source-line-no">731</span><span id="line-731">            builder.header(h.getName(), v);</span>
+<span class="source-line-no">732</span><span id="line-732">      }</span>
+<span class="source-line-no">733</span><span id="line-733"></span>
+<span class="source-line-no">734</span><span id="line-734">      if (client.parsers != null || client.defaultParser != null) {</span>
+<span class="source-line-no">735</span><span id="line-735">         var hasAccept = headers.stream().anyMatch(h -&gt; eqic("Accept", h.getName()));</span>
+<span class="source-line-no">736</span><span id="line-736">         if (! hasAccept) {</span>
+<span class="source-line-no">737</span><span id="line-737">            var accept = client.getDefaultAccept();</span>
+<span class="source-line-no">738</span><span id="line-738">            if (accept != null)</span>
+<span class="source-line-no">739</span><span id="line-739">               builder.header("Accept", accept);</span>
+<span class="source-line-no">740</span><span id="line-740">         }</span>
+<span class="source-line-no">741</span><span id="line-741">      }</span>
+<span class="source-line-no">742</span><span id="line-742"></span>
+<span class="source-line-no">743</span><span id="line-743">      // A Content-Type already present in the header list (a caller-supplied @Header param, or a constant header)</span>
+<span class="source-line-no">744</span><span id="line-744">      // wins over the body's own content type, and is never duplicated by it (dedup invariant).</span>
+<span class="source-line-no">745</span><span id="line-745">      var hasContentType = hasHeader("Content-Type");</span>
+<span class="source-line-no">746</span><span id="line-746"></span>
+<span class="source-line-no">747</span><span id="line-747">      // Pre-converted body from body(Object) takes priority</span>
+<span class="source-line-no">748</span><span id="line-748">      if (convertedBody != null) {</span>
+<span class="source-line-no">749</span><span id="line-749">         if (convertedBody.getContentType() != null &amp;&amp; ! hasContentType)</span>
+<span class="source-line-no">750</span><span id="line-750">            builder.header("Content-Type", convertedBody.getContentType());</span>
+<span class="source-line-no">751</span><span id="line-751">         builder.body(convertedBody);</span>
+<span class="source-line-no">752</span><span id="line-752">      } else if (!formData.isEmpty() &amp;&amp; body == null) {</span>
+<span class="source-line-no">753</span><span id="line-753">         // Form body when form data is present and no explicit body was set</span>
+<span class="source-line-no">754</span><span id="line-754">         var formBody = buildFormBody();</span>
+<span class="source-line-no">755</span><span id="line-755">         if (! hasContentType)</span>
+<span class="source-line-no">756</span><span id="line-756">            builder.header("Content-Type", formBody.getContentType());</span>
+<span class="source-line-no">757</span><span id="line-757">         builder.body(TransportBody.of(formBody));</span>
+<span class="source-line-no">758</span><span id="line-758">      } else if (body != null) {</span>
+<span class="source-line-no">759</span><span id="line-759">         if (body.getContentType() != null &amp;&amp; ! hasContentType)</span>
+<span class="source-line-no">760</span><span id="line-760">            builder.header("Content-Type", body.getContentType());</span>
+<span class="source-line-no">761</span><span id="line-761">         builder.body(TransportBody.of(body));</span>
+<span class="source-line-no">762</span><span id="line-762">      }</span>
+<span class="source-line-no">763</span><span id="line-763"></span>
+<span class="source-line-no">764</span><span id="line-764">      return builder.build();</span>
+<span class="source-line-no">765</span><span id="line-765">   }</span>
+<span class="source-line-no">766</span><span id="line-766"></span>
+<span class="source-line-no">767</span><span id="line-767">   private TransportRequest captureRequestBody(TransportRequest request, int cap) {</span>
+<span class="source-line-no">768</span><span id="line-768">      var originalBody = request.getBody();</span>
+<span class="source-line-no">769</span><span id="line-769">      if (originalBody == null) {</span>
+<span class="source-line-no">770</span><span id="line-770">         cachedContent = null;</span>
+<span class="source-line-no">771</span><span id="line-771">         cachedContentLength = 0;</span>
+<span class="source-line-no">772</span><span id="line-772">         return request;</span>
+<span class="source-line-no">773</span><span id="line-773">      }</span>
+<span class="source-line-no">774</span><span id="line-774"></span>
+<span class="source-line-no">775</span><span id="line-775">      var wrappedBody = new HttpBody() {</span>
+<span class="source-line-no">776</span><span id="line-776">         @Override</span>
+<span class="source-line-no">777</span><span id="line-777">         public String getContentType() {</span>
+<span class="source-line-no">778</span><span id="line-778">            return originalBody.getContentType();</span>
+<span class="source-line-no">779</span><span id="line-779">         }</span>
+<span class="source-line-no">780</span><span id="line-780"></span>
 <span class="source-line-no">781</span><span id="line-781">         @Override</span>
-<span class="source-line-no">782</span><span id="line-782">         public String getContentType() {</span>
-<span class="source-line-no">783</span><span id="line-783">            return originalBody.getContentType();</span>
+<span class="source-line-no">782</span><span id="line-782">         public long getContentLength() {</span>
+<span class="source-line-no">783</span><span id="line-783">            return originalBody.getContentLength();</span>
 <span class="source-line-no">784</span><span id="line-784">         }</span>
 <span class="source-line-no">785</span><span id="line-785"></span>
 <span class="source-line-no">786</span><span id="line-786">         @Override</span>
-<span class="source-line-no">787</span><span id="line-787">         public long getContentLength() {</span>
-<span class="source-line-no">788</span><span id="line-788">            return originalBody.getContentLength();</span>
-<span class="source-line-no">789</span><span id="line-789">         }</span>
-<span class="source-line-no">790</span><span id="line-790"></span>
-<span class="source-line-no">791</span><span id="line-791">         @Override</span>
-<span class="source-line-no">792</span><span id="line-792">         public void writeTo(OutputStream out) throws IOException {</span>
-<span class="source-line-no">793</span><span id="line-793">            var tee = new BoundedCaptureOutputStream(out, cap);</span>
-<span class="source-line-no">794</span><span id="line-794">            try {</span>
-<span class="source-line-no">795</span><span id="line-795">               originalBody.writeTo(tee);</span>
-<span class="source-line-no">796</span><span id="line-796">            } finally {</span>
-<span class="source-line-no">797</span><span id="line-797">               cachedContent = tee.getCapturedBytes();</span>
-<span class="source-line-no">798</span><span id="line-798">               cachedContentLength = tee.getTotalBytesWritten();</span>
-<span class="source-line-no">799</span><span id="line-799">            }</span>
+<span class="source-line-no">787</span><span id="line-787">         public void writeTo(OutputStream out) throws IOException {</span>
+<span class="source-line-no">788</span><span id="line-788">            var tee = new BoundedCaptureOutputStream(out, cap);</span>
+<span class="source-line-no">789</span><span id="line-789">            try {</span>
+<span class="source-line-no">790</span><span id="line-790">               originalBody.writeTo(tee);</span>
+<span class="source-line-no">791</span><span id="line-791">            } finally {</span>
+<span class="source-line-no">792</span><span id="line-792">               cachedContent = tee.getCapturedBytes();</span>
+<span class="source-line-no">793</span><span id="line-793">               cachedContentLength = tee.getTotalBytesWritten();</span>
+<span class="source-line-no">794</span><span id="line-794">            }</span>
+<span class="source-line-no">795</span><span id="line-795">         }</span>
+<span class="source-line-no">796</span><span id="line-796"></span>
+<span class="source-line-no">797</span><span id="line-797">         @Override</span>
+<span class="source-line-no">798</span><span id="line-798">         public boolean isRepeatable() {</span>
+<span class="source-line-no">799</span><span id="line-799">            return originalBody.isRepeatable();</span>
 <span class="source-line-no">800</span><span id="line-800">         }</span>
-<span class="source-line-no">801</span><span id="line-801"></span>
-<span class="source-line-no">802</span><span id="line-802">         @Override</span>
-<span class="source-line-no">803</span><span id="line-803">         public boolean isRepeatable() {</span>
-<span class="source-line-no">804</span><span id="line-804">            return originalBody.isRepeatable();</span>
-<span class="source-line-no">805</span><span id="line-805">         }</span>
-<span class="source-line-no">806</span><span id="line-806">      };</span>
-<span class="source-line-no">807</span><span id="line-807"></span>
-<span class="source-line-no">808</span><span id="line-808">      var builder = TransportRequest.builder()</span>
-<span class="source-line-no">809</span><span id="line-809">         .method(request.getMethod())</span>
-<span class="source-line-no">810</span><span id="line-810">         .uri(request.getUri())</span>
-<span class="source-line-no">811</span><span id="line-811">         .headers(request.getHeaders())</span>
-<span class="source-line-no">812</span><span id="line-812">         .body(TransportBody.of(wrappedBody))</span>
-<span class="source-line-no">813</span><span id="line-813">         .timeout(request.getTimeout())</span>
-<span class="source-line-no">814</span><span id="line-814">         .remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls())</span>
-<span class="source-line-no">815</span><span id="line-815">         .allowedAddressRanges(request.getAllowedAddressRanges());</span>
-<span class="source-line-no">816</span><span id="line-816">      return builder.build();</span>
-<span class="source-line-no">817</span><span id="line-817">   }</span>
-<span class="source-line-no">818</span><span id="line-818"></span>
-<span class="source-line-no">819</span><span id="line-819">   private String applyPathSubstitutions(String template) {</span>
-<span class="source-line-no">820</span><span id="line-820">      var result = template;</span>
-<span class="source-line-no">821</span><span id="line-821">      Object remainder = null;</span>
-<span class="source-line-no">822</span><span id="line-822">      for (var entry : pathData.entrySet()) {</span>
-<span class="source-line-no">823</span><span id="line-823">         if (eq(entry.getKey(), "/*")) {</span>
-<span class="source-line-no">824</span><span id="line-824">            remainder = entry.getValue();  // @PathRemainder — applied after named substitutions</span>
-<span class="source-line-no">825</span><span id="line-825">            continue;</span>
-<span class="source-line-no">826</span><span id="line-826">         }</span>
-<span class="source-line-no">827</span><span id="line-827">         var replacement = entry.getValue() != null ? entry.getValue().toString() : "";</span>
-<span class="source-line-no">828</span><span id="line-828">         result = result.replace("{" + entry.getKey() + "}", urlEncode(replacement));</span>
-<span class="source-line-no">829</span><span id="line-829">      }</span>
-<span class="source-line-no">830</span><span id="line-830">      if (remainder != null) {</span>
-<span class="source-line-no">831</span><span id="line-831">         var r = remainder.toString();</span>
-<span class="source-line-no">832</span><span id="line-832">         if (! r.isEmpty()) {</span>
-<span class="source-line-no">833</span><span id="line-833">            if (result.endsWith("/*"))</span>
-<span class="source-line-no">834</span><span id="line-834">               result = result.substring(0, result.length() - 2);</span>
-<span class="source-line-no">835</span><span id="line-835">            if (! result.endsWith("/"))</span>
-<span class="source-line-no">836</span><span id="line-836">               result += "/";</span>
-<span class="source-line-no">837</span><span id="line-837">            result += urlEncodePath(r);</span>
-<span class="source-line-no">838</span><span id="line-838">         }</span>
-<span class="source-line-no">839</span><span id="line-839">      }</span>
-<span class="source-line-no">840</span><span id="line-840">      return result;</span>
-<span class="source-line-no">841</span><span id="line-841">   }</span>
-<span class="source-line-no">842</span><span id="line-842"></span>
-<span class="source-line-no">843</span><span id="line-843">   /** URL-encodes a path remainder while preserving {@code /} segment separators. */</span>
-<span class="source-line-no">844</span><span id="line-844">   private static String urlEncodePath(String value) {</span>
-<span class="source-line-no">845</span><span id="line-845">      var segments = value.split("/", -1);</span>
-<span class="source-line-no">846</span><span id="line-846">      var sb = new StringBuilder();</span>
-<span class="source-line-no">847</span><span id="line-847">      for (var i = 0; i &lt; segments.length; i++) {</span>
-<span class="source-line-no">848</span><span id="line-848">         if (i &gt; 0)</span>
-<span class="source-line-no">849</span><span id="line-849">            sb.append('/');</span>
-<span class="source-line-no">850</span><span id="line-850">         sb.append(urlEncode(segments[i]));</span>
-<span class="source-line-no">851</span><span id="line-851">      }</span>
-<span class="source-line-no">852</span><span id="line-852">      return sb.toString();</span>
-<span class="source-line-no">853</span><span id="line-853">   }</span>
-<span class="source-line-no">854</span><span id="line-854"></span>
-<span class="source-line-no">855</span><span id="line-855">   private URI appendQuery(String baseUrl) {</span>
-<span class="source-line-no">856</span><span id="line-856">      if (queryData.isEmpty()) {</span>
-<span class="source-line-no">857</span><span id="line-857">         try {</span>
-<span class="source-line-no">858</span><span id="line-858">            return new URI(baseUrl);</span>
-<span class="source-line-no">859</span><span id="line-859">         } catch (URISyntaxException e) {</span>
-<span class="source-line-no">860</span><span id="line-860">            throw iaex(e, "Invalid URL: %s", baseUrl);</span>
-<span class="source-line-no">861</span><span id="line-861">         }</span>
-<span class="source-line-no">862</span><span id="line-862">      }</span>
-<span class="source-line-no">863</span><span id="line-863">      var sb = new StringBuilder(baseUrl);</span>
-<span class="source-line-no">864</span><span id="line-864">      var first = !baseUrl.contains("?");</span>
-<span class="source-line-no">865</span><span id="line-865">      for (var part : queryData) {</span>
-<span class="source-line-no">866</span><span id="line-866">         var v = part.getValue();</span>
-<span class="source-line-no">867</span><span id="line-867">         if (v == null)</span>
-<span class="source-line-no">868</span><span id="line-868">            continue;</span>
-<span class="source-line-no">869</span><span id="line-869">         sb.append(first ? '?' : '&amp;');</span>
-<span class="source-line-no">870</span><span id="line-870">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
-<span class="source-line-no">871</span><span id="line-871">         first = false;</span>
+<span class="source-line-no">801</span><span id="line-801">      };</span>
+<span class="source-line-no">802</span><span id="line-802"></span>
+<span class="source-line-no">803</span><span id="line-803">      var builder = TransportRequest.builder()</span>
+<span class="source-line-no">804</span><span id="line-804">         .method(request.getMethod())</span>
+<span class="source-line-no">805</span><span id="line-805">         .uri(request.getUri())</span>
+<span class="source-line-no">806</span><span id="line-806">         .headers(request.getHeaders())</span>
+<span class="source-line-no">807</span><span id="line-807">         .body(TransportBody.of(wrappedBody))</span>
+<span class="source-line-no">808</span><span id="line-808">         .timeout(request.getTimeout())</span>
+<span class="source-line-no">809</span><span id="line-809">         .remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls())</span>
+<span class="source-line-no">810</span><span id="line-810">         .allowedAddressRanges(request.getAllowedAddressRanges());</span>
+<span class="source-line-no">811</span><span id="line-811">      return builder.build();</span>
+<span class="source-line-no">812</span><span id="line-812">   }</span>
+<span class="source-line-no">813</span><span id="line-813"></span>
+<span class="source-line-no">814</span><span id="line-814">   private String applyPathSubstitutions(String template) {</span>
+<span class="source-line-no">815</span><span id="line-815">      var result = template;</span>
+<span class="source-line-no">816</span><span id="line-816">      Object remainder = null;</span>
+<span class="source-line-no">817</span><span id="line-817">      for (var entry : pathData.entrySet()) {</span>
+<span class="source-line-no">818</span><span id="line-818">         if (eq(entry.getKey(), "/*")) {</span>
+<span class="source-line-no">819</span><span id="line-819">            remainder = entry.getValue();  // @PathRemainder — applied after named substitutions</span>
+<span class="source-line-no">820</span><span id="line-820">            continue;</span>
+<span class="source-line-no">821</span><span id="line-821">         }</span>
+<span class="source-line-no">822</span><span id="line-822">         var replacement = entry.getValue() != null ? entry.getValue().toString() : "";</span>
+<span class="source-line-no">823</span><span id="line-823">         result = result.replace("{" + entry.getKey() + "}", urlEncode(replacement));</span>
+<span class="source-line-no">824</span><span id="line-824">      }</span>
+<span class="source-line-no">825</span><span id="line-825">      if (remainder != null) {</span>
+<span class="source-line-no">826</span><span id="line-826">         var r = remainder.toString();</span>
+<span class="source-line-no">827</span><span id="line-827">         if (! r.isEmpty()) {</span>
+<span class="source-line-no">828</span><span id="line-828">            if (result.endsWith("/*"))</span>
+<span class="source-line-no">829</span><span id="line-829">               result = result.substring(0, result.length() - 2);</span>
+<span class="source-line-no">830</span><span id="line-830">            if (! result.endsWith("/"))</span>
+<span class="source-line-no">831</span><span id="line-831">               result += "/";</span>
+<span class="source-line-no">832</span><span id="line-832">            result += urlEncodePath(r);</span>
+<span class="source-line-no">833</span><span id="line-833">         }</span>
+<span class="source-line-no">834</span><span id="line-834">      }</span>
+<span class="source-line-no">835</span><span id="line-835">      return result;</span>
+<span class="source-line-no">836</span><span id="line-836">   }</span>
+<span class="source-line-no">837</span><span id="line-837"></span>
+<span class="source-line-no">838</span><span id="line-838">   /** URL-encodes a path remainder while preserving {@code /} segment separators. */</span>
+<span class="source-line-no">839</span><span id="line-839">   private static String urlEncodePath(String value) {</span>
+<span class="source-line-no">840</span><span id="line-840">      var segments = value.split("/", -1);</span>
+<span class="source-line-no">841</span><span id="line-841">      var sb = new StringBuilder();</span>
+<span class="source-line-no">842</span><span id="line-842">      for (var i = 0; i &lt; segments.length; i++) {</span>
+<span class="source-line-no">843</span><span id="line-843">         if (i &gt; 0)</span>
+<span class="source-line-no">844</span><span id="line-844">            sb.append('/');</span>
+<span class="source-line-no">845</span><span id="line-845">         sb.append(urlEncode(segments[i]));</span>
+<span class="source-line-no">846</span><span id="line-846">      }</span>
+<span class="source-line-no">847</span><span id="line-847">      return sb.toString();</span>
+<span class="source-line-no">848</span><span id="line-848">   }</span>
+<span class="source-line-no">849</span><span id="line-849"></span>
+<span class="source-line-no">850</span><span id="line-850">   private URI appendQuery(String baseUrl) {</span>
+<span class="source-line-no">851</span><span id="line-851">      if (queryData.isEmpty()) {</span>
+<span class="source-line-no">852</span><span id="line-852">         try {</span>
+<span class="source-line-no">853</span><span id="line-853">            return new URI(baseUrl);</span>
+<span class="source-line-no">854</span><span id="line-854">         } catch (URISyntaxException e) {</span>
+<span class="source-line-no">855</span><span id="line-855">            throw iaex(e, "Invalid URL: %s", baseUrl);</span>
+<span class="source-line-no">856</span><span id="line-856">         }</span>
+<span class="source-line-no">857</span><span id="line-857">      }</span>
+<span class="source-line-no">858</span><span id="line-858">      var sb = new StringBuilder(baseUrl);</span>
+<span class="source-line-no">859</span><span id="line-859">      var first = !baseUrl.contains("?");</span>
+<span class="source-line-no">860</span><span id="line-860">      for (var part : queryData) {</span>
+<span class="source-line-no">861</span><span id="line-861">         var v = part.getValue();</span>
+<span class="source-line-no">862</span><span id="line-862">         if (v == null)</span>
+<span class="source-line-no">863</span><span id="line-863">            continue;</span>
+<span class="source-line-no">864</span><span id="line-864">         sb.append(first ? '?' : '&amp;');</span>
+<span class="source-line-no">865</span><span id="line-865">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
+<span class="source-line-no">866</span><span id="line-866">         first = false;</span>
+<span class="source-line-no">867</span><span id="line-867">      }</span>
+<span class="source-line-no">868</span><span id="line-868">      try {</span>
+<span class="source-line-no">869</span><span id="line-869">         return new URI(sb.toString());</span>
+<span class="source-line-no">870</span><span id="line-870">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">871</span><span id="line-871">         throw iaex(e, "Invalid URL: %s", sb);</span>
 <span class="source-line-no">872</span><span id="line-872">      }</span>
-<span class="source-line-no">873</span><span id="line-873">      try {</span>
-<span class="source-line-no">874</span><span id="line-874">         return new URI(sb.toString());</span>
-<span class="source-line-no">875</span><span id="line-875">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">876</span><span id="line-876">         throw iaex(e, "Invalid URL: %s", sb);</span>
-<span class="source-line-no">877</span><span id="line-877">      }</span>
-<span class="source-line-no">878</span><span id="line-878">   }</span>
-<span class="source-line-no">879</span><span id="line-879"></span>
-<span class="source-line-no">880</span><span id="line-880">   private HttpBody buildFormBody() {</span>
-<span class="source-line-no">881</span><span id="line-881">      var sb = new StringBuilder();</span>
-<span class="source-line-no">882</span><span id="line-882">      var first = true;</span>
-<span class="source-line-no">883</span><span id="line-883">      for (var part : formData) {</span>
-<span class="source-line-no">884</span><span id="line-884">         var v = part.getValue();</span>
-<span class="source-line-no">885</span><span id="line-885">         if (v == null)</span>
-<span class="source-line-no">886</span><span id="line-886">            continue;</span>
-<span class="source-line-no">887</span><span id="line-887">         if (!first)</span>
-<span class="source-line-no">888</span><span id="line-888">            sb.append('&amp;');</span>
-<span class="source-line-no">889</span><span id="line-889">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
-<span class="source-line-no">890</span><span id="line-890">         first = false;</span>
-<span class="source-line-no">891</span><span id="line-891">      }</span>
-<span class="source-line-no">892</span><span id="line-892">      final var encoded = sb.toString();</span>
-<span class="source-line-no">893</span><span id="line-893">      return new HttpBody() {</span>
-<span class="source-line-no">894</span><span id="line-894">         @Override public String getContentType() { return "application/x-www-form-urlencoded"; }</span>
-<span class="source-line-no">895</span><span id="line-895">         @Override public long getContentLength() { return encoded.getBytes(StandardCharsets.UTF_8).length; }</span>
-<span class="source-line-no">896</span><span id="line-896">         @Override public void writeTo(OutputStream out) throws IOException { out.write(encoded.getBytes(StandardCharsets.UTF_8)); }</span>
-<span class="source-line-no">897</span><span id="line-897">         @Override public boolean isRepeatable() { return true; }</span>
-<span class="source-line-no">898</span><span id="line-898">      };</span>
-<span class="source-line-no">899</span><span id="line-899">   }</span>
-<span class="source-line-no">900</span><span id="line-900"></span>
-<span class="source-line-no">901</span><span id="line-901">   private static String urlEncode(String value) {</span>
-<span class="source-line-no">902</span><span id="line-902">      return URLEncoder.encode(value, StandardCharsets.UTF_8);</span>
-<span class="source-line-no">903</span><span id="line-903">   }</span>
-<span class="source-line-no">904</span><span id="line-904"></span>
-<span class="source-line-no">905</span><span id="line-905">   private static final class BoundedCaptureOutputStream extends OutputStream {</span>
-<span class="source-line-no">906</span><span id="line-906">      private final OutputStream delegate;</span>
-<span class="source-line-no">907</span><span id="line-907">      private final ByteArrayOutputStream capture = new ByteArrayOutputStream();</span>
-<span class="source-line-no">908</span><span id="line-908">      private final int cap;</span>
-<span class="source-line-no">909</span><span id="line-909">      private long totalBytesWritten;</span>
+<span class="source-line-no">873</span><span id="line-873">   }</span>
+<span class="source-line-no">874</span><span id="line-874"></span>
+<span class="source-line-no">875</span><span id="line-875">   private HttpBody buildFormBody() {</span>
+<span class="source-line-no">876</span><span id="line-876">      var sb = new StringBuilder();</span>
+<span class="source-line-no">877</span><span id="line-877">      var first = true;</span>
+<span class="source-line-no">878</span><span id="line-878">      for (var part : formData) {</span>
+<span class="source-line-no">879</span><span id="line-879">         var v = part.getValue();</span>
+<span class="source-line-no">880</span><span id="line-880">         if (v == null)</span>
+<span class="source-line-no">881</span><span id="line-881">            continue;</span>
+<span class="source-line-no">882</span><span id="line-882">         if (!first)</span>
+<span class="source-line-no">883</span><span id="line-883">            sb.append('&amp;');</span>
+<span class="source-line-no">884</span><span id="line-884">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
+<span class="source-line-no">885</span><span id="line-885">         first = false;</span>
+<span class="source-line-no">886</span><span id="line-886">      }</span>
+<span class="source-line-no">887</span><span id="line-887">      final var encoded = sb.toString();</span>
+<span class="source-line-no">888</span><span id="line-888">      return new HttpBody() {</span>
+<span class="source-line-no">889</span><span id="line-889">         @Override public String getContentType() { return "application/x-www-form-urlencoded"; }</span>
+<span class="source-line-no">890</span><span id="line-890">         @Override public long getContentLength() { return encoded.getBytes(StandardCharsets.UTF_8).length; }</span>
+<span class="source-line-no">891</span><span id="line-891">         @Override public void writeTo(OutputStream out) throws IOException { out.write(encoded.getBytes(StandardCharsets.UTF_8)); }</span>
+<span class="source-line-no">892</span><span id="line-892">         @Override public boolean isRepeatable() { return true; }</span>
+<span class="source-line-no">893</span><span id="line-893">      };</span>
+<span class="source-line-no">894</span><span id="line-894">   }</span>
+<span class="source-line-no">895</span><span id="line-895"></span>
+<span class="source-line-no">896</span><span id="line-896">   private static String urlEncode(String value) {</span>
+<span class="source-line-no">897</span><span id="line-897">      return URLEncoder.encode(value, StandardCharsets.UTF_8);</span>
+<span class="source-line-no">898</span><span id="line-898">   }</span>
+<span class="source-line-no">899</span><span id="line-899"></span>
+<span class="source-line-no">900</span><span id="line-900">   private static final class BoundedCaptureOutputStream extends OutputStream {</span>
+<span class="source-line-no">901</span><span id="line-901">      private final OutputStream delegate;</span>
+<span class="source-line-no">902</span><span id="line-902">      private final ByteArrayOutputStream capture = new ByteArrayOutputStream();</span>
+<span class="source-line-no">903</span><span id="line-903">      private final int cap;</span>
+<span class="source-line-no">904</span><span id="line-904">      private long totalBytesWritten;</span>
+<span class="source-line-no">905</span><span id="line-905"></span>
+<span class="source-line-no">906</span><span id="line-906">      BoundedCaptureOutputStream(OutputStream delegate, int cap) {</span>
+<span class="source-line-no">907</span><span id="line-907">         this.delegate = delegate;</span>
+<span class="source-line-no">908</span><span id="line-908">         this.cap = cap;</span>
+<span class="source-line-no">909</span><span id="line-909">      }</span>
 <span class="source-line-no">910</span><span id="line-910"></span>
-<span class="source-line-no">911</span><span id="line-911">      BoundedCaptureOutputStream(OutputStream delegate, int cap) {</span>
-<span class="source-line-no">912</span><span id="line-912">         this.delegate = delegate;</span>
-<span class="source-line-no">913</span><span id="line-913">         this.cap = cap;</span>
-<span class="source-line-no">914</span><span id="line-914">      }</span>
-<span class="source-line-no">915</span><span id="line-915"></span>
-<span class="source-line-no">916</span><span id="line-916">      byte[] getCapturedBytes() {</span>
-<span class="source-line-no">917</span><span id="line-917">         return capture.toByteArray();</span>
-<span class="source-line-no">918</span><span id="line-918">      }</span>
-<span class="source-line-no">919</span><span id="line-919"></span>
-<span class="source-line-no">920</span><span id="line-920">      long getTotalBytesWritten() {</span>
-<span class="source-line-no">921</span><span id="line-921">         return totalBytesWritten;</span>
-<span class="source-line-no">922</span><span id="line-922">      }</span>
-<span class="source-line-no">923</span><span id="line-923"></span>
-<span class="source-line-no">924</span><span id="line-924">      @Override</span>
-<span class="source-line-no">925</span><span id="line-925">      public void write(int b) throws IOException {</span>
-<span class="source-line-no">926</span><span id="line-926">         delegate.write(b);</span>
-<span class="source-line-no">927</span><span id="line-927">         totalBytesWritten++;</span>
-<span class="source-line-no">928</span><span id="line-928">         if (capture.size() &lt; cap)</span>
-<span class="source-line-no">929</span><span id="line-929">            capture.write(b);</span>
-<span class="source-line-no">930</span><span id="line-930">      }</span>
-<span class="source-line-no">931</span><span id="line-931"></span>
-<span class="source-line-no">932</span><span id="line-932">      @Override</span>
-<span class="source-line-no">933</span><span id="line-933">      public void write(byte[] b, int off, int len) throws IOException {</span>
-<span class="source-line-no">934</span><span id="line-934">         delegate.write(b, off, len);</span>
-<span class="source-line-no">935</span><span id="line-935">         totalBytesWritten += len;</span>
-<span class="source-line-no">936</span><span id="line-936">         var remaining = cap - capture.size();</span>
-<span class="source-line-no">937</span><span id="line-937">         if (remaining &gt; 0)</span>
-<span class="source-line-no">938</span><span id="line-938">            capture.write(b, off, Math.min(len, remaining));</span>
-<span class="source-line-no">939</span><span id="line-939">      }</span>
-<span class="source-line-no">940</span><span id="line-940">   }</span>
-<span class="source-line-no">941</span><span id="line-941">}</span>
+<span class="source-line-no">911</span><span id="line-911">      byte[] getCapturedBytes() {</span>
+<span class="source-line-no">912</span><span id="line-912">         return capture.toByteArray();</span>
+<span class="source-line-no">913</span><span id="line-913">      }</span>
+<span class="source-line-no">914</span><span id="line-914"></span>
+<span class="source-line-no">915</span><span id="line-915">      long getTotalBytesWritten() {</span>
+<span class="source-line-no">916</span><span id="line-916">         return totalBytesWritten;</span>
+<span class="source-line-no">917</span><span id="line-917">      }</span>
+<span class="source-line-no">918</span><span id="line-918"></span>
+<span class="source-line-no">919</span><span id="line-919">      @Override</span>
+<span class="source-line-no">920</span><span id="line-920">      public void write(int b) throws IOException {</span>
+<span class="source-line-no">921</span><span id="line-921">         delegate.write(b);</span>
+<span class="source-line-no">922</span><span id="line-922">         totalBytesWritten++;</span>
+<span class="source-line-no">923</span><span id="line-923">         if (capture.size() &lt; cap)</span>
+<span class="source-line-no">924</span><span id="line-924">            capture.write(b);</span>
+<span class="source-line-no">925</span><span id="line-925">      }</span>
+<span class="source-line-no">926</span><span id="line-926"></span>
+<span class="source-line-no">927</span><span id="line-927">      @Override</span>
+<span class="source-line-no">928</span><span id="line-928">      public void write(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">929</span><span id="line-929">         delegate.write(b, off, len);</span>
+<span class="source-line-no">930</span><span id="line-930">         totalBytesWritten += len;</span>
+<span class="source-line-no">931</span><span id="line-931">         var remaining = cap - capture.size();</span>
+<span class="source-line-no">932</span><span id="line-932">         if (remaining &gt; 0)</span>
+<span class="source-line-no">933</span><span id="line-933">            capture.write(b, off, Math.min(len, remaining));</span>
+<span class="source-line-no">934</span><span id="line-934">      }</span>
+<span class="source-line-no">935</span><span id="line-935">   }</span>
+<span class="source-line-no">936</span><span id="line-936">}</span>
 
 
 

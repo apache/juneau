@@ -88,14 +88,9 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Accept.html" title="class in org.apache.juneau.http.header">Accept</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-41">HttpMediaRangesHeader</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-36">HttpMediaRangesHeader</a></span>
 <span class="extends-implements">extends <a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></span></div>
 <div class="block">Base type for headers whose wire format is an <c>Accept</c>-style list of media ranges.
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- (and possibly earlier).
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
@@ -206,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="LAZY_WIRE_STRING">
 <h3>LAZY_WIRE_STRING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-48">LAZY_WIRE_STRING</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-43">LAZY_WIRE_STRING</a></span></div>
 <div class="block">Lazy supplier provides the wire string.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -221,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="LAZY_MEDIA_RANGES">
 <h3>LAZY_MEDIA_RANGES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-51">LAZY_MEDIA_RANGES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-46">LAZY_MEDIA_RANGES</a></span></div>
 <div class="block">Lazy supplier provides <a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http"><code>MediaRanges</code></a> (re-evaluated on each access).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -244,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>HttpMediaRangesHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-61">HttpMediaRangesHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-56">HttpMediaRangesHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -256,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,org.apache.juneau.commons.http.MediaRanges)">
 <h3>HttpMediaRangesHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-72">HttpMediaRangesHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-67">HttpMediaRangesHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -268,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.function.Supplier,int)">
 <h3>HttpMediaRangesHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-84">HttpMediaRangesHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-79">HttpMediaRangesHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;supplier,
  int&nbsp;lazyMode)</span></div>
 <dl class="notes">
@@ -290,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMediaRanges()">
 <h3>asMediaRanges</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-101">asMediaRanges</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-96">asMediaRanges</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Parsed <a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http"><code>MediaRanges</code></a>, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the wire value is absent.</dd>
@@ -300,7 +295,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRange(int)">
 <h3>getRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/http/MediaRange.html" title="class in org.apache.juneau.commons.http">MediaRange</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-109">getRange</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/http/MediaRange.html" title="class in org.apache.juneau.commons.http">MediaRange</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-104">getRange</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>index</code> - Range index.</dd>
@@ -312,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasSubtypePart(java.lang.String)">
 <h3>hasSubtypePart</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-118">hasSubtypePart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;part)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-113">hasSubtypePart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;part)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>part</code> - Subtype fragment to find (e.g. <code>"activity"</code> for <code>text/json+activity</code>).</dd>
@@ -324,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="match(java.util.List)">
 <h3>match</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-127">match</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;&nbsp;mediaTypes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-122">match</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;&nbsp;mediaTypes)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>mediaTypes</code> - Candidate types, in preference order.</dd>
@@ -336,7 +331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElse(org.apache.juneau.commons.http.MediaRanges)">
 <h3>orElse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-136">orElse</a></span><wbr><span class="parameters">(<a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-131">orElse</a></span><wbr><span class="parameters">(<a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a>&nbsp;other)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>other</code> - Fallback when no parsed value is present.</dd>
@@ -348,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toMediaRanges()">
 <h3>toMediaRanges</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-144">toMediaRanges</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http">MediaRanges</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpMediaRangesHeader.html#line-139">toMediaRanges</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Parsed <a href="../../commons/http/MediaRanges.html" title="class in org.apache.juneau.commons.http"><code>MediaRanges</code></a>, or <code>null</code> if the wire value is absent.</dd>

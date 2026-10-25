@@ -64,277 +64,272 @@
 <span class="source-line-no">051</span><span id="line-51"> * OkHttp's {@link RequestBody#writeTo(BufferedSink)} streams the request body directly to the socket</span>
 <span class="source-line-no">052</span><span id="line-52"> * without in-memory buffering for bodies with a known content length.</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">056</span><span id="line-56"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">057</span><span id="line-57"> * (and possibly earlier).</span>
-<span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * @since 9.2.1</span>
-<span class="source-line-no">064</span><span id="line-64"> */</span>
-<span class="source-line-no">065</span><span id="line-65">@SuppressWarnings({</span>
-<span class="source-line-no">066</span><span id="line-66">   "resource" // Transport methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">067</span><span id="line-67">})</span>
-<span class="source-line-no">068</span><span id="line-68">public final class OkHttpTransport implements HttpTransport {</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   // OkHttp's own IP-literal test (okhttp3.internal HostnamesCommon): such hosts are connected to without a Dns lookup.</span>
-<span class="source-line-no">071</span><span id="line-71">   private static final Pattern OKHTTP_IP_LITERAL = Pattern.compile("([0-9a-fA-F]*:[0-9a-fA-F:.]*)|([\\d.]+)");</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   private final OkHttpClient httpClient;</span>
-<span class="source-line-no">074</span><span id="line-74">   private final OkHttpClient policyHttpClient;</span>
-<span class="source-line-no">075</span><span id="line-75">   // One further pin-on-connect client per distinct non-empty per-client allow-list, created on first use.  Each has its</span>
-<span class="source-line-no">076</span><span id="line-76">   // own connection pool, so a connection opened under one allow-list is never reused by a request with another.</span>
-<span class="source-line-no">077</span><span id="line-77">   private final Map&lt;RemoteUrlPolicy.AllowedRanges,OkHttpClient&gt; rangedPolicyHttpClients = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   OkHttpTransport(OkHttpTransportBuilder builder) {</span>
-<span class="source-line-no">080</span><span id="line-80">      // A caller-supplied client gets the redirect credential guard on a derived client: newBuilder() shares its</span>
-<span class="source-line-no">081</span><span id="line-81">      // connection pool, dispatcher and every other setting, and the caller's own client is left unchanged.</span>
-<span class="source-line-no">082</span><span id="line-82">      this.httpClient = builder.httpClient != null ? withCredentialGuard(builder.httpClient) : createDefaultHttpClient();</span>
-<span class="source-line-no">083</span><span id="line-83">      // A dedicated client -- sharing this client's connection pool/dispatcher via newBuilder(), but with its own</span>
-<span class="source-line-no">084</span><span id="line-84">      // pin-on-connect Dns and with auto-redirect-following disabled -- used only for SSRF-guard-active @Remote</span>
-<span class="source-line-no">085</span><span id="line-85">      // calls (see executeWithPolicy); ordinary (non-@Remote) calls on httpClient are completely unaffected.</span>
-<span class="source-line-no">086</span><span id="line-86">      // Unlike the shared-connection-manager engines (Apache HttpClient, Jetty), OkHttp's Dns/followRedirects are</span>
-<span class="source-line-no">087</span><span id="line-87">      // per-client (not tied to the shared connection pool), so this derivation works even for a caller-supplied</span>
-<span class="source-line-no">088</span><span id="line-88">      // httpClient.  The exception is a proxy: OkHttp asks Dns for the proxy's address, not the target's (the proxy</span>
-<span class="source-line-no">089</span><span id="line-89">      // resolves the target), so the pin cannot apply -- see supportsUrlPolicy() and requireNoProxy().</span>
-<span class="source-line-no">090</span><span id="line-90">      this.policyHttpClient = this.httpClient.newBuilder()</span>
-<span class="source-line-no">091</span><span id="line-91">         .followRedirects(false)</span>
-<span class="source-line-no">092</span><span id="line-92">         .dns(PolicyPinningDns.INSTANCE)</span>
-<span class="source-line-no">093</span><span id="line-93">         .build();</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   private static OkHttpClient createDefaultHttpClient() {</span>
-<span class="source-line-no">097</span><span id="line-97">      return withCredentialGuard(new OkHttpClient());</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   // OkHttp's own redirect follower keeps a caller-set Cookie, so every client this transport sends through has the</span>
-<span class="source-line-no">101</span><span id="line-101">   // guard as a network interceptor, which runs for each hop.  The first-hop recorder is the last application</span>
-<span class="source-line-no">102</span><span id="line-102">   // interceptor, so the origin is the URL after any caller application interceptor has rewritten it.</span>
-<span class="source-line-no">103</span><span id="line-103">   private static OkHttpClient withCredentialGuard(OkHttpClient client) {</span>
-<span class="source-line-no">104</span><span id="line-104">      return client.newBuilder()</span>
-<span class="source-line-no">105</span><span id="line-105">         .addInterceptor(OkHttpRedirectCredentialGuard.FIRST_HOP_RECORDER)</span>
-<span class="source-line-no">106</span><span id="line-106">         .addNetworkInterceptor(new OkHttpRedirectCredentialGuard())</span>
-<span class="source-line-no">107</span><span id="line-107">         .build();</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * Returns a new builder for this transport.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   public static OkHttpTransportBuilder builder() {</span>
-<span class="source-line-no">116</span><span id="line-116">      return new OkHttpTransportBuilder();</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /**</span>
-<span class="source-line-no">120</span><span id="line-120">    * Returns a new instance backed by a default {@link OkHttpClient}.</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   public static OkHttpTransport create() {</span>
-<span class="source-line-no">125</span><span id="line-125">      return builder().build();</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   @Override /* HttpTransport */</span>
-<span class="source-line-no">129</span><span id="line-129">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">130</span><span id="line-130">      if (request.isSsrfGuardActive())</span>
-<span class="source-line-no">131</span><span id="line-131">         return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);</span>
-<span class="source-line-no">132</span><span id="line-132">      return sendOnce(request, httpClient);</span>
-<span class="source-line-no">133</span><span id="line-133">   }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   /**</span>
-<span class="source-line-no">136</span><span id="line-136">    * {@inheritDoc}</span>
-<span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * &lt;p&gt;</span>
-<span class="source-line-no">139</span><span id="line-139">    * Reports &lt;jk&gt;false&lt;/jk&gt; when the {@link OkHttpClient} has an explicit {@linkplain OkHttpClient#proxy() proxy}: a</span>
-<span class="source-line-no">140</span><span id="line-140">    * proxy resolves the target host itself, so the pin-on-connect {@link okhttp3.Dns} is never consulted for the target.</span>
-<span class="source-line-no">141</span><span id="line-141">    * A client that selects a proxy per URL through a {@link ProxySelector} is accepted here, but a guarded request</span>
-<span class="source-line-no">142</span><span id="line-142">    * whose URL is routed through a proxy is refused when sent (fail closed).</span>
-<span class="source-line-no">143</span><span id="line-143">    */</span>
-<span class="source-line-no">144</span><span id="line-144">   @Override /* HttpTransport */</span>
-<span class="source-line-no">145</span><span id="line-145">   public boolean supportsUrlPolicy() {</span>
-<span class="source-line-no">146</span><span id="line-146">      var proxy = httpClient.proxy();</span>
-<span class="source-line-no">147</span><span id="line-147">      return proxy == null || proxy.type() == Proxy.Type.DIRECT;</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   // Performs one pin-on-connect hop via the dedicated, redirect-disabled policyHttpClient.</span>
-<span class="source-line-no">151</span><span id="line-151">   private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">152</span><span id="line-152">      try {</span>
-<span class="source-line-no">153</span><span id="line-153">         var url = HttpUrl.get(request.getUri().toString());</span>
-<span class="source-line-no">154</span><span id="line-154">         requireNoProxy(url);</span>
-<span class="source-line-no">155</span><span id="line-155">         requireAllowedIpLiteral(url.host(), request.getAllowedAddressRanges());</span>
-<span class="source-line-no">156</span><span id="line-156">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">157</span><span id="line-157">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
-<span class="source-line-no">158</span><span id="line-158">      }</span>
-<span class="source-line-no">159</span><span id="line-159">      return sendOnce(request, policyClientFor(request.getAllowedAddressRanges()));</span>
-<span class="source-line-no">160</span><span id="line-160">   }</span>
-<span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">   private OkHttpClient policyClientFor(RemoteUrlPolicy.AllowedRanges ranges) {</span>
-<span class="source-line-no">163</span><span id="line-163">      if (ranges.isEmpty())</span>
-<span class="source-line-no">164</span><span id="line-164">         return policyHttpClient;</span>
-<span class="source-line-no">165</span><span id="line-165">      return rangedPolicyHttpClients.computeIfAbsent(ranges, r -&gt; policyHttpClient.newBuilder()</span>
-<span class="source-line-no">166</span><span id="line-166">         .dns(new PolicyPinningDns(r))</span>
-<span class="source-line-no">167</span><span id="line-167">         .connectionPool(new ConnectionPool())</span>
-<span class="source-line-no">168</span><span id="line-168">         .build());</span>
-<span class="source-line-no">169</span><span id="line-169">   }</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">   // A proxy (SOCKS, or HTTP/CONNECT) resolves the target host itself, so OkHttp never asks Dns about the target and the</span>
-<span class="source-line-no">172</span><span id="line-172">   // pin cannot apply.  Fail closed rather than send a guarded request through one.</span>
-<span class="source-line-no">173</span><span id="line-173">   private void requireNoProxy(HttpUrl url) {</span>
-<span class="source-line-no">174</span><span id="line-174">      var explicit = httpClient.proxy();</span>
-<span class="source-line-no">175</span><span id="line-175">      var uri = url.uri();</span>
-<span class="source-line-no">176</span><span id="line-176">      // Like OkHttp, skip the ProxySelector when java.net.URI cannot parse a host (e.g. an underscore host name).</span>
-<span class="source-line-no">177</span><span id="line-177">      List&lt;Proxy&gt; proxies;</span>
-<span class="source-line-no">178</span><span id="line-178">      if (explicit != null)</span>
-<span class="source-line-no">179</span><span id="line-179">         proxies = List.of(explicit);</span>
-<span class="source-line-no">180</span><span id="line-180">      else if (uri.getHost() == null)</span>
-<span class="source-line-no">181</span><span id="line-181">         proxies = List.of(Proxy.NO_PROXY);</span>
-<span class="source-line-no">182</span><span id="line-182">      else</span>
-<span class="source-line-no">183</span><span id="line-183">         proxies = selectedProxies(uri);</span>
-<span class="source-line-no">184</span><span id="line-184">      for (var p : proxies)</span>
-<span class="source-line-no">185</span><span id="line-185">         if (p.type() != Proxy.Type.DIRECT)</span>
-<span class="source-line-no">186</span><span id="line-186">            throw iaex("Request to '%s' would be routed through a proxy, which resolves the target host itself and bypasses the SSRF guard's address pinning; use a client without a proxy (or set allowPrivateUrls)", url.host());</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188"></span>
-<span class="source-line-no">189</span><span id="line-189">   // Like OkHttp, a ProxySelector answer of null or empty means no proxy.</span>
-<span class="source-line-no">190</span><span id="line-190">   private List&lt;Proxy&gt; selectedProxies(URI uri) {</span>
-<span class="source-line-no">191</span><span id="line-191">      var selected = httpClient.proxySelector().select(uri);</span>
-<span class="source-line-no">192</span><span id="line-192">      return selected == null || selected.isEmpty() ? List.of(Proxy.NO_PROXY) : selected;</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   // OkHttp connects to any host it considers an IP literal without consulting Dns, so the pin never sees one; apply the</span>
-<span class="source-line-no">196</span><span id="line-196">   // same address check here.  Its literal test is deliberately broader than dotted-quad: an all-digit/dot host such as</span>
-<span class="source-line-no">197</span><span id="line-197">   // 2130706433 or 127.1 is parsed by InetAddress to 127.0.0.1.  (Host names are checked by PolicyPinningDns.)</span>
-<span class="source-line-no">198</span><span id="line-198">   // The literal is parsed locally and never resolved: a host that matches the pattern but is not a valid literal</span>
-<span class="source-line-no">199</span><span id="line-199">   // (1.2.3.4.5, 127.0.0.1.) would otherwise fall through to a DNS lookup here and a second one in OkHttp, so it is refused.</span>
-<span class="source-line-no">200</span><span id="line-200">   private static void requireAllowedIpLiteral(String host, RemoteUrlPolicy.AllowedRanges ranges) {</span>
-<span class="source-line-no">201</span><span id="line-201">      if (! OKHTTP_IP_LITERAL.matcher(host).matches())</span>
-<span class="source-line-no">202</span><span id="line-202">         return;</span>
-<span class="source-line-no">203</span><span id="line-203">      var address = parseIpLiteral(host);</span>
-<span class="source-line-no">204</span><span id="line-204">      if (address == null)</span>
-<span class="source-line-no">205</span><span id="line-205">         throw iaex("Host '%s' matches the IP-literal form but is not a valid IP literal; refusing to resolve it", host);</span>
-<span class="source-line-no">206</span><span id="line-206">      if (RemoteUrlPolicy.isDeniedAddress(address, ranges))</span>
-<span class="source-line-no">207</span><span id="line-207">         throw iaex("No allowed address for host '%s': the IP literal is private/loopback/link-local/reserved (set allowPrivateUrls to allow local-dev targets)", host);</span>
-<span class="source-line-no">208</span><span id="line-208">   }</span>
-<span class="source-line-no">209</span><span id="line-209"></span>
-<span class="source-line-no">210</span><span id="line-210">   // Returns the address for an IP-literal host without any name lookup, or null if it is not a valid literal.</span>
-<span class="source-line-no">211</span><span id="line-211">   private static InetAddress parseIpLiteral(String host) {</span>
-<span class="source-line-no">212</span><span id="line-212">      try {</span>
-<span class="source-line-no">213</span><span id="line-213">         if (host.indexOf(':') != -1)</span>
-<span class="source-line-no">214</span><span id="line-214">            return InetAddress.getByName("[" + host + "]"); // brackets make the JDK treat it as IPv6 only, never DNS</span>
-<span class="source-line-no">215</span><span id="line-215">         var parts = host.split("\\.", -1);</span>
-<span class="source-line-no">216</span><span id="line-216">         if (parts.length &gt; 4)</span>
-<span class="source-line-no">217</span><span id="line-217">            return null;</span>
-<span class="source-line-no">218</span><span id="line-218">         var value = 0L;</span>
-<span class="source-line-no">219</span><span id="line-219">         for (var i = 0; i &lt; parts.length; i++) {</span>
-<span class="source-line-no">220</span><span id="line-220">            var part = parts[i];</span>
-<span class="source-line-no">221</span><span id="line-221">            if (part.isEmpty() || part.length() &gt; 10 || (part.length() &gt; 1 &amp;&amp; part.charAt(0) == '0'))</span>
-<span class="source-line-no">222</span><span id="line-222">               return null;</span>
-<span class="source-line-no">223</span><span id="line-223">            var n = Long.parseLong(part);</span>
-<span class="source-line-no">224</span><span id="line-224">            var last = i == parts.length - 1;</span>
-<span class="source-line-no">225</span><span id="line-225">            if (n &gt; (last ? (1L &lt;&lt; (8 * (5 - parts.length))) - 1 : 255))</span>
-<span class="source-line-no">226</span><span id="line-226">               return null;</span>
-<span class="source-line-no">227</span><span id="line-227">            value |= last ? n : n &lt;&lt; (8 * (3 - i));</span>
-<span class="source-line-no">228</span><span id="line-228">         }</span>
-<span class="source-line-no">229</span><span id="line-229">         return InetAddress.getByAddress(new byte[]{(byte)(value &gt;&gt; 24), (byte)(value &gt;&gt; 16), (byte)(value &gt;&gt; 8), (byte)value});</span>
-<span class="source-line-no">230</span><span id="line-230">      } catch (UnknownHostException e) {</span>
-<span class="source-line-no">231</span><span id="line-231">         return null;</span>
-<span class="source-line-no">232</span><span id="line-232">      }</span>
-<span class="source-line-no">233</span><span id="line-233">   }</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   private static TransportResponse sendOnce(TransportRequest request, OkHttpClient client) throws TransportException {</span>
-<span class="source-line-no">236</span><span id="line-236">      var okRequest = buildOkRequest(request);</span>
-<span class="source-line-no">237</span><span id="line-237">      var timeout = request.getTimeout();</span>
-<span class="source-line-no">238</span><span id="line-238">      // Per-request read timeout (response-header wait and gaps between body reads); newBuilder() shares the connection pool.</span>
-<span class="source-line-no">239</span><span id="line-239">      var effective = timeout == null ? client : client.newBuilder().readTimeout(timeout).build();</span>
-<span class="source-line-no">240</span><span id="line-240">      Response okResponse;</span>
-<span class="source-line-no">241</span><span id="line-241">      try {</span>
-<span class="source-line-no">242</span><span id="line-242">         okResponse = effective.newCall(okRequest).execute();</span>
-<span class="source-line-no">243</span><span id="line-243">      } catch (IOException | IllegalArgumentException e) {</span>
-<span class="source-line-no">244</span><span id="line-244">         // IllegalArgumentException: any IAE raised while executing the call, on both the guarded and the ordinary</span>
-<span class="source-line-no">245</span><span id="line-245">         // path, is surfaced as a TransportException.  The expected source is a Dns.lookup failure, which OkHttp</span>
-<span class="source-line-no">246</span><span id="line-246">         // propagates unchanged -- notably PolicyPinningDns refusing a host whose every resolved address is denied.</span>
-<span class="source-line-no">247</span><span id="line-247">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
-<span class="source-line-no">248</span><span id="line-248">      }</span>
-<span class="source-line-no">249</span><span id="line-249">      try {</span>
-<span class="source-line-no">250</span><span id="line-250">         return buildTransportResponse(okResponse);</span>
-<span class="source-line-no">251</span><span id="line-251">      } catch (TransportException | RuntimeException e) {</span>
-<span class="source-line-no">252</span><span id="line-252">         // If response-body wiring fails the closeCallback never runs, so close here to avoid leaking the connection.</span>
-<span class="source-line-no">253</span><span id="line-253">         okResponse.close();</span>
-<span class="source-line-no">254</span><span id="line-254">         throw e;</span>
-<span class="source-line-no">255</span><span id="line-255">      }</span>
-<span class="source-line-no">256</span><span id="line-256">   }</span>
-<span class="source-line-no">257</span><span id="line-257"></span>
-<span class="source-line-no">258</span><span id="line-258">   @Override /* Closeable */</span>
-<span class="source-line-no">259</span><span id="line-259">   public void close() {</span>
-<span class="source-line-no">260</span><span id="line-260">      httpClient.dispatcher().executorService().shutdown();</span>
-<span class="source-line-no">261</span><span id="line-261">      httpClient.connectionPool().evictAll();</span>
-<span class="source-line-no">262</span><span id="line-262">      for (var c : rangedPolicyHttpClients.values())</span>
-<span class="source-line-no">263</span><span id="line-263">         c.connectionPool().evictAll();</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">267</span><span id="line-267">   // Internal helpers</span>
-<span class="source-line-no">268</span><span id="line-268">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">269</span><span id="line-269"></span>
-<span class="source-line-no">270</span><span id="line-270">   private static Request buildOkRequest(TransportRequest request) {</span>
-<span class="source-line-no">271</span><span id="line-271">      var builder = new Request.Builder().url(request.getUri().toString());</span>
-<span class="source-line-no">272</span><span id="line-272">      for (var h : request.getHeaders())</span>
-<span class="source-line-no">273</span><span id="line-273">         builder.addHeader(h.name(), h.value());</span>
-<span class="source-line-no">274</span><span id="line-274">      builder.method(request.getMethod(), buildOkBody(request.getBody(), request.getMethod()));</span>
-<span class="source-line-no">275</span><span id="line-275">      return builder.build();</span>
-<span class="source-line-no">276</span><span id="line-276">   }</span>
-<span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   private static RequestBody buildOkBody(TransportBody body, String method) {</span>
-<span class="source-line-no">279</span><span id="line-279">      if (body == null) {</span>
-<span class="source-line-no">280</span><span id="line-280">         // OkHttp requires a non-null body for POST/PUT/PATCH even if empty</span>
-<span class="source-line-no">281</span><span id="line-281">         return requiresBody(method) ? RequestBody.create(new byte[0], null) : null;</span>
-<span class="source-line-no">282</span><span id="line-282">      }</span>
-<span class="source-line-no">283</span><span id="line-283">      var ct = body.getContentType();</span>
-<span class="source-line-no">284</span><span id="line-284">      var mediaType = ct != null ? MediaType.parse(ct) : null;</span>
-<span class="source-line-no">285</span><span id="line-285">      return new RequestBody() {</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *</span>
+<span class="source-line-no">058</span><span id="line-58"> * @since 9.2.1</span>
+<span class="source-line-no">059</span><span id="line-59"> */</span>
+<span class="source-line-no">060</span><span id="line-60">@SuppressWarnings({</span>
+<span class="source-line-no">061</span><span id="line-61">   "resource" // Transport methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">062</span><span id="line-62">})</span>
+<span class="source-line-no">063</span><span id="line-63">public final class OkHttpTransport implements HttpTransport {</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   // OkHttp's own IP-literal test (okhttp3.internal HostnamesCommon): such hosts are connected to without a Dns lookup.</span>
+<span class="source-line-no">066</span><span id="line-66">   private static final Pattern OKHTTP_IP_LITERAL = Pattern.compile("([0-9a-fA-F]*:[0-9a-fA-F:.]*)|([\\d.]+)");</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">   private final OkHttpClient httpClient;</span>
+<span class="source-line-no">069</span><span id="line-69">   private final OkHttpClient policyHttpClient;</span>
+<span class="source-line-no">070</span><span id="line-70">   // One further pin-on-connect client per distinct non-empty per-client allow-list, created on first use.  Each has its</span>
+<span class="source-line-no">071</span><span id="line-71">   // own connection pool, so a connection opened under one allow-list is never reused by a request with another.</span>
+<span class="source-line-no">072</span><span id="line-72">   private final Map&lt;RemoteUrlPolicy.AllowedRanges,OkHttpClient&gt; rangedPolicyHttpClients = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   OkHttpTransport(OkHttpTransportBuilder builder) {</span>
+<span class="source-line-no">075</span><span id="line-75">      // A caller-supplied client gets the redirect credential guard on a derived client: newBuilder() shares its</span>
+<span class="source-line-no">076</span><span id="line-76">      // connection pool, dispatcher and every other setting, and the caller's own client is left unchanged.</span>
+<span class="source-line-no">077</span><span id="line-77">      this.httpClient = builder.httpClient != null ? withCredentialGuard(builder.httpClient) : createDefaultHttpClient();</span>
+<span class="source-line-no">078</span><span id="line-78">      // A dedicated client -- sharing this client's connection pool/dispatcher via newBuilder(), but with its own</span>
+<span class="source-line-no">079</span><span id="line-79">      // pin-on-connect Dns and with auto-redirect-following disabled -- used only for SSRF-guard-active @Remote</span>
+<span class="source-line-no">080</span><span id="line-80">      // calls (see executeWithPolicy); ordinary (non-@Remote) calls on httpClient are completely unaffected.</span>
+<span class="source-line-no">081</span><span id="line-81">      // Unlike the shared-connection-manager engines (Apache HttpClient, Jetty), OkHttp's Dns/followRedirects are</span>
+<span class="source-line-no">082</span><span id="line-82">      // per-client (not tied to the shared connection pool), so this derivation works even for a caller-supplied</span>
+<span class="source-line-no">083</span><span id="line-83">      // httpClient.  The exception is a proxy: OkHttp asks Dns for the proxy's address, not the target's (the proxy</span>
+<span class="source-line-no">084</span><span id="line-84">      // resolves the target), so the pin cannot apply -- see supportsUrlPolicy() and requireNoProxy().</span>
+<span class="source-line-no">085</span><span id="line-85">      this.policyHttpClient = this.httpClient.newBuilder()</span>
+<span class="source-line-no">086</span><span id="line-86">         .followRedirects(false)</span>
+<span class="source-line-no">087</span><span id="line-87">         .dns(PolicyPinningDns.INSTANCE)</span>
+<span class="source-line-no">088</span><span id="line-88">         .build();</span>
+<span class="source-line-no">089</span><span id="line-89">   }</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">   private static OkHttpClient createDefaultHttpClient() {</span>
+<span class="source-line-no">092</span><span id="line-92">      return withCredentialGuard(new OkHttpClient());</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   // OkHttp's own redirect follower keeps a caller-set Cookie, so every client this transport sends through has the</span>
+<span class="source-line-no">096</span><span id="line-96">   // guard as a network interceptor, which runs for each hop.  The first-hop recorder is the last application</span>
+<span class="source-line-no">097</span><span id="line-97">   // interceptor, so the origin is the URL after any caller application interceptor has rewritten it.</span>
+<span class="source-line-no">098</span><span id="line-98">   private static OkHttpClient withCredentialGuard(OkHttpClient client) {</span>
+<span class="source-line-no">099</span><span id="line-99">      return client.newBuilder()</span>
+<span class="source-line-no">100</span><span id="line-100">         .addInterceptor(OkHttpRedirectCredentialGuard.FIRST_HOP_RECORDER)</span>
+<span class="source-line-no">101</span><span id="line-101">         .addNetworkInterceptor(new OkHttpRedirectCredentialGuard())</span>
+<span class="source-line-no">102</span><span id="line-102">         .build();</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /**</span>
+<span class="source-line-no">106</span><span id="line-106">    * Returns a new builder for this transport.</span>
+<span class="source-line-no">107</span><span id="line-107">    *</span>
+<span class="source-line-no">108</span><span id="line-108">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">109</span><span id="line-109">    */</span>
+<span class="source-line-no">110</span><span id="line-110">   public static OkHttpTransportBuilder builder() {</span>
+<span class="source-line-no">111</span><span id="line-111">      return new OkHttpTransportBuilder();</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /**</span>
+<span class="source-line-no">115</span><span id="line-115">    * Returns a new instance backed by a default {@link OkHttpClient}.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">118</span><span id="line-118">    */</span>
+<span class="source-line-no">119</span><span id="line-119">   public static OkHttpTransport create() {</span>
+<span class="source-line-no">120</span><span id="line-120">      return builder().build();</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   @Override /* HttpTransport */</span>
+<span class="source-line-no">124</span><span id="line-124">   public TransportResponse execute(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">125</span><span id="line-125">      if (request.isSsrfGuardActive())</span>
+<span class="source-line-no">126</span><span id="line-126">         return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);</span>
+<span class="source-line-no">127</span><span id="line-127">      return sendOnce(request, httpClient);</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   /**</span>
+<span class="source-line-no">131</span><span id="line-131">    * {@inheritDoc}</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * Reports &lt;jk&gt;false&lt;/jk&gt; when the {@link OkHttpClient} has an explicit {@linkplain OkHttpClient#proxy() proxy}: a</span>
+<span class="source-line-no">135</span><span id="line-135">    * proxy resolves the target host itself, so the pin-on-connect {@link okhttp3.Dns} is never consulted for the target.</span>
+<span class="source-line-no">136</span><span id="line-136">    * A client that selects a proxy per URL through a {@link ProxySelector} is accepted here, but a guarded request</span>
+<span class="source-line-no">137</span><span id="line-137">    * whose URL is routed through a proxy is refused when sent (fail closed).</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   @Override /* HttpTransport */</span>
+<span class="source-line-no">140</span><span id="line-140">   public boolean supportsUrlPolicy() {</span>
+<span class="source-line-no">141</span><span id="line-141">      var proxy = httpClient.proxy();</span>
+<span class="source-line-no">142</span><span id="line-142">      return proxy == null || proxy.type() == Proxy.Type.DIRECT;</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   // Performs one pin-on-connect hop via the dedicated, redirect-disabled policyHttpClient.</span>
+<span class="source-line-no">146</span><span id="line-146">   private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">147</span><span id="line-147">      try {</span>
+<span class="source-line-no">148</span><span id="line-148">         var url = HttpUrl.get(request.getUri().toString());</span>
+<span class="source-line-no">149</span><span id="line-149">         requireNoProxy(url);</span>
+<span class="source-line-no">150</span><span id="line-150">         requireAllowedIpLiteral(url.host(), request.getAllowedAddressRanges());</span>
+<span class="source-line-no">151</span><span id="line-151">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">152</span><span id="line-152">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
+<span class="source-line-no">153</span><span id="line-153">      }</span>
+<span class="source-line-no">154</span><span id="line-154">      return sendOnce(request, policyClientFor(request.getAllowedAddressRanges()));</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   private OkHttpClient policyClientFor(RemoteUrlPolicy.AllowedRanges ranges) {</span>
+<span class="source-line-no">158</span><span id="line-158">      if (ranges.isEmpty())</span>
+<span class="source-line-no">159</span><span id="line-159">         return policyHttpClient;</span>
+<span class="source-line-no">160</span><span id="line-160">      return rangedPolicyHttpClients.computeIfAbsent(ranges, r -&gt; policyHttpClient.newBuilder()</span>
+<span class="source-line-no">161</span><span id="line-161">         .dns(new PolicyPinningDns(r))</span>
+<span class="source-line-no">162</span><span id="line-162">         .connectionPool(new ConnectionPool())</span>
+<span class="source-line-no">163</span><span id="line-163">         .build());</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   // A proxy (SOCKS, or HTTP/CONNECT) resolves the target host itself, so OkHttp never asks Dns about the target and the</span>
+<span class="source-line-no">167</span><span id="line-167">   // pin cannot apply.  Fail closed rather than send a guarded request through one.</span>
+<span class="source-line-no">168</span><span id="line-168">   private void requireNoProxy(HttpUrl url) {</span>
+<span class="source-line-no">169</span><span id="line-169">      var explicit = httpClient.proxy();</span>
+<span class="source-line-no">170</span><span id="line-170">      var uri = url.uri();</span>
+<span class="source-line-no">171</span><span id="line-171">      // Like OkHttp, skip the ProxySelector when java.net.URI cannot parse a host (e.g. an underscore host name).</span>
+<span class="source-line-no">172</span><span id="line-172">      List&lt;Proxy&gt; proxies;</span>
+<span class="source-line-no">173</span><span id="line-173">      if (explicit != null)</span>
+<span class="source-line-no">174</span><span id="line-174">         proxies = List.of(explicit);</span>
+<span class="source-line-no">175</span><span id="line-175">      else if (uri.getHost() == null)</span>
+<span class="source-line-no">176</span><span id="line-176">         proxies = List.of(Proxy.NO_PROXY);</span>
+<span class="source-line-no">177</span><span id="line-177">      else</span>
+<span class="source-line-no">178</span><span id="line-178">         proxies = selectedProxies(uri);</span>
+<span class="source-line-no">179</span><span id="line-179">      for (var p : proxies)</span>
+<span class="source-line-no">180</span><span id="line-180">         if (p.type() != Proxy.Type.DIRECT)</span>
+<span class="source-line-no">181</span><span id="line-181">            throw iaex("Request to '%s' would be routed through a proxy, which resolves the target host itself and bypasses the SSRF guard's address pinning; use a client without a proxy (or set allowPrivateUrls)", url.host());</span>
+<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   // Like OkHttp, a ProxySelector answer of null or empty means no proxy.</span>
+<span class="source-line-no">185</span><span id="line-185">   private List&lt;Proxy&gt; selectedProxies(URI uri) {</span>
+<span class="source-line-no">186</span><span id="line-186">      var selected = httpClient.proxySelector().select(uri);</span>
+<span class="source-line-no">187</span><span id="line-187">      return selected == null || selected.isEmpty() ? List.of(Proxy.NO_PROXY) : selected;</span>
+<span class="source-line-no">188</span><span id="line-188">   }</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">   // OkHttp connects to any host it considers an IP literal without consulting Dns, so the pin never sees one; apply the</span>
+<span class="source-line-no">191</span><span id="line-191">   // same address check here.  Its literal test is deliberately broader than dotted-quad: an all-digit/dot host such as</span>
+<span class="source-line-no">192</span><span id="line-192">   // 2130706433 or 127.1 is parsed by InetAddress to 127.0.0.1.  (Host names are checked by PolicyPinningDns.)</span>
+<span class="source-line-no">193</span><span id="line-193">   // The literal is parsed locally and never resolved: a host that matches the pattern but is not a valid literal</span>
+<span class="source-line-no">194</span><span id="line-194">   // (1.2.3.4.5, 127.0.0.1.) would otherwise fall through to a DNS lookup here and a second one in OkHttp, so it is refused.</span>
+<span class="source-line-no">195</span><span id="line-195">   private static void requireAllowedIpLiteral(String host, RemoteUrlPolicy.AllowedRanges ranges) {</span>
+<span class="source-line-no">196</span><span id="line-196">      if (! OKHTTP_IP_LITERAL.matcher(host).matches())</span>
+<span class="source-line-no">197</span><span id="line-197">         return;</span>
+<span class="source-line-no">198</span><span id="line-198">      var address = parseIpLiteral(host);</span>
+<span class="source-line-no">199</span><span id="line-199">      if (address == null)</span>
+<span class="source-line-no">200</span><span id="line-200">         throw iaex("Host '%s' matches the IP-literal form but is not a valid IP literal; refusing to resolve it", host);</span>
+<span class="source-line-no">201</span><span id="line-201">      if (RemoteUrlPolicy.isDeniedAddress(address, ranges))</span>
+<span class="source-line-no">202</span><span id="line-202">         throw iaex("No allowed address for host '%s': the IP literal is private/loopback/link-local/reserved (set allowPrivateUrls to allow local-dev targets)", host);</span>
+<span class="source-line-no">203</span><span id="line-203">   }</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">   // Returns the address for an IP-literal host without any name lookup, or null if it is not a valid literal.</span>
+<span class="source-line-no">206</span><span id="line-206">   private static InetAddress parseIpLiteral(String host) {</span>
+<span class="source-line-no">207</span><span id="line-207">      try {</span>
+<span class="source-line-no">208</span><span id="line-208">         if (host.indexOf(':') != -1)</span>
+<span class="source-line-no">209</span><span id="line-209">            return InetAddress.getByName("[" + host + "]"); // brackets make the JDK treat it as IPv6 only, never DNS</span>
+<span class="source-line-no">210</span><span id="line-210">         var parts = host.split("\\.", -1);</span>
+<span class="source-line-no">211</span><span id="line-211">         if (parts.length &gt; 4)</span>
+<span class="source-line-no">212</span><span id="line-212">            return null;</span>
+<span class="source-line-no">213</span><span id="line-213">         var value = 0L;</span>
+<span class="source-line-no">214</span><span id="line-214">         for (var i = 0; i &lt; parts.length; i++) {</span>
+<span class="source-line-no">215</span><span id="line-215">            var part = parts[i];</span>
+<span class="source-line-no">216</span><span id="line-216">            if (part.isEmpty() || part.length() &gt; 10 || (part.length() &gt; 1 &amp;&amp; part.charAt(0) == '0'))</span>
+<span class="source-line-no">217</span><span id="line-217">               return null;</span>
+<span class="source-line-no">218</span><span id="line-218">            var n = Long.parseLong(part);</span>
+<span class="source-line-no">219</span><span id="line-219">            var last = i == parts.length - 1;</span>
+<span class="source-line-no">220</span><span id="line-220">            if (n &gt; (last ? (1L &lt;&lt; (8 * (5 - parts.length))) - 1 : 255))</span>
+<span class="source-line-no">221</span><span id="line-221">               return null;</span>
+<span class="source-line-no">222</span><span id="line-222">            value |= last ? n : n &lt;&lt; (8 * (3 - i));</span>
+<span class="source-line-no">223</span><span id="line-223">         }</span>
+<span class="source-line-no">224</span><span id="line-224">         return InetAddress.getByAddress(new byte[]{(byte)(value &gt;&gt; 24), (byte)(value &gt;&gt; 16), (byte)(value &gt;&gt; 8), (byte)value});</span>
+<span class="source-line-no">225</span><span id="line-225">      } catch (UnknownHostException e) {</span>
+<span class="source-line-no">226</span><span id="line-226">         return null;</span>
+<span class="source-line-no">227</span><span id="line-227">      }</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   private static TransportResponse sendOnce(TransportRequest request, OkHttpClient client) throws TransportException {</span>
+<span class="source-line-no">231</span><span id="line-231">      var okRequest = buildOkRequest(request);</span>
+<span class="source-line-no">232</span><span id="line-232">      var timeout = request.getTimeout();</span>
+<span class="source-line-no">233</span><span id="line-233">      // Per-request read timeout (response-header wait and gaps between body reads); newBuilder() shares the connection pool.</span>
+<span class="source-line-no">234</span><span id="line-234">      var effective = timeout == null ? client : client.newBuilder().readTimeout(timeout).build();</span>
+<span class="source-line-no">235</span><span id="line-235">      Response okResponse;</span>
+<span class="source-line-no">236</span><span id="line-236">      try {</span>
+<span class="source-line-no">237</span><span id="line-237">         okResponse = effective.newCall(okRequest).execute();</span>
+<span class="source-line-no">238</span><span id="line-238">      } catch (IOException | IllegalArgumentException e) {</span>
+<span class="source-line-no">239</span><span id="line-239">         // IllegalArgumentException: any IAE raised while executing the call, on both the guarded and the ordinary</span>
+<span class="source-line-no">240</span><span id="line-240">         // path, is surfaced as a TransportException.  The expected source is a Dns.lookup failure, which OkHttp</span>
+<span class="source-line-no">241</span><span id="line-241">         // propagates unchanged -- notably PolicyPinningDns refusing a host whose every resolved address is denied.</span>
+<span class="source-line-no">242</span><span id="line-242">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
+<span class="source-line-no">243</span><span id="line-243">      }</span>
+<span class="source-line-no">244</span><span id="line-244">      try {</span>
+<span class="source-line-no">245</span><span id="line-245">         return buildTransportResponse(okResponse);</span>
+<span class="source-line-no">246</span><span id="line-246">      } catch (TransportException | RuntimeException e) {</span>
+<span class="source-line-no">247</span><span id="line-247">         // If response-body wiring fails the closeCallback never runs, so close here to avoid leaking the connection.</span>
+<span class="source-line-no">248</span><span id="line-248">         okResponse.close();</span>
+<span class="source-line-no">249</span><span id="line-249">         throw e;</span>
+<span class="source-line-no">250</span><span id="line-250">      }</span>
+<span class="source-line-no">251</span><span id="line-251">   }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">   @Override /* Closeable */</span>
+<span class="source-line-no">254</span><span id="line-254">   public void close() {</span>
+<span class="source-line-no">255</span><span id="line-255">      httpClient.dispatcher().executorService().shutdown();</span>
+<span class="source-line-no">256</span><span id="line-256">      httpClient.connectionPool().evictAll();</span>
+<span class="source-line-no">257</span><span id="line-257">      for (var c : rangedPolicyHttpClients.values())</span>
+<span class="source-line-no">258</span><span id="line-258">         c.connectionPool().evictAll();</span>
+<span class="source-line-no">259</span><span id="line-259">   }</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">262</span><span id="line-262">   // Internal helpers</span>
+<span class="source-line-no">263</span><span id="line-263">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   private static Request buildOkRequest(TransportRequest request) {</span>
+<span class="source-line-no">266</span><span id="line-266">      var builder = new Request.Builder().url(request.getUri().toString());</span>
+<span class="source-line-no">267</span><span id="line-267">      for (var h : request.getHeaders())</span>
+<span class="source-line-no">268</span><span id="line-268">         builder.addHeader(h.name(), h.value());</span>
+<span class="source-line-no">269</span><span id="line-269">      builder.method(request.getMethod(), buildOkBody(request.getBody(), request.getMethod()));</span>
+<span class="source-line-no">270</span><span id="line-270">      return builder.build();</span>
+<span class="source-line-no">271</span><span id="line-271">   }</span>
+<span class="source-line-no">272</span><span id="line-272"></span>
+<span class="source-line-no">273</span><span id="line-273">   private static RequestBody buildOkBody(TransportBody body, String method) {</span>
+<span class="source-line-no">274</span><span id="line-274">      if (body == null) {</span>
+<span class="source-line-no">275</span><span id="line-275">         // OkHttp requires a non-null body for POST/PUT/PATCH even if empty</span>
+<span class="source-line-no">276</span><span id="line-276">         return requiresBody(method) ? RequestBody.create(new byte[0], null) : null;</span>
+<span class="source-line-no">277</span><span id="line-277">      }</span>
+<span class="source-line-no">278</span><span id="line-278">      var ct = body.getContentType();</span>
+<span class="source-line-no">279</span><span id="line-279">      var mediaType = ct != null ? MediaType.parse(ct) : null;</span>
+<span class="source-line-no">280</span><span id="line-280">      return new RequestBody() {</span>
+<span class="source-line-no">281</span><span id="line-281">         @Override</span>
+<span class="source-line-no">282</span><span id="line-282">         public MediaType contentType() {</span>
+<span class="source-line-no">283</span><span id="line-283">            return mediaType;</span>
+<span class="source-line-no">284</span><span id="line-284">         }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
 <span class="source-line-no">286</span><span id="line-286">         @Override</span>
-<span class="source-line-no">287</span><span id="line-287">         public MediaType contentType() {</span>
-<span class="source-line-no">288</span><span id="line-288">            return mediaType;</span>
+<span class="source-line-no">287</span><span id="line-287">         public long contentLength() {</span>
+<span class="source-line-no">288</span><span id="line-288">            return body.getContentLength();</span>
 <span class="source-line-no">289</span><span id="line-289">         }</span>
 <span class="source-line-no">290</span><span id="line-290"></span>
 <span class="source-line-no">291</span><span id="line-291">         @Override</span>
-<span class="source-line-no">292</span><span id="line-292">         public long contentLength() {</span>
-<span class="source-line-no">293</span><span id="line-293">            return body.getContentLength();</span>
+<span class="source-line-no">292</span><span id="line-292">         public void writeTo(BufferedSink sink) throws IOException {</span>
+<span class="source-line-no">293</span><span id="line-293">            body.writeTo(sink.outputStream());</span>
 <span class="source-line-no">294</span><span id="line-294">         }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">         @Override</span>
-<span class="source-line-no">297</span><span id="line-297">         public void writeTo(BufferedSink sink) throws IOException {</span>
-<span class="source-line-no">298</span><span id="line-298">            body.writeTo(sink.outputStream());</span>
-<span class="source-line-no">299</span><span id="line-299">         }</span>
-<span class="source-line-no">300</span><span id="line-300">      };</span>
-<span class="source-line-no">301</span><span id="line-301">   }</span>
-<span class="source-line-no">302</span><span id="line-302"></span>
-<span class="source-line-no">303</span><span id="line-303">   private static boolean requiresBody(String method) {</span>
-<span class="source-line-no">304</span><span id="line-304">      return eqic("POST", method) || eqic("PUT", method) || eqic("PATCH", method);</span>
-<span class="source-line-no">305</span><span id="line-305">   }</span>
-<span class="source-line-no">306</span><span id="line-306"></span>
-<span class="source-line-no">307</span><span id="line-307">   @SuppressWarnings({</span>
-<span class="source-line-no">308</span><span id="line-308">      "java:S2095" // okResponse is closed via TransportResponse.closeCallback, not here</span>
-<span class="source-line-no">309</span><span id="line-309">   })</span>
-<span class="source-line-no">310</span><span id="line-310">   private static TransportResponse buildTransportResponse(Response okResponse) throws TransportException {</span>
-<span class="source-line-no">311</span><span id="line-311">      var builder = TransportResponse.builder()</span>
-<span class="source-line-no">312</span><span id="line-312">         .statusCode(okResponse.code())</span>
-<span class="source-line-no">313</span><span id="line-313">         .reasonPhrase(okResponse.message())</span>
-<span class="source-line-no">314</span><span id="line-314">         .closeCallback(okResponse);</span>
-<span class="source-line-no">315</span><span id="line-315">      for (var i = 0; i &lt; okResponse.headers().size(); i++)</span>
-<span class="source-line-no">316</span><span id="line-316">         builder.header(okResponse.headers().name(i), okResponse.headers().value(i));</span>
-<span class="source-line-no">317</span><span id="line-317">      try {</span>
-<span class="source-line-no">318</span><span id="line-318">         builder.body(okResponse.body().byteStream()); // body() is @NonNull in OkHttp 5.x</span>
-<span class="source-line-no">319</span><span id="line-319">      } catch (Exception e) {</span>
-<span class="source-line-no">320</span><span id="line-320">         throw new TransportException("Failed to read response body: " + e.getMessage(), e);</span>
-<span class="source-line-no">321</span><span id="line-321">      }</span>
-<span class="source-line-no">322</span><span id="line-322">      return builder.build();</span>
-<span class="source-line-no">323</span><span id="line-323">   }</span>
-<span class="source-line-no">324</span><span id="line-324">}</span>
+<span class="source-line-no">295</span><span id="line-295">      };</span>
+<span class="source-line-no">296</span><span id="line-296">   }</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   private static boolean requiresBody(String method) {</span>
+<span class="source-line-no">299</span><span id="line-299">      return eqic("POST", method) || eqic("PUT", method) || eqic("PATCH", method);</span>
+<span class="source-line-no">300</span><span id="line-300">   }</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">   @SuppressWarnings({</span>
+<span class="source-line-no">303</span><span id="line-303">      "java:S2095" // okResponse is closed via TransportResponse.closeCallback, not here</span>
+<span class="source-line-no">304</span><span id="line-304">   })</span>
+<span class="source-line-no">305</span><span id="line-305">   private static TransportResponse buildTransportResponse(Response okResponse) throws TransportException {</span>
+<span class="source-line-no">306</span><span id="line-306">      var builder = TransportResponse.builder()</span>
+<span class="source-line-no">307</span><span id="line-307">         .statusCode(okResponse.code())</span>
+<span class="source-line-no">308</span><span id="line-308">         .reasonPhrase(okResponse.message())</span>
+<span class="source-line-no">309</span><span id="line-309">         .closeCallback(okResponse);</span>
+<span class="source-line-no">310</span><span id="line-310">      for (var i = 0; i &lt; okResponse.headers().size(); i++)</span>
+<span class="source-line-no">311</span><span id="line-311">         builder.header(okResponse.headers().name(i), okResponse.headers().value(i));</span>
+<span class="source-line-no">312</span><span id="line-312">      try {</span>
+<span class="source-line-no">313</span><span id="line-313">         builder.body(okResponse.body().byteStream()); // body() is @NonNull in OkHttp 5.x</span>
+<span class="source-line-no">314</span><span id="line-314">      } catch (Exception e) {</span>
+<span class="source-line-no">315</span><span id="line-315">         throw new TransportException("Failed to read response body: " + e.getMessage(), e);</span>
+<span class="source-line-no">316</span><span id="line-316">      }</span>
+<span class="source-line-no">317</span><span id="line-317">      return builder.build();</span>
+<span class="source-line-no">318</span><span id="line-318">   }</span>
+<span class="source-line-no">319</span><span id="line-319">}</span>
 
 
 

@@ -161,33 +161,36 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">return</strong> Arrays.hashCode((Object[])o);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Method&gt; getAnnotationMethods(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; type) {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">return</strong> fixedSizeList(type.getDeclaredMethods()).stream();
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> hashMember(String name, Object value) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">int</strong> part1 = name.hashCode() * 127;
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">return</strong> part1;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (ClassUtils.isArray(value))
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Annotation value2)
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">return</strong> part1 ^ hash(value2);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">return</strong> part1 ^ value.hashCode();
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> memberEquals(Class&lt;?&gt; type, Object o1, Object o2) {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">if</strong> (o1 == o2)
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">if</strong> (o1 == <strong class="jxr_keyword">null</strong> || o2 == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">if</strong> (type.isArray())
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> arrayMemberEquals(type.getComponentType(), o1, o2);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">if</strong> (type.isAnnotation())
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">return</strong> equal((Annotation)o1, (Annotation)o2);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">return</strong> o1.equals(o2);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<span class="jxr_string">"javabugs:S2259"</span> <em class="jxr_comment">// Class.getDeclaredMethods() never returns null, so fixedSizeList() never returns null here.</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	})
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Method&gt; getAnnotationMethods(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; type) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">return</strong> fixedSizeList(type.getDeclaredMethods()).stream();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> hashMember(String name, Object value) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">int</strong> part1 = name.hashCode() * 127;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">return</strong> part1;
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">if</strong> (ClassUtils.isArray(value))
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">return</strong> part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Annotation value2)
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">return</strong> part1 ^ hash(value2);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">return</strong> part1 ^ value.hashCode();
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> memberEquals(Class&lt;?&gt; type, Object o1, Object o2) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">if</strong> (o1 == o2)
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">if</strong> (o1 == <strong class="jxr_keyword">null</strong> || o2 == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (type.isArray())
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> arrayMemberEquals(type.getComponentType(), o1, o2);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">if</strong> (type.isAnnotation())
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">return</strong> equal((Annotation)o1, (Annotation)o2);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">return</strong> o1.equals(o2);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

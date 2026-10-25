@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="resource/HttpResourceBean.html" title="class in org.apache.juneau.http.resource">HttpResourceBean</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpResource.html#line-41">HttpResource</a></span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpResource.html#line-36">HttpResource</a></span><span class="extends-implements">
 extends <a href="HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span></div>
 <div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
  <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.
@@ -92,11 +92,6 @@ extends <a href="HttpBody.html" title="interface in org.apache.juneau.http">Http
  Mirrors the semantics of <code>HttpResource</code> from <code>juneau-rest-common-classic</code> without the
  Apache HttpCore dependency. The default immutable implementation is
  <a href="resource/HttpResourceBean.html" title="class in org.apache.juneau.http.resource"><code>HttpResourceBean</code></a>.
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in
- the <b>next major</b> Juneau release (and possibly earlier).
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
@@ -144,7 +139,7 @@ extends <a href="HttpBody.html" title="interface in org.apache.juneau.http">Http
 <li>
 <section class="detail" id="getHeaders()">
 <h3>getHeaders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpResource.html#line-52">getHeaders</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpResource.html#line-47">getHeaders</a></span>()</div>
 <div class="block">Returns the headers associated with this resource.
 
  <p>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="ContentRange.html" title="class in org.apache.juneau.http.header">ContentRange</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.html#line-122">ContentRange.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.html#line-117">ContentRange.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for assembling an HTTP <c>Content-Range</c> header value.
 
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-122">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-117">Builder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unit(java.lang.String)">
 <h3>unit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-138">unit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-133">unit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the range unit (default <c>bytes</c>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="range(long,long)">
 <h3>range</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-158">range</a></span><wbr><span class="parameters">(long&nbsp;startValue,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-153">range</a></span><wbr><span class="parameters">(long&nbsp;startValue,
  long&nbsp;endValue)</span></div>
 <div class="block">Sets the resolved <c>first-last</c> byte range.
 
@@ -245,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unsatisfiedRange()">
 <h3>unsatisfiedRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-174">unsatisfiedRange</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-169">unsatisfiedRange</a></span>()</div>
 <div class="block">Marks the range portion as unsatisfied, rendering it as <c>*</c> (used with a known complete length).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="length(long)">
 <h3>length</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-191">length</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-186">length</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Sets the <c>complete-length</c> (the total size of the representation).
 
  <p>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unknownLength()">
 <h3>unknownLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-204">unknownLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.Builder.html" title="class in org.apache.juneau.http.header">ContentRange.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-199">unknownLength</a></span>()</div>
 <div class="block">Marks the complete length as unknown, rendering it as <c>*</c>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -285,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-215">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-210">build</a></span>()</div>
 <div class="block">Builds the rendered <c>Content-Range</c> header value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -296,7 +296,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toHeader()">
 <h3>toHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.html" title="class in org.apache.juneau.http.header">ContentRange</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-226">toHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentRange.html" title="class in org.apache.juneau.http.header">ContentRange</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-221">toHeader</a></span>()</div>
 <div class="block">Builds a <a href="ContentRange.html" title="class in org.apache.juneau.http.header"><code>ContentRange</code></a> header bean directly from this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -307,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-230">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentRange.Builder.html#line-225">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

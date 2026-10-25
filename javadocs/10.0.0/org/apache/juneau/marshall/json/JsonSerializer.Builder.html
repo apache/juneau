@@ -315,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="escapeSolidus()">
 <h3>escapeSolidus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="type parameter in JsonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializer.Builder.html#line-250">escapeSolidus</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="type parameter in JsonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializer.Builder.html#line-249">escapeSolidus</a></span>()</div>
 <div class="block">Prefix solidus <js>'/'</js> characters with escapes.
 
  <p>
@@ -329,9 +329,8 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
    <jc>// Create a JSON serializer that escapes solidus characters.</jc>
-   WriterSerializer <jv>serializer</jv> = JsonSerializer
+   WriterSerializer <jv>serializer</jv> = Json5Serializer
       .<jsm>create</jsm>()
-      .simple()
       .escapeSolidus()
       .build();
 
@@ -347,7 +346,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="escapeSolidus(boolean)">
 <h3>escapeSolidus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="type parameter in JsonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializer.Builder.html#line-260">escapeSolidus</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSerializer.Builder.html" title="type parameter in JsonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializer.Builder.html#line-259">escapeSolidus</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#escapeSolidus()"><code>escapeSolidus()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -360,7 +359,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashKey()">
 <h3>hashKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializer.Builder.html#line-265">hashKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializer.Builder.html#line-264">hashKey</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#hashKey()">Context.Builder</a></code></span></div>
 <div class="block">Returns the hashkey of this builder.
 

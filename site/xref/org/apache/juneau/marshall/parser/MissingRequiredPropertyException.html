@@ -59,84 +59,85 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * @serial exclude</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<span class="jxr_string">"java:S110"</span> <em class="jxr_comment">// Inherited hierarchy depth from ParseException; acceptable for a specific parse failure.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  })
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> MissingRequiredPropertyException <strong class="jxr_keyword">extends</strong> ParseException {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * Throws this exception if the bean map is missing required properties.</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * Parser sessions call this through {@code ParserSession.checkRequired(BeanMap)}.  Conversion code that has no</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * parser session passes &lt;jk&gt;null&lt;/jk&gt;, which omits the input position from the message.</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The bean type.</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * @param session The current parser session, or &lt;jk&gt;null&lt;/jk&gt; if not parsing.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * @param m The bean map to check.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @return The same bean map, for chaining.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * @throws MissingRequiredPropertyException If a required property was never written.</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@SuppressWarnings({
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// Pass-through for chaining: returns the argument itself, so null in gives null out</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	})
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; BeanMap&lt;T&gt; check(ParserSession session, BeanMap&lt;T&gt; m) {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> missing = m.getMissingRequiredProperties();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">if</strong> (! missing.isEmpty())
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MissingRequiredPropertyException(session, m.getMeta().getClassInfo().<strong class="jxr_keyword">inner</strong>(), missing);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * Finds a {@link MissingRequiredPropertyException} in the cause chain of a throwable.</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * Bean property setters wrap failures from nested conversions, so conversion code uses this to re-surface the</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * original exception (which is a {@link ParseException} and maps to HTTP 400).</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * @param t The throwable to inspect.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @return The first exception of this type in the chain (including &lt;c&gt;t&lt;/c&gt; itself), or &lt;jk&gt;null&lt;/jk&gt; if none.</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> MissingRequiredPropertyException find(Throwable t) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; t != <strong class="jxr_keyword">null</strong> &amp;&amp; i &lt; 32; i++, t = t.getCause())
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">if</strong> (t instanceof MissingRequiredPropertyException e)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				<strong class="jxr_keyword">return</strong> e;
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; beanClass;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] propertyNames;  <em class="jxr_comment">// Array (not List) so the exception stays serializable.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * @param session The parser session, or &lt;jk&gt;null&lt;/jk&gt;.  Used to add the input position to the message.</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * @param beanClass The bean class.</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @param propertyNames The missing property names.</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> MissingRequiredPropertyException(ParserSession session, Class&lt;?&gt; beanClass, List&lt;String&gt; propertyNames) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">super</strong>(session, <span class="jxr_string">"Missing required properties on bean class '%s': %s"</span>, beanClass.getSimpleName(), propertyNames);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">this</strong>.beanClass = beanClass;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">this</strong>.propertyNames = propertyNames.toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * Returns the bean class whose required properties were missing.</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * @return The bean class.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> Class&lt;?&gt; getBeanClass() { <strong class="jxr_keyword">return</strong> beanClass; }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * Returns the names of the missing required properties, in bean property order.</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list.  Never &lt;jk&gt;null&lt;/jk&gt; or empty.</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<strong class="jxr_keyword">public</strong> List&lt;String&gt; getPropertyNames() { <strong class="jxr_keyword">return</strong> List.of(propertyNames); }
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<span class="jxr_string">"java:S110"</span>, <em class="jxr_comment">// Inherited hierarchy depth from ParseException; acceptable for a specific parse failure.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<span class="jxr_string">"java:S2166"</span> <em class="jxr_comment">// ParseException extends BasicRuntimeException, so the class is a runtime exception and the name is accurate.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  })
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> MissingRequiredPropertyException <strong class="jxr_keyword">extends</strong> ParseException {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * Throws this exception if the bean map is missing required properties.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * Parser sessions call this through {@code ParserSession.checkRequired(BeanMap)}.  Conversion code that has no</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * parser session passes &lt;jk&gt;null&lt;/jk&gt;, which omits the input position from the message.</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The bean type.</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * @param session The current parser session, or &lt;jk&gt;null&lt;/jk&gt; if not parsing.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @param m The bean map to check.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * @return The same bean map, for chaining.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @throws MissingRequiredPropertyException If a required property was never written.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// Pass-through for chaining: returns the argument itself, so null in gives null out</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	})
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; BeanMap&lt;T&gt; check(ParserSession session, BeanMap&lt;T&gt; m) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> missing = m.getMissingRequiredProperties();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (! missing.isEmpty())
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MissingRequiredPropertyException(session, m.getMeta().getClassInfo().<strong class="jxr_keyword">inner</strong>(), missing);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * Finds a {@link MissingRequiredPropertyException} in the cause chain of a throwable.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * Bean property setters wrap failures from nested conversions, so conversion code uses this to re-surface the</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * original exception (which is a {@link ParseException} and maps to HTTP 400).</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @param t The throwable to inspect.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @return The first exception of this type in the chain (including &lt;c&gt;t&lt;/c&gt; itself), or &lt;jk&gt;null&lt;/jk&gt; if none.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> MissingRequiredPropertyException find(Throwable t) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; t != <strong class="jxr_keyword">null</strong> &amp;&amp; i &lt; 32; i++, t = t.getCause())
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">if</strong> (t instanceof MissingRequiredPropertyException e)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				<strong class="jxr_keyword">return</strong> e;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; beanClass;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] propertyNames;  <em class="jxr_comment">// Array (not List) so the exception stays serializable.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * @param session The parser session, or &lt;jk&gt;null&lt;/jk&gt;.  Used to add the input position to the message.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @param beanClass The bean class.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * @param propertyNames The missing property names.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">public</strong> MissingRequiredPropertyException(ParserSession session, Class&lt;?&gt; beanClass, List&lt;String&gt; propertyNames) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">super</strong>(session, <span class="jxr_string">"Missing required properties on bean class '%s': %s"</span>, beanClass.getSimpleName(), propertyNames);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">this</strong>.beanClass = beanClass;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">this</strong>.propertyNames = propertyNames.toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * Returns the bean class whose required properties were missing.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * @return The bean class.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> Class&lt;?&gt; getBeanClass() { <strong class="jxr_keyword">return</strong> beanClass; }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * Returns the names of the missing required properties, in bean property order.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list.  Never &lt;jk&gt;null&lt;/jk&gt; or empty.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">public</strong> List&lt;String&gt; getPropertyNames() { <strong class="jxr_keyword">return</strong> List.of(propertyNames); }
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

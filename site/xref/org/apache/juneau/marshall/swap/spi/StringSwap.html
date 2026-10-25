@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	}</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Use it to serialize a byte array.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().simple().swaps(ByteArrayBase64Swap.&lt;jk&gt;class&lt;/jk&gt;).build();</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = Json5Serializer.&lt;jsm&gt;create&lt;/jsm&gt;().swaps(ByteArrayBase64Swap.&lt;jk&gt;class&lt;/jk&gt;).build();</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new byte&lt;/jk&gt;[] {1,2,3});  &lt;jc&gt;// Produces "'AQID'"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>

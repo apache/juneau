@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-62">ContentSecurityPolicy</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-57">ContentSecurityPolicy</a></span>
 <span class="extends-implements">extends <a href="HttpStringHeader.html" title="class in org.apache.juneau.http.header">HttpStringHeader</a></span></div>
 <div class="block">Represents an HTTP <c>Content-Security-Policy</c> (or <c>Content-Security-Policy-Report-Only</c>) response header.
 
@@ -110,11 +110,6 @@ loadScripts(document, 'script');</script>
  Because this is an <a href="HttpStringHeader.html" title="class in org.apache.juneau.http.header"><code>HttpStringHeader</code></a>, an instance can be added directly to the REST server's
  <c>defaultResponseHeaders</c> <a href="HttpHeaderList.html" title="class in org.apache.juneau.http.header"><code>HttpHeaderList</code></a> (e.g. via a <c><ja>@Bean</ja>(name=<js>"defaultResponseHeaders"</js>)</c>
  factory method) and is emitted through the normal response-header path.
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- (and possibly earlier).
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='jc'><a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header"><code>ContentSecurityPolicy.Builder</code></a>
@@ -268,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="NAME">
 <h3>NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-68">NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-63">NAME</a></span></div>
 <div class="block">The enforcing header name: "Content-Security-Policy".</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -283,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="REPORT_ONLY_NAME">
 <h3>REPORT_ONLY_NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-71">REPORT_ONLY_NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-66">REPORT_ONLY_NAME</a></span></div>
 <div class="block">The observe-only header name: "Content-Security-Policy-Report-Only".</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -306,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>ContentSecurityPolicy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-78">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-73">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor with an eager value (enforcing <a href="#NAME">"Content-Security-Policy"</a> header).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -317,7 +312,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>ContentSecurityPolicy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-87">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-82">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Constructor with a lazy value supplier (enforcing <a href="#NAME">"Content-Security-Policy"</a> header).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -328,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>ContentSecurityPolicy</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-97">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-92">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor allowing the header name to be chosen (enforcing vs. report-only).</div>
 <dl class="notes">
@@ -341,7 +336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.function.Supplier)">
 <h3>ContentSecurityPolicy</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-107">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-102">ContentSecurityPolicy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Constructor allowing the header name to be chosen, with a lazy value supplier.</div>
 <dl class="notes">
@@ -362,7 +357,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-117">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-112">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Static factory method for an enforcing (<a href="#NAME">"Content-Security-Policy"</a>) header with an eager value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -375,7 +370,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.util.function.Supplier)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-127">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-122">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Static factory method for an enforcing (<a href="#NAME">"Content-Security-Policy"</a>) header with a lazy value supplier.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -388,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofReportOnly(java.lang.String)">
 <h3>ofReportOnly</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-141">ofReportOnly</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-136">ofReportOnly</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Static factory method for an observe-only (<a href="#REPORT_ONLY_NAME">"Content-Security-Policy-Report-Only"</a>) header with an eager value.
 
  <p>
@@ -405,7 +400,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofReportOnly(java.util.function.Supplier)">
 <h3>ofReportOnly</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-151">ofReportOnly</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-146">ofReportOnly</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Static factory method for an observe-only (<a href="#REPORT_ONLY_NAME">"Content-Security-Policy-Report-Only"</a>) header with a lazy value supplier.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -418,7 +413,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-160">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-155">create</a></span>()</div>
 <div class="block">Creates a new empty <a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header"><code>ContentSecurityPolicy.Builder</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -429,7 +424,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strictStarter()">
 <h3>strictStarter</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-170">strictStarter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/ContentSecurityPolicy.html#line-165">strictStarter</a></span>()</div>
 <div class="block">Creates a <a href="ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header"><code>ContentSecurityPolicy.Builder</code></a> pre-populated with the nonce-based <i>strict starter</i> preset.</div>
 <dl class="notes">
 <dt>Returns:</dt>

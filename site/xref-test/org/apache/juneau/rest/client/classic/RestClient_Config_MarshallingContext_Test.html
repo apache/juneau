@@ -912,7 +912,7 @@
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 	}
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 	@Test <strong class="jxr_keyword">void</strong> a35_timeZone() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">var</strong> x = client().timeZone(TimeZone.getTimeZone(<span class="jxr_string">"Z"</span>)).build().post(<span class="jxr_string">"/echoBody"</span>,A35.get()).run().cacheContent().assertContent(<span class="jxr_string">"{foo:1}"</span>).getContent().as(A35.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">var</strong> x = client().timeZone(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>)).build().post(<span class="jxr_string">"/echoBody"</span>,A35.get()).run().cacheContent().assertContent(<span class="jxr_string">"{foo:1}"</span>).getContent().as(A35.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		assertEquals(1,x.foo);
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 	}
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 

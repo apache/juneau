@@ -89,41 +89,43 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  					Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">".juneau-view-action-item[data-action-id=sell]"</span>),
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  					wait(<span class="jxr_string">"document.querySelector('"</span> + CONFIRM + <span class="jxr_string">"')"</span>),
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  					Map.of(<span class="jxr_string">"click"</span>, CONFIRM),
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					wait(<span class="jxr_string">"document.querySelector('#pet-body tbody')?.textContent.toUpperCase().includes('SOLD')"</span>)),
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"before"</span>, <span class="jxr_string">"window.__before"</span>, <span class="jxr_string">"pencils"</span>, PENCILS,
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  					<span class="jxr_string">"trigger"</span>, <span class="jxr_string">"(() =&gt; { const t = document.querySelector('"</span> + TRIGGER + <span class="jxr_string">"'); return !!t &amp;&amp; !t.hidden &amp;&amp; !t.disabled; })()"</span>)),
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"photo"</span>, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"viewer"</span>, <span class="jxr_string">"!!document.querySelector('"</span> + UPLOAD + <span class="jxr_string">"')"</span>,
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					<span class="jxr_string">"admin"</span>, UPLOAD_FOR + <span class="jxr_string">"('petstore-admin')"</span>, <span class="jxr_string">"user"</span>, UPLOAD_FOR + <span class="jxr_string">"('petstore-user')"</span>))));
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpResponse&lt;String&gt; get(String path) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">return</strong> HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create(base + path)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).GET().build(), BodyHandlers.ofString());
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_comment">// a - row actions</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					<em class="jxr_comment">// the status pill cell only holds SOLD once the redrawn row paints; the outcome banner lives in the actions cell of the old row</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					wait(<span class="jxr_string">"[...document.querySelectorAll('#pet-body tbody td.pill-cell')].some(td =&gt; td.textContent.toUpperCase().includes('SOLD'))"</span>)),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  				<em class="jxr_comment">// ordered: 'trigger' and 'pencils' must read the same (redrawn) row, in a fixed sequence</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				<span class="jxr_string">"queries"</span>, JsonMap.of(<span class="jxr_string">"before"</span>, <span class="jxr_string">"window.__before"</span>, <span class="jxr_string">"pencils"</span>, PENCILS,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					<span class="jxr_string">"trigger"</span>, <span class="jxr_string">"(() =&gt; { const t = document.querySelector('"</span> + TRIGGER + <span class="jxr_string">"'); return !!t &amp;&amp; !t.hidden &amp;&amp; !t.disabled; })()"</span>)),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"photo"</span>, <span class="jxr_string">"waitUntil"</span>, <span class="jxr_string">"networkidle"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets/1/photo"</span>, <span class="jxr_string">"allowFailedLoads"</span>, <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				<span class="jxr_string">"queries"</span>, Map.of(<span class="jxr_string">"viewer"</span>, <span class="jxr_string">"!!document.querySelector('"</span> + UPLOAD + <span class="jxr_string">"')"</span>,
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					<span class="jxr_string">"admin"</span>, UPLOAD_FOR + <span class="jxr_string">"('petstore-admin')"</span>, <span class="jxr_string">"user"</span>, UPLOAD_FOR + <span class="jxr_string">"('petstore-user')"</span>))));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpResponse&lt;String&gt; get(String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">return</strong> HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create(base + path)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).GET().build(), BodyHandlers.ofString());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a01_unsoldPetOffersSellAndThePencils() {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertBean(query(assertClean(report, <span class="jxr_string">"sell"</span>), <span class="jxr_string">"before"</span>), <span class="jxr_string">"menu,pencils"</span>, <span class="jxr_string">"[sell],[rename,reprice]"</span>);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a02_soldPetLosesThem() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"sell"</span>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertString(<span class="jxr_string">"SOLD"</span>, <strong class="jxr_keyword">new</strong> JsonMap(get(<span class="jxr_string">"/petstore/pets/"</span> + pet).body()).getString(<span class="jxr_string">"status"</span>));
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEmpty(query(c, <span class="jxr_string">"pencils"</span>));
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(false, query(c, <span class="jxr_string">"trigger"</span>));
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<em class="jxr_comment">// b - cards</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_comment">// a - row actions</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a01_unsoldPetOffersSellAndThePencils() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertBean(query(assertClean(report, <span class="jxr_string">"sell"</span>), <span class="jxr_string">"before"</span>), <span class="jxr_string">"menu,pencils"</span>, <span class="jxr_string">"[sell],[rename,reprice]"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a02_soldPetLosesThem() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"sell"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertString(<span class="jxr_string">"SOLD"</span>, <strong class="jxr_keyword">new</strong> JsonMap(get(<span class="jxr_string">"/petstore/pets/"</span> + pet).body()).getString(<span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertEmpty(query(c, <span class="jxr_string">"pencils"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(false, query(c, <span class="jxr_string">"trigger"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Test <strong class="jxr_keyword">void</strong> b01_uploadCardIsAdminOnly() {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertBean(assertClean(report, <span class="jxr_string">"photo"</span>).get(<span class="jxr_string">"queries"</span>), <span class="jxr_string">"viewer,user,admin"</span>, <span class="jxr_string">"false,false,true"</span>);
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> }
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<em class="jxr_comment">// b - cards</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> b01_uploadCardIsAdminOnly() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertBean(assertClean(report, <span class="jxr_string">"photo"</span>).get(<span class="jxr_string">"queries"</span>), <span class="jxr_string">"viewer,user,admin"</span>, <span class="jxr_string">"false,false,true"</span>);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

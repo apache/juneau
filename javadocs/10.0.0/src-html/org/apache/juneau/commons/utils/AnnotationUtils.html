@@ -166,33 +166,36 @@
 <span class="source-line-no">153</span><span id="line-153">      return Arrays.hashCode((Object[])o);</span>
 <span class="source-line-no">154</span><span id="line-154">   }</span>
 <span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   private static Stream&lt;Method&gt; getAnnotationMethods(Class&lt;? extends Annotation&gt; type) {</span>
-<span class="source-line-no">157</span><span id="line-157">      return fixedSizeList(type.getDeclaredMethods()).stream();</span>
-<span class="source-line-no">158</span><span id="line-158">   }</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">   private static int hashMember(String name, Object value) {</span>
-<span class="source-line-no">161</span><span id="line-161">      int part1 = name.hashCode() * 127;</span>
-<span class="source-line-no">162</span><span id="line-162">      if (value == null)</span>
-<span class="source-line-no">163</span><span id="line-163">         return part1;</span>
-<span class="source-line-no">164</span><span id="line-164">      if (ClassUtils.isArray(value))</span>
-<span class="source-line-no">165</span><span id="line-165">         return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);</span>
-<span class="source-line-no">166</span><span id="line-166">      if (value instanceof Annotation value2)</span>
-<span class="source-line-no">167</span><span id="line-167">         return part1 ^ hash(value2);</span>
-<span class="source-line-no">168</span><span id="line-168">      return part1 ^ value.hashCode();</span>
-<span class="source-line-no">169</span><span id="line-169">   }</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">   private static boolean memberEquals(Class&lt;?&gt; type, Object o1, Object o2) {</span>
-<span class="source-line-no">172</span><span id="line-172">      if (o1 == o2)</span>
-<span class="source-line-no">173</span><span id="line-173">         return true;</span>
-<span class="source-line-no">174</span><span id="line-174">      if (o1 == null || o2 == null)</span>
-<span class="source-line-no">175</span><span id="line-175">         return false;</span>
-<span class="source-line-no">176</span><span id="line-176">      if (type.isArray())</span>
-<span class="source-line-no">177</span><span id="line-177">         return arrayMemberEquals(type.getComponentType(), o1, o2);</span>
-<span class="source-line-no">178</span><span id="line-178">      if (type.isAnnotation())</span>
-<span class="source-line-no">179</span><span id="line-179">         return equal((Annotation)o1, (Annotation)o2);</span>
-<span class="source-line-no">180</span><span id="line-180">      return o1.equals(o2);</span>
-<span class="source-line-no">181</span><span id="line-181">   }</span>
-<span class="source-line-no">182</span><span id="line-182">}</span>
+<span class="source-line-no">156</span><span id="line-156">   @SuppressWarnings({</span>
+<span class="source-line-no">157</span><span id="line-157">      "javabugs:S2259" // Class.getDeclaredMethods() never returns null, so fixedSizeList() never returns null here.</span>
+<span class="source-line-no">158</span><span id="line-158">   })</span>
+<span class="source-line-no">159</span><span id="line-159">   private static Stream&lt;Method&gt; getAnnotationMethods(Class&lt;? extends Annotation&gt; type) {</span>
+<span class="source-line-no">160</span><span id="line-160">      return fixedSizeList(type.getDeclaredMethods()).stream();</span>
+<span class="source-line-no">161</span><span id="line-161">   }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">   private static int hashMember(String name, Object value) {</span>
+<span class="source-line-no">164</span><span id="line-164">      int part1 = name.hashCode() * 127;</span>
+<span class="source-line-no">165</span><span id="line-165">      if (value == null)</span>
+<span class="source-line-no">166</span><span id="line-166">         return part1;</span>
+<span class="source-line-no">167</span><span id="line-167">      if (ClassUtils.isArray(value))</span>
+<span class="source-line-no">168</span><span id="line-168">         return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);</span>
+<span class="source-line-no">169</span><span id="line-169">      if (value instanceof Annotation value2)</span>
+<span class="source-line-no">170</span><span id="line-170">         return part1 ^ hash(value2);</span>
+<span class="source-line-no">171</span><span id="line-171">      return part1 ^ value.hashCode();</span>
+<span class="source-line-no">172</span><span id="line-172">   }</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">   private static boolean memberEquals(Class&lt;?&gt; type, Object o1, Object o2) {</span>
+<span class="source-line-no">175</span><span id="line-175">      if (o1 == o2)</span>
+<span class="source-line-no">176</span><span id="line-176">         return true;</span>
+<span class="source-line-no">177</span><span id="line-177">      if (o1 == null || o2 == null)</span>
+<span class="source-line-no">178</span><span id="line-178">         return false;</span>
+<span class="source-line-no">179</span><span id="line-179">      if (type.isArray())</span>
+<span class="source-line-no">180</span><span id="line-180">         return arrayMemberEquals(type.getComponentType(), o1, o2);</span>
+<span class="source-line-no">181</span><span id="line-181">      if (type.isAnnotation())</span>
+<span class="source-line-no">182</span><span id="line-182">         return equal((Annotation)o1, (Annotation)o2);</span>
+<span class="source-line-no">183</span><span id="line-183">      return o1.equals(o2);</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185">}</span>
 
 
 

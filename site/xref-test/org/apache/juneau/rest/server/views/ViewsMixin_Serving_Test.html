@@ -393,7 +393,7 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> served = MockRestClient.buildLax(WithDataTablesMixin.<strong class="jxr_keyword">class</strong>).get(DataTablesMixin.GLUE_PATH).run()
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 			.assertStatus(200).getContent().asBytes();
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> v = DataTablesMixin.<strong class="jxr_keyword">class</strong>.getPackage().getImplementationVersion();
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(DataTablesMixin.GLUE_PATH, ViewsMixin.DATATABLES_JS_PATH);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(ViewsMixin.DATATABLES_JS_PATH, DataTablesMixin.GLUE_PATH);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertEquals(<span class="jxr_string">"servlet:"</span> + DataTablesMixin.GLUE_PATH + <span class="jxr_string">"?v="</span> + (v == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"dev"</span> : v) + <span class="jxr_string">"-"</span> + ChecksumUtils.hash8(served),
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 			ViewsMixin.viewAssetUrl(ViewsMixin.DATATABLES_JS_PATH));
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		cWithMixin.get(ViewsMixin.DATATABLES_JS_PATH).run().assertStatus(404);
@@ -420,10 +420,10 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * runtimes lives in {@code juneau-rest-server-widgets}; this pin is the views leftover.</em>
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 	@Test <strong class="jxr_keyword">void</strong> d03_widgetContractReexports_trackWidgetsMixinAndStayDistinctFromViewMeta() {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertEquals(WidgetsMixin.HEADER_CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertEquals(ViewsMixin.HEADER_CONTRACT_VERSION, WidgetsMixin.HEADER_CONTRACT_VERSION);
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertEquals(<span class="jxr_string">"1"</span>, ViewsMixin.HEADER_CONTRACT_VERSION);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertEquals(WidgetsMixin.BAR_CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(BarSlot.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertEquals(ViewsMixin.BAR_CONTRACT_VERSION, WidgetsMixin.BAR_CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(ViewsMixin.BAR_CONTRACT_VERSION, BarSlot.CONTRACT_VERSION);
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertEquals(<span class="jxr_string">"1"</span>, ViewsMixin.SLOT_CONTRACT_VERSION);
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.HEADER_CONTRACT_VERSION);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertNotSame(ViewsMixin.CONTRACT_VERSION, ViewsMixin.BAR_CONTRACT_VERSION);
@@ -1265,7 +1265,7 @@
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 	@Test <strong class="jxr_keyword">void</strong> q03_consoleJsPath_singleSourceOfTruth() {
 <a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 		assertEquals(<span class="jxr_string">"/juneau-console.js"</span>, ViewsMixin.CONSOLE_JS_PATH);
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 		assertEquals(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED, ViewsMixin.CONSOLE_JS_PATH);
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 		assertEquals(ViewsMixin.CONSOLE_JS_PATH, org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED);
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 	}
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 	@Test <strong class="jxr_keyword">void</strong> q02_hostWithoutMixin_consoleJsRouteIs404() <strong class="jxr_keyword">throws</strong> Exception {

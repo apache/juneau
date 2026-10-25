@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="apachehttpclient45/ApacheHc45TransportProvider.html" title="class in org.apache.juneau.rest.client.apachehttpclient45">ApacheHc45TransportProvider</a></code>, <code><a href="apachehttpclient50/ApacheHc5TransportProvider.html" title="class in org.apache.juneau.rest.client.apachehttpclient50">ApacheHc5TransportProvider</a></code>, <code><a href="JavaHttpTransportProvider.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportProvider</a></code>, <code><a href="jetty/JettyHttpTransportProvider.html" title="class in org.apache.juneau.rest.client.jetty">JettyHttpTransportProvider</a></code>, <code><a href="okhttp/OkHttpTransportProvider.html" title="class in org.apache.juneau.rest.client.okhttp">OkHttpTransportProvider</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-35">HttpTransportProvider</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-32">HttpTransportProvider</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> SPI for auto-discovering <a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> implementations on the classpath.
 
  <p>
@@ -88,10 +88,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  When no transport is explicitly set, <code>RestClient</code> uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> to load all
- available providers and selects the first one whose <a href="#isAvailable()"><code>isAvailable()</code></a> returns <code>true</code>.
-
- <p>
- <b>Beta — API subject to change.</b></div>
+ available providers and selects the first one whose <a href="#isAvailable()"><code>isAvailable()</code></a> returns <code>true</code>.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>9.2.1</dd>
@@ -142,7 +139,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPriority()">
 <h3>getPriority</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-47">getPriority</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-44">getPriority</a></span>()</div>
 <div class="block">Returns the priority of this provider.
 
  <p>
@@ -158,7 +155,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAvailable()">
 <h3>isAvailable</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-60">isAvailable</a></span>()</div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-57">isAvailable</a></span>()</div>
 <div class="block">Returns <code>true</code> if the required runtime dependencies of this transport are present on the classpath.
 
  <p>
@@ -173,7 +170,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="return-type"><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-67">create</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransportProvider.html#line-64">create</a></span>()</div>
 <div class="block">Creates and returns a new <a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> instance using default configuration.</div>
 <dl class="notes">
 <dt>Returns:</dt>

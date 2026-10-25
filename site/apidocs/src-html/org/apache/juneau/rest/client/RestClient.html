@@ -290,489 +290,465 @@
 <span class="source-line-no">277</span><span id="line-277">    * Only an explicit default set via {@link Builder#defaultSerializer(Serializer)} is honored — there is no implicit</span>
 <span class="source-line-no">278</span><span id="line-278">    * JSON fallback and no lone-registered-entry fallback.  A fully-unconfigured client returns {@link Optional#empty()}.</span>
 <span class="source-line-no">279</span><span id="line-279">    *</span>
-<span class="source-line-no">280</span><span id="line-280">    * &lt;p&gt;</span>
-<span class="source-line-no">281</span><span id="line-281">    * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">282</span><span id="line-282">    * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">283</span><span id="line-283">    * (and possibly earlier).</span>
-<span class="source-line-no">284</span><span id="line-284">    *</span>
-<span class="source-line-no">285</span><span id="line-285">    * @return The configured default serializer, or {@link Optional#empty()} if none was set.</span>
-<span class="source-line-no">286</span><span id="line-286">    */</span>
-<span class="source-line-no">287</span><span id="line-287">   public Optional&lt;Serializer&gt; getDefaultSerializer() {</span>
-<span class="source-line-no">288</span><span id="line-288">      return o(defaultSerializer);</span>
-<span class="source-line-no">289</span><span id="line-289">   }</span>
-<span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">   /**</span>
-<span class="source-line-no">292</span><span id="line-292">    * Returns the parser matching the given response {@code Content-Type}, or the explicitly-configured default parser.</span>
-<span class="source-line-no">293</span><span id="line-293">    *</span>
-<span class="source-line-no">294</span><span id="line-294">    * &lt;p&gt;</span>
-<span class="source-line-no">295</span><span id="line-295">    * Resolution precedence: an exact media-type match against the client's {@link ParserSet} wins; otherwise the</span>
-<span class="source-line-no">296</span><span id="line-296">    * explicitly-configured {@link Builder#defaultParser(Parser) default parser} is used; otherwise</span>
-<span class="source-line-no">297</span><span id="line-297">    * {@link Optional#empty()} is returned.  There is no implicit JSON fallback and no lone-registered-entry fallback,</span>
-<span class="source-line-no">298</span><span id="line-298">    * so a fully-unconfigured client resolves to empty (callers throw &lt;c&gt;415 Unsupported Media Type&lt;/c&gt;).</span>
-<span class="source-line-no">299</span><span id="line-299">    *</span>
-<span class="source-line-no">300</span><span id="line-300">    * &lt;p&gt;</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">302</span><span id="line-302">    * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">303</span><span id="line-303">    * (and possibly earlier).</span>
-<span class="source-line-no">304</span><span id="line-304">    *</span>
-<span class="source-line-no">305</span><span id="line-305">    * @param contentType The response {@code Content-Type} header value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">306</span><span id="line-306">    * @return The matching parser, or {@link Optional#empty()} if nothing matched and no default parser is configured.</span>
-<span class="source-line-no">307</span><span id="line-307">    */</span>
-<span class="source-line-no">308</span><span id="line-308">   public Optional&lt;Parser&gt; getMatchingParser(String contentType) {</span>
-<span class="source-line-no">309</span><span id="line-309">      if (parsers != null &amp;&amp; contentType != null) {</span>
-<span class="source-line-no">310</span><span id="line-310">         var p = parsers.getParser(contentType);</span>
-<span class="source-line-no">311</span><span id="line-311">         if (p.isPresent())</span>
-<span class="source-line-no">312</span><span id="line-312">            return p;</span>
-<span class="source-line-no">313</span><span id="line-313">      }</span>
-<span class="source-line-no">314</span><span id="line-314">      return o(defaultParser);</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   /**</span>
-<span class="source-line-no">318</span><span id="line-318">    * Returns the registered request serializer matching the given media type, or {@link Optional#empty()} if none matches.</span>
-<span class="source-line-no">319</span><span id="line-319">    *</span>
-<span class="source-line-no">320</span><span id="line-320">    * &lt;p&gt;</span>
-<span class="source-line-no">321</span><span id="line-321">    * Unlike {@link #getDefaultSerializer()}, this method performs media-type-driven &lt;i&gt;selection&lt;/i&gt; against the</span>
-<span class="source-line-no">322</span><span id="line-322">    * client's {@link SerializerSet} (via {@link SerializerSet#getSerializer(String)}) and returns</span>
-<span class="source-line-no">323</span><span id="line-323">    * {@link Optional#empty()} on no match so the caller can apply the locked no-match fallback (use the default</span>
-<span class="source-line-no">324</span><span id="line-324">    * serializer but still send the overridden {@code Content-Type} label).  An explicitly-configured single default</span>
-<span class="source-line-no">325</span><span id="line-325">    * serializer is also consulted when no set is registered.</span>
-<span class="source-line-no">326</span><span id="line-326">    *</span>
-<span class="source-line-no">327</span><span id="line-327">    * &lt;p&gt;</span>
-<span class="source-line-no">328</span><span id="line-328">    * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">329</span><span id="line-329">    *</span>
-<span class="source-line-no">330</span><span id="line-330">    * @param mediaType The desired request media type. May be &lt;jk&gt;null&lt;/jk&gt;/empty.</span>
-<span class="source-line-no">331</span><span id="line-331">    * @return The matching serializer, or {@link Optional#empty()} if no registered serializer matches.</span>
-<span class="source-line-no">332</span><span id="line-332">    */</span>
-<span class="source-line-no">333</span><span id="line-333">   public Optional&lt;Serializer&gt; getSerializerForMediaType(String mediaType) {</span>
-<span class="source-line-no">334</span><span id="line-334">      if (mediaType == null || mediaType.isEmpty() || serializers == null)</span>
-<span class="source-line-no">335</span><span id="line-335">         return oe();</span>
-<span class="source-line-no">336</span><span id="line-336">      return serializers.getSerializer(mediaType);</span>
-<span class="source-line-no">337</span><span id="line-337">   }</span>
-<span class="source-line-no">338</span><span id="line-338"></span>
-<span class="source-line-no">339</span><span id="line-339">   /**</span>
-<span class="source-line-no">340</span><span id="line-340">    * Returns the registered parser matching the given media type, or {@link Optional#empty()} if none matches.</span>
-<span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * &lt;p&gt;</span>
-<span class="source-line-no">343</span><span id="line-343">    * Used by the next-gen {@code RemoteClient} as the {@code accept} fallback parser: it is consulted only when the</span>
-<span class="source-line-no">344</span><span id="line-344">    * response {@code Content-Type} matched no registered parser (or the response was unlabeled).  Returns</span>
-<span class="source-line-no">345</span><span id="line-345">    * {@link Optional#empty()} on no match so the caller can fall back to the default parser.</span>
-<span class="source-line-no">346</span><span id="line-346">    *</span>
-<span class="source-line-no">347</span><span id="line-347">    * &lt;p&gt;</span>
-<span class="source-line-no">348</span><span id="line-348">    * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">349</span><span id="line-349">    *</span>
-<span class="source-line-no">350</span><span id="line-350">    * @param mediaType The desired parse media type. May be &lt;jk&gt;null&lt;/jk&gt;/empty.</span>
-<span class="source-line-no">351</span><span id="line-351">    * @return The matching parser, or {@link Optional#empty()} if no registered parser matches.</span>
-<span class="source-line-no">352</span><span id="line-352">    */</span>
-<span class="source-line-no">353</span><span id="line-353">   public Optional&lt;Parser&gt; getParserForMediaType(String mediaType) {</span>
-<span class="source-line-no">354</span><span id="line-354">      if (mediaType == null || mediaType.isEmpty() || parsers == null)</span>
-<span class="source-line-no">355</span><span id="line-355">         return oe();</span>
-<span class="source-line-no">356</span><span id="line-356">      return parsers.getParser(mediaType);</span>
-<span class="source-line-no">357</span><span id="line-357">   }</span>
-<span class="source-line-no">358</span><span id="line-358"></span>
-<span class="source-line-no">359</span><span id="line-359">   /**</span>
-<span class="source-line-no">360</span><span id="line-360">    * Returns the default {@code Accept} header value advertising what this client can read.</span>
-<span class="source-line-no">361</span><span id="line-361">    *</span>
-<span class="source-line-no">362</span><span id="line-362">    * &lt;p&gt;</span>
-<span class="source-line-no">363</span><span id="line-363">    * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">364</span><span id="line-364">    * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">365</span><span id="line-365">    * (and possibly earlier).</span>
-<span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * @return The default {@code Accept} header value, or &lt;jk&gt;null&lt;/jk&gt; if no parsers and no default parser are</span>
-<span class="source-line-no">368</span><span id="line-368">    *    configured (no implicit {@code application/json} fallback).</span>
-<span class="source-line-no">369</span><span id="line-369">    */</span>
-<span class="source-line-no">370</span><span id="line-370">   public String getDefaultAccept() {</span>
-<span class="source-line-no">371</span><span id="line-371">      if (parsers != null) {</span>
-<span class="source-line-no">372</span><span id="line-372">         var mts = parsers.getSupportedMediaTypes();</span>
-<span class="source-line-no">373</span><span id="line-373">         if (! mts.isEmpty())</span>
-<span class="source-line-no">374</span><span id="line-374">            return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));</span>
-<span class="source-line-no">375</span><span id="line-375">      }</span>
-<span class="source-line-no">376</span><span id="line-376">      if (defaultParser != null) {</span>
-<span class="source-line-no">377</span><span id="line-377">         var mts = defaultParser.getMediaTypes();</span>
-<span class="source-line-no">378</span><span id="line-378">         if (! mts.isEmpty())</span>
-<span class="source-line-no">379</span><span id="line-379">            return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));</span>
-<span class="source-line-no">380</span><span id="line-380">      }</span>
-<span class="source-line-no">381</span><span id="line-381">      return null;</span>
-<span class="source-line-no">382</span><span id="line-382">   }</span>
-<span class="source-line-no">383</span><span id="line-383"></span>
-<span class="source-line-no">384</span><span id="line-384">   /**</span>
-<span class="source-line-no">385</span><span id="line-385">    * Creates a Java proxy for the given {@link Remote}-annotated interface.</span>
-<span class="source-line-no">386</span><span id="line-386">    *</span>
-<span class="source-line-no">387</span><span id="line-387">    * &lt;p&gt;</span>
-<span class="source-line-no">388</span><span id="line-388">    * Each method call on the returned proxy will be translated into an HTTP request using this client.</span>
-<span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">391</span><span id="line-391">    *    UserService &lt;jv&gt;svc&lt;/jv&gt; = client.remote(UserService.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">392</span><span id="line-392">    *    String &lt;jv&gt;user&lt;/jv&gt; = &lt;jv&gt;svc&lt;/jv&gt;.getUser(&lt;js&gt;"42"&lt;/js&gt;);</span>
-<span class="source-line-no">393</span><span id="line-393">    * &lt;/p&gt;</span>
+<span class="source-line-no">280</span><span id="line-280">    * @return The configured default serializer, or {@link Optional#empty()} if none was set.</span>
+<span class="source-line-no">281</span><span id="line-281">    */</span>
+<span class="source-line-no">282</span><span id="line-282">   public Optional&lt;Serializer&gt; getDefaultSerializer() {</span>
+<span class="source-line-no">283</span><span id="line-283">      return o(defaultSerializer);</span>
+<span class="source-line-no">284</span><span id="line-284">   }</span>
+<span class="source-line-no">285</span><span id="line-285"></span>
+<span class="source-line-no">286</span><span id="line-286">   /**</span>
+<span class="source-line-no">287</span><span id="line-287">    * Returns the parser matching the given response {@code Content-Type}, or the explicitly-configured default parser.</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * &lt;p&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    * Resolution precedence: an exact media-type match against the client's {@link ParserSet} wins; otherwise the</span>
+<span class="source-line-no">291</span><span id="line-291">    * explicitly-configured {@link Builder#defaultParser(Parser) default parser} is used; otherwise</span>
+<span class="source-line-no">292</span><span id="line-292">    * {@link Optional#empty()} is returned.  There is no implicit JSON fallback and no lone-registered-entry fallback,</span>
+<span class="source-line-no">293</span><span id="line-293">    * so a fully-unconfigured client resolves to empty (callers throw &lt;c&gt;415 Unsupported Media Type&lt;/c&gt;).</span>
+<span class="source-line-no">294</span><span id="line-294">    *</span>
+<span class="source-line-no">295</span><span id="line-295">    * @param contentType The response {@code Content-Type} header value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">296</span><span id="line-296">    * @return The matching parser, or {@link Optional#empty()} if nothing matched and no default parser is configured.</span>
+<span class="source-line-no">297</span><span id="line-297">    */</span>
+<span class="source-line-no">298</span><span id="line-298">   public Optional&lt;Parser&gt; getMatchingParser(String contentType) {</span>
+<span class="source-line-no">299</span><span id="line-299">      if (parsers != null &amp;&amp; contentType != null) {</span>
+<span class="source-line-no">300</span><span id="line-300">         var p = parsers.getParser(contentType);</span>
+<span class="source-line-no">301</span><span id="line-301">         if (p.isPresent())</span>
+<span class="source-line-no">302</span><span id="line-302">            return p;</span>
+<span class="source-line-no">303</span><span id="line-303">      }</span>
+<span class="source-line-no">304</span><span id="line-304">      return o(defaultParser);</span>
+<span class="source-line-no">305</span><span id="line-305">   }</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">   /**</span>
+<span class="source-line-no">308</span><span id="line-308">    * Returns the registered request serializer matching the given media type, or {@link Optional#empty()} if none matches.</span>
+<span class="source-line-no">309</span><span id="line-309">    *</span>
+<span class="source-line-no">310</span><span id="line-310">    * &lt;p&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    * Unlike {@link #getDefaultSerializer()}, this method performs media-type-driven &lt;i&gt;selection&lt;/i&gt; against the</span>
+<span class="source-line-no">312</span><span id="line-312">    * client's {@link SerializerSet} (via {@link SerializerSet#getSerializer(String)}) and returns</span>
+<span class="source-line-no">313</span><span id="line-313">    * {@link Optional#empty()} on no match so the caller can apply the locked no-match fallback (use the default</span>
+<span class="source-line-no">314</span><span id="line-314">    * serializer but still send the overridden {@code Content-Type} label).  An explicitly-configured single default</span>
+<span class="source-line-no">315</span><span id="line-315">    * serializer is also consulted when no set is registered.</span>
+<span class="source-line-no">316</span><span id="line-316">    *</span>
+<span class="source-line-no">317</span><span id="line-317">    * @param mediaType The desired request media type. May be &lt;jk&gt;null&lt;/jk&gt;/empty.</span>
+<span class="source-line-no">318</span><span id="line-318">    * @return The matching serializer, or {@link Optional#empty()} if no registered serializer matches.</span>
+<span class="source-line-no">319</span><span id="line-319">    */</span>
+<span class="source-line-no">320</span><span id="line-320">   public Optional&lt;Serializer&gt; getSerializerForMediaType(String mediaType) {</span>
+<span class="source-line-no">321</span><span id="line-321">      if (mediaType == null || mediaType.isEmpty() || serializers == null)</span>
+<span class="source-line-no">322</span><span id="line-322">         return oe();</span>
+<span class="source-line-no">323</span><span id="line-323">      return serializers.getSerializer(mediaType);</span>
+<span class="source-line-no">324</span><span id="line-324">   }</span>
+<span class="source-line-no">325</span><span id="line-325"></span>
+<span class="source-line-no">326</span><span id="line-326">   /**</span>
+<span class="source-line-no">327</span><span id="line-327">    * Returns the registered parser matching the given media type, or {@link Optional#empty()} if none matches.</span>
+<span class="source-line-no">328</span><span id="line-328">    *</span>
+<span class="source-line-no">329</span><span id="line-329">    * &lt;p&gt;</span>
+<span class="source-line-no">330</span><span id="line-330">    * Used by the next-gen {@code RemoteClient} as the {@code accept} fallback parser: it is consulted only when the</span>
+<span class="source-line-no">331</span><span id="line-331">    * response {@code Content-Type} matched no registered parser (or the response was unlabeled).  Returns</span>
+<span class="source-line-no">332</span><span id="line-332">    * {@link Optional#empty()} on no match so the caller can fall back to the default parser.</span>
+<span class="source-line-no">333</span><span id="line-333">    *</span>
+<span class="source-line-no">334</span><span id="line-334">    * @param mediaType The desired parse media type. May be &lt;jk&gt;null&lt;/jk&gt;/empty.</span>
+<span class="source-line-no">335</span><span id="line-335">    * @return The matching parser, or {@link Optional#empty()} if no registered parser matches.</span>
+<span class="source-line-no">336</span><span id="line-336">    */</span>
+<span class="source-line-no">337</span><span id="line-337">   public Optional&lt;Parser&gt; getParserForMediaType(String mediaType) {</span>
+<span class="source-line-no">338</span><span id="line-338">      if (mediaType == null || mediaType.isEmpty() || parsers == null)</span>
+<span class="source-line-no">339</span><span id="line-339">         return oe();</span>
+<span class="source-line-no">340</span><span id="line-340">      return parsers.getParser(mediaType);</span>
+<span class="source-line-no">341</span><span id="line-341">   }</span>
+<span class="source-line-no">342</span><span id="line-342"></span>
+<span class="source-line-no">343</span><span id="line-343">   /**</span>
+<span class="source-line-no">344</span><span id="line-344">    * Returns the default {@code Accept} header value advertising what this client can read.</span>
+<span class="source-line-no">345</span><span id="line-345">    *</span>
+<span class="source-line-no">346</span><span id="line-346">    * @return The default {@code Accept} header value, or &lt;jk&gt;null&lt;/jk&gt; if no parsers and no default parser are</span>
+<span class="source-line-no">347</span><span id="line-347">    *    configured (no implicit {@code application/json} fallback).</span>
+<span class="source-line-no">348</span><span id="line-348">    */</span>
+<span class="source-line-no">349</span><span id="line-349">   public String getDefaultAccept() {</span>
+<span class="source-line-no">350</span><span id="line-350">      if (parsers != null) {</span>
+<span class="source-line-no">351</span><span id="line-351">         var mts = parsers.getSupportedMediaTypes();</span>
+<span class="source-line-no">352</span><span id="line-352">         if (! mts.isEmpty())</span>
+<span class="source-line-no">353</span><span id="line-353">            return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));</span>
+<span class="source-line-no">354</span><span id="line-354">      }</span>
+<span class="source-line-no">355</span><span id="line-355">      if (defaultParser != null) {</span>
+<span class="source-line-no">356</span><span id="line-356">         var mts = defaultParser.getMediaTypes();</span>
+<span class="source-line-no">357</span><span id="line-357">         if (! mts.isEmpty())</span>
+<span class="source-line-no">358</span><span id="line-358">            return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));</span>
+<span class="source-line-no">359</span><span id="line-359">      }</span>
+<span class="source-line-no">360</span><span id="line-360">      return null;</span>
+<span class="source-line-no">361</span><span id="line-361">   }</span>
+<span class="source-line-no">362</span><span id="line-362"></span>
+<span class="source-line-no">363</span><span id="line-363">   /**</span>
+<span class="source-line-no">364</span><span id="line-364">    * Creates a Java proxy for the given {@link Remote}-annotated interface.</span>
+<span class="source-line-no">365</span><span id="line-365">    *</span>
+<span class="source-line-no">366</span><span id="line-366">    * &lt;p&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * Each method call on the returned proxy will be translated into an HTTP request using this client.</span>
+<span class="source-line-no">368</span><span id="line-368">    *</span>
+<span class="source-line-no">369</span><span id="line-369">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">370</span><span id="line-370">    *    UserService &lt;jv&gt;svc&lt;/jv&gt; = client.remote(UserService.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">371</span><span id="line-371">    *    String &lt;jv&gt;user&lt;/jv&gt; = &lt;jv&gt;svc&lt;/jv&gt;.getUser(&lt;js&gt;"42"&lt;/js&gt;);</span>
+<span class="source-line-no">372</span><span id="line-372">    * &lt;/p&gt;</span>
+<span class="source-line-no">373</span><span id="line-373">    *</span>
+<span class="source-line-no">374</span><span id="line-374">    * @param &lt;T&gt; The interface type.</span>
+<span class="source-line-no">375</span><span id="line-375">    * @param iface The interface class. Must be annotated with {@link Remote}. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">376</span><span id="line-376">    * @return A proxy instance backed by this client. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">377</span><span id="line-377">    * @throws IllegalArgumentException If {@code iface} is not an interface or not annotated with {@code @Remote}.</span>
+<span class="source-line-no">378</span><span id="line-378">    */</span>
+<span class="source-line-no">379</span><span id="line-379">   public &lt;T&gt; T remote(Class&lt;T&gt; iface) {</span>
+<span class="source-line-no">380</span><span id="line-380">      return new RemoteClient(this).create(iface);</span>
+<span class="source-line-no">381</span><span id="line-381">   }</span>
+<span class="source-line-no">382</span><span id="line-382"></span>
+<span class="source-line-no">383</span><span id="line-383">   @Override /* Closeable */</span>
+<span class="source-line-no">384</span><span id="line-384">   public void close() throws IOException {</span>
+<span class="source-line-no">385</span><span id="line-385">      transport.close();</span>
+<span class="source-line-no">386</span><span id="line-386">   }</span>
+<span class="source-line-no">387</span><span id="line-387"></span>
+<span class="source-line-no">388</span><span id="line-388">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">389</span><span id="line-389">   // Builder</span>
+<span class="source-line-no">390</span><span id="line-390">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">391</span><span id="line-391"></span>
+<span class="source-line-no">392</span><span id="line-392">   /**</span>
+<span class="source-line-no">393</span><span id="line-393">    * Fluent builder for {@link RestClient}.</span>
 <span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param &lt;T&gt; The interface type.</span>
-<span class="source-line-no">396</span><span id="line-396">    * @param iface The interface class. Must be annotated with {@link Remote}. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">397</span><span id="line-397">    * @return A proxy instance backed by this client. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">398</span><span id="line-398">    * @throws IllegalArgumentException If {@code iface} is not an interface or not annotated with {@code @Remote}.</span>
-<span class="source-line-no">399</span><span id="line-399">    */</span>
-<span class="source-line-no">400</span><span id="line-400">   public &lt;T&gt; T remote(Class&lt;T&gt; iface) {</span>
-<span class="source-line-no">401</span><span id="line-401">      return new RemoteClient(this).create(iface);</span>
-<span class="source-line-no">402</span><span id="line-402">   }</span>
-<span class="source-line-no">403</span><span id="line-403"></span>
-<span class="source-line-no">404</span><span id="line-404">   @Override /* Closeable */</span>
-<span class="source-line-no">405</span><span id="line-405">   public void close() throws IOException {</span>
-<span class="source-line-no">406</span><span id="line-406">      transport.close();</span>
-<span class="source-line-no">407</span><span id="line-407">   }</span>
-<span class="source-line-no">408</span><span id="line-408"></span>
-<span class="source-line-no">409</span><span id="line-409">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">410</span><span id="line-410">   // Builder</span>
-<span class="source-line-no">411</span><span id="line-411">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">412</span><span id="line-412"></span>
-<span class="source-line-no">413</span><span id="line-413">   /**</span>
-<span class="source-line-no">414</span><span id="line-414">    * Fluent builder for {@link RestClient}.</span>
-<span class="source-line-no">415</span><span id="line-415">    *</span>
-<span class="source-line-no">416</span><span id="line-416">    * &lt;p&gt;</span>
-<span class="source-line-no">417</span><span id="line-417">    * &lt;b&gt;Beta — API subject to change.&lt;/b&gt;</span>
-<span class="source-line-no">418</span><span id="line-418">    *</span>
-<span class="source-line-no">419</span><span id="line-419">    * @since 9.2.1</span>
-<span class="source-line-no">420</span><span id="line-420">    */</span>
-<span class="source-line-no">421</span><span id="line-421">   public static final class Builder {</span>
-<span class="source-line-no">422</span><span id="line-422"></span>
-<span class="source-line-no">423</span><span id="line-423">      HttpTransport transport;</span>
-<span class="source-line-no">424</span><span id="line-424">      final List&lt;HttpHeader&gt; defaultHeaders = l();</span>
-<span class="source-line-no">425</span><span id="line-425">      final List&lt;HttpPart&gt; defaultQueryData = l();</span>
-<span class="source-line-no">426</span><span id="line-426">      String rootUrl;</span>
-<span class="source-line-no">427</span><span id="line-427">      final List&lt;RestCallInterceptor&gt; interceptors = l();</span>
-<span class="source-line-no">428</span><span id="line-428">      RestClientDebugFormatter debugFormatter;</span>
-<span class="source-line-no">429</span><span id="line-429">      String debugLoggerName;</span>
-<span class="source-line-no">430</span><span id="line-430">      List&lt;BodyConverter&lt;?&gt;&gt; bodyConverters = new ArrayList&lt;&gt;(DEFAULT_BODY_CONVERTERS);</span>
-<span class="source-line-no">431</span><span id="line-431">      SerializerSet serializers;</span>
-<span class="source-line-no">432</span><span id="line-432">      ParserSet parsers;</span>
-<span class="source-line-no">433</span><span id="line-433">      Serializer defaultSerializer;</span>
-<span class="source-line-no">434</span><span id="line-434">      Parser defaultParser;</span>
-<span class="source-line-no">435</span><span id="line-435">      final List&lt;Serializer&gt; serializerList = l();</span>
-<span class="source-line-no">436</span><span id="line-436">      final List&lt;Parser&gt; parserList = l();</span>
-<span class="source-line-no">437</span><span id="line-437">      boolean allowPrivateUrls;</span>
-<span class="source-line-no">438</span><span id="line-438">      final List&lt;String&gt; allowedAddressRanges = l();</span>
-<span class="source-line-no">439</span><span id="line-439">      boolean sendRequestId = true;</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">      private Builder() {}</span>
-<span class="source-line-no">442</span><span id="line-442"></span>
-<span class="source-line-no">443</span><span id="line-443">      /**</span>
-<span class="source-line-no">444</span><span id="line-444">       * Sets the HTTP transport to use.</span>
-<span class="source-line-no">445</span><span id="line-445">       *</span>
-<span class="source-line-no">446</span><span id="line-446">       * &lt;p&gt;</span>
-<span class="source-line-no">447</span><span id="line-447">       * If not set, {@link RestClient} discovers a transport via {@link ServiceLoader}.  When no</span>
-<span class="source-line-no">448</span><span id="line-448">       * sibling transport module is on the classpath, the built-in {@link JavaHttpTransport} (backed by the JDK's</span>
-<span class="source-line-no">449</span><span id="line-449">       * {@link java.net.http.HttpClient}) is used as the default.</span>
+<span class="source-line-no">395</span><span id="line-395">    * @since 9.2.1</span>
+<span class="source-line-no">396</span><span id="line-396">    */</span>
+<span class="source-line-no">397</span><span id="line-397">   public static final class Builder {</span>
+<span class="source-line-no">398</span><span id="line-398"></span>
+<span class="source-line-no">399</span><span id="line-399">      HttpTransport transport;</span>
+<span class="source-line-no">400</span><span id="line-400">      final List&lt;HttpHeader&gt; defaultHeaders = l();</span>
+<span class="source-line-no">401</span><span id="line-401">      final List&lt;HttpPart&gt; defaultQueryData = l();</span>
+<span class="source-line-no">402</span><span id="line-402">      String rootUrl;</span>
+<span class="source-line-no">403</span><span id="line-403">      final List&lt;RestCallInterceptor&gt; interceptors = l();</span>
+<span class="source-line-no">404</span><span id="line-404">      RestClientDebugFormatter debugFormatter;</span>
+<span class="source-line-no">405</span><span id="line-405">      String debugLoggerName;</span>
+<span class="source-line-no">406</span><span id="line-406">      List&lt;BodyConverter&lt;?&gt;&gt; bodyConverters = new ArrayList&lt;&gt;(DEFAULT_BODY_CONVERTERS);</span>
+<span class="source-line-no">407</span><span id="line-407">      SerializerSet serializers;</span>
+<span class="source-line-no">408</span><span id="line-408">      ParserSet parsers;</span>
+<span class="source-line-no">409</span><span id="line-409">      Serializer defaultSerializer;</span>
+<span class="source-line-no">410</span><span id="line-410">      Parser defaultParser;</span>
+<span class="source-line-no">411</span><span id="line-411">      final List&lt;Serializer&gt; serializerList = l();</span>
+<span class="source-line-no">412</span><span id="line-412">      final List&lt;Parser&gt; parserList = l();</span>
+<span class="source-line-no">413</span><span id="line-413">      boolean allowPrivateUrls;</span>
+<span class="source-line-no">414</span><span id="line-414">      final List&lt;String&gt; allowedAddressRanges = l();</span>
+<span class="source-line-no">415</span><span id="line-415">      boolean sendRequestId = true;</span>
+<span class="source-line-no">416</span><span id="line-416"></span>
+<span class="source-line-no">417</span><span id="line-417">      private Builder() {}</span>
+<span class="source-line-no">418</span><span id="line-418"></span>
+<span class="source-line-no">419</span><span id="line-419">      /**</span>
+<span class="source-line-no">420</span><span id="line-420">       * Sets the HTTP transport to use.</span>
+<span class="source-line-no">421</span><span id="line-421">       *</span>
+<span class="source-line-no">422</span><span id="line-422">       * &lt;p&gt;</span>
+<span class="source-line-no">423</span><span id="line-423">       * If not set, {@link RestClient} discovers a transport via {@link ServiceLoader}.  When no</span>
+<span class="source-line-no">424</span><span id="line-424">       * sibling transport module is on the classpath, the built-in {@link JavaHttpTransport} (backed by the JDK's</span>
+<span class="source-line-no">425</span><span id="line-425">       * {@link java.net.http.HttpClient}) is used as the default.</span>
+<span class="source-line-no">426</span><span id="line-426">       *</span>
+<span class="source-line-no">427</span><span id="line-427">       * @param value The transport. Can be &lt;jk&gt;null&lt;/jk&gt; (a transport is auto-discovered via {@link ServiceLoader}).</span>
+<span class="source-line-no">428</span><span id="line-428">       * @return This object.</span>
+<span class="source-line-no">429</span><span id="line-429">       */</span>
+<span class="source-line-no">430</span><span id="line-430">      public Builder transport(HttpTransport value) {</span>
+<span class="source-line-no">431</span><span id="line-431">         transport = value;</span>
+<span class="source-line-no">432</span><span id="line-432">         return this;</span>
+<span class="source-line-no">433</span><span id="line-433">      }</span>
+<span class="source-line-no">434</span><span id="line-434"></span>
+<span class="source-line-no">435</span><span id="line-435">      /**</span>
+<span class="source-line-no">436</span><span id="line-436">       * Sets a root URL prefix applied to all relative request URLs (those without {@code ://}).</span>
+<span class="source-line-no">437</span><span id="line-437">       *</span>
+<span class="source-line-no">438</span><span id="line-438">       * @param value The root URL (e.g. {@code "https://api.example.com/v1"}). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">439</span><span id="line-439">       * @return This object.</span>
+<span class="source-line-no">440</span><span id="line-440">       */</span>
+<span class="source-line-no">441</span><span id="line-441">      public Builder rootUrl(String value) {</span>
+<span class="source-line-no">442</span><span id="line-442">         rootUrl = value;</span>
+<span class="source-line-no">443</span><span id="line-443">         return this;</span>
+<span class="source-line-no">444</span><span id="line-444">      }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">      /**</span>
+<span class="source-line-no">447</span><span id="line-447">       * Opts every {@code @Remote}/{@code @Url} call made through this client out of the default deny-private SSRF</span>
+<span class="source-line-no">448</span><span id="line-448">       * guardrail (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), for local-dev/intranet targets that</span>
+<span class="source-line-no">449</span><span id="line-449">       * are intentionally private.</span>
 <span class="source-line-no">450</span><span id="line-450">       *</span>
-<span class="source-line-no">451</span><span id="line-451">       * @param value The transport. Can be &lt;jk&gt;null&lt;/jk&gt; (a transport is auto-discovered via {@link ServiceLoader}).</span>
-<span class="source-line-no">452</span><span id="line-452">       * @return This object.</span>
-<span class="source-line-no">453</span><span id="line-453">       */</span>
-<span class="source-line-no">454</span><span id="line-454">      public Builder transport(HttpTransport value) {</span>
-<span class="source-line-no">455</span><span id="line-455">         transport = value;</span>
-<span class="source-line-no">456</span><span id="line-456">         return this;</span>
-<span class="source-line-no">457</span><span id="line-457">      }</span>
-<span class="source-line-no">458</span><span id="line-458"></span>
-<span class="source-line-no">459</span><span id="line-459">      /**</span>
-<span class="source-line-no">460</span><span id="line-460">       * Sets a root URL prefix applied to all relative request URLs (those without {@code ://}).</span>
-<span class="source-line-no">461</span><span id="line-461">       *</span>
-<span class="source-line-no">462</span><span id="line-462">       * @param value The root URL (e.g. {@code "https://api.example.com/v1"}). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">463</span><span id="line-463">       * @return This object.</span>
-<span class="source-line-no">464</span><span id="line-464">       */</span>
-<span class="source-line-no">465</span><span id="line-465">      public Builder rootUrl(String value) {</span>
-<span class="source-line-no">466</span><span id="line-466">         rootUrl = value;</span>
-<span class="source-line-no">467</span><span id="line-467">         return this;</span>
-<span class="source-line-no">468</span><span id="line-468">      }</span>
-<span class="source-line-no">469</span><span id="line-469"></span>
-<span class="source-line-no">470</span><span id="line-470">      /**</span>
-<span class="source-line-no">471</span><span id="line-471">       * Opts every {@code @Remote}/{@code @Url} call made through this client out of the default deny-private SSRF</span>
-<span class="source-line-no">472</span><span id="line-472">       * guardrail (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), for local-dev/intranet targets that</span>
-<span class="source-line-no">473</span><span id="line-473">       * are intentionally private.</span>
-<span class="source-line-no">474</span><span id="line-474">       *</span>
-<span class="source-line-no">475</span><span id="line-475">       * &lt;p&gt;</span>
-<span class="source-line-no">476</span><span id="line-476">       * The effective per-call value is the logical OR of this setting, the</span>
-<span class="source-line-no">477</span><span id="line-477">       * {@value RemoteUrlPolicy#ALLOW_PRIVATE_URLS_PROPERTY} system property, and the {@code @Remote}/{@code @RemoteOp}</span>
-<span class="source-line-no">478</span><span id="line-478">       * {@code allowPrivateUrls} annotation attribute: any one of the three opting in is sufficient. The {@code http}/</span>
-<span class="source-line-no">479</span><span id="line-479">       * {@code https} scheme requirement is unaffected.</span>
-<span class="source-line-no">480</span><span id="line-480">       *</span>
-<span class="source-line-no">481</span><span id="line-481">       * @param value {@code true} to allow private/loopback/link-local/metadata {@code @Remote} targets. Default {@code false}.</span>
-<span class="source-line-no">482</span><span id="line-482">       * @return This object.</span>
-<span class="source-line-no">483</span><span id="line-483">       */</span>
-<span class="source-line-no">484</span><span id="line-484">      public Builder allowPrivateUrls(boolean value) {</span>
-<span class="source-line-no">485</span><span id="line-485">         allowPrivateUrls = value;</span>
-<span class="source-line-no">486</span><span id="line-486">         return this;</span>
-<span class="source-line-no">487</span><span id="line-487">      }</span>
-<span class="source-line-no">488</span><span id="line-488"></span>
-<span class="source-line-no">489</span><span id="line-489">      /**</span>
-<span class="source-line-no">490</span><span id="line-490">       * Re-permits, for this client only, addresses that the default SSRF guardrail denies solely because they fall in</span>
-<span class="source-line-no">491</span><span id="line-491">       * one of the special-purpose ranges &lt;c&gt;192.0.0.0/24&lt;/c&gt;, &lt;c&gt;198.18.0.0/15&lt;/c&gt;, &lt;c&gt;224.0.0.0/4&lt;/c&gt;,</span>
-<span class="source-line-no">492</span><span id="line-492">       * &lt;c&gt;240.0.0.0/4&lt;/c&gt; or &lt;c&gt;ff00::/8&lt;/c&gt; (for example a lab or appliance network on &lt;c&gt;198.18.0.0/15&lt;/c&gt;).</span>
-<span class="source-line-no">493</span><span id="line-493">       *</span>
-<span class="source-line-no">494</span><span id="line-494">       * &lt;p&gt;</span>
-<span class="source-line-no">495</span><span id="line-495">       * This is the per-client counterpart of the {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system</span>
-<span class="source-line-no">496</span><span id="line-496">       * property and has exactly its narrow semantics: every entry (a CIDR range or a single address, parsed as a</span>
-<span class="source-line-no">497</span><span id="line-497">       * literal with no DNS lookup) must lie entirely inside one of those five ranges, and it never re-permits</span>
-<span class="source-line-no">498</span><span id="line-498">       * loopback, link-local/metadata (&lt;c&gt;169.254.169.254&lt;/c&gt;), private, CGNAT or any other denied address.  It applies</span>
-<span class="source-line-no">499</span><span id="line-499">       * to the literal-host check, the connect-time (DNS-pinned) address selection and every redirect hop of this</span>
-<span class="source-line-no">500</span><span id="line-500">       * client's {@code @Remote} calls, on every first-party transport.</span>
-<span class="source-line-no">501</span><span id="line-501">       *</span>
-<span class="source-line-no">502</span><span id="line-502">       * &lt;p&gt;</span>
-<span class="source-line-no">503</span><span id="line-503">       * The effective allow-list is the &lt;b&gt;union&lt;/b&gt; of these ranges and the system property's ranges (both are</span>
-<span class="source-line-no">504</span><span id="line-504">       * narrow, so the union is too).  Calls accumulate.  An invalid entry is reported by {@link #build()} as an</span>
-<span class="source-line-no">505</span><span id="line-505">       * {@link IllegalArgumentException}.</span>
-<span class="source-line-no">506</span><span id="line-506">       *</span>
-<span class="source-line-no">507</span><span id="line-507">       * @param value The CIDR ranges or single addresses to allow; each element may also hold several comma- or</span>
-<span class="source-line-no">508</span><span id="line-508">       *    whitespace-separated entries.  &lt;jk&gt;null&lt;/jk&gt; or empty adds nothing.</span>
-<span class="source-line-no">509</span><span id="line-509">       * @return This object.</span>
-<span class="source-line-no">510</span><span id="line-510">       */</span>
-<span class="source-line-no">511</span><span id="line-511">      public Builder allowAddressRanges(String...value) {</span>
-<span class="source-line-no">512</span><span id="line-512">         if (value != null)</span>
-<span class="source-line-no">513</span><span id="line-513">            allowedAddressRanges.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">514</span><span id="line-514">         return this;</span>
-<span class="source-line-no">515</span><span id="line-515">      }</span>
-<span class="source-line-no">516</span><span id="line-516"></span>
-<span class="source-line-no">517</span><span id="line-517">      /**</span>
-<span class="source-line-no">518</span><span id="line-518">       * Controls the built-in {@code X-Request-Id} auto-send interceptor (enabled by default).</span>
-<span class="source-line-no">519</span><span id="line-519">       *</span>
-<span class="source-line-no">520</span><span id="line-520">       * &lt;p&gt;</span>
-<span class="source-line-no">521</span><span id="line-521">       * When enabled, every request that does not already carry an {@code X-Request-Id} header (case-insensitive) is</span>
-<span class="source-line-no">522</span><span id="line-522">       * stamped with a freshly minted version-7 UUID before it is sent, and the server's echoed id is captured on the</span>
-<span class="source-line-no">523</span><span id="line-523">       * response ({@link RestResponse#getRequestId()}).  Set to {@code false} to disable the interceptor entirely:</span>
-<span class="source-line-no">524</span><span id="line-524">       * no id is sent or captured, and a later {@link #interceptors(RestCallInterceptor...)} call does not resurrect</span>
-<span class="source-line-no">525</span><span id="line-525">       * it.  Callers can still set an id per request via {@link RestRequest#requestId(String)}.</span>
-<span class="source-line-no">526</span><span id="line-526">       *</span>
-<span class="source-line-no">527</span><span id="line-527">       * @param value {@code false} to disable the auto-send interceptor. Default {@code true}.</span>
+<span class="source-line-no">451</span><span id="line-451">       * &lt;p&gt;</span>
+<span class="source-line-no">452</span><span id="line-452">       * The effective per-call value is the logical OR of this setting, the</span>
+<span class="source-line-no">453</span><span id="line-453">       * {@value RemoteUrlPolicy#ALLOW_PRIVATE_URLS_PROPERTY} system property, and the {@code @Remote}/{@code @RemoteOp}</span>
+<span class="source-line-no">454</span><span id="line-454">       * {@code allowPrivateUrls} annotation attribute: any one of the three opting in is sufficient. The {@code http}/</span>
+<span class="source-line-no">455</span><span id="line-455">       * {@code https} scheme requirement is unaffected.</span>
+<span class="source-line-no">456</span><span id="line-456">       *</span>
+<span class="source-line-no">457</span><span id="line-457">       * @param value {@code true} to allow private/loopback/link-local/metadata {@code @Remote} targets. Default {@code false}.</span>
+<span class="source-line-no">458</span><span id="line-458">       * @return This object.</span>
+<span class="source-line-no">459</span><span id="line-459">       */</span>
+<span class="source-line-no">460</span><span id="line-460">      public Builder allowPrivateUrls(boolean value) {</span>
+<span class="source-line-no">461</span><span id="line-461">         allowPrivateUrls = value;</span>
+<span class="source-line-no">462</span><span id="line-462">         return this;</span>
+<span class="source-line-no">463</span><span id="line-463">      }</span>
+<span class="source-line-no">464</span><span id="line-464"></span>
+<span class="source-line-no">465</span><span id="line-465">      /**</span>
+<span class="source-line-no">466</span><span id="line-466">       * Re-permits, for this client only, addresses that the default SSRF guardrail denies solely because they fall in</span>
+<span class="source-line-no">467</span><span id="line-467">       * one of the special-purpose ranges &lt;c&gt;192.0.0.0/24&lt;/c&gt;, &lt;c&gt;198.18.0.0/15&lt;/c&gt;, &lt;c&gt;224.0.0.0/4&lt;/c&gt;,</span>
+<span class="source-line-no">468</span><span id="line-468">       * &lt;c&gt;240.0.0.0/4&lt;/c&gt; or &lt;c&gt;ff00::/8&lt;/c&gt; (for example a lab or appliance network on &lt;c&gt;198.18.0.0/15&lt;/c&gt;).</span>
+<span class="source-line-no">469</span><span id="line-469">       *</span>
+<span class="source-line-no">470</span><span id="line-470">       * &lt;p&gt;</span>
+<span class="source-line-no">471</span><span id="line-471">       * This is the per-client counterpart of the {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system</span>
+<span class="source-line-no">472</span><span id="line-472">       * property and has exactly its narrow semantics: every entry (a CIDR range or a single address, parsed as a</span>
+<span class="source-line-no">473</span><span id="line-473">       * literal with no DNS lookup) must lie entirely inside one of those five ranges, and it never re-permits</span>
+<span class="source-line-no">474</span><span id="line-474">       * loopback, link-local/metadata (&lt;c&gt;169.254.169.254&lt;/c&gt;), private, CGNAT or any other denied address.  It applies</span>
+<span class="source-line-no">475</span><span id="line-475">       * to the literal-host check, the connect-time (DNS-pinned) address selection and every redirect hop of this</span>
+<span class="source-line-no">476</span><span id="line-476">       * client's {@code @Remote} calls, on every first-party transport.</span>
+<span class="source-line-no">477</span><span id="line-477">       *</span>
+<span class="source-line-no">478</span><span id="line-478">       * &lt;p&gt;</span>
+<span class="source-line-no">479</span><span id="line-479">       * The effective allow-list is the &lt;b&gt;union&lt;/b&gt; of these ranges and the system property's ranges (both are</span>
+<span class="source-line-no">480</span><span id="line-480">       * narrow, so the union is too).  Calls accumulate.  An invalid entry is reported by {@link #build()} as an</span>
+<span class="source-line-no">481</span><span id="line-481">       * {@link IllegalArgumentException}.</span>
+<span class="source-line-no">482</span><span id="line-482">       *</span>
+<span class="source-line-no">483</span><span id="line-483">       * @param value The CIDR ranges or single addresses to allow; each element may also hold several comma- or</span>
+<span class="source-line-no">484</span><span id="line-484">       *    whitespace-separated entries.  &lt;jk&gt;null&lt;/jk&gt; or empty adds nothing.</span>
+<span class="source-line-no">485</span><span id="line-485">       * @return This object.</span>
+<span class="source-line-no">486</span><span id="line-486">       */</span>
+<span class="source-line-no">487</span><span id="line-487">      public Builder allowAddressRanges(String...value) {</span>
+<span class="source-line-no">488</span><span id="line-488">         if (value != null)</span>
+<span class="source-line-no">489</span><span id="line-489">            allowedAddressRanges.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">490</span><span id="line-490">         return this;</span>
+<span class="source-line-no">491</span><span id="line-491">      }</span>
+<span class="source-line-no">492</span><span id="line-492"></span>
+<span class="source-line-no">493</span><span id="line-493">      /**</span>
+<span class="source-line-no">494</span><span id="line-494">       * Controls the built-in {@code X-Request-Id} auto-send interceptor (enabled by default).</span>
+<span class="source-line-no">495</span><span id="line-495">       *</span>
+<span class="source-line-no">496</span><span id="line-496">       * &lt;p&gt;</span>
+<span class="source-line-no">497</span><span id="line-497">       * When enabled, every request that does not already carry an {@code X-Request-Id} header (case-insensitive) is</span>
+<span class="source-line-no">498</span><span id="line-498">       * stamped with a freshly minted version-7 UUID before it is sent, and the server's echoed id is captured on the</span>
+<span class="source-line-no">499</span><span id="line-499">       * response ({@link RestResponse#getRequestId()}).  Set to {@code false} to disable the interceptor entirely:</span>
+<span class="source-line-no">500</span><span id="line-500">       * no id is sent or captured, and a later {@link #interceptors(RestCallInterceptor...)} call does not resurrect</span>
+<span class="source-line-no">501</span><span id="line-501">       * it.  Callers can still set an id per request via {@link RestRequest#requestId(String)}.</span>
+<span class="source-line-no">502</span><span id="line-502">       *</span>
+<span class="source-line-no">503</span><span id="line-503">       * @param value {@code false} to disable the auto-send interceptor. Default {@code true}.</span>
+<span class="source-line-no">504</span><span id="line-504">       * @return This object.</span>
+<span class="source-line-no">505</span><span id="line-505">       * @since 10.0.0</span>
+<span class="source-line-no">506</span><span id="line-506">       */</span>
+<span class="source-line-no">507</span><span id="line-507">      public Builder sendRequestId(boolean value) {</span>
+<span class="source-line-no">508</span><span id="line-508">         sendRequestId = value;</span>
+<span class="source-line-no">509</span><span id="line-509">         return this;</span>
+<span class="source-line-no">510</span><span id="line-510">      }</span>
+<span class="source-line-no">511</span><span id="line-511"></span>
+<span class="source-line-no">512</span><span id="line-512">      /**</span>
+<span class="source-line-no">513</span><span id="line-513">       * Adds default headers sent with every request.</span>
+<span class="source-line-no">514</span><span id="line-514">       *</span>
+<span class="source-line-no">515</span><span id="line-515">       * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">516</span><span id="line-516">       * @return This object.</span>
+<span class="source-line-no">517</span><span id="line-517">       */</span>
+<span class="source-line-no">518</span><span id="line-518">      public Builder headers(HttpHeader... value) {</span>
+<span class="source-line-no">519</span><span id="line-519">         defaultHeaders.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">520</span><span id="line-520">         return this;</span>
+<span class="source-line-no">521</span><span id="line-521">      }</span>
+<span class="source-line-no">522</span><span id="line-522"></span>
+<span class="source-line-no">523</span><span id="line-523">      /**</span>
+<span class="source-line-no">524</span><span id="line-524">       * Adds a default header sent with every request.</span>
+<span class="source-line-no">525</span><span id="line-525">       *</span>
+<span class="source-line-no">526</span><span id="line-526">       * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">527</span><span id="line-527">       * @param value The header value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">528</span><span id="line-528">       * @return This object.</span>
-<span class="source-line-no">529</span><span id="line-529">       * @since 10.0.0</span>
-<span class="source-line-no">530</span><span id="line-530">       */</span>
-<span class="source-line-no">531</span><span id="line-531">      public Builder sendRequestId(boolean value) {</span>
-<span class="source-line-no">532</span><span id="line-532">         sendRequestId = value;</span>
-<span class="source-line-no">533</span><span id="line-533">         return this;</span>
-<span class="source-line-no">534</span><span id="line-534">      }</span>
-<span class="source-line-no">535</span><span id="line-535"></span>
-<span class="source-line-no">536</span><span id="line-536">      /**</span>
-<span class="source-line-no">537</span><span id="line-537">       * Adds default headers sent with every request.</span>
-<span class="source-line-no">538</span><span id="line-538">       *</span>
-<span class="source-line-no">539</span><span id="line-539">       * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">529</span><span id="line-529">       */</span>
+<span class="source-line-no">530</span><span id="line-530">      public Builder header(String name, String value) {</span>
+<span class="source-line-no">531</span><span id="line-531">         defaultHeaders.add(HttpHeaderBean.of(name, value));</span>
+<span class="source-line-no">532</span><span id="line-532">         return this;</span>
+<span class="source-line-no">533</span><span id="line-533">      }</span>
+<span class="source-line-no">534</span><span id="line-534"></span>
+<span class="source-line-no">535</span><span id="line-535">      /**</span>
+<span class="source-line-no">536</span><span id="line-536">       * Adds a default header with a lazy value, evaluated at each request.</span>
+<span class="source-line-no">537</span><span id="line-537">       *</span>
+<span class="source-line-no">538</span><span id="line-538">       * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">539</span><span id="line-539">       * @param value Supplier for the header value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">540</span><span id="line-540">       * @return This object.</span>
 <span class="source-line-no">541</span><span id="line-541">       */</span>
-<span class="source-line-no">542</span><span id="line-542">      public Builder headers(HttpHeader... value) {</span>
-<span class="source-line-no">543</span><span id="line-543">         defaultHeaders.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">542</span><span id="line-542">      public Builder header(String name, Supplier&lt;String&gt; value) {</span>
+<span class="source-line-no">543</span><span id="line-543">         defaultHeaders.add(HttpHeaderBean.of(name, value));</span>
 <span class="source-line-no">544</span><span id="line-544">         return this;</span>
 <span class="source-line-no">545</span><span id="line-545">      }</span>
 <span class="source-line-no">546</span><span id="line-546"></span>
 <span class="source-line-no">547</span><span id="line-547">      /**</span>
-<span class="source-line-no">548</span><span id="line-548">       * Adds a default header sent with every request.</span>
+<span class="source-line-no">548</span><span id="line-548">       * Adds default query parameters appended to every request URL.</span>
 <span class="source-line-no">549</span><span id="line-549">       *</span>
-<span class="source-line-no">550</span><span id="line-550">       * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">551</span><span id="line-551">       * @param value The header value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">552</span><span id="line-552">       * @return This object.</span>
-<span class="source-line-no">553</span><span id="line-553">       */</span>
-<span class="source-line-no">554</span><span id="line-554">      public Builder header(String name, String value) {</span>
-<span class="source-line-no">555</span><span id="line-555">         defaultHeaders.add(HttpHeaderBean.of(name, value));</span>
-<span class="source-line-no">556</span><span id="line-556">         return this;</span>
-<span class="source-line-no">557</span><span id="line-557">      }</span>
-<span class="source-line-no">558</span><span id="line-558"></span>
-<span class="source-line-no">559</span><span id="line-559">      /**</span>
-<span class="source-line-no">560</span><span id="line-560">       * Adds a default header with a lazy value, evaluated at each request.</span>
-<span class="source-line-no">561</span><span id="line-561">       *</span>
-<span class="source-line-no">562</span><span id="line-562">       * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">563</span><span id="line-563">       * @param value Supplier for the header value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">564</span><span id="line-564">       * @return This object.</span>
-<span class="source-line-no">565</span><span id="line-565">       */</span>
-<span class="source-line-no">566</span><span id="line-566">      public Builder header(String name, Supplier&lt;String&gt; value) {</span>
-<span class="source-line-no">567</span><span id="line-567">         defaultHeaders.add(HttpHeaderBean.of(name, value));</span>
-<span class="source-line-no">568</span><span id="line-568">         return this;</span>
-<span class="source-line-no">569</span><span id="line-569">      }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">      /**</span>
-<span class="source-line-no">572</span><span id="line-572">       * Adds default query parameters appended to every request URL.</span>
-<span class="source-line-no">573</span><span id="line-573">       *</span>
-<span class="source-line-no">574</span><span id="line-574">       * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">575</span><span id="line-575">       * @return This object.</span>
-<span class="source-line-no">576</span><span id="line-576">       */</span>
-<span class="source-line-no">577</span><span id="line-577">      public Builder queryData(HttpPart... value) {</span>
-<span class="source-line-no">578</span><span id="line-578">         defaultQueryData.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">579</span><span id="line-579">         return this;</span>
-<span class="source-line-no">580</span><span id="line-580">      }</span>
-<span class="source-line-no">581</span><span id="line-581"></span>
-<span class="source-line-no">582</span><span id="line-582">      /**</span>
-<span class="source-line-no">583</span><span id="line-583">       * Adds a default query parameter appended to every request URL.</span>
-<span class="source-line-no">584</span><span id="line-584">       *</span>
-<span class="source-line-no">585</span><span id="line-585">       * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">586</span><span id="line-586">       * @param value The parameter value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">587</span><span id="line-587">       * @return This object.</span>
-<span class="source-line-no">588</span><span id="line-588">       */</span>
-<span class="source-line-no">589</span><span id="line-589">      public Builder queryData(String name, String value) {</span>
-<span class="source-line-no">590</span><span id="line-590">         defaultQueryData.add(HttpPartBean.of(name, value));</span>
-<span class="source-line-no">591</span><span id="line-591">         return this;</span>
-<span class="source-line-no">592</span><span id="line-592">      }</span>
-<span class="source-line-no">593</span><span id="line-593"></span>
-<span class="source-line-no">594</span><span id="line-594">      /**</span>
-<span class="source-line-no">595</span><span id="line-595">       * Adds one or more lifecycle interceptors called before/after each request.</span>
-<span class="source-line-no">596</span><span id="line-596">       *</span>
-<span class="source-line-no">597</span><span id="line-597">       * @param value The interceptors to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">598</span><span id="line-598">       * @return This object.</span>
-<span class="source-line-no">599</span><span id="line-599">       */</span>
-<span class="source-line-no">600</span><span id="line-600">      public Builder interceptors(RestCallInterceptor... value) {</span>
-<span class="source-line-no">601</span><span id="line-601">         interceptors.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">602</span><span id="line-602">         return this;</span>
-<span class="source-line-no">603</span><span id="line-603">      }</span>
-<span class="source-line-no">604</span><span id="line-604"></span>
-<span class="source-line-no">605</span><span id="line-605">      /**</span>
-<span class="source-line-no">606</span><span id="line-606">       * Sets the formatter used for level-driven REST debug logging.</span>
-<span class="source-line-no">607</span><span id="line-607">       *</span>
-<span class="source-line-no">608</span><span id="line-608">       * &lt;p&gt;</span>
-<span class="source-line-no">609</span><span id="line-609">       * The formatter renders cumulative content based on the resolved debug logger level:</span>
-<span class="source-line-no">610</span><span id="line-610">       * &lt;ul&gt;</span>
-<span class="source-line-no">611</span><span id="line-611">       *    &lt;li&gt;{@link Level#INFO INFO} - basic line ({@link RestClientDebugFormatter#formatBasic(RestRequest, RestResponse)}).</span>
-<span class="source-line-no">612</span><span id="line-612">       *    &lt;li&gt;{@link Level#FINE FINE} - basic + headers.</span>
-<span class="source-line-no">613</span><span id="line-613">       *    &lt;li&gt;{@link Level#FINEST FINEST} - basic + headers + body.</span>
-<span class="source-line-no">614</span><span id="line-614">       * &lt;/ul&gt;</span>
-<span class="source-line-no">615</span><span id="line-615">       *</span>
-<span class="source-line-no">616</span><span id="line-616">       * @param value The formatter. Can be &lt;jk&gt;null&lt;/jk&gt; to restore the default formatter.</span>
-<span class="source-line-no">617</span><span id="line-617">       * @return This object.</span>
-<span class="source-line-no">618</span><span id="line-618">       */</span>
-<span class="source-line-no">619</span><span id="line-619">      public Builder debugFormatter(RestClientDebugFormatter value) {</span>
-<span class="source-line-no">620</span><span id="line-620">         debugFormatter = value;</span>
-<span class="source-line-no">621</span><span id="line-621">         return this;</span>
-<span class="source-line-no">622</span><span id="line-622">      }</span>
-<span class="source-line-no">623</span><span id="line-623"></span>
-<span class="source-line-no">624</span><span id="line-624">      /**</span>
-<span class="source-line-no">625</span><span id="line-625">       * Sets the logger name used for REST debug records.</span>
-<span class="source-line-no">626</span><span id="line-626">       *</span>
-<span class="source-line-no">627</span><span id="line-627">       * &lt;p&gt;</span>
-<span class="source-line-no">628</span><span id="line-628">       * If not set, defaults to {@code RestClient.class.getName()}.</span>
-<span class="source-line-no">629</span><span id="line-629">       *</span>
-<span class="source-line-no">630</span><span id="line-630">       * @param value The logger name. Can be &lt;jk&gt;null&lt;/jk&gt; to use the default logger name.</span>
-<span class="source-line-no">631</span><span id="line-631">       * @return This object.</span>
-<span class="source-line-no">632</span><span id="line-632">       */</span>
-<span class="source-line-no">633</span><span id="line-633">      public Builder debugLoggerName(String value) {</span>
-<span class="source-line-no">634</span><span id="line-634">         debugLoggerName = value;</span>
-<span class="source-line-no">635</span><span id="line-635">         return this;</span>
-<span class="source-line-no">636</span><span id="line-636">      }</span>
-<span class="source-line-no">637</span><span id="line-637"></span>
-<span class="source-line-no">638</span><span id="line-638"></span>
-<span class="source-line-no">639</span><span id="line-639">      /**</span>
-<span class="source-line-no">640</span><span id="line-640">       * Prepends custom body converters to the default converter list.</span>
-<span class="source-line-no">641</span><span id="line-641">       *</span>
-<span class="source-line-no">642</span><span id="line-642">       * &lt;p&gt;</span>
-<span class="source-line-no">643</span><span id="line-643">       * Custom converters are checked before the defaults when {@link RestRequest#body(Object)} is called.</span>
-<span class="source-line-no">644</span><span id="line-644">       *</span>
-<span class="source-line-no">645</span><span id="line-645">       * @param value The converters to prepend. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">646</span><span id="line-646">       * @return This object.</span>
-<span class="source-line-no">647</span><span id="line-647">       */</span>
-<span class="source-line-no">648</span><span id="line-648">      public Builder bodyConverter(BodyConverter&lt;?&gt;... value) {</span>
-<span class="source-line-no">649</span><span id="line-649">         var prepended = new ArrayList&lt;BodyConverter&lt;?&gt;&gt;(Arrays.asList(value));</span>
-<span class="source-line-no">650</span><span id="line-650">         prepended.addAll(bodyConverters);</span>
-<span class="source-line-no">651</span><span id="line-651">         bodyConverters = prepended;</span>
-<span class="source-line-no">652</span><span id="line-652">         return this;</span>
-<span class="source-line-no">653</span><span id="line-653">      }</span>
-<span class="source-line-no">654</span><span id="line-654"></span>
-<span class="source-line-no">655</span><span id="line-655">      /**</span>
-<span class="source-line-no">656</span><span id="line-656">       * Replaces the entire body converter list (including defaults).</span>
-<span class="source-line-no">657</span><span id="line-657">       *</span>
-<span class="source-line-no">658</span><span id="line-658">       * &lt;p&gt;</span>
-<span class="source-line-no">659</span><span id="line-659">       * Use this when you want full control over body conversion, including disabling the built-in defaults.</span>
-<span class="source-line-no">660</span><span id="line-660">       *</span>
-<span class="source-line-no">661</span><span id="line-661">       * @param value The complete replacement converter list. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">662</span><span id="line-662">       * @return This object.</span>
-<span class="source-line-no">663</span><span id="line-663">       */</span>
-<span class="source-line-no">664</span><span id="line-664">      public Builder bodyConverters(BodyConverter&lt;?&gt;... value) {</span>
-<span class="source-line-no">665</span><span id="line-665">         bodyConverters = list(value);</span>
-<span class="source-line-no">666</span><span id="line-666">         return this;</span>
-<span class="source-line-no">667</span><span id="line-667">      }</span>
-<span class="source-line-no">668</span><span id="line-668"></span>
-<span class="source-line-no">669</span><span id="line-669">      /**</span>
-<span class="source-line-no">670</span><span id="line-670">       * Sets the serializer registry used for outbound bodies.</span>
-<span class="source-line-no">671</span><span id="line-671">       *</span>
-<span class="source-line-no">672</span><span id="line-672">       * @param value The serializer set. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">673</span><span id="line-673">       * @return This object.</span>
-<span class="source-line-no">674</span><span id="line-674">       */</span>
-<span class="source-line-no">675</span><span id="line-675">      public Builder serializers(SerializerSet value) {</span>
-<span class="source-line-no">676</span><span id="line-676">         serializers = value;</span>
-<span class="source-line-no">677</span><span id="line-677">         return this;</span>
-<span class="source-line-no">678</span><span id="line-678">      }</span>
-<span class="source-line-no">679</span><span id="line-679"></span>
-<span class="source-line-no">680</span><span id="line-680">      /**</span>
-<span class="source-line-no">681</span><span id="line-681">       * Sets the parser registry used for inbound bodies.</span>
-<span class="source-line-no">682</span><span id="line-682">       *</span>
-<span class="source-line-no">683</span><span id="line-683">       * @param value The parser set. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">684</span><span id="line-684">       * @return This object.</span>
-<span class="source-line-no">685</span><span id="line-685">       */</span>
-<span class="source-line-no">686</span><span id="line-686">      public Builder parsers(ParserSet value) {</span>
-<span class="source-line-no">687</span><span id="line-687">         parsers = value;</span>
-<span class="source-line-no">688</span><span id="line-688">         return this;</span>
-<span class="source-line-no">689</span><span id="line-689">      }</span>
-<span class="source-line-no">690</span><span id="line-690"></span>
-<span class="source-line-no">691</span><span id="line-691">      /**</span>
-<span class="source-line-no">692</span><span id="line-692">       * Appends serializers (built into a {@link SerializerSet} at build time if no set was supplied).</span>
-<span class="source-line-no">693</span><span id="line-693">       *</span>
-<span class="source-line-no">694</span><span id="line-694">       * @param value The serializers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">695</span><span id="line-695">       * @return This object.</span>
-<span class="source-line-no">696</span><span id="line-696">       */</span>
-<span class="source-line-no">697</span><span id="line-697">      public Builder serializer(Serializer... value) {</span>
-<span class="source-line-no">698</span><span id="line-698">         serializerList.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">699</span><span id="line-699">         return this;</span>
-<span class="source-line-no">700</span><span id="line-700">      }</span>
-<span class="source-line-no">701</span><span id="line-701"></span>
-<span class="source-line-no">702</span><span id="line-702">      /**</span>
-<span class="source-line-no">703</span><span id="line-703">       * Appends parsers (built into a {@link ParserSet} at build time if no set was supplied).</span>
-<span class="source-line-no">704</span><span id="line-704">       *</span>
-<span class="source-line-no">705</span><span id="line-705">       * @param value The parsers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">706</span><span id="line-706">       * @return This object.</span>
-<span class="source-line-no">707</span><span id="line-707">       */</span>
-<span class="source-line-no">708</span><span id="line-708">      public Builder parser(Parser... value) {</span>
-<span class="source-line-no">709</span><span id="line-709">         parserList.addAll(Arrays.asList(value));</span>
-<span class="source-line-no">710</span><span id="line-710">         return this;</span>
-<span class="source-line-no">711</span><span id="line-711">      }</span>
-<span class="source-line-no">712</span><span id="line-712"></span>
-<span class="source-line-no">713</span><span id="line-713">      /**</span>
-<span class="source-line-no">714</span><span id="line-714">       * Designates the default serializer used for outbound bodies when no registered serializer matches the</span>
-<span class="source-line-no">715</span><span id="line-715">       * requested media type.</span>
+<span class="source-line-no">550</span><span id="line-550">       * @param value The parts to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">551</span><span id="line-551">       * @return This object.</span>
+<span class="source-line-no">552</span><span id="line-552">       */</span>
+<span class="source-line-no">553</span><span id="line-553">      public Builder queryData(HttpPart... value) {</span>
+<span class="source-line-no">554</span><span id="line-554">         defaultQueryData.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">555</span><span id="line-555">         return this;</span>
+<span class="source-line-no">556</span><span id="line-556">      }</span>
+<span class="source-line-no">557</span><span id="line-557"></span>
+<span class="source-line-no">558</span><span id="line-558">      /**</span>
+<span class="source-line-no">559</span><span id="line-559">       * Adds a default query parameter appended to every request URL.</span>
+<span class="source-line-no">560</span><span id="line-560">       *</span>
+<span class="source-line-no">561</span><span id="line-561">       * @param name The parameter name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">562</span><span id="line-562">       * @param value The parameter value (eager). May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">563</span><span id="line-563">       * @return This object.</span>
+<span class="source-line-no">564</span><span id="line-564">       */</span>
+<span class="source-line-no">565</span><span id="line-565">      public Builder queryData(String name, String value) {</span>
+<span class="source-line-no">566</span><span id="line-566">         defaultQueryData.add(HttpPartBean.of(name, value));</span>
+<span class="source-line-no">567</span><span id="line-567">         return this;</span>
+<span class="source-line-no">568</span><span id="line-568">      }</span>
+<span class="source-line-no">569</span><span id="line-569"></span>
+<span class="source-line-no">570</span><span id="line-570">      /**</span>
+<span class="source-line-no">571</span><span id="line-571">       * Adds one or more lifecycle interceptors called before/after each request.</span>
+<span class="source-line-no">572</span><span id="line-572">       *</span>
+<span class="source-line-no">573</span><span id="line-573">       * @param value The interceptors to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">574</span><span id="line-574">       * @return This object.</span>
+<span class="source-line-no">575</span><span id="line-575">       */</span>
+<span class="source-line-no">576</span><span id="line-576">      public Builder interceptors(RestCallInterceptor... value) {</span>
+<span class="source-line-no">577</span><span id="line-577">         interceptors.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">578</span><span id="line-578">         return this;</span>
+<span class="source-line-no">579</span><span id="line-579">      }</span>
+<span class="source-line-no">580</span><span id="line-580"></span>
+<span class="source-line-no">581</span><span id="line-581">      /**</span>
+<span class="source-line-no">582</span><span id="line-582">       * Sets the formatter used for level-driven REST debug logging.</span>
+<span class="source-line-no">583</span><span id="line-583">       *</span>
+<span class="source-line-no">584</span><span id="line-584">       * &lt;p&gt;</span>
+<span class="source-line-no">585</span><span id="line-585">       * The formatter renders cumulative content based on the resolved debug logger level:</span>
+<span class="source-line-no">586</span><span id="line-586">       * &lt;ul&gt;</span>
+<span class="source-line-no">587</span><span id="line-587">       *    &lt;li&gt;{@link Level#INFO INFO} - basic line ({@link RestClientDebugFormatter#formatBasic(RestRequest, RestResponse)}).</span>
+<span class="source-line-no">588</span><span id="line-588">       *    &lt;li&gt;{@link Level#FINE FINE} - basic + headers.</span>
+<span class="source-line-no">589</span><span id="line-589">       *    &lt;li&gt;{@link Level#FINEST FINEST} - basic + headers + body.</span>
+<span class="source-line-no">590</span><span id="line-590">       * &lt;/ul&gt;</span>
+<span class="source-line-no">591</span><span id="line-591">       *</span>
+<span class="source-line-no">592</span><span id="line-592">       * @param value The formatter. Can be &lt;jk&gt;null&lt;/jk&gt; to restore the default formatter.</span>
+<span class="source-line-no">593</span><span id="line-593">       * @return This object.</span>
+<span class="source-line-no">594</span><span id="line-594">       */</span>
+<span class="source-line-no">595</span><span id="line-595">      public Builder debugFormatter(RestClientDebugFormatter value) {</span>
+<span class="source-line-no">596</span><span id="line-596">         debugFormatter = value;</span>
+<span class="source-line-no">597</span><span id="line-597">         return this;</span>
+<span class="source-line-no">598</span><span id="line-598">      }</span>
+<span class="source-line-no">599</span><span id="line-599"></span>
+<span class="source-line-no">600</span><span id="line-600">      /**</span>
+<span class="source-line-no">601</span><span id="line-601">       * Sets the logger name used for REST debug records.</span>
+<span class="source-line-no">602</span><span id="line-602">       *</span>
+<span class="source-line-no">603</span><span id="line-603">       * &lt;p&gt;</span>
+<span class="source-line-no">604</span><span id="line-604">       * If not set, defaults to {@code RestClient.class.getName()}.</span>
+<span class="source-line-no">605</span><span id="line-605">       *</span>
+<span class="source-line-no">606</span><span id="line-606">       * @param value The logger name. Can be &lt;jk&gt;null&lt;/jk&gt; to use the default logger name.</span>
+<span class="source-line-no">607</span><span id="line-607">       * @return This object.</span>
+<span class="source-line-no">608</span><span id="line-608">       */</span>
+<span class="source-line-no">609</span><span id="line-609">      public Builder debugLoggerName(String value) {</span>
+<span class="source-line-no">610</span><span id="line-610">         debugLoggerName = value;</span>
+<span class="source-line-no">611</span><span id="line-611">         return this;</span>
+<span class="source-line-no">612</span><span id="line-612">      }</span>
+<span class="source-line-no">613</span><span id="line-613"></span>
+<span class="source-line-no">614</span><span id="line-614"></span>
+<span class="source-line-no">615</span><span id="line-615">      /**</span>
+<span class="source-line-no">616</span><span id="line-616">       * Prepends custom body converters to the default converter list.</span>
+<span class="source-line-no">617</span><span id="line-617">       *</span>
+<span class="source-line-no">618</span><span id="line-618">       * &lt;p&gt;</span>
+<span class="source-line-no">619</span><span id="line-619">       * Custom converters are checked before the defaults when {@link RestRequest#body(Object)} is called.</span>
+<span class="source-line-no">620</span><span id="line-620">       *</span>
+<span class="source-line-no">621</span><span id="line-621">       * @param value The converters to prepend. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">622</span><span id="line-622">       * @return This object.</span>
+<span class="source-line-no">623</span><span id="line-623">       */</span>
+<span class="source-line-no">624</span><span id="line-624">      public Builder bodyConverter(BodyConverter&lt;?&gt;... value) {</span>
+<span class="source-line-no">625</span><span id="line-625">         var prepended = new ArrayList&lt;BodyConverter&lt;?&gt;&gt;(Arrays.asList(value));</span>
+<span class="source-line-no">626</span><span id="line-626">         prepended.addAll(bodyConverters);</span>
+<span class="source-line-no">627</span><span id="line-627">         bodyConverters = prepended;</span>
+<span class="source-line-no">628</span><span id="line-628">         return this;</span>
+<span class="source-line-no">629</span><span id="line-629">      }</span>
+<span class="source-line-no">630</span><span id="line-630"></span>
+<span class="source-line-no">631</span><span id="line-631">      /**</span>
+<span class="source-line-no">632</span><span id="line-632">       * Replaces the entire body converter list (including defaults).</span>
+<span class="source-line-no">633</span><span id="line-633">       *</span>
+<span class="source-line-no">634</span><span id="line-634">       * &lt;p&gt;</span>
+<span class="source-line-no">635</span><span id="line-635">       * Use this when you want full control over body conversion, including disabling the built-in defaults.</span>
+<span class="source-line-no">636</span><span id="line-636">       *</span>
+<span class="source-line-no">637</span><span id="line-637">       * @param value The complete replacement converter list. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">638</span><span id="line-638">       * @return This object.</span>
+<span class="source-line-no">639</span><span id="line-639">       */</span>
+<span class="source-line-no">640</span><span id="line-640">      public Builder bodyConverters(BodyConverter&lt;?&gt;... value) {</span>
+<span class="source-line-no">641</span><span id="line-641">         bodyConverters = list(value);</span>
+<span class="source-line-no">642</span><span id="line-642">         return this;</span>
+<span class="source-line-no">643</span><span id="line-643">      }</span>
+<span class="source-line-no">644</span><span id="line-644"></span>
+<span class="source-line-no">645</span><span id="line-645">      /**</span>
+<span class="source-line-no">646</span><span id="line-646">       * Sets the serializer registry used for outbound bodies.</span>
+<span class="source-line-no">647</span><span id="line-647">       *</span>
+<span class="source-line-no">648</span><span id="line-648">       * @param value The serializer set. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">649</span><span id="line-649">       * @return This object.</span>
+<span class="source-line-no">650</span><span id="line-650">       */</span>
+<span class="source-line-no">651</span><span id="line-651">      public Builder serializers(SerializerSet value) {</span>
+<span class="source-line-no">652</span><span id="line-652">         serializers = value;</span>
+<span class="source-line-no">653</span><span id="line-653">         return this;</span>
+<span class="source-line-no">654</span><span id="line-654">      }</span>
+<span class="source-line-no">655</span><span id="line-655"></span>
+<span class="source-line-no">656</span><span id="line-656">      /**</span>
+<span class="source-line-no">657</span><span id="line-657">       * Sets the parser registry used for inbound bodies.</span>
+<span class="source-line-no">658</span><span id="line-658">       *</span>
+<span class="source-line-no">659</span><span id="line-659">       * @param value The parser set. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">660</span><span id="line-660">       * @return This object.</span>
+<span class="source-line-no">661</span><span id="line-661">       */</span>
+<span class="source-line-no">662</span><span id="line-662">      public Builder parsers(ParserSet value) {</span>
+<span class="source-line-no">663</span><span id="line-663">         parsers = value;</span>
+<span class="source-line-no">664</span><span id="line-664">         return this;</span>
+<span class="source-line-no">665</span><span id="line-665">      }</span>
+<span class="source-line-no">666</span><span id="line-666"></span>
+<span class="source-line-no">667</span><span id="line-667">      /**</span>
+<span class="source-line-no">668</span><span id="line-668">       * Appends serializers (built into a {@link SerializerSet} at build time if no set was supplied).</span>
+<span class="source-line-no">669</span><span id="line-669">       *</span>
+<span class="source-line-no">670</span><span id="line-670">       * @param value The serializers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">671</span><span id="line-671">       * @return This object.</span>
+<span class="source-line-no">672</span><span id="line-672">       */</span>
+<span class="source-line-no">673</span><span id="line-673">      public Builder serializer(Serializer... value) {</span>
+<span class="source-line-no">674</span><span id="line-674">         serializerList.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">675</span><span id="line-675">         return this;</span>
+<span class="source-line-no">676</span><span id="line-676">      }</span>
+<span class="source-line-no">677</span><span id="line-677"></span>
+<span class="source-line-no">678</span><span id="line-678">      /**</span>
+<span class="source-line-no">679</span><span id="line-679">       * Appends parsers (built into a {@link ParserSet} at build time if no set was supplied).</span>
+<span class="source-line-no">680</span><span id="line-680">       *</span>
+<span class="source-line-no">681</span><span id="line-681">       * @param value The parsers to append. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">682</span><span id="line-682">       * @return This object.</span>
+<span class="source-line-no">683</span><span id="line-683">       */</span>
+<span class="source-line-no">684</span><span id="line-684">      public Builder parser(Parser... value) {</span>
+<span class="source-line-no">685</span><span id="line-685">         parserList.addAll(Arrays.asList(value));</span>
+<span class="source-line-no">686</span><span id="line-686">         return this;</span>
+<span class="source-line-no">687</span><span id="line-687">      }</span>
+<span class="source-line-no">688</span><span id="line-688"></span>
+<span class="source-line-no">689</span><span id="line-689">      /**</span>
+<span class="source-line-no">690</span><span id="line-690">       * Designates the default serializer used for outbound bodies when no registered serializer matches the</span>
+<span class="source-line-no">691</span><span id="line-691">       * requested media type.</span>
+<span class="source-line-no">692</span><span id="line-692">       *</span>
+<span class="source-line-no">693</span><span id="line-693">       * &lt;p&gt;</span>
+<span class="source-line-no">694</span><span id="line-694">       * This is the explicit, opt-in way to restore a fallback serializer.  Without it, a request that cannot be</span>
+<span class="source-line-no">695</span><span id="line-695">       * matched to a registered serializer (and any body requiring serialization on a serializer-less client) fails</span>
+<span class="source-line-no">696</span><span id="line-696">       * rather than silently defaulting to JSON.  Set {@code defaultSerializer(JsonSerializer.DEFAULT)} to recover</span>
+<span class="source-line-no">697</span><span id="line-697">       * the pre-10.0 implicit-JSON behavior.</span>
+<span class="source-line-no">698</span><span id="line-698">       *</span>
+<span class="source-line-no">699</span><span id="line-699">       * @param value The default serializer. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">700</span><span id="line-700">       * @return This object.</span>
+<span class="source-line-no">701</span><span id="line-701">       */</span>
+<span class="source-line-no">702</span><span id="line-702">      public Builder defaultSerializer(Serializer value) {</span>
+<span class="source-line-no">703</span><span id="line-703">         defaultSerializer = value;</span>
+<span class="source-line-no">704</span><span id="line-704">         return this;</span>
+<span class="source-line-no">705</span><span id="line-705">      }</span>
+<span class="source-line-no">706</span><span id="line-706"></span>
+<span class="source-line-no">707</span><span id="line-707">      /**</span>
+<span class="source-line-no">708</span><span id="line-708">       * Designates the default parser used when the response {@code Content-Type} is absent or matches no registered</span>
+<span class="source-line-no">709</span><span id="line-709">       * parser.</span>
+<span class="source-line-no">710</span><span id="line-710">       *</span>
+<span class="source-line-no">711</span><span id="line-711">       * &lt;p&gt;</span>
+<span class="source-line-no">712</span><span id="line-712">       * This is the explicit, opt-in way to restore a fallback parser.  Without it, a response whose</span>
+<span class="source-line-no">713</span><span id="line-713">       * {@code Content-Type} matches no registered parser fails with &lt;c&gt;415 Unsupported Media Type&lt;/c&gt; rather than</span>
+<span class="source-line-no">714</span><span id="line-714">       * silently parsing as JSON.  Set {@code defaultParser(JsonParser.DEFAULT)} to recover the pre-10.0</span>
+<span class="source-line-no">715</span><span id="line-715">       * implicit-JSON behavior.</span>
 <span class="source-line-no">716</span><span id="line-716">       *</span>
-<span class="source-line-no">717</span><span id="line-717">       * &lt;p&gt;</span>
-<span class="source-line-no">718</span><span id="line-718">       * This is the explicit, opt-in way to restore a fallback serializer.  Without it, a request that cannot be</span>
-<span class="source-line-no">719</span><span id="line-719">       * matched to a registered serializer (and any body requiring serialization on a serializer-less client) fails</span>
-<span class="source-line-no">720</span><span id="line-720">       * rather than silently defaulting to JSON.  Set {@code defaultSerializer(JsonSerializer.DEFAULT)} to recover</span>
-<span class="source-line-no">721</span><span id="line-721">       * the pre-10.0 implicit-JSON behavior.</span>
-<span class="source-line-no">722</span><span id="line-722">       *</span>
-<span class="source-line-no">723</span><span id="line-723">       * @param value The default serializer. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">724</span><span id="line-724">       * @return This object.</span>
-<span class="source-line-no">725</span><span id="line-725">       */</span>
-<span class="source-line-no">726</span><span id="line-726">      public Builder defaultSerializer(Serializer value) {</span>
-<span class="source-line-no">727</span><span id="line-727">         defaultSerializer = value;</span>
-<span class="source-line-no">728</span><span id="line-728">         return this;</span>
-<span class="source-line-no">729</span><span id="line-729">      }</span>
-<span class="source-line-no">730</span><span id="line-730"></span>
-<span class="source-line-no">731</span><span id="line-731">      /**</span>
-<span class="source-line-no">732</span><span id="line-732">       * Designates the default parser used when the response {@code Content-Type} is absent or matches no registered</span>
-<span class="source-line-no">733</span><span id="line-733">       * parser.</span>
-<span class="source-line-no">734</span><span id="line-734">       *</span>
-<span class="source-line-no">735</span><span id="line-735">       * &lt;p&gt;</span>
-<span class="source-line-no">736</span><span id="line-736">       * This is the explicit, opt-in way to restore a fallback parser.  Without it, a response whose</span>
-<span class="source-line-no">737</span><span id="line-737">       * {@code Content-Type} matches no registered parser fails with &lt;c&gt;415 Unsupported Media Type&lt;/c&gt; rather than</span>
-<span class="source-line-no">738</span><span id="line-738">       * silently parsing as JSON.  Set {@code defaultParser(JsonParser.DEFAULT)} to recover the pre-10.0</span>
-<span class="source-line-no">739</span><span id="line-739">       * implicit-JSON behavior.</span>
-<span class="source-line-no">740</span><span id="line-740">       *</span>
-<span class="source-line-no">741</span><span id="line-741">       * @param value The default parser. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">742</span><span id="line-742">       * @return This object.</span>
-<span class="source-line-no">743</span><span id="line-743">       */</span>
-<span class="source-line-no">744</span><span id="line-744">      public Builder defaultParser(Parser value) {</span>
-<span class="source-line-no">745</span><span id="line-745">         defaultParser = value;</span>
-<span class="source-line-no">746</span><span id="line-746">         return this;</span>
-<span class="source-line-no">747</span><span id="line-747">      }</span>
-<span class="source-line-no">748</span><span id="line-748"></span>
-<span class="source-line-no">749</span><span id="line-749">      /**</span>
-<span class="source-line-no">750</span><span id="line-750">       * Builds and returns the {@link RestClient}.</span>
-<span class="source-line-no">751</span><span id="line-751">       *</span>
-<span class="source-line-no">752</span><span id="line-752">       * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">753</span><span id="line-753">       */</span>
-<span class="source-line-no">754</span><span id="line-754">      public RestClient build() {</span>
-<span class="source-line-no">755</span><span id="line-755">         if (serializers == null &amp;&amp; ! serializerList.isEmpty())</span>
-<span class="source-line-no">756</span><span id="line-756">            serializers = SerializerSet.create().add(serializerList.toArray(new Serializer[0])).build();</span>
-<span class="source-line-no">757</span><span id="line-757">         if (parsers == null &amp;&amp; ! parserList.isEmpty())</span>
-<span class="source-line-no">758</span><span id="line-758">            parsers = ParserSet.create().add(parserList.toArray(new Parser[0])).build();</span>
-<span class="source-line-no">759</span><span id="line-759">         return new RestClient(this);</span>
-<span class="source-line-no">760</span><span id="line-760">      }</span>
-<span class="source-line-no">761</span><span id="line-761">   }</span>
-<span class="source-line-no">762</span><span id="line-762">}</span>
+<span class="source-line-no">717</span><span id="line-717">       * @param value The default parser. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">718</span><span id="line-718">       * @return This object.</span>
+<span class="source-line-no">719</span><span id="line-719">       */</span>
+<span class="source-line-no">720</span><span id="line-720">      public Builder defaultParser(Parser value) {</span>
+<span class="source-line-no">721</span><span id="line-721">         defaultParser = value;</span>
+<span class="source-line-no">722</span><span id="line-722">         return this;</span>
+<span class="source-line-no">723</span><span id="line-723">      }</span>
+<span class="source-line-no">724</span><span id="line-724"></span>
+<span class="source-line-no">725</span><span id="line-725">      /**</span>
+<span class="source-line-no">726</span><span id="line-726">       * Builds and returns the {@link RestClient}.</span>
+<span class="source-line-no">727</span><span id="line-727">       *</span>
+<span class="source-line-no">728</span><span id="line-728">       * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">729</span><span id="line-729">       */</span>
+<span class="source-line-no">730</span><span id="line-730">      public RestClient build() {</span>
+<span class="source-line-no">731</span><span id="line-731">         if (serializers == null &amp;&amp; ! serializerList.isEmpty())</span>
+<span class="source-line-no">732</span><span id="line-732">            serializers = SerializerSet.create().add(serializerList.toArray(new Serializer[0])).build();</span>
+<span class="source-line-no">733</span><span id="line-733">         if (parsers == null &amp;&amp; ! parserList.isEmpty())</span>
+<span class="source-line-no">734</span><span id="line-734">            parsers = ParserSet.create().add(parserList.toArray(new Parser[0])).build();</span>
+<span class="source-line-no">735</span><span id="line-735">         return new RestClient(this);</span>
+<span class="source-line-no">736</span><span id="line-736">      }</span>
+<span class="source-line-no">737</span><span id="line-737">   }</span>
+<span class="source-line-no">738</span><span id="line-738">}</span>
 
 
 

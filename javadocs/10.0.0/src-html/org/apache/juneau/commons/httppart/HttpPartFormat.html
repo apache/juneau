@@ -232,29 +232,32 @@
 <span class="source-line-no">219</span><span id="line-219">    * @param value The enum name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">220</span><span id="line-220">    * @return The enum.</span>
 <span class="source-line-no">221</span><span id="line-221">    */</span>
-<span class="source-line-no">222</span><span id="line-222">   public static HttpPartFormat fromString(String value) {</span>
-<span class="source-line-no">223</span><span id="line-223">      value = ucr(value).replace('-', '_');</span>
-<span class="source-line-no">224</span><span id="line-224">      return valueOf(value);</span>
-<span class="source-line-no">225</span><span id="line-225">   }</span>
-<span class="source-line-no">226</span><span id="line-226"></span>
-<span class="source-line-no">227</span><span id="line-227">   /**</span>
-<span class="source-line-no">228</span><span id="line-228">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
-<span class="source-line-no">229</span><span id="line-229">    *</span>
-<span class="source-line-no">230</span><span id="line-230">    * @param list The list of formats to check against.</span>
-<span class="source-line-no">231</span><span id="line-231">    * @return &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
-<span class="source-line-no">232</span><span id="line-232">    */</span>
-<span class="source-line-no">233</span><span id="line-233">   public boolean isOneOf(HttpPartFormat...list) {</span>
-<span class="source-line-no">234</span><span id="line-234">      for (var ff : list)</span>
-<span class="source-line-no">235</span><span id="line-235">         if (this == ff)</span>
-<span class="source-line-no">236</span><span id="line-236">            return true;</span>
-<span class="source-line-no">237</span><span id="line-237">      return false;</span>
-<span class="source-line-no">238</span><span id="line-238">   }</span>
-<span class="source-line-no">239</span><span id="line-239"></span>
-<span class="source-line-no">240</span><span id="line-240">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">241</span><span id="line-241">   public String toString() {</span>
-<span class="source-line-no">242</span><span id="line-242">      return lcr(name()).replace('_', '-');</span>
-<span class="source-line-no">243</span><span id="line-243">   }</span>
-<span class="source-line-no">244</span><span id="line-244">}</span>
+<span class="source-line-no">222</span><span id="line-222">   @SuppressWarnings({</span>
+<span class="source-line-no">223</span><span id="line-223">      "javabugs:S2259" // The value must not be null, per the Javadoc contract; ucr() returns null only for a null input.</span>
+<span class="source-line-no">224</span><span id="line-224">   })</span>
+<span class="source-line-no">225</span><span id="line-225">   public static HttpPartFormat fromString(String value) {</span>
+<span class="source-line-no">226</span><span id="line-226">      value = ucr(value).replace('-', '_');</span>
+<span class="source-line-no">227</span><span id="line-227">      return valueOf(value);</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   /**</span>
+<span class="source-line-no">231</span><span id="line-231">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
+<span class="source-line-no">232</span><span id="line-232">    *</span>
+<span class="source-line-no">233</span><span id="line-233">    * @param list The list of formats to check against.</span>
+<span class="source-line-no">234</span><span id="line-234">    * @return &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
+<span class="source-line-no">235</span><span id="line-235">    */</span>
+<span class="source-line-no">236</span><span id="line-236">   public boolean isOneOf(HttpPartFormat...list) {</span>
+<span class="source-line-no">237</span><span id="line-237">      for (var ff : list)</span>
+<span class="source-line-no">238</span><span id="line-238">         if (this == ff)</span>
+<span class="source-line-no">239</span><span id="line-239">            return true;</span>
+<span class="source-line-no">240</span><span id="line-240">      return false;</span>
+<span class="source-line-no">241</span><span id="line-241">   }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">244</span><span id="line-244">   public String toString() {</span>
+<span class="source-line-no">245</span><span id="line-245">      return lcr(name()).replace('_', '-');</span>
+<span class="source-line-no">246</span><span id="line-246">   }</span>
+<span class="source-line-no">247</span><span id="line-247">}</span>
 
 
 

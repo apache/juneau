@@ -50,61 +50,56 @@
 <span class="source-line-no">037</span><span id="line-37"> * Implementations are discovered automatically via {@link HttpTransportProvider} using {@link java.util.ServiceLoader},</span>
 <span class="source-line-no">038</span><span id="line-38"> * or set explicitly via {@code RestClient.Builder#transport(HttpTransport)}.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
-<span class="source-line-no">042</span><span id="line-42"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">043</span><span id="line-43"> * (and possibly earlier).</span>
-<span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * @since 9.2.1</span>
-<span class="source-line-no">050</span><span id="line-50"> */</span>
-<span class="source-line-no">051</span><span id="line-51">public interface HttpTransport extends Closeable {</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   /**</span>
-<span class="source-line-no">054</span><span id="line-54">    * Executes the given request and returns the response.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
-<span class="source-line-no">057</span><span id="line-57">    * The caller is responsible for closing the returned {@link TransportResponse} after consuming the body.</span>
-<span class="source-line-no">058</span><span id="line-58">    *</span>
-<span class="source-line-no">059</span><span id="line-59">    * @param request The fully-resolved request. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">060</span><span id="line-60">    * @return The response. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">061</span><span id="line-61">    * @throws TransportException If a network-level error occurs.</span>
-<span class="source-line-no">062</span><span id="line-62">    */</span>
-<span class="source-line-no">063</span><span id="line-63">   TransportResponse execute(TransportRequest request) throws TransportException;</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Returns {@code true} if this transport can honor the SSRF guardrail's connect-time contract for a</span>
-<span class="source-line-no">067</span><span id="line-67">    * policy-covered request ({@link TransportRequest#isSsrfGuardActive()}): pin-on-connect to a resolved address</span>
-<span class="source-line-no">068</span><span id="line-68">    * that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the</span>
-<span class="source-line-no">069</span><span id="line-69">    * transport's own auto-follow).</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * &lt;p&gt;</span>
-<span class="source-line-no">072</span><span id="line-72">    * The default implementation returns {@code false} (fail closed): an unknown/caller-supplied transport that</span>
-<span class="source-line-no">073</span><span id="line-73">    * has not affirmatively opted in is presumed unable to honor the contract, so</span>
-<span class="source-line-no">074</span><span id="line-74">    * {@code RestRequest#run()} rejects policy-covered requests against it rather than silently connecting without</span>
-<span class="source-line-no">075</span><span id="line-75">    * the guardrail. First-party transports that construct and fully control their own underlying HTTP client</span>
-<span class="source-line-no">076</span><span id="line-76">    * override this to return {@code true}.</span>
-<span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * @return {@code true} if this transport supports pin-on-connect + redirect revalidation for policy-covered requests.</span>
-<span class="source-line-no">079</span><span id="line-79">    */</span>
-<span class="source-line-no">080</span><span id="line-80">   default boolean supportsUrlPolicy() {</span>
-<span class="source-line-no">081</span><span id="line-81">      return false;</span>
-<span class="source-line-no">082</span><span id="line-82">   }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Releases resources held by this transport (connection pools, threads, etc.).</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * &lt;p&gt;</span>
-<span class="source-line-no">088</span><span id="line-88">    * The default implementation is a no-op.</span>
-<span class="source-line-no">089</span><span id="line-89">    */</span>
-<span class="source-line-no">090</span><span id="line-90">   @Override</span>
-<span class="source-line-no">091</span><span id="line-91">   default void close() throws IOException {</span>
-<span class="source-line-no">092</span><span id="line-92">      // no-op by default</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94">}</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> * @since 9.2.1</span>
+<span class="source-line-no">045</span><span id="line-45"> */</span>
+<span class="source-line-no">046</span><span id="line-46">public interface HttpTransport extends Closeable {</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">   /**</span>
+<span class="source-line-no">049</span><span id="line-49">    * Executes the given request and returns the response.</span>
+<span class="source-line-no">050</span><span id="line-50">    *</span>
+<span class="source-line-no">051</span><span id="line-51">    * &lt;p&gt;</span>
+<span class="source-line-no">052</span><span id="line-52">    * The caller is responsible for closing the returned {@link TransportResponse} after consuming the body.</span>
+<span class="source-line-no">053</span><span id="line-53">    *</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param request The fully-resolved request. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">055</span><span id="line-55">    * @return The response. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">056</span><span id="line-56">    * @throws TransportException If a network-level error occurs.</span>
+<span class="source-line-no">057</span><span id="line-57">    */</span>
+<span class="source-line-no">058</span><span id="line-58">   TransportResponse execute(TransportRequest request) throws TransportException;</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   /**</span>
+<span class="source-line-no">061</span><span id="line-61">    * Returns {@code true} if this transport can honor the SSRF guardrail's connect-time contract for a</span>
+<span class="source-line-no">062</span><span id="line-62">    * policy-covered request ({@link TransportRequest#isSsrfGuardActive()}): pin-on-connect to a resolved address</span>
+<span class="source-line-no">063</span><span id="line-63">    * that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the</span>
+<span class="source-line-no">064</span><span id="line-64">    * transport's own auto-follow).</span>
+<span class="source-line-no">065</span><span id="line-65">    *</span>
+<span class="source-line-no">066</span><span id="line-66">    * &lt;p&gt;</span>
+<span class="source-line-no">067</span><span id="line-67">    * The default implementation returns {@code false} (fail closed): an unknown/caller-supplied transport that</span>
+<span class="source-line-no">068</span><span id="line-68">    * has not affirmatively opted in is presumed unable to honor the contract, so</span>
+<span class="source-line-no">069</span><span id="line-69">    * {@code RestRequest#run()} rejects policy-covered requests against it rather than silently connecting without</span>
+<span class="source-line-no">070</span><span id="line-70">    * the guardrail. First-party transports that construct and fully control their own underlying HTTP client</span>
+<span class="source-line-no">071</span><span id="line-71">    * override this to return {@code true}.</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * @return {@code true} if this transport supports pin-on-connect + redirect revalidation for policy-covered requests.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   default boolean supportsUrlPolicy() {</span>
+<span class="source-line-no">076</span><span id="line-76">      return false;</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Releases resources held by this transport (connection pools, threads, etc.).</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * &lt;p&gt;</span>
+<span class="source-line-no">083</span><span id="line-83">    * The default implementation is a no-op.</span>
+<span class="source-line-no">084</span><span id="line-84">    */</span>
+<span class="source-line-no">085</span><span id="line-85">   @Override</span>
+<span class="source-line-no">086</span><span id="line-86">   default void close() throws IOException {</span>
+<span class="source-line-no">087</span><span id="line-87">      // no-op by default</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89">}</span>
 
 
 

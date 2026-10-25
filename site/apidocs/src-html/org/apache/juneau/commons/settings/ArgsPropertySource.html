@@ -111,20 +111,48 @@
 <span class="source-line-no">098</span><span id="line-98">      var args = argsSupplier.get();</span>
 <span class="source-line-no">099</span><span id="line-99">      if (args == null)</span>
 <span class="source-line-no">100</span><span id="line-100">         return PropertyLookupResult.missing();</span>
-<span class="source-line-no">101</span><span id="line-101">      try {</span>
-<span class="source-line-no">102</span><span id="line-102">         var index = Integer.parseInt(name);</span>
-<span class="source-line-no">103</span><span id="line-103">         var v = args.get(index);</span>
-<span class="source-line-no">104</span><span id="line-104">         return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();</span>
-<span class="source-line-no">105</span><span id="line-105">      } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
-<span class="source-line-no">106</span><span id="line-106">         // Fall through.</span>
-<span class="source-line-no">107</span><span id="line-107">      }</span>
-<span class="source-line-no">108</span><span id="line-108">      var values = args.getAll(name);</span>
-<span class="source-line-no">109</span><span id="line-109">      if (! values.isEmpty())</span>
-<span class="source-line-no">110</span><span id="line-110">         return PropertyLookupResult.present(o(String.join(",", values)));</span>
-<span class="source-line-no">111</span><span id="line-111">      var v = args.get(name);</span>
-<span class="source-line-no">112</span><span id="line-112">      return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114">}</span>
+<span class="source-line-no">101</span><span id="line-101">      if (isIndex(name)) {</span>
+<span class="source-line-no">102</span><span id="line-102">         try {</span>
+<span class="source-line-no">103</span><span id="line-103">            var v = args.get(Integer.parseInt(name));</span>
+<span class="source-line-no">104</span><span id="line-104">            return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();</span>
+<span class="source-line-no">105</span><span id="line-105">         } catch (@SuppressWarnings("unused") NumberFormatException e) {</span>
+<span class="source-line-no">106</span><span id="line-106">            // Out of int range; fall through.</span>
+<span class="source-line-no">107</span><span id="line-107">         }</span>
+<span class="source-line-no">108</span><span id="line-108">      }</span>
+<span class="source-line-no">109</span><span id="line-109">      var values = args.getAll(name);</span>
+<span class="source-line-no">110</span><span id="line-110">      if (! values.isEmpty())</span>
+<span class="source-line-no">111</span><span id="line-111">         return PropertyLookupResult.present(o(String.join(",", values)));</span>
+<span class="source-line-no">112</span><span id="line-112">      var v = args.get(name);</span>
+<span class="source-line-no">113</span><span id="line-113">      return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the name has the shape of an integer (optional sign followed by digits).</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * Guards {@link Integer#parseInt(String)} so that ordinary non-numeric keys do not pay for a thrown exception.</span>
+<span class="source-line-no">121</span><span id="line-121">    */</span>
+<span class="source-line-no">122</span><span id="line-122">   static boolean isIndex(String name) {</span>
+<span class="source-line-no">123</span><span id="line-123">      if (name == null)</span>
+<span class="source-line-no">124</span><span id="line-124">         return false;</span>
+<span class="source-line-no">125</span><span id="line-125">      var n = name.length();</span>
+<span class="source-line-no">126</span><span id="line-126">      if (n == 0)</span>
+<span class="source-line-no">127</span><span id="line-127">         return false;</span>
+<span class="source-line-no">128</span><span id="line-128">      var i = 0;</span>
+<span class="source-line-no">129</span><span id="line-129">      var c = name.charAt(0);</span>
+<span class="source-line-no">130</span><span id="line-130">      if (c == '-' || c == '+') {</span>
+<span class="source-line-no">131</span><span id="line-131">         if (n == 1)</span>
+<span class="source-line-no">132</span><span id="line-132">            return false;</span>
+<span class="source-line-no">133</span><span id="line-133">         i = 1;</span>
+<span class="source-line-no">134</span><span id="line-134">      }</span>
+<span class="source-line-no">135</span><span id="line-135">      for (; i &lt; n; i++) {</span>
+<span class="source-line-no">136</span><span id="line-136">         c = name.charAt(i);</span>
+<span class="source-line-no">137</span><span id="line-137">         if (c &lt; '0' || c &gt; '9')</span>
+<span class="source-line-no">138</span><span id="line-138">            return false;</span>
+<span class="source-line-no">139</span><span id="line-139">      }</span>
+<span class="source-line-no">140</span><span id="line-140">      return true;</span>
+<span class="source-line-no">141</span><span id="line-141">   }</span>
+<span class="source-line-no">142</span><span id="line-142">}</span>
 
 
 

@@ -392,178 +392,181 @@
 <span class="source-line-no">379</span><span id="line-379">      consumedOneElement();</span>
 <span class="source-line-no">380</span><span id="line-380">   }</span>
 <span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">   private void consumedOneElement() {</span>
-<span class="source-line-no">383</span><span id="line-383">      if (depth == 0)</span>
-<span class="source-line-no">384</span><span id="line-384">         return;</span>
-<span class="source-line-no">385</span><span id="line-385">      var top = depth - 1;</span>
-<span class="source-line-no">386</span><span id="line-386">      if (stackRemaining[top] != INDEFINITE)</span>
-<span class="source-line-no">387</span><span id="line-387">         stackRemaining[top]--;</span>
-<span class="source-line-no">388</span><span id="line-388">      // In a map, alternate key/value positions per element.</span>
-<span class="source-line-no">389</span><span id="line-389">      if (stackIsMap[top])</span>
-<span class="source-line-no">390</span><span id="line-390">         stackAwaitingKey[top] = !stackAwaitingKey[top];</span>
-<span class="source-line-no">391</span><span id="line-391">   }</span>
-<span class="source-line-no">392</span><span id="line-392"></span>
-<span class="source-line-no">393</span><span id="line-393">   @Override /* TokenReader */</span>
-<span class="source-line-no">394</span><span id="line-394">   public TokenType getCurrentToken() {</span>
-<span class="source-line-no">395</span><span id="line-395">      return currentToken;</span>
-<span class="source-line-no">396</span><span id="line-396">   }</span>
-<span class="source-line-no">397</span><span id="line-397"></span>
-<span class="source-line-no">398</span><span id="line-398">   @Override /* TokenReader */</span>
-<span class="source-line-no">399</span><span id="line-399">   public int getDepth() {</span>
-<span class="source-line-no">400</span><span id="line-400">      return depth;</span>
-<span class="source-line-no">401</span><span id="line-401">   }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   @Override /* TokenReader */</span>
-<span class="source-line-no">404</span><span id="line-404">   public String getFieldName() {</span>
-<span class="source-line-no">405</span><span id="line-405">      if (currentToken != TokenType.FIELD_NAME)</span>
-<span class="source-line-no">406</span><span id="line-406">         throw isex("Current token is not FIELD_NAME (was %s)", currentToken);</span>
-<span class="source-line-no">407</span><span id="line-407">      return currentString;</span>
-<span class="source-line-no">408</span><span id="line-408">   }</span>
-<span class="source-line-no">409</span><span id="line-409"></span>
-<span class="source-line-no">410</span><span id="line-410">   @Override /* TokenReader */</span>
-<span class="source-line-no">411</span><span id="line-411">   public String getString() {</span>
-<span class="source-line-no">412</span><span id="line-412">      switch (currentToken) {</span>
-<span class="source-line-no">413</span><span id="line-413">         case VALUE_STRING:  return currentString;</span>
-<span class="source-line-no">414</span><span id="line-414">         case FIELD_NAME:    return currentString;</span>
-<span class="source-line-no">415</span><span id="line-415">         case VALUE_NUMBER:  return currentNumberLexeme;</span>
-<span class="source-line-no">416</span><span id="line-416">         case VALUE_BOOLEAN: return Boolean.toString(currentBoolean);</span>
-<span class="source-line-no">417</span><span id="line-417">         case VALUE_NULL:    return null;</span>
-<span class="source-line-no">418</span><span id="line-418">         default: throw isex("Current token does not have a string view (was %s)", currentToken);</span>
-<span class="source-line-no">419</span><span id="line-419">      }</span>
-<span class="source-line-no">420</span><span id="line-420">   }</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422">   @Override /* TokenReader */</span>
-<span class="source-line-no">423</span><span id="line-423">   public Number getNumber() throws ParseException {</span>
-<span class="source-line-no">424</span><span id="line-424">      if (currentToken != TokenType.VALUE_NUMBER)</span>
-<span class="source-line-no">425</span><span id="line-425">         throw isex("Current token is not VALUE_NUMBER (was %s)", currentToken);</span>
-<span class="source-line-no">426</span><span id="line-426">      return currentNumber;</span>
-<span class="source-line-no">427</span><span id="line-427">   }</span>
-<span class="source-line-no">428</span><span id="line-428"></span>
-<span class="source-line-no">429</span><span id="line-429">   @Override /* TokenReader */</span>
-<span class="source-line-no">430</span><span id="line-430">   public String getNumberLexeme() {</span>
-<span class="source-line-no">431</span><span id="line-431">      if (currentToken != TokenType.VALUE_NUMBER)</span>
-<span class="source-line-no">432</span><span id="line-432">         throw isex("Current token is not VALUE_NUMBER (was %s)", currentToken);</span>
-<span class="source-line-no">433</span><span id="line-433">      return currentNumberLexeme;</span>
-<span class="source-line-no">434</span><span id="line-434">   }</span>
-<span class="source-line-no">435</span><span id="line-435"></span>
-<span class="source-line-no">436</span><span id="line-436">   @Override /* TokenReader */</span>
-<span class="source-line-no">437</span><span id="line-437">   public boolean getBool() {</span>
-<span class="source-line-no">438</span><span id="line-438">      if (currentToken != TokenType.VALUE_BOOLEAN)</span>
-<span class="source-line-no">439</span><span id="line-439">         throw isex("Current token is not VALUE_BOOLEAN (was %s)", currentToken);</span>
-<span class="source-line-no">440</span><span id="line-440">      return currentBoolean;</span>
-<span class="source-line-no">441</span><span id="line-441">   }</span>
-<span class="source-line-no">442</span><span id="line-442"></span>
-<span class="source-line-no">443</span><span id="line-443">   @Override /* TokenReader */</span>
-<span class="source-line-no">444</span><span id="line-444">   public byte[] getBinary() {</span>
-<span class="source-line-no">445</span><span id="line-445">      if (currentToken != TokenType.VALUE_BINARY)</span>
-<span class="source-line-no">446</span><span id="line-446">         throw isex("Current token is not VALUE_BINARY (was %s)", currentToken);</span>
-<span class="source-line-no">447</span><span id="line-447">      return cp(currentBinary);</span>
-<span class="source-line-no">448</span><span id="line-448">   }</span>
-<span class="source-line-no">449</span><span id="line-449"></span>
-<span class="source-line-no">450</span><span id="line-450">   @Override /* TokenReader */</span>
-<span class="source-line-no">451</span><span id="line-451">   public boolean canRead() throws IOException, ParseException {</span>
-<span class="source-line-no">452</span><span id="line-452">      // CBOR has no separators to advance through; the cursor is "at a value boundary" iff</span>
-<span class="source-line-no">453</span><span id="line-453">      // (a) we're not inside a definite-length container that's exhausted, and</span>
-<span class="source-line-no">454</span><span id="line-454">      // (b) inside an indefinite-length container, the next byte isn't BREAK, and</span>
-<span class="source-line-no">455</span><span id="line-455">      // (c) the stream isn't ended.</span>
-<span class="source-line-no">456</span><span id="line-456">      if (ended)</span>
-<span class="source-line-no">457</span><span id="line-457">         return false;</span>
-<span class="source-line-no">458</span><span id="line-458">      if (depth &gt; 0) {</span>
-<span class="source-line-no">459</span><span id="line-459">         var remaining = stackRemaining[depth - 1];</span>
-<span class="source-line-no">460</span><span id="line-460">         if (remaining == 0)</span>
-<span class="source-line-no">461</span><span id="line-461">            return false;</span>
-<span class="source-line-no">462</span><span id="line-462">         if (remaining == INDEFINITE &amp;&amp; is.peekBreak())</span>
-<span class="source-line-no">463</span><span id="line-463">            return false;</span>
-<span class="source-line-no">464</span><span id="line-464">      }</span>
-<span class="source-line-no">465</span><span id="line-465">      return true;</span>
-<span class="source-line-no">466</span><span id="line-466">   }</span>
-<span class="source-line-no">467</span><span id="line-467"></span>
-<span class="source-line-no">468</span><span id="line-468">   @Override /* TokenReader */</span>
-<span class="source-line-no">469</span><span id="line-469">   public &lt;T&gt; T read(Class&lt;T&gt; type) throws IOException, ParseException {</span>
-<span class="source-line-no">470</span><span id="line-470">      return read(session().getClassMeta(type));</span>
-<span class="source-line-no">471</span><span id="line-471">   }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">   @Override /* TokenReader */</span>
-<span class="source-line-no">474</span><span id="line-474">   public &lt;T&gt; T read(ClassMeta&lt;T&gt; type) throws IOException, ParseException {</span>
-<span class="source-line-no">475</span><span id="line-475">      var s = session();</span>
-<span class="source-line-no">476</span><span id="line-476">      if (!canRead())</span>
-<span class="source-line-no">477</span><span id="line-477">         throw new IllegalStateException(MSG_READ_NON_VALUE_STATE);</span>
-<span class="source-line-no">478</span><span id="line-478">      try {</span>
-<span class="source-line-no">479</span><span id="line-479">         T o = s.readAnything(type, is, null, null);</span>
-<span class="source-line-no">480</span><span id="line-480">         consumedOneElement();</span>
-<span class="source-line-no">481</span><span id="line-481">         currentToken = TokenType.NOT_AVAILABLE;</span>
-<span class="source-line-no">482</span><span id="line-482">         return o;</span>
-<span class="source-line-no">483</span><span id="line-483">      } catch (Exception e) {</span>
-<span class="source-line-no">484</span><span id="line-484">         if (e instanceof IOException e2) throw e2;</span>
-<span class="source-line-no">485</span><span id="line-485">         if (e instanceof ParseException e2) throw e2;</span>
-<span class="source-line-no">486</span><span id="line-486">         throw new ParseException(s, "read failed: %s", e.getMessage());</span>
-<span class="source-line-no">487</span><span id="line-487">      }</span>
-<span class="source-line-no">488</span><span id="line-488">   }</span>
-<span class="source-line-no">489</span><span id="line-489"></span>
-<span class="source-line-no">490</span><span id="line-490">   @Override /* TokenReader */</span>
-<span class="source-line-no">491</span><span id="line-491">   public &lt;T&gt; T read(Type type, Type... args) throws IOException, ParseException {</span>
-<span class="source-line-no">492</span><span id="line-492">      return read(session().&lt;T&gt;getClassMeta(type, args));</span>
-<span class="source-line-no">493</span><span id="line-493">   }</span>
-<span class="source-line-no">494</span><span id="line-494"></span>
-<span class="source-line-no">495</span><span id="line-495">   private CborParserSession session() {</span>
-<span class="source-line-no">496</span><span id="line-496">      if (session == null)</span>
-<span class="source-line-no">497</span><span id="line-497">         throw new UnsupportedOperationException(</span>
-<span class="source-line-no">498</span><span id="line-498">            "read is not available on this CborTokenReader (no session attached). " +</span>
-<span class="source-line-no">499</span><span id="line-499">            "Open the cursor via CborParser.readTokens(...) to enable read.");</span>
-<span class="source-line-no">500</span><span id="line-500">      return session;</span>
-<span class="source-line-no">501</span><span id="line-501">   }</span>
-<span class="source-line-no">502</span><span id="line-502"></span>
-<span class="source-line-no">503</span><span id="line-503">   @Override /* TokenReader */</span>
-<span class="source-line-no">504</span><span id="line-504">   public void skipChildren() throws IOException, ParseException {</span>
-<span class="source-line-no">505</span><span id="line-505">      if (currentToken != TokenType.START_OBJECT &amp;&amp; currentToken != TokenType.START_ARRAY)</span>
-<span class="source-line-no">506</span><span id="line-506">         return;</span>
-<span class="source-line-no">507</span><span id="line-507">      var startDepth = depth - 1;</span>
-<span class="source-line-no">508</span><span id="line-508">      while (depth &gt; startDepth) {</span>
-<span class="source-line-no">509</span><span id="line-509">         var t = next();</span>
-<span class="source-line-no">510</span><span id="line-510">         if (t == TokenType.END_OF_STREAM)</span>
-<span class="source-line-no">511</span><span id="line-511">            throw new ParseException("Unexpected end of input while skipping children");</span>
-<span class="source-line-no">512</span><span id="line-512">      }</span>
-<span class="source-line-no">513</span><span id="line-513">   }</span>
-<span class="source-line-no">514</span><span id="line-514"></span>
-<span class="source-line-no">515</span><span id="line-515">   @Override /* TokenReader */</span>
-<span class="source-line-no">516</span><span id="line-516">   public boolean isStreaming() {</span>
-<span class="source-line-no">517</span><span id="line-517">      return true;</span>
-<span class="source-line-no">518</span><span id="line-518">   }</span>
-<span class="source-line-no">519</span><span id="line-519"></span>
-<span class="source-line-no">520</span><span id="line-520">   @Override /* TokenReader */</span>
-<span class="source-line-no">521</span><span id="line-521">   public void close() throws IOException {</span>
-<span class="source-line-no">522</span><span id="line-522">      pipe.close();</span>
-<span class="source-line-no">523</span><span id="line-523">   }</span>
-<span class="source-line-no">524</span><span id="line-524"></span>
-<span class="source-line-no">525</span><span id="line-525">   @Override /* TokenReader */</span>
-<span class="source-line-no">526</span><span id="line-526">   public BinaryNativeKind getNativeKind() {</span>
-<span class="source-line-no">527</span><span id="line-527">      return nativeKind;</span>
-<span class="source-line-no">528</span><span id="line-528">   }</span>
-<span class="source-line-no">529</span><span id="line-529"></span>
-<span class="source-line-no">530</span><span id="line-530">   @Override /* TokenReader */</span>
-<span class="source-line-no">531</span><span id="line-531">   public int getTagCount() {</span>
-<span class="source-line-no">532</span><span id="line-532">      return tagCount;</span>
-<span class="source-line-no">533</span><span id="line-533">   }</span>
-<span class="source-line-no">534</span><span id="line-534"></span>
-<span class="source-line-no">535</span><span id="line-535">   @Override /* TokenReader */</span>
-<span class="source-line-no">536</span><span id="line-536">   public long getTag(int index) {</span>
-<span class="source-line-no">537</span><span id="line-537">      if (index &lt; 0 || index &gt;= tagCount)</span>
-<span class="source-line-no">538</span><span id="line-538">         throw new IndexOutOfBoundsException("Tag index " + index + " out of bounds for tagCount " + tagCount);</span>
-<span class="source-line-no">539</span><span id="line-539">      return tags[index];</span>
-<span class="source-line-no">540</span><span id="line-540">   }</span>
-<span class="source-line-no">541</span><span id="line-541"></span>
-<span class="source-line-no">542</span><span id="line-542">   @Override /* TokenReader */</span>
-<span class="source-line-no">543</span><span id="line-543">   public int getExtType() {</span>
-<span class="source-line-no">544</span><span id="line-544">      throw new IllegalStateException("CBOR cursor has no MsgPack ext type.");</span>
-<span class="source-line-no">545</span><span id="line-545">   }</span>
-<span class="source-line-no">546</span><span id="line-546"></span>
-<span class="source-line-no">547</span><span id="line-547">   @Override /* TokenReader */</span>
-<span class="source-line-no">548</span><span id="line-548">   public int getSimpleValue() {</span>
-<span class="source-line-no">549</span><span id="line-549">      if (nativeKind != BinaryNativeKind.CBOR_SIMPLE)</span>
-<span class="source-line-no">550</span><span id="line-550">         throw isex("Current token is not a CBOR simple value (nativeKind=%s)", nativeKind);</span>
-<span class="source-line-no">551</span><span id="line-551">      return simpleValue;</span>
-<span class="source-line-no">552</span><span id="line-552">   }</span>
-<span class="source-line-no">553</span><span id="line-553">}</span>
+<span class="source-line-no">382</span><span id="line-382">   @SuppressWarnings({</span>
+<span class="source-line-no">383</span><span id="line-383">      "javabugs:S6466" // The stack arrays grow with every push, so depth minus one always indexes a live slot.</span>
+<span class="source-line-no">384</span><span id="line-384">   })</span>
+<span class="source-line-no">385</span><span id="line-385">   private void consumedOneElement() {</span>
+<span class="source-line-no">386</span><span id="line-386">      if (depth == 0)</span>
+<span class="source-line-no">387</span><span id="line-387">         return;</span>
+<span class="source-line-no">388</span><span id="line-388">      var top = depth - 1;</span>
+<span class="source-line-no">389</span><span id="line-389">      if (stackRemaining[top] != INDEFINITE)</span>
+<span class="source-line-no">390</span><span id="line-390">         stackRemaining[top]--;</span>
+<span class="source-line-no">391</span><span id="line-391">      // In a map, alternate key/value positions per element.</span>
+<span class="source-line-no">392</span><span id="line-392">      if (stackIsMap[top])</span>
+<span class="source-line-no">393</span><span id="line-393">         stackAwaitingKey[top] = !stackAwaitingKey[top];</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   @Override /* TokenReader */</span>
+<span class="source-line-no">397</span><span id="line-397">   public TokenType getCurrentToken() {</span>
+<span class="source-line-no">398</span><span id="line-398">      return currentToken;</span>
+<span class="source-line-no">399</span><span id="line-399">   }</span>
+<span class="source-line-no">400</span><span id="line-400"></span>
+<span class="source-line-no">401</span><span id="line-401">   @Override /* TokenReader */</span>
+<span class="source-line-no">402</span><span id="line-402">   public int getDepth() {</span>
+<span class="source-line-no">403</span><span id="line-403">      return depth;</span>
+<span class="source-line-no">404</span><span id="line-404">   }</span>
+<span class="source-line-no">405</span><span id="line-405"></span>
+<span class="source-line-no">406</span><span id="line-406">   @Override /* TokenReader */</span>
+<span class="source-line-no">407</span><span id="line-407">   public String getFieldName() {</span>
+<span class="source-line-no">408</span><span id="line-408">      if (currentToken != TokenType.FIELD_NAME)</span>
+<span class="source-line-no">409</span><span id="line-409">         throw isex("Current token is not FIELD_NAME (was %s)", currentToken);</span>
+<span class="source-line-no">410</span><span id="line-410">      return currentString;</span>
+<span class="source-line-no">411</span><span id="line-411">   }</span>
+<span class="source-line-no">412</span><span id="line-412"></span>
+<span class="source-line-no">413</span><span id="line-413">   @Override /* TokenReader */</span>
+<span class="source-line-no">414</span><span id="line-414">   public String getString() {</span>
+<span class="source-line-no">415</span><span id="line-415">      switch (currentToken) {</span>
+<span class="source-line-no">416</span><span id="line-416">         case VALUE_STRING:  return currentString;</span>
+<span class="source-line-no">417</span><span id="line-417">         case FIELD_NAME:    return currentString;</span>
+<span class="source-line-no">418</span><span id="line-418">         case VALUE_NUMBER:  return currentNumberLexeme;</span>
+<span class="source-line-no">419</span><span id="line-419">         case VALUE_BOOLEAN: return Boolean.toString(currentBoolean);</span>
+<span class="source-line-no">420</span><span id="line-420">         case VALUE_NULL:    return null;</span>
+<span class="source-line-no">421</span><span id="line-421">         default: throw isex("Current token does not have a string view (was %s)", currentToken);</span>
+<span class="source-line-no">422</span><span id="line-422">      }</span>
+<span class="source-line-no">423</span><span id="line-423">   }</span>
+<span class="source-line-no">424</span><span id="line-424"></span>
+<span class="source-line-no">425</span><span id="line-425">   @Override /* TokenReader */</span>
+<span class="source-line-no">426</span><span id="line-426">   public Number getNumber() throws ParseException {</span>
+<span class="source-line-no">427</span><span id="line-427">      if (currentToken != TokenType.VALUE_NUMBER)</span>
+<span class="source-line-no">428</span><span id="line-428">         throw isex("Current token is not VALUE_NUMBER (was %s)", currentToken);</span>
+<span class="source-line-no">429</span><span id="line-429">      return currentNumber;</span>
+<span class="source-line-no">430</span><span id="line-430">   }</span>
+<span class="source-line-no">431</span><span id="line-431"></span>
+<span class="source-line-no">432</span><span id="line-432">   @Override /* TokenReader */</span>
+<span class="source-line-no">433</span><span id="line-433">   public String getNumberLexeme() {</span>
+<span class="source-line-no">434</span><span id="line-434">      if (currentToken != TokenType.VALUE_NUMBER)</span>
+<span class="source-line-no">435</span><span id="line-435">         throw isex("Current token is not VALUE_NUMBER (was %s)", currentToken);</span>
+<span class="source-line-no">436</span><span id="line-436">      return currentNumberLexeme;</span>
+<span class="source-line-no">437</span><span id="line-437">   }</span>
+<span class="source-line-no">438</span><span id="line-438"></span>
+<span class="source-line-no">439</span><span id="line-439">   @Override /* TokenReader */</span>
+<span class="source-line-no">440</span><span id="line-440">   public boolean getBool() {</span>
+<span class="source-line-no">441</span><span id="line-441">      if (currentToken != TokenType.VALUE_BOOLEAN)</span>
+<span class="source-line-no">442</span><span id="line-442">         throw isex("Current token is not VALUE_BOOLEAN (was %s)", currentToken);</span>
+<span class="source-line-no">443</span><span id="line-443">      return currentBoolean;</span>
+<span class="source-line-no">444</span><span id="line-444">   }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">   @Override /* TokenReader */</span>
+<span class="source-line-no">447</span><span id="line-447">   public byte[] getBinary() {</span>
+<span class="source-line-no">448</span><span id="line-448">      if (currentToken != TokenType.VALUE_BINARY)</span>
+<span class="source-line-no">449</span><span id="line-449">         throw isex("Current token is not VALUE_BINARY (was %s)", currentToken);</span>
+<span class="source-line-no">450</span><span id="line-450">      return cp(currentBinary);</span>
+<span class="source-line-no">451</span><span id="line-451">   }</span>
+<span class="source-line-no">452</span><span id="line-452"></span>
+<span class="source-line-no">453</span><span id="line-453">   @Override /* TokenReader */</span>
+<span class="source-line-no">454</span><span id="line-454">   public boolean canRead() throws IOException, ParseException {</span>
+<span class="source-line-no">455</span><span id="line-455">      // CBOR has no separators to advance through; the cursor is "at a value boundary" iff</span>
+<span class="source-line-no">456</span><span id="line-456">      // (a) we're not inside a definite-length container that's exhausted, and</span>
+<span class="source-line-no">457</span><span id="line-457">      // (b) inside an indefinite-length container, the next byte isn't BREAK, and</span>
+<span class="source-line-no">458</span><span id="line-458">      // (c) the stream isn't ended.</span>
+<span class="source-line-no">459</span><span id="line-459">      if (ended)</span>
+<span class="source-line-no">460</span><span id="line-460">         return false;</span>
+<span class="source-line-no">461</span><span id="line-461">      if (depth &gt; 0) {</span>
+<span class="source-line-no">462</span><span id="line-462">         var remaining = stackRemaining[depth - 1];</span>
+<span class="source-line-no">463</span><span id="line-463">         if (remaining == 0)</span>
+<span class="source-line-no">464</span><span id="line-464">            return false;</span>
+<span class="source-line-no">465</span><span id="line-465">         if (remaining == INDEFINITE &amp;&amp; is.peekBreak())</span>
+<span class="source-line-no">466</span><span id="line-466">            return false;</span>
+<span class="source-line-no">467</span><span id="line-467">      }</span>
+<span class="source-line-no">468</span><span id="line-468">      return true;</span>
+<span class="source-line-no">469</span><span id="line-469">   }</span>
+<span class="source-line-no">470</span><span id="line-470"></span>
+<span class="source-line-no">471</span><span id="line-471">   @Override /* TokenReader */</span>
+<span class="source-line-no">472</span><span id="line-472">   public &lt;T&gt; T read(Class&lt;T&gt; type) throws IOException, ParseException {</span>
+<span class="source-line-no">473</span><span id="line-473">      return read(session().getClassMeta(type));</span>
+<span class="source-line-no">474</span><span id="line-474">   }</span>
+<span class="source-line-no">475</span><span id="line-475"></span>
+<span class="source-line-no">476</span><span id="line-476">   @Override /* TokenReader */</span>
+<span class="source-line-no">477</span><span id="line-477">   public &lt;T&gt; T read(ClassMeta&lt;T&gt; type) throws IOException, ParseException {</span>
+<span class="source-line-no">478</span><span id="line-478">      var s = session();</span>
+<span class="source-line-no">479</span><span id="line-479">      if (!canRead())</span>
+<span class="source-line-no">480</span><span id="line-480">         throw new IllegalStateException(MSG_READ_NON_VALUE_STATE);</span>
+<span class="source-line-no">481</span><span id="line-481">      try {</span>
+<span class="source-line-no">482</span><span id="line-482">         T o = s.readAnything(type, is, null, null);</span>
+<span class="source-line-no">483</span><span id="line-483">         consumedOneElement();</span>
+<span class="source-line-no">484</span><span id="line-484">         currentToken = TokenType.NOT_AVAILABLE;</span>
+<span class="source-line-no">485</span><span id="line-485">         return o;</span>
+<span class="source-line-no">486</span><span id="line-486">      } catch (Exception e) {</span>
+<span class="source-line-no">487</span><span id="line-487">         if (e instanceof IOException e2) throw e2;</span>
+<span class="source-line-no">488</span><span id="line-488">         if (e instanceof ParseException e2) throw e2;</span>
+<span class="source-line-no">489</span><span id="line-489">         throw new ParseException(s, "read failed: %s", e.getMessage());</span>
+<span class="source-line-no">490</span><span id="line-490">      }</span>
+<span class="source-line-no">491</span><span id="line-491">   }</span>
+<span class="source-line-no">492</span><span id="line-492"></span>
+<span class="source-line-no">493</span><span id="line-493">   @Override /* TokenReader */</span>
+<span class="source-line-no">494</span><span id="line-494">   public &lt;T&gt; T read(Type type, Type... args) throws IOException, ParseException {</span>
+<span class="source-line-no">495</span><span id="line-495">      return read(session().&lt;T&gt;getClassMeta(type, args));</span>
+<span class="source-line-no">496</span><span id="line-496">   }</span>
+<span class="source-line-no">497</span><span id="line-497"></span>
+<span class="source-line-no">498</span><span id="line-498">   private CborParserSession session() {</span>
+<span class="source-line-no">499</span><span id="line-499">      if (session == null)</span>
+<span class="source-line-no">500</span><span id="line-500">         throw new UnsupportedOperationException(</span>
+<span class="source-line-no">501</span><span id="line-501">            "read is not available on this CborTokenReader (no session attached). " +</span>
+<span class="source-line-no">502</span><span id="line-502">            "Open the cursor via CborParser.readTokens(...) to enable read.");</span>
+<span class="source-line-no">503</span><span id="line-503">      return session;</span>
+<span class="source-line-no">504</span><span id="line-504">   }</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">   @Override /* TokenReader */</span>
+<span class="source-line-no">507</span><span id="line-507">   public void skipChildren() throws IOException, ParseException {</span>
+<span class="source-line-no">508</span><span id="line-508">      if (currentToken != TokenType.START_OBJECT &amp;&amp; currentToken != TokenType.START_ARRAY)</span>
+<span class="source-line-no">509</span><span id="line-509">         return;</span>
+<span class="source-line-no">510</span><span id="line-510">      var startDepth = depth - 1;</span>
+<span class="source-line-no">511</span><span id="line-511">      while (depth &gt; startDepth) {</span>
+<span class="source-line-no">512</span><span id="line-512">         var t = next();</span>
+<span class="source-line-no">513</span><span id="line-513">         if (t == TokenType.END_OF_STREAM)</span>
+<span class="source-line-no">514</span><span id="line-514">            throw new ParseException("Unexpected end of input while skipping children");</span>
+<span class="source-line-no">515</span><span id="line-515">      }</span>
+<span class="source-line-no">516</span><span id="line-516">   }</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">   @Override /* TokenReader */</span>
+<span class="source-line-no">519</span><span id="line-519">   public boolean isStreaming() {</span>
+<span class="source-line-no">520</span><span id="line-520">      return true;</span>
+<span class="source-line-no">521</span><span id="line-521">   }</span>
+<span class="source-line-no">522</span><span id="line-522"></span>
+<span class="source-line-no">523</span><span id="line-523">   @Override /* TokenReader */</span>
+<span class="source-line-no">524</span><span id="line-524">   public void close() throws IOException {</span>
+<span class="source-line-no">525</span><span id="line-525">      pipe.close();</span>
+<span class="source-line-no">526</span><span id="line-526">   }</span>
+<span class="source-line-no">527</span><span id="line-527"></span>
+<span class="source-line-no">528</span><span id="line-528">   @Override /* TokenReader */</span>
+<span class="source-line-no">529</span><span id="line-529">   public BinaryNativeKind getNativeKind() {</span>
+<span class="source-line-no">530</span><span id="line-530">      return nativeKind;</span>
+<span class="source-line-no">531</span><span id="line-531">   }</span>
+<span class="source-line-no">532</span><span id="line-532"></span>
+<span class="source-line-no">533</span><span id="line-533">   @Override /* TokenReader */</span>
+<span class="source-line-no">534</span><span id="line-534">   public int getTagCount() {</span>
+<span class="source-line-no">535</span><span id="line-535">      return tagCount;</span>
+<span class="source-line-no">536</span><span id="line-536">   }</span>
+<span class="source-line-no">537</span><span id="line-537"></span>
+<span class="source-line-no">538</span><span id="line-538">   @Override /* TokenReader */</span>
+<span class="source-line-no">539</span><span id="line-539">   public long getTag(int index) {</span>
+<span class="source-line-no">540</span><span id="line-540">      if (index &lt; 0 || index &gt;= tagCount)</span>
+<span class="source-line-no">541</span><span id="line-541">         throw new IndexOutOfBoundsException("Tag index " + index + " out of bounds for tagCount " + tagCount);</span>
+<span class="source-line-no">542</span><span id="line-542">      return tags[index];</span>
+<span class="source-line-no">543</span><span id="line-543">   }</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   @Override /* TokenReader */</span>
+<span class="source-line-no">546</span><span id="line-546">   public int getExtType() {</span>
+<span class="source-line-no">547</span><span id="line-547">      throw new IllegalStateException("CBOR cursor has no MsgPack ext type.");</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
+<span class="source-line-no">549</span><span id="line-549"></span>
+<span class="source-line-no">550</span><span id="line-550">   @Override /* TokenReader */</span>
+<span class="source-line-no">551</span><span id="line-551">   public int getSimpleValue() {</span>
+<span class="source-line-no">552</span><span id="line-552">      if (nativeKind != BinaryNativeKind.CBOR_SIMPLE)</span>
+<span class="source-line-no">553</span><span id="line-553">         throw isex("Current token is not a CBOR simple value (nativeKind=%s)", nativeKind);</span>
+<span class="source-line-no">554</span><span id="line-554">      return simpleValue;</span>
+<span class="source-line-no">555</span><span id="line-555">   }</span>
+<span class="source-line-no">556</span><span id="line-556">}</span>
 
 
 

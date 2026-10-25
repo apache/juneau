@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-39">RestClientDebugFormatter</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-36">RestClientDebugFormatter</a></span></div>
 <div class="block">Per-tier formatter for JUL-level-driven REST client debug logging.
 
  <p>
@@ -88,10 +88,7 @@ loadScripts(document, 'script');</script>
    <li><a href="#formatBasic(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)"><code>formatBasic(RestRequest, RestResponse)</code></a> at <code>INFO</code>.
    <li><a href="#formatHeaders(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)"><code>formatHeaders(RestRequest, RestResponse)</code></a> added at <code>FINE</code>.
    <li><a href="#formatBody(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)"><code>formatBody(RestRequest, RestResponse)</code></a> added at <code>FINEST</code>.
- </ul>
-
- <p>
- <b>Beta - API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.</div>
+ </ul></div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>
@@ -156,7 +153,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatBasic(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>formatBasic</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-48">formatBasic</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-45">formatBasic</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Renders the basic (<code>INFO</code>-tier) portion of a debug record.</div>
 <dl class="notes">
@@ -171,7 +168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatHeaders(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>formatHeaders</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-57">formatHeaders</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-54">formatHeaders</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Renders the headers (<code>FINE</code>-tier) portion of a debug record.</div>
 <dl class="notes">
@@ -186,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatBody(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>formatBody</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-68">formatBody</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-65">formatBody</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span></div>
 <div class="block">Renders the body (<code>FINEST</code>-tier) portion of a debug record.</div>
 <dl class="notes">
@@ -201,7 +198,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bodyCap()">
 <h3>bodyCap</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-77">bodyCap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-74">bodyCap</a></span>()</div>
 <div class="block">Maximum number of request/response body bytes to capture for <code>FINEST</code> rendering.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -212,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isBodyRenderable(java.lang.String)">
 <h3>isBodyRenderable</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-102">isBodyRenderable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestClientDebugFormatter.html#line-99">isBodyRenderable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType)</span></div>
 <div class="block">Returns <jk>true</jk> if a body with the given content type is worth rendering as text (as opposed to being
  binary/unknown).
 

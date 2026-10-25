@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-52">ResponseAssertion</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-47">ResponseAssertion</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fluent assertion class for validating <a href="../RestResponse.html" title="class in org.apache.juneau.rest.client"><code>RestResponse</code></a> instances.
 
@@ -98,11 +98,6 @@ loadScripts(document, 'script');</script>
          .body().contains(<js>"alice"</js>);
    }
  </p>
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- (and possibly earlier).
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
@@ -195,7 +190,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.RestResponse)">
 <h3>ResponseAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-64">ResponseAssertion</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;response)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-59">ResponseAssertion</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;response)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -214,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="statusCode(int)">
 <h3>statusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-75">statusCode</a></span><wbr><span class="parameters">(int&nbsp;expected)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-70">statusCode</a></span><wbr><span class="parameters">(int&nbsp;expected)</span></div>
 <div class="block">Asserts that the response status code equals the expected value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -229,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isOk()">
 <h3>isOk</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-88">isOk</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-83">isOk</a></span>()</div>
 <div class="block">Asserts that the response status code is in the 2xx (success) range.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -242,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isClientError()">
 <h3>isClientError</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-101">isClientError</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-96">isClientError</a></span>()</div>
 <div class="block">Asserts that the response status code is in the 4xx (client error) range.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -255,7 +250,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isServerError()">
 <h3>isServerError</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-114">isServerError</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-109">isServerError</a></span>()</div>
 <div class="block">Asserts that the response status code is in the 5xx (server error) range.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -268,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.String)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeaderAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseHeaderAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-127">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseHeaderAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseHeaderAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-122">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a fluent header assertion for the named response header.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -281,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="body()">
 <h3>body</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-136">body</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-131">body</a></span>()</div>
 <div class="block">Returns a fluent body assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -292,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="and()">
 <h3>and</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-145">and</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseAssertion.html#line-140">and</a></span>()</div>
 <div class="block">Returns the underlying response (for further access after assertions).</div>
 <dl class="notes">
 <dt>Returns:</dt>

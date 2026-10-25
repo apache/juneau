@@ -79,19 +79,12 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="response/HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-39">HttpStatusLine</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-32">HttpStatusLine</a></span></div>
 <div class="block">The first line of an HTTP response message, containing the protocol version, status code, and reason phrase.
 
  <p>
  Mirrors the semantics of <code>org.apache.http.StatusLine</code> without the Apache HttpCore dependency.
  The default immutable implementation is <a href="response/HttpStatusLineBean.html" title="class in org.apache.juneau.http.response"><code>HttpStatusLineBean</code></a>.
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- (and possibly earlier).
- For production use cases that require long-term binary stability, continue using the existing
- <code>juneau-rest-client</code> and <code>juneau-rest-common</code> APIs until the <code>ng</code> stack is declared stable.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
@@ -146,7 +139,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-46">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-39">getStatusCode</a></span>()</div>
 <div class="block">Returns the HTTP status code (e.g. <code>200</code>, <code>404</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -157,7 +150,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getReasonPhrase()">
 <h3>getReasonPhrase</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-53">getReasonPhrase</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-46">getReasonPhrase</a></span>()</div>
 <div class="block">Returns the human-readable reason phrase (e.g. <code>"OK"</code>, <code>"Not Found"</code>), or <jk>null</jk> if absent.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -168,7 +161,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getProtocolVersion()">
 <h3>getProtocolVersion</h3>
-<div class="member-signature"><span class="return-type"><a href="HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-60">getProtocolVersion</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpStatusLine.html#line-53">getProtocolVersion</a></span>()</div>
 <div class="block">Returns the HTTP protocol version (e.g. <a href="HttpProtocolVersion.html#HTTP_1_1"><code>HttpProtocolVersion.HTTP_1_1</code></a>).</div>
 <dl class="notes">
 <dt>Returns:</dt>

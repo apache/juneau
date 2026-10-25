@@ -78,17 +78,12 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-43">ResponseBodyAssertion</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-38">ResponseBodyAssertion</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fluent assertion class for HTTP response bodies.
 
  <p>
  Obtain instances via <a href="ResponseAssertion.html#body()"><code>ResponseAssertion.body()</code></a>.
-
- <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
- It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- (and possibly earlier).
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
@@ -161,7 +156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.String)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-64">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expected)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-59">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expected)</span></div>
 <div class="block">Asserts that the response body (as a UTF-8 string) equals the expected value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -177,7 +172,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contains(java.lang.String)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-82">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;substring)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-77">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;substring)</span></div>
 <div class="block">Asserts that the response body (as a UTF-8 string) contains the given substring.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -193,7 +188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-96">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-91">isEmpty</a></span>()</div>
 <div class="block">Asserts that the response body is empty (<jk>null</jk> or zero-length).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -207,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNotEmpty()">
 <h3>isNotEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-110">isNotEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-105">isNotEmpty</a></span>()</div>
 <div class="block">Asserts that the response body is present and non-empty.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -221,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="startsWith(java.lang.String)">
 <h3>startsWith</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-125">startsWith</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseBodyAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseBodyAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-120">startsWith</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix)</span></div>
 <div class="block">Asserts that the response body starts with the given prefix.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -237,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="and()">
 <h3>and</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-137">and</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion">ResponseAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/assertion/ResponseBodyAssertion.html#line-132">and</a></span>()</div>
 <div class="block">Returns the parent <a href="ResponseAssertion.html" title="class in org.apache.juneau.rest.client.assertion"><code>ResponseAssertion</code></a> to continue assertion chaining.</div>
 <dl class="notes">
 <dt>Returns:</dt>

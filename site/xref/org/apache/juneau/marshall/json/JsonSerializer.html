@@ -104,7 +104,7 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create a custom serializer for lax syntax using single quote characters&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * 	JsonSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().simple().sq().build();</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * 	JsonSerializer &lt;jv&gt;serializer&lt;/jv&gt; = Json5Serializer.&lt;jsm&gt;create&lt;/jsm&gt;().build();</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Clone an existing serializer and modify it to use single-quotes&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> * 	&lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.copy().sq().build();</em>
@@ -243,226 +243,225 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a JSON serializer that escapes solidus characters.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = Json5Serializer</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">		 * 		.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">		 * 		.simple()</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">		 * 		.escapeSolidus()</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Produces: "{foo:'&amp;lt;\/bar&amp;gt;'"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"&amp;lt;/bar&amp;gt;"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">public</strong> SELF escapeSolidus() {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">return</strong> escapeSolidus(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		}
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">		 * Same as {@link #escapeSolidus()} but allows you to explicitly specify the value.</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">		 * @param value The value for this setting.</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">public</strong> SELF escapeSolidus(<strong class="jxr_keyword">boolean</strong> value) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			escapeSolidus = value;
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">return</strong> self();
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		}
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder&lt;?&gt; */</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">public</strong> HashKey hashKey() {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">return</strong> HashKey.of(
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				<strong class="jxr_keyword">super</strong>.hashKey(),
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				addBeanTypesJson,
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				escapeSolidus
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">		 * 		.escapeSolidus()</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Produces: "{foo:'&amp;lt;\/bar&amp;gt;'"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"&amp;lt;/bar&amp;gt;"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">public</strong> SELF escapeSolidus() {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">return</strong> escapeSolidus(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		}
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">		 * Same as {@link #escapeSolidus()} but allows you to explicitly specify the value.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">		 * @param value The value for this setting.</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">public</strong> SELF escapeSolidus(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			escapeSolidus = value;
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">return</strong> self();
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder&lt;?&gt; */</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">public</strong> HashKey hashKey() {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">return</strong> HashKey.of(
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">super</strong>.hashKey(),
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				addBeanTypesJson,
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				escapeSolidus
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	}
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * Concrete default builder leaf for the non-subclassed {@link JsonSerializer#create()} / {@link JsonSerializer#copy()} path.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> DefaultBuilder <strong class="jxr_keyword">extends</strong> Builder&lt;DefaultBuilder&gt; {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		DefaultBuilder() {}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		DefaultBuilder(JsonSerializer copyFrom) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">super</strong>(copyFrom);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		}
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		DefaultBuilder(Builder&lt;?&gt; copyFrom) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">super</strong>(copyFrom);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder&lt;?&gt; */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">public</strong> DefaultBuilder copy() {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DefaultBuilder(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<em class="jxr_javadoccomment">/** Default serializer, with whitespace. */</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Readable <strong class="jxr_keyword">extends</strong> JsonSerializer {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> Readable(Builder&lt;?&gt; builder) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">super</strong>(builder.useWhitespace());
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<em class="jxr_javadoccomment">/** Default serializer, all default settings.*/</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> JsonSerializer DEFAULT = <strong class="jxr_keyword">new</strong> JsonSerializer(create());
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<em class="jxr_javadoccomment">/** Default serializer, all default settings.*/</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> JsonSerializer DEFAULT_READABLE = <strong class="jxr_keyword">new</strong> Readable(create());
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * Creates a new builder for this object.</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<span class="jxr_string">"java:S1452"</span> <em class="jxr_comment">// Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	})
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder&lt;?&gt; create() {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DefaultBuilder();
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypesJson;
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> escapeSolidus;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypes2;
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,JsonBeanPropertyMeta&gt; jsonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,JsonClassMeta&gt; jsonClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;JsonSchemaSerializer&gt; schemaSerializer = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<strong class="jxr_keyword">public</strong> JsonSerializer(Builder&lt;?&gt; builder) {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		addBeanTypesJson = builder.addBeanTypesJson;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		escapeSolidus = builder.escapeSolidus;
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		addBeanTypes2 = addBeanTypesJson || <strong class="jxr_keyword">super</strong>.isAddBeanTypes();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<strong class="jxr_keyword">public</strong> Builder&lt;?&gt; copy() {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DefaultBuilder(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<strong class="jxr_keyword">public</strong> JsonSerializerSession.Builder&lt;?&gt; createSession() {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">return</strong> JsonSerializerSession.create(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@Override <em class="jxr_comment">/* Overridden from JsonMetaProvider */</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonBeanPropertyMeta" href="../../../../../org/apache/juneau/marshall/json/JsonBeanPropertyMeta.html#JsonBeanPropertyMeta">JsonBeanPropertyMeta</a> getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">return</strong> JsonBeanPropertyMeta.DEFAULT;
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">return</strong> jsonBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; <strong class="jxr_keyword">new</strong> <a name="JsonBeanPropertyMeta" href="../../../../../org/apache/juneau/marshall/json/JsonBeanPropertyMeta.html#JsonBeanPropertyMeta">JsonBeanPropertyMeta</a>(k.getDelegateFor(), <strong class="jxr_keyword">this</strong>));
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Override <em class="jxr_comment">/* Overridden from JsonMetaProvider */</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonClassMeta" href="../../../../../org/apache/juneau/marshall/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a> getJsonClassMeta(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">return</strong> jsonClassMetas.computeIfAbsent(cm, k -&gt; <strong class="jxr_keyword">new</strong> <a name="JsonClassMeta" href="../../../../../org/apache/juneau/marshall/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a>(k, <strong class="jxr_keyword">this</strong>));
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * Returns the schema serializer based on the settings of this serializer.</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * the settings of the object called on.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * @return The schema serializer.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">public</strong> JsonSchemaSerializer getSchemaSerializer() {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		JsonSchemaSerializer result = schemaSerializer.get();
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">if</strong> (result == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			result = JsonSchemaSerializer.create().marshallingContext(getMarshallingContext()).build();
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">if</strong> (! schemaSerializer.compareAndSet(<strong class="jxr_keyword">null</strong>, result)) {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				result = schemaSerializer.get();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			}
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		}
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<strong class="jxr_keyword">public</strong> JsonSerializerSession getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * Convenience delegator that opens a {@link JsonTokenWriter} over the output using</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object, Object)}).</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * The real implementation lives on {@link JsonSerializerSession#writeTokens(Object)}.</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * Callers that need request-derived configuration should call {@link #createSession()} and</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * invoke {@link JsonSerializerSession#writeTokens(Object)} on the built session instead.</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * 	{@link StringBuilder}.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @return A new {@link JsonTokenWriter}.</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * @throws IOException If the output type is not supported or could not be opened.</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Override <em class="jxr_comment">/* TokenWritable */</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">public</strong> TokenWriter writeTokens(Object output) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">return</strong> getSession().writeTokens(output);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @see Builder#addBeanTypesJson()</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Override
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() { <strong class="jxr_keyword">return</strong> addBeanTypes2; }
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * Prefix solidus &lt;js&gt;'/'&lt;/js&gt; characters with escapes.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @see Builder#escapeSolidus()</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if solidus (e.g. slash) characters should be escaped.</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isEscapeSolidus() { <strong class="jxr_keyword">return</strong> escapeSolidus; }
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	@Override <em class="jxr_comment">/* Overridden from WriterSerializer */</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			.a(<span class="jxr_string">"addBeanTypesJson"</span>, addBeanTypesJson)
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			.a(<span class="jxr_string">"escapeSolidus"</span>, escapeSolidus);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * session args; see {@link #writeTokens(Object)}).  Real impl on</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * {@link JsonSerializerSession#writeArrayRecords(Object)}.</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * @param output The output.</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @return A new element-streamed {@link RecordWriter}.</em>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * @throws IOException If a problem occurred opening the underlying output.</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	@Override <em class="jxr_comment">/* ArrayRecordWritable */</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">public</strong> <a name="RecordWriter" href="../../../../../org/apache/juneau/marshall/stream/RecordWriter.html#RecordWriter">RecordWriter</a> writeArrayRecords(Object output) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">return</strong> getSession().writeArrayRecords(output);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * Concrete default builder leaf for the non-subclassed {@link JsonSerializer#create()} / {@link JsonSerializer#copy()} path.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> DefaultBuilder <strong class="jxr_keyword">extends</strong> Builder&lt;DefaultBuilder&gt; {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		DefaultBuilder() {}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		DefaultBuilder(JsonSerializer copyFrom) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">super</strong>(copyFrom);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		DefaultBuilder(Builder&lt;?&gt; copyFrom) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">super</strong>(copyFrom);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		}
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder&lt;?&gt; */</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">public</strong> DefaultBuilder copy() {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DefaultBuilder(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<em class="jxr_javadoccomment">/** Default serializer, with whitespace. */</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Readable <strong class="jxr_keyword">extends</strong> JsonSerializer {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">		 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">public</strong> Readable(Builder&lt;?&gt; builder) {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			<strong class="jxr_keyword">super</strong>(builder.useWhitespace());
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/** Default serializer, all default settings.*/</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> JsonSerializer DEFAULT = <strong class="jxr_keyword">new</strong> JsonSerializer(create());
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_javadoccomment">/** Default serializer, all default settings.*/</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> JsonSerializer DEFAULT_READABLE = <strong class="jxr_keyword">new</strong> Readable(create());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * Creates a new builder for this object.</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<span class="jxr_string">"java:S1452"</span> <em class="jxr_comment">// Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	})
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder&lt;?&gt; create() {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DefaultBuilder();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	}
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypesJson;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> escapeSolidus;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> addBeanTypes2;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;BeanPropertyMeta,JsonBeanPropertyMeta&gt; jsonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ClassMeta&lt;?&gt;,JsonClassMeta&gt; jsonClassMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicReference&lt;JsonSchemaSerializer&gt; schemaSerializer = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;();
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<strong class="jxr_keyword">public</strong> JsonSerializer(Builder&lt;?&gt; builder) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		addBeanTypesJson = builder.addBeanTypesJson;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		escapeSolidus = builder.escapeSolidus;
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		addBeanTypes2 = addBeanTypesJson || <strong class="jxr_keyword">super</strong>.isAddBeanTypes();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> Builder&lt;?&gt; copy() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DefaultBuilder(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> JsonSerializerSession.Builder&lt;?&gt; createSession() {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">return</strong> JsonSerializerSession.create(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Override <em class="jxr_comment">/* Overridden from JsonMetaProvider */</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonBeanPropertyMeta" href="../../../../../org/apache/juneau/marshall/json/JsonBeanPropertyMeta.html#JsonBeanPropertyMeta">JsonBeanPropertyMeta</a> getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">return</strong> JsonBeanPropertyMeta.DEFAULT;
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">return</strong> jsonBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; <strong class="jxr_keyword">new</strong> <a name="JsonBeanPropertyMeta" href="../../../../../org/apache/juneau/marshall/json/JsonBeanPropertyMeta.html#JsonBeanPropertyMeta">JsonBeanPropertyMeta</a>(k.getDelegateFor(), <strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Override <em class="jxr_comment">/* Overridden from JsonMetaProvider */</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonClassMeta" href="../../../../../org/apache/juneau/marshall/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a> getJsonClassMeta(ClassMeta&lt;?&gt; cm) {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">return</strong> jsonClassMetas.computeIfAbsent(cm, k -&gt; <strong class="jxr_keyword">new</strong> <a name="JsonClassMeta" href="../../../../../org/apache/juneau/marshall/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a>(k, <strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * Returns the schema serializer based on the settings of this serializer.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * Note that this method creates a builder initialized to all default settings, whereas {@link #copy()} copies</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * the settings of the object called on.</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * @return The schema serializer.</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">public</strong> JsonSchemaSerializer getSchemaSerializer() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		JsonSchemaSerializer result = schemaSerializer.get();
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">if</strong> (result == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			result = JsonSchemaSerializer.create().marshallingContext(getMarshallingContext()).build();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">if</strong> (! schemaSerializer.compareAndSet(<strong class="jxr_keyword">null</strong>, result)) {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 				result = schemaSerializer.get();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">public</strong> JsonSerializerSession getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * Convenience delegator that opens a {@link JsonTokenWriter} over the output using</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object, Object)}).</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * The real implementation lives on {@link JsonSerializerSession#writeTokens(Object)}.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * Callers that need request-derived configuration should call {@link #createSession()} and</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * invoke {@link JsonSerializerSession#writeTokens(Object)} on the built session instead.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * 	{@link StringBuilder}.</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * @return A new {@link JsonTokenWriter}.</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @throws IOException If the output type is not supported or could not be opened.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Override <em class="jxr_comment">/* TokenWritable */</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">public</strong> TokenWriter writeTokens(Object output) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">return</strong> getSession().writeTokens(output);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @see Builder#addBeanTypesJson()</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	@Override
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() { <strong class="jxr_keyword">return</strong> addBeanTypes2; }
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * Prefix solidus &lt;js&gt;'/'&lt;/js&gt; characters with escapes.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @see Builder#escapeSolidus()</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if solidus (e.g. slash) characters should be escaped.</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isEscapeSolidus() { <strong class="jxr_keyword">return</strong> escapeSolidus; }
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	@Override <em class="jxr_comment">/* Overridden from WriterSerializer */</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">protected</strong> FluentMap&lt;String,Object&gt; properties() {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.properties()
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			.a(<span class="jxr_string">"addBeanTypesJson"</span>, addBeanTypesJson)
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			.a(<span class="jxr_string">"escapeSolidus"</span>, escapeSolidus);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * session args; see {@link #writeTokens(Object)}).  Real impl on</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * {@link JsonSerializerSession#writeArrayRecords(Object)}.</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * @param output The output.</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * @return A new element-streamed {@link RecordWriter}.</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @throws IOException If a problem occurred opening the underlying output.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	@Override <em class="jxr_comment">/* ArrayRecordWritable */</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<strong class="jxr_keyword">public</strong> <a name="RecordWriter" href="../../../../../org/apache/juneau/marshall/stream/RecordWriter.html#RecordWriter">RecordWriter</a> writeArrayRecords(Object output) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">return</strong> getSession().writeArrayRecords(output);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

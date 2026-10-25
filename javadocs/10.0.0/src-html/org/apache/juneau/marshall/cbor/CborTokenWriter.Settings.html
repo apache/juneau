@@ -337,32 +337,35 @@
 <span class="source-line-no">324</span><span id="line-324">         stackAwaitingKey[depth - 1] = true;  // next emit inside this map should be a key</span>
 <span class="source-line-no">325</span><span id="line-325">   }</span>
 <span class="source-line-no">326</span><span id="line-326"></span>
-<span class="source-line-no">327</span><span id="line-327">   private void pushContainer(boolean isMap) {</span>
-<span class="source-line-no">328</span><span id="line-328">      if (depth == stackIsMap.length) {</span>
-<span class="source-line-no">329</span><span id="line-329">         var n = depth * 2;</span>
-<span class="source-line-no">330</span><span id="line-330">         var nm = new boolean[n];</span>
-<span class="source-line-no">331</span><span id="line-331">         var nk = new boolean[n];</span>
-<span class="source-line-no">332</span><span id="line-332">         System.arraycopy(stackIsMap, 0, nm, 0, depth);</span>
-<span class="source-line-no">333</span><span id="line-333">         System.arraycopy(stackAwaitingKey, 0, nk, 0, depth);</span>
-<span class="source-line-no">334</span><span id="line-334">         stackIsMap = nm;</span>
-<span class="source-line-no">335</span><span id="line-335">         stackAwaitingKey = nk;</span>
-<span class="source-line-no">336</span><span id="line-336">      }</span>
-<span class="source-line-no">337</span><span id="line-337">      stackIsMap[depth] = isMap;</span>
-<span class="source-line-no">338</span><span id="line-338">      stackAwaitingKey[depth] = isMap;  // map starts awaiting a key</span>
-<span class="source-line-no">339</span><span id="line-339">      depth++;</span>
-<span class="source-line-no">340</span><span id="line-340">   }</span>
-<span class="source-line-no">341</span><span id="line-341"></span>
-<span class="source-line-no">342</span><span id="line-342">   private void popContainer(boolean expectMap) {</span>
-<span class="source-line-no">343</span><span id="line-343">      if (depth == 0)</span>
-<span class="source-line-no">344</span><span id="line-344">         throw new IllegalStateException("end-container called with no matching start-container");</span>
-<span class="source-line-no">345</span><span id="line-345">      var actualIsMap = stackIsMap[depth - 1];</span>
-<span class="source-line-no">346</span><span id="line-346">      if (actualIsMap != expectMap)</span>
-<span class="source-line-no">347</span><span id="line-347">         throw new IllegalStateException(</span>
-<span class="source-line-no">348</span><span id="line-348">            "end-container kind mismatch: expected " + (expectMap ? "object" : "array") +</span>
-<span class="source-line-no">349</span><span id="line-349">            ", got " + (actualIsMap ? "object" : "array"));</span>
-<span class="source-line-no">350</span><span id="line-350">      depth--;</span>
-<span class="source-line-no">351</span><span id="line-351">   }</span>
-<span class="source-line-no">352</span><span id="line-352">}</span>
+<span class="source-line-no">327</span><span id="line-327">   @SuppressWarnings({</span>
+<span class="source-line-no">328</span><span id="line-328">      "javabugs:S6466" // The stack arrays start at 16 and double whenever depth reaches their length, so depth always indexes a live slot.</span>
+<span class="source-line-no">329</span><span id="line-329">   })</span>
+<span class="source-line-no">330</span><span id="line-330">   private void pushContainer(boolean isMap) {</span>
+<span class="source-line-no">331</span><span id="line-331">      if (depth == stackIsMap.length) {</span>
+<span class="source-line-no">332</span><span id="line-332">         var n = depth * 2;</span>
+<span class="source-line-no">333</span><span id="line-333">         var nm = new boolean[n];</span>
+<span class="source-line-no">334</span><span id="line-334">         var nk = new boolean[n];</span>
+<span class="source-line-no">335</span><span id="line-335">         System.arraycopy(stackIsMap, 0, nm, 0, depth);</span>
+<span class="source-line-no">336</span><span id="line-336">         System.arraycopy(stackAwaitingKey, 0, nk, 0, depth);</span>
+<span class="source-line-no">337</span><span id="line-337">         stackIsMap = nm;</span>
+<span class="source-line-no">338</span><span id="line-338">         stackAwaitingKey = nk;</span>
+<span class="source-line-no">339</span><span id="line-339">      }</span>
+<span class="source-line-no">340</span><span id="line-340">      stackIsMap[depth] = isMap;</span>
+<span class="source-line-no">341</span><span id="line-341">      stackAwaitingKey[depth] = isMap;  // map starts awaiting a key</span>
+<span class="source-line-no">342</span><span id="line-342">      depth++;</span>
+<span class="source-line-no">343</span><span id="line-343">   }</span>
+<span class="source-line-no">344</span><span id="line-344"></span>
+<span class="source-line-no">345</span><span id="line-345">   private void popContainer(boolean expectMap) {</span>
+<span class="source-line-no">346</span><span id="line-346">      if (depth == 0)</span>
+<span class="source-line-no">347</span><span id="line-347">         throw new IllegalStateException("end-container called with no matching start-container");</span>
+<span class="source-line-no">348</span><span id="line-348">      var actualIsMap = stackIsMap[depth - 1];</span>
+<span class="source-line-no">349</span><span id="line-349">      if (actualIsMap != expectMap)</span>
+<span class="source-line-no">350</span><span id="line-350">         throw new IllegalStateException(</span>
+<span class="source-line-no">351</span><span id="line-351">            "end-container kind mismatch: expected " + (expectMap ? "object" : "array") +</span>
+<span class="source-line-no">352</span><span id="line-352">            ", got " + (actualIsMap ? "object" : "array"));</span>
+<span class="source-line-no">353</span><span id="line-353">      depth--;</span>
+<span class="source-line-no">354</span><span id="line-354">   }</span>
+<span class="source-line-no">355</span><span id="line-355">}</span>
 
 
 

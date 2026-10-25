@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> *    }</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;jc&gt;// Use it to serialize a byte array.&lt;/jc&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().simple().swaps(MyBeanSwap.&lt;jk&gt;class&lt;/jk&gt;).build();</span>
+<span class="source-line-no">041</span><span id="line-41"> *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = Json5Serializer.&lt;jsm&gt;create&lt;/jsm&gt;().swaps(MyBeanSwap.&lt;jk&gt;class&lt;/jk&gt;).build();</span>
 <span class="source-line-no">042</span><span id="line-42"> *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean(&lt;js&gt;"bar"&lt;/js&gt;));  &lt;jc&gt;// Produces "{foo:'bar'}"&lt;/jc&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>

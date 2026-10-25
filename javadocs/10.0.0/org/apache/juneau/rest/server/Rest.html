@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
  this default.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
 
  </ul></div>
 </section>
@@ -456,7 +456,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Use <js>"*"</js> to represent all methods.
@@ -491,7 +491,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Method names are case-insensitive.
@@ -540,7 +540,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Use <js>"*"</js> to represent all methods.
@@ -577,7 +577,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator — Resource-Level Authentication</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -606,7 +606,7 @@ loadScripts(document, 'script');</script>
  Children are <b>isolated from the parent's resolution chain</b> by design — a child's serializers, parsers,
  guards, hooks, etc. are all resolved against the child's own <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> only, NOT walked
  through the parent.  This is the opposite of how <a href="#mixins()"><code>mixins</code></a> resolve.  See the
- <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin Sub-Contexts &mdash; Mixin-vs-child divergence</a>
+ <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">REST Server — Mixin Sub-Contexts</a>
  topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers
  sharing the host's URL namespace and resolution chain).
 
@@ -618,7 +618,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources">Child Resources</a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">Mixin Sub-Contexts</a> (for the mixin-vs-child divergence)
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server — Mixin Sub-Contexts</a> (for the mixin-vs-child divergence)
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -666,7 +666,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>See Also:</h5><ul>
    <li class='ja'><a href="Child.html" title="annotation interface in org.apache.juneau.rest.server"><code>Child</code></a>
    <li class='jm'><a href="#children()"><code>children()</code></a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Child Resources &mdash; Host-side seeding with @Child</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Child Resources</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -723,7 +723,7 @@ loadScripts(document, 'script');</script>
  Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.
  <a href="#children()"><code>Children</code></a> are independently-mounted resources isolated from the host's resolution chain.
  See the
- <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin Sub-Contexts &mdash; Mixin-vs-child divergence</a>
+ <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">REST Server — Mixin Sub-Contexts</a>
  topic for the rationale.
 
  <h5 class='section'>Inheritance Rules</h5>
@@ -741,8 +741,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='jma'><a href="#mixinDefs()"><code>mixinDefs()</code></a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server &mdash; Mixin Sub-Contexts</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server — Mixin Sub-Contexts</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -846,7 +846,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -875,7 +875,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Use the keyword <c>SYSTEM_DEFAULT</c> to refer to the system default configuration
@@ -911,7 +911,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -960,7 +960,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       The programmatic knob <code>RestContext.Builder.lazyChildInit(boolean)</code> overrides this annotation.
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$E{LAZY_CHILDREN,false}"</js>).
  </ul>
 
@@ -989,7 +989,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -1019,7 +1019,7 @@ loadScripts(document, 'script');</script>
  Use <a href="#noInherit()"><code>noInherit()</code></a> to prevent inheriting less-derived contributions.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options - Safe Properties</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1046,7 +1046,7 @@ loadScripts(document, 'script');</script>
  Use <a href="#noInherit()"><code>noInherit()</code></a> to prevent inheriting less-derived contributions.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options - Safe Properties</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1086,8 +1086,8 @@ loadScripts(document, 'script');</script>
  <code>HealthMixin</code>).
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options</a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server &mdash; Mixin Sub-Contexts</a> (for the per-property opt-out semantics)
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options via HTTP</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server — Mixin Sub-Contexts</a> (for the per-property opt-out semantics)
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1138,7 +1138,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -1162,7 +1162,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
@@ -1197,7 +1197,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -1240,7 +1240,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
@@ -1272,7 +1272,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -1296,7 +1296,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -1325,7 +1325,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       The format is plain-text.
@@ -1372,7 +1372,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -1417,7 +1417,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Use <a href="#noInherit()"><code>noInherit()</code></a> to prevent inheriting an opt-in from a parent <code>@Rest</code>.
@@ -1466,7 +1466,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Use <a href="#noInherit()"><code>noInherit()</code></a> to prevent inheriting an opt-in from a parent <code>@Rest</code>.
@@ -1516,7 +1516,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$E{ENABLE_VIRTUAL_THREADS,false}"</js>).
    <li class='note'>
       Synchronized blocks and JNI calls in handler code <i>pin</i> a virtual thread to its carrier thread
@@ -1562,7 +1562,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$E{ENABLE_OBSERVABILITY,false}"</js>).
    <li class='note'>
       Per-operation overrides via <a href="RestOp.html#observability()"><code>RestOp.observability()</code></a> (or verb annotations) take precedence over
@@ -1573,7 +1573,7 @@ loadScripts(document, 'script');</script>
    <li class='ja'><a href="RestOp.html#observability()"><code>RestOp.observability()</code></a>
    <li class='jc'><a href="metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a>
    <li class='jc'><a href="tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1604,7 +1604,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$E{ASYNC_TIMEOUT_MS,30000}"</js>).
  </ul>
 
@@ -1726,7 +1726,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders in REST servers</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1841,7 +1841,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
@@ -1890,7 +1890,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2128,7 +2128,7 @@ loadScripts(document, 'script');</script>
  Each array element is treated as a template:
  <ol>
    <li>The element runs through
-      <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>
+      <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       variable substitution (e.g. <code>$C{health.paths}</code>, <code>$E{HEALTH_PATHS,/healthz}</code>,
       <code>$S{my.system.prop,/healthz}</code>) using the bootstrap <a href="../../commons/svl/VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> on the bean store.
    <li>The post-SVL value is split on <code>,</code>; each piece is trimmed and empty pieces are dropped.
@@ -2216,7 +2216,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2300,7 +2300,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2410,7 +2410,7 @@ loadScripts(document, 'script');</script>
    <li>
       If patterns are used, you must specify the list of declared roles using <a href="#rolesDeclared()"><code>rolesDeclared()</code></a>.
    <li>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2551,7 +2551,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2689,7 +2689,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
       Corresponds to the swagger field <c>/info/title</c>.
@@ -2715,7 +2715,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2739,7 +2739,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2766,7 +2766,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
@@ -2793,7 +2793,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul></div>
 <dl class="notes">
