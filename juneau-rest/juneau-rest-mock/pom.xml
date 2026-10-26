@@ -70,7 +70,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-test</artifactId>
+			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

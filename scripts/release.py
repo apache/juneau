@@ -43,8 +43,8 @@ Options:
     --skip-step STEP_NAME     Skip a specific step (can be used multiple times)
     --resume                  Resume from the last checkpoint (if available)
     --revert                  Delete the git tag, revert the Maven versions and remove the RC from SVN
-    --console MODE            Maven output on the console: full (default), board or none (JUNEAU_RUN_CONSOLE)
-    --detail LEVEL            Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
+    --console MODE            Maven output on the console: full (default), board or none (JUNEAU_TERMINAL_CONSOLE)
+    --detail LEVEL            Console detail: summary, actionable (default), modules or all (JUNEAU_TERMINAL_DETAIL)
 """
 
 import argparse
@@ -111,16 +111,16 @@ RELEASE_STEPS = list(STEP_TITLES)
 # The command the resume hint names.
 RESUME_PROG = 'python3 scripts/release.py'
 
-# The checkpoint's key for the last finished step before juneau_scripts' Checkpoint, which calls it "last".
+# The checkpoint's key for the last finished step before juneau_terminal_scripts' Checkpoint, which calls it "last".
 LEGACY_LAST_STEP = 'last_step'
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def toolkit(name):
-    """A juneau_scripts module (run, steps, state, prompt) from the in-tree toolkit."""
+    """A juneau_terminal_scripts module (run, steps, state, prompt) from the in-tree toolkit."""
     _juneau.load()
-    return importlib.import_module(f"juneau_scripts.{name}")
+    return importlib.import_module(f"juneau_terminal_scripts.{name}")
 
 
 def say(text='', level='info'):
@@ -204,7 +204,7 @@ class ReleaseScript:
     """Main release script class."""
     
     def __init__(self, rc: Optional[int] = None, start_step: Optional[str] = None, skip_steps: List[str] = None, resume: bool = False, load_env: bool = True):
-        self.jr = _juneau.load()[0]   # juneau_run; not self.run, which would hide the run() method
+        self.jr = _juneau.load()[0]   # juneau_terminal; not self.run, which would hide the run() method
         self.current = None      # the step whose row run_command's sub-rows go under
         self._sub = 0            # sub-row counter within the current step
         self.summary = None      # the current step's row text, set by the step method
@@ -1119,18 +1119,18 @@ Anyone can participate in testing and voting, not just committers, please feel f
     
     def _in_session(self, title, body, header, plan=None):
         """
-        Run body in one juneau_scripts session: done(ok|fail|cancelled), exit 130 on Ctrl-C or Ctrl-D, 1 on a
+        Run body in one juneau_terminal_scripts session: done(ok|fail|cancelled), exit 130 on Ctrl-C or Ctrl-D, 1 on a
         failure.  The full log always goes to ~/.juneau-release-logs/<release>-<ts>.log, whatever
-        JUNEAU_RUN_CONSOLE says, and juneau_run puts its path in the header.
+        JUNEAU_TERMINAL_CONSOLE says, and juneau_terminal puts its path in the header.
         """
         release = os.environ.get('X_RELEASE') or self.state.get('X_RELEASE') or 'juneau-release'
         self.full_log = release_log_path(release)
         self.full_log.parent.mkdir(parents=True, exist_ok=True)
         self.full_log.touch()
-        os.environ['JUNEAU_RUN_FULL_LOG'] = str(self.full_log)
+        os.environ['JUNEAU_TERMINAL_FULL_LOG'] = str(self.full_log)
 
         def full_log_note():
-            # The final line names the full log only on fail (juneau_run's format_final), so say it first, at
+            # The final line names the full log only on fail (juneau_terminal's format_final), so say it first, at
             # warn: info would be hidden at the default detail.
             self.jr.say(f"full log: {self.full_log}", level='warn')
 
@@ -1248,22 +1248,22 @@ def main(argv=None):
     parser.add_argument(
         '--console',
         choices=('full', 'board', 'none'),
-        help='Maven output on the console: full (default), board or none (also JUNEAU_RUN_CONSOLE)'
+        help='Maven output on the console: full (default), board or none (also JUNEAU_TERMINAL_CONSOLE)'
     )
     parser.add_argument(
         '--detail',
-        help='Console detail: summary, actionable (default), modules or all (also JUNEAU_RUN_DETAIL)'
+        help='Console detail: summary, actionable (default), modules or all (also JUNEAU_TERMINAL_DETAIL)'
     )
     
     args = parser.parse_args(argv)
     
     if args.console:
-        os.environ['JUNEAU_RUN_CONSOLE'] = args.console   # an argument beats a value already in the environment
+        os.environ['JUNEAU_TERMINAL_CONSOLE'] = args.console   # an argument beats a value already in the environment
     run = _juneau.load()[0]
     run.warn("scripts/release.py is deprecated: Juneau releases run from juneau-release-manager "
              "(scripts/release.py there, or its Release page). This script will be removed after the next release.")
-    if os.environ.pop('RUN_MARKERS', None):
-        run.warn("release.py does not emit run markers; RUN_MARKERS is ignored")
+    if os.environ.pop('TERMINAL_MARKERS', None):
+        run.warn("release.py does not emit run markers; TERMINAL_MARKERS is ignored")
     try:
         run.export_detail(args.detail)
     except ValueError as e:

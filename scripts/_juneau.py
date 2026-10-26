@@ -15,13 +15,13 @@
 # limitations under the License.
 
 """
-The one loader push.py, test.py and release.py share: the in-tree juneau_scripts toolkit and juneau_run, from
-juneau-run/src/main/python beside this directory.
+The one loader push.py, test.py and release.py share: the in-tree juneau_terminal_scripts toolkit and juneau_terminal, from
+juneau-terminal/src/main/python beside this directory.
 
     import _juneau
     jr, js = _juneau.load()
 
-bootstrap.load does the work (in-tree mode, idempotent within a process, an already-loaded juneau_run reused).  It
+bootstrap.load does the work (in-tree mode, idempotent within a process, an already-loaded juneau_terminal reused).  It
 leaves sys.dont_write_bytecode set, so nothing writes __pycache__ into the source tree the Maven build's RAT check
 scans.
 """
@@ -30,17 +30,17 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PYTHON_SRC = ROOT / "juneau-run" / "src" / "main" / "python"
+PYTHON_SRC = ROOT / "juneau-terminal" / "src" / "main" / "python"
 
 
 def load():
-    """(juneau_run, juneau_scripts).  Raises bootstrap.BootstrapError when juneau-run's sources are not there."""
+    """(juneau_terminal, juneau_terminal_scripts).  Raises bootstrap.BootstrapError when juneau-terminal's sources are not there."""
     src = str(PYTHON_SRC)
     if src not in sys.path:
         sys.path.insert(0, src)
     sys.dont_write_bytecode = True      # before bootstrap itself is imported from the source tree
     import bootstrap
-    return bootstrap.load(pom=str(ROOT / "pom.xml"), run=True)
+    return bootstrap.load(pom=str(ROOT / "pom.xml"), terminal=True)
 
 
 def same_shape_runs(records):

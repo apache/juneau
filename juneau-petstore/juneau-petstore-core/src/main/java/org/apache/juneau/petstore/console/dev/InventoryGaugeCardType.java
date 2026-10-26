@@ -21,7 +21,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.dto.*;
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.console.*;
 
 /**
  * The server half of the Custom cards page's validated card type: an inventory gauge for one species.

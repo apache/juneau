@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.petstore.console;
 
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.console.test.PageContractAssert.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -30,7 +30,7 @@ import org.apache.juneau.petstore.rest.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.console.test.*;
+import org.apache.juneau.console.test.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 

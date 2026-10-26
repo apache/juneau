@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.

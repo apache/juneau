@@ -71,32 +71,32 @@
 		<!-- Console UI: chrome, FreeMarker bridge, DataTables, views and widgets. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-console-ui</artifactId>
+			<artifactId>juneau-console</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-console-ui-freemarker</artifactId>
+			<artifactId>juneau-console-freemarker</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-views</artifactId>
+			<artifactId>juneau-console-views</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-widgets</artifactId>
+			<artifactId>juneau-console-widgets</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-datatables</artifactId>
+			<artifactId>juneau-console-datatables</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-terminal</artifactId>
+			<artifactId>juneau-terminal-region</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -126,7 +126,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-test</artifactId>
+			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -173,7 +173,7 @@
 
 			    mvn -Pjs-tests -pl juneau-petstore/juneau-petstore-core -am test -Dtest='org.apache.juneau.petstore.**.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
 
-			A copy of juneau-rest-server-views' js-tests profile (see the notes there on target/js, the browser cache
+			A copy of juneau-console-views' js-tests profile (see the notes there on target/js, the browser cache
 			and the -Djuneau.jsTests.* overrides; -Djuneau.jsTests.forks=N sets how many classes run at once, 3 by
 			default), with only the harness path and the npm packages changed: the
 			petstore pages load jQuery and DataTables from the WebJars the console serves (WebJarsMixin).
@@ -181,7 +181,7 @@
 		<profile>
 			<id>js-tests</id>
 			<properties>
-				<!-- Keep in step with juneau-rest-server-views/pom.xml: one Playwright version, one CI cache. -->
+				<!-- Keep in step with juneau-console-views/pom.xml: one Playwright version, one CI cache. -->
 				<playwright.version>1.49.1</playwright.version>
 				<juneau.jsTests.node>node</juneau.jsTests.node>
 				<juneau.jsTests.npm>npm</juneau.jsTests.npm>

@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.rest.client.classic.assertion.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Represents a single header on an HTTP response.

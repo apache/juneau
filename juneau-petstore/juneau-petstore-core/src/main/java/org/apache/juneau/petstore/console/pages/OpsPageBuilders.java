@@ -19,11 +19,11 @@ package org.apache.juneau.petstore.console.pages;
 import java.util.*;
 
 import org.apache.juneau.commons.beanquery.*;
-import org.apache.juneau.rest.server.terminal.*;
-import org.apache.juneau.rest.server.view.freemarker.console.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.views.RowAction.*;
-import org.apache.juneau.rest.server.views.TableSpec.*;
+import org.apache.juneau.terminal.region.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.views.RowAction.*;
+import org.apache.juneau.console.views.TableSpec.*;
 
 /**
  * Builder twins of the Operations pages: P6 Jobs ({@code jobs.ftlh}) and P7 Audit ({@code audit.ftlh}).

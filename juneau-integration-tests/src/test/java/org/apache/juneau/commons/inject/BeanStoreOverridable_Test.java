@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.encoders.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.test.junit.*;
+import org.apache.juneau.bct.junit.*;
 import org.junit.jupiter.api.*;
 
 /**

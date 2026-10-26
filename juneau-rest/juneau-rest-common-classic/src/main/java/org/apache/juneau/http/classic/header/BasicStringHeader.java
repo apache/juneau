@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Category of headers that consist of a single string value.

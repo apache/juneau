@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.data.*;
-import org.apache.juneau.rest.server.terminal.*;
+import org.apache.juneau.terminal.region.*;
 
 /**
  * The groom-pet demo runs behind the Jobs page's terminal cards.

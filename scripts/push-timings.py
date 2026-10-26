@@ -88,7 +88,7 @@ def _store(repo):
 
 
 def history_off() -> bool:
-    """True when JUNEAU_RUN_HISTORY=0: the store neither records nor reads."""
+    """True when JUNEAU_TERMINAL_HISTORY=0: the store neither records nor reads."""
     return not _juneau.load()[0].history_enabled()
 
 
@@ -229,7 +229,7 @@ def main(argv: list[str] | None = None) -> int:
     history = Path(args.history).expanduser() if args.history else None
     repo = Path(args.repo).expanduser() if args.repo else REPO_ROOT
     if history is None and history_off():
-        print("📊 Push-timing report: run history is off (JUNEAU_RUN_HISTORY=0).")
+        print("📊 Push-timing report: run history is off (JUNEAU_TERMINAL_HISTORY=0).")
         return 0
     records = load_history(repo, history)
     _, reason = latest_run(records)

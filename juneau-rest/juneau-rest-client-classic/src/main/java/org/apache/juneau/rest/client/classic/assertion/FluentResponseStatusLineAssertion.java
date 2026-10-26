@@ -22,7 +22,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Used for fluent assertion calls against a response {@link StatusLine} object.

@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 # Sprite and key file, relative to the repository root.
-VIEWS_RESOURCES = Path("juneau-rest/juneau-rest-server-views/src/main/resources/org/apache/juneau/views")
+VIEWS_RESOURCES = Path("juneau-rest/juneau-console-views/src/main/resources/org/apache/juneau/views")
 SPRITE = VIEWS_RESOURCES / "juneau-symbols.svg"
 KEY = VIEWS_RESOURCES / "juneau-symbols-key.svg"
 

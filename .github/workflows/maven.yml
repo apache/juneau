@@ -72,7 +72,7 @@ jobs:
     - name: Build with Maven
       run: mvn --no-transfer-progress --batch-mode --show-version
 
-  # Executes the juneau-rest-server-views client runtime (juneau-pages.js) in headless Chromium.  Two real defects
+  # Executes the juneau-console-views client runtime (juneau-pages.js) in headless Chromium.  Two real defects
   # shipped in that runtime because JavaScript had no execution coverage at all, so this job is the thing that makes
   # the harness real: it is opt-in via the -Pjs-tests profile precisely so an offline source-tarball build never needs
   # Node, npm or a browser, which means it only ever runs where something deliberately asks for it - here.
@@ -83,7 +83,7 @@ jobs:
   # on every JDK.
   #
   # Runs on EVERY push and pull request - it inherits this workflow's triggers rather than adding a path filter
-  # scoped to juneau-rest/juneau-rest-server-views.  A path filter would be cheaper but wrong: the fixture this
+  # scoped to juneau-rest/juneau-console-views.  A path filter would be cheaper but wrong: the fixture this
   # harness renders is assembled from three modules, so a regression can arrive from outside the views module
   # entirely.  The PAGE_META sidecar alone depends on StringUtils.escapeForScript in juneau-commons and on
   # HtmlBuilder.rawText in juneau-bean-html5 - break either and JSON.parse fails in the browser and every page blanks,
@@ -121,7 +121,7 @@ jobs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('juneau-rest/juneau-rest-server-views/pom.xml', 'juneau-petstore/juneau-petstore-core/pom.xml') }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles('juneau-rest/juneau-console-views/pom.xml', 'juneau-petstore/juneau-petstore-core/pom.xml') }}
         restore-keys: ${{ runner.os }}-playwright-
     # Recorded so a future failure log says which Node actually ran, rather than "whatever the runner image had".
     - name: Show Node version
@@ -136,9 +136,9 @@ jobs:
       run: >
         mvn --no-transfer-progress --batch-mode --show-version
         -Pjs-tests
-        -pl juneau-rest/juneau-rest-server-views -am
+        -pl juneau-rest/juneau-console-views -am
         test
-        -Dtest='org.apache.juneau.rest.server.views.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
+        -Dtest='org.apache.juneau.console.views.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
         -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
     # The petstore console's browser tests: real Jetty on an ephemeral port, the same pinned Playwright and the same
     # browser cache as the step above.  -pl/-am for the same reason as above; -Dtest is package-qualified because a
@@ -162,9 +162,9 @@ jobs:
       run: >
         mvn --no-transfer-progress --batch-mode
         -Pjs-tests
-        -pl juneau-rest/juneau-rest-server-terminal -am
+        -pl juneau-rest/juneau-terminal-region -am
         test
-        -Dtest='org.apache.juneau.rest.server.terminal.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
+        -Dtest='org.apache.juneau.terminal.region.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
         -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
     - name: Upload petstore theme screenshots
       if: always()
@@ -180,7 +180,7 @@ jobs:
     - name: Explain failure
       if: failure()
       env:
-        VIEWS: juneau-rest/juneau-rest-server-views
+        VIEWS: juneau-rest/juneau-console-views
       run: |
         echo '================================================================================'
         echo 'The JavaScript-execution harness failed.  It runs the real juneau-views.js'
@@ -201,7 +201,7 @@ jobs:
         echo '  mvn -Pjs-tests -pl juneau-petstore/juneau-petstore-core -am test -Dtest="org.apache.juneau.petstore.**.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'
         echo '  Per-suite stderr: juneau-petstore/juneau-petstore-core/target/js/<suite>-stderr.txt'
         echo 'Terminal browser tests:'
-        echo '  mvn -Pjs-tests -pl juneau-rest/juneau-rest-server-terminal -am test -Dtest="org.apache.juneau.rest.server.terminal.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'
+        echo '  mvn -Pjs-tests -pl juneau-rest/juneau-terminal-region -am test -Dtest="org.apache.juneau.terminal.region.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'
 
   # The build and release tooling's own tests (scripts/tests).  Pure Python: no Maven, no JDK, and nothing from the
   # network beyond pip itself.

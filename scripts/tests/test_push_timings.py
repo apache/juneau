@@ -200,9 +200,9 @@ def test_main_without_history_says_so_and_writes_nothing(timings, tmp_path, caps
 
 def test_main_with_history_off_says_so(timings, tmp_path, capsys, run_history, history_record, monkeypatch):
     store = fill(run_history.store(repo=tmp_path), store_records(history_record, {"m": ([10.0], 10.0)}))
-    monkeypatch.setenv("JUNEAU_RUN_HISTORY", "0")
+    monkeypatch.setenv("JUNEAU_TERMINAL_HISTORY", "0")
     assert timings.main(["--repo", str(tmp_path)]) == 0
-    assert capsys.readouterr().out == "📊 Push-timing report: run history is off (JUNEAU_RUN_HISTORY=0).\n"
+    assert capsys.readouterr().out == "📊 Push-timing report: run history is off (JUNEAU_TERMINAL_HISTORY=0).\n"
     assert not store.path.with_name("test-timings.txt").exists()
 
 

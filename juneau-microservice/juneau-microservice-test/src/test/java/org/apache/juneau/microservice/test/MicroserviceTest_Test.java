@@ -25,7 +25,7 @@ import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.test.junit.*;
+import org.apache.juneau.bct.junit.*;
 import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
 

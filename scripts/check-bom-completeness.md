@@ -20,7 +20,7 @@ None.
 ## What it does
 
 1. Finds the repository root as the parent of `scripts/` and requires `juneau-bom/pom.xml` (`main`).
-2. Walks every `pom.xml` under the root (`collect_publishable`). It skips poms under a `target/` directory, under `juneau-shaded/`, `juneau-examples/`, `juneau-petstore/` and `juneau-distrib/`, and poms whose `artifactId` is in the exclusion set (the BOM itself, the test-support modules, `juneau-integration-tests`, `juneau-run`, `juneau-microservice-examples`, and a few others, listed in `EXCLUDED_ARTIFACTS`). It also skips aggregators (packaging `pom` with `<modules>`). Unparseable poms produce a warning on stderr.
+2. Walks every `pom.xml` under the root (`collect_publishable`). It skips poms under a `target/` directory, under `juneau-shaded/`, `juneau-examples/`, `juneau-petstore/` and `juneau-distrib/`, and poms whose `artifactId` is in the exclusion set (the BOM itself, the test-support modules, `juneau-integration-tests`, `juneau-terminal`, `juneau-microservice-examples`, and a few others, listed in `EXCLUDED_ARTIFACTS`). It also skips aggregators (packaging `pom` with `<modules>`). Unparseable poms produce a warning on stderr.
 3. Reads the `org.apache.juneau` artifacts from the BOM's `<dependencyManagement>` (`collect_bom_entries`).
 4. Compares the two sets: modules missing from the BOM, and BOM entries that are not publishable modules.
 

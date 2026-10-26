@@ -1,0 +1,872 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console;
+
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.util.*;
+import java.util.regex.*;
+
+/**
+ * The validated token model behind the console's FTL {@code <@theme>}/{@code <@token>} directives: an immutable theme
+ * name, an ordered map of leaf tokens (literals) and an ordered map of alias tokens (live {@code var()} references).
+ *
+ * <p>
+ * Applications don't build themes in Java. They author them in their FreeMarker chrome, and the directives build
+ * this object:
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bftl'>
+ * 	&lt;@console&gt;
+ * 		&lt;@theme name="light-red"&gt;
+ * 			&lt;#-- A leaf: a literal (or a var() resolved to one at build time). --&gt;
+ * 			&lt;@token name="--jc-pill-red-bg" value="#fdeceb"/&gt;
+ * 			&lt;#-- An alias: a reference that stays live in the browser's cascade. --&gt;
+ * 			&lt;@token name="--jc-tab-bar-bg" alias="var(--jc-card-bg)"/&gt;
+ * 		&lt;/@theme&gt;
+ * 		&lt;@main/&gt;
+ * 	&lt;/@console&gt;
+ * </p>
+ *
+ * <p>
+ * That is equivalent to the following, which is what {@code <@theme>} does internally after seeding the builder
+ * from the stock palette:
+ *
+ * <p class='bjava'>
+ * 	Theme <jv>theme</jv> = Theme.<jsm>create</jsm>(<js>"light-red"</js>)
+ * 		.token(<js>"--jc-pill-red-bg"</js>, <js>"#fdeceb"</js>)
+ * 		.alias(<js>"--jc-tab-bar-bg"</js>, <js>"var(--jc-card-bg)"</js>)
+ * 		.build();
+ * 	String <jv>css</jv> = ConsoleChromeMixin.<jsm>overrideBlock</jsm>(<jv>theme</jv>);
+ * 	<jc>// html:root{--jc-pill-red-bg:#fdeceb;--jc-tab-bar-bg:var(--jc-card-bg);}</jc>
+ * </p>
+ *
+ * <p>
+ * The five stock palettes ({@link #OPEN}, {@link #LIGHT_RED}, {@link #LIGHT_BROWN}, {@link #RED}, {@link #GRAY})
+ * are selected by name: {@code <@theme name="gray">} in FTL, or {@code ConsoleChromeMixin.create().theme("gray")}
+ * for the served {@code chrome.css}.
+ *
+ * <h5 class='section'>The two channels:</h5>
+ * <p>
+ * The contract in one sentence: <b>a leaf is always a literal; an alias is always a reference; and no token name
+ * is declared by both.</b> The two channels are disjoint by <i>value shape</i> rather than by convention, and each
+ * carries its own validation:
+ *
+ * <table class='styled'>
+ * 	<tr><th>&nbsp;</th><th>leaf ({@link #getTokens()})</th><th>alias ({@link #getAliases()})</th></tr>
+ * 	<tr><td>example</td><td><c>--jc-accent: #b45309</c></td><td><c>--jc-tab-bar-bg: var(--jc-card-bg)</c></td></tr>
+ * 	<tr><td>value shape</td><td>literal</td><td>reference</td></tr>
+ * 	<tr><td>validated by</td><td>{@code CssValueGrammar}'s accept-known-safe allowlist</td><td>the anchored
+ * 		{@code var(--jc-name)} recognizer ({@link Builder#alias(String, String)})</td></tr>
+ * 	<tr><td>emitted</td><td>escaped, via {@code CssValueEscaper}</td><td>verbatim &mdash; see
+ * 		<i>Injection safety</i> below</td></tr>
+ * </table>
+ *
+ * <p>
+ * The rule a theme author needs to remember: <b>a literal belongs in {@link Builder#token(String, String)}; a
+ * reference belongs in {@link Builder#alias(String, String)}.</b> To make {@code --jc-tab-bar-bg} be {@code #fff},
+ * declare it with {@code token()}. To make it <i>follow</i> {@code --jc-card-bg} through the live cascade,
+ * {@link Builder#alias(String, String) alias} it.
+ *
+ * <h5 class='section'>Why the alias channel exists at all:</h5>
+ * <p>
+ * A leaf cannot carry a derived token. {@link Builder#build()} recognizes a {@code var(--jc-name)} value as a
+ * reference and <b>resolves it to a frozen literal</b>, which snapshots the live CSS cascade at composition time
+ * &mdash; so a token that must <i>keep following</i> its target can never be a leaf. {@code
+ * ConsoleChromeMixin.OPEN_ROLE_ALIASES} is the framework's own answer to the same problem, but those are
+ * unconditional framework defaults rather than per-theme derivations. The alias map is the third channel:
+ * <b>consumer-authored derivations that survive to the wire as references.</b>
+ *
+ * <h5 class='section'>The var() asymmetry &mdash; read this before "unifying" the two paths:</h5>
+ * <p>
+ * These two adjacent channels have <b>opposite</b> {@code var()} semantics, deliberately:
+ * <ul class='spaced-list'>
+ * 	<li>A {@code var()} in a <b>leaf</b> is <b>resolved away</b> before the wire ({@link Builder#build()}), so the
+ * 		served declaration carries the literal. That is asserted by {@code
+ * 		ConsoleChromeMixin_OverrideBlock_Test.a05}, which pins that {@code --jc-tag-red-text:var(} never appears in
+ * 		the body.
+ * 	<li>A {@code var()} in an <b>alias</b> must <b>survive as a reference</b> in the served declaration. Freezing
+ * 		it to a literal would defeat the entire purpose of the channel.
+ * </ul>
+ * <p>
+ * So a change that "unifies the two {@code var()} paths" silently destroys this type's reason to exist. The same
+ * warning is repeated at the emission site ({@code ConsoleChromeMixin.overrideBlock}), because that is the other
+ * place the mistake is reachable from.
+ *
+ * <h5 class='section'>The dark channel:</h5>
+ * <p>
+ * A theme may also declare <b>dark accents</b> with {@link Builder#dark(String, String)}, read back through
+ * {@link #getDarkTokens()}. They apply on top of the shared dark neutral layer, when the page is in the dark scheme.
+ * Only literals are accepted: a {@code var()} would resolve against the light palette, which would bake the wrong
+ * value into the dark scheme. The stock themes use the channel to keep their link, focus and accent colours
+ * legible on a dark surface.
+ *
+ * <h5 class='section'>Security:</h5>
+ * <p>
+ * Identifiers (theme name, token name, alias name) are rejected fail-closed by anchored {@code String.matches(...)}
+ * guards. Leaf values are validated by {@code CssValueGrammar}'s accept-known-safe allowlist grammar (not a
+ * {@code url(}-blocklist) and are escaped at emission time by {@code CssValueEscaper}. A leaf may also be a
+ * {@code var(--jc-name)} reference to another known token; {@link Builder#build() build()} resolves it to a
+ * concrete literal (own tokens shadowing {@link #OPEN}'s), so {@code var(} never appears in a {@link #getTokens()}
+ * value. An unknown reference, a cycle, or a chain longer than the resolution depth cap is a loud {@code build()}
+ * failure, never a silent fallback. Declared names in the reserved {@code --jc-chrome-*} namespace are rejected
+ * (see {@code rejectReservedChromeDeclaration}).
+ *
+ * <h5 class='section'>Injection safety of the alias channel:</h5>
+ * <p>
+ * Every alias value must match the fully-anchored {@code var(--jc-name)} shape ({@code VAR_REFERENCE}), which
+ * admits <b>exactly</b> this alphabet and nothing else: the three letters of {@code var} in either case, an opening
+ * paren, optional ASCII spaces, the literal {@code --jc-}, one or more of {@code [a-z0-9-]}, optional ASCII spaces,
+ * and a closing paren. (The recognizer's whitespace class can only ever match a plain space here, because every
+ * other character it would accept &mdash; tab, newline, carriage return, form feed, vertical tab &mdash; is a C0
+ * control character that {@code CssValueGrammar}'s belt has already rejected on the raw value, before this
+ * recognizer runs.)
+ *
+ * <p>
+ * So not one of {@code ;}, <code>}</code>, {@code "}, {@code '}, {@code \}, <code>/&#42;</code>, {@code url(} or a
+ * control character is <i>representable</i> in an accepted value &mdash; the emitted text is provably safe with
+ * <b>no escaper at all</b>. That is a strictly stronger claim than the leaf channel's "safe because we escape it",
+ * and it is the reason the channel is restricted to references rather than given an escaper of its own (escaping a
+ * {@code var()} reference would corrupt its parens).
+ *
+ * <p>
+ * A corollary worth stating: because an alias cannot carry a literal, the alias channel is <b>structurally</b>
+ * incapable of smuggling in a colour value, a font stack, or any other palette content. It can only ever point one
+ * name at another.
+ *
+ * @since 10.0.0
+ */
+@SuppressWarnings({
+	"java:S1192" // Duplicated literals are CSS custom-property / theme-token values; constants would obscure the token map.
+})
+public final class Theme {
+
+	/** Anchored (full-string) guard for a theme name. Anchoring matters: an unanchored {@code find()} would accept {@code "--jc-foo;--bar"}-shaped garbage as a substring match. */
+	private static final String NAME_PATTERN = "^[a-z][a-z0-9-]*$";
+
+	/** Anchored (full-string) guard for a CSS custom-property token name. */
+	private static final String TOKEN_NAME_PATTERN = "^--jc-[a-z0-9-]+$";
+
+	/**
+	 * Anchored recognizer for a {@code var(--jc-name)} Theme-layer reference, run on the post-belt (control-char
+	 * rejected, comment-stripped, trimmed) value.
+	 *
+	 * <p>
+	 * Fully anchored ({@code ^...$}) so a reference can only ever be the <b>entire</b> value, never a prefix or
+	 * suffix of some larger value: {@code linear-gradient(var(--jc-a), #fff)} never matches this and is rejected by
+	 * the unchanged grammar. There is no fallback branch &mdash; {@code var(--jc-x, #fff)} simply fails to match
+	 * (comma inside the parens) and falls through to grammar rejection.
+	 */
+	static final Pattern VAR_REFERENCE = Pattern.compile("^[Vv][Aa][Rr]\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
+
+	/** The reserved token-name prefix guarded by {@link #rejectReservedChromeDeclaration(String, String)}. */
+	static final String CHROME_TOKEN_PREFIX = "--jc-chrome-";
+
+	/**
+	 * The maximum number of reference hops resolved before {@code build()} fails, enforced independently of cycle
+	 * detection so a long <i>acyclic</i> chain is bounded too.
+	 */
+	private static final int MAX_REFERENCE_HOPS = 8;
+
+	/**
+	 * The default, "open" theme.
+	 *
+	 * <p>
+	 * Ships with the framework so out-of-the-box adoption needs zero theme configuration: an Inter/system-ui font
+	 * stack, a neutral blue-gray page gradient, and blue accents.  Its token set is exactly the set
+	 * {@code chrome.css} references &mdash; see {@code ConsoleChromeMixin_Test}'s bidirectional cross-check (every
+	 * token here is a {@code var(--jc-*)} in {@code chrome.css}, and vice versa).
+	 */
+	public static final Theme OPEN = create("open")
+		.token("--jc-font", "'Inter', 'Source Sans 3', system-ui, sans-serif")
+		.token("--jc-page-bg", "linear-gradient(180deg, #b0c4df 0%, #c7d5e8 22%, #e4eaf2 55%, #f5f6f9 100%)")
+		.token("--jc-header-icon-color", "#747474")
+		.token("--jc-accent", "#1589EE")
+		.token("--jc-accent-wash", "rgba(21,137,238,0.1)")
+		.token("--jc-link", "#015194")
+		.token("--jc-text", "#080707")
+		.token("--jc-text-soft", "#080707cc")
+		.token("--jc-text-muted", "#706e6b")
+		.token("--jc-border", "#dddbda")
+		.token("--jc-border-2", "#888c90")
+		.token("--jc-card-bg", "#ffffff")
+		.token("--jc-chrome-bg", "#f3f2f2")
+		.token("--jc-white", "#ffffff")
+		.token("--jc-btn-primary", "#1a5297")
+		.token("--jc-btn-primary-hover", "#005fb2")
+		.token("--jc-danger", "#c23934")
+		.token("--jc-success", "#2e844a")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #1589EE, #1a5297)")
+		.token("--jc-radius", "0.25rem")
+		// Pill palette: the CANONICAL status-chip colour family the client `pill` catalog renderer
+		// paints from - the ".tag.<domain>.<value>" palette rules in chrome.css consume these directly.  Declared
+		// before the legacy --jc-tag-* triads so those can be authored as var(--jc-pill-*) references to this single
+		// source of truth.  Values are the exact literals the --jc-tag-* tokens use.
+		.token("--jc-pill-green-bg", "#b8e6c4")
+		.token("--jc-pill-green-text", "#155724")
+		.token("--jc-pill-green-border", "#9fd6ad")
+		.token("--jc-pill-blue-bg", "#dceefb")
+		.token("--jc-pill-blue-text", "#0c5460")
+		.token("--jc-pill-blue-border", "#c3e0f3")
+		.token("--jc-pill-amber-bg", "#fff3cd")
+		.token("--jc-pill-amber-text", "#856404")
+		.token("--jc-pill-amber-border", "#ffe69c")
+		.token("--jc-pill-neutral-bg", "#e2e3e5")
+		.token("--jc-pill-neutral-text", "#383d41")
+		.token("--jc-pill-neutral-border", "#c6c8ca")
+		.token("--jc-pill-red-bg", "#f8d7da")
+		.token("--jc-pill-red-text", "#721c24")
+		.token("--jc-pill-red-border", "#f5c6cb")
+		// Legacy status/tag palette - RETAINED as var(--jc-pill-*) aliases (never renamed away): the .jc-badge /
+		// .jc-avatar-status-* chrome here AND the frozen widgets calendar palette (juneau-calendar.css, out of v1)
+		// still consume --jc-tag-*, so aliasing keeps one source of truth without a cross-module rename.  build()
+		// resolves each reference to the pill literal, so getTokens()/the served :root still carry a 6-hex value.
+		.token("--jc-tag-green-bg", "var(--jc-pill-green-bg)")
+		.token("--jc-tag-green-text", "var(--jc-pill-green-text)")
+		.token("--jc-tag-green-border", "var(--jc-pill-green-border)")
+		.token("--jc-tag-blue-bg", "var(--jc-pill-blue-bg)")
+		.token("--jc-tag-blue-text", "var(--jc-pill-blue-text)")
+		.token("--jc-tag-blue-border", "var(--jc-pill-blue-border)")
+		.token("--jc-tag-amber-bg", "var(--jc-pill-amber-bg)")
+		.token("--jc-tag-amber-text", "var(--jc-pill-amber-text)")
+		.token("--jc-tag-amber-border", "var(--jc-pill-amber-border)")
+		.token("--jc-tag-neutral-bg", "var(--jc-pill-neutral-bg)")
+		.token("--jc-tag-neutral-text", "var(--jc-pill-neutral-text)")
+		.token("--jc-tag-neutral-border", "var(--jc-pill-neutral-border)")
+		.token("--jc-tag-red-bg", "var(--jc-pill-red-bg)")
+		.token("--jc-tag-red-text", "var(--jc-pill-red-text)")
+		.token("--jc-tag-red-border", "var(--jc-pill-red-border)")
+		// Probe palette (client-side status probes).  A separate family from the pill/tag triads: probes SHOW a status
+		// dot and carry their own light status wash + ink, keyed to the four probe statuses success/error/warning/neutral.  Each
+		// status sets a background wash, a text (ink) colour, and the dot fill.  The selected-state ring reuses the
+		// existing --jc-accent-selected token (no new ring token).  Values are the measured status palette, independent
+		// of both the pill palette and the theme accent (neutral is a neutral grey, not the accent).
+		.token("--jc-probe-success-bg", "#d1fae5")
+		.token("--jc-probe-success-text", "#065f46")
+		.token("--jc-probe-success-dot", "#10b981")
+		.token("--jc-probe-error-bg", "#fee2e2")
+		.token("--jc-probe-error-text", "#991b1b")
+		.token("--jc-probe-error-dot", "#dc2626")
+		.token("--jc-probe-warning-bg", "#fef3c7")
+		.token("--jc-probe-warning-text", "#92400e")
+		.token("--jc-probe-warning-dot", "#f59e0b")
+		.token("--jc-probe-neutral-bg", "#e5e7eb")
+		.token("--jc-probe-neutral-text", "#374151")
+		.token("--jc-probe-neutral-dot", "#6b7280")
+		// --jc-font must stay first and each tag triad contiguous; see Theme_TokenOrdering_Test.
+		.token("--jc-header-height", "56px")               // (a) keeps .jc-header height and .jc-nav sticky offset in sync
+		.token("--jc-nav-indicator-width", "3px")          // (g) .jc-nav floor, .jc-nav-tab top bar, HTML-slot page-nav floor + selected-section top
+		.token("--jc-page-nav-hairline", "2px")            // line between page-nav sections row and children row
+		.token("--jc-page-nav-section-font-size", "13px")  // Page Tabs (top row) type; independent of children
+		.token("--jc-page-nav-child-font-size", "12px")    // page-nav children (second row) type; independent of sections
+		.token("--jc-nav-tab-padding-block", "8px")        // Page Tab (and HTML-slot section) vertical padding; with line-height and the indicator border sets tab height
+		.token("--jc-nav-tab-padding-inline", "10px")      // Page Tab horizontal padding
+		.token("--jc-nav-tab-line-height", "1.5")          // Page Tab / Page Subtab line box (unitless multiple of the font size)
+		.token("--jc-page-nav-child-padding-block", "6px")   // Page Subtab vertical padding; less than the tab's 8px so the strip stays subordinate
+		.token("--jc-page-nav-child-padding-inline", "10px") // Page Subtab horizontal padding
+		.token("--jc-card-shadow", "0 2px 2px rgba(0, 0, 0, 0.05)")  // (c) content-card / title-card elevation; table-chrome clears it
+		.token("--jc-danger-wash", "#fdeceb")              // (d) themeable .jc-btn-danger:hover fill (was a hardcoded hex)
+		.token("--jc-success-wash", "#eaf6ee")             // (d) themeable .jc-btn-success:hover fill (was a hardcoded hex)
+		.token("--jc-space-1", "4px")                      // (e) spacing scale seam (consumed by the .jc-prose rhythm)
+		.token("--jc-space-2", "8px")
+		.token("--jc-space-3", "12px")
+		.token("--jc-space-4", "16px")
+		.token("--jc-space-5", "24px")
+		.token("--jc-space-6", "32px")
+		// Accessibility: a themeable focus-ring colour so the generic :focus-visible rule in chrome.css
+		// gives every interactive control a WCAG 2.4.7-compliant keyboard-focus indicator by default.  A darker
+		// shade of the blue accent, so the ring still reads as the accent colour but clears 3:1 on the page
+		// gradient's lightest-blue top stop, not only on white.
+		.token("--jc-focus", "#116ab9")
+		// Accessibility: the ribbon-format selected-state face (WCAG 1.4.11 non-text 3:1 remedy).  A new, OPAQUE
+		// token rather than a re-valued --jc-accent-wash: the wash has 13 hover/table-wash consumers in chrome.css
+		// that must stay untouched, so the selected face is confined to this independent token instead.
+		// Same literal as --jc-accent at this theme's baseline (the shipped colour choice does not change, only
+		// the mechanism, wash to opaque) - but tracked separately: a consumer overriding --jc-accent will NOT move
+		// this token; it must be overridden on its own.  A permanent widening of the theming surface.
+		.token("--jc-accent-selected", "#1589EE")
+		.token("--jc-table-stripe-bg", "#fafaf9")
+		.token("--jc-main-bg", "#f5f6f9")  // inner-main well; not a retarget of old card tints
+		.token("--jc-card-padding", "16px 16px 8px")  // content-card / title-card inset; --jc-space-4 / --jc-space-4 / --jc-space-2
+		.token("--jc-chrome-icon", "#666666")  // idle ribbon / paging glyph; not --jc-text-soft (body ink)
+		// Chart tokens, read by juneau-charts.js when it registers the ECharts theme (series palette, then roles).
+		.token("--jc-chart-1", "#1b6ac9")
+		.token("--jc-chart-2", "#e07a1f")
+		.token("--jc-chart-3", "#2e8540")
+		.token("--jc-chart-4", "#9b3fb5")
+		.token("--jc-chart-5", "#c23934")
+		.token("--jc-chart-6", "#0e8a8a")
+		.token("--jc-chart-7", "#7a6a00")
+		.token("--jc-chart-8", "#5a5a5a")
+		.token("--jc-chart-bg", "transparent")
+		.token("--jc-chart-text", "#080707")
+		.token("--jc-chart-axis", "#dddbda")
+		.token("--jc-chart-grid", "#ececec")
+		.token("--jc-chart-tooltip-bg", "#ffffff")
+		.token("--jc-chart-tooltip-text", "#080707")
+		.token("--jc-chart-mark", "#5a5a5a")
+		.token("--jc-chart-band", "rgba(0, 0, 0, 0.06)")
+		.token("--jc-chart-heat-low", "#e8f1fb")
+		.token("--jc-chart-heat-high", "#1b6ac9")
+		// Dark accents: lighter blues than the light palette, legible on the shared dark neutral layer.
+		.dark("--jc-link", "#6cb4ff")
+		.dark("--jc-focus", "#4aa3ff")
+		.dark("--jc-accent-selected", "#4aa3ff")
+		.dark("--jc-accent-wash", "rgba(21,137,238,0.22)")
+		.build();
+
+	/**
+	 * A warm, light-brown ("parchment") retint of {@link #OPEN}'s structure.
+	 *
+	 * <p>
+	 * Recolors the chrome, accent, links, text, borders, and primary button to a warm brown palette, while keeping
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, error red, warning amber,
+	 * neutral gray) verbatim &mdash; a brown "error" pill would stop reading as an error, so the status palette is
+	 * deliberately untouched. Authored as seeded from {@link #OPEN}, overriding
+	 * only the 15 browned tokens below; the other 40 &mdash; including all five tag triads and every structural
+	 * token &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
+	 * identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Caveat: like {@link #OPEN}'s own {@code --jc-accent}, this theme's {@code --jc-accent} (<c>#a9772f</c>) clears
+	 * WCAG AA only for non-text/large-surface use (its {@code --jc-focus}/{@code --jc-accent-selected} consumers); a
+	 * consumer repurposing it as small body text should use {@code --jc-link} (<c>#754d16</c>) instead, which
+	 * passes AA normal-text contrast.
+	 */
+	public static final Theme LIGHT_BROWN = deriveFrom("light-brown", OPEN).resetDark()
+		.token("--jc-page-bg", "linear-gradient(180deg, #dccaa6 0%, #e8dcc4 22%, #f2ebdc 55%, #faf6ee 100%)")
+		.token("--jc-accent", "#a9772f")
+		.token("--jc-accent-wash", "rgba(169,119,47,0.1)")
+		.token("--jc-link", "#754d16")
+		.token("--jc-text", "#2e2415")
+		.token("--jc-text-soft", "#2e2415cc")
+		.token("--jc-text-muted", "#7a6a4f")
+		.token("--jc-border", "#d8cbb0")
+		.token("--jc-border-2", "#977f4e")
+		.token("--jc-chrome-bg", "#efe6d4")
+		.token("--jc-btn-primary", "#8a6d3b")
+		.token("--jc-btn-primary-hover", "#74592f")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #a9772f, #8a6d3b)")
+		.token("--jc-focus", "#926729")
+		.token("--jc-accent-selected", "#a9772f")
+		// Dark accents: a lighter link and the lighter focus ring; the accent itself is already legible as a non-text colour on dark.
+		.dark("--jc-link", "#d9a65c")
+		.dark("--jc-focus", "#a9772f")
+		.dark("--jc-accent-wash", "rgba(169,119,47,0.25)")
+		.build();
+
+	/**
+	 * A light-chrome red retint of {@link #OPEN}'s structure &mdash; the sibling of {@link #LIGHT_BROWN}.
+	 *
+	 * <p>
+	 * Recolors the chrome, accent, links, text, borders, and primary button to a wine/rose palette, while keeping
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, error red, warning amber,
+	 * neutral gray) verbatim &mdash; a red "error" pill that matched the brand would stop reading as an error, so
+	 * the status palette is deliberately untouched. Seeded from {@link #OPEN}, overriding only the 15 recolored
+	 * tokens below; the other 40 &mdash; including all five tag triads and every structural token &mdash; are
+	 * inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is
+	 * provably identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Like {@link #RED}, this theme keeps a <b>light</b> {@code --jc-chrome-bg} (a rose tint, not a saturated red) for the
+	 * page-chrome fallback, hover fill, and dialog chrome. Header and page-nav rows stay white via
+	 * {@code --jc-header-bg} &rarr; {@code --jc-white}; red is reserved for accent, links, focus, and the primary
+	 * button.
+	 *
+	 * <p>
+	 * Caveat: {@link #RED}'s {@code --jc-btn-primary} sits close in hue to {@link #OPEN}'s unchanged semantic
+	 * {@code --jc-danger} (<c>#c23934</c>). This theme avoids that collision by using a darker wine primary
+	 * (<c>#6B1D2A</c>) rather than danger red or the mockup placeholder <c>#a31f34</c>; {@code --jc-danger} itself
+	 * is deliberately left untouched. A consumer still should not reuse {@code --jc-danger} as brand.
+	 */
+	public static final Theme LIGHT_RED = deriveFrom("light-red", OPEN).resetDark()
+		.token("--jc-page-bg", "linear-gradient(180deg, #e8cfd3 0%, #f0dfe3 22%, #f6eef0 55%, #faf7f8 100%)")
+		.token("--jc-accent", "#B42348")
+		.token("--jc-accent-wash", "rgba(180,35,72,0.1)")
+		.token("--jc-link", "#8B1538")
+		.token("--jc-text", "#2a181c")
+		.token("--jc-text-soft", "#2a181ccc")
+		.token("--jc-text-muted", "#6e585c")
+		.token("--jc-border", "#e4d4d7")
+		.token("--jc-border-2", "#a37c85")
+		.token("--jc-chrome-bg", "#f3ecee")
+		.token("--jc-btn-primary", "#6B1D2A")
+		.token("--jc-btn-primary-hover", "#541620")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #B42348, #6B1D2A)")
+		.token("--jc-focus", "#B42348")
+		.token("--jc-accent-selected", "#B42348")
+		// Dark accents: lighter rose so the link and accent stay legible on a dark surface.
+		.dark("--jc-link", "#f27a9a")
+		.dark("--jc-accent", "#e0557a")
+		.dark("--jc-focus", "#e0557a")
+		.dark("--jc-accent-selected", "#e0557a")
+		.dark("--jc-accent-wash", "rgba(224,85,122,0.22)")
+		.build();
+
+	/**
+	 * A Jira-inspired red retint of {@link #OPEN}'s structure.
+	 *
+	 * <p>
+	 * "Jira-inspired" describes the structural feel &mdash; white content, a white header and page-nav with a
+	 * distinctly-colored accent floor, subtle neutral borders, a restrained accent &mdash; rendered in a red key
+	 * color (Jira's own brand is blue); no
+	 * Atlassian trademark appears in this theme's name or token values. Recolors the chrome, accent, links, brand,
+	 * text, and borders, while keeping every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success
+	 * green, error red, warning amber, neutral gray) verbatim, so status pills stay unambiguous. Authored as
+	 * seeded from {@link #OPEN}, overriding only the 16 recolored tokens below;
+	 * the other 35 &mdash; including all five tag triads and every structural token &mdash; are inherited from
+	 * {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Caveat: {@code --jc-btn-primary} (<c>#BF2600</c>) sits close in hue to {@link #OPEN}'s unchanged semantic
+	 * {@code --jc-danger} (<c>#c23934</c>); a primary button and a danger button rendered side by side rely on
+	 * shape/label conventions (solid brand vs. danger-wash hover), not color alone, to stay distinguishable &mdash;
+	 * {@code --jc-danger} itself is deliberately left untouched.
+	 */
+	public static final Theme RED = deriveFrom("red", OPEN).resetDark()
+		.token("--jc-page-bg", "linear-gradient(180deg, #f4f5f7 0%, #fafbfc 55%, #ffffff 100%)")
+		.token("--jc-accent", "#FF5630")
+		.token("--jc-accent-wash", "rgba(255,86,48,0.1)")
+		.token("--jc-link", "#BF2600")
+		.token("--jc-text", "#172B4D")
+		.token("--jc-text-soft", "#172B4Dcc")
+		.token("--jc-text-muted", "#5E6C84")
+		.token("--jc-border", "#DFE1E6")
+		.token("--jc-border-2", "#727f94")
+		// Chrome-scale token consumed by --jc-hover-bg and dialog chrome. Header / page-nav rows stay white
+		// (--jc-header-bg → --jc-white); table headers stay white (--jc-table-header-bg → --jc-white).
+		.token("--jc-chrome-bg", "#ffd9cf")
+		.token("--jc-btn-primary", "#BF2600")
+		.token("--jc-btn-primary-hover", "#a01f00")
+		.token("--jc-avatar-bg", "linear-gradient(135deg, #FF5630, #BF2600)")
+		.token("--jc-radius", "0.1875rem")
+		.token("--jc-focus", "#ff481f")
+		.token("--jc-accent-selected", "#FF5630")
+		// Dark accents: a lighter link and a tint of the chrome red; the accent itself reads on dark unchanged.
+		.dark("--jc-link", "#ff8a70")
+		.dark("--jc-chrome-bg", "#7a1a05")
+		.dark("--jc-accent-wash", "rgba(255,86,48,0.22)")
+		.build();
+
+	/**
+	 * A neutral, general-purpose light-gray retint of {@link #OPEN}'s structure &mdash; the ASF Jira-inspired
+	 * "clean neutral" member of the stock-theme set.
+	 *
+	 * <p>
+	 * Neutralizes the chrome, page background, text, and borders to a coherent grayscale ramp, while keeping
+	 * every one of {@link #OPEN}'s semantic status/tag tokens (info blue, success green, danger red, warning
+	 * amber, neutral gray) <b>and</b> {@link #OPEN}'s blue interactive affordances (accent, link, primary button,
+	 * focus ring, avatar gradient) verbatim &mdash; a pure-grayscale accent would make links/buttons stop reading
+	 * as clickable, so the restrained blue affordance set is deliberately left untouched (this is the
+	 * "7 grayed / 48 kept" derivation; see the design item for the vetoed all-monochrome alternative). Authored
+	 * as seeded from {@link #OPEN}, overriding only the 7 grayed tokens below;
+	 * the other 48 &mdash; including all five tag triads, every structural token, and the blue affordance set
+	 * &mdash; are inherited from {@link #OPEN} unchanged, so this theme's token <i>key</i> set is provably
+	 * identical to {@link #OPEN}'s.
+	 *
+	 * <p>
+	 * Caveat: like {@link #OPEN}'s own {@code --jc-accent}, this theme's (unchanged, kept-from-OPEN)
+	 * {@code --jc-accent} clears WCAG AA only for non-text/large-surface use; a consumer repurposing it as small
+	 * body text should use {@code --jc-link} instead, which passes AA normal-text contrast.
+	 */
+	public static final Theme GRAY = deriveFrom("gray", OPEN)
+		.token("--jc-page-bg", "linear-gradient(180deg, #e8e8e8 0%, #f0f0f0 55%, #ffffff 100%)")
+		.token("--jc-text", "#262626")
+		.token("--jc-text-soft", "#262626cc")
+		.token("--jc-text-muted", "#737373")
+		.token("--jc-border", "#e0e0e0")
+		.token("--jc-border-2", "#8a8a8a")
+		.token("--jc-chrome-bg", "#f4f4f4")
+		.build();
+
+	private final String name;
+	private final Map<String,String> tokens;
+	private final Map<String,String> aliases;
+	private final Map<String,String> darkTokens;
+
+	private Theme(String name, Map<String,String> tokens, Map<String,String> aliases, Map<String,String> darkTokens) {
+		this.name = name;
+		// Insertion-ordered rather than Map.copyOf: ConsoleChromeMixin emits this map's iteration order directly as
+		// the served stylesheet's :root{} declarations, and Map.copyOf's order is perturbed by a per-JVM salt - which
+		// would make the response body differ between two processes serving an identical token set.  cp(Map) is
+		// contractually a LinkedHashMap copy, so it preserves that order; do not swap it for an unordered copy.
+		this.tokens = u(cp(tokens));
+		this.aliases = u(cp(aliases));
+		this.darkTokens = u(cp(darkTokens));
+	}
+
+	/**
+	 * Starts building a new named theme.
+	 *
+	 * @param name The theme name. Must not be <jk>null</jk> and must match {@code ^[a-z][a-z0-9-]*$}.
+	 * @return A new builder.
+	 * @throws IllegalArgumentException If the name is <jk>null</jk>, empty, or not in the legal shape (e.g. contains
+	 * 	uppercase, whitespace, or a path-traversal-shaped segment like {@code "../evil"} &mdash; gated here, not
+	 * 	just at classpath-asset-resolution time, so a later fast-follow that interpolates the name into an asset
+	 * 	path doesn't need to re-gate).
+	 */
+	public static Builder create(String name) {
+		if (name == null || ! name.matches(NAME_PATTERN))
+			throw iaex("Invalid theme name: '%s'.  Must match %s.", name, NAME_PATTERN);
+		return new Builder(name);
+	}
+
+	/**
+	 * Seeds a builder with every token of {@code seed} under a new name. Used to author the stock palettes
+	 * ({@link #LIGHT_RED}, {@link #LIGHT_BROWN}, {@link #RED}, {@link #GRAY}) from {@link #OPEN} without restating
+	 * the whole map.
+	 *
+	 * <p>
+	 * The seed's dark tokens are copied too.  A derived theme that declares its own accents should call
+	 * {@code resetDark()} first, or it inherits the seed's dark accents.
+	 */
+	private static Builder deriveFrom(String name, Theme seed) {
+		if (seed == null)
+			throw iaex("Invalid theme seed: null.");
+		var b = create(name);
+		for (var e : seed.getTokens().entrySet())
+			b.token(e.getKey(), e.getValue());
+		for (var e : seed.getDarkTokens().entrySet())
+			b.dark(e.getKey(), e.getValue());
+		return b;
+	}
+
+	/**
+	 * Returns this theme's name.
+	 *
+	 * @return This theme's name.
+	 */
+	public String getName() { return name; }
+
+	/**
+	 * Returns this theme's token overrides.
+	 *
+	 * @return
+	 * 	An immutable map of token name (e.g. {@code "--jc-accent"}) to CSS value, iterating in the order the tokens
+	 * 	were declared on the builder. Never <jk>null</jk>.
+	 */
+	public Map<String,String> getTokens() { return tokens; }
+
+	/**
+	 * Returns this theme's dark accent tokens: name to a literal CSS value, applied on top of the shared dark neutral
+	 * layer when the page is in the dark scheme.
+	 *
+	 * <p>
+	 * Every value is a literal. A {@code var()} is rejected at {@link Builder#dark(String, String)}, because it could
+	 * only resolve against the light palette.
+	 *
+	 * @return An immutable, insertion-ordered map of token name to CSS value.  Never <jk>null</jk>.
+	 */
+	public Map<String,String> getDarkTokens() { return darkTokens; }
+
+	/**
+	 * Returns this theme's alias tokens: name to a live {@code var(--jc-*)} reference.
+	 *
+	 * <p>
+	 * Unlike a {@link #getTokens() leaf}, an alias is never resolved at build time. It reaches the browser verbatim,
+	 * so it follows its target through the cascade, including any later override of the target. The map is
+	 * insertion-ordered (the order {@link Builder#alias(String, String)} was called in), which keeps the emitted
+	 * block byte-stable, and it is unmodifiable. It is empty for every stock theme.
+	 *
+	 * <p>
+	 * This is a {@code Map}, not a rendered {@code String}, on purpose: the leaf half and the alias half of an
+	 * override block are escaped differently (see {@link ConsoleChromeMixin#overrideBlock(Theme)}), so the
+	 * emitter needs the two halves apart. Do not simplify this into a rendered string.
+	 *
+	 * @return The alias tokens.  Never <jk>null</jk>.
+	 */
+	public Map<String,String> getAliases() {
+		return aliases;
+	}
+
+	/**
+	 * The single shared, fail-closed guard rejecting a declaration of a reserved chrome-scale token name, invoked on
+	 * <b>every</b> path by which a token declaration can reach the served stylesheet.
+	 *
+	 * <p>
+	 * <b>What it protects.</b> {@code juneau-views.css} declares one shared control-scale ladder
+	 * ({@code --jc-chrome-control-height}, {@code --jc-chrome-font-size-1}, {@code --jc-chrome-glyph-size}, ...) at
+	 * {@code :root}, and a contract test in that module pins it as declared exactly once so that every surface
+	 * shares one ladder. A token block emitted here sits at {@code html:root}, which out-specifies that
+	 * {@code :root} &mdash; so a consumer redeclaring a ladder step would win, render perfectly, and turn that
+	 * contract into decoration with no test failing anywhere. Documentation is not a mitigation for that, so the
+	 * rejection lives here.
+	 *
+	 * <p>
+	 * <b>Where it fires.</b>
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link Builder#token(String, String)} and {@link Builder#alias(String, String)}, at declaration &mdash;
+	 * 		the only way a name enters a theme.
+	 * 	<li>{@code ConsoleChromeMixin.overrideBlock(Theme)}, at emission &mdash; defense in depth; unreachable for a
+	 * 		theme built by this class.
+	 * </ul>
+	 *
+	 * <p>
+	 * <b>It fires on the declared name only, never on a target.</b> Aliasing a stock-theme token <i>to</i> a ladder step
+	 * is legal and useful; <i>declaring</i> a ladder step is not.
+	 *
+	 * <p>
+	 * <b>The {@link Theme#OPEN} exemption.</b> The reserved namespace is {@code --jc-chrome-*} <i>except</i> the
+	 * names {@link Theme#OPEN} itself already declares. Two names are exempt today:
+	 * {@code --jc-chrome-bg} (page-chrome grey that predates the ladder) and {@code --jc-chrome-icon} (idle
+	 * ribbon / paging glyph ink). Both are consumed by {@code chrome.css} and are legitimately overridable.
+	 * Without the exemption this guard would reject {@link Theme#OPEN}'s own token
+	 * set &mdash; and therefore every stock palette seeded from {@link Theme#OPEN}, which is the normal way
+	 * to author a palette. The exemption is expressed against
+	 * {@link Theme#OPEN} rather than as a hardcoded name list so it cannot drift: it needs no copy of the ladder's
+	 * names (which live in a module this one deliberately cannot see), it stays correct if a chrome-named leaf is
+	 * ever added to or removed from {@link Theme#OPEN}, and it fails <i>closed</i> for every new name &mdash; no
+	 * ladder step is a {@link Theme#OPEN} token, and adding one could only ever happen through a reviewed edit to
+	 * {@link Theme#OPEN} that its own pinned token count would surface.
+	 *
+	 * <p>
+	 * A prefix test rather than an anchored {@code matches(...)}: by the time a name reaches here it has already
+	 * passed a full-string {@code ^--jc-[a-z0-9-]+$} shape guard, so its alphabet is closed and
+	 * {@link String#startsWith(String)} is total &mdash; there is no string that passes the shape guard, begins with
+	 * the reserved prefix, and escapes this check.
+	 *
+	 * <p>While {@link #OPEN} itself is being built, {@code OPEN} is still {@code null} and the guard is skipped: the
+	 * stock palette is the source of the exemption list, not subject to it.
+	 *
+	 * @param name The declared token name. Already shape-validated by the caller.
+	 * @param source A short description of the channel the declaration arrived through, for the failure message.
+	 * @throws IllegalArgumentException If {@code name} is a reserved chrome-scale token name.
+	 */
+	static void rejectReservedChromeDeclaration(String name, String source) {
+		if (OPEN == null)
+			return;
+		if (name.startsWith(CHROME_TOKEN_PREFIX) && ! OPEN.getTokens().containsKey(name))
+			throw iaex("Cannot declare reserved token '%s' (%s).  The '%s' namespace is the shared control-scale ladder declared by juneau-views.css; a token block served here out-specifies it.  Referencing one of these tokens is legal - declaring one is not.",
+				name, source, CHROME_TOKEN_PREFIX);
+	}
+
+	/**
+	 * Builder for {@link Theme}.
+	 */
+	public static final class Builder {
+		private final String name;
+		private final Map<String,String> tokens = new LinkedHashMap<>();
+		private final Map<String,String> aliases = new LinkedHashMap<>();
+		private final Map<String,String> darkTokens = new LinkedHashMap<>();
+
+		private Builder(String name) { this.name = name; }
+
+		/**
+		 * Adds (or overrides) a single CSS custom-property token.
+		 *
+		 * <p>
+		 * The value may be either a <b>literal</b> or a {@code var(--jc-name)} <b>reference</b> to another known
+		 * token:
+		 * <ul class='spaced-list'>
+		 * 	<li>A literal is validated eagerly here by {@code CssValueGrammar}'s accept-known-safe allowlist grammar
+		 * 		after normalization (trim &rarr; reject C0/C1/DEL &rarr; strip comments &rarr; reject {@code url(} in
+		 * 		any spelling &rarr; grammar).
+		 * 	<li>A value that, after that same normalization belt, matches {@code var(--jc-name)} is recognized as a
+		 * 		reference and stored <i>unresolved</i> &mdash; it is resolved to a concrete literal at {@link #build()}
+		 * 		time (its target may not be defined yet, e.g. a forward reference). {@code var()} is never a
+		 * 		{@code CssValueGrammar} value shape; it is Theme-layer syntax recognized one layer above the grammar.
+		 * </ul>
+		 * Escaping happens later, at emission time, via {@code CssValueEscaper} (see {@code ConsoleChromeMixin}).
+		 *
+		 * <p>A declared name in the reserved {@code --jc-chrome-*} namespace that {@link Theme#OPEN} does not already
+		 * declare is rejected.
+		 *
+		 * @param name The token name. Must not be <jk>null</jk> and must match {@code ^--jc-[a-z0-9-]+$}.
+		 * @param value
+		 * 	The CSS value &mdash; a literal, or a {@code var(--jc-name)} reference.
+		 * @return This object.
+		 * @throws IllegalArgumentException
+		 * 	If the name is not in the legal shape (full-string {@code String.matches(...)}, not {@code find(...)}
+		 * 	&mdash; {@code "--jc-foo;--bar"} must REJECT even though {@code "--jc-foo"} matches as a leading
+		 * 	substring), if the value contains a control character or a {@code url(} production, or if the value is
+		 * 	neither a {@code var(--jc-name)} reference nor one of the allowlisted CSS value shapes. A reference whose
+		 * 	target is unknown, cyclic, or too deeply chained is instead reported at {@link #build()} time.
+		 */
+		public Builder token(String name, String value) {
+			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
+				throw iaex("Invalid theme token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
+			rejectReservedChromeDeclaration(name, "theme '" + this.name + "' leaf token");
+			// Recognition runs on the SAME post-belt string the grammar would see (one shared belt, no second
+			// comment-stripping pass).  A reference is stored unresolved; a literal is validated eagerly, exactly
+			// as before this feature existed.
+			var normalized = CssValueGrammar.normalize(value);
+			if (referencedName(normalized) != null)
+				tokens.put(name, normalized);
+			else
+				tokens.put(name, CssValueGrammar.normalizeAndValidate(value));
+			return this;
+		}
+
+		/**
+		 * Adds (or overrides) a dark accent token: a literal applied on top of the shared dark neutral layer when the
+		 * page is in the dark scheme.
+		 *
+		 * <p>
+		 * The name and value go through the same guards as {@link #token(String, String)}, with one difference: the
+		 * value must be a <b>literal</b>. A {@code var()} reference is rejected, because the only thing it could
+		 * resolve against is the light palette, which would bake the wrong value into the dark scheme.
+		 *
+		 * @param name The token name.  Must match {@code ^--jc-[a-z0-9-]+$}.
+		 * @param value The CSS literal.
+		 * @return This object.
+		 * @throws IllegalArgumentException
+		 * 	If the name is malformed or in the reserved {@code --jc-chrome-*} namespace without being a {@link Theme#OPEN}
+		 * 	token, or if the value is a {@code var()} reference or is not one of the allowlisted CSS value shapes.
+		 */
+		public Builder dark(String name, String value) {
+			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
+				throw iaex("Invalid theme dark token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
+			rejectReservedChromeDeclaration(name, "theme '" + this.name + "' dark token");
+			// Literal only: CssValueGrammar has no var() shape, so a reference fails here rather than being resolved.
+			darkTokens.put(name, CssValueGrammar.normalizeAndValidate(value));
+			return this;
+		}
+
+		/** Drops every dark accent, for a derived theme that declares its own set instead of inheriting its seed's. */
+		private Builder resetDark() {
+			darkTokens.clear();
+			return this;
+		}
+
+		/**
+		 * Declares an alias token: a name whose value is a live reference to another {@code --jc-*} token.
+		 *
+		 * <p>
+		 * The target must be exactly one {@code var(--jc-name)} reference, with no fallback, no surrounding value
+		 * and no second reference. It is stored after the shared normalization belt (trim and comment strip, with
+		 * control characters rejected on the raw value) and emitted verbatim. Nothing dangerous is representable in
+		 * that shape, so an alias needs no escaper. A literal belongs in {@link #token(String, String)}. A
+		 * {@code var()} given to {@code token()} is resolved to its literal at build time; one given here is not.
+		 *
+		 * <p>
+		 * A name may be declared by only one channel: {@link #build()} rejects a name given to both
+		 * {@code token()} and {@code alias()}, in either order.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Follows --jc-card-bg live, including any later override of it.</jc>
+		 * 	<jv>builder</jv>.alias(<js>"--jc-tab-bar-bg"</js>, <js>"var(--jc-card-bg)"</js>);
+		 *
+		 * 	<jc>// Rejected: a literal belongs in token(), not alias().</jc>
+		 * 	<jv>builder</jv>.alias(<js>"--jc-tab-bar-bg"</js>, <js>"#fff"</js>);
+		 * </p>
+		 *
+		 * <p>A declared name in the reserved {@code --jc-chrome-*} namespace that {@link Theme#OPEN} does not already
+		 * declare is rejected.
+		 *
+		 * @param name The alias name.  Must match {@code ^--jc-[a-z0-9-]+$}.
+		 * @param target The reference.  Must be a single {@code var(--jc-name)}.
+		 * @return This object.
+		 * @throws IllegalArgumentException If the name or the target is malformed.
+		 */
+		public Builder alias(String name, String target) {
+			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
+				throw iaex("Invalid theme alias name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
+			rejectReservedChromeDeclaration(name, "theme '" + this.name + "' alias");
+			if (target == null)
+				throw iaex("Invalid theme alias target for '%s': null.", name);
+			var normalized = CssValueGrammar.normalize(target);
+			if (! VAR_REFERENCE.matcher(normalized).matches())
+				throw iaex("Invalid theme alias target for '%s': '%s'.  Must be a var(--jc-name) reference.", name, target);
+			aliases.put(name, normalized);
+			return this;
+		}
+
+		/**
+		 * Builds the immutable {@link Theme}, resolving every {@code var(--jc-name)} reference to a concrete literal.
+		 *
+		 * <p>
+		 * Resolution scope is this builder's own tokens, shadowing {@link Theme#OPEN}'s tokens (exact shadowing: a
+		 * name defined on this builder wins outright, even if resolving that entry then fails &mdash; there is no
+		 * silent fall-through to {@code Theme.OPEN}'s value for a shadowed name). Resolution runs on a copy of the
+		 * token map, so a failed {@code build()} leaves this builder unchanged and retryable.
+		 *
+		 * <p>Rejects a name declared by both {@link #token(String, String)} and {@link #alias(String, String)}.
+		 *
+		 * @return A new {@link Theme} whose every token value is a resolved six-shape literal (the substring
+		 * 	{@code var(} appears in none of them).
+		 * @throws IllegalArgumentException
+		 * 	If a reference names an unknown token, forms a cycle (the message carries the cycle path), or exceeds the
+		 * 	resolution depth cap.
+		 */
+		public Theme build() {
+			var resolved = resolveReferences();
+			for (var n : aliases.keySet())
+				if (tokens.containsKey(n))
+					throw iaex("Theme '%s' declares '%s' as both a leaf token and an alias.  A name may be declared by only one channel.", name, n);
+			return new Theme(name, resolved, aliases, darkTokens);
+		}
+
+		/** Resolves every reference in a copy of the token map, preserving declaration order; never mutates {@link #tokens}. */
+		private Map<String,String> resolveReferences() {
+			var resolved = new LinkedHashMap<String,String>();
+			for (var e : tokens.entrySet()) {
+				var target = referencedName(e.getValue());
+				resolved.put(e.getKey(), target == null ? e.getValue() : resolveReference(e.getKey(), target));
+			}
+			return resolved;
+		}
+
+		/**
+		 * Iteratively walks a reference chain from {@code firstTarget} to the literal it names, with exact shadowing
+		 * (own tokens win over {@link Theme#OPEN}'s), cycle detection, and an independent hop cap; re-validates the
+		 * resolved literal against the grammar as defense-in-depth.
+		 */
+		private String resolveReference(String definingName, String firstTarget) {
+			// Theme.OPEN is null only while Theme.OPEN itself is being built - and it has no references, so this
+			// fallback map is never actually consulted during that construction.
+			var openTokens = Theme.OPEN == null ? Collections.<String,String>emptyMap() : Theme.OPEN.getTokens();
+			var visited = new LinkedHashSet<String>();
+			visited.add(definingName);
+			var target = firstTarget;
+			var hops = 0;
+			while (true) {
+				if (visited.contains(target))
+					throw iaex("Theme token '%s' contains a cyclic reference: %s.", definingName, cyclePath(visited, target));
+				if (++hops > MAX_REFERENCE_HOPS)
+					throw iaex("Theme token '%s' exceeds the maximum reference depth of %d hops.", definingName, MAX_REFERENCE_HOPS);
+				visited.add(target);
+
+				String targetValue;
+				if (tokens.containsKey(target))
+					targetValue = tokens.get(target);          // own map wins outright (exact shadowing)
+				else if (openTokens.containsKey(target))
+					targetValue = openTokens.get(target);
+				else
+					throw iaex("Theme token '%s' references unknown token '%s'.", definingName, target);
+
+				var next = referencedName(targetValue);
+				if (next == null)
+					// The resolved literal - and only that literal, with no var() present - is re-validated by the
+					// unchanged grammar as defense-in-depth against a bad value hiding under a referenceable name.
+					return CssValueGrammar.normalizeAndValidate(targetValue);
+				target = next;
+			}
+		}
+
+		/** Returns the {@code --jc-name} a {@code var(--jc-name)} reference points at, or <jk>null</jk> if {@code value} is not a reference. */
+		private static String referencedName(String value) {
+			var m = VAR_REFERENCE.matcher(value);
+			return m.matches() ? m.group(1) : null;
+		}
+
+		/** Renders a cycle path like {@code --jc-a -> --jc-b -> --jc-a} for a build-failure message. */
+		private static String cyclePath(Set<String> visited, String repeated) {
+			return String.join(" -> ", visited) + " -> " + repeated;
+		}
+	}
+}

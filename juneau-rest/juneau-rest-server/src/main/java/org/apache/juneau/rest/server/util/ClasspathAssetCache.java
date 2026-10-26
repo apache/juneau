@@ -32,7 +32,7 @@ import org.apache.juneau.http.resource.*;
  * A themeable/configurable asset-serving mixin's cache of classpath-shipped assets: reads each configured
  * resource's bytes once, computes and caches its {@link ChecksumUtils#hash8(byte[]) content hash}, and wraps
  * bytes as a cacheable {@link HttpResource} - the read+cache+hash+cache-buster-URL+serve bundle that
- * {@code ConsoleChromeMixin} (juneau-rest-server-console-ui) and {@code ViewsMixin} (juneau-rest-server-views)
+ * {@code ConsoleChromeMixin} (juneau-console) and {@code ViewsMixin} (juneau-console-views)
  * previously each hand-rolled as their own private statics and static cache maps.
  *
  * <h5 class='section'>Version-anchor:</h5>

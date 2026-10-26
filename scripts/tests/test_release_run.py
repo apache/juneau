@@ -11,9 +11,9 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-scripts/release.py on juneau_run: commands go through run_tool (Maven with -B and a PTY), every prompt is run.ask,
+scripts/release.py on juneau_terminal: commands go through run_tool (Maven with -B and a PTY), every prompt is run.ask,
 the full log is always written, steps are rows, and run_git_diff is wired in.  Hermetic: a FakeRun stands in for
-juneau_run except where a test says otherwise, HOME is a temp dir (so the state file and logs land there), and no
+juneau_terminal except where a test says otherwise, HOME is a temp dir (so the state file and logs land there), and no
 real mvn, svn or gpg runs.
 """
 
@@ -33,9 +33,9 @@ from types import SimpleNamespace
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
-RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL",
-                 "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE")
+RUN_VARIABLES = ("TERMINAL_MARKERS", "TERMINAL_ARTIFACTS", "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_CONSOLE",
+                 "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_TERMINAL_SESSION", "JUNEAU_TERMINAL_DETAIL",
+                 "JUNEAU_TERMINAL_LABEL_WIDTH", "JUNEAU_TERMINAL_LIVE")
 RELEASE_VARIABLES = ("X_VERSION", "X_NEXT_VERSION", "X_RELEASE", "X_STAGING", "X_USERNAME", "X_EMAIL", "X_GIT_BRANCH",
                      "X_JAVA_HOME", "X_CLEANM2", "X_REPO", "GPG_TTY")
 RELEASE = "juneau-9.9.9-RC1"
@@ -50,10 +50,10 @@ def clean_env(monkeypatch, tmp_path):
         monkeypatch.delenv(variable, raising=False)
     (tmp_path / "home").mkdir()
     monkeypatch.setenv("HOME", str(tmp_path / "home"))
-    monkeypatch.setenv("JUNEAU_RUN_LOG_DIR", str(tmp_path / "run-logs"))
-    sys.modules.pop("juneau_run", None)
+    monkeypatch.setenv("JUNEAU_TERMINAL_LOG_DIR", str(tmp_path / "run-logs"))
+    sys.modules.pop("juneau_terminal", None)
     yield
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
     for key, value in saved.items():   # release.py and session() write os.environ directly
         if value is None:
             os.environ.pop(key, None)
@@ -82,7 +82,7 @@ class FakeStep:
 
 
 class FakeRun:
-    """Records what release.py asks of juneau_run.  answers feed ask(); tool(cmd) gives run_tool's (exit, output)."""
+    """Records what release.py asks of juneau_terminal.  answers feed ask(); tool(cmd) gives run_tool's (exit, output)."""
 
     def __init__(self, answers=()):
         self.answers = list(answers)
@@ -118,7 +118,7 @@ class FakeRun:
         self._record("session", title, list(header))
         self.console = True
 
-    # What juneau_scripts' session, step and prompt ask of juneau_run besides the above.
+    # What juneau_terminal_scripts' session, step and prompt ask of juneau_terminal besides the above.
     console = False
 
     def enabled(self):
@@ -130,8 +130,8 @@ class FakeRun:
     def history_start(self, repo=".", history=None):
         pass
 
-    def Sinks(self):  # noqa: N802 - mirrors juneau_run.Sinks
-        default = not os.environ.get("JUNEAU_RUN_FULL_LOG") and os.environ.get("JUNEAU_RUN_CONSOLE", "full") == "full"
+    def Sinks(self):  # noqa: N802 - mirrors juneau_terminal.Sinks
+        default = not os.environ.get("JUNEAU_TERMINAL_FULL_LOG") and os.environ.get("JUNEAU_TERMINAL_CONSOLE", "full") == "full"
         return SimpleNamespace(is_default=default)
 
     def plan(self, ids):
@@ -175,8 +175,8 @@ class FakeRun:
 
 
 def install(monkeypatch, fake):
-    """fake as the loaded juneau_run: release.py and juneau_scripts both look it up in sys.modules."""
-    monkeypatch.setitem(sys.modules, "juneau_run", fake)
+    """fake as the loaded juneau_terminal: release.py and juneau_terminal_scripts both look it up in sys.modules."""
+    monkeypatch.setitem(sys.modules, "juneau_terminal", fake)
     return fake
 
 
@@ -350,10 +350,10 @@ def test_the_session_ends_with_done(release, monkeypatch, body, status, code):
         assert exit_info.value.code == code
     assert fake.of("session") == [(("Release", [RELEASE]), {})]
     assert fake.of("done") == [((status,), {})]
-    log = Path(os.environ["JUNEAU_RUN_FULL_LOG"])
+    log = Path(os.environ["JUNEAU_TERMINAL_FULL_LOG"])
     assert log.parent == Path.home() / ".juneau-release-logs" and log.name.startswith(f"{RELEASE}-")
     assert log.exists()
-    # ok and cancelled final lines carry no log path (juneau_run's format_final), so it is said just before done, at
+    # ok and cancelled final lines carry no log path (juneau_terminal's format_final), so it is said just before done, at
     # warn: info would hide it at the default detail
     said = [call for call in fake.of("say") if call[0][0].startswith("full log")]
     assert said == ([] if status == "fail" else [((f"full log: {log}",), {"level": "warn"})])
@@ -387,9 +387,9 @@ def test_ctrl_d_before_the_session_exits_quietly(release, monkeypatch, capsys):
 
 @pytest.mark.parametrize("console", ["full", "board", "none"])
 def test_the_full_log_is_written_in_every_console_mode(release, monkeypatch, tmp_path, console):
-    """The real juneau_run: a command's output lands in the release log."""
+    """The real juneau_terminal: a command's output lands in the release log."""
     monkeypatch.setenv("X_RELEASE", RELEASE)
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", console)
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", console)
     # No PGP prompt: no prompt-pgp-passphrase.py beside it, and _prompt_pgp stubbed out.  That helper's getpass reads
     # /dev/tty, which would hang the test run.
     monkeypatch.setattr(release, "__file__", str(tmp_path / "release.py"))
@@ -401,7 +401,7 @@ def test_the_full_log_is_written_in_every_console_mode(release, monkeypatch, tmp
     try:
         script.run()
     finally:
-        sys.modules["juneau_run"]._end_session()
+        sys.modules["juneau_terminal"]._end_session()
     [log] = (Path.home() / ".juneau-release-logs").glob(f"{RELEASE}-*.log")
     assert "hello-from-release" in log.read_text(encoding="utf-8", errors="replace")
 
@@ -419,9 +419,9 @@ def test_detail_is_exported_and_an_unknown_level_is_a_usage_error(release, monke
 
 def test_console_flag_sets_the_env_var_and_beats_it(release, monkeypatch, capsys):
     install(monkeypatch, FakeRun())
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     release.main(["--list-steps", "--console", "none"])
-    assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+    assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "none"
     with pytest.raises(SystemExit) as exit_info:
         release.main(["--list-steps", "--console", "loud"])
     assert exit_info.value.code == 2
@@ -432,13 +432,13 @@ DEPRECATION = ("scripts/release.py is deprecated: Juneau releases run from junea
 
 
 def test_run_markers_is_ignored_with_a_warning(release, monkeypatch):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     fake = FakeRun()
     install(monkeypatch, fake)
     release.main(["--list-steps"])
     assert fake.of("warn") == [((DEPRECATION,), {}),
-                               (("release.py does not emit run markers; RUN_MARKERS is ignored",), {})]
-    assert "RUN_MARKERS" not in os.environ
+                               (("release.py does not emit run markers; TERMINAL_MARKERS is ignored",), {})]
+    assert "TERMINAL_MARKERS" not in os.environ
 
 
 def test_deprecation_notice_first(release, monkeypatch):
@@ -944,7 +944,7 @@ def test_each_phase_command_is_a_sub_row_of_its_phase(release, monkeypatch, tmp_
     """
     A phase command runs as a sub-row (parent=) of its phase, so the phase row draws a unit line for it; a Maven
     command (parser "maven") hands that line to its reactor's modules instead.  What each draws is pinned in
-    juneau-run's test_unit_model; this pins the call shape that selects it.
+    juneau-terminal's test_unit_model; this pins the call shape that selects it.
     """
     fake = FakeRun()
     script = make(release, monkeypatch, fake)

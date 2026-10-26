@@ -17,7 +17,7 @@
 package org.apache.juneau.petstore.console.browser;
 
 import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

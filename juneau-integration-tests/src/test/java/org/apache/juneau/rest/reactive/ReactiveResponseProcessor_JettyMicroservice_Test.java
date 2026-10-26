@@ -18,7 +18,7 @@ package org.apache.juneau.rest.reactive;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;

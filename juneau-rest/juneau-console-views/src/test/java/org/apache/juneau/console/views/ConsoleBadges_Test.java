@@ -1,0 +1,223 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console.views;
+
+import static org.apache.juneau.bct.BctAssertions.assertSize;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.console.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * The count-badge runtime {@code juneau-badges.js}: labels, hide-at-zero, error handling, scope, visibility, drain
+ * refresh, tooltip and click navigation.  Lives in this module because it owns the Node harness plumbing and the
+ * DOM shims; runs when node is on PATH.
+ */
+class ConsoleBadges_Test extends TestBase {
+
+	private static Map<?,?> report() {
+		var r = NodeHarness.report("badges.cjs", ConsoleChromeMixin.BADGES_JS_RESOURCE);
+		assumeTrue(r != null, "node (or badges.cjs) not available - JS layer skipped");
+		return r;
+	}
+
+	@Test void a01_labelsAndAria() {
+		var r = report();
+		assertEquals("3 changes pending", r.get("plainLabel"));
+		assertEquals("1 change pending", r.get("singularLabel"));
+		assertEquals("2 changes pending (1 yours)", r.get("mineLabel"));
+		assertEquals("2 open", r.get("customLabel"));
+		assertEquals("status", r.get("role"));
+		assertEquals("polite", r.get("ariaLive"));
+		assertEquals("jc-header-badges", r.get("inHeaderBadges"));
+	}
+
+	@Test void a01b_pollAsksForJson() {
+		assertEquals(List.of("application/json", "application/json", "application/json"), report().get("pollAccept"));
+	}
+
+	@Test void a02_toneDefaultsToWarningAndDangerPaintsAsError() {
+		var r = report();
+		assertEquals("warning", r.get("defaultTone"));
+		assertEquals("error", r.get("dangerTone"));
+	}
+
+	@Test void a03_zeroHidesAndGrowthPulses() {
+		var r = report();
+		assertEquals(true, r.get("zeroHidden"));
+		assertEquals(true, r.get("reshown"));
+		assertEquals(true, r.get("pulsed"));
+	}
+
+	@Test void a03u_unloadAbortedFetchIsSilent() {
+		var r = report();
+		assertEquals(0, ((Number)r.get("unload_e65")).intValue());
+		assertEquals(true, r.get("unload_noRetry"));
+		assertEquals(0, ((Number)r.get("abort_e65")).intValue());
+	}
+
+	@Test void a03v_failureOnLivePageStillLogs() {
+		var r = report();
+		assertEquals(1, ((Number)r.get("live_e65")).intValue());
+		assertEquals(1, ((Number)r.get("pageshow_e65")).intValue());
+	}
+
+	@Test void a04_forbiddenRemovesBadgeAndStopsPolling() {
+		var r = report();
+		assertEquals(true, r.get("removedOn403"));
+		assertEquals(1, ((Number)r.get("e65Count")).intValue());
+		assertEquals(true, r.get("noRescheduleOn403"));
+		assertEquals(1, ((Number)r.get("fetchCountAfter403")).intValue());
+	}
+
+	@Test void a05_badResponseGoesStaleAndBacksOff() {
+		var r = report();
+		assertEquals(true, r.get("stale"));
+		assertEquals(true, r.get("e66"));
+		assertEquals(true, r.get("e65OnNetworkError"));
+		assertEquals(List.of(10000, 20000), ((List<?>)r.get("backoff")).stream().map(o -> ((Number)o).intValue()).toList());
+	}
+
+	@Test void a06_refreshMsBelowFloorIsClamped() {
+		assertEquals(5000, ((Number)report().get("clampedInterval")).intValue());
+	}
+
+	@Test void a07_visibleWhenGatesMountAndFetch() {
+		var r = report();
+		assertEquals(true, r.get("visibleWhenShown"));
+		assertEquals(true, r.get("visibleWhenHiddenNotMounted"));
+		assertEquals(List.of("/yes"), r.get("visibleWhenFetched"));
+	}
+
+	@Test void a08_scopeResolvesFromNavLeaf() {
+		var r = report();
+		assertEquals("/p?a=b%20c&beanType=Suspension,Hold", r.get("scopedUrl"));
+		assertEquals(true, r.get("unscopedPageNoFetch"));
+		assertEquals(true, r.get("unscopedPageReschedules"));
+	}
+
+	@Test void a09_drainRefreshesLinkedCardsOnlyWhenAnItemLeaves() {
+		var r = report();
+		assertEquals(0, ((Number)r.get("reloadedOnGrowth")).intValue());
+		assertEquals(List.of("rules-table"), r.get("reloadedOnDrain"));
+	}
+
+	@Test void a13_drainOfCardNotOnPage_isANoOp() {
+		var r = report();
+		assertEquals(List.of(), r.get("missingCard_errors"), "a refresh target that is not mounted is silently skipped");
+		assertEquals(2, ((Number)r.get("missingCard_polledAgain")).intValue(), "the badge keeps polling");
+	}
+
+	@Test void a10_tooltipHonorsCapAndCloses() {
+		var r = report();
+		assertEquals(true, r.get("tooltipOpen"));
+		assertEquals("tooltip", r.get("tooltipRole"));
+		assertEquals(3, ((Number)r.get("tooltipItems")).intValue());
+		assertEquals("and 1 more", r.get("tooltipMore"));
+		assertEquals(true, r.get("describedBy"));
+		assertEquals(true, r.get("escapeCloses"));
+		assertEquals(true, r.get("blurCloses"));
+	}
+
+	@Test void a11_clickNavigation() {
+		var r = report();
+		assertEquals("/ui/changes", r.get("plainNav"));
+		assertEquals("/ui/changes?state=filter(beanType%3D%24eq(Suspension))", r.get("filteredNav"));
+	}
+
+	@Test void a12_sameOriginGuard() {
+		var r = report();
+		assertEquals(List.of("/p"), r.get("guard_urls"), "only the badge with a same-origin src fetches");
+		assertSize(() -> "the bad src and the bad href are each logged as E-JS-82", 2, ((List<?>)r.get("guard_errors")));
+		assertEquals(List.of(), r.get("guard_assigned"), "a cross-host href is never navigated to");
+		assertEquals(List.of(List.of("evil", ""), List.of("tab", ""), List.of("ok", "/ok/3")), r.get("guard_rows"),
+			"a poll-body href that is not a same-origin path is not copied onto the row");
+		assertEquals(2, ((Number)r.get("guard_itemErrors")).intValue());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// JuneauViews.bus wrap (the harness loads juneau-bus.js ahead of the badges)
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static Map<?,?> busReport() {
+		var r = NodeHarness.report("badges.cjs", ConsoleChromeMixin.BADGES_JS_RESOURCE, ViewsMixin.BUS_JS_RESOURCE);
+		assumeTrue(r != null, "node (or badges.cjs) not available - JS layer skipped");
+		assertEquals(true, r.get("bus_hasBus"), () -> "juneau-bus.js did not define JuneauViews.bus: " + r);
+		return r;
+	}
+
+	@Test void bus01_badgeTopicPublishedOnEveryPoll() {
+		var r = busReport();
+		assertEquals(Map.of("schemaVersion", 1, "badgeId", "pending", "total", 3), normalize(r.get("bus_badge_first")));
+		assertEquals("badge:pending", r.get("bus_badge_from"));
+		assertEquals(Map.of("schemaVersion", 1, "badgeId", "pending", "total", 2), normalize(r.get("bus_badge_second")));
+		assertEquals(Map.of("schemaVersion", 1, "badgeId", "zero", "total", 0), normalize(r.get("bus_zero")), "total 0 must publish too");
+	}
+
+	@Test void bus02_drainPublishesCmdRefresh_insteadOfReloading() {
+		var r = busReport();
+		assertEquals(0, ((Number)r.get("bus_cmd_afterFirst")).intValue(), "growth/first poll is not a drain");
+		assertEquals(List.of(Map.of("schemaVersion", 1, "op", "refresh")),
+			((List<?>)r.get("bus_cmd")).stream().map(ConsoleBadges_Test::normalize).toList());
+		assertEquals(0, ((Number)r.get("bus_directReloads")).intValue(), "with the bus the shell's cmd handler refreshes, not reloadCard");
+	}
+
+	@Test void bus03_removeAndUnmountDisposeTheOwner() {
+		var r = busReport();
+		assertNotNull(r.get("bus_retained_beforeRemove"));
+		assertEquals(true, r.get("bus_removed"));
+		assertNull(r.get("bus_retained_afterRemove"), "a removed badge must not leave a retained badge:<id> behind");
+		assertNull(r.get("bus_afterUnmountAll"));
+	}
+
+	@Test void bus04_claimedElsewhere_fallsBackToDirectReload() {
+		var r = busReport();
+		assertEquals(0, ((Number)r.get("bus_claimed_published")).intValue());
+		assertEquals(0, ((Number)r.get("bus_claimed_cmds")).intValue());
+		assertEquals(List.of("tasks"), r.get("bus_claimed_reloaded"));
+	}
+
+	@Test void bus06_cmdToCardOnAnotherPage_isANoOp() {
+		var r = busReport();
+		assertEquals(1, ((Number)r.get("bus_missing_cmd")).intValue(), "the cmd:<card> refresh is published");
+		assertEquals(List.of(), r.get("bus_missing_errors"), "nobody listening is not an error");
+		assertEquals(0, ((Number)r.get("bus_missing_reloaded")).intValue());
+		assertNotNull(r.get("bus_missing_badge"), "the badge itself keeps publishing");
+	}
+
+	@Test void bus05_sourceShape() throws java.io.IOException {
+		var js = BusHarness.source(ConsoleChromeMixin.BADGES_JS_RESOURCE);
+		assertTrue(js.contains("owner.publish(\"cmd:\" + cardId, { schemaVersion: 1, op: \"refresh\" })"), "drain must publish cmd:<id>");
+		assertTrue(js.contains("else reloadCard(cardId);"), "the no-bus fallback must stay");
+	}
+
+	/** JSON numbers come back as Integer/Long/Double depending on the parser; compare them as ints. */
+	private static Object normalize(Object o) {
+		if (o instanceof Map<?,?> m) {
+			var out = new LinkedHashMap<String,Object>();
+			m.forEach((k, v) -> out.put((String)k, normalize(v)));
+			return out;
+		}
+		if (o instanceof Number n && n.doubleValue() == n.intValue())
+			return n.intValue();
+		return o;
+	}
+}

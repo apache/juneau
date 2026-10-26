@@ -24,7 +24,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Represents a parsed <l>Client-Version</l> HTTP request header.

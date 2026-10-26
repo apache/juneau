@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.console.orders;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

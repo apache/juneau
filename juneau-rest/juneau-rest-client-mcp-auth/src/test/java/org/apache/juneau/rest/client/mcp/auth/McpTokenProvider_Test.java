@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

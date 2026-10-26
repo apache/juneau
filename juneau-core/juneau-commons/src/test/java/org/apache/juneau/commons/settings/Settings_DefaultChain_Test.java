@@ -157,6 +157,7 @@ class Settings_DefaultChain_Test extends TestBase {
 			keys.add(e.toLowerCase(Locale.ROOT).replace('_', '.'));
 			keys.add(camel(e));
 		}
+		keys.removeIf(String::isBlank);  // System.getProperty rejects empty keys (e.g. camel("__") is "")
 		return keys;
 	}
 

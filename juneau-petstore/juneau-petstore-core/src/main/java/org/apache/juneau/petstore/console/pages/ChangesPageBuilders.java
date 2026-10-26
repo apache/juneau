@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
-import org.apache.juneau.rest.server.view.freemarker.console.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.views.RowAction.*;
-import org.apache.juneau.rest.server.views.TableSpec.*;
-import org.apache.juneau.rest.server.widgets.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.views.RowAction.*;
+import org.apache.juneau.console.views.TableSpec.*;
+import org.apache.juneau.console.widgets.*;
 
 /**
  * Builder twin of the Pending changes page (P10, {@code changes.ftlh}).

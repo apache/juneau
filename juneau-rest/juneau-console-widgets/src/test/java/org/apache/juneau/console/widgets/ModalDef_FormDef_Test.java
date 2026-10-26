@@ -1,0 +1,578 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console.widgets;
+
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * Contract test for the declarative modal ({@link ModalDef}) + form ({@link FormDef}) payload the modal-open
+ * confirmation fetch returns. This pins the bean half of that contract; the runtime half is
+ * pinned separately in the views module.
+ *
+ * <p>
+ * The confirmation body is typed fields painted with textContent (never innerHTML); this test pins that field
+ * shape, the typed FormDef inputs the client paints (never template markup), plus the omit-when-unset rule for
+ * the optional form and idempotency key.
+ */
+@SuppressWarnings({
+	"unchecked" // The "form" entry of the parsed JSON Map is cast to Map<String,Object>
+})
+class ModalDef_FormDef_Test extends TestBase {
+
+	//------------------------------------------------------------------------------------------------------------------
+	// ModalDef wire shape
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a01_fullModal_serializesToFrozenShape() {
+		// raw builder, never .checked() -- both levels are stamped by construction now, not by the
+		// serving-path hook, which is the incident this design closes.
+		var modal = ModalDef.create("Acknowledge this incident?")
+			.field("Incident", "INC-42")
+			.field("Title", "API latency")
+			.field("Service", "gateway")
+			.field("Current status", "triggered")
+			.form(FormDef.ofTemplate("servlet:/incidents/ack-form.ftl"))
+			.idempotencyKey("deadbeef");
+		var json = Json.of(modal);
+		var expected = Json.to("""
+			{"contractVersion":"2",
+			 "title":"Acknowledge this incident?",
+			 "fields":[{"label":"Incident","value":"INC-42"},{"label":"Title","value":"API latency"},
+			           {"label":"Service","value":"gateway"},{"label":"Current status","value":"triggered"}],
+			 "form":{"contractVersion":"2","template":"servlet:/incidents/ack-form.ftl"},
+			 "idempotencyKey":"deadbeef"}
+			""", Map.class);
+		assertEquals(expected, Json.to(json, Map.class), json);
+	}
+
+	@Test void a02_topLevelKeyOrder() {
+		// contractVersion is stamped FIRST on both beans by construction now; checked() merely
+		// re-affirms it (and still validates) -- key order comes from @BeanType, which is unchanged.
+		var modal = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k").checked();
+		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
+		assertEquals(List.of("contractVersion", "title", "fields", "form", "idempotencyKey"), new ArrayList<>(actual.keySet()));
+		assertEquals(ModalDef.CONTRACT_VERSION, actual.get("contractVersion"));
+	}
+
+	@Test void a03_confirmOnlyModal_omitsFieldsFormAndKey() {
+		// A bare confirm-only modal (no fields, no form, no key) - every optional field omitted, not null.
+		// contractVersion is NOT one of the omitted ones any more -- it is stamped by construction on
+		// every modal, confirm-only included.
+		var json = Json.of(ModalDef.create("Really delete?"));
+		assertEquals(Json.to("{\"contractVersion\":\"2\",\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
+		for (var k : List.of("fields", "form", "idempotencyKey", "selfTargeted"))
+			assertFalse(json.contains("\"" + k + "\""), () -> "unset field leaked: " + k + "\n" + json);
+	}
+
+	@Test void a06_selfTargeted_isAnOptInAndIsOtherwiseOmitted() {
+		// The row-less dialog seam's opt-in: it tells the runtime to submit the key's OWN value as the target,
+		// because a dialog with no row has no artifact id to bind to at modal-open.
+		var unset = ModalDef.create("t").idempotencyKey("k");
+		assertNull(unset.selfTargeted);
+		assertFalse(Json.of(unset).contains("selfTargeted"), () -> Json.of(unset));
+
+		// Explicit false CLEARS rather than serializing a false: an un-opted-in dialog's payload stays byte-identical
+		// to one that never set this property, so the property doesn't bump the contract version.
+		var off = ModalDef.create("t").idempotencyKey("k").selfTargeted(false);
+		assertNull(off.selfTargeted);
+		assertFalse(Json.of(off).contains("selfTargeted"), () -> Json.of(off));
+
+		var on = ModalDef.create("t").idempotencyKey("k").selfTargeted(true);
+		assertEquals(Boolean.TRUE, on.selfTargeted);
+		assertTrue(Json.of(on).contains("\"selfTargeted\":true"), () -> Json.of(on));
+	}
+
+	@Test void a07_selfTargeted_ridesAfterTheKeyItQualifies() {
+		// It qualifies idempotencyKey, so it reads immediately after it on the wire.
+		var modal = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k")
+			.selfTargeted(true).checked();
+		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
+		assertEquals(List.of("contractVersion", "title", "fields", "form", "idempotencyKey", "selfTargeted"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void a08_selfTargeted_doesNotBumpTheContractVersion() {
+		// Additive-only, like barSlot: opting in does not change the version a v2-aware client checks.
+		// this is now true by construction rather than by checked() -- kept because it still pins
+		// the constant's value, not because it exercises the stamping path.
+		var modal = ModalDef.create("t").form(FormDef.ofTemplate("u")).idempotencyKey("k").selfTargeted(true).checked();
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
+	}
+
+	@Test void a05_confirmOnlyChecked_keepsTheStamp() {
+		// checked()'s else-branch that used to NULL a confirm-only modal's version is
+		// deleted.  If it were left in, checked() would un-stamp what the initializer had just stamped -- this test
+		// is what catches that regression.
+		var modal = ModalDef.create("Really delete?").field("Note", "gone").checked();
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+	}
+
+	@Test void a04_fieldNullValue_serializesLabelOnly() {
+		// A field value may be null (rendered as an empty value client-side); the label is required.
+		var json = Json.of(ModalDef.create("t").field("Note", null));
+		assertTrue(json.contains("\"label\":\"Note\""), json);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Validation guards
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_createBlankTitleThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> ModalDef.create("  "));
+		assertTrue(e.getMessage().contains("blank"), e::getMessage);
+		assertThrows(IllegalArgumentException.class, () -> ModalDef.create(null));
+	}
+
+	@Test void b02_fieldBlankLabelThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> ModalDef.Field.of("  ", "v"));
+		assertTrue(e.getMessage().contains("blank"), e::getMessage);
+		assertThrows(IllegalArgumentException.class, () -> ModalDef.Field.of(null, "v"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// FormDef (FreeMarker-first)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_formDef_serializesTemplateOnly() {
+		// a pure FormDef golden with no modal in sight -- stamped by construction too.
+		var json = Json.of(FormDef.ofTemplate("servlet:/x/form.ftl"));
+		assertEquals(Json.to("{\"contractVersion\":\"2\",\"template\":\"servlet:/x/form.ftl\"}", Map.class), Json.to(json, Map.class), json);
+	}
+
+	@Test void c02_formDef_reservedBeanTypeIsNotOnTheWireYet() {
+		// The bean->form generator is a deferred follow-on; no "beanType" key leaks in the MVP.
+		assertFalse(Json.of(FormDef.ofTemplate("u")).contains("beanType"));
+	}
+
+	@Test void c03_formDef_blankTemplateThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.ofTemplate("  "));
+		assertTrue(e.getMessage().contains("blank"), e::getMessage);
+		assertThrows(IllegalArgumentException.class, () -> FormDef.ofTemplate(null));
+	}
+
+	@Test void c04_formDef_serializesTypedInputs() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("resolution", "Resolution comment", "textarea").required().value("done"));
+		var json = Json.of(form);
+		var expected = Json.to("""
+			{"contractVersion":"2",
+			 "fields":[{"name":"resolution","label":"Resolution comment","type":"textarea","required":true,"value":"done"}]}
+			""", Map.class);
+		assertEquals(expected, Json.to(json, Map.class), json);
+		assertFalse(json.contains("\"template\""), json);
+	}
+
+	@Test void c05_formDef_textDefaultAndOptionalPrefillOmitted() {
+		var json = Json.of(FormDef.create().field(FormDef.Input.of("note", "Note", null)));
+		assertTrue(json.contains("\"type\":\"text\""), json);
+		assertFalse(json.contains("\"required\""), json);
+		assertFalse(json.contains("\"value\""), json);
+	}
+
+	@Test void c06_formDef_inputBlankNameOrLabelThrows() {
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("  ", "L", "text"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of(null, "L", "text"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "  ", "text"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", null, "text"));
+	}
+
+	@Test void c07_formDef_unknownTypeThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "radio"));
+		assertTrue(e.getMessage().contains("text"), e::getMessage);
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "<img>"));
+	}
+
+	@Test void c08_formDef_nullFieldThrows() {
+		var form = FormDef.create();
+		assertThrows(IllegalArgumentException.class, () -> form.field(null));
+	}
+
+	@Test void c09_formDef_templateAndFieldsTogether() {
+		var json = Json.of(FormDef.ofTemplate("servlet:/x.ftl")
+			.field(FormDef.Input.of("resolution", "Resolution", "textarea")));
+		assertTrue(json.contains("\"template\":\"servlet:/x.ftl\""), json);
+		assertTrue(json.contains("\"name\":\"resolution\""), json);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// d) v1 control vocabulary: checkbox / toggle / select / action
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_eachNewTypeBuilds() {
+		// All six allowlisted types build and validate.
+		var form = FormDef.create()
+			.field(FormDef.Input.of("t", "Text", "text"))
+			.field(FormDef.Input.of("ta", "Textarea", "textarea"))
+			.field(FormDef.Input.of("cb", "Checkbox", "checkbox"))
+			.field(FormDef.Input.of("tg", "Toggle", "toggle"))
+			.field(FormDef.Input.of("sel", "Select", "select").option("a", "A").option("b", "B"))
+			.field(FormDef.Input.of("act", "Do it", "action").actionId("ack"));
+		assertDoesNotThrow(form::validate);
+	}
+
+	@Test void d02_selectRequiresAtLeastOneOption() {
+		var form = FormDef.create().field(FormDef.Input.of("sel", "Select", "select"));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("option"), e::getMessage);
+	}
+
+	@Test void d03_optionBlankLabelOrNullValueThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.Input.Option.of("v", "  "));
+		assertTrue(e.getMessage().contains("blank"), e::getMessage);
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.Option.of("v", null));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.Option.of(null, "L"));
+	}
+
+	@Test void d04_nonSelectRejectsOptions() {
+		var form = FormDef.create().field(FormDef.Input.of("t", "Text", "text").option("a", "A"));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("select"), e::getMessage);
+	}
+
+	@Test void d05_patternThatDoesNotCompileThrows() {
+		var form = FormDef.create().field(FormDef.Input.of("t", "Text", "text").pattern("(unclosed"));
+		var eV = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(eV.getMessage().contains("compile"), eV::getMessage);
+		// The serving-path hook surfaces the same failure.
+		var form2 = FormDef.create().field(FormDef.Input.of("t", "Text", "text").pattern("(unclosed"));
+		assertThrows(IllegalArgumentException.class, form2::checked);
+	}
+
+	@Test void d06_patternTooLongThrows() {
+		var pat = "a".repeat(FormDef.PATTERN_MAX_LENGTH + 1);
+		var form = FormDef.create().field(FormDef.Input.of("t", "Text", "text").pattern(pat));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("characters"), e::getMessage);
+	}
+
+	@Test void d07_maxLengthNonPositiveThrows() {
+		var form = FormDef.create().field(FormDef.Input.of("t", "Text", "text").maxLength(0));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("maxLength"), e::getMessage);
+	}
+
+	@Test void d08_patternOrMaxLengthOnNonTextThrows() {
+		for (var type : List.of("checkbox", "toggle", "select", "action")) {
+			var withPattern = FormDef.create().field(baseFor(type).pattern("x"));
+			assertThrows(IllegalArgumentException.class, withPattern::validate, () -> "pattern on " + type);
+			var withMax = FormDef.create().field(baseFor(type).maxLength(5));
+			assertThrows(IllegalArgumentException.class, withMax::validate, () -> "maxLength on " + type);
+		}
+	}
+
+	@Test void d09_duplicateFieldNameThrows() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("dup", "One", "text"))
+			.field(FormDef.Input.of("dup", "Two", "text"));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("duplicate"), e::getMessage);
+	}
+
+	@Test void d10_selectValueNotMatchingOptionThrows() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("sel", "Select", "select").option("a", "A").option("b", "B").value("z"));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("does not match"), e::getMessage);
+	}
+
+	@Test void d11_actionRequiresActionId() {
+		var form = FormDef.create().field(FormDef.Input.of("act", "Do it", "action"));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("actionId"), e::getMessage);
+		// A non-action field with an actionId is rejected too.
+		var form2 = FormDef.create().field(FormDef.Input.of("t", "Text", "text").actionId("ack"));
+		assertThrows(IllegalArgumentException.class, form2::validate);
+	}
+
+	@Test void d12_actionFromActionRefStoresId() {
+		var form = FormDef.create().field(FormDef.Input.of("act", "Do it", "action").action(ActionRef.of("ack")));
+		assertDoesNotThrow(form::validate);
+		assertTrue(Json.of(form).contains("\"actionId\":\"ack\""), Json.of(form));
+	}
+
+	@Test void d13_selectWireShape() {
+		var json = Json.of(FormDef.create()
+			.field(FormDef.Input.of("sev", "Severity", "select").options(
+				FormDef.Input.Option.of("p1", "P1"), FormDef.Input.Option.of("p2", "P2")).value("p1")));
+		var expected = Json.to("""
+			{"contractVersion":"2",
+			 "fields":[{"name":"sev","label":"Severity","type":"select","value":"p1",
+			            "options":[{"value":"p1","label":"P1"},{"value":"p2","label":"P2"}]}]}
+			""", Map.class);
+		assertEquals(expected, Json.to(json, Map.class), json);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) Per-widget contract version + fail-loud handshake (h5)
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * The two bean halves of the three-way lockstep, pinned to the literal.  The runtime's baked-in third is pinned
+	 * against these in the views module's {@code ViewsJs_ContractVersion_Test}; bumping any two of the three makes
+	 * every form-bearing dialog refuse to open, so the literal is asserted here rather than compared to itself.
+	 */
+	@Test void e01_contractVersionConstantsAreTwo() {
+		assertEquals("2", FormDef.CONTRACT_VERSION);
+		assertEquals("2", ModalDef.CONTRACT_VERSION);
+	}
+
+	@Test void e02_rawFormDefIsStamped() {
+		// a raw builder carries the version from construction, independent of checked().
+		var form = FormDef.create().field(FormDef.Input.of("r", "R", "textarea"));
+		assertEquals(FormDef.CONTRACT_VERSION, form.contractVersion);
+		assertTrue(Json.of(form).contains("\"contractVersion\":\"2\""), Json.of(form));
+	}
+
+	@Test void e03_checkedStampsBothVersionsFirst() {
+		// both are stamped by construction already; checked() re-affirms rather than originates
+		// the stamp.  Kept because it still pins that checked() does not disturb it.
+		var modal = ModalDef.create("t")
+			.form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea"))).checked();
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
+		assertEquals(FormDef.CONTRACT_VERSION, modal.form.contractVersion);
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"contractVersion\":\"" + ModalDef.CONTRACT_VERSION + "\""), json);
+		// The nested form carries its own version too.
+		assertEquals(FormDef.CONTRACT_VERSION, Json.to(Json.of(modal.form), Map.class).get("contractVersion"));
+	}
+
+	@Test void e04_validateDoesNotRequireVersionSet() {
+		// the initializer now stamps at construction, so the null case must be re-created deliberately --
+		// validate() must still not false-refuse a modal whose version was explicitly cleared (or that arrived from a
+		// producer that never stamped one).  This pins that validate() gains no version check.
+		var modal = ModalDef.create("t").form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea")));
+		modal.contractVersion = null;
+		modal.form.contractVersion = null;
+		assertDoesNotThrow(modal::validate);
+	}
+
+	@Test void e05_checkedRejectsMalformedFormAtServeTime() {
+		// The serving-path hook fails on a bad form/modal - not silently on the wire.
+		var badForm = ModalDef.create("t").form(FormDef.create().field(FormDef.Input.of("sel", "S", "select")));
+		assertThrows(IllegalArgumentException.class, badForm::checked);
+		var badTitle = new ModalDef();
+		assertThrows(IllegalArgumentException.class, badTitle::checked);
+	}
+
+	@Test void e06_backCompatAllTextFormValidates() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("a", "A", "text"))
+			.field(FormDef.Input.of("b", "B", "textarea"));
+		assertDoesNotThrow(form::checked);
+	}
+
+	@Test void e07_templateOnlyFormValidatesAndChecks() {
+		// A fieldless / template-only form is a shipped shape; validate() over empty fields is a no-op.
+		var form = FormDef.ofTemplate("servlet:/x.ftl");
+		assertDoesNotThrow(form::validate);
+		assertEquals(FormDef.CONTRACT_VERSION, form.checked().contractVersion);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) Per-widget contract version (cont'd) - construction-time stamping guarantee
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e08_nestedFormStampsIndependentlyOfModal() {
+		// The modal level and the nested form level each carry their own field initializer; the version is present at
+		// both without either being reached through checked()'s recursion.
+		var modal = ModalDef.create("t").form(FormDef.ofTemplate("u"));
+		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
+		assertEquals(FormDef.CONTRACT_VERSION, modal.form.contractVersion);
+	}
+
+	@Test void e09_orderIndependent_formAttachedAfterChecked() {
+		// The second, independent bug class this design closes: create(t).checked().form(f) used to ship unstamped
+		// and leave the later-attached form unvalidated, because checked() ran before form existed.  Construction-time
+		// stamping does not depend on ordering.
+		var modal = ModalDef.create("t").checked().form(FormDef.ofTemplate("u"));
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
+		assertEquals("2", formMap.get("contractVersion"));
+	}
+
+	@Test void e10_checkedVsUnchecked_formBearing_byteForByteEqual() {
+		// No drift between the checked() and non-checked() serving paths for a form-bearing modal.
+		var unchecked = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k");
+		var checked = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k").checked();
+		assertEquals(Json.of(checked), Json.of(unchecked));
+	}
+
+	@Test void e11_checkedVsUnchecked_confirmOnly_byteForByteEqual() {
+		// Same pin for a confirm-only modal.  This is the test that fails if checked()'s else-branch is left in.
+		var unchecked = ModalDef.create("Really delete?").field("Note", "gone");
+		var checked = ModalDef.create("Really delete?").field("Note", "gone").checked();
+		assertEquals(Json.of(checked), Json.of(unchecked));
+	}
+
+	@Test void e12_deserializeOmittedVersion_normalizesToCurrent() {
+		// Deserialization runs the constructor first, so a foreign payload that omits contractVersion parses to the
+		// initializer's default and re-serializes with it -- the same normalize-on-parse behavior ViewDef and
+		// ActionResult already have.
+		var parsed = Json.to("{\"title\":\"t\"}", ModalDef.class);
+		assertEquals(ModalDef.CONTRACT_VERSION, parsed.contractVersion);
+		assertTrue(Json.of(parsed).contains("\"contractVersion\":\"2\""), Json.of(parsed));
+	}
+
+	@Test void e13_deserializeExplicitWrongVersion_roundTrips() {
+		// The initializer is a default, not a clobber: a parsed value overrides it, so the server can still model a
+		// foreign payload carrying a different version.
+		var parsed = Json.to("{\"contractVersion\":\"1\",\"title\":\"t\"}", ModalDef.class);
+		assertEquals("1", parsed.contractVersion);
+		assertTrue(Json.of(parsed).contains("\"contractVersion\":\"1\""), Json.of(parsed));
+	}
+
+	/**
+	 * The accepted cost of construction-time stamping: version-presence is guaranteed,
+	 * structural validity is NOT.  A malformed form that never reached checked() now serializes as contract-VALID
+	 * and the client will render it, where before the missing version refused it.  This test exists so that
+	 * behavior is a recorded decision rather than a discovery.  See the serving-path
+	 * Widget.validate() hook that closes it.
+	 */
+	@Test void e14_malformedUncheckedForm_serializesAsContractValid() {
+		var badForm = FormDef.create().field(FormDef.Input.of("sev", "Severity", "select"));
+		var modal = ModalDef.create("Pick one").form(badForm);
+		var json = Json.of(modal);
+		assertTrue(json.contains("\"contractVersion\":\"2\""), json);
+		var formMap = (Map<String,Object>) Json.to(json, Map.class).get("form");
+		assertEquals("2", formMap.get("contractVersion"));
+	}
+
+	@Test void e15_malformedForm_stillThrowsFromCheckedAndValidate() {
+		// The other half of the e14 pair: the structural gate still exists and still works -- only whether anything
+		// reaches it, absent an explicit checked() call, has changed.
+		var badForm = FormDef.create().field(FormDef.Input.of("sev", "Severity", "select"));
+		var modal = ModalDef.create("Pick one").form(badForm);
+		assertThrows(IllegalArgumentException.class, modal::validate);
+		assertThrows(IllegalArgumentException.class, modal::checked);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) Sectioned forms: an ordered list of labelled field groups instead of one flat list
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_sectionsAlone_validatesAndChecks() {
+		var form = FormDef.create()
+			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("name", "Name", "text")))
+			.section(FormDef.Section.of("advanced", "Advanced").field(FormDef.Input.of("notes", "Notes", "textarea")));
+		assertDoesNotThrow(form::validate);
+		assertEquals(FormDef.CONTRACT_VERSION, form.checked().contractVersion);
+	}
+
+	@Test void f02_flatFieldsAlone_stillValidates() {
+		// The flat list IS the single-section case and stays a first-class shape.
+		var form = FormDef.create().field(FormDef.Input.of("name", "Name", "text"));
+		assertDoesNotThrow(form::validate);
+		assertNull(form.sections);
+	}
+
+	@Test void f03_bothFieldsAndSections_areRejected() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("name", "Name", "text"))
+			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("notes", "Notes", "textarea")));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("mutually exclusive"), e.getMessage());
+		// checked() reaches the same rejection, so a serving path cannot emit the ambiguous shape either.
+		assertThrows(IllegalArgumentException.class, form::checked);
+	}
+
+	@Test void f04_emptySectionsList_isRejected() {
+		var form = FormDef.create();
+		form.sections = new ArrayList<>();
+		assertThrows(IllegalArgumentException.class, form::validate);
+	}
+
+	@Test void f05_duplicateSectionId_isRejected() {
+		var form = FormDef.create()
+			.section(FormDef.Section.of("dup", "First").field(FormDef.Input.of("a", "A", "text")))
+			.section(FormDef.Section.of("dup", "Second").field(FormDef.Input.of("b", "B", "text")));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("duplicate section id"), e.getMessage());
+	}
+
+	@Test void f06_fieldlessSection_isRejected() {
+		var form = FormDef.create().section(FormDef.Section.of("empty", "Empty"));
+		assertThrows(IllegalArgumentException.class, form::validate);
+	}
+
+	/**
+	 * Field names are unique across the WHOLE form, not per section: every control shares one submit body and one
+	 * dialog-scoped element-id namespace, so two sections declaring the same name would collide in both.
+	 */
+	@Test void f07_duplicateFieldNameAcrossSections_isRejected() {
+		var form = FormDef.create()
+			.section(FormDef.Section.of("one", "One").field(FormDef.Input.of("shared", "A", "text")))
+			.section(FormDef.Section.of("two", "Two").field(FormDef.Input.of("shared", "B", "text")));
+		var e = assertThrows(IllegalArgumentException.class, form::validate);
+		assertTrue(e.getMessage().contains("duplicate field name"), e.getMessage());
+	}
+
+	@Test void f08_perFieldValidationStillRunsInsideASection() {
+		// A select with no options is malformed wherever it is declared.
+		var form = FormDef.create()
+			.section(FormDef.Section.of("one", "One").field(FormDef.Input.of("sev", "Severity", "select")));
+		assertThrows(IllegalArgumentException.class, form::validate);
+	}
+
+	@Test void f09_sectionFactoryRejectsBlankIdAndLabel() {
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of(" ", "Label"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of("id", " "));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of(null, "Label"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Section.of("id", null));
+	}
+
+	@Test void f10_sectionsWireShape() {
+		var json = Json.of(FormDef.create()
+			.section(FormDef.Section.of("basics", "Basics").field(FormDef.Input.of("name", "Name", "text")))
+			.section(FormDef.Section.of("advanced", "Advanced").field(FormDef.Input.of("notes", "Notes", "textarea"))));
+		var expected = Json.to("""
+			{"contractVersion":"2",
+			 "sections":[{"id":"basics","label":"Basics","fields":[{"name":"name","label":"Name","type":"text"}]},
+			             {"id":"advanced","label":"Advanced","fields":[{"name":"notes","label":"Notes","type":"textarea"}]}]}
+			""", Map.class);
+		assertEquals(expected, Json.to(json, Map.class), json);
+	}
+
+	@Test void f11_flatFormOmitsSectionsFromTheWire() {
+		var json = Json.of(FormDef.create().field(FormDef.Input.of("name", "Name", "text")));
+		assertFalse(json.contains("sections"), json);
+	}
+
+	@Test void f12_nullSection_isRejectedAtTheBuilder() {
+		var form = FormDef.create();
+		assertThrows(IllegalArgumentException.class, () -> form.section(null));
+	}
+
+	/** Builds a minimal valid field of the given non-text type (for cross-type rejection tests). */
+	private static FormDef.Input baseFor(String type) {
+		var i = FormDef.Input.of("f", "F", type);
+		if (eq(type, "select"))
+			i.option("a", "A");
+		else if (eq(type, "action"))
+			i.actionId("ack");
+		return i;
+	}
+}

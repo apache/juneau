@@ -26,9 +26,9 @@ from pathlib import Path
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
-RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
-                 "JUNEAU_RUN_DETAIL", "JUNEAU_PUSH_ACTIVE")
+RUN_VARIABLES = ("TERMINAL_MARKERS", "TERMINAL_ARTIFACTS", "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_CONSOLE",
+                 "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_TERMINAL_SESSION",
+                 "JUNEAU_TERMINAL_DETAIL", "JUNEAU_PUSH_ACTIVE")
 
 # A class line the Maven parser attributes to Module A, so its own surefire_s series has an entry.
 CLASS_LINES = """\
@@ -43,9 +43,9 @@ CLASS_LINES = """\
 def clean_env(monkeypatch):
     for variable in RUN_VARIABLES:
         monkeypatch.delenv(variable, raising=False)
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
     yield
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
 
 
 @pytest.fixture
@@ -98,7 +98,7 @@ def test_the_parser_surefire_s_total_is_still_there(test_mod, fake_mvn, run_hist
 
 
 def test_bucket_names_match_the_history_series_name_pattern(test_mod):
-    """Each surefire_s.<bucket> name matches the pattern juneau_run.history_series accepts ([a-z0-9_.]{1,64});
+    """Each surefire_s.<bucket> name matches the pattern juneau_terminal.history_series accepts ([a-z0-9_.]{1,64});
     history_series drops any other name silently."""
     buckets = sorted({bucket for _, bucket in test_mod.CONTAINER_MARKERS} | {"core"})
     assert buckets == ["container.jetty", "container.springboot", "container.tomcat", "core"]

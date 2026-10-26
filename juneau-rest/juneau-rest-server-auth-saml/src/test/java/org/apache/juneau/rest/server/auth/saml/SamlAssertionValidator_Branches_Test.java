@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

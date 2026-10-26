@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.transforms;
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.test.assertions.Verify.*;
+import static org.apache.juneau.bct.assertions.Verify.*;
 
 import java.lang.reflect.*;
 import java.util.*;

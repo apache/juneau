@@ -36,9 +36,9 @@ import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.terminal.*;
-import org.apache.juneau.rest.server.widgets.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.terminal.region.*;
+import org.apache.juneau.console.widgets.*;
 
 /**
  * Jobs: the console's async-job reference.  A restock submits once per idempotency key, answers

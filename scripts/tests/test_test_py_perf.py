@@ -25,12 +25,12 @@ SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 
 @pytest.fixture
 def test_mod():
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
     spec = importlib.util.spec_from_file_location("_perf_test", SCRIPTS_DIR / "test.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     yield module
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
 
 
 def pom(directory: Path, name: str | None, parent_name: str = "Apache Juneau", artifact: str = "a"):
@@ -50,7 +50,7 @@ REACTOR = """\
 [INFO] Apache Juneau ...................................... SUCCESS [  0.215 s]
 [INFO] Apache Juneau Marshall ............................. SUCCESS [ 24.789 s]
 [INFO] Apache Juneau Integration Tests .................... SUCCESS [01:13 min]
-[INFO] Apache Juneau REST Server Views .................... FAILURE [ 35.0 s]
+[INFO] Apache Juneau Console Views .................... FAILURE [ 35.0 s]
 [INFO] Apache Juneau Distribution ......................... SKIPPED
 [INFO] \x1b[1mApache Juneau REST Mock\x1b[m ........................... SUCCESS [  9.012 s]
 [INFO] ------------------------------------------------------------------------
@@ -428,17 +428,17 @@ def test_rebaseline_with_history_off_says_so(test_mod, monkeypatch, tmp_path, ca
     store = run_history.store(repo=tmp_path)
     for record in history_records(history_record, GOLDEN_RUNS):
         store.append(record)
-    monkeypatch.setenv("JUNEAU_RUN_HISTORY", "0")
+    monkeypatch.setenv("JUNEAU_TERMINAL_HISTORY", "0")
     monkeypatch.setattr(test_mod, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(test_mod, "PERF_BASELINE", baseline)
     monkeypatch.setattr(sys, "argv", ["test.py", "--rebaseline"])
     assert test_mod._main() == 1
     assert baseline.read_text(encoding="utf-8") == GOLDEN_BASELINE
-    assert "JUNEAU_RUN_HISTORY=0" in capsys.readouterr().out
+    assert "JUNEAU_TERMINAL_HISTORY=0" in capsys.readouterr().out
 
 
 def test_baseline_series_is_the_renamed_reader(test_mod):
-    """test.py's own reader is baseline_series, so it never collides with juneau_run's history_series."""
+    """test.py's own reader is baseline_series, so it never collides with juneau_terminal's history_series."""
     assert callable(test_mod.baseline_series)
     assert not hasattr(test_mod, "history_series")
 

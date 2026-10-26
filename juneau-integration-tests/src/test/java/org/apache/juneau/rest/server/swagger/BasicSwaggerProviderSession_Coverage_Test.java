@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.swagger;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.TestBase;

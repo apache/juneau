@@ -18,7 +18,7 @@ package org.apache.juneau.rest.mock.classic;
 
 import java.io.*;
 
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * A capturing {@link PrintStream} that allows you to easily capture console output.

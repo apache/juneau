@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.protobuf;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import java.util.*;
 

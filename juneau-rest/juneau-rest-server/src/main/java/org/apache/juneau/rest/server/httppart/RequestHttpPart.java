@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Represents a single HTTP part on an HTTP request.

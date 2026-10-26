@@ -45,7 +45,7 @@ One summary line with the counts and the report path, then one `⚠` line per sl
 ## Gotchas
 
 - `JUNEAU_PUSH_TIMING_THRESHOLD` sets the relative margin (default `0.20`) and `JUNEAU_PUSH_TIMING_MIN_SECONDS` the absolute one (default `5`). Unparseable values fall back to the defaults.
-- `JUNEAU_RUN_HISTORY=0` turns the history store off; the script then reports that and exits 0.
+- `JUNEAU_TERMINAL_HISTORY=0` turns the history store off; the script then reports that and exits 0.
 - The report file is replaced on every run.
 - The history comes from `test.py` runs, so a repository with no recorded runs reports "no timing history yet".
 

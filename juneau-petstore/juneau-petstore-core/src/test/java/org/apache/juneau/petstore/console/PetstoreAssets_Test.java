@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.petstore.console;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.petstore.console.browser.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.server.console.test.*;
+import org.apache.juneau.console.test.*;
 import org.junit.jupiter.api.*;
 
 /**

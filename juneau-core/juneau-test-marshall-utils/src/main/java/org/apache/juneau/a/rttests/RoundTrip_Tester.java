@@ -179,7 +179,7 @@ public class RoundTrip_Tester {
 	}
 
 	@SuppressWarnings({
-		"java:S106" // Test harness diagnostic output, gated behind the debug flag; mirrors juneau-test's Assertion.java precedent.
+		"java:S106" // Test harness diagnostic output, gated behind the debug flag; mirrors juneau-bct's Assertion.java precedent.
 	})
 	public <T> Object serialize(T object, Serializer s) throws Exception {
 

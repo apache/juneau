@@ -1,0 +1,188 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+
+import org.apache.juneau.marshall.collections.*;
+import org.junit.jupiter.api.*;
+
+class CardTypeRegistry_Test {
+
+	@Test void standard_hasHtmlBuiltIn() {
+		assertTrue(CardTypeRegistry.standard().isRegistered("html"));
+		assertTrue(CardTypeRegistry.standard().types().contains("html"));
+	}
+
+	@Test void handler_unknownType_getsGenericPassthrough() {
+		var r = CardTypeRegistry.standard();
+		assertFalse(r.isRegistered("kpi"));
+		assertNotNull(r.handler("kpi"));
+	}
+
+	@Test void genericHandler_jsonBody_passesThroughFlat() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").body("{value:3}").build();
+		var card = r.toCard(src);
+		assertEquals("k", card.get("id"));
+		assertEquals("kpi", card.get("type"));
+		assertEquals(3, card.get("value"));
+	}
+
+	@Test void genericHandler_markupBody_becomesTemplate() {
+		var r = CardTypeRegistry.standard();
+		var sink = new JsonMap();
+		var src = CardSource.create("kpi", "k").body("<p>hi</p>")
+			.templateSink(sink::put).build();
+		var card = r.toCard(src);
+		assertEquals("k", card.get("template"));
+		assertEquals("<p>hi</p>", sink.get("k"));
+	}
+
+	@Test void genericHandler_noBody_givesEmptyFragment() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").build();
+		var card = r.toCard(src);
+		assertEquals(Set.of("id", "type"), card.keySet());
+	}
+
+	@Test void add_duplicateType_throwsE20() {
+		var b = CardTypeRegistry.standard().copy();
+		b.add(new TestCardType("kpi"));
+		var arg = new TestCardType("kpi");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg));
+		assertTrue(ex.getMessage().startsWith("Card type 'kpi' is already registered by '"), ex.getMessage());
+	}
+
+	@Test void add_badName_throwsE21() {
+		var b = CardTypeRegistry.standard().copy();
+		var arg2 = new TestCardType("KPI");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg2));
+		assertEquals("Card type 'KPI' must match ^[a-z][a-z0-9-]{0,31}$.", ex.getMessage());
+	}
+
+	@Test void add_reservedType_throwsE22() {
+		var b = CardTypeRegistry.standard().copy();
+		var arg3 = new TestCardType("datatables");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg3));
+		assertTrue(ex.getMessage().startsWith("Card type 'datatables' is reserved and cannot be replaced; reserved: '"),
+			ex.getMessage());
+	}
+
+	@Test void toCard_reservedBodyKey_throwsE23() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").body("{id:'nope', value:3}").build();
+		var ex = assertThrows(IllegalArgumentException.class, () -> r.toCard(src));
+		assertEquals("<@card id='k'> body key 'id' is reserved; set it as an attribute.", ex.getMessage());
+	}
+
+	@Test void toCard_subscribesAndPublishes_arePromotedOntoTheCard() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").body("{value:3, subscribes:['a'], publishes:['b']}").build();
+		var card = r.toCard(src);
+		assertEquals(List.of("a"), card.get("subscribes"));
+		assertEquals(List.of("b"), card.get("publishes"));
+		assertEquals(3, card.get("value"));
+	}
+
+	@Test void toCard_subscribesAndPublishes_areNotReservedKeys() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").body("{subscribes:'a', publishes:'b'}").build();
+		assertDoesNotThrow(() -> r.toCard(src));
+	}
+
+	@Test void toCard_subscribesAndPublishes_absentWhenNotAuthored() {
+		var card = CardTypeRegistry.standard().toCard(CardSource.create("kpi", "k").body("{value:3}").build());
+		assertFalse(card.containsKey("subscribes"));
+		assertFalse(card.containsKey("publishes"));
+	}
+
+	@Test void toCard_keySetAsAttributeAndBody_isRejectedAtTheCaller() {
+		// The registry never sees attributes: a base key in the body is E-23 here; subscribes/publishes duplicates are
+		// rejected by <@card> after promotion (see CardDirective_Bus_Test).
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").title("T").body("{title:'x', subscribes:'a'}").build();
+		var ex = assertThrows(IllegalArgumentException.class, () -> r.toCard(src));
+		assertEquals("<@card id='k'> body key 'title' is reserved; set it as an attribute.", ex.getMessage());
+	}
+
+	@Test void toCard_visibleWhenIsAdmittedInAnyCardBody() {
+		var r = CardTypeRegistry.standard().copy().add(new TableLikeCardType()).build();
+		var src = CardSource.create("tablelike", "t").body("{visibleWhen:{field:'x',op:'present'}, rows:[]}").build();
+		var card = r.toCard(src);
+		assertNotNull(card.get("visibleWhen"));
+	}
+
+	@Test void add_chartIsReserved_throwE22() {
+		var b = CardTypeRegistry.standard().copy();
+		var arg4 = new TestCardType("chart");
+		assertThrows(IllegalArgumentException.class, () -> b.add(arg4));
+	}
+
+	@Test void add_terminalIsReserved_throwE22() {
+		var b = CardTypeRegistry.standard().copy();
+		var arg5 = new TestCardType("terminal");
+		assertThrows(IllegalArgumentException.class, () -> b.add(arg5));
+	}
+
+	@Test void add_jobLogIsReserved_throwE22() {
+		var b = CardTypeRegistry.standard().copy();
+		var arg6 = new TestCardType("job-log");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg6));
+		assertEquals("Card type 'job-log' is reserved and cannot be replaced; reserved: "
+			+ "'chart, datatables, html, job-log, terminal, terminal-view'.", ex.getMessage());
+	}
+
+	@Test void copy_isIsolatedFromStandard() {
+		var custom = CardTypeRegistry.standard().copy().add(new TestCardType("kpi")).build();
+		assertTrue(custom.isRegistered("kpi"));
+		assertFalse(CardTypeRegistry.standard().isRegistered("kpi"));
+		// A second copy starts from standard() again, not from the first copy.
+		assertFalse(CardTypeRegistry.standard().copy().build().isRegistered("kpi"));
+	}
+
+	@Test void toCard_titleAndSrc_becomeBaseKeys() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").title("Count").src("/rest/count").build();
+		var card = r.toCard(src);
+		assertEquals("Count", card.get("title"));
+		assertEquals("/rest/count", card.get("src"));
+	}
+
+	/** Minimal handler whose fragment never carries `visibleWhen` itself — exercises toCard's promotion. */
+	private static final class TableLikeCardType implements CardTypeHandler {
+		@Override public String type() { return "tablelike"; }
+		@Override public JsonMap toFragment(CardSource source) {
+			var body = source.json();
+			var table = new JsonMap();
+			table.putAll(body);
+			table.remove("visibleWhen");
+			var frag = new JsonMap();
+			frag.put("table", table);
+			return frag;
+		}
+	}
+
+	private static final class TestCardType implements CardTypeHandler {
+		private final String type;
+		TestCardType(String type) { this.type = type; }
+		@Override public String type() { return type; }
+		@Override public JsonMap toFragment(CardSource source) { return new JsonMap(); }
+	}
+}

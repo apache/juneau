@@ -27,7 +27,7 @@ import org.apache.http.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.UnmodifiableBean;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * A basic {@link org.apache.http.HttpEntity} implementation with additional features.

@@ -22,12 +22,12 @@
 # To re-baseline once a few test.py runs have recorded module timings:
 #     python3 scripts/test.py --rebaseline [--window 20] [--min-runs 5]
 # It reads this repo's test.py run history (the passing `tests` records in
-# ~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl, shared by every branch and worktree) that have
+# ~/.cache/juneau-terminal/history/<repo>-<sha8>/test.jsonl, shared by every branch and worktree) that have
 # the newest record's command signature (so --no-container and wrapper runs don't skew it), takes
 # each key's median over its last 20 passing runs (dropping runs over 3× that median), rounds up to
 # 0.1s, rewrites the suite line and the [modules] section, and prints what changed.  A key with
 # fewer than 5 runs keeps its value; a command shape with fewer than 5 runs prints "no baseline for this
-# command shape" and rewrites nothing.  With JUNEAU_RUN_HISTORY=0 there is no history and nothing is
+# command shape" and rewrites nothing.  With JUNEAU_TERMINAL_HISTORY=0 there is no history and nothing is
 # rewritten.  Review the diff; nothing is committed.
 #
 # --rebaseline rewrites the [modules] section wholesale: keep comments above the [modules] line,
@@ -68,7 +68,7 @@ juneau-core/juneau-commons = 16
 juneau-core/juneau-config = 8.6
 juneau-core/juneau-marshall = 24.3
 juneau-core/juneau-marshall-rdf = 18.6
-juneau-core/juneau-test = 3
+juneau-core/juneau-bct = 3
 juneau-core/juneau-test-marshall-utils = 0.2
 juneau-core/juneau-test-utils = 0.4
 juneau-distrib = 0.1
@@ -106,12 +106,12 @@ juneau-rest/juneau-rest-server-auth-jwt = 6.8
 juneau-rest/juneau-rest-server-auth-oauth = 4.5
 juneau-rest/juneau-rest-server-auth-oidc-rp = 18.8
 juneau-rest/juneau-rest-server-auth-saml = 28.4
-juneau-rest/juneau-rest-server-bus = 12.8
-juneau-rest/juneau-rest-server-bus-websocket = 6
-juneau-rest/juneau-rest-server-console-ui = 10.1
-juneau-rest/juneau-rest-server-console-ui-freemarker = 0.5
-juneau-rest/juneau-rest-server-console-ui-freemarker-tests = 28.2
-juneau-rest/juneau-rest-server-datatables = 10.4
+juneau-rest/juneau-console-bus = 12.8
+juneau-rest/juneau-console-bus-websocket = 6
+juneau-rest/juneau-console = 10.1
+juneau-rest/juneau-console-freemarker = 0.5
+juneau-rest/juneau-console-freemarker-tests = 28.2
+juneau-rest/juneau-console-datatables = 10.4
 juneau-rest/juneau-rest-server-management-logging = 3.5
 juneau-rest/juneau-rest-server-mcp = 14.4
 juneau-rest/juneau-rest-server-mcp-v20250618 = 10
@@ -121,18 +121,18 @@ juneau-rest/juneau-rest-server-rdf = 0.5
 juneau-rest/juneau-rest-server-reactive = 9.2
 juneau-rest/juneau-rest-server-reactive-reactor = 4.5
 juneau-rest/juneau-rest-server-springboot = 11.1
-juneau-rest/juneau-rest-server-terminal = 19.6
-juneau-rest/juneau-rest-server-terminal-bus = 2.7
+juneau-rest/juneau-terminal-region = 19.6
+juneau-rest/juneau-terminal-bus = 2.7
 juneau-rest/juneau-rest-server-tracing-otel = 11
 juneau-rest/juneau-rest-server-view-freemarker = 15.1
 juneau-rest/juneau-rest-server-view-jsp = 17.2
 juneau-rest/juneau-rest-server-view-mustache = 11.9
 juneau-rest/juneau-rest-server-view-thymeleaf = 13.1
-juneau-rest/juneau-rest-server-views = 19.4
-juneau-rest/juneau-rest-server-views-markdown = 1.5
-juneau-rest/juneau-rest-server-widgets = 14.9
-juneau-rest/juneau-run-report = 4.7
-juneau-run = 130
+juneau-rest/juneau-console-views = 19.4
+juneau-rest/juneau-console-views-markdown = 1.5
+juneau-rest/juneau-console-widgets = 14.9
+juneau-rest/juneau-terminal-report = 4.7
+juneau-terminal = 130
 juneau-sc = 0.1
 juneau-sc/juneau-sc-server = 1.9
 juneau-secret-macos-keychain = 5.1

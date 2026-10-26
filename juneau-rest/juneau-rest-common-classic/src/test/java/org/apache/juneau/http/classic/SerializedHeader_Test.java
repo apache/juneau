@@ -20,7 +20,7 @@ import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

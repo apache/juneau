@@ -32,15 +32,15 @@ Options:
     --timing-log <path>      Ignored, with a warning (timings are in the run history now); removed in a later release
     --enforce-perf           Hard-fail on a perf-guard breach (see "Perf guard" below)
     --rebaseline             Rewrite perf-baseline.txt's suite line and [modules] from this repo's test.py run
-                             history (~/.cache/juneau-run/history), then exit (no build)
+                             history (~/.cache/juneau-terminal/history), then exit (no build)
     --window <n>             --rebaseline: runs per key to take the median of (default 20); a module whose window
                              spreads by more than 50% ((max - min) / min) takes the p75 instead (the suite keeps the median)
     --min-runs <n>           --rebaseline: skip keys with fewer runs than this (default 5)
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
-                             juneau-rest-server-views, juneau-petstore-core and juneau-rest-server-terminal).  Fails if Node/npm are missing.
+                             juneau-console-views, juneau-petstore-core and juneau-terminal-region).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
     --console <mode>         Maven output on the console: full (default), board or none
-    --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
+    --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_TERMINAL_DETAIL)
     --full-log <path>        Also write every byte Maven prints to this file (appended)
     --board-log <path>       Also write the board one-line-per-event stream to this file (appended)
     --profile <module>       Run one-shot JFR profile for module tests
@@ -56,7 +56,7 @@ Python Tests:
     the step prints a notice and skips.  Nothing is installed.
 
 Browser Tests:
-    The *_BrowserTest classes (juneau-rest-server-views, juneau-petstore-core, juneau-rest-server-terminal) are excluded from the main test
+    The *_BrowserTest classes (juneau-console-views, juneau-petstore-core, juneau-terminal-region) are excluded from the main test
     pass, so it reports no skips for them; this step runs them with -Pjs-tests, as CI's js-tests and
     js-tests-petstore and js-tests-terminal jobs do.  When neither
     --js-tests nor --no-js-tests is given, this script enables them automatically if any .js, .cjs, .css or .ftl
@@ -103,14 +103,14 @@ _step_n = 0
 
 
 def next_step_number():
-	"""Top-level step numbers continue after JUNEAU_RUN_N_BASE, which push.py sets for the steps it spawns us for."""
+	"""Top-level step numbers continue after JUNEAU_TERMINAL_N_BASE, which push.py sets for the steps it spawns us for."""
 	global _step_n
 	_step_n += 1
-	return int(os.environ.get("JUNEAU_RUN_N_BASE", "0")) + _step_n
+	return int(os.environ.get("JUNEAU_TERMINAL_N_BASE", "0")) + _step_n
 
 
 def say(text, level="info"):
-	"""Script status text: through juneau_run (a filtered note once a console view owns the screen)."""
+	"""Script status text: through juneau_terminal (a filtered note once a console view owns the screen)."""
 	_juneau.load()[0].say(text, level)
 
 
@@ -158,9 +158,9 @@ def wrap_mvn_command(cmd):
 def run_command(cmd, step_id=None, title=None, label=None, summarize=None):
 	"""Run a command, streaming its output live, and return exit code and full output.
 
-	A command with a step_id runs as that step through juneau_run's run_tool whatever the output routing, so its row
+	A command with a step_id runs as that step through juneau_terminal's run_tool whatever the output routing, so its row
 	is recorded in the run history; with markers off and the default sinks its output is the same as a plain run's.
-	Without a step_id (or without juneau_run) it runs under Popen, as it always has.  summarize(text), when given,
+	Without a step_id (or without juneau_terminal) it runs under Popen, as it always has.  summarize(text), when given,
 	runs after the command exits while its row is still open (see _record_buckets); never on the Popen path.
 	"""
 	project_root = REPO_ROOT
@@ -281,7 +281,7 @@ def discover_module_stats(repo_root: Path) -> dict:
 	return modules
 
 
-# A Reactor Summary row, read the way juneau_run's Maven parser reads it (MavenParser.SUMMARY_ROW in juneau_run.py).
+# A Reactor Summary row, read the way juneau_terminal's Maven parser reads it (MavenParser.SUMMARY_ROW in juneau_terminal.py).
 SECTION = re.compile(r"^\[([\w.-]+)\]$")
 REACTOR_SUMMARY = re.compile(r"^\[INFO\] Reactor Summary")
 SUMMARY_ROW = re.compile(r"^\[INFO\] (.+?)(?: \.+)? (SUCCESS|FAILURE|SKIPPED)(?: \[\s*([^\]]+?)\s*\])?\s*$")
@@ -290,7 +290,7 @@ POM_SKIP_DIRS = {"target", "node_modules", "src", "build-overlay"}
 
 
 def _summary_seconds(text):
-	"""'7.513 s' -> 7.513, '02:45 min' -> 165.0, '01:28 h' -> 5280.0 (as juneau_run's _seconds)."""
+	"""'7.513 s' -> 7.513, '02:45 min' -> 165.0, '01:28 h' -> 5280.0 (as juneau_terminal's _seconds)."""
 	text = text.strip()
 	m = re.match(r"^(\d+):(\d+)\s*(min|h)?$", text)
 	if m:
@@ -719,9 +719,9 @@ def script_tests(launcher=None, runner=None):
 # '*_BrowserTest' would also match a sibling module's suite in the reactor).  Those classes are excluded from the
 # default surefire pass by each module's pom and enabled by its js-tests profile.
 JS_TEST_MODULES = (
-	("juneau-rest/juneau-rest-server-views", "org.apache.juneau.rest.server.views.*_BrowserTest"),
+	("juneau-rest/juneau-console-views", "org.apache.juneau.console.views.*_BrowserTest"),
 	("juneau-petstore/juneau-petstore-core", "org.apache.juneau.petstore.**.*_BrowserTest"),
-	("juneau-rest/juneau-rest-server-terminal", "org.apache.juneau.rest.server.terminal.*_BrowserTest"),
+	("juneau-rest/juneau-terminal-region", "org.apache.juneau.terminal.region.*_BrowserTest"),
 )
 JS_SOURCE_SUFFIXES = (".js", ".cjs", ".css", ".ftl")
 
@@ -926,9 +926,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 			"The option goes away in a later release.", "warn")
 	if args.rebaseline:
 		return _rebaseline_from_history(args.window, args.min_runs)
-	# juneau_run reads its output routing from the environment; an argument beats a value already set there.
-	for flag, variable in ((args.console, "JUNEAU_RUN_CONSOLE"), (args.full_log, "JUNEAU_RUN_FULL_LOG"),
-			(args.board_log, "JUNEAU_RUN_BOARD_LOG")):
+	# juneau_terminal reads its output routing from the environment; an argument beats a value already set there.
+	for flag, variable in ((args.console, "JUNEAU_TERMINAL_CONSOLE"), (args.full_log, "JUNEAU_TERMINAL_FULL_LOG"),
+			(args.board_log, "JUNEAU_TERMINAL_BOARD_LOG")):
 		if flag:
 			os.environ[variable] = flag
 	try:
@@ -968,7 +968,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		test_start = time.time()
 		exit_code, last_test_output = test(no_container=args.no_container)
 		test_elapsed = time.time() - test_start
-		# The summarizer parsed the Reactor Summary already; parse it here only when it did not run (no juneau_run,
+		# The summarizer parsed the Reactor Summary already; parse it here only when it did not run (no juneau_terminal,
 		# or it failed).
 		module_times_, unmapped = _last_times or module_times(last_test_output, REPO_ROOT)
 		if exit_code != 0:
@@ -999,7 +999,7 @@ def _rebaseline_from_history(window, min_runs):
 	history is off."""
 	run = _juneau.load()[0]
 	if not run.history_enabled():
-		print("❌ run history is off (JUNEAU_RUN_HISTORY=0), so there are no timings to rebaseline from; "
+		print("❌ run history is off (JUNEAU_TERMINAL_HISTORY=0), so there are no timings to rebaseline from; "
 			  "nothing rewritten.")
 		return 1
 	return rebaseline(PERF_BASELINE, run.HistoryStore(REPO_ROOT, "test").read(), window=window, min_runs=min_runs)
@@ -1007,9 +1007,9 @@ def _rebaseline_from_history(window, min_runs):
 
 def owned_by_enclosing_run():
 	"""True when push.py or an enclosing run spawned us; it rings once at its own end.  The toolkit session makes the
-	same decision (juneau_scripts.run._nested_env), so this is the documented predicate rather than a branch here."""
-	return bool(os.environ.get("JUNEAU_PUSH_ACTIVE") or os.environ.get("JUNEAU_RUN_N_BASE")
-		or os.environ.get("JUNEAU_RUN_ACTIVE"))
+	same decision (juneau_terminal_scripts.run._nested_env), so this is the documented predicate rather than a branch here."""
+	return bool(os.environ.get("JUNEAU_PUSH_ACTIVE") or os.environ.get("JUNEAU_TERMINAL_N_BASE")
+		or os.environ.get("JUNEAU_TERMINAL_ACTIVE"))
 
 
 def _prepare_output(argv):
@@ -1021,8 +1021,8 @@ def _prepare_output(argv):
 		parser.add_argument(flag)
 	args, _ = parser.parse_known_args(argv)
 	if args.console in ("full", "board", "none"):
-		os.environ["JUNEAU_RUN_CONSOLE"] = args.console
-	for flag, variable in ((args.full_log, "JUNEAU_RUN_FULL_LOG"), (args.board_log, "JUNEAU_RUN_BOARD_LOG")):
+		os.environ["JUNEAU_TERMINAL_CONSOLE"] = args.console
+	for flag, variable in ((args.full_log, "JUNEAU_TERMINAL_FULL_LOG"), (args.board_log, "JUNEAU_TERMINAL_BOARD_LOG")):
 		if flag:
 			os.environ[variable] = flag
 	try:
@@ -1038,7 +1038,7 @@ def main():
 	root = Path(__file__).resolve().parent.parent
 	_prepare_output(sys.argv[1:])
 	_juneau.load()
-	from juneau_scripts import run as toolkit
+	from juneau_terminal_scripts import run as toolkit
 	with toolkit.session("Test", header=["Juneau", git_value(['rev-parse', '--abbrev-ref', 'HEAD'])], bell=True, silence_env=("JUNEAU_PUSH_NO_SOUND",), repo=root, mode="test",
 			project=root.name, exit=False) as s:
 		code = _main()

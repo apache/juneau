@@ -18,8 +18,8 @@ package org.apache.juneau.petstore.console.browser;
 
 import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.console.test.PageContractAssert.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.nio.file.*;
 import java.util.*;
@@ -29,7 +29,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.dev.*;
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.console.*;
 import org.junit.jupiter.api.*;
 
 /**

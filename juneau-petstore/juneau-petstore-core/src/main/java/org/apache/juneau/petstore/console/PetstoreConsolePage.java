@@ -20,13 +20,13 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.datatables.*;
+import org.apache.juneau.console.datatables.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
-import org.apache.juneau.rest.server.view.freemarker.console.*;
-import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.views.*;
 
 /**
  * Base class for every petstore console page resource: registers the console FreeMarker mixin with

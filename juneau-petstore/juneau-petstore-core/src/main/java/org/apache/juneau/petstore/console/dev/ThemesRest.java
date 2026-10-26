@@ -23,7 +23,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.console.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 

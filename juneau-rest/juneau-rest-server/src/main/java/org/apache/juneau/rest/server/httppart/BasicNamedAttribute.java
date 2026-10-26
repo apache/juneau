@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Implementation of a named object.

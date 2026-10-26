@@ -19,7 +19,7 @@ package org.apache.juneau.petstore.console;
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;

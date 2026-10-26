@@ -1,0 +1,433 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console.freemarker;
+
+import static org.apache.juneau.bct.BctAssertions.*;
+import static org.apache.juneau.console.freemarker.ToolkitPack.Kind.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+import java.util.logging.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.staticfile.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * Unit tests for {@link ToolkitPackRegistry}: the built-in packs, the dependency graph, provided packs, duplicate
+ * detection against the page's own assets, and the vendor/runtime split.  The per-pack
+ * {@link ToolkitPackRegistry.AssetUrlResolver} seam (the same seam
+ * {@code ConsoleFreemarkerMixin.Builder.registerToolkitPack} feeds) is honored.
+ *
+ * @since 10.0.0
+ */
+@SuppressWarnings({
+	"resource" // MockRestClient/RestResponse are closed in try-with-resources; fluent run() returns this.
+})
+class ToolkitPackRegistry_Test extends TestBase {
+
+	// A live RestRequest so the built-in VIEWS_RESOLVER (ViewsMixin::viewAssetUrl) can resolve servlet URIs.
+	private static RestRequest dummyRequest() throws Exception {
+		try (var c = MockRestClient.buildLax(DummyHost.class);
+			var rsp = c.get("/x").run()) {
+			return DummyHost.CAPTURED.get();
+		}
+	}
+
+	public static class DummyHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		static final ThreadLocal<RestRequest> CAPTURED = new ThreadLocal<>();
+		@RestGet(path="/x")
+		public String x(RestRequest req) {
+			CAPTURED.set(req);
+			return "x";
+		}
+	}
+
+	private static int indexOfContaining(List<String> urls, String needle) {
+		for (var i = 0; i < urls.size(); i++)
+			if (urls.get(i).contains(needle))
+				return i;
+		return -1;
+	}
+
+	private static final ToolkitPackRegistry.AssetUrlResolver ECHO = (req, path) -> "ECHO" + path;
+
+	private static ToolkitPack pack(String name, ToolkitPack.Kind kind, String js, String...deps) {
+		return ToolkitPack.create(name).kind(kind).resolver(ECHO).js(js).dependsOn(deps).build();
+	}
+
+	private static List<String> files(List<String> urls) {
+		return urls.stream().map(ToolkitPackRegistry::fileName).toList();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// a - built-in packs
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void a01_views_runtimeOrder_helpersLast_noGlue() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest(), List.of(), "");
+		assertList(files(r.runtimeCss()), "juneau-views.css", "juneau-config.css");
+		// JS load order is a contract: bus FIRST (dependency-free; views, regions and the console shell all read
+		// JuneauViews.bus), then renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
+		// regions, terminal-view, helpers LAST.  The DataTables glue is its own pack now.
+		assertList(files(r.runtimeJs()),
+			"juneau-bus.js", "juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
+			"juneau-ribbon.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js",
+			"juneau-terminal-view.js", "juneau-helpers.js");
+		// The bus is the very first runtime JS entry.
+		assertTrue(r.runtimeJs().get(0).contains("juneau-bus.js"), () -> r.runtimeJs().toString());
+		assertEmpty(r.vendorCss());
+		assertEmpty(r.vendorJs());
+	}
+
+	@Test void a02_calendar_isBuiltIn_resolvesThroughWidgetsMixin() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_CALENDAR), dummyRequest(), List.of(), "");
+		assertList(files(r.runtimeCss()), "juneau-calendar.css");
+		assertList(files(r.runtimeJs()), "juneau-calendar.js");
+	}
+
+	@Test void a03_viewsThenCalendar_authorOrder() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS, ToolkitPackRegistry.PACK_CALENDAR), dummyRequest(), List.of(), "");
+		assertTrue(indexOfContaining(r.runtimeJs(), "juneau-views.js") < indexOfContaining(r.runtimeJs(), "juneau-calendar.js"), r.runtimeJs()::toString);
+	}
+
+	@Test void a04_omit_isEmpty_needsNoRequest() {
+		var reg = new ToolkitPackRegistry();
+		for (var names : Arrays.<List<String>>asList(List.of(), null))
+			assertBean(reg.resolve(names, null, List.of(), ""), "vendorCss,vendorJs,runtimeCss,runtimeJs", "[],[],[],[]");
+	}
+
+	@Test void a05_unknownRequested_namesSource() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		var req = dummyRequest();
+		var arg = List.of("nope");
+		List<String> noPageUrls = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(arg, req, noPageUrls, ""));
+		assertString("Unknown toolkit pack 'nope' (requested).", e.getMessage());
+	}
+
+	@Test void a06_runtimePack_ownResolver() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(ToolkitPack.create("probe").kind(RUNTIME).resolver(ECHO).css("/a.css").js("/x.js", "/y.js").build());
+		assertBean(reg.resolve(List.of("probe"), dummyRequest(), List.of(), ""), "vendorCss,vendorJs,runtimeCss,runtimeJs", "[],[],[ECHO/a.css],[ECHO/x.js,ECHO/y.js]");
+	}
+
+	@Test void a07_glue_pullsDataTablesAndJquery_fromWebJars() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorCss()), "datatables.datatables.min.css");
+		assertList(files(r.vendorJs()), "jquery.min.js", "datatables.min.js", "juneau-datatables.js");
+		var jq = WebJarResolver.version("org.webjars", "jquery");
+		var dt = WebJarResolver.version("org.webjars.npm", "datatables.net");
+		assertContains("/webjars/jquery/" + jq + "/jquery.min.js?v=" + jq, r.vendorJs().get(0));
+		assertContains("/webjars/datatables.net/" + dt + "/js/dataTables.min.js?v=" + dt, r.vendorJs().get(1));
+		assertContains("/juneau-datatables.js?v=", r.vendorJs().get(2));
+		assertEmpty(r.runtimeJs());
+	}
+
+	@Test void a08_terminal_pullsViewsAndXterm_runtimeLast() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_TERMINAL), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorCss()), "xterm.css");
+		assertList(files(r.vendorJs()), "xterm.js");
+		var css = files(r.runtimeCss());
+		var js = files(r.runtimeJs());
+		assertEquals("juneau-terminal.css", css.get(css.size() - 1), css::toString);
+		assertEquals("juneau-terminal.js", js.get(js.size() - 1), js::toString);
+		assertTrue(css.contains("juneau-views.css"), css::toString);
+		assertTrue(js.indexOf("juneau-views.js") >= 0 && js.indexOf("juneau-views.js") < js.size() - 1, js::toString);
+		var v = WebJarResolver.version("org.webjars.npm", "xterm__xterm");
+		assertContains("/webjars/xterm__xterm/" + v + "/lib/xterm.js?v=" + v, r.vendorJs().get(0));
+		assertContains("/webjars/xterm__xterm/" + v + "/css/xterm.css?v=" + v, r.vendorCss().get(0));
+		assertContains("/juneau-terminal.js?v=", r.runtimeJs().get(r.runtimeJs().size() - 1));
+	}
+
+	@Test void a09_charts_pullsViewsDataAndEcharts_vendorFirst() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_CHARTS), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorJs()), "echarts.min.js");
+		assertContains("/webjars/echarts/6.1.0/dist/echarts.min.js", r.vendorJs().get(0));
+		var rt = files(r.runtimeJs());
+		assertEquals("juneau-bus.js", rt.get(0));
+		assertEquals(List.of("juneau-helpers.js", "juneau-data.js", "juneau-charts.js"), rt.subList(rt.size() - 3, rt.size()));
+	}
+
+	@Test void a10_joblog_isOneRuntimeScript_noDependencies() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_JOBLOG), dummyRequest(), List.of(), "");
+		assertList(files(r.runtimeJs()), "juneau-joblog.js");
+		assertEmpty(r.runtimeCss());
+		assertEmpty(r.vendorJs());
+		assertContains("/juneau-console/juneau-joblog.js?v=", r.runtimeJs().get(0));
+	}
+
+	@Test void a11_echartsGl_isVendor_dependsOnEcharts() {
+		var reg = new ToolkitPackRegistry();
+		assertTrue(reg.contains(ToolkitPackRegistry.PACK_ECHARTS_GL));
+		assertTrue(reg.reaches(ToolkitPackRegistry.PACK_ECHARTS_GL, ToolkitPackRegistry.PACK_ECHARTS));
+		assertFalse(reg.reaches(ToolkitPackRegistry.PACK_VIEWS, ToolkitPackRegistry.PACK_ECHARTS));
+	}
+
+	@Test void a12_checkWebJars_present_passes() {
+		assertNotNull(new ToolkitPackRegistry().checkWebJars(List.of("charts")));
+	}
+
+	@Test void a13_checkWebJars_absentEcharts_isE70() {
+		var target = new ToolkitPackRegistry();
+		var arg2 = List.of("charts");
+		var e = assertThrows(IllegalStateException.class, () -> target.checkWebJars(arg2, a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
+		assertContains("E-70: chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')", e.getMessage());
+	}
+
+	@Test void a14_checkWebJars_noRoots_probesNothing() {
+		assertNotNull(new ToolkitPackRegistry().checkWebJars(List.of(), a -> { throw new IllegalStateException("x"); }));
+	}
+
+	@Test void a15_checkWebJars_providedEcharts_skipped() {
+		var reg = new ToolkitPackRegistry().provide(List.of("echarts"));
+		assertNotNull(reg.checkWebJars(List.of("charts"), a -> { if (a.contains(":echarts:")) throw new IllegalStateException("x"); return a; }));
+	}
+
+	@Test void a16_firstRender_absentWebJar_isE70() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(ToolkitPack.create(ToolkitPackRegistry.PACK_ECHARTS).kind(VENDOR)
+			.resolver((req, path) -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); })
+			.js(ToolkitPackRegistry.ECHARTS_JS_ASSET).build());
+		var req = dummyRequest();
+		var arg3 = List.of("charts");
+		List<String> noPageUrls2 = List.of();
+		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(arg3, req, noPageUrls2, "t.ftlh"));
+		assertContains("E-70: chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')", e.getMessage());
+	}
+
+	@Test void a17_e70_appendsCauseMessage_soJarAbsentAndFileMissingDiffer() {
+		var target2 = new ToolkitPackRegistry();
+		var arg4 = List.of("charts");
+		var absent = assertThrows(IllegalStateException.class, () -> target2.checkWebJars(arg4, a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
+		var target3 = new ToolkitPackRegistry();
+		var arg5 = List.of("charts");
+		var missingFile = assertThrows(IllegalStateException.class, () -> target3.checkWebJars(arg5, a -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); }));
+		assertContains("[needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties).]", absent.getMessage());
+		assertContains("[needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath.]", missingFile.getMessage());
+		assertNotEquals(absent.getMessage(), missingFile.getMessage());
+	}
+
+	@Test void a19_e70Pack_appendsCauseMessage() {
+		var target4 = new ToolkitPackRegistry();
+		var arg6 = List.of("echarts-gl");
+		var e = assertThrows(IllegalStateException.class, () -> target4.checkWebJars(arg6, a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("needs org.webjars.npm:echarts-gl on the classpath (no pom)."); return a; }));
+		assertTrue(e.getMessage().endsWith(" [needs org.webjars.npm:echarts-gl on the classpath (no pom).]"), e.getMessage());
+	}
+
+	@Test void a20_e70_nullCauseMessage_hasNoSuffix() {
+		var target5 = new ToolkitPackRegistry();
+		var arg7 = List.of("charts");
+		var e = assertThrows(IllegalStateException.class, () -> target5.checkWebJars(arg7, a -> { throw new IllegalStateException((String)null); }));
+		assertEquals("E-70: " + ToolkitPackRegistry.E70, e.getMessage());
+	}
+
+	@Test void a18_e70Pack_echartsGl_namesVersionProperty() {
+		var target6 = new ToolkitPackRegistry();
+		var arg8 = List.of("echarts-gl");
+		var e = assertThrows(IllegalStateException.class, () -> target6.checkWebJars(arg8, a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("x"); return a; }));
+		assertContains("E-70: toolkit pack 'echarts-gl' needs the WebJar org.webjars.npm:echarts-gl, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts-gl.version')", e.getMessage());
+	}
+
+	@Test void a21_dashboardPack_dependsOnViewsAndData() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DASHBOARD), dummyRequest(), List.of(), "");
+		var js = files(r.runtimeJs());
+		assertEquals("juneau-dashboard.js", js.get(js.size() - 1));
+		assertTrue(js.indexOf("juneau-data.js") >= 0 && js.indexOf("juneau-data.js") < js.size() - 1, () -> "data before dashboard: " + js);
+		assertTrue(js.indexOf("juneau-bus.js") >= 0, () -> "views pack present: " + js);
+		assertEmpty(r.vendorJs());
+		assertContains("/juneau-console/juneau-dashboard.js?v=", r.runtimeJs().get(js.size() - 1));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// b - graph, provided, kinds
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_buttons_expandsDependencies() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_BUTTONS), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorJs()), "jquery.min.js", "datatables.min.js", "datatables.buttons.min.js", "buttons.html5.min.js");
+		assertList(files(r.vendorCss()), "datatables.datatables.min.css", "buttons.datatables.min.css");
+	}
+
+	@Test void b02_siblingOrder_followsRoots() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("a", VENDOR, "/a.js"));
+		reg.register(pack("b", VENDOR, "/b.js", "c"));
+		reg.register(pack("c", VENDOR, "/c.js"));
+		var req = dummyRequest();
+		assertList(reg.resolve(List.of("b", "a"), req, List.of(), "").vendorJs(), "ECHO/c.js", "ECHO/b.js", "ECHO/a.js");
+		assertList(reg.resolve(List.of("a", "b"), req, List.of(), "").vendorJs(), "ECHO/a.js", "ECHO/c.js", "ECHO/b.js");
+	}
+
+	@Test void b03_packNamedTwice_emittedOnce() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE, ToolkitPackRegistry.PACK_DATATABLES, ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorJs()), "jquery.min.js", "datatables.min.js", "juneau-datatables.js");
+	}
+
+	@Test void b04_unknownDependsOn_failsAtValidate() {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("x", VENDOR, "/x.js", "ghost"));
+		var e = assertThrows(IllegalArgumentException.class, reg::validate);
+		assertString("Unknown toolkit pack 'ghost' (dependsOn of pack 'x').", e.getMessage());
+	}
+
+	@Test void b05_unknownDependsOn_failsAtRender() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("x", VENDOR, "/x.js", "ghost"));
+		var req = dummyRequest();
+		var arg9 = List.of("x");
+		List<String> noPageUrls3 = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(arg9, req, noPageUrls3, ""));
+		assertString("Unknown toolkit pack 'ghost' (dependsOn of pack 'x').", e.getMessage());
+	}
+
+	@Test void b06_cycle_failsAtValidate() {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("a", VENDOR, "/a.js", "b"));
+		reg.register(pack("b", VENDOR, "/b.js", "a"));
+		var e = assertThrows(IllegalArgumentException.class, reg::validate);
+		assertString("Toolkit pack cycle: a → b → a.", e.getMessage());
+	}
+
+	@Test void b07_cycle_failsAtRender() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("a", VENDOR, "/a.js", "b"));
+		reg.register(pack("b", VENDOR, "/b.js", "a"));
+		var req = dummyRequest();
+		var arg10 = List.of("b");
+		List<String> noPageUrls4 = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(arg10, req, noPageUrls4, ""));
+		assertString("Toolkit pack cycle: b → a → b.", e.getMessage());
+	}
+
+	@Test void b08_provided_contributesNothing_dependenciesStillLoad() throws Exception {
+		var reg = new ToolkitPackRegistry().provide(List.of(ToolkitPackRegistry.PACK_DATATABLES)).validate();
+		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorJs()), "jquery.min.js", "juneau-datatables.js");
+		assertEmpty(r.vendorCss());
+	}
+
+	@Test void b09_providedJquery_unprovidedDataTables_emitsDataTablesOnly() throws Exception {
+		var reg = new ToolkitPackRegistry().provide(List.of(ToolkitPackRegistry.PACK_JQUERY)).validate();
+		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorJs()), "datatables.min.js");
+	}
+
+	@Test void b10_unknownProvided_failsAtValidate() {
+		var reg = new ToolkitPackRegistry().provide(List.of("ghost"));
+		var e = assertThrows(IllegalArgumentException.class, reg::validate);
+		assertString("Unknown toolkit pack 'ghost' (providedPacks).", e.getMessage());
+	}
+
+	@Test void b11_split_runtimeMayDependOnVendor() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("v", VENDOR, "/v.js"));
+		reg.register(pack("r", RUNTIME, "/r.js", "v"));
+		var r = reg.validate().resolve(List.of("r"), dummyRequest(), List.of(), "");
+		assertBean(r, "vendorJs,runtimeJs", "[ECHO/v.js],[ECHO/r.js]");
+	}
+
+	@Test void b12_vendorDependingOnRuntime_failsAtValidate() {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack("v2", VENDOR, "/v2.js", ToolkitPackRegistry.PACK_VIEWS));
+		var e = assertThrows(IllegalArgumentException.class, reg::validate);
+		assertString("VENDOR toolkit pack 'v2' cannot depend on RUNTIME pack 'views'.", e.getMessage());
+	}
+
+	@Test void b13_replacement_wins_andDropsOldDependsOn() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(pack(ToolkitPackRegistry.PACK_DATATABLES, VENDOR, "/app/dt.js"));
+		var r = reg.validate().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
+		assertList(files(r.vendorJs()), "dt.js", "juneau-datatables.js");
+		assertEmpty(r.vendorCss());
+	}
+
+	@Test void b14_requireKnown_namesSource() {
+		var reg = new ToolkitPackRegistry();
+		reg.requireKnown(List.of(ToolkitPackRegistry.PACK_VIEWS), "<@page toolkit=>");
+		var arg11 = List.of("views", "nope");
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.requireKnown(arg11, "<@page toolkit=>"));
+		assertString("Unknown toolkit pack 'nope' (<@page toolkit=>).", e.getMessage());
+	}
+
+	@Test void b15_resolverFailure_namesPack() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(ToolkitPack.create("p").kind(VENDOR).js("x").resolver((req, path) -> { throw new IllegalStateException("needs org.example:p on the classpath."); }).build());
+		var req = dummyRequest();
+		var arg12 = List.of("p");
+		List<String> noPageUrls5 = List.of();
+		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(arg12, req, noPageUrls5, ""));
+		assertString("Pack 'p' needs org.example:p on the classpath.", e.getMessage());
+	}
+
+	@Test void b16_builtIns_validate() {
+		assertNotNull(new ToolkitPackRegistry().validate());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// c - duplicates against the page's own init=/css=
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final class Capture extends Handler {
+		final List<String> messages = new ArrayList<>();
+		@Override public void publish(LogRecord r) { messages.add(r.getLevel() + ": " + r.getMessage()); }
+		@Override public void flush() { /* no-op */ }
+		@Override public void close() { /* no-op */ }
+	}
+
+	private static List<String> warnings(Runnable r) {
+		var log = Logger.getLogger(ToolkitPackRegistry.class.getName());
+		var cap = new Capture();
+		var useParent = log.getUseParentHandlers();
+		log.setUseParentHandlers(false);
+		log.addHandler(cap);
+		try {
+			r.run();
+		} finally {
+			log.removeHandler(cap);
+			log.setUseParentHandlers(useParent);
+		}
+		return cap.messages;
+	}
+
+	@Test void c01_initDuplicate_skipped_andWarned() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		var req = dummyRequest();
+		var out = new ToolkitPackRegistry.Resolved[1];
+		var msgs = warnings(() -> out[0] = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), req, List.of("/app/static/JQuery.Min.JS?x=1"), "admin/releases.ftlh"));
+		assertList(files(out[0].vendorJs()), "datatables.min.js", "juneau-datatables.js");
+		assertSize(1, msgs);
+		assertMatchesGlob("WARNING: Template 'admin/releases.ftlh': skipped pack 'jquery' asset */webjars/jquery/*/jquery.min.js?v=*; the page already loads /app/static/JQuery.Min.JS?x=1.", msgs.get(0));
+	}
+
+	@Test void c02_cssDuplicate_skipped() throws Exception {
+		var out = new Object[1];
+		var req = dummyRequest();
+		var msgs = warnings(() -> out[0] = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), req, List.of("https://cdn.example/dataTables.dataTables.min.css"), "t.ftlh"));
+		assertEmpty(((ToolkitPackRegistry.Resolved)out[0]).vendorCss());
+		assertSize(msgs::toString, 1, msgs);
+	}
+
+	@Test void c03_fileName_lastSegment_noQueryOrFragment_lowerCase() {
+		assertString("jquery.min.js", ToolkitPackRegistry.fileName("http://h/a/JQuery.min.js?v=1#f"));
+		assertString("a.css", ToolkitPackRegistry.fileName("a.css"));
+	}
+}

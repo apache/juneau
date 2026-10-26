@@ -1,0 +1,218 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console.views;
+
+import static org.apache.juneau.bct.BctAssertions.assertSize;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * Guards the shared chrome scale contract on the served {@code juneau-views.css}: the steps are declared once
+ * each, and no surface writes a literal that duplicates one.
+ *
+ * <p>
+ * Driven by {@link ChromeScaleScanner}, which carries the contract's own step table and the reasoning behind
+ * what it does and does not evaluate.
+ */
+class ChromeScale_ContractScan_Test extends TestBase {
+
+	private static String viewsCss() throws IOException {
+		try (var in = ChromeScale_ContractScan_Test.class.getResourceAsStream("/org/apache/juneau/views/juneau-views.css")) {
+			assertNotNull(in, "juneau-views.css not found on the test classpath");
+			return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// a) Every step is declared exactly once, at the value the contract states
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void a01_everyStepIsDeclaredExactlyOnce() throws IOException {
+		var problems = ChromeScaleScanner.checkDeclaredExactlyOnce(viewsCss());
+		assertTrue(problems.isEmpty(), () -> "chrome scale declaration problems:\n  " + String.join("\n  ", problems));
+	}
+
+	/**
+	 * The ladders are declared whole, so a step with no consumer today is still declared. Asserting the count
+	 * pins that: a future edit that prunes an "unused" step has to come through this test.
+	 */
+	@Test void a02_ladderIsDeclaredWhole_includingStepsWithNoConsumerYet() throws IOException {
+		var css = viewsCss();
+		assertTrue(css.contains("--jc-space-5: 24px;"), "the spacing ladder is declared whole, unused steps included");
+		assertTrue(css.contains("--jc-space-6: 32px;"), "the spacing ladder is declared whole, unused steps included");
+		assertSize(17, ChromeScaleScanner.scale());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// b) No literal duplicates a declared step
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_noLiteralDuplicatesADeclaredStep() throws IOException {
+		var r = ChromeScaleScanner.scan(viewsCss());
+		assertTrue(r.violations().isEmpty(), () -> "literals duplicating a declared step:\n  "
+			+ String.join("\n  ", r.violations()));
+	}
+
+	/**
+	 * A scanner that silently stops matching reads as a passing test, which is worse than no scanner. The scan
+	 * must actually reach a meaningful number of declarations on the properties the scale covers.
+	 */
+	@Test void b02_scanIsNotVacuous() throws IOException {
+		var r = ChromeScaleScanner.scan(viewsCss());
+		assertTrue(r.checked().size() > 20, () -> "scan examined only " + r.checked().size()
+			+ " declarations - it has probably stopped matching rather than found a clean file");
+	}
+
+	/**
+	 * The recorded-exception table is a ratchet, not an allowlist that may rot: an entry matching nothing means
+	 * the declaration it excused has moved or been fixed, and the entry must go rather than sit there quietly
+	 * widening what the scan will tolerate.
+	 */
+	@Test void b03_everyRecordedExceptionStillMatchesSomething() throws IOException {
+		var r = ChromeScaleScanner.scan(viewsCss());
+		var stale = ChromeScaleScanner.recordedLiterals().stream()
+			.filter(x -> !r.matchedRecords().contains(x))
+			.map(x -> x.selector() + " { " + x.property() + ": " + x.value() + " }")
+			.toList();
+		assertTrue(stale.isEmpty(), () -> "recorded exceptions that no longer match any declaration - remove them:\n  "
+			+ String.join("\n  ", stale));
+	}
+
+	/** Every recorded exception states why it is not spending a step; a bare entry is not auditable. */
+	@Test void b04_everyRecordedExceptionCarriesAReason() {
+		ChromeScaleScanner.recordedLiterals()
+			.forEach(x -> assertFalse(x.reason() == null || x.reason().isBlank(),
+				() -> "recorded exception with no reason: " + x.selector() + " { " + x.property() + " }"));
+	}
+
+	/**
+	 * Proves the scan can actually fail. Without this, (b01) passing tells you nothing about whether the check
+	 * works or merely never fires.
+	 */
+	@Test void b05_syntheticDuplicateLiteralIsCaught() {
+		var r = ChromeScaleScanner.scan(".synthetic-surface { height: 31px; }");
+		assertSize(() -> "expected the synthetic duplicate to be caught: " + r.violations(), 1, r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-control-height"), r.violations().get(0));
+	}
+
+	/**
+	 * An {@code em} value must never be treated as a step match. Its computed value depends on a font-size
+	 * context this file does not have one of, and on form controls that context is a UA/system font that differs
+	 * by browser - so an engine-specific computation would fail on one platform and pass on another.
+	 */
+	@Test void b06_emValuesAreNeverTreatedAsAStepMatch() {
+		// 0.9em computes to exactly 12px against Chrome's form-control font and to nothing near a step elsewhere.
+		var r = ChromeScaleScanner.scan(".synthetic-toggle::after { width: 0.9em; height: 0.9em; }");
+		assertTrue(r.violations().isEmpty(), () -> "an em value was evaluated as a step match: " + r.violations());
+	}
+
+	/**
+	 * A provisional step has no rendered consumer yet, so an existing literal must not be bound to its value.
+	 *
+	 * <p>
+	 * {@code SCALE} carries zero provisional steps now that {@code --jc-chrome-font-size-2} (its own fixture's
+	 * former value) has flipped from provisional to confirmed, so this exercises the exemption branch
+	 * against a synthetic still-provisional step via the {@code scan(String, List)} test seam rather than
+	 * against a real one - see that overload's javadoc.
+	 */
+	@Test void b07_provisionalStepValuesDoNotTriggerAViolation() {
+		var provisional = List.of(
+			new ChromeScaleScanner.Step("--jc-synthetic-provisional", "0.8125rem", false, ChromeScaleScanner.Family.FONT_SIZE));
+		var r = ChromeScaleScanner.scan(".synthetic-label { font-size: 0.8125rem; }", provisional);
+		assertTrue(r.violations().isEmpty(), () -> "a provisional step value was enforced: " + r.violations());
+	}
+
+	/** A declaration already spending a token is compliant, fallback and all. */
+	@Test void b08_tokenFallbackIsNotReadAsABareLiteral() {
+		var r = ChromeScaleScanner.scan(".synthetic-grid { gap: var(--jc-card-gap, 1rem); }");
+		assertTrue(r.violations().isEmpty(), () -> "a var() fallback was read as a bare literal: " + r.violations());
+	}
+
+	/** {@code width} is a scale property on an SVG glyph and a content measure everywhere else. */
+	@Test void b09_widthIsOnlyCheckedOnGlyphs() {
+		assertTrue(ChromeScaleScanner.scan(".synthetic-cell { width: 16px; }").violations().isEmpty());
+		assertSize(1, ChromeScaleScanner.scan(".synthetic-btn svg { width: 18px; }").violations());
+	}
+
+	/**
+	 * {@code CONTROL_PADDING_X} was structurally unscored before this fix - no property mapped onto it in
+	 * {@code CHECKED_PROPERTIES}, so a duplicated value could never be caught regardless of a step's
+	 * {@code confirmed} flag. Exercises both newly-wired longhand properties.
+	 */
+	@Test void b10_controlPaddingXCatchesADuplicatedValue() {
+		var r = ChromeScaleScanner.scan(".synthetic-control { padding-left: 10px; padding-right: 14px; }");
+		assertSize(() -> "expected both padding-left and padding-right to be caught: "
+			+ r.violations(), 2, r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-control-padding-x (10px)"), r.violations().get(0));
+		assertTrue(r.violations().get(1).contains("--jc-chrome-control-padding-x-wide (14px)"), r.violations().get(1));
+	}
+
+	/**
+	 * {@code LINE_HEIGHT}'s only step value is unitless, so the general px/rem literal matcher could never bind
+	 * to it before this fix - {@code line-height} was already mapped in {@code CHECKED_PROPERTIES}, but nothing
+	 * could ever match. Proves the widened, {@code line-height}-scoped value-matching now catches it.
+	 */
+	@Test void b11_lineHeightCatchesADuplicatedValue() {
+		var r = ChromeScaleScanner.scan(".synthetic-control { line-height: 1.2; }");
+		assertSize(() -> "expected the duplicated line-height value to be caught: "
+			+ r.violations(), 1, r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-line-height (1.2)"), r.violations().get(0));
+	}
+
+	/**
+	 * {@code font-size}'s three chrome-scale steps are declared in {@code rem}, not {@code px} - the general
+	 * px-only literal matcher could never bind to a {@code rem}-valued {@code font-size} duplicate before this
+	 * fix (the font-size rem-reachability carve-out), so a tenth un-tokenized {@code 0.75rem}/{@code 0.8125rem}/{@code 0.875rem} site
+	 * introduced today would have gone unnoticed exactly the same way the original twelve did. Proves the
+	 * widened, {@code font-size}-scoped {@code rem} carve-out now catches it.
+	 */
+	@Test void b12_fontSizeRemCarveOutCatchesADuplicatedValue() {
+		var r = ChromeScaleScanner.scan(".synthetic-label { font-size: 0.875rem; }");
+		assertSize(() -> "expected the rem-valued font-size duplicate to be caught: "
+			+ r.violations(), 1, r.violations());
+		assertTrue(r.violations().get(0).contains("--jc-chrome-font-size-3 (0.875rem)"), r.violations().get(0));
+	}
+
+	/**
+	 * The three DataTables density literals ({@code table[data-juneau-view]}/{@code thead}/{@code tbody} cell
+	 * type context) moved from {@code 0.75rem} (a duplicate of {@code --jc-chrome-font-size-1}) to
+	 * {@code 0.8333rem} - the reference body type step. {@code 0.8333rem} does not equal any
+	 * declared step, so the {@code font-size} {@code rem} carve-out never even reaches
+	 * {@link ChromeScaleScanner#recordedLiterals()} for these three sites any more: no duplicate, no violation,
+	 * no exception needed. Reproduces the three pinned sites synthetically, by selector shape rather than by
+	 * reading the shipped stylesheet's own line numbers, so this proves the new value is clean of the scale
+	 * independent of where the sites currently sit in the file - and would start failing loudly (a real,
+	 * unexcused violation, since these are no longer in the recorded table) if the value ever drifted back onto
+	 * an existing step.
+	 */
+	@Test void b13_movedTableCellPinNoLongerDuplicatesAStepOrNeedsAnException() {
+		var r = ChromeScaleScanner.scan(
+			"table[data-juneau-view], table.dataTable { font-size: 0.8333rem; }"
+			+ " table[data-juneau-view] > thead > tr > th { font-size: 0.8333rem; }"
+			+ " table[data-juneau-view] > tbody > tr > th { font-size: 0.8333rem; }");
+		assertTrue(r.violations().isEmpty(), () -> "0.8333rem does not equal any declared step and must not be "
+			+ "reported as a violation: " + r.violations());
+		assertTrue(r.matchedRecords().isEmpty(), () -> "0.8333rem does not duplicate a step, so it needs no "
+			+ "recorded exception any more: " + r.matchedRecords());
+	}
+}

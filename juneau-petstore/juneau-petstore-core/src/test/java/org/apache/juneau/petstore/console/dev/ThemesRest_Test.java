@@ -17,12 +17,12 @@
 package org.apache.juneau.petstore.console.dev;
 
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.console.test.PageContractAssert.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.console.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

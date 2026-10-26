@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

@@ -39,8 +39,8 @@ EXCLUDED_ARTIFACTS = {
     "juneau-test-utils",         # test-only support module
     "juneau-test-marshall-utils",  # test-only support module (marshall-level fixtures)
     "juneau-integration-tests",  # cross-module test harness, not published
-    "juneau-rest-server-console-ui-freemarker-tests",  # console-ui-freemarker's unit tests, not published
-    "juneau-run",                # build tooling: a pom module that attaches juneau_run.py, not a library artifact
+    "juneau-console-freemarker-tests",  # console-ui-freemarker's unit tests, not published
+    "juneau-terminal",                # build tooling: a pom module that attaches juneau_terminal.py, not a library artifact
     "juneau-microservice-examples",  # sample/demo REST resources, not shipped as a framework artifact
     "juneau",                    # reactor root (defensive; also an aggregator)
 }

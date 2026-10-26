@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.sql;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -28,8 +28,8 @@ import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.dto.Order;
 import org.apache.juneau.petstore.service.*;
-import org.apache.juneau.rest.server.datatables.*;
-import org.apache.juneau.rest.server.datatables.adapter.*;
+import org.apache.juneau.console.datatables.*;
+import org.apache.juneau.console.datatables.adapter.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

@@ -36,8 +36,8 @@ def make_module(root, rel):
 
 def test_a_module_with_a_sibling_tests_module_runs_both(tmp_path):
     cov = load_coverage(tmp_path)
-    src = make_module(tmp_path, "juneau-rest/juneau-rest-server-console-ui-freemarker")
-    tests = make_module(tmp_path, "juneau-rest/juneau-rest-server-console-ui-freemarker-tests")
+    src = make_module(tmp_path, "juneau-rest/juneau-console-freemarker")
+    tests = make_module(tmp_path, "juneau-rest/juneau-console-freemarker-tests")
     assert cov.modules_to_test(src) == [src, tests]
 
 

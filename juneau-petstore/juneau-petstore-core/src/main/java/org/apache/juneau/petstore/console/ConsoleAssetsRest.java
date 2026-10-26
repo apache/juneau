@@ -17,7 +17,7 @@
 package org.apache.juneau.petstore.console;
 
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.console.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 /**

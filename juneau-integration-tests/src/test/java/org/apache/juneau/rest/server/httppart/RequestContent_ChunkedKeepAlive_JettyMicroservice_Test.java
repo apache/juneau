@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.httppart;
 
 import static java.nio.charset.StandardCharsets.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.io.*;
 import java.net.*;

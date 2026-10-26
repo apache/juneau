@@ -1,0 +1,77 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console;
+
+import static org.apache.juneau.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * {@link Theme#RED} &mdash; the second stock token-{@link Theme} beyond {@link Theme#OPEN}.
+ *
+ * <p>
+ * The load-bearing guard is (a01): because {@link Theme#RED} is seeded from {@link Theme#OPEN},
+ * its token <i>key</i> set must be
+ * provably identical to {@link Theme#OPEN}'s, which is what protects the {@code chrome.css} bidirectional
+ * cross-check ({@code ConsoleChromeMixin_Test}) for this theme too.
+ */
+class Theme_Red_Test extends TestBase {
+
+	@Test void a01_tokenKeySet_isIdenticalToOpens() {
+		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.RED.getTokens().keySet());
+	}
+
+	@Test void a02_tokenCount_is105_mirroringOpensPin() {
+		assertSize(105, Theme.RED.getTokens());
+	}
+
+	@Test void a03_name_isRed() {
+		assertEquals("red", Theme.RED.getName());
+	}
+
+	@Test void b01_recoloredSignatureValues() {
+		var tokens = Theme.RED.getTokens();
+		assertBean(tokens, "--jc-chrome-bg,--jc-accent,--jc-link,--jc-btn-primary", "#ffd9cf,#FF5630,#BF2600,#BF2600");
+	}
+
+	@Test void b02_keptFromOpen_semanticStatusAndTagValues_areUnchanged() {
+		var tokens = Theme.RED.getTokens();
+		assertEquals(Theme.OPEN.getTokens().get("--jc-white"), tokens.get("--jc-white"));
+		// Kept deliberately: RED's chrome/brand red must not be confused with, or replace, this semantic color.
+		assertEquals(Theme.OPEN.getTokens().get("--jc-danger"), tokens.get("--jc-danger"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-success"), tokens.get("--jc-success"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-blue-bg"), tokens.get("--jc-tag-blue-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-amber-bg"), tokens.get("--jc-tag-amber-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-neutral-bg"), tokens.get("--jc-tag-neutral-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-bg"), tokens.get("--jc-tag-red-bg"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-tag-red-text"), tokens.get("--jc-tag-red-text"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-padding"), tokens.get("--jc-card-padding"));
+		assertEquals(Theme.OPEN.getTokens().get("--jc-card-shadow"), tokens.get("--jc-card-shadow"));
+		assertBean(tokens, "--jc-card-padding,--jc-card-shadow", "16px 16px 8px,0 2px 2px rgba(0, 0, 0, 0.05)");
+	}
+
+	@Test void b03_noVarReferencesLeak_everyValueIsAResolvedLiteral() {
+		for (var e : Theme.RED.getTokens().entrySet())
+			assertFalse(e.getValue().contains("var("), () -> "token '" + e.getKey() + "' leaked an unresolved var() reference: " + e.getValue());
+	}
+
+	@Test void c01_derivedFromOpen_never_equalsOpensOwnName() {
+		assertNotEquals(Theme.OPEN.getName(), Theme.RED.getName());
+	}
+}

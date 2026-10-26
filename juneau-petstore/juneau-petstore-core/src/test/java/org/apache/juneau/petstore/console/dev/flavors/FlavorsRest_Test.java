@@ -17,8 +17,8 @@
 package org.apache.juneau.petstore.console.dev.flavors;
 
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.console.test.PageContractAssert.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.util.*;
 import java.util.regex.*;

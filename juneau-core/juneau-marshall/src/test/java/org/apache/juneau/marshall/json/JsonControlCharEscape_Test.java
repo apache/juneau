@@ -18,7 +18,7 @@ package org.apache.juneau.marshall.json;
 
 import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import java.util.*;
 

@@ -1,0 +1,666 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console.views;
+
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.util.*;
+
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.console.widgets.Op;
+
+/**
+ * A per-row action descriptor in the {@code VIEW_META} wire contract (the transport-agnostic
+ * "row-action intent" model).
+ *
+ * <p>
+ * An FTL {@code <@card type="datatables">} {@code VIEW_META} catalog declares zero or more of these via
+ * {@code rowActions}; the
+ * {@code juneau-views.js} runtime renders each as a row-menu item and, on activation, submits the declared
+ * {@link #endpoint} with the declared {@link #method} as a JSON request carrying the process's CSRF token.
+ *
+ * <h5 class='section'>The frozen wire schema</h5>
+ * <p>
+ * This is the <b>complete</b> set of wire fields; it is pinned in full now so that later waves (a future declarative
+ * modal/form + typed result) can rely on it verbatim without forcing another fail-loud
+ * contract bump.  Only {@link #id} is required; every other field is optional and is omitted from the serialized
+ * form when unset (null-valued properties are dropped).
+ * <table class='styled'>
+ * 	<tr><th>Field</th><th>Type / tokens</th><th>Meaning</th></tr>
+ * 	<tr><td>{@code id}</td><td>string</td><td>Stable action id (menu-item key; also the submit's logical name).</td></tr>
+ * 	<tr><td>{@code label}</td><td>string</td><td>The menu-item text.</td></tr>
+ * 	<tr><td>{@code icon}</td><td>string</td><td>Optional glyph name (resolved by the shared icon registry).</td></tr>
+ * 	<tr><td>{@code endpoint}</td><td>string</td><td>The URL the action submits to; may carry a {@code {property}}
+ * 		token substituted from the current row - a value that cannot be resolved refuses the submission (see
+ * 		{@link #endpoint(String) endpoint}).</td></tr>
+ * 	<tr><td>{@code method}</td><td>{@code POST}|{@code PUT}|{@code PATCH}|{@code DELETE}</td>
+ * 		<td>The non-safe HTTP method (see {@link Method}).</td></tr>
+ * 	<tr><td>{@code confirm}</td><td>string</td><td>Optional confirmation prompt shown before the submit.</td></tr>
+ * 	<tr><td>{@code form}</td><td>string</td><td>Optional form-source URL supplying the action's input fields;
+ * 		may carry a {@code {property}} token substituted from the current row before the confirmation GET
+ * 		(see {@link #form(String) form}).  Blank/absent {@code form} is the confirm-only local path.</td></tr>
+ * 	<tr><td>{@code present}</td><td>{@code page}|{@code dialog}|{@code inline}</td>
+ * 		<td>How the action's form/confirmation is presented (see {@link Present}); {@code inline} keeps it out of the row menu.</td></tr>
+ * 	<tr><td>{@code onSuccess}</td><td>{@code redraw}|{@code mergeRow}|{@code navigate}</td>
+ * 		<td>What the runtime does with a successful result (see {@link OnSuccess}).</td></tr>
+ * 	<tr><td>{@code enabledWhen}</td><td>{@code [{field,op,value?,reason}, ...]}</td>
+ * 		<td>Row-state disable-with-reason rules (see {@link #enabledWhen(String,Op,Object,String)}).</td></tr>
+ * 	<tr><td>{@code visibleWhen}</td><td>{@code [{field,op,value?}, ...]}</td>
+ * 		<td>Row-state visibility rules (see {@link #visibleWhen(VisibilityRule...)}).</td></tr>
+ * 	<tr><td>{@code tone}</td><td>{@code default}|{@code danger}</td>
+ * 		<td>Styling of the confirmation (see {@link Tone}); {@code danger} focuses Cancel first.</td></tr>
+ * 	<tr><td>{@code confirmLabel}</td><td>string</td>
+ * 		<td>Text of the confirm button; defaults to the action's {@code label}.</td></tr>
+ * 	<tr><td>{@code confirmRenderer}</td><td>string</td>
+ * 		<td>Name of a confirm renderer registered with the client runtime; absent means the built-in modal.
+ * 		Like {@code confirm}, it is not consulted when an inline cell edit commits (that never prompts).</td></tr>
+ * </table>
+ *
+ * <p>
+ * {@code enabledWhen} was added after this schema was first frozen; like {@code ModalDef#barSlot}, it is
+ * additive-only (<jk>null</jk> when unset, omitted from the serialized form) and its presence does not bump
+ * {@code VIEW_META} &mdash; a {@link RowAction} that leaves it unset serializes
+ * unchanged, and old {@code juneau-views.js} ignores the unknown key.
+ *
+ * <h5 class='section'>Why {@link #method} cannot be a safe method</h5>
+ * <p>
+ * {@link Method} enumerates only {@code POST}/{@code PUT}/{@code PATCH}/{@code DELETE}, so a safe (CSRF-exempt)
+ * method cannot be declared at all &mdash; a build-time refusal by construction.  This mirrors the server boundary:
+ * {@link org.apache.juneau.rest.server.MethodSafety} fails any {@code @Mutating} operation bound to a safe method at
+ * startup, and {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} applies its Origin/CSRF/JSON checks
+ * only to non-safe methods.  A mutating action bound to {@code GET} would be a CSRF-able write; the type system
+ * forbids expressing one.
+ *
+ * <h5 class='section'>Per-row {@code {property}} substitution in {@link #endpoint} and {@link #form}</h5>
+ * <p>
+ * {@link #endpoint(String) endpoint} and {@link #form(String) form} may each carry a {@code {property}} token
+ * (e.g. {@code {id}}, as in the example below) that the client-side runtime substitutes from the row &mdash; the
+ * SAME mechanism, same token grammar, and same per-value escaping as the {@code linked} cell renderer's
+ * {@code href} interpolation.  Unlike a rendered {@code href}, these URLs are <i>fetched</i> (form: confirmation GET) or
+ * <i>submitted</i> (endpoint: mutating write), so an unresolved substitution <b>refuses</b> instead of issuing a
+ * malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and
+ * is used as declared.  A blank/absent {@code form} is the confirm-only local path (no
+ * GET), not a refusal.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	RowAction <jv>delete</jv> = RowAction.<jsm>create</jsm>(<js>"delete"</js>)
+ * 		.label(<js>"Delete"</js>)
+ * 		.endpoint(<js>"servlet:/incidents/{id}"</js>)
+ * 		.method(RowAction.Method.<jsf>DELETE</jsf>)
+ * 		.confirm(<js>"Delete incident {id}?"</js>)
+ * 		.confirmLabel(<js>"Delete forever"</js>)
+ * 		.tone(RowAction.Tone.<jsf>DANGER</jsf>)
+ * 		.visibleWhen(VisibilityRule.<jsm>when</jsm>(<js>"locked"</js>).ne(<jk>true</jk>));
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='jc'>{@link Render}
+ * </ul>
+ *
+ * @since 10.0.0
+ */
+@BeanType(properties="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer")
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
+})
+public class RowAction {
+
+	/**
+	 * The non-safe HTTP method a row action submits with.
+	 *
+	 * <p>
+	 * Deliberately limited to the four non-safe methods.  A safe method (GET/HEAD/OPTIONS/TRACE) skips the
+	 * Origin/CSRF/JSON checks at {@link org.apache.juneau.rest.server.filter.LoopbackBoundary}, so a mutating
+	 * action bound to one would be CSRF-able; this enum makes that unexpressible.  Each constant's wire token is
+	 * its uppercase name, which is exactly what the client sends as the request method.
+	 */
+	public enum Method {
+
+		/** HTTP {@code POST}. */
+		POST,
+
+		/** HTTP {@code PUT}. */
+		PUT,
+
+		/** HTTP {@code PATCH}. */
+		PATCH,
+
+		/** HTTP {@code DELETE}. */
+		DELETE;
+
+		/**
+		 * Returns the wire token for this method (its uppercase name).
+		 *
+		 * @return The wire token (e.g. {@code "POST"}).
+		 */
+		public String wire() {
+			return name();
+		}
+	}
+
+	/**
+	 * The visual tone of a row action's confirmation.
+	 *
+	 * <p>
+	 * Each constant carries the lowercase wire token emitted for the {@code tone} field.  {@link #DANGER} styles the
+	 * confirmation as destructive and focuses its Cancel button first.
+	 */
+	public enum Tone {
+
+		/** The ordinary confirmation styling. */
+		DEFAULT("default"),
+
+		/** A destructive confirmation: danger styling, Cancel focused first. */
+		DANGER("danger");
+
+		private final String wire;
+
+		Tone(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * Returns the lowercase wire token for this tone.
+		 *
+		 * @return The wire token (e.g. {@code "danger"}).
+		 */
+		public String wire() {
+			return wire;
+		}
+	}
+
+	/**
+	 * How a row action's form/confirmation is presented.
+	 *
+	 * <p>
+	 * Each constant carries the lowercase wire token emitted for the {@code present} field.  {@link #INLINE} also
+	 * keeps the action out of the row menu.
+	 */
+	public enum Present {
+
+		/** Navigate to / render the action's form as a full page. */
+		PAGE("page"),
+
+		/** Render the action's form/confirmation in a modal dialog. */
+		DIALOG("dialog"),
+
+		/**
+		 * The action is fired from its cell pill or edit cell, never from the row menu.
+		 *
+		 * <p>
+		 * The row-action menu omits it; every other activation surface still runs it.
+		 */
+		INLINE("inline");
+
+		private final String wire;
+
+		Present(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * Returns the lowercase wire token for this presentation.
+		 *
+		 * @return The wire token (e.g. {@code "dialog"}).
+		 */
+		public String wire() {
+			return wire;
+		}
+	}
+
+	/**
+	 * What the runtime does with a successful action result.
+	 *
+	 * <p>
+	 * Each constant carries the wire token emitted for the {@code onSuccess} field.  The behavior behind each
+	 * token is implemented by a later wave; this type freezes the vocabulary.
+	 */
+	public enum OnSuccess {
+
+		/** Redraw (reload) the whole table. */
+		REDRAW("redraw"),
+
+		/** Merge the returned row into the table in place. */
+		MERGE_ROW("mergeRow"),
+
+		/** Navigate away using the result. */
+		NAVIGATE("navigate");
+
+		private final String wire;
+
+		OnSuccess(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * Returns the wire token for this success behavior.
+		 *
+		 * @return The wire token (e.g. {@code "mergeRow"}).
+		 */
+		public String wire() {
+			return wire;
+		}
+	}
+
+	/**
+	 * How an action behaves when driven from a bulk-mutate toolbar.
+	 *
+	 * @since 10.0.0
+	 */
+	public enum BulkMode {
+
+		/** One call per selected row. */
+		PER_ROW("perRow"),
+
+		/** A single call carrying every selected id. */
+		AGGREGATE("aggregate");
+
+		private final String wire;
+
+		BulkMode(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * Returns the wire token for this mode.
+		 *
+		 * @return The wire token ({@code "perRow"} or {@code "aggregate"}).
+		 */
+		public String wire() {
+			return wire;
+		}
+	}
+
+	/** The stable action id (menu-item key; also the submit's logical name). */
+	public String id;
+
+	/** The menu-item text. */
+	public String label;
+
+	/** Optional glyph/icon name (resolved by the shared icon registry). */
+	public String icon;
+
+	/**
+	 * The URL this action submits to (see {@link #endpoint(String) endpoint} for the {@code {property}}
+	 * substitution grammar).
+	 */
+	public String endpoint;
+
+	/** The non-safe HTTP method wire token (see {@link Method#wire()}). */
+	public String method;
+
+	/** Optional confirmation prompt shown before the submit, or literal <jk>false</jk> for none (see {@link #noConfirm()}). */
+	public Object confirm;
+
+	/** Optional confirm-dialog title when this action is driven in bulk. */
+	public String confirmTitle;
+
+	/** Optional bulk-mode wire token (see {@link BulkMode#wire()}); <jk>null</jk> means {@code perRow}. */
+	public String bulkMode;
+
+	/** Optional form-source URL supplying the action's input fields. */
+	public String form;
+
+	/** Optional presentation hint wire token (see {@link Present#wire()}). */
+	public String present;
+
+	/** Optional success-behavior hint wire token (see {@link OnSuccess#wire()}). */
+	public String onSuccess;
+
+	/**
+	 * The row-state rules that must all match for this action to render enabled.
+	 *
+	 * <p>
+	 * <jk>null</jk> or empty means "never gated" &mdash; the action renders exactly as it does today.  See
+	 * {@link #enabledWhen(String,Op,Object,String)} for the semantics, which mirror
+	 * {@code ActionRef.enabledWhen} on the detail-panel {@code ActionBar} (widgets module): presentation only,
+	 * disabled never hidden, first-declared-rule-wins, and a field the row does not carry fails closed.
+	 */
+	public List<RowActionEnabledRule> enabledWhen;
+
+	/**
+	 * The rules that must all match for this action to render at all.  <jk>null</jk> or empty means always visible.
+	 *
+	 * <p>
+	 * Unlike {@link #enabledWhen}, which disables but never hides, a row whose data does not satisfy every rule
+	 * here has this action hidden entirely (re-evaluated on every draw).  Prefer {@code enabledWhen}, which tells
+	 * the user why an action is unavailable, and hide only when the action is irrelevant to the row.  Still
+	 * presentation only &mdash; the endpoint must authorize independently.  The evaluation map is the row, plus the
+	 * page's {@code facts} under a {@code facts.} prefix, so a rule can test either {@code "status"} or
+	 * {@code "facts.viewer.roles"}.
+	 */
+	public List<VisibilityRule> visibleWhen;
+
+	/** Optional confirmation tone wire token (see {@link Tone#wire()}). */
+	public String tone;
+
+	/** Optional text of the confirm button; <jk>null</jk> means the action's {@link #label}. */
+	public String confirmLabel;
+
+	/** Optional name of a confirm renderer registered with the client runtime; <jk>null</jk> means the built-in modal. */
+	public String confirmRenderer;
+
+	/**
+	 * Starts a new {@link RowAction} with the specified stable action id.
+	 *
+	 * @param id The stable action id.  Must not be <jk>null</jk> or blank.
+	 * @return A new mutable {@link RowAction} to chain builder calls on.
+	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
+	 */
+	public static RowAction create(String id) {
+		if (ib(id))
+			throw iaex("RowAction id must not be null or blank.");
+		var a = new RowAction();
+		a.id = id;
+		return a;
+	}
+
+	/**
+	 * Sets the menu-item text.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RowAction label(String value) {
+		label = value;
+		return this;
+	}
+
+	/**
+	 * Sets the glyph/icon name.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RowAction icon(String value) {
+		icon = value;
+		return this;
+	}
+
+	/**
+	 * Sets the URL this action submits to.
+	 *
+	 * <p>
+	 * May contain one or more {@code {property}} tokens (e.g. {@code "servlet:/incidents/{id}/ack"}), substituted
+	 * from the CURRENT ROW's own already-fetched data at submit time &mdash; the client-side ({@code
+	 * juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the identical
+	 * {@code interpolateHref} helper the {@code linked} cell renderer uses
+	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and the
+	 * SAME per-value {@code encodeURIComponent} escaping &mdash; unchanged.
+	 *
+	 * <p>
+	 * <b>Divergence from a rendered {@code href} is deliberate:</b> because this URL is <i>submitted</i>
+	 * rather than merely rendered, the runtime <b>refuses the submission</b> (renders a visible refusal; issues no
+	 * request; never a request-time exception) instead of firing a malformed or undeclared write, when:
+	 * <ul>
+	 * 	<li>a {@code {property}} token's row value is absent, <jk>null</jk>, or blank;
+	 * 	<li>the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped
+	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer);
+	 * 	<li>the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise
+	 * 		normalize into a different, undeclared endpoint); or
+	 * 	<li>no {@code endpoint} is declared at all.
+	 * </ul>
+	 * {@code Column.href} keeps substituting to an empty string in each of these cases, because a rendered link is
+	 * not a write.
+	 *
+	 * <p>
+	 * <b>Backward compatible, narrowed:</b> an {@code endpoint} with no {@code {...}} token is still
+	 * issued as declared (three of the four guards above cannot fire on it; the fourth,
+	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now
+	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a
+	 * row with no {@code id}) rather than issuing it.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RowAction endpoint(String value) {
+		endpoint = value;
+		return this;
+	}
+
+	/**
+	 * Sets the non-safe HTTP method this action submits with.
+	 *
+	 * <p>
+	 * Only a {@link Method} (POST/PUT/PATCH/DELETE) can be passed, so a safe method can never be declared &mdash;
+	 * the build-time half of the safe-method refusal.
+	 *
+	 * @param value The method.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction method(Method value) {
+		method = value.wire();
+		return this;
+	}
+
+	/**
+	 * Sets the confirmation prompt shown before the submit.
+	 *
+	 * <p>
+	 * The prompt is shown whatever {@link #present(Present) present} says: without {@link Present#DIALOG} the action
+	 * opens a confirm-only dialog (or its {@link #confirmRenderer(String) confirmRenderer}) and submits only on
+	 * Confirm.  Use {@link #noConfirm()} for an action that never prompts.
+	 *
+	 * <p>
+	 * One surface never prompts: committing an inline cell edit (the {@code edit} renderer's pencil) submits the action
+	 * directly on Enter or blur even when the action declares a confirm or a
+	 * {@link #confirmRenderer(String) confirmRenderer}, because a dialog opening on Enter or blur is awkward.  Do not
+	 * wire a confirm-guarded action to an inline editor.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public RowAction confirm(String value) {
+		confirm = value;
+		return this;
+	}
+
+	/**
+	 * Sets how this action behaves when driven from a bulk-mutate toolbar: one call per selected row
+	 * ({@link BulkMode#PER_ROW}, the default) or a single call carrying every selected id
+	 * ({@link BulkMode#AGGREGATE}).
+	 *
+	 * @param value The new mode. A <jk>null</jk> value clears it (the default, {@link BulkMode#PER_ROW}).
+	 * @return This object.
+	 */
+	public RowAction bulkMode(BulkMode value) {
+		bulkMode = value == null ? null : value.wire();
+		return this;
+	}
+
+	/**
+	 * Sets the confirm dialog's title when this action is driven in bulk (e.g. {@code "Abort {count} pending changes"}).
+	 *
+	 * @param value The title template. May be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction confirmTitle(String value) {
+		confirmTitle = value;
+		return this;
+	}
+
+	/**
+	 * Marks this action as never requiring a confirm dialog, in bulk or otherwise &mdash; writes a literal
+	 * <jk>false</jk> onto the same {@link #confirm} wire key a confirm message would otherwise occupy.
+	 *
+	 * @return This object.
+	 */
+	public RowAction noConfirm() {
+		confirm = Boolean.FALSE;
+		return this;
+	}
+
+	/**
+	 * Sets the form-source URL supplying the action's input fields.
+	 *
+	 * <p>
+	 * May contain one or more {@code {property}} tokens (e.g. {@code "/data/alerts/{id}/ack-form"}), substituted
+	 * from the CURRENT ROW's own already-fetched data before the confirmation GET &mdash; the client-side
+	 * ({@code juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the
+	 * identical {@code interpolateHref} helper the {@code linked} cell renderer
+	 * uses (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and
+	 * the SAME per-value {@code encodeURIComponent} escaping.
+	 *
+	 * <p>
+	 * <b>Divergence from a rendered {@code href}:</b> because this URL is <i>fetched</i> (the confirmation GET) rather
+	 * than merely rendered, the runtime <b>refuses the open</b> (renders a visible refusal; issues no {@code
+	 * fetch}) instead of GETting a malformed or undeclared path, when:
+	 * <ul>
+	 * 	<li>a {@code {property}} token's row value is absent, <jk>null</jk>, or blank;
+	 * 	<li>the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped
+	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer); or
+	 * 	<li>the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise
+	 * 		normalize into a different, undeclared endpoint).
+	 * </ul>
+	 * {@code href} keeps substituting to an empty string in each of these cases, because a rendered link is
+	 * not a fetch.
+	 *
+	 * <p>
+	 * <b>Divergence from {@link #endpoint(String) endpoint}:</b> a blank/absent {@code form} is still the
+	 * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched
+	 * as declared.
+	 *
+	 * @param value The new value.  Can be <jk>null</jk> or blank for a confirm-only dialog.
+	 * @return This object.
+	 */
+	public RowAction form(String value) {
+		form = value;
+		return this;
+	}
+
+	/**
+	 * Sets the presentation hint.
+	 *
+	 * @param value The presentation.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction present(Present value) {
+		present = value.wire();
+		return this;
+	}
+
+	/**
+	 * Sets the success-behavior hint.
+	 *
+	 * @param value The success behavior.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction onSuccess(OnSuccess value) {
+		onSuccess = value.wire();
+		return this;
+	}
+
+	/**
+	 * Gates this action on the row's own state, comparing one field against one value.
+	 *
+	 * <p>
+	 * Mirrors {@code ActionRef.enabledWhen(String,Op,Object,String)} on the detail-panel {@code ActionBar}
+	 * (widgets module).  This is presentation only, never the authorization gate: the endpoint behind this
+	 * action must still perform its own real check and refuse on its own authority.  A row whose field does
+	 * not satisfy every declared rule renders this action present but disabled, carrying {@code reason} as its
+	 * explanation; disabled, never hidden.  Call this more than once to declare more than one rule &mdash; all
+	 * of them must match, and when several fail, the runtime shows the first-declared failing reason.
+	 *
+	 * @param field The row field to test.  Must not be <jk>null</jk> or blank.
+	 * @param op The comparison operator.  Must be {@link Op#EQ} or {@link Op#NE}.
+	 * @param value The comparison value.  Must not be <jk>null</jk>.
+	 * @param reason Why the action is unavailable when this rule does not match.  Must not be <jk>null</jk> or
+	 * 	blank.
+	 * @return This object.
+	 */
+	public RowAction enabledWhen(String field, Op op, Object value, String reason) {
+		return addEnabledRule(RowActionEnabledRule.of(field, op, value, reason));
+	}
+
+	/**
+	 * Gates this action on the presence or absence of a row field.
+	 *
+	 * <p>
+	 * The presence-based counterpart of {@link #enabledWhen(String,Op,Object,String)}, which carries the full
+	 * semantics.
+	 *
+	 * @param field The row field to test.  Must not be <jk>null</jk> or blank.
+	 * @param op The comparison operator.  Must be {@link Op#PRESENT} or {@link Op#ABSENT}.
+	 * @param reason Why the action is unavailable when this rule does not match.  Must not be <jk>null</jk> or
+	 * 	blank.
+	 * @return This object.
+	 */
+	public RowAction enabledWhen(String field, Op op, String reason) {
+		return addEnabledRule(RowActionEnabledRule.of(field, op, reason));
+	}
+
+	private RowAction addEnabledRule(RowActionEnabledRule rule) {
+		if (enabledWhen == null)
+			enabledWhen = l();
+		enabledWhen.add(rule);
+		return this;
+	}
+
+	/**
+	 * Hides this action, per row, unless every rule matches (see {@link #visibleWhen} for the semantics).
+	 *
+	 * @param rules The rules; all must match.  Replaces any rules set by an earlier call.
+	 * @return This object.
+	 */
+	public RowAction visibleWhen(VisibilityRule...rules) {
+		visibleWhen = l(rules);
+		return this;
+	}
+
+	/**
+	 * Sets the confirmation tone.
+	 *
+	 * @param value The tone.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction tone(Tone value) {
+		tone = value.wire();
+		return this;
+	}
+
+	/**
+	 * Sets the text of the confirm button.
+	 *
+	 * @param value The label.  Can be <jk>null</jk> to fall back to {@link #label}.
+	 * @return This object.
+	 */
+	public RowAction confirmLabel(String value) {
+		confirmLabel = value;
+		return this;
+	}
+
+	/**
+	 * Sets the name of the confirm renderer to use for this action's confirmation.
+	 *
+	 * <p>
+	 * The name must be registered on the client with {@code JuneauViews.rowActions.registerConfirmRenderer}; an
+	 * unregistered name refuses the confirmation.
+	 *
+	 * <p>
+	 * A renderer on its own, with no {@link #confirm(String) confirm} text, is enough to prompt: the action asks the
+	 * renderer before it submits even without {@code present(DIALOG)}, and the prompt is titled with the action's name.
+	 *
+	 * @param value The renderer name.  Can be <jk>null</jk> for the built-in modal.
+	 * @return This object.
+	 */
+	public RowAction confirmRenderer(String value) {
+		confirmRenderer = value;
+		return this;
+	}
+}

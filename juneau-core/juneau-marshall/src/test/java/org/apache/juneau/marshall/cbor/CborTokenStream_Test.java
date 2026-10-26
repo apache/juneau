@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.cbor;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import java.io.*;
 

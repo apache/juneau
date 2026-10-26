@@ -11,7 +11,7 @@ remains here is a juneau-only script with no counterpart elsewhere.
 
 ## Running
 
-The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Python Tests step runs it that way. `conftest.py` strips every live-run `JUNEAU_RUN_*` variable (`LIVE_RUN_ENV`: logs, cancel, header, markers, result, session and pending/overall rows) before each test, so a test never writes into the real run's logs (`test_env_isolation.py`); a test that needs one sets it itself.
+The suite must also pass under a push-like environment (`JUNEAU_TERMINAL_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_TERMINAL_ACTIVE`, `JUNEAU_TERMINAL_N_BASE` set), because `push.py`'s Python Tests step runs it that way. `conftest.py` strips every live-run `JUNEAU_TERMINAL_*` variable (`LIVE_RUN_ENV`: logs, cancel, header, markers, result, session and pending/overall rows) before each test, so a test never writes into the real run's logs (`test_env_isolation.py`); a test that needs one sets it itself.
 
 `pytest` is not vendored anywhere in this repo (it's pure-stdlib elsewhere in `scripts/` on
 purpose). Two easy ways to run this suite without installing anything globally:
@@ -51,7 +51,7 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   still returns the full output and exit code. The second test proves a line is echoed while the
   command is still running. Uses trivial shell commands, never mvn.
 
-- `test_run_adoption.py` -- `push.py` and `test.py` on juneau-run: marker streams from a fake `mvn` on `PATH`,
+- `test_run_adoption.py` -- `push.py` and `test.py` on juneau-terminal: marker streams from a fake `mvn` on `PATH`,
   `push.py --test-only`, console routing, the skipped second install, the commit summary, the Timing row, the
   nested `test.py` handoff and `--detail`. It also pins the default (markers off) behaviour.
 
@@ -62,7 +62,7 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   relative and the absolute margin, faster modules get the `↓` mark, the env overrides, and the `--report` table
   file. Synthetic run-history records in a temp dir.
 
-- `test_release_run.py` -- `release.py` on juneau-run and juneau_scripts, with a fake juneau_run module installed in
+- `test_release_run.py` -- `release.py` on juneau-terminal and juneau_terminal_scripts, with a fake juneau_terminal module installed in
   `sys.modules` (where release.py and the toolkit both look it up): every prompt goes through `prompt.text` (Ctrl-D
   cancels, never takes the default), Maven gets `-B` and a PTY, the full log is always written, the steps are a
   `steps.Registry` (its CLI, resume and checkpoint, with a legacy `last_step` file still resuming), each step is a

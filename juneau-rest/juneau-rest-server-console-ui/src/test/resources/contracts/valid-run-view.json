@@ -1,3 +1,0 @@
-{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
-  {"id":"run","type":"run-view","title":"Run","runView":{"eventsUrl":"/juneau-run-view/1/events","refreshMs":2000,"poll":true,"compact":false,"title":"Build run","rawHref":"/runs/1/raw#O{offset}"}}
-]}

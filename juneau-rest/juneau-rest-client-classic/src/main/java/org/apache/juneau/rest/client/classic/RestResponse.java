@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Represents a response from a remote REST resource.

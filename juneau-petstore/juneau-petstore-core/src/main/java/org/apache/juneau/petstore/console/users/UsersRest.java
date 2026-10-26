@@ -26,12 +26,12 @@ import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.datatables.*;
-import org.apache.juneau.rest.server.datatables.adapter.*;
+import org.apache.juneau.console.datatables.*;
+import org.apache.juneau.console.datatables.adapter.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.widgets.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.widgets.*;
 
 /**
  * The Users page and its endpoints.  The password is write-only: every read goes through {@link UserView}, which has

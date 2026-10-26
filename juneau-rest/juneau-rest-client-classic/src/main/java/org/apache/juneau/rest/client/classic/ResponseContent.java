@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Represents the body of an HTTP response.

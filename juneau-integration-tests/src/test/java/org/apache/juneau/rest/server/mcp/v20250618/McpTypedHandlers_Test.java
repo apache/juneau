@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20250618.*;

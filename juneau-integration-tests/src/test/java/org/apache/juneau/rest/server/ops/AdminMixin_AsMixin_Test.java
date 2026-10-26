@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.ops;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;

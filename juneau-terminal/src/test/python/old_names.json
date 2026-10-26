@@ -1,0 +1,774 @@
+{
+ "entries": [
+  {
+   "label": "juneau|run sep=-",
+   "parts": [
+    "juneau",
+    "run"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|run|report sep=-",
+   "parts": [
+    "juneau",
+    "run",
+    "report"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|test sep=-",
+   "parts": [
+    "juneau",
+    "test"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|console|ui sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "console",
+    "ui"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|console|ui|freemarker sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "console",
+    "ui",
+    "freemarker"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|console|ui|freemarker|tests sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "console",
+    "ui",
+    "freemarker",
+    "tests"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|views sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "views"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|views|markdown sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "views",
+    "markdown"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|widgets sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "widgets"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|datatables sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "datatables"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|bus sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "bus"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|bus|websocket sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "bus",
+    "websocket"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|terminal sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "terminal"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "juneau|rest|server|terminal|bus sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "terminal",
+    "bus"
+   ],
+   "sep": "-",
+   "kind": "token",
+   "before": "(?<![A-Za-z0-9_])"
+  },
+  {
+   "label": "org|apache|juneau|test|assertions sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "test",
+    "assertions"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|test|bct sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "test",
+    "bct"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|test|junit sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "test",
+    "junit"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|views sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "views"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|console sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "console"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|widgets sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "widgets"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|datatables sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "datatables"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|bus sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "bus"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|terminal sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "terminal"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|runreport sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "runreport"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "org|apache|juneau|rest|server|view|freemarker|console sep=.",
+   "parts": [
+    "org",
+    "apache",
+    "juneau",
+    "rest",
+    "server",
+    "view",
+    "freemarker",
+    "console"
+   ],
+   "sep": ".",
+   "kind": "package"
+  },
+  {
+   "label": "juneau|run sep=_",
+   "parts": [
+    "juneau",
+    "run"
+   ],
+   "sep": "_",
+   "kind": "literal"
+  },
+  {
+   "label": "JUNEAU|RUN| sep=_",
+   "parts": [
+    "JUNEAU",
+    "RUN",
+    ""
+   ],
+   "sep": "_",
+   "kind": "prefix",
+   "before": "(?<![A-Z0-9_])"
+  },
+  {
+   "label": ".cache/juneau|run sep=-",
+   "parts": [
+    ".cache/juneau",
+    "run"
+   ],
+   "sep": "-",
+   "kind": "literal"
+  },
+  {
+   "label": "juneau|scripts sep=_",
+   "parts": [
+    "juneau",
+    "scripts"
+   ],
+   "sep": "_",
+   "kind": "literal"
+  },
+  {
+   "label": "juneau|scripts sep=-",
+   "parts": [
+    "juneau",
+    "scripts"
+   ],
+   "sep": "-",
+   "kind": "prefix"
+  },
+  {
+   "label": "JUNEAU|SCRIPTS| sep=_",
+   "parts": [
+    "JUNEAU",
+    "SCRIPTS",
+    ""
+   ],
+   "sep": "_",
+   "kind": "prefix",
+   "before": "(?<![A-Z0-9_])"
+  },
+  {
+   "label": "RUN|MARKERS sep=_",
+   "parts": [
+    "RUN",
+    "MARKERS"
+   ],
+   "sep": "_",
+   "kind": "ident"
+  },
+  {
+   "label": "RUN|ARTIFACTS sep=_",
+   "parts": [
+    "RUN",
+    "ARTIFACTS"
+   ],
+   "sep": "_",
+   "kind": "ident"
+  },
+  {
+   "label": "/docs/topics/Juneau|Run",
+   "parts": [
+    "/docs/topics/Juneau",
+    "Run"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "after": "(?![A-Za-z0-9_])"
+  },
+  {
+   "label": "/docs/topics/Juneau|Test",
+   "parts": [
+    "/docs/topics/Juneau",
+    "Test"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "after": "(?![A-Za-z0-9_])"
+  },
+  {
+   "label": "/docs/topics/Juneau|TestJUnitExtensions",
+   "parts": [
+    "/docs/topics/Juneau",
+    "TestJUnitExtensions"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "after": "(?![A-Za-z0-9_])"
+  },
+  {
+   "label": "/docs/topics/Driving|ARun",
+   "parts": [
+    "/docs/topics/Driving",
+    "ARun"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "after": "(?![A-Za-z0-9_])"
+  },
+  {
+   "label": "/docs/topics/Run|ViewRegion",
+   "parts": [
+    "/docs/topics/Run",
+    "ViewRegion"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "after": "(?![A-Za-z0-9_])"
+  },
+  {
+   "label": "##|run",
+   "parts": [
+    "##",
+    "run"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "after": "(?!\\w)"
+  },
+  {
+   "label": "Run|Event",
+   "parts": [
+    "Run",
+    "Event"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewChecks",
+   "parts": [
+    "Run",
+    "ViewChecks"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewCardType",
+   "parts": [
+    "Run",
+    "ViewCardType"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewDef",
+   "parts": [
+    "Run",
+    "ViewDef"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewEndpoints",
+   "parts": [
+    "Run",
+    "ViewEndpoints"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewLog",
+   "parts": [
+    "Run",
+    "ViewLog"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewMixin",
+   "parts": [
+    "Run",
+    "ViewMixin"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewPage",
+   "parts": [
+    "Run",
+    "ViewPage"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewSource",
+   "parts": [
+    "Run",
+    "ViewSource"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|View_BrowserTest",
+   "parts": [
+    "Run",
+    "View_BrowserTest"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "Run|ViewCss_Test",
+   "parts": [
+    "Run",
+    "ViewCss_Test"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![a-z0-9])"
+  },
+  {
+   "label": "juneau|run|view sep=-",
+   "parts": [
+    "juneau",
+    "run",
+    "view"
+   ],
+   "sep": "-",
+   "kind": "prefix"
+  },
+  {
+   "label": "run|view sep=-",
+   "parts": [
+    "run",
+    "view"
+   ],
+   "sep": "-",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])"
+  },
+  {
+   "label": "run|View",
+   "parts": [
+    "run",
+    "View"
+   ],
+   "sep": "",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])"
+  },
+  {
+   "label": "run|view sep=_",
+   "parts": [
+    "run",
+    "view"
+   ],
+   "sep": "_",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])"
+  },
+  {
+   "label": "Run|view sep= ",
+   "parts": [
+    "Run",
+    "view"
+   ],
+   "sep": " ",
+   "kind": "literal",
+   "before": "(?<![A-Za-z0-9])",
+   "after": "(?![A-Za-z0-9])"
+  },
+  {
+   "label": "juneau|run|script sep=.",
+   "parts": [
+    "juneau",
+    "run",
+    "script"
+   ],
+   "sep": ".",
+   "kind": "literal"
+  },
+  {
+   "label": "run|protocol|v1 sep=-",
+   "parts": [
+    "run",
+    "protocol",
+    "v1"
+   ],
+   "sep": "-",
+   "kind": "prefix"
+  }
+ ],
+ "keep": [
+  {
+   "label": "juneau|test|utils sep=-",
+   "parts": [
+    "juneau",
+    "test",
+    "utils"
+   ],
+   "sep": "-",
+   "kind": "token"
+  },
+  {
+   "label": "juneau|test|marshall|utils sep=-",
+   "parts": [
+    "juneau",
+    "test",
+    "marshall",
+    "utils"
+   ],
+   "sep": "-",
+   "kind": "token"
+  },
+  {
+   "label": "juneau|rest|server|view| sep=-",
+   "parts": [
+    "juneau",
+    "rest",
+    "server",
+    "view",
+    ""
+   ],
+   "sep": "-",
+   "kind": "prefix"
+  },
+  {
+   "label": "##|pytest ",
+   "parts": [
+    "##",
+    "pytest "
+   ],
+   "sep": "",
+   "kind": "literal"
+  },
+  {
+   "label": "juneau|runs sep=_",
+   "parts": [
+    "juneau",
+    "runs"
+   ],
+   "sep": "_",
+   "kind": "literal"
+  },
+  {
+   "label": "Run|Override",
+   "parts": [
+    "Run",
+    "Override"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "Run|GroupTest",
+   "parts": [
+    "Run",
+    "GroupTest"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "Run|RequestedTest",
+   "parts": [
+    "Run",
+    "RequestedTest"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "Run|DecisionTest",
+   "parts": [
+    "Run",
+    "DecisionTest"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "Run|EventsSseServlet",
+   "parts": [
+    "Run",
+    "EventsSseServlet"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "Run|ViewSources",
+   "parts": [
+    "Run",
+    "ViewSources"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "Run|ViewSourcesTest",
+   "parts": [
+    "Run",
+    "ViewSourcesTest"
+   ],
+   "sep": "",
+   "kind": "ident"
+  },
+  {
+   "label": "foundry.dashboard.|runs",
+   "parts": [
+    "foundry.dashboard.",
+    "runs"
+   ],
+   "sep": "",
+   "kind": "literal"
+  }
+ ],
+ "allow": [
+  "pages/release-notes/10.0.0.md"
+ ]
+}

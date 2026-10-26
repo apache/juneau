@@ -26,7 +26,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.client.classic.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;

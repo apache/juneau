@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.petstore.console;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.view.freemarker.console.*;
+import org.apache.juneau.console.freemarker.*;
 import org.junit.jupiter.api.*;
 
 /** Every console template validates with zero findings. */

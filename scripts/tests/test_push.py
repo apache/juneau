@@ -1003,7 +1003,7 @@ def _stub_push_flow(push_module, monkeypatch, *, tests_pass, test_py=True):
                         lambda cmd, *a, **k: tests_pass if cmd == ["mvn", "test"] else True)
     monkeypatch.setattr(push_module, "_append_test_run_history", lambda *a: calls.append(a))
     monkeypatch.setattr(push_module, "current_branch", lambda root: "main")
-    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")    # the session's bell and sound
+    monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", "1")    # the session's bell and sound
     monkeypatch.setattr(push_module, "run_test_script",
                         lambda cmd, cwd, run, **k: subprocess.CompletedProcess(cmd, 0 if tests_pass else 1))
     if not test_py:
@@ -1125,7 +1125,7 @@ class TestRefusalGuardCharacterization:
 
 
 # ---------------------------------------------------------------------------------------
-# The git readers come from the juneau_scripts toolkit; the refusal guard around them is unchanged.
+# The git readers come from the juneau_terminal_scripts toolkit; the refusal guard around them is unchanged.
 # ---------------------------------------------------------------------------------------
 @pytest.fixture
 def toolkit_git(push_module):
@@ -1455,28 +1455,28 @@ class TestDocsPrechecksWhenIdle:
 
 
 # ---------------------------------------------------------------------------------------
-# Console default: flag > JUNEAU_RUN_CONSOLE > board.
+# Console default: flag > JUNEAU_TERMINAL_CONSOLE > board.
 # ---------------------------------------------------------------------------------------
 class TestConsoleDefault:
     @pytest.fixture(autouse=True)
     def _clean_env(self, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "")    # registers the restore; deleted next so the test starts unset
-        monkeypatch.delenv("JUNEAU_RUN_CONSOLE")
+        monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "")    # registers the restore; deleted next so the test starts unset
+        monkeypatch.delenv("JUNEAU_TERMINAL_CONSOLE")
 
     def test_defaults_to_board(self, push_module):
         push_module.parse_args(["msg"])
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "board"
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "board"
 
     def test_environment_beats_the_default(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+        monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
         push_module.parse_args(["msg"])
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "full"
 
     @pytest.mark.parametrize("mode", ["full", "board", "none"])
     def test_flag_beats_the_environment(self, push_module, monkeypatch, mode):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full" if mode != "full" else "none")
+        monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full" if mode != "full" else "none")
         push_module.parse_args(["msg", "--console", mode])
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == mode
 
     def test_help_says_board_is_the_default(self, push_module, monkeypatch, capsys):
         monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--help"])
@@ -1490,26 +1490,26 @@ def test_prechecks_opens_a_unit_and_a_child_step_per_check(
 ):
     """
     The Prechecks row draws one line per check while it runs: on the bus each check is a script unit, and
-    under RUN_MARKERS=1 a prechecks/<check> child step.  A failed check leaves the row its reason text, not a unit name.
+    under TERMINAL_MARKERS=1 a prechecks/<check> child step.  A failed check leaves the row its reason text, not a unit name.
     """
     _local_only_commit(docs_repo)
     _run(docs_repo, "git", "config", "--unset", "user.email")
     listed = push_module.prechecks(juneau_root)
 
-    jr = sys.modules["juneau_run"]
+    jr = sys.modules["juneau_terminal"]
     seen = []
     board = jr.Board()
     monkeypatch.setattr(jr, "_subscribers", list(jr._subscribers))     # the subscribers below go with the test
     jr.subscribe(lambda kind, fields: seen.append((kind, dict(fields))))
     jr.subscribe(board.apply)
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
 
     push_module.toolkit("run").checks("prechecks", "Prechecks", listed)
 
     starts = [f for k, f in seen if k == "unit_start"]
     assert [(f["step"], f["title"], f["src"]) for f in starts] == [("prechecks", c.name, "script") for c in listed]
-    found = [json.loads(line[len("##run "):]) for line in capsys.readouterr().out.splitlines()
-             if line.startswith("##run ")]
+    found = [json.loads(line[len("##terminal "):]) for line in capsys.readouterr().out.splitlines()
+             if line.startswith("##terminal ")]
     children = [m["id"] for m in found if m["ev"] == "step" and m.get("parent") == "prechecks"]
     assert children == ["prechecks/" + push_module.toolkit("run")._slug(c.name) for c in listed]
     ends = {m["id"]: m["status"] for m in found if m["ev"] == "end"}

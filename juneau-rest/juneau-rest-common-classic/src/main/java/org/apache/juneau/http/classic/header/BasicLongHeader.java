@@ -24,7 +24,7 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Category of headers that consist of a single long value.

@@ -43,7 +43,7 @@
 		<!-- Opt-in BusWebSocketCsrf_TomcatIT (-Djuneau.busIt=true) only; Juneau ships no container WebSocket dependency. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-bus-websocket</artifactId>
+			<artifactId>juneau-console-bus-websocket</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -62,7 +62,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-test</artifactId>
+			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

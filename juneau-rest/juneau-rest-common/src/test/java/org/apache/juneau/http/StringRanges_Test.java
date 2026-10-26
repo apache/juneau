@@ -18,7 +18,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.commons.http.StringRanges.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

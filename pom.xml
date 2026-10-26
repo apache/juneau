@@ -100,7 +100,7 @@
 		<sonar.issue.ignore.multicriteria.e8.ruleKey>java:S2143</sonar.issue.ignore.multicriteria.e8.ruleKey>
 		<sonar.issue.ignore.multicriteria.e8.resourceKey>**/microservice/logging/LogEntryFormatter.java</sonar.issue.ignore.multicriteria.e8.resourceKey>
 		<sonar.issue.ignore.multicriteria.e9.ruleKey>java:S2143</sonar.issue.ignore.multicriteria.e9.ruleKey>
-		<sonar.issue.ignore.multicriteria.e9.resourceKey>**/test/assertions/FluentDateAssertion.java</sonar.issue.ignore.multicriteria.e9.resourceKey>
+		<sonar.issue.ignore.multicriteria.e9.resourceKey>**/bct/assertions/FluentDateAssertion.java</sonar.issue.ignore.multicriteria.e9.resourceKey>
 		<!-- Coverage/exclusion config for the SonarScanner-for-Maven (used by CI in .github/workflows/sonarcloud.yml). -->
 		<!-- The Maven scanner reads these from the POM and ignores sonar-project.properties. -->
 		<!-- Aggregate report (cross-module integration-test coverage) via reactor-root path, per-module report via basedir fallback. -->
@@ -146,7 +146,7 @@
 		<module>juneau-microservice</module>
 		<module>juneau-sc</module>
 		<module>juneau-secret-macos-keychain</module>
-		<module>juneau-run</module>
+		<module>juneau-terminal</module>
 		<module>juneau-examples</module>
 		<module>juneau-petstore</module>
 		<module>juneau-integration-tests</module>

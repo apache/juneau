@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient50;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.util.*;
 

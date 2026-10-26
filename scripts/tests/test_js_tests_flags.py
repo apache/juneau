@@ -49,7 +49,7 @@ def push_mod():
 
 # ---- auto-detect -----------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("path,expected", [
-    ("juneau-rest/juneau-rest-server-views/src/main/resources/juneau-views.js", True),
+    ("juneau-rest/juneau-console-views/src/main/resources/juneau-views.js", True),
     ("juneau-rest/x/src/main/resources/style.CSS", True),
     ("juneau-rest/x/src/main/resources/templates/page.ftl", True),
     ("a/src/test/js/row-actions.js", True),
@@ -57,8 +57,8 @@ def push_mod():
     ("src.js", False),                      # file named src, not a directory
     ("juneau-petstore/juneau-petstore-core/src/main/resources/console/petstore.css", True),
     ("juneau-petstore/juneau-petstore-core/src/test/js/petstore-browser.cjs", True),
-    ("juneau-rest/juneau-rest-server-terminal/src/main/resources/terminal.js", True),
-    ("juneau-rest/juneau-rest-server-terminal/src/test/js/terminal-prober.cjs", True),
+    ("juneau-rest/juneau-terminal-region/src/main/resources/terminal.js", True),
+    ("juneau-rest/juneau-terminal-region/src/test/js/terminal-prober.cjs", True),
     ("juneau-core/src/main/java/Foo.java", False),
     ("a/src/main/resources/readme.md", False),
 ])

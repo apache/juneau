@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""A live run's JUNEAU_RUN_* variables must not reach the tests, or their sessions write into the real run's logs."""
+"""A live run's JUNEAU_TERMINAL_* variables must not reach the tests, or their sessions write into the real run's logs."""
 
 import os
 import subprocess

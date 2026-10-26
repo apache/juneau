@@ -25,7 +25,7 @@
 
 Apache Juneau™ is a single cohesive Java ecosystem consisting of a comprehensive toolkit for marshalling POJOs to a wide variety of content types using a common framework, along with universal REST server and client APIs for creating Swagger-based self-documenting REST interfaces.
 
-> **⚠️ Upgrading from 9.x?** The project is currently developing the **10.0.0** release, which includes a number of breaking changes (the public `ObjectRest` class removed, `SerializerSet`/`ParserSet` lookups now returning `Optional`, the next-gen `RestClient` no longer implicitly defaulting to JSON, the `juneau-assertions`/`juneau-bct`/`juneau-junit5` modules merged into a single `juneau-test` artifact, and the legacy `juneau-my-jetty-microservice`/`juneau-examples-rest` modules removed, among others). See the **[10.0.0 Migration Guide](https://juneau.apache.org/docs/topics/V10MigrationGuide)** for the full list before upgrading.
+> **⚠️ Upgrading from 9.x?** The project is currently developing the **10.0.0** release, which includes a number of breaking changes (the public `ObjectRest` class removed, `SerializerSet`/`ParserSet` lookups now returning `Optional`, the next-gen `RestClient` no longer implicitly defaulting to JSON, the `juneau-assertions`/`juneau-bct`/`juneau-junit5` modules merged into a single `juneau-bct` artifact, and the legacy `juneau-my-jetty-microservice`/`juneau-examples-rest` modules removed, among others). See the **[10.0.0 Migration Guide](https://juneau.apache.org/docs/topics/V10MigrationGuide)** for the full list before upgrading.
 
 ## Key Features
 
@@ -83,7 +83,7 @@ Apache Juneau™ excels in the following scenarios:
 * **Serverless unit testing of REST APIs** - Test REST services without servlet containers using MockRestClient for fast, comprehensive testing
 * **Microservice development** - Build lightweight microservices with embedded Jetty or Spring Boot integration
 * **Data transformation and mapping** - Convert between different data formats and handle complex object hierarchies with swap mechanisms
-* **Bean-Centric Testing and fluent-style assertions** - Write readable test assertions with comprehensive validation capabilities using juneau-test
+* **Bean-Centric Testing and fluent-style assertions** - Write readable test assertions with comprehensive validation capabilities using juneau-bct
 * **Content negotiation and HTTP/2 support** - Handle multiple content types automatically with modern HTTP features
 
 ## Getting Started in 5 Minutes
@@ -305,7 +305,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
   * **juneau-marshall**	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
   * **juneau-marshall-rdf**	- Additional support for various RDF languages.
   * **juneau-config**	- A sophisticated configuration file API.
-  * **juneau-test** - Unified test-support API combining fluent-style assertions, Bean-Centric Testing, and JUnit 5 extensions (replaces the former `juneau-assertions`/`juneau-bct`/`juneau-junit5` artifacts).
+  * **juneau-bct** - Unified test-support API combining fluent-style assertions, Bean-Centric Testing, and JUnit 5 extensions (replaces the former `juneau-assertions`/`juneau-bct`/`juneau-junit5` artifacts).
 * **juneau-bean** - Predefined serializable beans: **juneau-bean-atom**, **juneau-bean-common**, **juneau-bean-hal**, **juneau-bean-html5**, **juneau-bean-jsonapi**, **juneau-bean-jsonpatch**, **juneau-bean-jsonrpc**, **juneau-bean-jsonschema**, **juneau-bean-openapi-v3**, **juneau-bean-rfc7807**, **juneau-bean-swagger-v2** - such as HTML5, Swagger/OpenAPI, ATOM, HAL, JSON:API, JSON Patch, and RFC 7807 Problem Details. (See [MCP Support](#mcp-model-context-protocol-support) above for the `juneau-bean-mcp-*` adapters.)
 * **juneau-rest** - REST server and client APIs:
   * **juneau-rest-common** / **juneau-rest-common-classic** - REST APIs common to client and server side (next-gen vs. classic client stack).
@@ -314,7 +314,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
   * **juneau-rest-server-springboot** - Spring Boot integration for juneau-rest-server.
   * **juneau-rest-server-auth-jwt, -saml, -oauth, -oidc-rp** and **juneau-rest-auth-oauth-flow** - Authentication/authorization add-ons (JWT, SAML, OAuth, OpenID Connect RP).
   * **juneau-rest-server-metrics-micrometer, -tracing-otel, -management-logging** - Observability add-ons (Micrometer metrics, OpenTelemetry tracing, request/response logging).
-  * **juneau-rest-server-datatables** - Server-side processing adapter (plus browser-side helpers) for [DataTables](https://datatables.net/).
+  * **juneau-console-datatables** - Server-side processing adapter (plus browser-side helpers) for [DataTables](https://datatables.net/).
   * **juneau-rest-server-reactive, -reactive-reactor** - Reactive-streams (SSE) response support.
   * **juneau-rest-server-view-jsp, -thymeleaf, -mustache, -freemarker** - View-engine add-ons.
   * **juneau-rest-client** / **juneau-rest-client-classic** - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces (next-gen vs. classic client stack), with **juneau-rest-client-apache-httpclient-45/-50**, **juneau-rest-client-jetty**, and **juneau-rest-client-okhttp** transport backends.
@@ -345,7 +345,7 @@ Juneau is packed with features that may not be obvious at first. Users are encou
 * Minimal library dependencies:
    * juneau-commons, juneau-marshall, juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi-v3, juneau-config - No external dependencies. Entirely self-contained.
    * juneau-marshall-rdf - Optional RDF support. Requires Apache Jena 5.6.0+.
-   * juneau-test - Requires opentest4j (JUnit Jupiter is a provided-scope dependency, supplied by your test runtime).
+   * juneau-bct - Requires opentest4j (JUnit Jupiter is a provided-scope dependency, supplied by your test runtime).
    * juneau-rest-server - Any Servlet 3.1.0+ container.
    * juneau-rest-client - Apache HttpClient 4.5+.
 * Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features such as request/response multiplexing and server push.

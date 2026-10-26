@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.console;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.console.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.petstore.console.dev.*;
@@ -33,8 +33,8 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
-import org.apache.juneau.rest.server.view.freemarker.console.*;
-import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.views.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -155,7 +155,7 @@ class PetstoreFailLoud_Test extends TestBase {
 	@Test void a15_adopterHandlerForAReservedType_failsAtMixinBuild() {
 		var ex = assertThrows(IllegalArgumentException.class,
 			() -> ConsoleFreemarkerMixin.create().cardType(new ImpostorDatatables()).build());
-		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, datatables, html, job-log, run-view, terminal'.",
+		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, datatables, html, job-log, terminal, terminal-view'.",
 			ex.getMessage());
 	}
 

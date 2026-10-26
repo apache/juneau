@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * A {@link NameValuePair} that consist of a single HTTP-date.

@@ -1,0 +1,431 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.console.freemarker;
+
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
+
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.console.*;
+import org.apache.juneau.console.views.*;
+
+import freemarker.core.*;
+import freemarker.template.*;
+import freemarker.template.utility.*;
+
+/**
+ * The {@code <@card>} FreeMarker directive: adds one entry to the page contract's {@code cards[]}.
+ *
+ * <p>
+ * {@code html} (the default) and {@code terminal-view} are built in. {@code datatables}, {@code terminal} and every other
+ * well-formed type name is dispatched through the host's {@link CardTypeRegistry}: a registered
+ * {@link CardTypeHandler} validates it, and an unregistered type falls back to the generic passthrough. Every type other
+ * than {@code html} requires {@code id=}.
+ *
+ * <p>
+ * {@code type="html"} (the default) takes exactly one content source: a body (emitted as
+ * {@code <template data-card="{id}">}), {@code template=} (reuses another card's template), or {@code src=} (fetched
+ * same-origin by the shell). {@code type="datatables"} takes {@code src=} or a JSON5 catalog body and becomes the C1
+ * bridge card. {@code type="terminal-view"} takes a JSON5
+ * {@code {contractVersion: '1', terminalView: {...}}} body and becomes the terminal-view bridge card (see {@link TerminalViewDef}).
+ * {@code type="terminal"} takes a JSON5 {@code {contractVersion: '1', terminal: {...}}} body and becomes the terminal
+ * card (see {@code TerminalDef}). A card without {@code id=} gets {@code jc-card-N}. {@code <@card>} is only valid inside
+ * {@code <@page>}; markup around it becomes {@code jc-seg-N} segments, so the authored order is kept.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	&lt;@page tab="releases"&gt;
+ * 	  &lt;@card id="intro" title="Releases"&gt;&lt;p&gt;All releases.&lt;/p&gt;&lt;/@card&gt;
+ * 	  &lt;@card type="datatables" id="releases"&gt;
+ * 	    { dataUrl: '/rest/releases/data', columns: [ { key: 'name', label: 'Name' } ] }
+ * 	  &lt;/@card&gt;
+ * 	&lt;/@page&gt;
+ * </p>
+ *
+ * @since 10.0.0
+ */
+@SuppressWarnings({
+	"java:S1192", // Duplicated literals read more clearly inline than as constants
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
+public final class CardDirectiveModel implements TemplateDirectiveModel {
+
+	/** The shared-variable name this directive registers under. */
+	public static final String NAME = "card";
+
+	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class", "ref", "subscribes", "publishes", "sanitize");
+
+	static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
+
+	private static final Pattern CLASS_TOKEN_RE = Pattern.compile("^[A-Za-z_-][A-Za-z0-9_-]*$");
+
+	private static final Pattern TYPE_RE = Pattern.compile("^[a-z][a-z0-9-]{0,31}$");
+
+	/** Contract base keys copied onto {@link CardSpec}'s own setters rather than {@link CardSpec#body}. */
+	private static final Set<String> BASE_KEYS = Set.of("id", "type", "title", "src", "template");
+
+	private final CardRequirements requirements;
+	private final CardTypeRegistry cardTypes;
+
+	CardDirectiveModel(CardRequirements requirements, CardTypeRegistry cardTypes) {
+		this.requirements = requirements;
+		this.cardTypes = cardTypes;
+	}
+
+	@Override
+	@SuppressWarnings({
+		"unchecked" // FreeMarker's raw params Map is String-keyed by contract.
+	})
+	public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars,
+			TemplateDirectiveBody body) throws TemplateException, IOException {
+		Map<String, TemplateModel> p = params;
+		if (p.containsKey("format"))
+			throw FtlAttrLists.reject("<@card> uses type= only; format= is not a valid attribute.");
+		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
+
+		if (p.containsKey("ref")) {
+			placeByRef(env, p, FtlAttrLists.scalar(p, "ref"), body);
+			return;
+		}
+
+		var type = FtlAttrLists.scalar(p, "type");
+		var authoredId = FtlAttrLists.scalar(p, "id");
+		var requires = FtlAttrLists.list(p, NAME, "requires");
+		var cssClass = cssClass(p, authoredId);
+		var sanitize = FtlAttrLists.strictBoolean(p, NAME, "sanitize", false);
+		var subsAttr = p.containsKey("subscribes") ? DeepUnwrap.unwrap(p.get("subscribes")) : null;
+		var pubsAttr = p.containsKey("publishes") ? DeepUnwrap.unwrap(p.get("publishes")) : null;
+		if ((subsAttr != null || pubsAttr != null) && authoredId.isEmpty())
+			throw FtlAttrLists.reject("<@card> with subscribes= or publishes= needs id=.");
+		if (REMOVED_TYPES.contains(type))
+			throw FtlAttrLists.reject(f(
+				"<@card id='%s'> type='%s' was removed in 10.0.0; use type='html' with a <template>, or a registered card type.",
+				authoredId, type));
+		if (! type.isEmpty() && ! TYPE_RE.matcher(type).matches())
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' must match ^[a-z][a-z0-9-]{0,31}$.", authoredId, type));
+
+		var cap = PageCapture.get(env);
+		if (n(cap) || ! cap.pageOpen)
+			throw FtlAttrLists.reject("<@card> must be nested inside <@page>.");
+		if (cap.cardOpen)
+			throw FtlAttrLists.reject("<@card> cannot be nested inside another <@card>.");
+		if (! authoredId.isEmpty())
+			FtlAttrLists.checkId(NAME, authoredId);
+
+		// Markup before this card becomes its own segment, so it stays ahead of the card.
+		cap.flushSegment();
+
+		String markup;
+		cap.cardOpen = true;
+		try {
+			markup = PageCapture.render(body);
+		} finally {
+			cap.cardOpen = false;
+		}
+
+		var title = FtlAttrLists.scalar(p, "title");
+		var src = FtlAttrLists.scalar(p, "src");
+		var template = FtlAttrLists.scalar(p, "template");
+		var cardType = type.isEmpty() ? "html" : type;
+		if (sanitize && (neq(cardType, "html") || src.isEmpty()))
+			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", authoredId));
+		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
+		Map<String,Object> cardBody = Map.of();
+		if (eq(cardType, "terminal-view"))
+			terminalViewCard(cap, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
+		else if (eq(cardType, "html"))
+			htmlCard(cap, id, title, src, template, markup, cssClass, sanitize, pubsAttr, subsAttr);
+		else
+			cardBody = registryCard(cap, cardType, id, title, src, template, markup, cssClass, pubsAttr, subsAttr).bodyMap();
+		recordRequirements(cap, cardType, id, requires, cardBody);
+	}
+
+	/**
+	 * {@code <@card ref="id"/>}: places a PageSpec-built card at this point in the card order.  Present-but-empty
+	 * {@code ref=} takes this path too and fails as an unknown card.  Guards run in order: another attribute (E-B7),
+	 * then page and nesting, then a non-blank body (E-B7), then the placement checks (E-B5, E-B6).
+	 */
+	private static void placeByRef(Environment env, Map<String, TemplateModel> p, String ref, TemplateDirectiveBody body)
+			throws TemplateException, IOException {
+		var other = firstOtherAttr(p);
+		if (other != null)
+			throw FtlAttrLists.reject(f("<@card ref='%s'> must not also set '%s' or a body.", ref, other));
+		var cap = PageCapture.get(env);
+		if (n(cap) || ! cap.pageOpen)
+			throw FtlAttrLists.reject("<@card> must be nested inside <@page>.");
+		if (cap.cardOpen)
+			throw FtlAttrLists.reject("<@card> cannot be nested inside another <@card>.");
+		String markup;
+		cap.cardOpen = true;
+		try {
+			markup = PageCapture.render(body);
+		} finally {
+			cap.cardOpen = false;
+		}
+		if (! markup.isBlank())
+			throw FtlAttrLists.reject(f("<@card ref='%s'> must not have a body.", ref));
+		cap.flushSegment();
+		cap.placeBuiltCard(ref);
+	}
+
+	private static String firstOtherAttr(Map<String, TemplateModel> p) {
+		for (var a : List.of("type", "id", "title", "src", "template", "requires", "class", "subscribes", "publishes", "sanitize"))
+			if (p.containsKey(a))
+				return a;
+		return null;
+	}
+
+	/**
+	 * Reads {@code class=}: a space-separated list of CSS class tokens, each matching
+	 * {@code [A-Za-z_-][A-Za-z0-9_-]*}. Returns the tokens joined by single spaces, or {@code ""} when absent.
+	 */
+	private static String cssClass(Map<String, TemplateModel> p, String authoredId) throws TemplateModelException {
+		var raw = FtlAttrLists.scalar(p, "class");
+		if (raw.isEmpty())
+			return "";
+		var tokens = raw.split("\\s+");
+		for (var t : tokens)
+			if (! CLASS_TOKEN_RE.matcher(t).matches())
+				throw FtlAttrLists.reject(f(
+					"<@card id='%s'> class='%s' must be a space-separated list of CSS class names matching [A-Za-z_-][A-Za-z0-9_-]*.",
+					authoredId, raw));
+		return String.join(" ", tokens);
+	}
+
+	// Lowers subscribes= / publishes= (attribute or JSON5 body) onto the card through the Subscription / TopicDecl builders.
+	private static void wire(CardSpec card, Object pubs, Object subs) throws TemplateModelException {
+		if (pubs == null && subs == null)
+			return;
+		try {
+			card.wiring(CardBusAttrs.publications(card.id(), pubs), CardBusAttrs.subscriptions(card.id(), subs));
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
+	}
+
+	// The one place a card's packs are recorded; <@page> resolves them after its body.  The handler's body-aware packs
+	// (for example a datatables card whose detail region is a job-log region) are unioned in.
+	void recordRequirements(PageCapture cap, String type, String id, List<String> requires, Map<String,Object> body)
+			throws TemplateModelException {
+		try {
+			var bodyPacks = cardTypes.handler(type).requiredPacks(new JsonMap(body));
+			cap.require(requirements.forCard(type, id, requires, bodyPacks));
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
+	}
+
+	@SuppressWarnings({
+		"java:S107" // Internal helper whose parameters are the render/validation context.
+	})
+	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
+			String cssClass, boolean sanitize, Object pubs, Object subs)
+			throws TemplateModelException {
+		var hasBody = ! markup.isBlank();
+		var sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
+		if (sources == 0)
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='html' requires a body or src=.", id));
+		if (sources > 1)
+			throw FtlAttrLists.reject(f(
+				"<@card id='%s'> type='html' takes exactly one of a body, template= or src=.", id));
+		var card = CardSpec.html(id);
+		if (! title.isEmpty())
+			card.title(title);
+		if (! src.isEmpty())
+			card.src(src);
+		if (! template.isEmpty())
+			card.template(template);
+		if (! cssClass.isEmpty())
+			card.cssClass(cssClass);
+		if (sanitize)
+			card.sanitize(true);
+		wire(card, pubs, subs);
+		cap.addCard(card, hasBody ? markup : null);
+	}
+
+	/** Names whichever of {@code src=} and {@code template=} is present. */
+	static String notAllowed(String src, String template) {
+		if (src.isEmpty())
+			return "template= is not allowed";
+		if (template.isEmpty())
+			return "src= is not allowed";
+		return "src= and template= are not allowed";
+	}
+
+	/**
+	 * Every type other than {@code html} and {@code terminal-view}: validated and lifted by the host's
+	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code terminal} or {@code job-log}, or the
+	 * generic passthrough for an unregistered type).
+	 */
+	@SuppressWarnings({
+		"java:S107" // Internal helper whose parameters are the render/validation context.
+	})
+	private CardSpec registryCard(PageCapture cap, String type, String id, String title, String src, String template,
+			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
+		if (id.isEmpty())
+			throw FtlAttrLists.reject(f("<@card type=\"%s\"> requires id=.", type));
+		var hasBody = ! markup.isBlank();
+		if (eq(type, "terminal") || eq(type, "job-log")) {
+			if (! (src.isEmpty() && template.isEmpty()))
+				throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' takes its options as the body; %s.", id, type,
+					notAllowed(src, template)));
+		} else if (eq(type, "chart")) {
+			if (! template.isEmpty())
+				throw FtlAttrLists.reject(f(
+					"<@card id='%s'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.", id));
+		} else if (eq(type, "datatables")) {
+			if (! template.isEmpty())
+				throw FtlAttrLists.reject(f(
+					"<@card id='%s'> type='datatables' takes src= or a JSON5 body; template= is not allowed.", id));
+		} else if ((hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1) > 1) {
+			throw FtlAttrLists.reject(f(
+				"<@card id='%s'> type='%s' takes at most one of a body, template= or src=.", id, type));
+		}
+		var captured = new boolean[1];
+		var source = CardSource.create(type, id).templateSink((cid, m) -> captured[0] = true);
+		if (! title.isEmpty())
+			source.title(title);
+		if (! src.isEmpty())
+			source.src(src);
+		if (! template.isEmpty())
+			source.template(template);
+		if (hasBody)
+			source.body(markup);
+		JsonMap card;
+		try {
+			card = cardTypes.toCard(source.build());
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
+		var bodySubs = card.remove("subscribes");
+		var bodyPubs = card.remove("publishes");
+		if (subs != null && bodySubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'subscribes' is reserved; set it as an attribute.", id));
+		if (pubs != null && bodyPubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'publishes' is reserved; set it as an attribute.", id));
+		var spec = toCardSpec(card);
+		if (! cssClass.isEmpty())
+			spec.cssClass(cssClass);
+		wire(spec, pubs != null ? pubs : bodyPubs, subs != null ? subs : bodySubs);
+		cap.addCard(spec, captured[0] ? markup : null);
+		return spec;
+	}
+
+	/**
+	 * Lifts a card source through the registry into the {@link CardSpec} {@link PageCapture} wants; the same path
+	 * {@code <@card>} takes for a registered type.  {@code subscribes} / {@code publishes} found in the handler's
+	 * result (a JSON5 body) are wired onto the card, and refused when the authored card already declares them, as
+	 * {@code <@card>} refuses them alongside the attribute.
+	 *
+	 * @param source The card source.
+	 * @param authored The authored card whose wiring the result takes.
+	 * @return The lifted card.
+	 * @throws TemplateModelException If the registry or its handler rejects the source, or its wiring conflicts.
+	 */
+	CardSpec lift(CardSource source, CardSpec authored) throws TemplateModelException {
+		JsonMap card;
+		try {
+			card = cardTypes.toCard(source);
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
+		var id = source.id();
+		var bodySubs = card.remove("subscribes");
+		var bodyPubs = card.remove("publishes");
+		if (authored.hasSubscribes() && bodySubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'subscribes' is reserved; set it as an attribute.", id));
+		if (authored.hasPublishes() && bodyPubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'publishes' is reserved; set it as an attribute.", id));
+		var spec = toCardSpec(card);
+		wire(spec, bodyPubs, bodySubs);
+		return spec.wiringFrom(authored);
+	}
+
+	/** Converts the flat {@link CardTypeRegistry#toCard} result into the {@link CardSpec} {@link PageCapture} wants. */
+	private static CardSpec toCardSpec(JsonMap card) {
+		var spec = CardSpec.of((String)card.get("type"), (String)card.get("id"));
+		if (card.get("title") instanceof String v)
+			spec.title(v);
+		if (card.get("src") instanceof String v)
+			spec.src(v);
+		if (card.get("template") instanceof String v)
+			spec.template(v);
+		for (var e : card.entrySet())
+			if (! BASE_KEYS.contains(e.getKey()))
+				spec.body(e.getKey(), e.getValue());
+		return spec;
+	}
+
+	private static final Set<String> RUN_VIEW_BODY_KEYS = new LinkedHashSet<>(List.of("contractVersion", "terminalView"));
+
+	/**
+	 * The terminal-view bridge: a JSON5 {@code {contractVersion: '1', terminalView: {...}}} body whose {@code terminalView} keys
+	 * are exactly {@link TerminalViewDef#KEYS}, validated through {@link TerminalViewDef} so an unsafe URL fails the
+	 * render. The shell mounts it through {@code JuneauViews.terminalView.mount}.
+	 */
+	@SuppressWarnings({
+		"java:S107", // Internal helper whose parameters are the render/validation context.
+		"unchecked" // JSON5 object keys are always strings.
+	})
+	private static void terminalViewCard(PageCapture cap, String id, String title, String src, String template,
+			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
+		if (id.isEmpty())
+			throw FtlAttrLists.reject("<@card type=\"terminal-view\"> requires id=.");
+		if (! (src.isEmpty() && template.isEmpty()))
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='terminal-view' takes its options as the body; %s.", id,
+				notAllowed(src, template)));
+		var trimmed = markup.trim();
+		if (! trimmed.startsWith("{"))
+			throw FtlAttrLists.reject(f(
+				"<@card id='%s'> type='terminal-view' requires a JSON5 body { contractVersion: '1', terminalView: {...} }.", id));
+		JsonMap envelope;
+		try {
+			envelope = Json5Parser.DEFAULT.read(trimmed, JsonMap.class);
+		} catch (org.apache.juneau.marshall.parser.ParseException ex) {
+			throw FtlAttrLists.reject("Card JSON5 is invalid: " + ex.getMessage());
+		}
+		var bodySubs = envelope.remove("subscribes");
+		var bodyPubs = envelope.remove("publishes");
+		if (subs != null && bodySubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'subscribes' is reserved; set it as an attribute.", id));
+		if (pubs != null && bodyPubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'publishes' is reserved; set it as an attribute.", id));
+		for (var k : envelope.keySet())
+			if (! RUN_VIEW_BODY_KEYS.contains(k))
+				throw FtlAttrLists.reject(f(
+					"<@card id='%s'> type='terminal-view' unknown key '%s'; allowed: contractVersion, terminalView, subscribes, publishes.", id, k));
+		var version = envelope.get("contractVersion");
+		if (neq("1", version))
+			throw FtlAttrLists.reject(f(
+				"<@card id='%s'> type='terminal-view' requires contractVersion: '1'; got '%s'.", id, version));
+		if (! (envelope.get("terminalView") instanceof Map<?,?> terminalView))
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='terminal-view' requires a terminalView object.", id));
+		var def = TerminalViewDef.fromMap(id, (Map<String,?>)terminalView).validate();
+		var card = CardSpec.of("terminal-view", id);
+		if (! title.isEmpty())
+			card.title(title);
+		if (! cssClass.isEmpty())
+			card.cssClass(cssClass);
+		card.body("terminalView", def.toMap());
+		wire(card, pubs != null ? pubs : bodyPubs, subs != null ? subs : bodySubs);
+		cap.addCard(card, null);
+	}
+}

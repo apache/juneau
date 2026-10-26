@@ -30,7 +30,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.console.data.*;
+import org.apache.juneau.console.data.*;
 import org.apache.juneau.rest.server.view.*;
 
 /**

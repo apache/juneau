@@ -157,7 +157,7 @@
 		<!-- Test: assertBean(...), per repo test conventions. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-test</artifactId>
+			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

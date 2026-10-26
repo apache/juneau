@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.converter;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;

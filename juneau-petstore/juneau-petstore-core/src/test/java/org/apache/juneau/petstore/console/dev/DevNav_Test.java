@@ -17,7 +17,7 @@
 package org.apache.juneau.petstore.console.dev;
 
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
+import static org.apache.juneau.console.test.PageContractAssert.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

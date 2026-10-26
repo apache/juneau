@@ -1,0 +1,3433 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * juneau-views.css - base ".tag" chip for the Apache Juneau rich-view toolkit (Task B.6).
+ *
+ * DEPENDENCY-FREE + NEUTRAL: this file styles ONLY the shape of the shared ".tag.<domain>.<value>" chip contract -
+ * padding, border-radius, inline layout - and deliberately ships NO colors (no color/background/border-color
+ * palette).  It exists so a client-rendered `render("tag:status")` cell is legible standalone, even before an app
+ * adopts console-ui's chrome.
+ *
+ * The ".tag.<domain>.<value>" class-name contract is OWNED by console-ui.  When console-ui's chrome.css is present
+ * it themes the SAME classes (colors by domain/value); this module takes NO dependency on console-ui and MUST NOT
+ * add a color palette here.  Any color layering is console-ui's job.
+ *
+ * The banner class below is the fail-loud contract-version-mismatch surface rendered by juneau-views.js; it, too,
+ * avoids a color palette (uses currentColor / inherited text color only).
+ */
+
+/* Base chip - tight status-chip shape (not a capsule). Longhand border so a colourless
+   `border: N solid` shorthand cannot reset chrome.css border-color to currentColor.
+   3px radius / 10px / normal weight / 1px 6px padding match the reference status-chip look
+   (no dot, regular weight) without copying any third-party CSS or a hue palette. */
+.tag {
+	display: inline-block;
+	padding: 1px 6px;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: normal;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	line-height: 14px;
+	white-space: nowrap;
+	vertical-align: baseline;
+}
+
+/*
+ * Threshold progress bar.  Views-owned shape classes (.jc-progress / .jc-progress-bar.is-* /
+ * .jc-progress-label); theming hook is .progress.{field}.  The bar states use the status-tone names
+ * (success / warning / error).  Neutral greys via --jc-* tokens so the bar is legible without a theme; a
+ * consumer stylesheet may override the tokens.  No hue names.
+ */
+:root {
+	--jc-progress-track: #e6e6e6;
+	--jc-progress-success: #6b6b6b;
+	--jc-progress-warning: #8a8a8a;
+	--jc-progress-error: #333333;
+	/*
+	 * The four painted status tones (the fifth, `neutral`, is deliberately the ABSENCE of a modifier and inherits
+	 * currentColor).  Each aliases the matching badge tag-palette ink (--jc-tag-<hue>-text), so any theme that overrides
+	 * the tag palette carries the tones with it; the hex fallbacks apply when no theme defines the palette.
+	 *
+	 * Dark ships as juneau-theme-dark.css in the console UI module, scoped to html:root[data-jc-scheme="dark"].  The
+	 * tokens declared here are the light defaults, and the dark file redeclares the colour ones.  A new colour token
+	 * added here must also be added to the dark file or to its allowlist; the dark-layer completeness guard enforces
+	 * that.
+	 */
+	--jc-tone-info: var(--jc-tag-blue-text, #1a4971);
+	--jc-tone-success: var(--jc-tag-green-text, #1f5b34);
+	--jc-tone-warning: var(--jc-tag-amber-text, #7a531a);
+	--jc-tone-error: var(--jc-tag-red-text, #7a1f1f);
+	/* Ink on a filled status-tone background (terminal failure line); dark inverts it because the tone fills go light. */
+	--jc-on-tone: #ffffff;
+	/* Terminal screen surface, ink, caret and selection wash. */
+	--jc-term-bg: #000000;
+	--jc-term-fg: #e5e5e5;
+	--jc-term-cursor: #e5e5e5;
+	--jc-term-selection: rgba(255, 255, 255, 0.3);
+	/* Secondary label ink (cell-popover label, card status and field names). */
+	--jc-label-text: #555555;
+	/* Search-box placeholder ink. */
+	--jc-placeholder: #b4b5b6;
+	--jc-popover-bg: #f7f7f7;
+	--jc-popover-border: #ccc;
+	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+	--jc-popover-z: 1200;
+	/*
+	 * Cursor tooltip for icon-only ribbon/paging chrome (.jc-tip).  Sits above dialogs (1000) and cell
+	 * popovers (1200) so a paging chevron label is never clipped under an open layer.
+	 */
+	--jc-tip-z: 1400;
+	/*
+	 * Cursor-tooltip face (compact bubble): white / #222222 / #cccccc /
+	 * 0 2px 8px, not the grey popover surface.  Padding 6px 9px and type 0.78em are fixed literals
+	 * (not chrome-scale steps) so the bubble stays compact next to paging/ribbon chrome.
+	 */
+	--jc-tip-bg: #ffffff;
+	--jc-tip-text: #222222;
+	--jc-tip-border: #cccccc;
+	--jc-tip-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+	/*
+	 * The base z-index of the shared popup layer stack and the per-layer step.  juneau-views.js stamps
+	 * each registered layer an INLINE z-index of (--jc-dialog-z + rawStackIndex * --jc-layer-step); these tokens are
+	 * the single source of truth the runtime reads (with the same numeric fallbacks baked into the script for the
+	 * token-less / Node-shim case).  Keep --jc-dialog-z below --jc-popover-z so a cell popover's own chrome layers
+	 * sensibly; raise them together if a host's chrome needs more headroom.
+	 */
+	--jc-dialog-z: 1000;
+	--jc-layer-step: 10;
+	/*
+	 * Toast sits below dialogs (1000) so a confirmation dialog is never covered by a save-error toast.
+	 * Neutral greys for a themeless page; chrome.css sinks --jc-* colour tokens onto the same classes.
+	 */
+	--jc-toast-z: 900;
+	/*
+	 * Card grid tokens (merged here to avoid a duplicate :root selector - see the card-grid rule block below for
+	 * the full description).  Neutral greys so a grid is legible without a theme; a consumer stylesheet (or
+	 * console-ui chrome.css) may override the tokens.
+	 */
+	--jc-card-bg: #ffffff;
+	--jc-card-border: #dddddd;
+	--jc-card-radius: 6px;
+	--jc-card-gap: 1rem;
+	--jc-card-min: 280px;
+	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	/*
+	 * Summary-view zebra: even rows stay #FFFFFF; the odd/first-body stripe is #FAFAF9 so
+	 * row 1 does not blend into the white header.  DataTables may stamp the first row `even`;
+	 * paint by :nth-child, not by those class names.
+	 */
+	--jc-table-row-bg: #ffffff;
+	--jc-table-stripe-bg: #fafaf9;
+	/*
+	 * Summary-view cell grid: the reference tables use Bootstrap's bordered-table stroke
+	 * (`--bs-border-color` / DataTables last-child right edge `#dee2e6`).  Token so a
+	 * host theme can retint; no host-framework class names.  Vertical column edges only —
+	 * the header/body seam and table floor use --jc-table-rule.
+	 */
+	--jc-table-border: #dee2e6;
+	--jc-table-rule: #bbbbbb;
+	/*
+	 * Shared chrome scale (merged here for the same reason the card tokens are - one :root selector).  This is
+	 * the single set of named steps every chrome surface spends, so a toolbar, a detail panel and a dialog
+	 * cannot each derive their own.  Coverage is DIMENSIONAL AND TYPE STEPS ONLY: control heights, control
+	 * horizontal padding, spacing, type sizes, line-height and glyph sizes.  The currentColor / no-palette rule
+	 * this file's header states is a SEPARATE contract and is deliberately not a member - it has no step
+	 * structure, so it could not be extended the way a step can.  The 1px border weight is still out
+	 * (a stroke weight, not a density value).  Card / chip / dialog radii stay on --jc-card-radius /
+	 * --jc-radius; pager, icon ribbon, and the toolbar search box spend --jc-chrome-control-radius.
+	 *
+	 * A later surface MAY add a step.  Declare it in this group, name it <family>-<role> (spelled out, never
+	 * abbreviated), and give it a one-line comment naming the surface that needed it.  What a surface may
+	 * never do:
+	 *   1. Write a literal inline that duplicates an existing step.  If a value equals a step, spend the step.
+	 *   2. Re-value or rename an existing step to suit itself.  A surface needing a different number adds a
+	 *      NEW step; it does not move one out from under the other surfaces.
+	 *   3. Introduce a surface-prefixed name for a chrome-wide value that another surface could legitimately
+	 *      spend.
+	 *   4. Declare a step anywhere but here.  A step declared only in a consumer's stylesheet is invisible to
+	 *      the themeless render this file's header exists to guarantee.
+	 *
+	 * Spacing ladder - the same six names and the same values as the console chrome's own spacing seam,
+	 * re-declared here rather than referenced so this file stays dependency-free and all three layers share one
+	 * spacing vocabulary instead of forking a second ladder.  -5 and -6 have no consumer in this file yet and
+	 * are declared anyway: the ladder is declared whole, as its upstream counterpart is.
+	 */
+	--jc-space-1: 4px;
+	--jc-space-2: 8px;
+	--jc-space-3: 12px;
+	--jc-space-4: 16px;
+	--jc-space-5: 24px;
+	--jc-space-6: 32px;
+	/*
+	 * Control heights.  BOTH are first-class steps, not a default plus a deviation - a surface spending the
+	 * compact step is not deviating from the full-height one.  Neither name mentions a surface: `compact` is a
+	 * density word, so a compact toolbar control and a full-height detail control are each expressible without
+	 * a new token.
+	 *
+	 * --jc-chrome-control-height is 31px, not 32px: the reference paging-pill nav
+	 * buttons and center range segment are explicitly pinned to `height: 31px`, and the reference search-bar
+	 * "Go" button is documented as "the same ... height as ribbon buttons" - i.e. one canonical control
+	 * height, not a paging-only one-off.  This single step drives every full-height control this toolkit
+	 * ships (ribbon buttons, the paging pill, the toolbar search input, the async-status loading region), so
+	 * re-valuing it here is the whole of the fix - no per-consumer override.
+	 */
+	--jc-chrome-control-height: 31px;
+	--jc-chrome-control-height-compact: 28px;
+	/*
+	 * Control horizontal padding.  Deliberately OFF the 4px ladder: rounding 10px to 8px or 12px would be a
+	 * visual change no surface asked for.  Vertical padding is deliberately NOT a step - both control heights
+	 * are stated directly and `box-sizing: border-box` is already in force, so padding-y is a derived value
+	 * rather than an independent one.
+	 */
+	--jc-chrome-control-padding-x: 10px;
+	--jc-chrome-control-padding-x-wide: 14px;
+	/*
+	 * Toolbar control corner radius (pager, icon ribbon, search).  3.2px, not 0.25em (~3px at
+	 * 12px type) and not --jc-radius (0.25rem / 4px, cards and chrome buttons).
+	 */
+	--jc-chrome-control-radius: 3.2px;
+	/*
+	 * Type steps.  A label-smaller-than-value pairing is expressed as the STEP PAIR (-font-size-1 for the
+	 * label, -font-size-3 for the value, 0.857x) rather than as a ratio token: no CSS property could consume a
+	 * ratio, and nothing would stop a surface setting two sizes that ignore it, whereas two named steps are the
+	 * only two values on offer.  The pairing is now spent by the detail field, which fixes -font-size-3 and the
+	 * ratio with it; -font-size-2 and -line-height are now spent by the detail action button (below).
+	 */
+	--jc-chrome-font-size-1: 0.75rem;
+	--jc-chrome-font-size-2: 0.8125rem;
+	--jc-chrome-font-size-3: 0.875rem;
+	--jc-chrome-line-height: 1.2;
+	/*
+	 * Glyph sizes, one per role, stated once rather than repeated per selector.  These are chrome-wide glyph
+	 * ROLES; a widget's own internal proportions (a pill dot, a toggle knob) are sized to their own text and
+	 * are deliberately not enrolled here.
+	 */
+	--jc-chrome-glyph-size: 18px;
+	--jc-chrome-glyph-size-small: 12px;
+	/*
+	 * Paging-pill chevron role (first/prev/next/last arrows + the page-size caret).  Its own step, larger than
+	 * --jc-chrome-glyph-size-small, so the pager glyphs render at the visible size the reference pager shows.  The two
+	 * pagers use the SAME 12px SVG box, but Juneau's own chevron artwork sits smaller inside its 24-unit viewBox
+	 * (path spans ~65% of height / ~42% of width) than the reference glyph does (~83% / ~50%), so at an identical
+	 * box the Juneau chevron reads noticeably smaller.  This is a reimplemented SIZE (a larger box for Juneau's own
+	 * art), NOT the reference artwork — nothing is copied.  Kept off --jc-chrome-glyph-size-small so the datatable
+	 * header sort glyphs, which share that token, are unaffected.
+	 */
+	--jc-chrome-glyph-size-pager: 16px;
+	/*
+	 * Idle paging/ribbon glyph (the reference ribbon buttons use `color: #666`).  Not --jc-text-soft: chrome.css
+	 * themes that token for prose, which is darker than the reference chevrons on SSC.
+	 */
+	--jc-chrome-icon: #666666;
+	/*
+	 * Idle (unsorted) datatable header sort-glyph fill (reference-look follow-up).  The reference renders its idle
+	 * sort chevrons as DataTables' muted default - header ink `#3e3e3c` (its own `table.dataTable thead th`
+	 * rule) shown through `span.dt-column-order`'s idle `opacity: 0.125` (datatables.css).  Over
+	 * this file's white header (`background-color: #fff`, below) that composites to #e7e7e7, pinned here as a
+	 * SOLID fill rather than an opacity - the same "opacity on a tiny 12px glyph reads muddy, spend a solid"
+	 * rule the disabled-glyph token below states, and what fixes the previous currentColor@0.45 idle carets
+	 * reading as a dark/brown grey.  The ACTIVE/sorted direction is deliberately NOT this grey: it spends
+	 * currentColor themeless and --jc-accent under console-ui chrome.css.
+	 */
+	--jc-sort-icon-idle: #e7e7e7;
+	/*
+	 * Disabled paging solids.  The reference look is NOT these hexes: the ribbon button is
+	 * `color: #666`, `background-color: #fff`, segment borders `#ced4da`, and
+	 * its disabled state is `opacity: 0.6` with no fill override.
+	 * That opacity composites against the grey toolbar canvas (#f6f6f9 / a runtime dashboard,
+	 * SSC `.ssc-table-shell`) into the solids below — NOT the white-canvas composite (#a3a3a3 glyph
+	 * on #ffffff) the previous pin used.  Kept as solids so a 12px SVG stays crisply anti-aliased
+	 * (opacity on a tiny glyph reads muddy) and so a consumer that cannot use opacity spends the
+	 * same look.  #a0a0a1 is #666 @ 0.6 over #f6f6f9.  Pager/ribbon/search share one control-chrome
+	 * border (do not fade it to #dfe2e6 when disabled, and do not keep a second measured grey on
+	 * buttons).  --jc-chrome-control-border below is the leaf.
+	 */
+	--jc-chrome-disabled-color: #a0a0a1;
+	--jc-chrome-disabled-bg: #f6f6f9;
+	/*
+	 * Chrome-wide control border/text grey: toolbar Search, ribbon
+	 * buttons, and paging-pill edges are one role.  Themeless default is #ced4da.  When console-ui
+	 * chrome.css is linked, --jc-control-border (alias of themed --jc-border-2) wins via the var()
+	 * fallback so OPEN/RED/LIGHT_RED/LIGHT_BROWN/GRAY keep search vs ribbon matched *within* that
+	 * theme — including the tinted --jc-border-2 leaves.  Named "control", not "search-input": a
+	 * text control's border/text grey is a chrome-wide role like --jc-chrome-control-height above,
+	 * not a single-widget colour.
+	 */
+	--jc-chrome-control-border: var(--jc-control-border, #ced4da);
+	/* Toolbar Search focus border: the accent in light; the dark layer repoints it at --jc-focus. */
+	--jc-chrome-control-focus-border: var(--jc-accent);
+	/* Ink of a primary-coloured text button on a surface (dialog Cancel/Close): the primary fill in light; the dark layer repoints it at --jc-link. */
+	--jc-btn-primary-ink: var(--jc-btn-primary-bg);
+	--jc-chrome-button-border: var(--jc-chrome-control-border);
+	--jc-chrome-disabled-border: var(--jc-chrome-control-border);
+	--jc-chrome-control-text: #4f4f4f;
+	/*
+	 * Detail action button palette: DEFAULT tokens declared here, not console-ui chrome.css
+	 * aliases, so the button reads correctly wherever this file is the only stylesheet served.  A theme MAY
+	 * override every one of these; it does not have to supply them - same precedent as --jc-card-bg /
+	 * --jc-card-shadow above.  Named --jc-detail-action-* rather than reused --jc-btn-* names because the
+	 * latter are chrome.css's own consumer-facing vocabulary (its ".jc-btn" family) and this file must not
+	 * shadow a name it does not own.
+	 */
+	--jc-detail-action-bg: #ffffff;
+	--jc-detail-action-border: #cccccc;
+	--jc-detail-action-color: #4f4f4f;
+	--jc-detail-action-hover-bg: #f2f2f2;
+	--jc-detail-action-primary-bg: #4f4f4f;
+	--jc-detail-action-primary-bg-hover: #333333;
+	--jc-detail-action-primary-border: #333333;
+	--jc-detail-action-primary-color: #ffffff;
+	--jc-detail-action-primary-bg-disabled: #8a8a8a;
+	/*
+	 * Row-detail field-row separator.  DEFAULT declared here (same precedent as the --jc-detail-action-* tokens
+	 * above) so every consumer of this file gets a light neutral hairline between field rows even with no theme
+	 * linked - not the near-black currentColor the separator used to inherit, which read as a rule rather than a
+	 * hairline.  The target shade is the light neutral gray (~#ddd) a record-detail field grid uses as its
+	 * between-rows separator; #dddddd is Juneau's own neutral, not a themed accent, so the separator stays a
+	 * quiet gray regardless of the page's accent colour.  A theme MAY override it; it does not have to.
+	 */
+	--jc-detail-field-border: #dddddd;
+}
+
+/*
+ * QUERY CONTAINERS - shared, and declared here beside the scale for the same reason the scale is: containment
+ * is a property of the shell a widget renders inside, not of the widget, and an @container block is silently
+ * wrong rather than broken when its container is not the element the author had in mind.  An unnamed
+ * @container condition resolves against the NEAREST ancestor with a container-type, so every such block below
+ * is asking about one of the elements named here.
+ *
+ * A later surface that needs containment ADDS ITS SELECTOR TO THIS LIST.  It does not re-declare
+ * container-type in its own rules (a second host between a query block and this one silently retargets the
+ * query), and it emphatically does not put container-type on :root - that makes the root element the container
+ * and turns every unnamed @container query in this file into a viewport media query wearing a different name,
+ * which is the exact signal the detail panel was chosen to avoid: the panel is nested in a table cell, so its
+ * width and the viewport's are unrelated.
+ *
+ * The detail panel is a containment host: its `container-type: inline-size` is declared in the single
+ * `.juneau-view-detail-panel` rule further down (next to its padding/background), not re-declared here.
+ */
+
+.jc-progress {
+	position: relative;
+	display: inline-block;
+	width: 6em;
+	height: 1.1em;
+	background: var(--jc-progress-track);
+	border-radius: 0.2em;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+.jc-progress-bar {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.jc-progress-bar.is-success { background: var(--jc-progress-success); }
+.jc-progress-bar.is-warning { background: var(--jc-progress-warning); }
+.jc-progress-bar.is-error { background: var(--jc-progress-error); }
+
+.jc-progress-label {
+	position: relative;
+	z-index: 1;
+	display: block;
+	text-align: center;
+	font-size: 0.7em;
+	line-height: 1.1em;
+	white-space: nowrap;
+}
+
+/*
+ * Status pill.  Inherits the shared ".tag.<domain>.<value>" chip shape (theming/palette lives on ".tag");
+ * this file adds only the inline-flex layout.  The leading dot is intentionally hidden (the reference status chips
+ * carry no dot); the renderer still emits the `.jc-pill-dot` span for markup/tone compatibility, so it is
+ * collapsed with `display: none` rather than removed from the DOM contract.
+ */
+.jc-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-space-1);
+}
+
+.jc-pill-dot {
+	display: none;
+}
+
+/* Action-bound pill: activatable (pointer + keyboard); focus ring via the shared currentColor :focus-visible rule below. */
+.jc-pill[role="button"] {
+	cursor: pointer;
+}
+
+/* A disabled action pill (in-flight or capability-gated) is dimmed and non-interactive; no palette color. */
+.jc-pill[role="button"].is-disabled,
+.jc-pill[role="button"][aria-disabled="true"] {
+	cursor: default;
+	opacity: 0.5;
+}
+
+/*
+ * Status probe.  A selectable status chip, sized a touch larger than a pill and carrying a VISIBLE status dot (unlike
+ * the pill, whose dot is collapsed above).  This file owns only shape/geometry/state mechanics and carries NO palette:
+ * the per-status wash/ink/dot fill and the themed selected ring live in console-ui chrome.css (.jc-probe-<status> and
+ * .jc-probe[aria-checked="true"]).  Standalone (no chrome), the dot inherits currentColor and the selected ring below
+ * draws in currentColor so the control is still legible and its selection still visible.  Selection is one-per-group
+ * (radiogroup/radio semantics, roving tabindex); selecting never repaints status colour.
+ */
+.jc-probe-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--jc-space-2);
+}
+
+.jc-probe {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-space-2);
+	padding: 6px 14px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	font-weight: 500;
+	cursor: pointer;
+	user-select: none;
+}
+
+.jc-probe-dot {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: currentColor;
+	flex-shrink: 0;
+}
+
+/* A disabled probe is dimmed and non-interactive (matches the disabled action pill); skipped in roving focus and not
+ * selectable (see juneau-views.js). */
+.jc-probe.is-disabled,
+.jc-probe[aria-disabled="true"] {
+	cursor: default;
+	opacity: 0.5;
+}
+
+/* Selected probe: an accent ring.  chrome.css recolors this to the themed --jc-accent-selected; standalone it draws in
+ * currentColor.  Selecting does NOT change the status wash/ink. */
+.jc-probe[aria-checked="true"] {
+	box-shadow: 0 0 0 2px currentColor;
+}
+
+/*
+ * Quick-stats strip - the server-painted at-a-glance figures row above a table's toolbar.  Shape only; the four
+ * painted tones use the shared --jc-tone-* tokens, which alias the badge --jc-tag-*-text inks, so a tone name is one
+ * ink colour across the stat strip and badge.  Nothing here is interactive: there is no cursor, no hover, and no focus rule, because the emitted markup
+ * carries no control (see QuickStatsTable).
+ */
+.jc-quickstats {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1.25em;
+	margin: 0 0 var(--jc-space-2);
+}
+
+.jc-stat {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+}
+
+.jc-stat-label {
+	font-size: 0.85em;
+	opacity: 0.75;
+}
+
+.jc-stat-value {
+	font-weight: bold;
+}
+
+.jc-stat-value.is-info { color: var(--jc-tone-info); }
+.jc-stat-value.is-success { color: var(--jc-tone-success); }
+.jc-stat-value.is-warning { color: var(--jc-tone-warning); }
+.jc-stat-value.is-error { color: var(--jc-tone-error); }
+
+.jc-stat-track {
+	position: relative;
+	display: inline-block;
+	width: 6em;
+	height: 0.5em;
+	background: var(--jc-progress-track);
+	border-radius: 0.25em;
+	overflow: hidden;
+}
+
+.jc-stat-fill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background: currentColor;
+}
+
+.jc-stat-fill.is-info { background: var(--jc-tone-info); }
+.jc-stat-fill.is-success { background: var(--jc-tone-success); }
+.jc-stat-fill.is-warning { background: var(--jc-tone-warning); }
+.jc-stat-fill.is-error { background: var(--jc-tone-error); }
+
+.jc-stat-segment {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.25em;
+	font-size: 0.85em;
+}
+
+.jc-stat-segment-count {
+	font-weight: bold;
+}
+
+.jc-stat-segment.is-info .jc-stat-segment-count { color: var(--jc-tone-info); }
+.jc-stat-segment.is-success .jc-stat-segment-count { color: var(--jc-tone-success); }
+.jc-stat-segment.is-warning .jc-stat-segment-count { color: var(--jc-tone-warning); }
+.jc-stat-segment.is-error .jc-stat-segment-count { color: var(--jc-tone-error); }
+
+/* Segmented tile: a proportional bar plus a legend; the legend text carries the meaning. */
+.jc-stat-segbar {
+	display: inline-flex;
+	gap: 1px;
+	width: 6em;
+	height: 0.5em;
+	background: var(--jc-progress-track);
+	border-radius: 0.25em;
+	overflow: hidden;
+	vertical-align: middle;
+}
+.jc-stat-segfill { min-width: 2px; }
+.jc-stat-swatch {
+	display: inline-block;
+	width: 0.6em;
+	height: 0.6em;
+	margin-right: 0.25em;
+	vertical-align: middle;
+}
+.jc-stat-segfill.is-info, .jc-stat-segment.is-info .jc-stat-swatch { background-color: var(--jc-tone-info); }
+.jc-stat-segfill.is-success, .jc-stat-segment.is-success .jc-stat-swatch { background-color: var(--jc-tone-success); }
+.jc-stat-segfill.is-warning, .jc-stat-segment.is-warning .jc-stat-swatch { background-color: var(--jc-tone-warning); }
+.jc-stat-segfill.is-error, .jc-stat-segment.is-error .jc-stat-swatch { background-color: var(--jc-tone-error); }
+.jc-stat-segfill.is-c1, .jc-stat-segment.is-c1 .jc-stat-swatch { background-color: var(--jc-chart-1, #1b6ac9); }
+.jc-stat-segfill.is-c2, .jc-stat-segment.is-c2 .jc-stat-swatch { background-color: var(--jc-chart-2, #e07a1f); }
+.jc-stat-segfill.is-c3, .jc-stat-segment.is-c3 .jc-stat-swatch { background-color: var(--jc-chart-3, #2e8540); }
+.jc-stat-segfill.is-c4, .jc-stat-segment.is-c4 .jc-stat-swatch { background-color: var(--jc-chart-4, #9b3fb5); }
+.jc-stat-segfill.is-c5, .jc-stat-segment.is-c5 .jc-stat-swatch { background-color: var(--jc-chart-5, #c23934); }
+.jc-stat-segfill.is-c6, .jc-stat-segment.is-c6 .jc-stat-swatch { background-color: var(--jc-chart-6, #0e8a8a); }
+.jc-stat-segfill.is-c7, .jc-stat-segment.is-c7 .jc-stat-swatch { background-color: var(--jc-chart-7, #7a6a00); }
+.jc-stat-segfill.is-c8, .jc-stat-segment.is-c8 .jc-stat-swatch { background-color: var(--jc-chart-8, #5a5a5a); }
+/* Warning and error are striped so they read without colour; one dark stripe works in both schemes. */
+.jc-stat-fill.is-warning, .jc-stat-fill.is-error, .jc-stat-segfill.is-warning, .jc-stat-segfill.is-error {
+	background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, .28) 0 2px, transparent 2px 5px);
+}
+/* Over limit: the cue sits inside the full-width fill because the track clips overflow. */
+.jc-stat-bar.is-over .jc-stat-fill { box-shadow: inset -3px 0 0 var(--jc-tone-error); }
+.jc-stat-track.is-error { outline: 1px solid var(--jc-tone-error); }
+@media (forced-colors: active) {
+	/* Repeated classes outrank the tone and palette rules above, so every fill reads as one system colour. */
+	.jc-stat-fill.jc-stat-fill, .jc-stat-segfill.jc-stat-segfill, .jc-stat-segment .jc-stat-swatch.jc-stat-swatch { forced-color-adjust: none; background-color: CanvasText; }
+	/* Warning and error keep their stripe, drawn in system colours so it shows on any contrast theme. */
+	.jc-stat-fill.jc-stat-fill.is-warning, .jc-stat-fill.jc-stat-fill.is-error, .jc-stat-segfill.jc-stat-segfill.is-warning, .jc-stat-segfill.jc-stat-segfill.is-error {
+		background-image: repeating-linear-gradient(45deg, Canvas 0 2px, transparent 2px 5px);
+	}
+	.jc-stat-track, .jc-stat-segbar { forced-color-adjust: none; background: Canvas; border: 1px solid CanvasText; }
+}
+
+/* Fail-loud contract-version-mismatch banner - neutral, no palette color. */
+.juneau-view-error {
+	display: block;
+	padding: 0.5em 0.75em;
+	margin: 0.25em 0;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	font-weight: bold;
+}
+
+/*
+ * Accessibility: a NEUTRAL keyboard focus ring for this module's own interactive controls, mirroring console-ui
+ * chrome.css's generic :focus-visible rule but WITHOUT a palette colour (currentColor only, per this file's
+ * no-palette contract) - so a standalone client-rendered view is keyboard-accessible (WCAG 2.4.7) even before an
+ * app adopts the chrome.  When chrome.css is present, its own token-driven :focus-visible ring applies to the
+ * same controls with the themed --jc-focus colour.
+ *
+ * Toolbar Search is NOT in this list: a 2px outset ring around the field is a second outline.  Search
+ * focus recolors the existing 1px border (see the :focus/:focus-visible rules on the DT search input).
+ */
+.juneau-view-ribbon-btn:focus-visible,
+.juneau-view-pagingpill-btn:focus-visible,
+.juneau-view-pagingpill-menu-option:focus-visible,
+.jc-pill[role="button"]:focus-visible,
+.jc-probe:focus-visible,
+.juneau-ts:focus-visible,
+.jc-tab:focus-visible,
+.jc-subtab:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+/*
+ * With the ribbon-format tabs now contiguous (`gap: 0` above), a focused MIDDLE tab's ring loses its right edge:
+ * non-positioned flex items paint in DOM order, so the next member's opaque background paints over it.  An
+ * INSET ring (negative offset) is drawn inside the member's own box, so neither a sibling nor the bar's clip can
+ * reach it - this restores all four sides on first, middle and last members alike.  Scoped to the tab selectors
+ * only, as a separate override after the shared rule above: the other five controls in that shared list have no
+ * `gap: 0` sibling-overpaint problem and keep their existing outset ring.
+ */
+.jc-tab:focus-visible,
+.jc-subtab:focus-visible {
+	outline-offset: -2px;
+}
+
+/*
+ * DataTables table density/shape (compact 4px 5px cells, 0.8333rem/13.333px reference body type,
+ * outer frame + cell grid).  NEUTRAL - shape only (font-size,
+ * padding, border WIDTH/style); no color/background-color/border-color palette here (console-ui's
+ * chrome.css themes the SAME selectors with --jc-* colors).  Selectors list BOTH
+ * `table[data-juneau-view]` and `table.dataTable` so the rule applies whether or not DataTables
+ * has run yet.  Child-combinator (`>`) selectors deliberately mirror the vendored
+ * dataTables.dataTables.css structure so this rule's specificity TIES the vendored one;
+ * this file is served AFTER the vendored DataTables CSS, so the tie resolves in our favor.
+ */
+table[data-juneau-view],
+table.dataTable {
+	font-size: 0.8333rem;         /* reference body type (13.333px/10pt); see the cell-level pin below */
+	border-collapse: collapse;
+	border-spacing: 0;
+	/* Longhand width/style only — a colourless `border: N solid` shorthand resets the
+	   colour to currentColor (near-black --jc-text) and beats chrome.css when this file
+	   loads after chrome. Top edge is a 1px gray hairline, not a 2px ink bar. */
+	border-width: 1px;
+	border-style: solid;
+	border-top-width: 1px;
+	border-bottom-color: var(--jc-table-rule, #bbbbbb);
+}
+
+/*
+ * The cell font-size is PINNED here, not merely inherited from the table rule above, because everything the
+ * DataTables child row renders (the whole detail-panel family) sizes its `em` spacing against it.  Left to
+ * inheritance, a host theme that set a cell font-size on a views table would silently re-resolve every one of
+ * those declarations.  `rem`, never `em`: at cell level an `em` would COMPOUND, so a nested views table would
+ * render its cells at 9px and its own nested cells at 6.75px.  A theme that legitimately should win can still
+ * win by matching this selector's specificity and coming later.
+ */
+table[data-juneau-view] > thead > tr > th,
+table[data-juneau-view] > thead > tr > td,
+table.dataTable > thead > tr > th,
+table.dataTable > thead > tr > td {
+	/*
+	 * Header type is its OWN, smaller step than the body cell's 0.8333rem (reference-look pass):
+	 * the reference `table.dataTable thead th` sets 0.75rem/12px, one notch below
+	 * its 0.8333rem/13.333px body row - a header/body size split this toolkit's shared cell rule below did
+	 * not have.  Declared here, not folded into the shared rule, precisely BECAUSE it must NOT match the
+	 * body pin: this file's own em-spacing warning on that rule is about the tbody cell only (the child-row/
+	 * detail-panel family sizes against the BODY row it renders inside, never against the header).  0.75rem
+	 * equals the already-declared --jc-chrome-font-size-1 step, so it spends that token rather than writing a
+	 * second literal of the same value (this file's own "if a value equals a step, spend the step" rule).
+	 */
+	font-size: var(--jc-chrome-font-size-1);   /* reference header type (12px) - see comment above */
+	padding: 4px 5px;
+	font-weight: normal;
+	text-align: left;
+	vertical-align: middle;
+	min-width: 20px;
+	border: 1px solid var(--jc-table-border, #dee2e6);
+	/*
+	 * Header row HEIGHT (reference-look follow-up): this rule's own `padding: 4px 5px` above is already
+	 * IDENTICAL to the reference thead-th padding, so the padding was never the gap
+	 * between the two.  The extra height the reference renders comes from its VENDORED DataTables theme's sort-icon
+	 * spacer - `span.dt-column-order`, a fixed 12px-wide by 24px-tall box (datatables/datatables.css) holding
+	 * the stacked up/down-chevron pair inside `div.dt-column-header` - sitting in a `display:flex;
+	 * align-items:center` header row, that 24px content-box sets the header ROW's cross-size regardless of
+	 * the label text's own shorter line-height, so the reference header cell totals 4+4 padding + 24 content
+	 * = 32px.  A host with an older/absent DataTables build has no such spacer to reserve that height, so
+	 * this toolkit reserves the SAME 24px directly on the cell's own text line-box instead - a plain, generic
+	 * `line-height`, not a copy of the reference markup/selectors - so the header renders the same 32px total whether
+	 * or not the host's DataTables build happens to ship that spacer.  24px equals the already-declared,
+	 * previously-unspent --jc-space-5 step, so it spends that token rather than writing a second literal of
+	 * the same value (this file's own "if a value equals a step, spend the step" rule).
+	 */
+	line-height: var(--jc-space-5);
+	/*
+	 * Header background: EXPLICIT opaque white (reference-look follow-up), not merely "no color set" the
+	 * way the rest of this NEUTRAL file's shape rules stay silent on colour.  The reference `table.dataTable
+	 * thead th` never needs an explicit background either, but only because nothing ambient ever tints it
+	 * there; this toolkit cannot assume the same is true of every host, so the header is pinned white here
+	 * rather than left to inherit whatever a host theme (or this file's own new row-stripe rule two blocks
+	 * below, which is scoped to tbody only but is exactly the kind of ambient tint a header must never pick
+	 * up) happens to leave in the cascade.  The same "opaque surface" exception this file already grants
+	 * `.juneau-view-dialog` / `.juneau-view-detail-panel` / the DataTables-native child row (below) - not a
+	 * new precedent.
+	 */
+	background-color: var(--jc-table-header-bg, #fff);
+	border-bottom-color: var(--jc-table-rule, #bbbbbb);
+}
+
+/*
+ * Cell grid (reference table look): Bootstrap bordered tables paint 1px `#dee2e6`
+ * vertical and horizontal cell edges (DataTables last-child restores the right edge the
+ * DT theme otherwise zeroes).  Apply the hex here so every views table gets the same
+ * columns without a Bootstrap class.  Expander `tr.child` cells drop the grid
+ * below so the detail panel is not boxed; row-status left ticks stay absent.
+ */
+table[data-juneau-view] > tbody > tr > th,
+table[data-juneau-view] > tbody > tr > td,
+table.dataTable > tbody > tr > th,
+table.dataTable > tbody > tr > td {
+	font-size: 0.8333rem;         /* reference body type; not tokenized, see comment above */
+	padding: 4px 5px;             /* matches the reference thead th / tbody td padding */
+	/*
+	 * Body row HEIGHT (reference-look follow-up): the reference sets no explicit min-height on tbody td.
+	 * Its taller body rows come from Bootstrap reboot's body line-height:1.5 (a 20px line box at 10pt) plus the same
+	 * 4px vertical padding this rule already shares.  Hosts without Bootstrap inherit a tighter UA
+	 * `normal` (~1.2), so pin 1.5 here — a generic ratio, not a design-system token — so every views table matches
+	 * the reference ~28px text-only row (4+4 padding + 20 content) without depending on a host Bootstrap load.
+	 */
+	line-height: 1.5;
+	vertical-align: middle;
+	border-left: 1px solid var(--jc-table-border, #dee2e6);
+	border-right: 1px solid var(--jc-table-border, #dee2e6);
+	border-top: none;
+	border-bottom: none;
+}
+
+/*
+ * Options restore: opt-in text wrap. The baseline cell behavior is whatever each renderer's own
+ * default is (most clip/ellipsis) - no rule needed for that. Checking "Text wrap" in the Options tab adds this
+ * class to the <table> itself, reversing the clip for every cell at once.
+ */
+table.juneau-view-wrap > tbody > tr > td,
+table.juneau-view-wrap > tbody > tr > th {
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: normal;
+}
+
+/*
+ * Options restore: opt-in "comfortable" row density. "Compact" - this file's existing 4px
+ * vertical padding above, matching the reference - stays the class-less baseline; checking "Row density: Comfortable" in the
+ * Options tab adds this class to the <table> itself and doubles the vertical padding only.
+ */
+table.juneau-view-density-comfortable > tbody > tr > td,
+table.juneau-view-density-comfortable > tbody > tr > th {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+/*
+ * Linked key column (reference-look follow-up): the reference stamps `className: 'table-key'` on ID columns with
+ * `.table-key { font-weight: bold }` — typically 700.  This toolkit has no author-facing
+ * key-class stamp required of every consumer, but the common pattern is a linked first data column
+ * immediately after the dedicated expander cell (and optional selection cell).  Use 600 (semibold) — one
+ * step lighter than the reference bold — and leave link color alone so blue PD/GUS hyperlinks stay blue.
+ */
+table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td > a,
+table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a,
+table.dataTable > tbody > tr > td.juneau-view-detail-control + td > a,
+table.dataTable > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a {
+	font-weight: 600;
+}
+
+/*
+ * The header/body boundary - the ONE row-to-row line the reference borderless table keeps (see the tbody rule's
+ * comment above), painted on the first body row's own top edge rather than the header row's bottom edge
+ * (mirrors the reference `table.dataTable>tbody>tr:first-child>td` exactly).  Needed now more than when the
+ * header carried its own background tint: a white-on-white header/body pair has nothing else marking where
+ * one ends and the other begins.  Longhand, not a colourless `border-top` shorthand - see the segmented-
+ * group note earlier in this file for why a colourless shorthand would fight a themed border-color.
+ */
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > th,
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > td,
+table.dataTable > tbody > tr:first-child:not(.child) > th,
+table.dataTable > tbody > tr:first-child:not(.child) > td {
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: var(--jc-table-rule, #bbbbbb);
+}
+
+/*
+ * Summary-view zebra: first data row MUST be the stripe (#FAFAF9) so it does not blend into
+ * the white header.  CSS :nth-child is 1-based, so odd = stripe, even = white.  DataTables
+ * often stamps the first row `even` (0-based); inverted tr.even/tr.odd fall back for that,
+ * then `nth-child(odd of :not(.child))` wins so an inserted expander `tr.child` does not
+ * shift the stripe.  `:not(.child)` keeps the expander row on the opaque white the child-row
+ * rule declares.  The previous 5%-black cell box-shadow is killed below.
+ */
+table[data-juneau-view] > tbody > tr.even:not(.child),
+table.dataTable > tbody > tr.even:not(.child) {
+	background-color: var(--jc-table-stripe-bg, #fafaf9);
+}
+table[data-juneau-view] > tbody > tr.odd:not(.child),
+table.dataTable > tbody > tr.odd:not(.child) {
+	background-color: var(--jc-table-row-bg, #ffffff);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),
+table.dataTable > tbody > tr:nth-child(odd):not(.child) {
+	background-color: var(--jc-table-stripe-bg, #fafaf9);
+}
+table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),
+table.dataTable > tbody > tr:nth-child(even):not(.child) {
+	background-color: var(--jc-table-row-bg, #ffffff);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable > tbody > tr:nth-child(odd of :not(.child)) {
+	background-color: var(--jc-table-stripe-bg, #fafaf9);
+}
+table[data-juneau-view] > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable > tbody > tr:nth-child(even of :not(.child)) {
+	background-color: var(--jc-table-row-bg, #ffffff);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > th,
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child) > td,
+table.dataTable > tbody > tr:nth-child(odd):not(.child) > th,
+table.dataTable > tbody > tr:nth-child(odd):not(.child) > td {
+	box-shadow: none;
+}
+
+/* Sort affordance: keep DT2's dt-column-order on the RIGHT of the label (numeric columns otherwise
+   reverse the flex and put the chevron on the left). Hide DT1's duplicate :before/:after glyphs
+   AND DT2's unicode ▲/▼ (those mash with the Juneau SVG). Idle triangles must be visible
+   (DataTables' 0.125 opacity reads as "no sort icon"). Sort is a click on the order control
+   only — views.js capture-stops a click on the rest of the th. The visible control is a
+   Juneau-owned stacked-triangle SVG (two small ▲/▼ in a 12×24 box), not a 24px-tall chevron. */
+table[data-juneau-view] thead th div.dt-column-header,
+table[data-juneau-view] thead td div.dt-column-header,
+table.dataTable thead th div.dt-column-header,
+table.dataTable thead td div.dt-column-header {
+	flex-direction: row !important;   /* DT2 numeric columns otherwise reverse and put the chevron on the left */
+	align-items: center;
+	gap: var(--jc-space-1);
+}
+
+table.dataTable thead > tr > th.dt-orderable-asc,
+table.dataTable thead > tr > th.dt-orderable-desc,
+table.dataTable thead > tr > td.dt-orderable-asc,
+table.dataTable thead > tr > td.dt-orderable-desc {
+	cursor: default;
+	padding-right: 5px;
+}
+
+table.dataTable thead span.dt-column-order,
+.juneau-view-col-sort-icon {
+	position: relative;
+	right: auto;
+	top: auto;
+	bottom: auto;
+	/* Square host so the shipped 24×24 sort symbol meets without vertical squash (U1 sprite path). */
+	width: var(--jc-space-5);
+	height: var(--jc-space-5);
+	flex: 0 0 var(--jc-space-5);
+	cursor: pointer;
+	overflow: hidden;
+	color: inherit;
+	/*
+	 * Center the sort glyph on the header label.  DT2 lays the header out as `div.dt-column-header`
+	 * (display:flex; align-items:center above), which already centers this box; DT1 (and any host whose
+	 * build ships no `div.dt-column-header`) appends the control straight into the `th`, where a 24px-tall
+	 * inline box otherwise sits on the text BASELINE and rides high above the label.  `vertical-align:middle`
+	 * centers that inline case on the label's middle (a no-op for the flex-item case), and `inline-flex` +
+	 * `align-items:center` centers the glyph inside this box in both.
+	 */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+}
+table.dataTable thead span.dt-column-order svg,
+.juneau-view-col-sort-icon svg,
+.juneau-view-col-sort-glyph {
+	display: block;
+	width: var(--jc-space-5);
+	height: var(--jc-space-5);
+	pointer-events: none;
+}
+/*
+ * The sort glyph is a plain <use> of #juneau-sym-sort (so an override / replacement sprite wins, even on a header drawn
+ * before the sprite loaded).  Document selectors cannot reach into a <use> shadow tree, but custom properties inherit
+ * into it: the sprite's two triangles paint `var(--jc-sort-asc-fill, currentColor)` / `var(--jc-sort-desc-fill, ...)`.
+ * Idle = the muted token; the active direction (DT's dt-ordering-* on the header cell) = the header ink.
+ */
+.juneau-view-col-sort-glyph {
+	--jc-sort-asc-fill: var(--jc-sort-icon-idle);
+	--jc-sort-desc-fill: var(--jc-sort-icon-idle);
+	/* Idle ink for an app-supplied sort symbol painted with plain currentColor; the active rules restore the header ink. */
+	color: var(--jc-sort-icon-idle);
+}
+table.dataTable thead > tr > th.dt-ordering-asc .juneau-view-col-sort-glyph,
+table.dataTable thead > tr > td.dt-ordering-asc .juneau-view-col-sort-glyph {
+	--jc-sort-asc-fill: currentColor;
+	color: inherit;
+}
+table.dataTable thead > tr > th.dt-ordering-desc .juneau-view-col-sort-glyph,
+table.dataTable thead > tr > td.dt-ordering-desc .juneau-view-col-sort-glyph {
+	--jc-sort-desc-fill: currentColor;
+	color: inherit;
+}
+
+/*
+ * DataTables 2 paints stacked ▲/▼ via span.dt-column-order::before/::after
+ * (`content:"▲";content:"▲"/""`). That rule's specificity
+ * (`th.dt-orderable-asc span.dt-column-order:before` = 0,3,5) beats the
+ * `:has(svg){content:none}` (0,3,3), so unicode triangles stack on the Juneau
+ * SVG and read as a mashed tick. `dataTables.dataTables.css` does not use
+ * `!important` on `content`; this does, so it cannot lose. The visible control
+ * is `.juneau-view-col-sort-icon`'s SVG — not DT glyphs, not CSS-border chevrons.
+ */
+table.dataTable thead span.dt-column-order input,
+.juneau-view-col-sort-icon input {
+	display: none;
+}
+table.dataTable thead > tr > th span.dt-column-order:before,
+table.dataTable thead > tr > th span.dt-column-order:after,
+table.dataTable thead > tr > td span.dt-column-order:before,
+table.dataTable thead > tr > td span.dt-column-order:after,
+.juneau-view-col-sort-icon:before,
+.juneau-view-col-sort-icon:after {
+	content: none !important;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+	content: none;
+}
+
+/*
+ * DataTables ribbon - neutral 32px icon-only ribbon-button shape.  NEW rule
+ * (not a rewrite - the module shipped no ".juneau-view-ribbon*" CSS before this pass; buttons rendered with bare
+ * browser-default styling).  NEUTRAL - no palette color (border/color fall back to currentColor); console-ui's
+ * chrome.css layers the themed hover/active accent over these same classes.
+ *
+ * ".juneau-view-ribbon" is the CONTAINER buildRibbon(...) creates (juneau-ribbon.js) - it must lay its buttons out
+ * as a horizontal row itself; ".juneau-view-ribbon-btn" below only shapes each individual button (a per-button
+ * `display: flex` centers that button's own icon, it does NOT make sibling buttons flow horizontally - omitting a
+ * container rule left every button stacking vertically, one per line).
+ */
+.juneau-view-ribbon {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 0.5em;
+}
+
+.juneau-view-ribbon-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-width: 32px;
+	height: var(--jc-chrome-control-height);
+	padding: 0 var(--jc-chrome-control-padding-x);   /* ribbon-button horizontal padding between glyphs */
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: var(--jc-chrome-control-radius);
+	background: transparent;
+	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
+	cursor: pointer;
+}
+
+.juneau-view-ribbon-btn svg { width: var(--jc-chrome-glyph-size); height: var(--jc-chrome-glyph-size); fill: currentColor; }
+
+/* Modifier ".juneau-view-ribbon-btn--icon" / ".juneau-view-helper-btn--icon" (RibbonAction.appearance("icon")
+ * / helpers.button({appearance:"icon"})): chrome.css hover recolors the glyph only — no wash, no border
+ * shift. Default (no modifier) keeps the bordered chrome hover. */
+
+/* The reference disabled ribbon button uses opacity: 0.6. */
+.juneau-view-ribbon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Neutral shape for an ACTIVE toggle (`option`/`optionGroup` member button's aria-pressed="true") - a thicker
+ * border only (no palette color here); console-ui's chrome.css layers the themed background/color accent over
+ * this same attribute selector, exactly like it already does for :hover/:active. Without ANY visual affordance
+ * here, a toggled-on filter (e.g. a column-scoped `option` persisted to localStorage) is invisible - indistinguishable
+ * from every other unpressed button - so it can silently keep filtering out all rows after being clicked once. */
+.juneau-view-ribbon-btn[aria-pressed="true"] { border-width: 2px; }
+
+/*
+ * Segmented ribbon group: one OUTER chrome around the group,
+ * no inner vertical borders between glyphs.  Ends keep left/right; middles keep only top/bottom.  Rounding
+ * only on the group's outer ends.  NEUTRAL - shape only; console-ui's chrome.css themes the member buttons'
+ * colors exactly like a standalone button (same ".juneau-view-ribbon-btn" class).
+ *
+ * This base rule and the end-cap rules below it all restore/null a side border with LONGHAND
+ * border-*-width / border-*-style declarations, never a one-line colourless shorthand (width + style with no
+ * colour component): such a shorthand resets border-*-color to its initial value (currentColor), which at this
+ * rule's specificity beats chrome.css's themed border-color and paints a near-black edge instead of the
+ * intended grey/accent one - including at the end-caps, whose own longhand rules never re-declare a color and
+ * so never re-open the fight this rule would otherwise lose.
+ */
+.juneau-view-ribbon-group { display: inline-flex; align-items: stretch; }
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn {
+	border-radius: 0;
+	border-left-width: 0;
+	border-left-style: none;
+	border-right-width: 0;
+	border-right-style: none;
+}
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {
+	border-left-width: 1px;       /* longhand, not a colourless `border-left` shorthand - see note above */
+	border-left-style: solid;
+	border-radius: var(--jc-chrome-control-radius) 0 0 var(--jc-chrome-control-radius);
+}
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-radius: 0 var(--jc-chrome-control-radius) var(--jc-chrome-control-radius) 0;
+}
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-radius: var(--jc-chrome-control-radius);
+}
+
+/*
+ * Shared strip widget - TAB-MODE shape.  The SAME ".juneau-view-ribbon-group" widget carries an optional
+ * "data-juneau-strip-mode" visual flag decoupled from its a11y role: absent (or "ribbon") is the default
+ * four-corner segmented pill above (toolbar/paging/pill call sites are unchanged - they emit no attribute);
+ * "tab" repaints the SAME connected buttons as a folder-tab strip.  Tab-mode adds a floor/divider line under
+ * the strip, SQUARE bottom corners on the end caps (top radii stay), and a 1px downward overlap so the strip's
+ * buttons sit ON the floor line and the selected tab's own bottom edge reads as continuous with it.  The strip
+ * never wraps and never grows a "more" menu: it scrolls horizontally.  NEUTRAL - shape only (border/floor fall
+ * back to currentColor); console-ui's chrome.css layers the themed floor + selected-tab accent over these same
+ * selectors.  Row-detail multi-section conversion (juneau-views.js buildDetailStrip) is the first consumer:
+ * it stamps data-juneau-strip-mode="tab" + role="tablist" and per-button role="tab"/aria-selected.
+ */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] {
+	display: flex;
+	align-items: stretch;
+	border-bottom: 1px solid;     /* currentColor floor line - themed by chrome.css */
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	position: relative;
+	margin-bottom: -1px;          /* buttons overlap the floor line so the selected tab paints over it */
+}
+
+/* Square the outer bottom corners on the end caps so they meet the floor line flush (top radii stay). */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:first-child {
+	border-bottom-left-radius: 0;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:last-child {
+	border-bottom-right-radius: 0;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:only-child {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+/*
+ * Detail-panel header (icon + title + action bar) sitting above the section tab strip.
+ * NEUTRAL - layout only; chrome.css themes colors.
+ */
+.juneau-view-detail-header {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5em 0.75em;
+	margin: 0 0 0.5em;
+	padding: 0.5em 0.75em;
+}
+
+/*
+ * Header icon TILE, not a bare glyph: a square affordance sized to anchor the title rather than to match it.
+ * Shape only - the fill and the contrasting glyph colour are chrome.css's, and there is deliberately no
+ * per-RowDetailDef colour hook, which would be author-facing colour API this item is not adding.
+ */
+.juneau-view-detail-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 2em;
+	height: 2em;
+	border-radius: 6px;
+}
+
+.juneau-view-detail-icon svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	fill: currentColor;
+}
+
+.juneau-view-detail-icon[hidden] {
+	display: none;
+}
+
+.juneau-view-detail-title {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	font-size: 1.05em;
+	font-weight: 600;
+}
+
+.juneau-view-detail-header .juneau-view-detail-actions {
+	margin: 0;
+	margin-left: auto;
+	flex: 0 0 auto;
+}
+
+/*
+ * Detail section tabs deliberately have NO shape override here.  They are the generic tab-mode strip above,
+ * unmodified: one widget, one treatment.  The pill override that used to sit at this point re-rounded the
+ * corners the generic rules had just squared and removed the floor line they had just drawn, so the detail
+ * strip and the toolbar strip diverged for no reason an author could state, and every subsequent fix had to be
+ * written twice.  Deleting it is the whole of the fix - resist adding a replacement rule here, including a
+ * "small" one.  The only detail-tabs selector left in this file is the bar-slot host below, which positions a
+ * trailing region rather than repainting the strip.
+ */
+
+/*
+ * Count suffix on a detail tab (DetailSection.count).  Not a strip repaint - it styles a child the client
+ * appends, and the strip itself is untouched.  The gap is a MARGIN on purpose: the tab button is inline-flex,
+ * so a leading space in the markup would be collapsed away and the tab would read "Suspensions(0)".
+ */
+.juneau-view-detail-tab-count {
+	margin-left: var(--jc-space-1);
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.juneau-sym-flip-x { transform: scaleX(-1); }
+
+.juneau-view-paging-double {
+	display: inline-flex;
+	align-items: center;
+}
+
+/*
+ * Skip glyph correction: each "chevronright" host's visible filled
+ * chevron sits in the middle of its 24x24 viewBox (path spans x=7.2..17.4), so two hosts
+ * placed edge-to-edge with no overlap read as two separated arrows ("&gt;  &gt;") rather than one merged
+ * double-chevron ("&gt;&gt;") the way the reference skip glyph does. Rather than ship a second copied path, the SAME sprite glyph is reused twice and the second host is pulled left
+ * to cancel most of that built-in padding - no new artwork, just correct spacing for the artwork already here.
+ * The overlap is -0.5 of the glyph box (the padding-cancelling ratio the artwork needs): it was -6px at the old
+ * 12px box and is -8px now that the pager glyph spends --jc-chrome-glyph-size-pager (16px), so the two chevrons
+ * stay merged at the pager's larger size instead of drifting apart.
+ */
+.juneau-view-paging-double svg + svg {
+	margin-left: -8px;
+}
+
+/*
+ * Unified paging ribbon - hides BOTH DataTables major-version's native length-select/
+ * pagination class-name generations (DT1.x ".dataTables_length"/".dataTables_paginate", DT2.x ".dt-length"/
+ * ".dt-paging") and ships the first-party ribbon's neutral shape: `[First] [Prev] [<range> + page-size menu]
+ * [Next] [Last]` - a SINGLE segmented control (no separate page-size <select>, no second paging control
+ * elsewhere).  NEUTRAL - no palette color; console-ui's chrome.css layers the themed accent/disabled treatment
+ * over these same classes.  The native entry-count text (".dataTables_info"/".dt-info") needs no hide rule here:
+ * `buildOptions(...)` sets DataTables' own `info: false` (juneau-views.js) so that node is never created in the
+ * first place - disabled at the source rather than hidden after the fact.
+ */
+.dataTables_length, .dt-length, .dataTables_paginate, .dt-paging { display: none; }
+
+/*
+ * DataTables 2's default layout puts search/length/paging in their own `.dt-layout-row` *above* the table
+ * (sibling of `.dt-layout-row.dt-layout-table`).  `buildToolbarRow` relocates `.dt-search` into the unified
+ * toolbar; these leftover feature rows would otherwise keep an empty (or still-populated, if the move missed)
+ * second line.  DT1 has no `.dt-layout-*` nodes, so this rule is a no-op there.
+ */
+.dt-container > .dt-layout-row:not(.dt-layout-table) { display: none; }
+
+/*
+ * Table overflow discipline — table-only horizontal scroll.
+ *
+ * A table wider than its region scrolls INSIDE its own region; the page/<html>/<body> never grow a horizontal
+ * scrollbar and the surrounding chrome (toolbar, header, nav, card padding) stays put.  Two mechanisms, no palette
+ * colour and no new token (neutral shape only — the file's colours-in-chrome split):
+ *
+ *   - DT2 flex layout: the scroll box IS the table's own flex `.dt-layout-cell` — a sibling
+ *     lineage away from the toolbar's layout row, so the paging-pill menu is never inside it.  The
+ *     selector is SCOPED to the table's layout row (`.dt-layout-row.dt-layout-table > .dt-layout-cell`); an
+ *     unscoped `.dt-layout-cell { overflow }` would also scroll toolbar cells in other layout rows.
+ *   - DT1 fallback: juneau-views.js wraps the <table> in `.juneau-view-table-scroll`.
+ *
+ * The `min-width:0` chain is mandatory: flex items default to `min-width:auto` (min-content of the table),
+ * so without it any link refusing to shrink lets the table contribute to viewport overflow and Goal 2 fails.  It
+ * is stamped along the actual DT2 constraint path plus the DataTables wrapper and the DT1 wrap.
+ */
+.dt-layout-row { min-width: 0; }
+.dt-layout-row.dt-layout-table { min-width: 0; }
+.dt-layout-row.dt-layout-table > .dt-layout-cell { overflow-x: auto; min-width: 0; }
+.dataTables_wrapper, .dt-container { min-width: 0; }
+.juneau-view-table-scroll { overflow-x: auto; min-width: 0; }
+
+/*
+ * DataTables 2.1.8 pins an unowned .75em vertical margin on this row (Juneau vendors nothing here - each
+ * consumer supplies its own copy).  Reclaiming it makes both edges Juneau's own decision instead of the
+ * vendor's: the top edge collapses against the toolbar row's own bottom margin (already this same step), and
+ * the bottom edge would otherwise fall through to whatever padding a host theme happens to supply.  Narrow
+ * selector at specificity (0,3,0) beats the vendor's (0,2,2) on class count alone, so no !important and no
+ * stylesheet-order dependence.  A DataTables version bump should re-check this margin still exists to neutralize.
+ */
+.dt-container > .dt-layout-row.dt-layout-table { margin: 0 0 var(--jc-space-2); }
+
+/*
+ * The 10.0 one-overflow-contract half: the two scroll boxes above are unchanged, but cell CONTENT now CLIPS with an
+ * ellipsis instead of wrapping - the SAME policy on both DataTables generations, so a table no longer changes shape
+ * depending on which generation the app supplied.
+ *
+ * The selector is deliberately NAMED (`.juneau-view-table`, stamped by ViewTable's emit) rather than a global
+ * unnamed `td` rule: a bare `td { overflow: hidden }` would reach every table on the page - including app markup
+ * this toolkit does not own - which is blast radius the toolkit has no right to take.  The ellipsis needs all three
+ * of `overflow`/`text-overflow`/`white-space` plus a constrained box; `max-width` is what actually gives a table
+ * cell something to overflow, since an unconstrained `td` simply grows the column instead.
+ *
+ * Opt-out is the `juneau-cell-wrap` class on the cell, which restores the pre-10.0 wrap.  The named emitters whose
+ * markup is a chip / bar / link rather than prose (progress, pill, tag, linked) stamp it themselves, and an author
+ * who wants a wrapping prose column can stamp it via the column's own class.  The `truncate` renderer is untouched
+ * and composes with this: it shortens the VALUE, while this rule clips whatever still overflows the box.
+ */
+.juneau-view-table td {
+	max-width: 24em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.juneau-view-table td.juneau-cell-wrap {
+	max-width: none;
+	overflow: visible;
+	text-overflow: clip;
+	white-space: normal;
+}
+
+.juneau-view-pagingpill {
+	display: inline-flex;
+	align-items: stretch;
+	box-sizing: border-box;
+	height: var(--jc-chrome-control-height);
+	border: none;                 /* segment borders ARE the pill — a container stroke + hover on the
+	                                 buttons paints an inner blue box inside a gray halo */
+	border-radius: var(--jc-chrome-control-radius);
+	font-family: inherit;         /* <button> UA font otherwise; apps theme via body font */
+}
+
+/* Same model as .juneau-view-ribbon-group: rest = top/bottom on every segment + first left + last
+   right.  chrome.css colors those edges gray, then recolors the same edges --jc-accent on hover.
+   Longhand width/style only; a colourless shorthand would reset border-*-color and steal the theme.
+   No inner verticals.  No overflow:hidden (that would clip the page-size menu). */
+.juneau-view-pagingpill > *:first-child {
+	border-radius: var(--jc-chrome-control-radius) 0 0 var(--jc-chrome-control-radius);
+	border-left-width: 1px;
+	border-left-style: solid;
+}
+.juneau-view-pagingpill > *:last-child {
+	border-radius: 0 var(--jc-chrome-control-radius) var(--jc-chrome-control-radius) 0;
+	border-right-width: 1px;
+	border-right-style: solid;
+}
+
+/*
+ * No inner divider between the four nav buttons (First/Prev/Next/Last). The segmented-group
+ * treatment above (".juneau-view-ribbon-group") already dropped this same inner-border pattern for the ribbon;
+ * that change was ribbon-format only and never reached the paging pill's own nav buttons, so they kept the old
+ * per-button "border-right: 1px solid" divider this rule used to carry. The menu-button segment
+ * (".juneau-view-pagingpill-menuwrap") is a DIFFERENT widget riding the same pill, not one of the four nav
+ * buttons - it USED to keep its own divider on the theory that a different widget warranted a visible seam,
+ * but the reference center range segment has NO side border at
+ * all (`border-left: none; border-right: none`), seamless against its neighbours
+ * exactly like the four nav buttons.  This was the real root cause of the styling defect that "never
+ * stuck": every console-side attempt targeted the WRONG layer (a color/override in console.css cannot zero
+ * out a width+style pair the framework's own shipped rule below re-asserts) - the divider was never a console
+ * bug to band-aid, it was this framework rule.  Removed below; the pill is now one fully seamless five-
+ * segment control, matching every other segmented control in this file.
+ */
+.juneau-view-pagingpill-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-width: 32px;
+	padding: 0 8px;
+	border-top-width: 1px;        /* longhand, not a colourless shorthand — hover recolors this same edge */
+	border-top-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-left-width: 0;         /* kill UA button sides; first/last restore the end-caps */
+	border-left-style: none;
+	border-right-width: 0;
+	border-right-style: none;
+	background: transparent;
+	font-family: inherit;
+	cursor: pointer;
+}
+
+/*
+ * Paging chevrons vs DataTables.  `div.dt-container .dt-paging .dt-paging-button` (and
+ * `.dt-paging-button.disabled`) ships `color: inherit !important` / `rgba(0,0,0,0.5) !important`
+ * plus `background: transparent`.  The previous pin's `.juneau-view-pagingpill-btn:disabled`
+ * (0,2,1) restated only `color` + `background-color` on the BUTTON, so (a) segment-edge
+ * `border-*-color` stayed `--jc-control-border` (#ced4da), (b) SVG `fill` could lose to a
+ * more specific `svg`/`use` rule, (c) white-canvas composites (#a3a3a3 / #ffffff) never
+ * matched the reference grey-canvas opacity look.  These selectors are (0,4,1)/(0,4,2) on the
+ * pill's own classes (not `.dt-paging-button`) and restate button, svg, and border.
+ */
+div.dt-container .juneau-view-ribbon-btn,
+.juneau-view-ribbon-group .juneau-view-ribbon-btn {
+	border-color: var(--jc-chrome-button-border);
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn,
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-menuwrap,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn,
+.juneau-view-pagingpill .juneau-view-pagingpill-menuwrap {
+	border-color: var(--jc-chrome-button-border);
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled),
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) {
+	color: var(--jc-chrome-icon);
+	border-color: var(--jc-chrome-button-border);
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) svg,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:not(:disabled) svg {
+	color: var(--jc-chrome-icon);
+	fill: currentColor;
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled,
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled],
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] {
+	color: var(--jc-chrome-disabled-color);
+	background-color: var(--jc-chrome-disabled-bg);
+	border-color: var(--jc-chrome-disabled-border);
+	opacity: 1;
+	cursor: not-allowed;
+}
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled svg,
+div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] svg,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn:disabled svg,
+.juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] svg {
+	color: var(--jc-chrome-disabled-color);
+	fill: currentColor;
+	background-color: transparent;
+}
+.juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-pager); height: var(--jc-chrome-glyph-size-pager); fill: currentColor; }
+
+/*
+ * The pill's central segment: BOTH the compact "n-n of n" range summary AND the
+ * page-size menu button that replaced the old standalone <select> - a WAI-ARIA menu-button (`.juneau-view-
+ * pagingpill-menubtn`, `aria-haspopup="listbox"`) whose popup (`.juneau-view-pagingpill-menu`, `role="listbox"`)
+ * lists the page-size options.  NEUTRAL - shape only; console-ui's chrome.css themes text/accent/background.
+ */
+.juneau-view-pagingpill-menuwrap {
+	position: relative;
+	display: flex;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+.juneau-view-pagingpill-menubtn {
+	display: flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0 0.75em;
+	border: none;
+	background: transparent;
+	font-family: inherit;
+	font-size: inherit;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.juneau-view-pagingpill-info { white-space: nowrap; font-family: inherit; }
+
+/* Centring box for the baseline-seated inline SVG - without this the 12px glyph rides high against the
+   "n-n of n" range text beside it, since only the child svg (below) is sized and the span itself has no
+   display/vertical-align rule.  Verbatim shape of .juneau-view-paging-double above: no height here, since
+   height is a checked ChromeScale property on this glyph family and inline-flex + centred items needs none. */
+.juneau-view-pagingpill-caret {
+	display: inline-flex;
+	align-items: center;
+}
+
+.juneau-view-pagingpill-caret svg { width: var(--jc-chrome-glyph-size-pager); height: var(--jc-chrome-glyph-size-pager); fill: currentColor; }
+
+/* The popup itself - absolutely positioned below the menu button; `[hidden]` (set/cleared by juneau-views.js)
+   is enough to show/hide it, so no explicit `display` toggle rule is needed here. */
+.juneau-view-pagingpill-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 10;
+	min-width: 100%;
+	margin: 0.2em 0 0;
+	padding: 0.25em 0;
+	list-style: none;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+}
+
+.juneau-view-pagingpill-menu-option {
+	padding: 0.3em 0.75em;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+/* Reserved left gutter so every option's label lines up, selected or not - the selected-item check sits
+   here (standard checkbox-column layout), not floated to the far right of the row. */
+.juneau-view-pagingpill-menu-option::before {
+	content: "";
+	display: inline-block;
+	width: 1.1em;
+	margin-right: 0.35em;
+	text-align: center;
+}
+
+.juneau-view-pagingpill-menu-option[aria-selected="true"] { font-weight: bold; }
+
+/* A plain checkmark glyph (not an icon-registry glyph - a bare CSS content string) indicating the current
+   page-size selection, mirroring the affordance a native <select> gives its chosen <option> for free. */
+.juneau-view-pagingpill-menu-option[aria-selected="true"]::before {
+	content: "\2713";
+}
+
+/*
+ * Single unified top-toolbar row: a LEFT cluster (page-size + paging nav pill) and a RIGHT
+ * cluster (search, ribbon groups, refresh) laid out with `space-between` so the right cluster stays right-aligned
+ * - built once by `buildToolbarRow(...)` (juneau-views.js), which assembles both clusters above the table.
+ */
+.juneau-view-toolbar-row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--jc-space-2);
+	min-width: 0;
+	overflow-x: visible;
+	margin: 0 0 var(--jc-space-2) 0;
+	font-size: var(--jc-chrome-font-size-1);   /* same type size as the table / paging+search */
+}
+
+.juneau-view-toolbar-left,
+.juneau-view-toolbar-right {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--jc-space-2);
+	min-width: 0;
+	flex-shrink: 0;
+}
+
+/* Native DT search box, once relocated into the right cluster: inline with the icon ribbon, not a
+   full-width / floated block that drops onto its own line. Same --jc-chrome-control-height (31px) control
+   class as the paging pill and icon ribbon (box-sizing so the 1px border is inside that height, not added
+   on top). */
+.juneau-view-toolbar-right .dataTables_filter,
+.juneau-view-toolbar-right .dt-search {
+	float: none;
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+}
+
+/*
+ * Grey control border + grey text at passing contrast - this input previously had no colour
+ * of its own (border: 1px solid resolved to currentColor; text inherited whatever colour surrounded it), which
+ * is why console-ui's own MT-11 fix had to fork a second border colour in console.css rather than getting one
+ * from here. Fixing the framework default instead: --jc-chrome-control-border/-text are still overridable by a
+ * host theme exactly like every other token in this file.
+ *
+ * appearance:none is load-bearing on macOS/WebKit: without it, the UA text-field chrome paints a darker
+ * platform border (~#aaa) that outranks / composites over the authored #ced4da, so the toolbar Search reads
+ * heavier than the adjacent ribbon buttons that already use an explicit CSS border.  background + box-shadow
+ * resets finish neutralizing the native field so only the shared control border shows.
+ *
+ * Specificity must beat DataTables' `div.dt-container .dt-search input { border: 1px solid #aaa }`
+ * (0,2,2).  `.juneau-view-toolbar-right .dt-search input` is only (0,2,1) and loses regardless of
+ * source order.  The extra element (`div.dt-search` / `div.dataTables_filter`) raises these to (0,2,3).
+ */
+div.dt-container div.dt-search input,
+div.dataTables_wrapper div.dataTables_filter input {
+	box-sizing: border-box;
+	height: var(--jc-chrome-control-height);
+	margin: 0;
+	padding: 0 0.5em;
+	appearance: none;
+	-webkit-appearance: none;
+	background: var(--jc-control-bg, #ffffff);
+	box-shadow: none;
+	border: 1px solid var(--jc-chrome-control-border);
+	border-radius: var(--jc-chrome-control-radius);
+	color: var(--jc-chrome-control-text);
+	font-family: inherit;
+	flex-shrink: 0;
+}
+
+/* Scoped to the toolkit's own toolbar search input only - never a bare `::placeholder`, which would be a
+   stronger claim on a consumer's page than a framework should make.  Two separate rules (DT1 / DT2 markup),
+   never a comma list, per this file's own comma-joined-selector caution.  The reference paints placeholders with
+   italic + opacity 0.5 over input text; the Chrome UA default is #757575.  The visible reference grey is
+   #B4B5B6 at full opacity (opacity:1 so Firefox's 0.54 UA fade cannot lighten it). */
+.juneau-view-toolbar-right .dataTables_filter input::placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+.juneau-view-toolbar-right .dataTables_filter input::-webkit-input-placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+
+.juneau-view-toolbar-right .dt-search input::placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+.juneau-view-toolbar-right .dt-search input::-webkit-input-placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+
+div.dt-container div.dt-search input::placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+div.dt-container div.dt-search input::-webkit-input-placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+div.dataTables_wrapper div.dataTables_filter input::placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+div.dataTables_wrapper div.dataTables_filter input::-webkit-input-placeholder {
+	font-style: italic;
+	color: var(--jc-placeholder, #b4b5b6);
+	opacity: 1;
+}
+
+/*
+ * Toolbar Search focus: recolor the field's own 1px border.  Do not add an outset outline/box-shadow
+ * ring (chrome.css's generic :focus-visible is 2px / offset 2px).  Specificity (0,3,3) beats
+ * DataTables (0,2,2) and the generic ring (0,1,0).  --jc-chrome-control-focus-border is the themed
+ * accent in light and --jc-focus in dark; no hex fallback here (this file's no-palette contract).
+ */
+div.dt-container div.dt-search input:focus,
+div.dt-container div.dt-search input:focus-visible,
+div.dataTables_wrapper div.dataTables_filter input:focus,
+div.dataTables_wrapper div.dataTables_filter input:focus-visible {
+	outline: none;
+	box-shadow: none;
+	border-color: var(--jc-chrome-control-focus-border);
+}
+
+.juneau-view-ribbon-divider {
+	display: inline-block;
+	width: 0.5em;               /* pure spacing only; no visible glyph. Stays in the DOM (unchanged JS branch). */
+}
+
+/*
+ * Per-table staleness indicator (per-table, never a single page-level chip) - a small neutral text chip
+ * juneau-views.js appends to the end of the toolbar row's RIGHT cluster (against the cluster itself, never
+ * against a specific sibling, since a view may poll with no ribbon at all) for any table that declares a
+ * `pollIntervalMs`.  NEUTRAL - no palette color (per this file's no-color contract); the `data-state="error"`
+ * case ("the last refresh attempt failed" must look visibly distinct from a merely-aging timestamp) gets a
+ * heavier border/bold text instead of a color change, mirroring the
+ * ".juneau-view-ribbon-btn[aria-pressed=\"true\"]" neutral-emphasis convention above; console-ui's chrome.css
+ * MAY layer a themed color onto this same attribute selector when present.  The min-width below reserves room
+ * for the longest rendered text (error-state, two-digit) so a shorter state cannot let the trailing refresh
+ * button jump sideways as the label ticks.
+ */
+.juneau-view-staleness {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.15em 0.6em;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.75em;
+	font-size: var(--jc-chrome-font-size-2);
+	white-space: nowrap;
+	min-width: 38ch;
+}
+
+.juneau-view-staleness[data-state="error"] {
+	border-width: 2px;
+	font-weight: bold;
+}
+
+/*
+ * Suspended polling (the pausePolling ribbon toggle, or an open editor on a view that opted into
+ * ViewDef.pausePollingWhileEditing).  Distinct from BOTH neighbours without a palette color, and deliberately
+ * quieter than the error state: a pause is a state the operator chose, a failed refresh is one that happened to
+ * them.  The dashed border is the tell that the age you are reading is not being refreshed - it keeps ticking up.
+ */
+.juneau-view-staleness[data-state="paused"] {
+	border-style: dashed;
+	font-style: italic;
+}
+
+/*
+ * Per-column header search icon: Juneau search glyph in the header flex row, immediately
+ * left of the sort control.  Click opens .juneau-view-col-search-popover (not a second search row).
+ * NEUTRAL shape; chrome.css tints idle/active/popover.
+ */
+.juneau-view-col-search-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 var(--jc-chrome-glyph-size-small);
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-space-5);
+	margin: 0;
+	cursor: pointer;
+	opacity: 0.45;
+	color: var(--jc-chrome-icon);
+}
+.juneau-view-col-search-icon:hover,
+.juneau-view-col-search-icon:focus-visible {
+	opacity: 0.85;
+}
+.juneau-view-col-search-icon.is-active {
+	opacity: 1;
+}
+.juneau-view-col-search-icon svg {
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-chrome-glyph-size-small);
+	display: block;
+	fill: currentColor;
+}
+
+.juneau-view-col-search-popover {
+	min-width: 220px;
+	max-width: 340px;
+	padding: 8px 10px;
+	border: 1px solid;
+	box-sizing: border-box;
+	text-align: left;
+}
+.juneau-view-col-search-popover-title {
+	font-weight: 600;
+	font-size: var(--jc-chrome-font-size-2);
+	margin-bottom: 6px;
+}
+.juneau-view-col-search-popover-input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 3px 6px;
+	font: inherit;
+	font-size: var(--jc-chrome-font-size-2);
+	border: 1px solid;
+	border-radius: var(--jc-chrome-control-radius);
+}
+/* Per-type bare-value help - one line, between the heading and the input. */
+.juneau-view-col-search-popover-barehelp {
+	margin: 2px 0 6px;
+	font-size: var(--jc-chrome-font-size-1);
+	opacity: 0.85;
+}
+/* Reject / still-typing feedback: an out-of-set operator or unparseable expression is rejected,
+ * not silently applied.  NEUTRAL shape; chrome.css tints the invalid ring/text. */
+.juneau-view-col-search-popover.is-invalid .juneau-view-col-search-popover-input {
+	border-color: var(--jc-chrome-danger, currentColor);
+}
+.juneau-view-col-search-popover-status {
+	min-height: var(--jc-chrome-font-size-2);
+	margin-top: 4px;
+	font-size: var(--jc-chrome-font-size-1);
+}
+.juneau-view-col-search-popover.is-invalid .juneau-view-col-search-popover-status {
+	color: var(--jc-chrome-danger, currentColor);
+}
+/* Operator help: one row per effective operator, its "$name" then the operator API's help text. */
+.juneau-view-col-search-popover-help {
+	margin-top: 6px;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	font-size: var(--jc-chrome-font-size-1);
+}
+.juneau-view-col-search-popover-help-op {
+	display: flex;
+	gap: 6px;
+	align-items: baseline;
+}
+.juneau-view-col-search-popover-help-op code {
+	flex: 0 0 auto;
+	font-family: var(--jc-chrome-font-mono, monospace);
+	opacity: 0.85;
+}
+
+/* Live-announcer region: visually hidden, never removed by a popover's own teardown. */
+.juneau-view-announcer {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/*
+ * Self-contained ".jc-*" tabs/sub-tabs page shell (Decision 1(A)).  Folded into this file rather than a separate
+ * juneau-pages.css: small enough not to warrant its own served asset/pom touch (see the module's ViewsMixin
+ * asset-serving pattern).  NEUTRAL - no color palette; console-ui's chrome.css MAY theme these same classes when
+ * present, mirroring the ".tag.<domain>.<value>" chip reconciliation above - this module takes NO dependency on
+ * console-ui either way.
+ */
+.jc-tab-bar,
+.jc-subtab-bar {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	white-space: nowrap;
+	gap: 0;
+	margin: 0 0 var(--jc-space-2) 0;
+}
+
+/*
+ * Ribbon-format shape: one continuous outer frame, no dividing line between members - the same segmented
+ * pattern as ".juneau-view-ribbon-group" above.  Members drop their side borders and rounding; only the outer
+ * ends restore a side border and a corner radius, with LONGHAND border-*-width / border-*-style declarations
+ * rather than a one-line colourless shorthand (see the segmented-group note above for why).
+ */
+.jc-tab,
+.jc-subtab {
+	flex: 0 0 auto;
+	display: inline-block;
+	padding: 0.35em var(--jc-space-3);
+	text-decoration: none;
+	border-top: 1px solid;        /* currentColor - no palette color set here */
+	border-bottom: 1px solid;
+	border-left: none;
+	border-right: none;
+	border-radius: 0;
+	cursor: pointer;
+}
+
+.jc-tab:first-child,
+.jc-subtab:first-child {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-top-left-radius: 0.25em;
+	border-bottom-left-radius: 0.25em;
+}
+
+.jc-tab:last-child,
+.jc-subtab:last-child {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-top-right-radius: 0.25em;
+	border-bottom-right-radius: 0.25em;
+}
+
+.jc-tab:only-child,
+.jc-subtab:only-child {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-radius: 0.25em;
+}
+
+.jc-tab-active,
+.jc-subtab-active {
+	font-weight: bold;
+	border-bottom-width: 3px;
+}
+
+/* Historical leftover from the deleted hash-swap shell: panels stay hidden until ".jc-active". HTML-slot pages do not use these classes. */
+.jc-panel,
+.jc-subpanel {
+	display: none;
+}
+
+.jc-panel.jc-active,
+.jc-subpanel.jc-active {
+	display: block;
+}
+
+/* Fail-loud PAGE_META contract-version-mismatch banner - neutral, no palette color (mirrors .juneau-view-error). */
+.jc-page-error {
+	display: block;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	margin: var(--jc-space-1) 0;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	font-weight: bold;
+}
+
+/*
+ * Page chrome (app-header / avatar / bar-slot) base SHAPE - NEUTRAL, no palette color; console-ui's
+ * chrome.css themes these same classes (and anchors the badge overlay) when present.  This module takes NO
+ * dependency on console-ui: dependency-free, the count/dot badge simply reads inline next to its action, and the
+ * bar-slot region reads as a flex row trailing the .jc-subtab-bar.  The app-header and bar-slot markup is painted
+ * client-side (juneau-views.js and the console's juneau-console.js).
+ */
+.jc-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.25em;
+	height: 1.25em;
+	padding: 0 0.35em;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.75em;
+	font-size: 0.7rem;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.jc-badge-dot {
+	min-width: 0.6em;
+	width: 0.6em;
+	height: 0.6em;
+	padding: 0;
+	border-radius: 50%;
+}
+
+/* A menu-less avatar is a non-interactive identity chip; a menu-bearing one is a disabled trigger until 445h. */
+.jc-icon-btn[disabled],
+.jc-avatar[disabled] {
+	cursor: default;
+	opacity: 0.55;
+}
+
+/* Bar slot: emitted as a trailing sibling of .jc-subtab-bar - never the archived .juneau-view-toolbar-* row. */
+.jc-bar-slot {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: var(--jc-space-2);
+	margin: 0 0 var(--jc-space-2) 0;
+}
+
+.jc-bar-text,
+.jc-bar-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+}
+
+/*
+ * SECOND bar-slot host: a bar slot riding the row-detail ribbon (RowDetailDef.barSlot), which the runtime relocates
+ * to the ribbon's trailing position and marks with [data-juneau-strip-trailed] on the ribbon itself.  Both become
+ * inline-level so they share ONE line while there is room and WRAP onto the next when there is not - so a badge can
+ * never overlap a ribbon tab at a narrow width.  Without a trailing slot the ribbon keeps its full-width track.
+ * NEUTRAL - shape only.
+ */
+.juneau-view-ribbon-group.juneau-view-detail-tabs[data-juneau-strip-mode="tab"][data-juneau-strip-trailed] {
+	display: inline-flex;
+	width: auto;
+	max-width: 100%;
+	vertical-align: top;
+	margin-right: 0.5em;
+}
+
+.juneau-view-detail-bar-slot {
+	display: inline-flex;
+	flex-wrap: wrap;
+	vertical-align: top;
+	max-width: 100%;
+	margin: 0 0 0.75em 0;
+}
+
+/*
+ * Row-details expander - initDetailsExpander(...)/createdRow (juneau-views.js) mark every row
+ * `.juneau-view-detail-row` when a sibling `<template data-juneau-row-detail>` is present; the
+ * chevron lives in a dedicated leading column (`.juneau-view-detail-control`), never jammed into
+ * the first data cell.  Dual-chevron swap via `.juneau-view-detail-open`.  Expand/collapse is
+ * chevron-only (the row body is not a click target).  NEUTRAL - no palette color.
+ */
+.juneau-view-detail-th,
+.juneau-view-detail-control {
+	width: 20px;
+	max-width: 20px;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.juneau-view-detail-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	line-height: 0;
+}
+
+.juneau-view-detail-control svg {
+	width: 12px;
+	height: 12px;
+	fill: currentColor;
+	color: inherit;
+	vertical-align: middle;
+}
+
+.juneau-view-detail-expanded { display: none; }
+
+.juneau-view-detail-open .juneau-view-detail-collapsed { display: none; }
+.juneau-view-detail-open .juneau-view-detail-expanded { display: inline; }
+
+/*
+ * The DataTables-native child row created by `row.child(panel).show()` (juneau-views.js) - class "child", per
+ * DataTables' own row.child() API, not one of this file's own "juneau-view-detail-*" names: Juneau never gets a
+ * handle on this <tr>/<td> to stamp its own class onto it, so it has to be reached by DataTables' own default
+ * shape instead.  Opaque content-card fill (`--jc-card-bg`) plus `padding: 0` so ancestor row colouring (a zebra
+ * stripe, an "open" indicator, a hover wash) cannot show through, and the gray main well cannot halo the
+ * expanded panel.
+ */
+table[data-juneau-view] > tbody > tr.child,
+table[data-juneau-view] > tbody > tr.child > td,
+table.dataTable > tbody > tr.child,
+table.dataTable > tbody > tr.child > td {
+	background-color: var(--jc-card-bg);
+	border: none;
+	padding: 0;
+}
+
+/* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`).
+ * Also the containment host for the unnamed @container ladder below (see QUERY CONTAINERS). */
+.juneau-view-detail-panel {
+	margin: 0;
+	container-type: inline-size;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	background-color: var(--jc-card-bg);
+}
+
+.juneau-view-detail-panel .jc-card,
+table[data-juneau-view] > tbody > tr.child .jc-card,
+table.dataTable > tbody > tr.child .jc-card {
+	margin: 0;
+}
+
+.juneau-view-detail-section {
+	margin: 0 0 var(--jc-space-3);
+}
+
+.juneau-view-detail-section-title {
+	margin: 0 0 0.5em;
+	font-size: 1em;
+}
+
+/*
+ * `code` fill-sink renderer output: a monospace,
+ * whitespace-preserving block for source text, scoped to its own class rather than styling the bare
+ * `<pre><code>` the renderer emits - a caller nesting unrelated `<pre>`/`<code>` markup elsewhere in a detail
+ * section is untouched.  NEUTRAL - no new palette color; reuses the existing --jc-popover-bg/-border light-
+ * neutral-surface tokens rather than declaring a third near-identical pair.
+ */
+.juneau-code {
+	margin: 0;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	background: var(--jc-popover-bg);
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	overflow-x: auto;
+	font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+	font-size: var(--jc-chrome-font-size-2);
+	line-height: 1.4;
+	white-space: pre;
+}
+
+.juneau-view-detail-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	margin: 0 0 0.75em;
+}
+
+/*
+ * Detail action button: shape and density are LOCAL (this file's own concern - see the module-split note at
+ * this file's header); colour is routed through the self-declared --jc-detail-action-* tokens above so a theme
+ * may override every one of them without this stylesheet depending on it.  HEIGHT rather than vertical padding
+ * spends the shared control-height step directly (box-sizing: border-box already in force chrome-wide), so
+ * padding-y is derived rather than independently declared - the same reasoning the chrome scale's own :root
+ * comment states for why padding-y is not a step.
+ */
+.juneau-view-detail-action {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--jc-space-1);
+	box-sizing: border-box;
+	height: var(--jc-chrome-control-height-compact);
+	padding: 0 var(--jc-chrome-control-padding-x-wide);
+	border-radius: 4px;
+	border: 1px solid var(--jc-detail-action-border);
+	background: var(--jc-detail-action-bg);
+	color: var(--jc-detail-action-color);
+	font-family: inherit;
+	font-size: var(--jc-chrome-font-size-2);
+	font-weight: 600;
+	line-height: var(--jc-chrome-line-height);
+	cursor: pointer;
+}
+
+.juneau-view-detail-action:hover:not(:disabled) {
+	background: var(--jc-detail-action-hover-bg);
+}
+
+.juneau-view-detail-action:disabled {
+	cursor: default;
+	opacity: 0.55;
+}
+
+.juneau-view-detail-action[hidden] {
+	display: none;
+}
+
+/* Primary: solid accent fill, white label, a slightly darker border of its own fill colour. */
+.juneau-view-detail-action-primary {
+	background: var(--jc-detail-action-primary-bg);
+	border-color: var(--jc-detail-action-primary-border);
+	color: var(--jc-detail-action-primary-color);
+}
+
+.juneau-view-detail-action-primary:hover:not(:disabled) {
+	background: var(--jc-detail-action-primary-bg-hover);
+}
+
+/*
+ * A solid fill needs its own disabled treatment (reduced fill saturation): with UA chrome the disabled state
+ * was readable by accident, and it will not be once the button has real colour.  Reduced saturation rather
+ * than opacity so the white label stays legible against it; opacity alone would fade both toward the panel
+ * background at the same rate.
+ */
+.juneau-view-detail-action-primary:disabled {
+	background: var(--jc-detail-action-primary-bg-disabled);
+	border-color: var(--jc-detail-action-primary-bg-disabled);
+	opacity: 1;
+}
+
+/*
+ * FIELDS GRID.  "juneau-view-detail-fields-cols-N" names the AUTHOR'S CAP (DetailSection.columns), not the
+ * rendered count: the ladder below decides how many of those N columns a given panel width can afford, and a
+ * section always starts at one.  The count is a class rather than the inline grid-template-columns this file
+ * used to receive from ViewTable, because an inline style out-ranks every rule here - a 4-column section would
+ * stay 4 columns in a 320px panel and push horizontal overflow out through the host table.
+ *
+ * There is no per-section minimum column width, and there is no way to add one: a container query condition
+ * cannot read a var(), so a per-section threshold could only be produced by generating bespoke CSS per
+ * section, which is the inline-style pattern this rewrite exists to remove.  The narrowest a field column
+ * reaches is an OUTPUT of the steps below.
+ */
+.juneau-view-detail-fields {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0 var(--jc-space-3);
+}
+
+/*
+ * The ladder.  Queries are unnamed and therefore resolve against .juneau-view-detail-panel, the containment
+ * host declared beside the shared scale at the top of this file.  Each step names its own column count, which
+ * is what makes an integer span clampable at all (see the span rules below).
+ *
+ * ORDER IS LOAD-BEARING: a wide panel satisfies every min-width below it, so all three blocks apply at once
+ * and the LAST match wins at equal specificity.  Narrowest step first, widest last.  Reversing them silently
+ * pins every section to two columns at every width above 560px.
+ */
+@container (min-width: 560px) {
+	.juneau-view-detail-fields-cols-2,
+	.juneau-view-detail-fields-cols-3,
+	.juneau-view-detail-fields-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@container (min-width: 800px) {
+	.juneau-view-detail-fields-cols-3,
+	.juneau-view-detail-fields-cols-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@container (min-width: 1040px) {
+	.juneau-view-detail-fields-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/*
+ * A span is a MAXIMUM too.  "1 / -1" is the only span value that is well-defined without knowing the rendered
+ * column count - it means first line to last line, so it resolves correctly at four columns and at one, where
+ * it is indistinguishable from no span at all.  A markdown field carries this class from the server rather
+ * than getting its own grid-column rule; two mechanisms doing one job in one stylesheet is how the detail-tabs
+ * override started.
+ */
+.juneau-view-detail-field-span-full {
+	grid-column: 1 / -1;
+}
+
+/*
+ * One field block.  Block padding gives the row its breathing room; INLINE padding is deliberately ZERO,
+ * because inline padding insets the block's bottom border along with it and the separator is required to span
+ * the full column width including the label half.
+ */
+.juneau-view-detail-field {
+	padding: var(--jc-space-1) 0;
+	border-bottom: 1px solid var(--jc-detail-field-border);    /* light neutral hairline - see --jc-detail-field-border */
+}
+
+/*
+ * INLINE (the default): label and value side by side.  The label track is capped rather than a bare
+ * percentage - at 40% alone a full-span field gives a one-word label a track over four times a normal one's.
+ * Top-aligned so a label that wraps to two lines does not drag the value's first line down with it.
+ */
+.juneau-view-detail-fields-inline > .juneau-view-detail-field {
+	display: grid;
+	grid-template-columns: minmax(0, min(40%, 12em)) minmax(0, 1fr);
+	align-items: start;
+	column-gap: var(--jc-space-3);
+}
+
+/* STACKED: label above value.  Also how a markdown field arranges itself under either layout - its value is a
+ * prose block, not a cell. */
+.juneau-view-detail-fields-stacked > .juneau-view-detail-field,
+.juneau-view-detail-fields-inline > .juneau-view-detail-field-markdown {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
+}
+
+/*
+ * Label / value typography.  The pairing is the shared scale's -font-size-1 and -font-size-3 steps rather than
+ * two private em values, and it INVERTS the old emphasis: the label used to be the heavier of the two, which
+ * made a panel read as a wall of bold keys.  overflow-wrap on both is not polish - a single unbreakable value
+ * (a URL, a fingerprint) otherwise blows the column out and propagates horizontal overflow through the panel
+ * to the host table.
+ */
+.juneau-view-detail-field-title {
+	font-size: var(--jc-chrome-font-size-1);
+	font-weight: 400;
+	overflow-wrap: anywhere;
+}
+
+.juneau-view-detail-field-value {
+	font-size: var(--jc-chrome-font-size-3);
+	overflow-wrap: anywhere;
+	/*
+	 * An empty value div contributes no line box, so an unset field would measure short and its separator
+	 * would ride up out of line with its filled siblings.  DERIVED from the two steps the value already
+	 * spends rather than declared as a new one.
+	 */
+	min-height: calc(var(--jc-chrome-line-height) * var(--jc-chrome-font-size-3));
+}
+
+/*
+ * Empty-value affordance.  Generated content rather than markup, because the value div is a client-filled
+ * slot: the runtime assigns textContent (the empty string for a missing key), so anything the framework places
+ * INSIDE the div is overwritten on the first paint.  ::after survives that by construction.
+ */
+.juneau-view-detail-field-value:empty::after {
+	content: "\2014";
+}
+
+/*
+ * A FIELD-HOSTED action bar (DetailField.actions) - the third ActionBar host, and the only one that lands inside
+ * a grid row.  The bar is emitted as a plain sibling of the value slot, so three things need correcting before the
+ * shared bar rule above sits right in a field row:
+ *
+ *   1. PLACEMENT.  The inline field block is a two-column grid, label then value, and the bar arrives as a THIRD
+ *      child - which auto-places at row 2 of column ONE, directly under the label.  That is the single
+ *      arrangement a value-slot bar exists to rule out, so column 2 is named explicitly.
+ *   2. THE BOTTOM MARGIN.  The shared rule reserves space beneath itself, which is right for a panel or section
+ *      toolbar and wrong in a row whose rhythm is the field block's own padding plus separator.
+ *   3. DENSITY.  In-field emphasis is IMPLICIT: a field row is subordinate to its panel by construction and no
+ *      author may opt out, so the buttons are tightened and unbolded here rather than by a declared level.  This
+ *      LAYERS on the shared button recipe (the one rule that owns shape, colour, and every state) - it does not
+ *      fork it.
+ *
+ * A descendant combinator rather than a compound selector: it out-ranks the shared bar rule on specificity as
+ * well as on order, and it needs no new class or attribute from the server.
+ *
+ * INLINE (the default) is what this is designed against.  A one-column field block - a stacked section, or a
+ * markdown field with a title - mints an IMPLICIT second column for the placement below and widens that row; a
+ * variant for those layouts is a separate decision and is deliberately not taken here.
+ */
+.juneau-view-detail-field .juneau-view-detail-actions {
+	grid-column: 2;
+	margin: 0;
+	gap: var(--jc-space-1);
+}
+
+/*
+ * A ONE-COLUMN ancestor has no second column for the bar above to occupy - a STACKED-layout section and a
+ * titled MARKDOWN field under INLINE are the SAME one-column declaration (the comma-joined selector pair
+ * above, "STACKED: label above value"), so without this override the rule above's explicit column placement
+ * mints an implicit second column and widens the row.  One shared rule, using that same comma-joined selector
+ * pair, resets the bar back into the ancestor's own single column for both shapes.  Ordered AFTER the
+ * two-column rule above so it wins on source order as well as specificity - it narrows that rule, it does not
+ * replace it.  Closes the STACKED case the field-hosted-actions rule above's own comment left as "a variant
+ * for those layouts is a separate decision and is deliberately not taken here."
+ */
+.juneau-view-detail-fields-stacked > .juneau-view-detail-field .juneau-view-detail-actions,
+.juneau-view-detail-fields-inline > .juneau-view-detail-field-markdown .juneau-view-detail-actions {
+	grid-column: 1;
+}
+
+.juneau-view-detail-field .juneau-view-detail-action {
+	padding: 0 var(--jc-chrome-control-padding-x);
+	font-weight: 400;
+}
+
+/*
+ * Editable detail leaf (`helpers.editableField`).  Palette-neutral shape: currentColor / chrome-scale
+ * tokens only.  Colour theming lives in chrome.css.  Pencil is always in the layout in text/select view
+ * (opacity, never display:none / visibility:hidden); it is omitted from the DOM while that leaf is in edit.
+ */
+.jc-editable-field {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--jc-space-1);
+	min-width: 0;
+	width: 100%;
+}
+
+.jc-editable-field-view {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-space-1);
+	min-width: 0;
+}
+
+.jc-editable-field-pencil {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: var(--jc-chrome-control-height-compact);
+	height: var(--jc-chrome-control-height-compact);
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	color: currentColor;
+	opacity: 0.75;
+	border-radius: var(--jc-radius, 4px);
+}
+
+.jc-editable-field-pencil .juneau-view-helper-icon,
+.jc-editable-field-pencil svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	fill: currentColor;
+}
+
+.jc-editable-field:hover .jc-editable-field-pencil,
+.jc-editable-field:focus-within .jc-editable-field-pencil,
+.jc-editable-field-pencil:hover,
+.jc-editable-field-pencil:focus-visible {
+	opacity: 1;
+}
+
+.jc-editable-field-input {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	height: var(--jc-chrome-control-height);
+	margin: 0;
+	padding: 0 var(--jc-space-2);
+	font-family: var(--jc-font, inherit);
+	font-size: var(--jc-chrome-font-size-3);
+	border: 1px solid currentColor;
+	border-radius: var(--jc-radius, 4px);
+	background: transparent;
+}
+
+textarea.jc-editable-field-input {
+	height: auto;
+	min-height: calc(3 * var(--jc-chrome-line-height) * var(--jc-chrome-font-size-3));
+	padding: var(--jc-space-1) var(--jc-space-2);
+	resize: vertical;
+}
+
+input[type="checkbox"].jc-editable-field-input {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	padding: 0;
+}
+
+.jc-editable-field-error {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.jc-editable-field-explicit-actions {
+	display: flex;
+	gap: var(--jc-space-1);
+}
+
+.jc-toast {
+	position: fixed;
+	bottom: var(--jc-space-4);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: var(--jc-toast-z, 900);
+	max-width: min(36rem, calc(100% - 2 * var(--jc-space-4)));
+	padding: var(--jc-space-2) var(--jc-space-3);
+	border: 1px solid var(--jc-popover-border, #ccc);
+	border-radius: var(--jc-radius, 4px);
+	background: var(--jc-card-bg, #ffffff);
+	box-shadow: var(--jc-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.jc-editable-field-pencil,
+	.jc-toast {
+		transition: none;
+		animation: none;
+	}
+}
+
+.juneau-view-detail-markdown {
+	max-width: 96ch;
+}
+
+.juneau-view-detail-status {
+	margin: 0.5em 0 0;
+}
+
+/*
+ * Empty consumer-owned mount for an async-status indicator placed below a ribbon or subtab bar.  The shared
+ * control-height and type steps give the region chrome-adjacent dimensions without declaring another scale step;
+ * paint inherits currentColor unless a consumer supplies either role token.
+ */
+.juneau-view-loading-region {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	min-height: var(--jc-chrome-control-height);
+	padding: 0 var(--jc-chrome-control-padding-x);
+	font-size: var(--jc-chrome-font-size-2);
+	color: var(--jc-loading-region-color, currentColor);
+	border-bottom: 1px solid var(--jc-loading-region-border, currentColor);
+}
+
+/*
+ * Async-status loading spinner.  A widget-internal proportion sized off its own text, not a
+ * --jc-chrome-glyph-size step - the same carve-out the scale's own header comment gives a pill dot or toggle
+ * knob, because this glyph is not an SVG icon role shared across surfaces.  NO palette color: the ring is drawn
+ * with `currentColor` so it inherits whatever text color the status paragraph already has, consistent with this
+ * file's dependency-free/neutral contract.
+ *
+ * juneau-views.js appends this span only for the `loading` state; `error` and `empty` replace the status
+ * paragraph's content with plain text, and `ok` removes the status paragraph entirely.
+ */
+.juneau-view-spinner {
+	display: inline-block;
+	width: 0.9em;
+	height: 0.9em;
+	margin-right: 0.5em;
+	vertical-align: -0.15em;
+	border: 0.15em solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: juneau-view-spin 0.75s linear infinite;
+}
+
+@keyframes juneau-view-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/*
+ * Motion-sensitive users get a static ring instead of an infinite spin - the loading state is still visible
+ * (and still announced via the paragraph's role="status"), it just doesn't animate.
+ */
+@media (prefers-reduced-motion: reduce) {
+	.juneau-view-spinner {
+		animation: none;
+		border-right-color: currentColor;
+	}
+}
+
+/*
+ * Nested read-only table inside a row-detail section (a table[data-juneau-view] + its id-less sidecar, appended
+ * after the section's fields grid).  NEUTRAL - layout only, no palette color.  Full-width within the panel; the
+ * `min-width: 0` lets the nested table shrink below its content's intrinsic width (a grid/flex child otherwise
+ * refuses to), and `overflow-x: auto` gives a wide nested table its own horizontal scroll rather than forcing the
+ * whole detail panel (and the parent table) to widen.
+ */
+.juneau-view-detail-nested {
+	margin: 0.75em 0 0;
+	min-width: 0;
+	overflow-x: auto;
+}
+
+.juneau-view-detail-nested > table {
+	width: 100%;
+}
+
+/*
+ * Declarative row-action modal (present=dialog) + settled-outcome banner (juneau-views.js openActionDialog/
+ * buildDialogOverlay/renderActionOutcome).  NEUTRAL - shape/layout only, no palette color; a host's
+ * chrome.css MAY theme these same classes.  The confirmation body is typed fields painted with textContent (never
+ * innerHTML), so there is no markup styling here to get wrong.
+ */
+.juneau-view-dialog-backdrop {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.35);
+	/* Fallback only; the runtime stamps an inline per-layer z-index (--jc-dialog-z + index*--jc-layer-step). */
+	z-index: var(--jc-dialog-z, 1000);
+}
+
+.juneau-view-dialog {
+	/* Capped at the backdrop width less 3em: a nested dialog is shifted 1.5em right and down, and this keeps that shift on-screen. */
+	min-width: min(28em, calc(100% - 3em));
+	/* The same 3em slack bounds the width from above: wide content (a long unbreakable value) may grow the dialog to 90vw, but never past the room a nested dialog's 1.5em shift needs. */
+	max-width: min(90vw, calc(100% - 3em));
+	max-height: 90vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+	border: 1px solid;
+	border-radius: 8px;
+	background: var(--jc-surface, #fff);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/*
+ * A NESTED dialog (a type=action button opened it over its parent) is offset so both backdrops read as a stack
+ * rather than one exactly-occluding the other.  Dialog-only: the rule targets `.juneau-view-dialog` (popover / menu
+ * layers have no such child), and applies to any layer above the base (raw stack index != 0).
+ */
+.juneau-view-dialog-backdrop[data-juneau-layer]:not([data-juneau-layer="0"]) .juneau-view-dialog {
+	transform: translate(1.5em, 1.5em);
+}
+
+/* The depth-cap / missing-action refusal painted INTO the current top dialog (never a silent no-op). */
+.juneau-view-dialog-depth-refusal,
+.juneau-view-dialog-action-refusal {
+	margin: 0.75em 0 0;
+	font-size: 0.9em;
+}
+
+.juneau-view-dialog-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex: 0 0 auto;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+}
+
+.juneau-view-dialog-figure {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: var(--jc-chrome-control-height-compact);
+	height: var(--jc-chrome-control-height-compact);
+	border-radius: 50%;
+}
+
+.juneau-view-dialog-figure svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	display: block;
+}
+
+.juneau-view-dialog-title {
+	margin: 0;
+	font-size: 0.95rem;
+	font-weight: 600;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.juneau-view-dialog-dismiss {
+	flex: 0 0 auto;
+	margin-left: auto;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	font-size: 1.25rem;
+	line-height: 1;
+	padding: 0 2px;
+}
+
+/*
+ * THIRD bar-slot host: a bar slot anchored to a dialog's title (ModalDef.barSlot), painted client-side from JSON
+ * (juneau-views.js buildDialogBarSlotRegion) rather than relocated like the row-detail host - so only the block
+ * bottom-margin needs tuning here to match the dialog's own vertical rhythm; .jc-bar-slot already supplies the
+ * shared flex/wrap/gap shape.  NEUTRAL - shape only.
+ */
+.juneau-view-dialog-bar-slot {
+	margin: 0;
+	padding: 0 1.25em 0.75em;
+}
+
+.juneau-view-dialog-fields {
+	margin: 0;
+	padding: var(--jc-space-3) var(--jc-space-4);
+	overflow: auto;
+}
+
+.juneau-view-dialog-fields dt {
+	float: left;
+	clear: left;
+	width: 40%;
+	font-weight: 600;
+}
+
+.juneau-view-dialog-fields dd {
+	margin: 0 0 0.35em 42%;
+}
+
+.juneau-view-dialog-form {
+	margin: 0;
+	padding: var(--jc-space-3) var(--jc-space-4) var(--jc-space-2);
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-3);
+	overflow: auto;
+	flex: 1 1 auto;
+}
+
+/*
+ * In-dialog section strip: the same ribbon widget the row-detail sections use, borrowing that consumer's pill shape
+ * so a sectioned dialog and a sectioned detail read as one vocabulary.  Panes stack below it in the form's flex
+ * column; only the selected one is unhidden, and the strip itself opens no layer.
+ * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
+ */
+.juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
+	gap: var(--jc-space-1);
+	width: 100%;
+	margin: 0;
+	padding: var(--jc-space-1);
+	border-bottom: none;
+}
+
+.juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	margin-bottom: 0;
+	border-left-width: 1px;       /* longhand, not a colourless shorthand - see the segmented-group note above */
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-radius: 999px;
+}
+
+.juneau-view-dialog-form-section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-3);
+}
+
+/*
+ * The `display: flex` above is an AUTHOR rule, so it OUTRANKS the UA stylesheet's `[hidden] { display: none }` - an
+ * unselected pane would keep rendering and every section would show at once.  Re-hide it explicitly.
+ */
+.juneau-view-dialog-form-section[hidden] {
+	display: none;
+}
+
+.juneau-view-dialog-form-row {
+	display: grid;
+	grid-template-columns: minmax(6em, 8em) minmax(0, 1fr);
+	align-items: center;
+	column-gap: 0.75em;
+	row-gap: 0.15em;
+}
+
+.juneau-view-dialog-form-row:has(textarea) {
+	align-items: start;
+}
+
+.juneau-view-dialog-form-row label {
+	display: block;
+	font-weight: 400;
+	font-size: var(--jc-chrome-font-size-1);
+	margin-bottom: 0;
+}
+
+.juneau-view-dialog-form-row label::after {
+	content: ":";
+}
+
+.juneau-view-dialog-form-row input:not([type="checkbox"]):not([type="hidden"]),
+.juneau-view-dialog-form-row textarea,
+.juneau-view-dialog-form-row select {
+	width: 100%;
+	box-sizing: border-box;
+	/* 36px border-box: 2px shorter than Bootstrap 5.3 .form-control (38px at 16px root). */
+	height: 36px;
+	padding: 6px 10px;
+	font-size: var(--jc-chrome-font-size-3);
+	line-height: 1.5;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 4px;
+}
+
+.juneau-view-dialog-form-row textarea {
+	height: auto;
+	min-height: 6em;
+}
+
+/* A checkbox and a checkbox styled as a switch are inline (auto width), not full-width form controls. */
+.juneau-view-dialog-form-row input[type="checkbox"] {
+	width: auto;
+	justify-self: start;
+}
+
+/*
+ * The toggle skin (role=switch): a track+knob rendered from a native checkbox via appearance:none, so keyboard /
+ * form semantics are unchanged.  NEUTRAL - shape only; a host's chrome.css MAY theme the on/off palette.
+ */
+.juneau-view-toggle {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 2.25em;
+	height: 1.25em;
+	border: 1px solid;
+	border-radius: 1em;
+	position: relative;
+	vertical-align: middle;
+	cursor: pointer;
+	flex: 0 0 auto;
+}
+
+.juneau-view-toggle::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 0.15em;
+	width: 0.9em;
+	height: 0.9em;
+	border-radius: 50%;
+	background: currentColor;
+	transform: translateY(-50%);
+	transition: left 0.1s ease-in-out;
+}
+
+.juneau-view-toggle:checked::after {
+	left: calc(100% - 1.05em);
+}
+
+/* The optional per-field help hint (painted with textContent). */
+.juneau-view-dialog-form-help {
+	font-size: 0.85em;
+	font-weight: normal;
+	margin-top: 0.2em;
+	grid-column: 2;
+}
+
+/* The per-field inline validation error sibling; empty until a rule fails (role=alert set on confirm-time). */
+.juneau-view-dialog-form-error {
+	font-size: 0.85em;
+	font-weight: normal;
+	margin-top: 0.2em;
+	min-height: 1em;
+	grid-column: 2;
+}
+
+/* A type=action button rendered inside a dialog form. */
+.juneau-view-dialog-form-action {
+	align-self: flex-start;
+}
+
+.juneau-view-dialog-actions {
+	display: flex;
+	gap: var(--jc-space-2);
+	justify-content: flex-end;
+	flex: 0 0 auto;
+	padding: var(--jc-chrome-control-padding-x) var(--jc-space-3);
+	border-top-width: 2px;
+	border-top-style: solid;
+}
+
+.juneau-view-dialog-cancel,
+.juneau-view-dialog-confirm,
+.juneau-view-dialog-close {
+	font: inherit;
+	font-size: var(--jc-chrome-font-size-2);
+	font-weight: 600;
+	padding: 7px var(--jc-chrome-control-padding-x-wide);
+	border-radius: 4px;
+	cursor: pointer;
+	min-width: 5.5em;
+}
+
+/*
+ * The row-action menu: portalled to document.body as a light-dismiss layer and positioned under its
+ * trigger, so it needs its own opaque box + a fallback z-index (the runtime stamps an inline per-layer z-index).
+ * NEUTRAL - shape only; a host's chrome.css MAY theme these classes.
+ */
+.juneau-view-action-menu {
+	position: fixed;
+	margin: 0;
+	padding: var(--jc-space-1) 0;
+	list-style: none;
+	min-width: 10em;
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	background: var(--jc-popover-bg);
+	box-shadow: var(--jc-popover-shadow);
+	z-index: var(--jc-popover-z, 1200);
+}
+
+/*
+ * Instant cursor tooltip for icon-only ribbon/paging controls.  Compact bubble (white / #222 /
+ * 6px 9px / 0.78em), not a native `title` and not the grey popover surface.  No delay (display
+ * toggles, no transition).  pointer-events:none so the bubble never steals the hover that keeps
+ * it visible.
+ */
+.jc-tip {
+	position: fixed;
+	z-index: var(--jc-tip-z, 1400);
+	display: none;
+	pointer-events: none;
+	background: var(--jc-tip-bg, #ffffff);
+	color: var(--jc-tip-text, #222222);
+	border: 1px solid var(--jc-tip-border, #cccccc);
+	border-radius: 4px;
+	box-shadow: var(--jc-tip-shadow, 0 2px 8px rgba(0, 0, 0, 0.18));
+	padding: 6px 9px;
+	font-size: 0.78em;
+	line-height: 1.35;
+	max-width: 320px;
+	white-space: normal;
+}
+
+.juneau-view-action-item {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	text-align: left;
+	padding: 0.35em 0.75em;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+/* The post-response settled-outcome banner (success/failure/refusal/unknown) - neutral; role drives assistive text. */
+.juneau-view-action-outcome {
+	margin-top: 0.35em;
+	font-size: 0.9em;
+}
+
+/*
+ * The RIBBON-ANCHORED banner host and its two banners - where a ROW-LESS (ribbon-hosted) dialog's refusals and
+ * settled outcomes land, since there is no row actions cell to put them in.  Sits directly under the
+ * toolbar row that holds the ribbon, so the message reads as belonging to the control that opened the dialog.
+ * Same neutral treatment as the row banners above: the role, not the color, carries the assistive meaning.
+ */
+.juneau-view-ribbon-banner-host {
+	margin: 0 0 var(--jc-space-2) 0;
+}
+
+.juneau-view-ribbon-action-refusal,
+.juneau-view-ribbon-action-outcome {
+	font-size: 0.9em;
+}
+
+/*
+ * The LIVE async-job progress banner - shown while a long job streams over SSE.  Deliberately a
+ * DISTINCT class from .juneau-view-action-outcome: a running job and a settled outcome are never the same visual
+ * state.  The row it sits in carries `data-juneau-job` (never `data-juneau-inflight`), so table polling keeps
+ * running for the whole job.
+ */
+.juneau-view-job-progress {
+	margin-top: 0.35em;
+	font-size: 0.9em;
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.juneau-view-job-progress-msg {
+	flex: 1 1 auto;
+}
+
+.juneau-view-job-cancel {
+	flex: 0 0 auto;
+}
+
+/*
+ * Row selection + bulk mutation - two INDEPENDENT opt-ins.  NEUTRAL - shape only, no palette color; a
+ * host's chrome.css MAY theme these same classes.  The selection column itself (`.juneau-view-select-th`/
+ * `.juneau-view-select-cell`) is rendered whenever a `SelectionDef` was declared, WITH or WITHOUT bulk mutation;
+ * the bulk toolbar (`.juneau-view-bulk-toolbar`) only ever exists when a `BulkMutateDef` was ALSO declared - so a
+ * selection-only (e.g. selectable-for-export) table gets the checkbox column and nothing else here.
+ */
+.juneau-view-select-th,
+.juneau-view-select-cell {
+	width: 1%;
+	white-space: nowrap;
+	text-align: center;
+	vertical-align: middle;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.juneau-view-select-checkbox,
+.juneau-view-select-all-checkbox {
+	cursor: pointer;
+}
+
+/* The bulk-actions toolbar - placed at the far end of the unified toolbar row's RIGHT cluster. */
+.juneau-view-bulk-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.juneau-view-bulk-count {
+	font-size: var(--jc-chrome-font-size-2);
+	white-space: nowrap;
+}
+
+.juneau-view-bulk-toolbar[hidden] {
+	display: none;
+}
+
+/* Bulk-run summary toast: fixed so a table redraw never removes it; failures are sticky with a Close button. */
+.juneau-view-bulk-toast {
+	position: fixed;
+	right: var(--jc-space-4);
+	bottom: var(--jc-space-4);
+	z-index: var(--jc-dialog-z, 1000);
+	display: flex;
+	align-items: center;
+	gap: var(--jc-space-3);
+	max-width: 30em;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	border: 1px solid var(--jc-tone-info);
+	border-radius: var(--jc-space-1);
+	background: Canvas;
+	color: CanvasText;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.juneau-view-bulk-toast-status { border-color: var(--jc-tone-success); }
+
+.juneau-view-bulk-toast-alert { border-color: var(--jc-tone-error); }
+
+.juneau-view-bulk-toast-close {
+	cursor: pointer;
+	border: 1px solid;
+	border-radius: var(--jc-space-1);
+	padding: 0 var(--jc-space-2);
+	background: transparent;
+	color: inherit;
+}
+
+.juneau-view-bulk-clear {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font-size: var(--jc-chrome-font-size-2);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.juneau-view-bulk-select,
+.juneau-view-bulk-go,
+.juneau-view-bulk-action-btn {
+	padding: 0.3em 0.75em;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	background: transparent;
+	font-size: var(--jc-chrome-font-size-2);
+	cursor: pointer;
+}
+
+.juneau-view-bulk-go:disabled,
+.juneau-view-bulk-action-btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+/*
+ * Timestamp (ts-zulu / datetime+popup) hover/focus popup — two lines of local + California time.
+ * White overlay (same exception as .juneau-view-dialog): a floating box must be opaque to stay readable
+ * over table cells.  Position/visibility are set by juneau-renders.js.
+ */
+.juneau-ts {
+	white-space: nowrap;
+	cursor: default;
+}
+
+.juneau-ts-popup {
+	position: fixed;
+	z-index: 1100;
+	display: none;
+	pointer-events: none;
+	padding: 0.4em 0.65em;
+	border: 1px solid var(--jc-popover-border, #ccc);
+	border-radius: 4px;
+	background: var(--jc-tip-bg, #fff);
+	color: var(--jc-tip-text, #222);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	font-size: var(--jc-chrome-font-size-2);
+	line-height: 1.4;
+	white-space: nowrap;
+}
+
+/*
+ * Author-declared cell popover (Render.popover).  Portaled to document.body, position:fixed.
+ * Neutral greys via --jc-* tokens; do not restyle .juneau-ts-popup here.
+ */
+.jc-cell-popover-trigger {
+	display: inline-block;
+	margin-left: 0.35em;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	vertical-align: middle;
+	width: 1em;
+	height: 1em;
+	line-height: 1;
+}
+
+.jc-cell-popover-trigger::before {
+	content: "";
+	display: block;
+	width: 0.55em;
+	height: 0.55em;
+	margin: 0.15em auto 0;
+	border: 0.12em solid currentColor;
+	border-radius: 50%;
+	box-sizing: border-box;
+}
+
+/*
+ * Inline cell edit (the edit renderer): a value with a pencil that swaps the cell to an input.
+ */
+.juneau-edit-pencil {
+	margin-left: 0.35em;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	vertical-align: middle;
+	width: 1em;
+	height: 1em;
+	line-height: 1;
+	opacity: 0.55;
+}
+
+.juneau-edit-pencil::before {
+	content: "\270E";
+}
+
+.juneau-edit-pencil:hover,
+.juneau-edit-pencil:focus-visible {
+	opacity: 1;
+}
+
+.juneau-edit-pencil[disabled],
+.juneau-edit-pencil[aria-disabled="true"] {
+	cursor: not-allowed;
+	opacity: 0.3;
+}
+
+.juneau-edit-editor {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.2em;
+}
+
+.juneau-edit-input {
+	font: inherit;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.juneau-edit-error {
+	font-size: 0.85em;
+	color: var(--jc-chrome-danger, currentColor);
+}
+
+.jc-cell-popover {
+	position: fixed;
+	z-index: var(--jc-popover-z);
+	display: none;
+	min-width: 12em;
+	max-width: 24em;
+	padding: 0.5em 0.75em;
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	background: var(--jc-popover-bg);
+	color: var(--jc-tip-text, #222);
+	box-shadow: var(--jc-popover-shadow);
+	font-size: var(--jc-chrome-font-size-2);
+	line-height: 1.4;
+}
+
+.jc-cell-popover-title {
+	font-weight: 600;
+	margin-bottom: 0.35em;
+}
+
+.jc-cell-popover-row {
+	display: flex;
+	gap: 0.75em;
+	margin: 0.15em 0;
+}
+
+.jc-cell-popover-label {
+	flex: 0 0 7em;
+	color: var(--jc-label-text, #555);
+}
+
+.jc-cell-popover-value {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+/*
+ * Card-layout shape classes (.juneau-view-card-*), kept for HTML-authored dashboards after the Java Card*
+ * emitters were deleted.  Neutral, dependency-free defaults via --jc-card-* tokens so a grid is legible without
+ * a theme; a consumer stylesheet (or console-ui chrome.css) may override the tokens.  The grid's minmax() floor
+ * reads --jc-card-min.  There is deliberately no --jc-card-status-error token - the error status chip is
+ * distinguished by a heavier border + bold weight, not a color, so it reads in any theme.
+ * The token values themselves are declared once, on the shared :root block near the top of this file (avoids a
+ * duplicate :root selector).
+ */
+
+.juneau-view-card-grid {
+	display: grid;
+	gap: var(--jc-card-gap, 1rem);
+	grid-template-columns: repeat(auto-fill, minmax(var(--jc-card-min, 280px), 1fr));
+	align-items: start;
+}
+
+.juneau-view-card-grid-title {
+	grid-column: 1 / -1;
+	margin: 0 0 0.25rem;
+}
+
+.juneau-view-card {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	background: var(--jc-card-bg, #ffffff);
+	border: none;
+	border-radius: var(--jc-card-radius, 6px);
+	box-shadow: var(--jc-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+	overflow: hidden;
+}
+
+.juneau-view-card-header {
+	display: flex;
+	align-items: center;
+	gap: var(--jc-space-2);
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid var(--jc-card-border, #dddddd);
+}
+
+.juneau-view-card-title {
+	font-weight: 600;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.juneau-view-card-status {
+	font-size: var(--jc-chrome-font-size-1);
+	color: var(--jc-label-text, #555);
+	padding: 0.05em 0.4em;
+	border-radius: 3px;
+}
+
+/* Error status: heavier border + bold weight (no color token) so it reads in any theme. */
+.juneau-view-card-status[data-state="error"],
+[data-juneau-card-status][data-state="error"] {
+	font-weight: 700;
+	border: 1px solid currentColor;
+}
+
+.juneau-view-card-actions {
+	margin-left: auto;
+	display: flex;
+	gap: var(--jc-space-1);
+}
+
+.juneau-view-card-refresh {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.75em;
+	height: 1.75em;
+	padding: 0;
+	border: 1px solid var(--jc-card-border, #dddddd);
+	border-radius: 4px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.juneau-view-card-refresh:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.juneau-view-card-banner {
+	padding: 0.4rem 0.75rem;
+	border-bottom: 1px solid var(--jc-card-border, #dddddd);
+	font-size: var(--jc-chrome-font-size-2);
+}
+
+.juneau-view-card-body {
+	padding: 0.5rem 0.75rem;
+	min-width: 0;
+}
+
+/* Field list: HTML authors may stamp grid-template-columns inline. */
+.juneau-view-card-fields {
+	display: grid;
+	gap: 0.4rem 0.75rem;
+	margin: 0;
+}
+
+.juneau-view-card-field {
+	min-width: 0;
+}
+
+.juneau-view-card-field dt {
+	font-size: var(--jc-chrome-font-size-1);
+	color: var(--jc-label-text, #555);
+	margin: 0;
+}
+
+.juneau-view-card-field dd {
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+/*
+ * Terminal view shared fragments (juneau-terminal-view.js, and hosts that draw status blocks): the .juneau-co-block swatch and
+ * fills, the tooltip and the screen-reader-only text.  Every colour is a --jc-tone-* or --jc-text-muted reference.
+ */
+/* Block fragments: a small swatch, optionally a link or a tooltip target. */
+.juneau-co-block {
+	display: inline-block;
+	width: 10px;
+	height: var(--jc-chrome-glyph-size-small);
+	vertical-align: -1px;
+	border-radius: 2px;
+	margin-right: 1px;
+	background-color: currentColor;
+}
+
+.juneau-co-block-empty {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--jc-popover-border);
+}
+
+.juneau-co-block:focus-visible {
+	outline: 2px solid var(--jc-tone-info);
+	outline-offset: 1px;
+}
+
+.juneau-co-fill-success {
+	background-color: var(--jc-tone-success);
+}
+
+.juneau-co-fill-warn {
+	background-color: var(--jc-tone-warning);
+}
+
+.juneau-co-fill-error {
+	background-color: var(--jc-tone-error);
+}
+
+.juneau-co-fill-muted {
+	background-color: var(--jc-text-muted);
+}
+
+.juneau-co-fill-accent {
+	background-color: var(--jc-tone-info);
+}
+
+.juneau-co-tooltip {
+	position: fixed;
+	z-index: var(--jc-tip-z);
+	max-width: 32em;
+	padding: var(--jc-space-1) var(--jc-space-2);
+	color: var(--jc-tip-text);
+	background: var(--jc-tip-bg);
+	border: 1px solid var(--jc-tip-border);
+	border-radius: var(--jc-chrome-control-radius);
+	box-shadow: var(--jc-tip-shadow);
+	white-space: pre-line;
+	pointer-events: none;
+}
+
+/* Visually hidden; the same recipe as .juneau-view-announcer. */
+.juneau-co-sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/*
+ * Terminal view (juneau-terminal-view.js).
+ *
+ * A live test and build run summary: headline, counts, a failures list, then one record per step with a row per
+ * suite and a strip of per-test blocks (the .juneau-co-block swatches and fills above are reused).  Every colour
+ * is a --jc-tone-* or --jc-text-muted reference; there are no literals and no animation.  The status root attribute
+ * is data-juneau-rv-status (ok | fail | waiting | running | cancelled | empty).
+ */
+.juneau-rv {
+	font: inherit;
+	min-width: 0;
+}
+
+.juneau-rv-summary {
+	border: 1px solid var(--jc-popover-border);
+	border-radius: var(--jc-chrome-control-radius);
+	padding: var(--jc-space-2) var(--jc-space-3);
+	margin-bottom: var(--jc-space-2);
+}
+
+.juneau-rv-headline {
+	margin: 0;
+	font-size: var(--jc-chrome-font-size-3);
+	font-weight: 600;
+}
+
+.juneau-rv[data-juneau-rv-status="ok"] .juneau-rv-headline {
+	color: var(--jc-tone-success);
+}
+
+.juneau-rv[data-juneau-rv-status="fail"] .juneau-rv-headline {
+	color: var(--jc-tone-error);
+}
+
+.juneau-rv[data-juneau-rv-status="waiting"] .juneau-rv-headline {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-rv[data-juneau-rv-status="running"] .juneau-rv-headline {
+	color: var(--jc-tone-info);
+}
+
+.juneau-rv[data-juneau-rv-status="cancelled"] .juneau-rv-headline,
+.juneau-rv[data-juneau-rv-status="empty"] .juneau-rv-headline {
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-counts {
+	margin: var(--jc-space-1) 0 0;
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-failures,
+.juneau-rv-steps,
+.juneau-rv-notes,
+.juneau-rv-run-notes {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.juneau-rv-failures {
+	margin-top: var(--jc-space-1);
+}
+
+.juneau-rv-failure,
+.juneau-rv-failure-trace,
+.juneau-rv-suite-toggle {
+	font: inherit;
+	color: var(--jc-tone-info);
+	background: none;
+	border: 0;
+	padding: 0;
+	text-align: left;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.juneau-rv-failure-trace {
+	margin-left: var(--jc-space-2);
+}
+
+.juneau-rv-step {
+	padding: var(--jc-space-1) 0;
+}
+
+.juneau-rv-attempts-toggle {
+	font: inherit;
+	color: var(--jc-tone-info);
+	background: none;
+	border: 0;
+	padding: 0;
+	text-align: left;
+	cursor: pointer;
+}
+
+.juneau-rv-attempts-toggle:hover .juneau-rv-attempts-label {
+	text-decoration: underline;
+}
+
+.juneau-rv-attempts-chevron {
+	display: inline-block;
+	width: 1.2em;
+}
+
+.juneau-rv-attempts {
+	list-style: none;
+	margin: 0;
+	padding: 0 0 0 var(--jc-space-4);
+	opacity: 0.85;
+}
+
+.juneau-rv-attempts[hidden] {
+	display: none;
+}
+
+.juneau-rv-step-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--jc-space-2);
+}
+
+.juneau-rv-glyph {
+	font-weight: 600;
+}
+
+.juneau-rv-state-ok {
+	color: var(--jc-tone-success);
+}
+
+.juneau-rv-state-fail {
+	color: var(--jc-tone-error);
+}
+
+.juneau-rv-state-skip {
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-state-running {
+	color: var(--jc-tone-info);
+}
+
+.juneau-rv-state-waiting {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-rv-dur,
+.juneau-rv-suite-sum,
+.juneau-rv-more,
+.juneau-rv-running,
+.juneau-rv-reconnect {
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-suites {
+	padding-left: var(--jc-space-4);
+}
+
+.juneau-rv-suite {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--jc-space-2);
+	padding: 1px 0;
+}
+
+.juneau-rv-strip {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1px;
+}
+
+.juneau-rv-notes {
+	padding-left: var(--jc-space-4);
+}
+
+.juneau-rv-note {
+	padding: 1px 0;
+}
+
+.juneau-rv-note-info .juneau-rv-note-glyph {
+	color: var(--jc-tone-info);
+}
+
+.juneau-rv-note-warn .juneau-rv-note-glyph {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-rv-note-error .juneau-rv-note-glyph {
+	color: var(--jc-tone-error);
+}
+
+.juneau-rv-trace {
+	flex-basis: 100%;
+	border-left: 2px solid var(--jc-popover-border);
+	padding-left: var(--jc-space-2);
+}
+
+.juneau-rv-trace-msg,
+.juneau-rv-trace-text {
+	margin: var(--jc-space-1) 0 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.juneau-rv-compact {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.juneau-rv button:focus-visible,
+.juneau-rv a:focus-visible {
+	outline: 2px solid var(--jc-tone-info);
+	outline-offset: 1px;
+}
+
+.juneau-rv [hidden] {
+	display: none !important;
+}

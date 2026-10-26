@@ -139,7 +139,7 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	// Live gate against the real framework tree
 	// -----------------------------------------------------------------------------------------------------------
 
-	private static final String REGION_TABLE = "juneau-rest/juneau-rest-server-views/src/main/java/org/apache/juneau/rest/server/views/RegionTable.java";
+	private static final String REGION_TABLE = "juneau-rest/juneau-console-views/src/main/java/org/apache/juneau/console/views/RegionTable.java";
 
 	/** GREEN: every {@code <script>}-JSON sink in the real framework tree routes through escapeForScript. */
 	@Test void a10_realTree_hasNoViolations() throws Exception {

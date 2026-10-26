@@ -44,8 +44,8 @@ class Stdout(io.StringIO):
 
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
-    for variable in ("SANDBOX_RUNTIME", "JUNEAU_PUSH_NO_SOUND", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE",
-                     "JUNEAU_PUSH_ACTIVE", "JUNEAU_RUN_SESSION"):
+    for variable in ("SANDBOX_RUNTIME", "JUNEAU_PUSH_NO_SOUND", "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE",
+                     "JUNEAU_PUSH_ACTIVE", "JUNEAU_TERMINAL_SESSION"):
         monkeypatch.delenv(variable, raising=False)
 
 
@@ -164,7 +164,7 @@ def test_test_py_sound_is_silenced_by_juneau_push_no_sound(test_mod, monkeypatch
     assert "\a" not in out.getvalue()
 
 
-@pytest.mark.parametrize("owner", ["JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_PUSH_ACTIVE"])
+@pytest.mark.parametrize("owner", ["JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_PUSH_ACTIVE"])
 def test_test_py_stays_quiet_when_push_or_a_run_owns_the_run(test_mod, monkeypatch, owner):
     monkeypatch.setenv(owner, "1")
     monkeypatch.setattr(test_mod, "_main", lambda: 0)
@@ -210,7 +210,7 @@ def test_push_rings_when_a_run_is_cancelled(push_mod, monkeypatch, sandbox):
 
 
 # ---- characterization: what makes test.py defer to an enclosing run ----------------------------------------------------
-@pytest.mark.parametrize("owner", ["JUNEAU_PUSH_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_ACTIVE", None])
+@pytest.mark.parametrize("owner", ["JUNEAU_PUSH_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_ACTIVE", None])
 def test_test_py_under_push_is_owned_by_the_enclosing_run(test_mod, monkeypatch, owner):
     if owner is not None:
         monkeypatch.setenv(owner, "1")
@@ -218,6 +218,6 @@ def test_test_py_under_push_is_owned_by_the_enclosing_run(test_mod, monkeypatch,
 
 
 def test_next_step_number_starts_after_n_base(monkeypatch):
-    monkeypatch.setenv("JUNEAU_RUN_N_BASE", "2")
+    monkeypatch.setenv("JUNEAU_TERMINAL_N_BASE", "2")
     fresh = load("_bell_test_fresh", "test.py")
     assert fresh.next_step_number() == 3

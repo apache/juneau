@@ -18,7 +18,7 @@ package org.apache.juneau.petstore.console.ops;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.BasicTestUtils.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.terminal.*;
+import org.apache.juneau.terminal.region.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

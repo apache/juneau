@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.dto;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 
 import java.util.*;
 

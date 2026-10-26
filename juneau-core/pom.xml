@@ -38,7 +38,7 @@
 		<module>juneau-marshall</module>
 		<module>juneau-marshall-rdf</module>
 		<module>juneau-config</module>
-		<module>juneau-test</module>
+		<module>juneau-bct</module>
 		<module>juneau-test-marshall-utils</module>
 	</modules>
 

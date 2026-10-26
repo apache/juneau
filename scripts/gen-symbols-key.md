@@ -23,7 +23,7 @@ python3 scripts/gen-symbols-key.py --check
 ## What it does
 
 1. Locates the repository root by walking up to a directory that holds both `juneau-core` and `juneau-rest` (`repo_root`).
-2. Reads the sprite `juneau-rest/juneau-rest-server-views/src/main/resources/org/apache/juneau/views/juneau-symbols.svg`.
+2. Reads the sprite `juneau-rest/juneau-console-views/src/main/resources/org/apache/juneau/views/juneau-symbols.svg`.
 3. Collects every `<symbol>...</symbol>` verbatim, in order (`symbols`), and reuses the sprite's own XML declaration and license comment as the header (`license_header`).
 4. Lays the glyphs out in a grid of 10 columns with a label under each (`cell`, `render`). The sheet size follows the glyph count.
 5. Writes `juneau-symbols-key.svg` beside the sprite, or with `--check` compares the generated text with the file on disk.

@@ -21,11 +21,11 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.petstore.dto.*;
-import org.apache.juneau.rest.server.view.freemarker.console.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.views.RowAction.*;
-import org.apache.juneau.rest.server.views.TableSpec.*;
-import org.apache.juneau.rest.server.widgets.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.views.RowAction.*;
+import org.apache.juneau.console.views.TableSpec.*;
+import org.apache.juneau.console.widgets.*;
 
 /**
  * Builder twins of the Pets pages: P2 Pets ({@code pets.ftlh}), its {@code ?mixed} variant, P3 Sold

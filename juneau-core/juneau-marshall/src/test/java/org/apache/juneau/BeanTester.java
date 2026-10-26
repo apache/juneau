@@ -19,10 +19,10 @@ package org.apache.juneau;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.test.bct.*;
+import org.apache.juneau.bct.*;
 
 /**
  * Utility class for testing bean functionality in a standardized way.

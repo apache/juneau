@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.test.junit.*;
+import org.apache.juneau.bct.junit.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 

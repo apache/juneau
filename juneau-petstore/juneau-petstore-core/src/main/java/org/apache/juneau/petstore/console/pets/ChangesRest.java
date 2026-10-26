@@ -30,11 +30,11 @@ import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.datatables.*;
-import org.apache.juneau.rest.server.datatables.adapter.*;
+import org.apache.juneau.console.datatables.*;
+import org.apache.juneau.console.datatables.adapter.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
-import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.console.views.*;
 
 /**
  * Pending changes: the staged-edits table.  Persistent selection is limited to {@code PENDING} rows, an aggregate

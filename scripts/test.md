@@ -71,7 +71,7 @@ Maven output, a status line per step, and the perf-guard report. The run header 
 - `JUNEAU_MVN_WRAPPER` adds a prefix to every `mvn` command, for example a lock script that serializes runs. The value is a command plus arguments, not a shell fragment: it is split like a shell would (so `'/a b/lock.sh' --x` works), then re-quoted word by word, so a path with spaces or `$`/`;` is never interpreted. An unquoted path with spaces also works, taken as the longest leading run of words that names an existing file. A word that is exactly `&&`, `||`, `;` or `|` stays a shell operator, so `lock.sh --x &&` still chains.
 - The pytest step is skipped with a notice when neither pytest nor `uv` is available. Nothing is installed.
 - The browser tests download Playwright and Chromium on the first run, so they need network access.
-- `JUNEAU_RUN_HISTORY=0` turns off the run history, which `--rebaseline` and `push-timings.py` depend on.
+- `JUNEAU_TERMINAL_HISTORY=0` turns off the run history, which `--rebaseline` and `push-timings.py` depend on.
 - `--profile` skips JaCoCo with `-Djacoco.skip=true`, because its `prepare-agent` goal rewrites `argLine` after any `-DargLine`. Upstream modules are not built or tested: the run starts in the module directory, not from the root with `-pl`.
 - The default mode runs `mvn clean install`, which replaces the Juneau artifacts in `~/.m2`.
 

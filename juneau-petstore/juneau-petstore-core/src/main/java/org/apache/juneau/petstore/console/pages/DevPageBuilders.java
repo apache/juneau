@@ -24,12 +24,12 @@ import java.util.stream.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.console.dev.flavors.*;
-import org.apache.juneau.rest.server.console.*;
-import org.apache.juneau.rest.server.console.TopicDecl.*;
-import org.apache.juneau.rest.server.view.freemarker.console.*;
-import org.apache.juneau.rest.server.view.freemarker.console.DataSourceDef.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.views.TableSpec.*;
+import org.apache.juneau.console.*;
+import org.apache.juneau.console.TopicDecl.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.freemarker.DataSourceDef.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.console.views.TableSpec.*;
 
 /**
  * Builder twins of the Developer pages: Custom cards ({@code cards.ftlh}), Rendering flavors ({@code flavors.ftlh},

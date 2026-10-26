@@ -77,7 +77,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-test</artifactId>
+			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -392,27 +392,27 @@
 									<destFileName>org.apache.juneau.commons_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-test -->
+								<!-- juneau-bct -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-test</artifactId>
+									<artifactId>juneau-bct</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
-									<destFileName>apache-juneau-test-${project.version}-sources.jar</destFileName>
+									<destFileName>apache-juneau-bct-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-test</artifactId>
+									<artifactId>juneau-bct</artifactId>
 									<version>${project.version}</version>
-									<destFileName>apache-juneau-test-${project.version}.jar</destFileName>
+									<destFileName>apache-juneau-bct-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-test</artifactId>
+									<artifactId>juneau-bct</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.test_${project.version}.jar</destFileName>
 								</artifactItem>

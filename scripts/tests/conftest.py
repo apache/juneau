@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Keep the scripts tests from writing run history into the real ~/.cache/juneau-run/history, and the shared fixtures for
+Keep the scripts tests from writing run history into the real ~/.cache/juneau-terminal/history, and the shared fixtures for
 the tests that need history on: run_history (F1), fake_reports (F2) and history_record (F3).
 """
 
@@ -25,7 +25,7 @@ from types import SimpleNamespace
 
 import pytest
 
-RUN_MODULE_PATH = Path(__file__).resolve().parent.parent.parent / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
+RUN_MODULE_PATH = Path(__file__).resolve().parent.parent.parent / "juneau-terminal" / "src" / "main" / "python" / "juneau_terminal.py"
 
 
 @pytest.fixture(autouse=True)
@@ -36,11 +36,11 @@ def _no_nested_script_tests(monkeypatch):
 
 @pytest.fixture(scope="session", autouse=True)
 def _no_real_run_history():
-    tmp = tempfile.mkdtemp(prefix="juneau-run-test-history-")
-    names = ("JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR")
+    tmp = tempfile.mkdtemp(prefix="juneau-terminal-test-history-")
+    names = ("JUNEAU_TERMINAL_HISTORY", "JUNEAU_TERMINAL_HISTORY_DIR")
     saved = {n: os.environ.get(n) for n in names}
-    os.environ["JUNEAU_RUN_HISTORY"] = "0"
-    os.environ["JUNEAU_RUN_HISTORY_DIR"] = tmp
+    os.environ["JUNEAU_TERMINAL_HISTORY"] = "0"
+    os.environ["JUNEAU_TERMINAL_HISTORY_DIR"] = tmp
     try:
         yield
     finally:
@@ -56,18 +56,18 @@ def _no_real_run_history():
 def _full_console(monkeypatch):
     """push.main() exports the board console default into os.environ; pin the full console for every test (set,
     not unset, so teardown restores it) so that export cannot leak into later tests.  Tests of the default or of
-    the flag/env precedence set JUNEAU_RUN_CONSOLE themselves."""
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+    the flag/env precedence set JUNEAU_TERMINAL_CONSOLE themselves."""
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
 
 
-# Every JUNEAU_RUN_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
-# header and pending/overall rows, or the fact that one is active).  JUNEAU_RUN_CONSOLE, _DETAIL and _HISTORY* are
+# Every JUNEAU_TERMINAL_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
+# header and pending/overall rows, or the fact that one is active).  JUNEAU_TERMINAL_CONSOLE, _DETAIL and _HISTORY* are
 # settings, not pointers, and are handled by their own fixtures.
 LIVE_RUN_ENV = (
-    "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_LIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_LABEL_WIDTH",
-    "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_CANCEL", "JUNEAU_RUN_HEADER",
-    "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HANDBACK",
-    "JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS",
+    "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_SESSION", "JUNEAU_TERMINAL_LIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_LABEL_WIDTH",
+    "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_TERMINAL_CANCEL", "JUNEAU_TERMINAL_HEADER",
+    "JUNEAU_TERMINAL_PENDING", "JUNEAU_TERMINAL_OVERALL", "JUNEAU_TERMINAL_HANDBACK",
+    "JUNEAU_TERMINAL_MARKERS_FILE", "JUNEAU_TERMINAL_RESULT", "JUNEAU_TERMINAL_RESULT_PARTS",
 )
 
 
@@ -85,13 +85,13 @@ def _no_push_sound(monkeypatch):
     monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")
 
 
-def load_juneau_run():
-    """The juneau_run module the scripts share (sys.modules["juneau_run"]), loaded from the tree if not yet loaded."""
-    module = sys.modules.get("juneau_run")
+def load_juneau_terminal():
+    """The juneau_terminal module the scripts share (sys.modules["juneau_terminal"]), loaded from the tree if not yet loaded."""
+    module = sys.modules.get("juneau_terminal")
     if module is None:
-        spec = importlib.util.spec_from_file_location("juneau_run", RUN_MODULE_PATH)
+        spec = importlib.util.spec_from_file_location("juneau_terminal", RUN_MODULE_PATH)
         module = importlib.util.module_from_spec(spec)
-        sys.modules["juneau_run"] = module
+        sys.modules["juneau_terminal"] = module
         saved, sys.dont_write_bytecode = sys.dont_write_bytecode, True
         try:
             spec.loader.exec_module(module)
@@ -101,7 +101,7 @@ def load_juneau_run():
 
 
 def _drop_history():
-    module = sys.modules.get("juneau_run")
+    module = sys.modules.get("juneau_terminal")
     if module is not None and getattr(module, "_history", None) is not None:
         module.unsubscribe(module._history)
         module._history = None
@@ -113,21 +113,21 @@ def run_history(monkeypatch, tmp_path):
     F1: run history on for one test, written under tmp_path/history.  argv[0] is /x/scripts/test.py so the writer's
     script_name() is "test", whatever runs the tests.  Yields a helper: start(repo) opens this process's History (for
     tests that drive run_tool directly), store(script="test", repo=...) is the HistoryStore a reader would open, and
-    jr() is the juneau_run module now in sys.modules.
+    jr() is the juneau_terminal module now in sys.modules.
     """
-    monkeypatch.delenv("JUNEAU_RUN_HISTORY", raising=False)
-    monkeypatch.setenv("JUNEAU_RUN_HISTORY_DIR", str(tmp_path / "history"))
+    monkeypatch.delenv("JUNEAU_TERMINAL_HISTORY", raising=False)
+    monkeypatch.setenv("JUNEAU_TERMINAL_HISTORY_DIR", str(tmp_path / "history"))
     monkeypatch.setattr(sys, "argv", ["/x/scripts/test.py"])
     _drop_history()
 
     def start(repo):
-        load_juneau_run().history_start(repo)
+        load_juneau_terminal().history_start(repo)
 
     def store(script="test", repo=None):
-        return load_juneau_run().HistoryStore(repo, script)
+        return load_juneau_terminal().HistoryStore(repo, script)
 
     try:
-        yield SimpleNamespace(start=start, store=store, jr=load_juneau_run, root=tmp_path / "history")
+        yield SimpleNamespace(start=start, store=store, jr=load_juneau_terminal, root=tmp_path / "history")
     finally:
         _drop_history()
 

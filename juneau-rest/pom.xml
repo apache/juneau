@@ -46,18 +46,18 @@
 		<module>juneau-rest-server-metrics-micrometer</module>
 		<module>juneau-rest-server-tracing-otel</module>
 		<module>juneau-rest-server-management-logging</module>
-		<module>juneau-rest-server-datatables</module>
-		<module>juneau-run-report</module>
-		<module>juneau-rest-server-widgets</module>
-		<module>juneau-rest-server-views</module>
-		<module>juneau-rest-server-views-markdown</module>
-		<module>juneau-rest-server-terminal</module>
-		<module>juneau-rest-server-console-ui</module>
-		<module>juneau-rest-server-console-ui-freemarker</module>
-		<module>juneau-rest-server-console-ui-freemarker-tests</module>
-		<module>juneau-rest-server-bus</module>
-		<module>juneau-rest-server-bus-websocket</module>
-		<module>juneau-rest-server-terminal-bus</module>
+		<module>juneau-console-datatables</module>
+		<module>juneau-terminal-report</module>
+		<module>juneau-console-widgets</module>
+		<module>juneau-console-views</module>
+		<module>juneau-console-views-markdown</module>
+		<module>juneau-terminal-region</module>
+		<module>juneau-console</module>
+		<module>juneau-console-freemarker</module>
+		<module>juneau-console-freemarker-tests</module>
+		<module>juneau-console-bus</module>
+		<module>juneau-console-bus-websocket</module>
+		<module>juneau-terminal-bus</module>
 		<module>juneau-rest-server-reactive</module>
 		<module>juneau-rest-server-reactive-reactor</module>
 		<module>juneau-rest-server-view-jsp</module>

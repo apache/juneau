@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Tests for push.py and test.py's adoption of juneau-run: marker streams with a fake `mvn` on PATH, the
+Tests for push.py and test.py's adoption of juneau-terminal: marker streams with a fake `mvn` on PATH, the
 `--test-only` mode of push.py, and the pins that keep the default (markers off) behaviour unchanged.
 Hermetic: no real Maven, no git writes, no sounds; push.py's gates are replaced by recorders.
 """
@@ -34,7 +34,7 @@ from types import SimpleNamespace
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
-PREFIX = "##run "
+PREFIX = "##terminal "
 
 
 def load(name, filename):
@@ -44,23 +44,23 @@ def load(name, filename):
     return module
 
 
-RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
-                 "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE", "JUNEAU_PUSH_ACTIVE")
+RUN_VARIABLES = ("TERMINAL_MARKERS", "TERMINAL_ARTIFACTS", "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_CONSOLE",
+                 "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_TERMINAL_SESSION",
+                 "JUNEAU_TERMINAL_DETAIL", "JUNEAU_TERMINAL_LABEL_WIDTH", "JUNEAU_TERMINAL_LIVE", "JUNEAU_PUSH_ACTIVE")
 
 
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch, tmp_path):
-    monkeypatch.setenv("JUNEAU_RUN_LOG_DIR", str(tmp_path / "run-logs"))
+    monkeypatch.setenv("JUNEAU_TERMINAL_LOG_DIR", str(tmp_path / "run-logs"))
     for variable in RUN_VARIABLES:
         monkeypatch.delenv(variable, raising=False)
     # push.py now defaults to the board console; these tests assert on the full-console output.  Set (not just
     # unset) so teardown restores the variable and a main() that exports the default can't leak it to other tests.
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
     sigterm = signal.getsignal(signal.SIGTERM)
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
     yield
-    module = sys.modules.pop("juneau_run", None)
+    module = sys.modules.pop("juneau_terminal", None)
     if module is not None and hasattr(module, "_end_session"):
         module._end_session()
     for variable in RUN_VARIABLES:   # session() and export_detail() write os.environ directly
@@ -109,7 +109,7 @@ def test_test_py_default_path_records_history_through_run_tool(test_mod, fake_mv
     run_history.start(tmp_path)
     code, out = test_mod.run_command("mvn test", "tests", "Java Tests")
     assert (code, out) == (0, "fake mvn: test\n")
-    assert "##run" not in capfd.readouterr().out
+    assert "##terminal" not in capfd.readouterr().out
     records = run_history.store("test", repo=tmp_path).read()
     assert [r["step"] for r in records] == ["tests"]
 
@@ -145,7 +145,7 @@ def _counting_run_tool(real):
 
 
 def test_test_py_markers_on_runs_the_command_as_a_step(test_mod, fake_mvn, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     code, out = test_mod.run_command("mvn test -T1C -Dtest='A B'", "tests", "Java Tests")
     assert code == 0
     assert out == "fake mvn: test -T1C -Dtest=A B\n"
@@ -158,14 +158,14 @@ def test_test_py_markers_on_runs_the_command_as_a_step(test_mod, fake_mvn, monke
 
 
 def test_test_py_step_numbers_continue_after_n_base(test_mod, fake_mvn, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
-    monkeypatch.setenv("JUNEAU_RUN_N_BASE", "3")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
+    monkeypatch.setenv("JUNEAU_TERMINAL_N_BASE", "3")
     test_mod.run_command("mvn test", "tests", "Java Tests")
     assert markers(capfd.readouterr().out)[0]["n"] == 4
 
 
 def test_test_py_failure_exit_code_is_returned_and_marked(test_mod, fake_mvn, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setenv("FAKE_MVN_EXIT", "3")
     code, _ = test_mod.run_command("mvn test", "tests", "Java Tests")
     assert code == 3
@@ -174,8 +174,8 @@ def test_test_py_failure_exit_code_is_returned_and_marked(test_mod, fake_mvn, mo
 
 def test_test_py_routing_flags_work_without_markers(test_mod, fake_mvn, monkeypatch, capfd, tmp_path):
     log = tmp_path / "full.log"
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "none")
-    monkeypatch.setenv("JUNEAU_RUN_FULL_LOG", str(log))
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "none")
+    monkeypatch.setenv("JUNEAU_TERMINAL_FULL_LOG", str(log))
     code, out = test_mod.run_command("mvn test", "tests", "Java Tests")
     assert code == 0 and out == "fake mvn: test\n"
     assert log.read_text() == "fake mvn: test\n"
@@ -183,15 +183,15 @@ def test_test_py_routing_flags_work_without_markers(test_mod, fake_mvn, monkeypa
 
 
 def test_test_py_wrapper_prefix_stays_in_the_command(test_mod, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "echo wrapped")
     _, out = test_mod.run_command("mvn test", "tests", "Java Tests")
     assert out == "wrapped mvn test\n"
 
 
 def test_test_py_under_an_active_run_emits_steps_but_no_run_or_done(test_mod, fake_mvn, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
-    monkeypatch.setenv("JUNEAU_RUN_ACTIVE", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
+    monkeypatch.setenv("JUNEAU_TERMINAL_ACTIVE", "1")
     monkeypatch.setattr(sys, "argv", ["test.py", "--build-only"])
     assert test_mod.main() == 0
     events = markers(capfd.readouterr().out)
@@ -200,7 +200,7 @@ def test_test_py_under_an_active_run_emits_steps_but_no_run_or_done(test_mod, fa
 
 
 def test_test_py_standalone_with_markers_owns_run_and_done(test_mod, fake_mvn, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(sys, "argv", ["test.py", "--build-only"])
     assert test_mod.main() == 0
     events = markers(capfd.readouterr().out)
@@ -211,11 +211,11 @@ def test_test_py_standalone_with_markers_owns_run_and_done(test_mod, fake_mvn, m
 
 def test_test_py_console_flag_routes_the_output(test_mod, fake_mvn, monkeypatch, capfd):
     # Registered before test.py exports the flag, so teardown removes it again (a delenv afterwards would restore it).
-    monkeypatch.delenv("JUNEAU_RUN_CONSOLE", raising=False)
+    monkeypatch.delenv("JUNEAU_TERMINAL_CONSOLE", raising=False)
     monkeypatch.setattr(sys, "argv", ["test.py", "--build-only", "--console", "none"])
     assert test_mod.main() == 0
     assert "fake mvn" not in capfd.readouterr().out
-    assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+    assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "none"
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -245,7 +245,7 @@ def gates(push_mod, monkeypatch):
     monkeypatch.setattr(push_mod, "run_docs_followup", lambda *a, **k: rec.calls.append("docs") or ("ok", 1))
     monkeypatch.setattr(push_mod, "_append_test_run_history", rec("history"))
     monkeypatch.setattr(push_mod, "current_branch", lambda root: "main")
-    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")    # the session's bell and sound
+    monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", "1")    # the session's bell and sound
     monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, run, **k: rec.calls.append("test.py") or
                         subprocess.CompletedProcess(cmd, 0))
     monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, "", ""))
@@ -253,7 +253,7 @@ def gates(push_mod, monkeypatch):
 
 
 def test_push_test_only_emits_mode_test_and_never_commits(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     events = markers(capsys.readouterr().out)
@@ -289,12 +289,12 @@ def test_push_test_only_rejects_flags_that_commit_or_gate(push_mod, gates, monke
 def test_push_markers_off_prints_no_markers_and_reaches_the_commit(push_mod, gates, monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["push.py", "a message"])
     assert push_mod.main() == 0
-    assert "##run" not in capsys.readouterr().out
+    assert "##terminal" not in capsys.readouterr().out
     assert "identity" in gates.calls and "commit" in gates.calls
 
 
 def test_push_full_run_emits_push_mode_and_done_ok(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(sys, "argv", ["push.py", "a message"])
     assert push_mod.main() == 0
     events = markers(capsys.readouterr().out)
@@ -303,7 +303,7 @@ def test_push_full_run_emits_push_mode_and_done_ok(push_mod, gates, monkeypatch,
 
 
 def test_push_failed_gate_ends_the_run_with_done_fail(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(push_mod, "run_command", lambda *a, **k: False)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 1
@@ -314,7 +314,7 @@ def test_push_failed_gate_ends_the_run_with_done_fail(push_mod, gates, monkeypat
 
 
 def test_push_run_command_with_a_tool_emits_the_step_and_keeps_the_result_lines(push_mod, fake_mvn, monkeypatch, capfd):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     ok = push_mod.run_command(["mvn", "install"], "Build", tool="maven", step_id="install", title="Build and install", n=7)
     shown = capfd.readouterr().out
     assert ok is True
@@ -330,7 +330,7 @@ def test_push_run_command_markers_off_keeps_the_exact_original_call(push_mod, fa
     monkeypatch.setattr(push_mod.subprocess, "run", lambda *a, **k: seen.append((a, k)) or real_run(*a, **k))
     ok = push_mod.run_command(["mvn", "install"], "Build", tmp_path, tool="maven", step_id="install", title="Build", n=1)
     assert ok is True
-    assert "##run" not in capfd.readouterr().out
+    assert "##terminal" not in capfd.readouterr().out
     assert seen == [((["mvn", "install"],), {"cwd": tmp_path, "shell": False, "check": True, "capture_output": False,
                                              "text": True})]
 
@@ -342,15 +342,15 @@ def test_push_run_command_failure_returns_false(push_mod, fake_mvn, monkeypatch,
 
 
 def test_push_reserves_step_numbers_for_the_steps_test_py_contributes(push_mod, gates, monkeypatch):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     env = _capture_child_env(push_mod, monkeypatch, gates)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
-    assert env["JUNEAU_RUN_N_BASE"] == "2"    # after Tags and BOM
+    assert env["JUNEAU_TERMINAL_N_BASE"] == "2"    # after Tags and BOM
 
 
 def test_push_test_only_fallback_runs_mvn_test_as_a_maven_step(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(push_mod.Path, "exists", lambda self: self.name != "test.py" and Path.is_file(self))
     calls = []
     monkeypatch.setattr(push_mod, "run_command", lambda cmd, *a, **k: calls.append((cmd, k)) or True)
@@ -373,7 +373,7 @@ def test_run_test_script_markers_off_is_the_plain_subprocess_run(push_mod, monke
 @pytest.mark.parametrize("markers_on", [True, False])
 def test_run_test_script_keeps_returncode_for_its_call_site(push_mod, monkeypatch, tmp_path, markers_on):
     if markers_on:
-        monkeypatch.setenv("RUN_MARKERS", "1")
+        monkeypatch.setenv("TERMINAL_MARKERS", "1")
     proc = push_mod.toolkit("proc")
     seen = []
     monkeypatch.setattr(proc, "run_group", lambda cmd, **k: seen.append(k) or proc.Result(False, 3))
@@ -384,7 +384,7 @@ def test_run_test_script_keeps_returncode_for_its_call_site(push_mod, monkeypatc
 
 
 def test_run_test_script_markers_on_gives_the_child_its_own_session(push_mod, monkeypatch, tmp_path):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     script = tmp_path / "child.py"
     script.write_text("import os\nraise SystemExit(0 if os.getsid(0) == os.getpid() else 7)\n", encoding="utf-8")
     run = push_mod._juneau.load()[0]
@@ -392,7 +392,7 @@ def test_run_test_script_markers_on_gives_the_child_its_own_session(push_mod, mo
 
 
 def test_test_py_wrapper_with_and_and_markers_on_runs_through_a_shell(test_mod, monkeypatch):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "echo first &&")
     code, out = test_mod.run_command("mvn --version", "tests", "Java Tests")
     assert out.startswith("first\n")  # the && part ran in the same shell as the rest of the command
@@ -426,16 +426,16 @@ def test_sigterm_ends_the_run_as_cancelled_and_leaves_no_orphan(script, tmp_path
     mvn.write_text(f"#!/bin/sh\necho $$ > {pidfile}\necho '[INFO] Scanning for projects...'\ntouch {ready}\n"
                    "exec sleep 300\n", encoding="utf-8")
     mvn.chmod(mvn.stat().st_mode | stat.S_IEXEC)
-    env = {**os.environ, "RUN_MARKERS": "1", "PATH": f"{bin_dir}{os.pathsep}{os.environ['PATH']}"}
-    for variable in ("JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_MVN_WRAPPER"):
+    env = {**os.environ, "TERMINAL_MARKERS": "1", "PATH": f"{bin_dir}{os.pathsep}{os.environ['PATH']}"}
+    for variable in ("JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_MVN_WRAPPER"):
         env.pop(variable, None)
-    # A scratch tree holding only copies of the two scripts (and the real juneau-run), so push.py's other gates
+    # A scratch tree holding only copies of the two scripts (and the real juneau-terminal), so push.py's other gates
     # (container tags, BOM) have nothing to run and nothing real is built.
     root = tmp_path / "tree"
     (root / "scripts").mkdir(parents=True)
     for name in ("push.py", "test.py", "_juneau.py"):
         shutil.copy(SCRIPTS_DIR / name, root / "scripts" / name)
-    (root / "juneau-run").symlink_to(SCRIPTS_DIR.parent / "juneau-run")
+    (root / "juneau-terminal").symlink_to(SCRIPTS_DIR.parent / "juneau-terminal")
     args = [sys.executable, "-B", str(root / "scripts" / script)] + (["--test-only", "--no-js-tests"] if script == "push.py"
                                                                       else ["--build-only"])
     proc = subprocess.Popen(args, cwd=root, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -473,8 +473,8 @@ class Events:
 
 @pytest.fixture
 def console(push_mod, monkeypatch):
-    """A board session; stdout is captured, so it draws in plain mode.  Returns (juneau_run, Events)."""
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    """A board session; stdout is captured, so it draws in plain mode.  Returns (juneau_terminal, Events)."""
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     run = push_mod._juneau.load()[0]
     run.session("Push", ["Juneau", "test"])
     assert run.console_active()
@@ -485,9 +485,9 @@ def console(push_mod, monkeypatch):
 @pytest.fixture
 def standalone(push_mod, monkeypatch):
     """A board console that push.main() opens itself, as a push run from the shell does: no session is open
-    first, so the push session is not nested (its own run marker, summary and bell).  Yields (juneau_run, Events,
+    first, so the push session is not nested (its own run marker, summary and bell).  Yields (juneau_terminal, Events,
     nested), nested being each _nested_env() value the session saw; teardown checks push opened exactly one, un-nested."""
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     run = push_mod._juneau.load()[0]
     toolkit_run = push_mod.toolkit("run")
     real, nested = toolkit_run._nested_env, []
@@ -552,7 +552,7 @@ def test_push_installs_with_skip_tests(push_mod, gates, monkeypatch):
 
 def test_push_test_only_marks_the_install_step_skipped(push_mod, gates, monkeypatch, capsys):
     """With markers on (the release manager), the skipped install is still the `install` step, ending with skip."""
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     commands = recorded_commands(push_mod, monkeypatch)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
@@ -631,17 +631,17 @@ def test_the_timing_row_counts_slower_entries_and_names_the_report(push_mod, con
 def test_push_exports_detail_to_test_py(push_mod, gates, monkeypatch):
     seen = []
     monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, run, env=None:
-                        seen.append(env.get("JUNEAU_RUN_DETAIL")) or subprocess.CompletedProcess(cmd, 0))
+                        seen.append(env.get("JUNEAU_TERMINAL_DETAIL")) or subprocess.CompletedProcess(cmd, 0))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--detail", "modules"])
     assert push_mod.main() == 0
     assert seen == ["modules"]
 
 
 def test_push_console_flag_sets_the_env_var_and_beats_it(push_mod, gates, monkeypatch):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--console", "none"])
     assert push_mod.main() == 0
-    assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+    assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "none"
 
 
 def test_push_rejects_an_unknown_console_mode(push_mod, gates, monkeypatch, capsys):
@@ -661,7 +661,7 @@ def test_push_rejects_an_unknown_detail_level(push_mod, gates, monkeypatch, caps
 
 
 def test_push_identity_is_a_row_not_a_header_mark(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(sys, "argv", ["push.py", "Quick fix", "--skip-tests"])
     assert push_mod.main() == 0
@@ -682,7 +682,7 @@ def test_push_hands_the_console_to_test_py(push_mod, gates, standalone, monkeypa
     monkeypatch.setattr(run.Console, "pause", lambda self: calls.append("pause"))
     monkeypatch.setattr(run.Console, "resume", lambda self: calls.append("resume"))
     monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, r, env=None: calls.append(
-        ("test.py", env.get("JUNEAU_RUN_LABEL_WIDTH"))) or subprocess.CompletedProcess(cmd, 0))
+        ("test.py", env.get("JUNEAU_TERMINAL_LABEL_WIDTH"))) or subprocess.CompletedProcess(cmd, 0))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     # the final line may pause again
@@ -772,12 +772,12 @@ def docs_tree(push_mod, monkeypatch, tmp_path):
     monkeypatch.setattr(push_mod, "prechecks", lambda *a, **k: [])
     monkeypatch.setattr(push_mod, "docs_prechecks", lambda *a, **k: [])
     monkeypatch.setattr(push_mod, "current_branch", lambda root: "main")
-    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")
+    monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", "1")
     return tmp_path
 
 
 def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_tree, monkeypatch):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
     monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
@@ -791,8 +791,8 @@ def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_t
 
 
 def test_docs_only_with_markers_on_emits_run_and_done_markers(push_mod, docs_tree, monkeypatch, capsys):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
     monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
     assert push_mod.main() == 0
@@ -803,7 +803,7 @@ def test_docs_only_with_markers_on_emits_run_and_done_markers(push_mod, docs_tre
 
 @pytest.mark.parametrize("flags", [[], ["--docs-only"]])
 def test_a_dry_run_under_a_console_still_says_so(push_mod, docs_tree, monkeypatch, capsys, flags):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
     monkeypatch.setattr(sys, "argv", ["push.py", "--dry-run", "a message", *flags])
     assert push_mod.main() == 0
     assert "DRY RUN MODE" in capsys.readouterr().out
@@ -953,7 +953,7 @@ def test_the_tags_and_bom_rows_summarise_their_checks(push_mod):
 
 def test_run_marked_passes_the_summarizer_under_a_console(push_mod, monkeypatch):
     seen = []
-    monkeypatch.setitem(sys.modules, "juneau_run", SimpleNamespace(enabled=lambda: False, console_active=lambda: True))
+    monkeypatch.setitem(sys.modules, "juneau_terminal", SimpleNamespace(enabled=lambda: False, console_active=lambda: True))
     monkeypatch.setattr(push_mod, "run_command", lambda *a, **k: seen.append(k) or True)
     assert push_mod.run_marked("bom", "BOM", ["x"], "Checking", label="BOM", summarize=push_mod.bom_summary)
     assert seen[0]["summarize"] is push_mod.bom_summary
@@ -1008,12 +1008,12 @@ def _capture_child_env(push_mod, monkeypatch, gates):
 
 
 def test_push_child_env_carries_push_active_and_n_base_under_markers(push_mod, gates, monkeypatch):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     env = _capture_child_env(push_mod, monkeypatch, gates)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
-    assert env["JUNEAU_RUN_N_BASE"] == "2"    # after Tags and BOM
+    assert env["JUNEAU_TERMINAL_N_BASE"] == "2"    # after Tags and BOM
 
 
 def test_push_child_env_has_push_active_but_no_n_base_without_markers(push_mod, gates, monkeypatch):
@@ -1021,30 +1021,30 @@ def test_push_child_env_has_push_active_but_no_n_base_without_markers(push_mod, 
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
-    assert "JUNEAU_RUN_N_BASE" not in env
+    assert "JUNEAU_TERMINAL_N_BASE" not in env
 
 
 @pytest.mark.parametrize("markers_on", [True, False])
 def test_push_does_not_mutate_os_environ_for_the_child(push_mod, gates, monkeypatch, markers_on):
     if markers_on:
-        monkeypatch.setenv("RUN_MARKERS", "1")
+        monkeypatch.setenv("TERMINAL_MARKERS", "1")
     env = _capture_child_env(push_mod, monkeypatch, gates)
     later = []
     monkeypatch.setattr(push_mod, "_append_test_run_history", lambda *a: later.append(
-        (os.environ.get("JUNEAU_PUSH_ACTIVE"), os.environ.get("JUNEAU_RUN_N_BASE"))))
+        (os.environ.get("JUNEAU_PUSH_ACTIVE"), os.environ.get("JUNEAU_TERMINAL_N_BASE"))))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
     assert later == [(None, None)]
-    assert "JUNEAU_PUSH_ACTIVE" not in os.environ and "JUNEAU_RUN_N_BASE" not in os.environ
+    assert "JUNEAU_PUSH_ACTIVE" not in os.environ and "JUNEAU_TERMINAL_N_BASE" not in os.environ
 
 
 def test_push_reserves_exactly_four_numbers_for_test_py(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     env = _capture_child_env(push_mod, monkeypatch, gates)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
-    n_base = int(env["JUNEAU_RUN_N_BASE"])
+    n_base = int(env["JUNEAU_TERMINAL_N_BASE"])
     steps = [e for e in markers(capsys.readouterr().out) if e["ev"] == "step" and "parent" not in e]
     ids = [e["id"] for e in steps]
     after = steps[ids.index("bom") + 1]
@@ -1056,7 +1056,7 @@ def test_push_reserves_exactly_four_numbers_for_test_py(push_mod, gates, monkeyp
 def test_push_plain_ctrl_c_before_the_session_exits_130(push_mod, monkeypatch, capsys):
     def interrupted():
         raise KeyboardInterrupt
-    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")
+    monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", "1")
     monkeypatch.setattr(push_mod, "_main", interrupted)
     assert push_mod.main() == 130
     assert "❌ Cancelled." in capsys.readouterr().out
@@ -1124,41 +1124,41 @@ def juneau_loader():
         sys.dont_write_bytecode = saved
 
 
-def test_the_loader_imports_the_in_tree_toolkit_and_juneau_run(juneau_loader):
+def test_the_loader_imports_the_in_tree_toolkit_and_juneau_terminal(juneau_loader):
     jr, js = juneau_loader.load()
-    python_src = (SCRIPTS_DIR.parent / "juneau-run" / "src" / "main" / "python").resolve()
-    assert Path(js.__file__).resolve() == python_src / "juneau_scripts" / "__init__.py"
-    assert Path(jr.__file__).resolve() == python_src / "juneau_run.py"
-    assert sys.modules["juneau_run"] is jr
+    python_src = (SCRIPTS_DIR.parent / "juneau-terminal" / "src" / "main" / "python").resolve()
+    assert Path(js.__file__).resolve() == python_src / "juneau_terminal_scripts" / "__init__.py"
+    assert Path(jr.__file__).resolve() == python_src / "juneau_terminal.py"
+    assert sys.modules["juneau_terminal"] is jr
     assert juneau_loader.load() == (jr, js)
 
 
-def test_the_loader_reuses_an_already_loaded_juneau_run(juneau_loader, monkeypatch):
-    sentinel = SimpleNamespace(__file__="elsewhere/juneau_run.py")
-    monkeypatch.setitem(sys.modules, "juneau_run", sentinel)
+def test_the_loader_reuses_an_already_loaded_juneau_terminal(juneau_loader, monkeypatch):
+    sentinel = SimpleNamespace(__file__="elsewhere/juneau_terminal.py")
+    monkeypatch.setitem(sys.modules, "juneau_terminal", sentinel)
     assert juneau_loader.load()[0] is sentinel
 
 
 def test_the_loader_writes_no_bytecode_into_the_source_tree(tmp_path, monkeypatch):
     """A fresh process, without -B, on a scratch copy of the tree: loading and the toolkit's late imports write no
-    __pycache__ under juneau-run (the Maven build's RAT check scans it)."""
-    python_src = SCRIPTS_DIR.parent / "juneau-run" / "src" / "main" / "python"
+    __pycache__ under juneau-terminal (the Maven build's RAT check scans it)."""
+    python_src = SCRIPTS_DIR.parent / "juneau-terminal" / "src" / "main" / "python"
     tree = tmp_path / "tree"
-    shutil.copytree(python_src, tree / "juneau-run" / "src" / "main" / "python",
+    shutil.copytree(python_src, tree / "juneau-terminal" / "src" / "main" / "python",
                     ignore=shutil.ignore_patterns("__pycache__"))
     (tree / "scripts").mkdir()
     shutil.copy(SCRIPTS_DIR / "_juneau.py", tree / "scripts" / "_juneau.py")
     code = ("import sys; sys.path.insert(0, sys.argv[1]); import _juneau; jr, js = _juneau.load(); "
-            "from juneau_scripts import git, run, tools, notify, steps, state, prompt; print(jr.__file__)")
+            "from juneau_terminal_scripts import git, run, tools, notify, steps, state, prompt; print(jr.__file__)")
     # a push or test.py run exports where the real engine lives; the child must still find the copy beside _juneau.py
-    monkeypatch.setenv("JUNEAU_RUN_PY", str(python_src / "juneau_run.py"))
-    monkeypatch.setenv("JUNEAU_SCRIPTS_ZIP", str(python_src))
-    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONDONTWRITEBYTECODE", "JUNEAU_RUN_PY", "JUNEAU_SCRIPTS_ZIP")}
+    monkeypatch.setenv("JUNEAU_TERMINAL_PY", str(python_src / "juneau_terminal.py"))
+    monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_ZIP", str(python_src))
+    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONDONTWRITEBYTECODE", "JUNEAU_TERMINAL_PY", "JUNEAU_TERMINAL_SCRIPTS_ZIP")}
     done = subprocess.run([sys.executable, "-c", code, str(tree / "scripts")], env=env, capture_output=True,
                           text=True, check=False)
     assert done.returncode == 0, done.stderr
     assert Path(done.stdout.strip()).resolve().is_relative_to(tree.resolve())
-    assert list((tree / "juneau-run").rglob("__pycache__")) == []
+    assert list((tree / "juneau-terminal").rglob("__pycache__")) == []
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -1166,7 +1166,7 @@ def test_the_loader_writes_no_bytecode_into_the_source_tree(tmp_path, monkeypatc
 # ----------------------------------------------------------------------------------------------------------------------
 
 def test_push_steps_share_the_toolkit_counter(push_mod, monkeypatch, capsys):
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     run = push_mod.toolkit("run")
     monkeypatch.setattr(run, "_n", 0)
     with push_mod.marked_step("a", "A"):
@@ -1190,7 +1190,7 @@ def test_the_timing_row_says_when_history_is_off(push_mod, console, monkeypatch,
     push_mod.run_timing_report(tmp_path, tmp_path)
     assert HistoryOffTimings.written == []
     [timing] = [f for f in events.of("step_end") if f["id"] == "timing"]
-    assert timing["summary"] == "run history is off (JUNEAU_RUN_HISTORY=0)"
+    assert timing["summary"] == "run history is off (JUNEAU_TERMINAL_HISTORY=0)"
 
 
 def test_the_timing_row_reads_the_test_store_not_the_push_store(push_mod, console, run_history, history_record,

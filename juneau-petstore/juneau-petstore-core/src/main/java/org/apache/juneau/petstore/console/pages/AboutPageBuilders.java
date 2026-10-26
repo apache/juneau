@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
-import org.apache.juneau.rest.server.view.freemarker.console.*;
+import org.apache.juneau.console.freemarker.*;
 
 /**
  * Builder twin of the About page ({@code about.ftlh}).

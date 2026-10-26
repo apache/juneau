@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+import static org.apache.juneau.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.logging.LogRecordCapture;

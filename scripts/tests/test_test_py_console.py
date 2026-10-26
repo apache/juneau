@@ -24,9 +24,9 @@ from pathlib import Path
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
-RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
-                 "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE")
+RUN_VARIABLES = ("TERMINAL_MARKERS", "TERMINAL_ARTIFACTS", "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_CONSOLE",
+                 "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_TERMINAL_SESSION",
+                 "JUNEAU_TERMINAL_DETAIL", "JUNEAU_TERMINAL_LABEL_WIDTH", "JUNEAU_TERMINAL_LIVE")
 
 
 @pytest.fixture(autouse=True)
@@ -34,9 +34,9 @@ def clean_env(monkeypatch):
     for variable in RUN_VARIABLES:
         monkeypatch.delenv(variable, raising=False)
     sigterm = signal.getsignal(signal.SIGTERM)
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
     yield
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
     for variable in RUN_VARIABLES:   # session() and export_detail() write os.environ directly
         os.environ.pop(variable, None)
     signal.signal(signal.SIGTERM, sigterm)
@@ -150,12 +150,12 @@ def test_perf_without_a_baseline_still_writes_the_report(test_mod, bus, monkeypa
 # ---- browser step scope ------------------------------------------------------------------------------------------------
 def test_js_tests_cover_the_views_and_petstore_modules(test_mod, monkeypatch):
     modules = dict(test_mod.JS_TEST_MODULES)
-    assert set(modules) == {"juneau-rest/juneau-rest-server-views", "juneau-petstore/juneau-petstore-core",
-                       "juneau-rest/juneau-rest-server-terminal"}
+    assert set(modules) == {"juneau-rest/juneau-console-views", "juneau-petstore/juneau-petstore-core",
+                       "juneau-rest/juneau-terminal-region"}
     # Package-qualified, so one module's pattern cannot select the other's suite.
-    assert modules["juneau-rest/juneau-rest-server-views"] == "org.apache.juneau.rest.server.views.*_BrowserTest"
+    assert modules["juneau-rest/juneau-console-views"] == "org.apache.juneau.console.views.*_BrowserTest"
     assert modules["juneau-petstore/juneau-petstore-core"] == "org.apache.juneau.petstore.**.*_BrowserTest"
-    assert modules["juneau-rest/juneau-rest-server-terminal"] == "org.apache.juneau.rest.server.terminal.*_BrowserTest"
+    assert modules["juneau-rest/juneau-terminal-region"] == "org.apache.juneau.terminal.region.*_BrowserTest"
     calls = []
     monkeypatch.delenv("JUNEAU_MVN_WRAPPER", raising=False)
     monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: calls.append(cmd) or (0, ""))
@@ -164,11 +164,11 @@ def test_js_tests_cover_the_views_and_petstore_modules(test_mod, monkeypatch):
     cmd = calls[0]
     # Not just installed: one reactor run (upstream modules built from the working tree by --also-make).
     assert calls[0] != calls[1]
-    assert cmd.startswith("mvn -Pjs-tests -pl juneau-rest/juneau-rest-server-views,juneau-petstore/juneau-petstore-core,"
-                              "juneau-rest/juneau-rest-server-terminal test ")
+    assert cmd.startswith("mvn -Pjs-tests -pl juneau-rest/juneau-console-views,juneau-petstore/juneau-petstore-core,"
+                              "juneau-rest/juneau-terminal-region test ")
     assert "-f " not in cmd
-    assert ("-Dtest='org.apache.juneau.rest.server.views.*_BrowserTest,"
-            "org.apache.juneau.petstore.**.*_BrowserTest,org.apache.juneau.rest.server.terminal.*_BrowserTest'") in cmd
+    assert ("-Dtest='org.apache.juneau.console.views.*_BrowserTest,"
+            "org.apache.juneau.petstore.**.*_BrowserTest,org.apache.juneau.terminal.region.*_BrowserTest'") in cmd
     assert "-Dsurefire.failIfNoSpecifiedTests=false" in cmd
     # Just installed: one mvn -f per module, all at once.
     assert all(f"-f {module}/pom.xml" in calls[1] for module in modules)
@@ -192,7 +192,7 @@ def test_detail_is_exported(test_mod, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["test.py", "--detail", "modules", "--profile", "m"])
     monkeypatch.setattr(test_mod, "profile", lambda module: (0, ""))
     assert test_mod._main() == 0
-    assert os.environ["JUNEAU_RUN_DETAIL"] == "modules"
+    assert os.environ["JUNEAU_TERMINAL_DETAIL"] == "modules"
 
 
 def test_an_unknown_detail_level_lists_the_valid_ones(test_mod, monkeypatch, capsys):
@@ -217,10 +217,10 @@ def test_a_console_session_opens_only_when_the_sinks_are_not_default(test_mod, m
 
 def test_test_py_opens_one_toolkit_session_and_one_done(test_mod, monkeypatch, capsys):
     import contextlib
-    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setenv("TERMINAL_MARKERS", "1")
     monkeypatch.setattr(test_mod, "git_value", lambda args: "b1")
     test_mod._juneau.load()
-    from juneau_scripts import run as toolkit
+    from juneau_terminal_scripts import run as toolkit
     real, entered = toolkit.session, []
 
     @contextlib.contextmanager
@@ -239,7 +239,7 @@ def test_test_py_opens_one_toolkit_session_and_one_done(test_mod, monkeypatch, c
         ("Test", ["Juneau", "b1"], "test", root.name, root, True, False)
     assert tuple(kw["silence_env"]) == ("JUNEAU_PUSH_NO_SOUND",)
     out = capsys.readouterr().out
-    events = [line for line in out.splitlines() if line.startswith("##run ")]
+    events = [line for line in out.splitlines() if line.startswith("##terminal ")]
     assert sum('"ev":"run"' in e.replace(" ", "") for e in events) == 1
     dones = [e for e in events if '"ev":"done"' in e.replace(" ", "")]
     assert len(dones) == 1 and '"fail"' in dones[0]
@@ -270,7 +270,7 @@ def test_test_py_plain_ctrl_c_is_a_cancel(test_mod, monkeypatch, capsys):
     assert test_mod.main() == 130
     captured = capsys.readouterr()
     assert "❌ Cancelled." in captured.out
-    assert "##run" not in captured.out
+    assert "##terminal" not in captured.out
 
 
 # ---- the plan ----------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@ def test_the_plan_labels_are_push_pys(test_mod):
 
 def test_a_nested_run_under_a_parents_overall_has_an_overall_figure(test_mod, monkeypatch):
     run = test_mod._juneau.load()[0]
-    monkeypatch.setenv("JUNEAU_RUN_OVERALL", json.dumps({"elapsed": 60, "done": 2, "pending": [
+    monkeypatch.setenv("JUNEAU_TERMINAL_OVERALL", json.dumps({"elapsed": 60, "done": 2, "pending": [
         ["tests", 120], ["perf", None], ["py-tests", 20], ["js-tests", 40], ["install", 10]]}))
     board = run.Board(nested=True)
     feed = run.subscribe(lambda kind, fields: board.apply(kind, fields))

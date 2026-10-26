@@ -25,7 +25,7 @@ import java.util.regex.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 /**
  * Used for fluent assertion calls against {@link RequestHeader} objects.

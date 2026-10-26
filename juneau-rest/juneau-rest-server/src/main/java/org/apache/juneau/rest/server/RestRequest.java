@@ -72,7 +72,7 @@ import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.util.*;
-import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.bct.assertions.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

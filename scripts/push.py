@@ -48,9 +48,9 @@ WATCHDOG_SECONDS = 20
 
 
 def toolkit(name):
-    """A juneau_scripts module (git, run, notify, prompt, proc) from the in-tree toolkit."""
+    """A juneau_terminal_scripts module (git, run, notify, prompt, proc) from the in-tree toolkit."""
     _juneau.load()
-    return importlib.import_module(f"juneau_scripts.{name}")
+    return importlib.import_module(f"juneau_terminal_scripts.{name}")
 
 
 def say(text="", level="info"):
@@ -59,7 +59,7 @@ def say(text="", level="info"):
 
 
 def console_active():
-    """True when a juneau_run console view draws the terminal."""
+    """True when a juneau_terminal console view draws the terminal."""
     return _juneau.load()[0].console_active()
 
 
@@ -100,7 +100,7 @@ def next_step_number(count=1):
 
 @contextlib.contextmanager
 def marked_step(step_id, title, label=None):
-    """A run-protocol step around a block (run.step): silent unless RUN_MARKERS=1 or a console view is active."""
+    """A terminal-protocol step around a block (run.step): silent unless TERMINAL_MARKERS=1 or a console view is active."""
     with toolkit("run").step(step_id, title, label=label) as step:
         yield step
 
@@ -108,7 +108,7 @@ def marked_step(step_id, title, label=None):
 def run_marked(step_id, title, cmd, description, cwd=None, tool=None, label=None, summarize=None):
     """
     run_command() as the protocol step `step_id`.  With `tool` ("maven", "generic", ...) and markers on, or with a
-    console view active, juneau_run runs the command and reports its progress; otherwise the call is just wrapped
+    console view active, juneau_terminal runs the command and reports its progress; otherwise the call is just wrapped
     in a step.  summarize(output) becomes the row's text under a console view.
     """
     run = _juneau.load()[0]
@@ -131,7 +131,7 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
         cmd: Command to run (string or list)
         description: Description of the step for output
         cwd: Working directory (defaults to script parent directory)
-        tool: juneau_run parser name; with it (and a list cmd) the command runs as the protocol step `step_id`
+        tool: juneau_terminal parser name; with it (and a list cmd) the command runs as the protocol step `step_id`
             when markers are on
         step_id, title, n, parent, label: the step fields.  With a console view active, a list cmd with a
             step_id also runs through run_tool (tool defaults to "generic"), so its output stays off the screen
@@ -487,7 +487,7 @@ def run_timing_report(script_dir, juneau_root):
         try:
             timings = load_timings_module(script_dir)
             if timings.history_off():
-                row.summary = "run history is off (JUNEAU_RUN_HISTORY=0)"
+                row.summary = "run history is off (JUNEAU_TERMINAL_HISTORY=0)"
                 return
             records = timings.load_history(repo=juneau_root)
             report = timings.report_path(repo=juneau_root)
@@ -1085,8 +1085,8 @@ def _in_session(title, body, *, header, lines=(), mode, repo, plan):
 
 
 def parse_args(argv=None):
-    """The command line, validated, with --console and --detail exported (JUNEAU_RUN_CONSOLE, default board, and
-    JUNEAU_RUN_DETAIL) so the session and test.py use them.  Exits 2 on a bad combination."""
+    """The command line, validated, with --console and --detail exported (JUNEAU_TERMINAL_CONSOLE, default board, and
+    JUNEAU_TERMINAL_DETAIL) so the session and test.py use them.  Exits 2 on a bad combination."""
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -1181,12 +1181,12 @@ Examples:
     parser.add_argument(
         "--console",
         choices=("full", "board", "none"),
-        help="Maven output on the console: full, board (default) or none (also JUNEAU_RUN_CONSOLE; the flag wins)."
+        help="Maven output on the console: full, board (default) or none (also JUNEAU_TERMINAL_CONSOLE; the flag wins)."
     )
 
     parser.add_argument(
         "--detail",
-        help="Console detail: summary, actionable (default), modules or all (also JUNEAU_RUN_DETAIL)."
+        help="Console detail: summary, actionable (default), modules or all (also JUNEAU_TERMINAL_DETAIL)."
     )
 
     args = parser.parse_args(argv)
@@ -1256,7 +1256,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             step_num += 1
             print(f"  {step_num}. Verify BOM completeness: python3 scripts/check-bom-completeness.py")
             step_num += 1
-            print(f"  {step_num}. Run tests: python3 scripts/test.py --full (timings go to ~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl)")
+            print(f"  {step_num}. Run tests: python3 scripts/test.py --full (timings go to ~/.cache/juneau-terminal/history/<repo>-<sha8>/test.jsonl)")
             step_num += 1
             print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --repo . (reads that store)")
             step_num += 1
@@ -1350,7 +1350,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
                 installed_by_tests = "--full" in test_cmd
                 # The child draws its own Compile/Java Tests/Perf/Python Tests/Browser Tests rows; ours closes until it exits.  Its
                 # environment carries JUNEAU_PUSH_ACTIVE (test.py then leaves the end-of-run bell to us) and, with
-                # markers on, JUNEAU_RUN_N_BASE reserving the numbers of the steps it contributes so the whole run
+                # markers on, JUNEAU_TERMINAL_N_BASE reserving the numbers of the steps it contributes so the whole run
                 # stays in order.  Neither is set in our own environment, so later children don't inherit them.
                 with toolkit("run").handoff(reserve=len(TEST_PY_NUMBERED_STEPS)) as extra:
                     result = run_test_script(test_cmd, juneau_root, run, env={**os.environ, **extra})

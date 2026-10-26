@@ -26,8 +26,8 @@ python3 scripts/release.py --revert
 | `--resume` | none | off | Start after the last step recorded in the checkpoint file. |
 | `--skip-step` | step name | none | Skip this step. May be repeated. |
 | `--revert` | none | off | Revert a release: delete the git tag, reset the Maven versions and remove the RC from SVN. |
-| `--console` | `full`, `board`, `none` | `full` | Maven output on the console. Also `JUNEAU_RUN_CONSOLE`; the flag wins. |
-| `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_RUN_DETAIL`. |
+| `--console` | `full`, `board`, `none` | `full` | Maven output on the console. Also `JUNEAU_TERMINAL_CONSOLE`; the flag wins. |
+| `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_TERMINAL_DETAIL`. |
 
 ## What it does
 
@@ -66,7 +66,7 @@ A configuration banner, then a row per step with the full output written to `~/.
 - `make_git_folder` deletes the whole staging directory on every run that includes it. Use `--start-step` or `--resume` to avoid redoing it.
 - `--revert` deletes the remote tag with `git push origin :<tag>` and can commit SVN deletions after asking.
 - Steps need GPG and SVN credentials. The script primes the gpg agent first with `prompt-pgp-passphrase.py`.
-- `RUN_MARKERS` is ignored, with a warning.
+- `TERMINAL_MARKERS` is ignored, with a warning.
 
 ## See also
 

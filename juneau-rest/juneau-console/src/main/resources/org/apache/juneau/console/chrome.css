@@ -1,0 +1,1755 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+
+/* ==========================================================================
+   Apache Juneau — admin-console chrome ("chrome.css")
+   ==========================================================================
+
+   PURPOSE
+   A themeable admin-console shell (branded header, primary nav tab
+   bar, content card on a tinted page background, data grid with semantic
+   status pills). Structural rules only — this file ships no :root block of
+   its own. Every --jc-* token is defined by the DYNAMIC part of the served
+   response: ConsoleChromeMixin always appends Theme.OPEN's token block, then
+   (if a non-default theme is active) a second block of that theme's
+   overrides. Those blocks are emitted at html:root, specificity (0,0,1,1), so
+   they out-rank a same-named token declared at :root (0,0,1,0) by a
+   separately linked stylesheet — juneau-views.css, which declares its own
+   token set, included — whichever order the consumer links the two in. Do
+   not read this as "later text always wins": two :root blocks in separately
+   linked files tie on specificity and are resolved by <link> order, which
+   this framework neither sets nor can observe. The type prefix is what makes
+   the theme's value win rather than the append position.
+
+   SECURITY - SINK-PROPERTY DISCIPLINE (do not casually add a new var(--jc-*)
+   reference without re-reading this):
+     - Every var(--jc-*) reference below is the ENTIRE value of its property
+       - never an argument nested inside another function call
+       (linear-gradient(..., var(--jc-x), ...), rgb(var(--jc-x)),
+       url(var(--jc-x)) are all forbidden shapes).
+     - Color/font/length tokens sink ONLY into color, background-color,
+       border-color (+ border-top-color/border-bottom-color), font-family,
+       font-size, or border-radius - never a url-capable property.
+     - The ONLY url-capable property that takes a var(--jc-*) value is
+       background-image, and only for the two gradient tokens
+       --jc-page-bg / --jc-avatar-bg (their values are locked to
+       gradient/color shapes by Theme's allowlist grammar, so a url() can
+       never be their value).
+     - The logo is NOT a token. .jc-logo's background-image is a hard-coded
+       url("data:...") literal below; there is no --jc-logo custom property
+       anywhere in this file or the Theme API.
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--jc-font);
+  color: var(--jc-text);
+  background-color: var(--jc-chrome-bg);
+  background-image: var(--jc-page-bg);
+  height: 100%;
+  min-height: 100vh;
+  /* The document does not scroll. Header, page nav, and the page-bg gradient stay
+     put; .jc-main is the only overflow box (the cards). */
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  /* Bottom gutter lives on the flex container, not as .jc-main's margin-bottom:
+     a column-flex body's last item drops its margin from the scrollable overflow,
+     so the themed --jc-page-bg band vanished after scrolling to the end. Container
+     padding is included in that overflow. */
+  padding-bottom: var(--jc-space-3);
+}
+
+/* Header, page nav (and the optional .jc-chrome sticky wrapper), and footer stay
+   outside the scrolling well. */
+.jc-header,
+.jc-chrome,
+.juneau-page-nav,
+.jc-nav,
+.jc-page-footer,
+.jc-footer {
+  flex: 0 0 auto;
+}
+
+a { color: var(--jc-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Accessibility: a single token-driven :focus-visible ring covers every interactive control at once
+   (icon buttons, all .jc-btn variants, nav tabs, links, ribbon/pagingpill controls) so keyboard focus is visible
+   by default - a WCAG 2.4.7 (AA) requirement. :focus-visible (not :focus) so mouse clicks don't show the ring. */
+:focus-visible {
+  outline: 2px solid var(--jc-focus);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.jc-header {
+  display: flex;
+  align-items: center;
+  height: var(--jc-header-height);
+  background-color: var(--jc-header-bg);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+/* Title row + HTML-slot page nav as one sticky stack. Consumers wrap both in this class
+   (header, then .juneau-page-nav) so they cannot scroll apart. Opaque background so page
+   content does not show through. Inner .jc-header sticky is then redundant. */
+.jc-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: var(--jc-header-bg);
+}
+
+.jc-chrome .jc-header,
+.jc-chrome .juneau-page-nav {
+  position: static; /* the wrapper is the sticky unit */
+}
+
+.jc-brand {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jc-logo {
+  width: 40px;
+  height: 40px;
+  margin: 8px 16px;
+  flex: 0 0 auto;
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-header-bg);
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0OCA0OCc+PHJlY3Qgd2lkdGg9JzQ4JyBoZWlnaHQ9JzQ4JyByeD0nMTAnIGZpbGw9JyMxNTg5RUUnLz48cGF0aCBkPSdNMjQgOGMtNyA2LTExIDEzLTExIDE5YTExIDExIDAgMCAwIDIyIDBjMC02LTQtMTMtMTEtMTl6JyBmaWxsPScjZmZmZmZmJyBmaWxsLW9wYWNpdHk9JzAuOTUnLz48cGF0aCBkPSdNMjQgMTR2MjAnIHN0cm9rZT0nIzE1ODlFRScgc3Ryb2tlLXdpZHRoPScxLjYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjwvc3ZnPgo=");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px;
+}
+
+.jc-brand-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--jc-text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jc-brand-title .jc-brand-sep {
+  margin: 0 6px;
+  color: var(--jc-text-muted);
+  font-weight: 400;
+}
+
+.jc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 16px;
+  flex: 0 0 auto;
+}
+
+.jc-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--jc-header-icon-text);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.jc-icon-btn:hover { background-color: var(--jc-hover-bg); }
+
+.jc-icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+.jc-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-image: var(--jc-avatar-bg);
+  color: var(--jc-on-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+/* ==========================================================================
+   App-header extras: action/avatar count-dot badges, avatar
+   presence status + image fallback, and the menu surface.
+   Badge tones use the StatusTone wire tokens (info, success, warning, error,
+   neutral) and presence states reuse the shared .tag palette tokens - the
+   warning tone and AWAY status BOTH map to amber (no dedicated --jc-warn*
+   token is introduced).  Every var(--jc-*) here sinks only into
+   color / background-color / border-color / border-radius (or a "Npx solid
+   var()" border shorthand as elsewhere in this file) - never a url-capable
+   whole value.
+   ========================================================================== */
+
+/* A badge overlays its host action/avatar, so those hosts anchor it. */
+.jc-icon-btn,
+.jc-avatar { position: relative; }
+
+/* A menu-bearing action/avatar is a DISABLED trigger until the shared layer stack is wired. */
+.jc-icon-btn[disabled],
+.jc-avatar[disabled] { cursor: default; opacity: 0.5; }
+
+.jc-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  background-color: var(--jc-tag-neutral-bg);
+  color: var(--jc-tag-neutral-text);
+  border: 1px solid var(--jc-tag-neutral-border);
+}
+
+/* Count badges (header.badges[]): inline pills fed by a polled endpoint; tones reuse the StatusTone tokens above. */
+.jc-header-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jc-count-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  background-color: var(--jc-tag-amber-bg);
+  color: var(--jc-tag-amber-text);
+  border: 1px solid var(--jc-tag-amber-border);
+}
+.jc-count-badge[hidden] { display: none; }
+.jc-count-badge[data-juneau-badge-tone="info"]  { background-color: var(--jc-tag-blue-bg); color: var(--jc-tag-blue-text); border-color: var(--jc-tag-blue-border); }
+.jc-count-badge[data-juneau-badge-tone="error"] { background-color: var(--jc-tag-red-bg);  color: var(--jc-tag-red-text);  border-color: var(--jc-tag-red-border); }
+.jc-count-badge--stale { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
+.jc-count-badge--pulse { animation: jc-count-badge-pulse 0.8s ease-out 1; }
+
+@keyframes jc-count-badge-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jc-count-badge--pulse { animation: none; }
+}
+
+.jc-count-badge-popover {
+  position: absolute;
+  z-index: 1000;
+  max-width: 320px;
+  padding: 6px 0;
+  background-color: var(--jc-surface, #fff);
+  color: inherit;
+  border: 1px solid var(--jc-tag-neutral-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  font-size: 13px;
+}
+.jc-count-badge-popover-item,
+.jc-count-badge-popover-more { display: block; padding: 4px 12px; color: inherit; text-decoration: none; }
+.jc-count-badge-popover-item--mine { font-weight: 600; }
+.jc-count-badge-popover-more { opacity: 0.7; }
+
+/* A dot badge (no count) collapses to a small circle in the same corner. */
+.jc-badge.jc-badge-dot {
+  min-width: 8px;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.jc-badge[data-juneau-badge-tone="info"]    { background-color: var(--jc-tag-blue-bg);    color: var(--jc-tag-blue-text);    border-color: var(--jc-tag-blue-border); }
+.jc-badge[data-juneau-badge-tone="success"] { background-color: var(--jc-tag-green-bg);   color: var(--jc-tag-green-text);   border-color: var(--jc-tag-green-border); }
+.jc-badge[data-juneau-badge-tone="warning"] { background-color: var(--jc-tag-amber-bg);   color: var(--jc-tag-amber-text);   border-color: var(--jc-tag-amber-border); }
+.jc-badge[data-juneau-badge-tone="error"]   { background-color: var(--jc-tag-red-bg);     color: var(--jc-tag-red-text);     border-color: var(--jc-tag-red-border); }
+.jc-badge[data-juneau-badge-tone="neutral"] { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
+
+/* Avatar image + hidden-initials fallback (juneau-console.js hides the img on error and unhides the initials). */
+.jc-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Presence dot in the avatar's lower-right corner; the ring blends into the header bar. */
+.jc-avatar[class*="jc-avatar-status-"]::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--jc-header-bg);
+  background-color: var(--jc-tag-neutral-text);
+}
+
+.jc-avatar-status-online::after  { background-color: var(--jc-tag-green-text); }
+.jc-avatar-status-away::after    { background-color: var(--jc-tag-amber-text); }
+.jc-avatar-status-busy::after    { background-color: var(--jc-tag-red-text); }
+.jc-avatar-status-offline::after { background-color: var(--jc-tag-neutral-text); }
+
+/* Menu surface - display:none until juneau-console.js portals it onto the shared views layer stack, which
+   sets position:fixed + the cell-anchored top/left and toggles display back on.  Inert with JS off. */
+.jc-menu {
+  display: none;
+  min-width: 160px;
+  padding: 4px 0;
+  background-color: var(--jc-header-bg);
+  color: var(--jc-text);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* A single row: a same-origin <a href> link or a SAFE host-dispatch <button>; both share this chrome. */
+.jc-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+  text-align: left;
+  color: var(--jc-text);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.jc-menu-item:hover,
+.jc-menu-item:focus {
+  background-color: var(--jc-accent-wash);
+  text-decoration: none;
+  outline: none;
+}
+
+/* An inert separator between item groups. */
+.jc-menu-divider {
+  height: 1px;
+  margin: 4px 0;
+  background-color: var(--jc-border);
+}
+
+/* ==========================================================================
+   Primary navigation (Page Tabs — .jc-nav-tab)
+   Selected tab: thick accent on the TOP edge (--jc-page-nav-accent → --jc-accent
+   per stock theme), light wash, dark ink. A same-color opaque fill hid that top
+   bar and left only .jc-nav's floor reading as a bar below the tab. The floor
+   (full-width underline of the strip) stays; the selected-tab indicator does not.
+   Not .jc-tab / .jc-subtab (deprecated ribbon pills; bottom-edge accent).
+   ========================================================================== */
+
+.jc-nav {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--jc-nav-bg);
+  border-bottom: var(--jc-nav-indicator-width) solid var(--jc-page-nav-accent);
+  padding: 0 16px;
+  position: sticky;
+  top: var(--jc-header-height);
+  z-index: 19;
+}
+
+.jc-nav-tab {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: 0.8125rem;
+  line-height: var(--jc-nav-tab-line-height);
+  font-weight: 400;
+  color: var(--jc-text-soft);
+  padding: var(--jc-nav-tab-padding-block) var(--jc-nav-tab-padding-inline);
+  margin-right: 0;
+  border-top: var(--jc-nav-indicator-width) solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  transition: background-color 0.1s ease-in;
+}
+
+.jc-nav-tab:hover {
+  background-color: var(--jc-accent-wash);
+  text-decoration: none;
+}
+
+.jc-nav-tab.active {
+  background-color: var(--jc-accent-wash);
+  border-top-color: var(--jc-page-nav-accent);
+  border-bottom: none;
+  color: var(--jc-text);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Page-shell tabs / sub-tabs (.jc-tab / .jc-subtab)
+   The base SHAPE (flex layout, padding, border WIDTH, the display:none-until-
+   .jc-active panel toggle) lives in juneau-views.css with NO palette
+   (currentColor borders); chrome.css paints them HERE so a tab surface reads as
+   belonging next to the .jc-nav-tab bar directly above it - the same
+   base-shape-in-views / colours-in-chrome split as .tag and the ribbon buttons.
+   The active tab's 3px bottom edge (border-bottom-width, set neutrally in
+   -views) becomes the accent, echoing .jc-nav-tab.active's accent top edge.
+
+   The selector below repeats its class deliberately.  The -views base rule for
+   these same two classes is a bare .jc-tab/.jc-subtab, so a single class here
+   would tie it at (0,0,1,0) and the winner would be decided by which <link> a
+   consumer happens to place second - and -views' colourless "border-top: 1px
+   solid" shorthand resets the border back to currentColor whenever it wins.
+   Doubling the class lifts this rule to (0,0,2,0) so it beats the base rule on
+   specificity, matching exactly the same elements either way.  The :hover and
+   .jc-tab-active rules below need no such bump: they already outrank anything
+   -views declares for the same state.
+   ========================================================================== */
+
+.jc-tab.jc-tab,
+.jc-subtab.jc-subtab {
+  color: var(--jc-text-soft);
+  background-color: var(--jc-control-bg);
+  border-color: var(--jc-border);
+  transition: background-color 0.1s ease-in;
+}
+
+.jc-tab:hover,
+.jc-subtab:hover {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-accent);
+  text-decoration: none;
+}
+
+.jc-tab.jc-tab-active,
+.jc-subtab.jc-subtab-active {
+  color: var(--jc-on-accent);
+  background-color: var(--jc-accent-selected);
+  border-color: var(--jc-border);
+  border-bottom-color: var(--jc-accent-selected);
+}
+
+/* ==========================================================================
+   HTML-slot page nav (two text rows; extra children rows for deeper nested
+   <@node>s; not Page Tabs / Page Subtabs pills)
+   Shape AND colour live here so toolkit-less pages still get Page Tabs.
+   juneau-views.css keeps a parallel colourless shape for views-only consumers.
+   Selected section = light wash + indicator accent on the TOP edge, no pill
+   fill. The --jc-page-nav-accent floor (--jc-nav-indicator-width, 3px) sits on
+   the nav itself, under the whole stack. A --jc-page-nav-hairline (2px) accent
+   sits BETWEEN rows only: under the sections row when children follow
+   (:not(:last-child)) and between stacked children rows. With no children the
+   sections row is the last child, so it draws no hairline and the 3px floor is
+   the only bottom border - not 3px + 2px stacked into 5px. Selected child =
+   accent wash behind the label, not accent type.
+   ========================================================================== */
+
+.juneau-page-nav {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--jc-nav-bg);
+  border-bottom-width: var(--jc-nav-indicator-width);
+  border-bottom-style: solid;
+  border-bottom-color: var(--jc-page-nav-accent);
+  /* Pins under the sticky header when the document still scrolls (toolkit-less
+     pages without .jc-chrome). Harmless when html/body overflow is hidden. */
+  position: sticky;
+  top: var(--jc-header-height);
+  z-index: 19;
+}
+
+.juneau-page-nav-sections, .juneau-page-nav-children {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  align-items: stretch;
+  gap: 0;
+  margin: 0;
+  padding-left: var(--jc-space-3);
+  padding-right: var(--jc-space-3);
+}
+
+.juneau-page-nav-sections:not(:last-child) {
+  border-bottom-width: var(--jc-page-nav-hairline);
+  border-bottom-style: solid;
+  border-bottom-color: var(--jc-page-nav-accent);
+}
+
+.juneau-page-nav-children:not(:last-child) {
+  border-bottom-width: var(--jc-page-nav-hairline);
+  border-bottom-style: solid;
+  border-bottom-color: var(--jc-page-nav-accent);
+}
+
+.juneau-page-nav-section, .juneau-page-nav-child {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: var(--jc-nav-tab-padding-inline);
+  padding-right: var(--jc-nav-tab-padding-inline);
+  font-weight: 400;
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.juneau-page-nav-section {
+  padding: var(--jc-nav-tab-padding-block) var(--jc-nav-tab-padding-inline);
+  line-height: var(--jc-nav-tab-line-height);
+  color: var(--jc-text-soft);
+  font-size: var(--jc-page-nav-section-font-size);
+  border-top-width: var(--jc-nav-indicator-width);
+  border-top-style: solid;
+  border-top-color: transparent;
+}
+
+.juneau-page-nav-section:hover {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-accent);
+  text-decoration: none;
+}
+
+.juneau-page-nav-section[aria-current="page"] {
+  background-color: var(--jc-accent-wash);
+  border-top-color: var(--jc-page-nav-accent);
+  color: var(--jc-text);
+  font-weight: 700;
+}
+
+.juneau-page-nav-child {
+  padding: var(--jc-page-nav-child-padding-block) var(--jc-page-nav-child-padding-inline);
+  line-height: var(--jc-nav-tab-line-height);
+  color: var(--jc-text-soft);
+  font-size: var(--jc-page-nav-child-font-size);
+}
+
+.juneau-page-nav-child:hover {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-text);
+  text-decoration: none;
+}
+
+.juneau-page-nav-child[aria-current="page"] {
+  color: var(--jc-text);
+  background-color: var(--jc-accent-wash);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Page scaffolding
+   ========================================================================== */
+
+.jc-main {
+  flex: 1 1 auto;
+  padding: 20px 24px 40px;
+  min-width: 0;
+  min-height: 0; /* shrink below content so overflow:auto becomes the card scroller */
+  overflow: auto;
+  background-color: var(--jc-main-bg);
+  /* Top + sides only; body padding-bottom is the matching bottom gutter (see body rule). */
+  margin: var(--jc-space-3) var(--jc-space-3) 0;
+  border-radius: var(--jc-radius);
+}
+
+.jc-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0 0 14px;
+  flex-wrap: wrap;
+  gap: 0;
+  background-color: var(--jc-card-bg);
+  border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
+  padding: var(--jc-card-padding);
+  /* Tighter top than content cards (16px → 8px). SSC hero did this as a local
+     padding-top; page-header is the title-card so the inset lives here. */
+  padding-top: var(--jc-space-2);
+}
+
+.jc-page-header h1 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--jc-text);
+  margin: 0 0 var(--jc-space-1);
+}
+
+.jc-page-header .jc-page-sub {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--jc-text-muted);
+  margin: 0;
+}
+
+.jc-breadcrumb {
+  font-size: 0.75rem;
+  color: var(--jc-text-muted);
+  margin-bottom: 4px;
+}
+
+.jc-breadcrumb a { color: var(--jc-text-muted); }
+.jc-breadcrumb .sep { margin: 0 6px; }
+
+/* --------------------------------------------------------------------------
+   Shell-rendered chrome (juneau-console.js, 10.0.0)
+   -------------------------------------------------------------------------- */
+
+.jc-brand-subtitle {
+  margin-left: var(--jc-space-2);
+  color: var(--jc-text-soft);
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.jc-card-title {
+  margin: 0 0 var(--jc-space-3) 0;
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--jc-text);
+}
+
+/* Local fallback when the JuneauViews layer stack is absent: the shell toggles the list's
+   display; with views loaded the list is portalled as a layer and these rules do not apply. */
+.jc-user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.jc-user-menu > .jc-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 30;
+}
+
+/* Loud-failure banner. One banner per page, one item per failure. */
+.jc-console-error {
+  position: relative;
+  z-index: 40;
+  margin: 0;
+  padding: var(--jc-space-2) var(--jc-space-3);
+  background-color: var(--jc-tag-red-bg);
+  color: var(--jc-tag-red-text);
+  border-bottom: 2px solid var(--jc-tag-red-text);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.jc-console-error-item {
+  overflow-wrap: anywhere;
+}
+
+.jc-console-error-item + .jc-console-error-item {
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+
+.jc-card {
+  margin: 0 auto;
+  background-color: var(--jc-card-bg);
+  border: none;
+  border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
+  padding: var(--jc-card-padding);
+}
+
+.jc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.jc-card-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--jc-text);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Table-chrome detector (data-juneau-layout="wide")
+   ==========================================================================
+   ViewTable stamps `data-juneau-layout="wide"` on the ONE stamp node it emits (its wrapper <div>).
+   This is a first-class public data-juneau-* convention (allowed value: "wide"; never stamped on
+   .jc-card / .jc-main — the toolkit emits neither class).  After cards fill the main well, the
+   stamp is the table-chrome detector, not a width punch-through: the outer .jc-card that contains
+   the stamp goes transparent and unpadded so Table Toolbar + Summary View sit on the gray well.
+   Nested .jc-card descendants stay content cards (`:not(.jc-card .jc-card)`).
+
+   Position-dependent matrix:
+     - the wrapper itself           -> still widened (self-match)
+     - outer .jc-card containing the stamp (HTML-slot: stamp may sit inside a slot <div>)
+                                    -> table-chrome (transparent, padding 0, no card shadow); descendant :has
+     - nested .jc-card              -> never table-chrome
+     - .jc-main                     -> max-width:none when ANY descendant wrapper is wide (harmless;
+                                       .jc-main has no max-width of its own)
+   `.jc-main` keeps its padding; `min-width:0` lets the main region shrink below the table's
+   intrinsic width so the table-region scroll box (juneau-views.css), not the page, absorbs overflow.
+*/
+
+[data-juneau-layout="wide"] {
+  max-width: none;
+  width: 100%;
+}
+
+.jc-card:has([data-juneau-layout="wide"]):not(.jc-card .jc-card):not(.jc-card-bare .jc-card) {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.jc-main:has([data-juneau-layout="wide"]) {
+  max-width: none;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.jc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--jc-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--jc-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.jc-btn-primary {
+  background-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
+}
+.jc-btn-primary:hover { background-color: var(--jc-btn-primary-bg-hover); }
+
+.jc-btn-outline {
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text-soft);
+  border-color: var(--jc-control-border);
+}
+.jc-btn-outline:hover { background-color: var(--jc-hover-bg); }
+
+.jc-btn-danger {
+  background-color: var(--jc-control-bg);
+  color: var(--jc-danger-text);
+  border-color: var(--jc-control-border);
+}
+.jc-btn-danger:hover { background-color: var(--jc-danger-wash); }
+
+.jc-btn-success {
+  background-color: var(--jc-control-bg);
+  color: var(--jc-success-text);
+  border-color: var(--jc-control-border);
+}
+.jc-btn-success:hover { background-color: var(--jc-success-wash); }
+
+/* ==========================================================================
+   Tag / pill system
+   ========================================================================== */
+
+.tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 14px;
+}
+
+/* Example domain/value vocabulary (lifted from the release-manager dogfood) - an extension point, not a closed
+   contract. A consumer app is expected to add its own .tag.<domain>.<value> rules using the same palette tokens.
+   These pill/tag chips paint from the canonical --jc-pill-* family: the client `pill` catalog renderer
+   emits ".jc-pill.tag.<domain>.<value>", so this is the palette its colour comes from.  (The --jc-tag-* triads
+   remain as aliases of --jc-pill-* for .jc-badge / .jc-avatar-status-* below.) */
+.tag.status.released,
+.tag.stage.released { background-color: var(--jc-pill-green-bg); color: var(--jc-pill-green-text); border-color: var(--jc-pill-green-border); }
+
+.tag.status.voting,
+.tag.status.rc,
+.tag.stage.voting,
+.tag.stage.rc { background-color: var(--jc-pill-blue-bg); color: var(--jc-pill-blue-text); border-color: var(--jc-pill-blue-border); }
+
+.tag.status.draft,
+.tag.status.pending,
+.tag.stage.draft,
+.tag.stage.pending,
+.tag.stage.building { background-color: var(--jc-pill-amber-bg); color: var(--jc-pill-amber-text); border-color: var(--jc-pill-amber-border); }
+
+.tag.status.dropped,
+.tag.status.unknown,
+.tag.stage.dropped,
+.tag.stage.unknown,
+.tag.stage.archived { background-color: var(--jc-pill-neutral-bg); color: var(--jc-pill-neutral-text); border-color: var(--jc-pill-neutral-border); }
+
+.tag.status.fail,
+.tag.status.failed,
+.tag.stage.fail,
+.tag.stage.failed { background-color: var(--jc-pill-red-bg); color: var(--jc-pill-red-text); border-color: var(--jc-pill-red-border); }
+
+/* Status probes.  A client-side control (see juneau-views.css .jc-probe for the shape/geometry): a status chip with a
+   visible dot, sized a touch larger than a pill.  Exactly four statuses paint from the dedicated --jc-probe-* palette
+   (light wash + ink + dot fill); the selected probe in a group draws a themed accent ring from --jc-accent-selected.
+   Selecting a probe never repaints its status colours. */
+.jc-probe-success { background-color: var(--jc-probe-success-bg); color: var(--jc-probe-success-text); }
+.jc-probe-success .jc-probe-dot { background-color: var(--jc-probe-success-dot); }
+.jc-probe-error   { background-color: var(--jc-probe-error-bg);   color: var(--jc-probe-error-text); }
+.jc-probe-error   .jc-probe-dot { background-color: var(--jc-probe-error-dot); }
+.jc-probe-warning { background-color: var(--jc-probe-warning-bg); color: var(--jc-probe-warning-text); }
+.jc-probe-warning .jc-probe-dot { background-color: var(--jc-probe-warning-dot); }
+.jc-probe-neutral { background-color: var(--jc-probe-neutral-bg); color: var(--jc-probe-neutral-text); }
+.jc-probe-neutral .jc-probe-dot { background-color: var(--jc-probe-neutral-dot); }
+.jc-probe[aria-checked="true"] { box-shadow: 0 0 0 2px var(--jc-accent-selected); }
+
+/* ==========================================================================
+   Data table (DataTables style)
+   ========================================================================== */
+
+table.jc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--jc-table-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  overflow: hidden;
+}
+
+table.jc-table thead th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--jc-text-muted);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--jc-border);
+  background-color: var(--jc-table-header-bg);
+  white-space: nowrap;
+}
+
+table.jc-table tbody td {
+  font-size: 0.8125rem;
+  color: var(--jc-text);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--jc-border);
+  vertical-align: middle;
+}
+
+table.jc-table tbody tr:nth-child(odd) { background-color: var(--jc-table-stripe-bg); }
+table.jc-table tbody tr:nth-child(even) { background-color: var(--jc-table-row-bg); }
+table.jc-table tbody tr:hover { background-color: var(--jc-accent-wash); }
+table.jc-table tbody tr:last-child td { border-bottom: none; }
+
+/* ==========================================================================
+   DataTables table visual parity (compact rows, subtle zebra
+   striping, row hover, light header) - juneau-console-views' neutral
+   `table[data-juneau-view]` / `table.dataTable` selectors (juneau-views.css)
+   get their font-family/color/background-color/border-color HERE, via
+   --jc-* tokens - the same base-shape-in-views / colors-in-chrome split as
+   the ".tag"/ribbon reconciliation above.  Child-combinator selectors mirror
+   the vendored dataTables.dataTables.css structure so specificity TIES (not
+   loses to) it; this file is served LAST in every juneau-views page's
+   <head>, so ties resolve in our favor by cascade order.
+
+   Covers BOTH DataTables stripe/hover generations: DT1.x's `tr.odd`/
+   `tr.even` row classes, AND DT2.x's - this app's table carries no
+   "stripe"/"hover"/"display" convenience class (see juneau-views.js), so
+   DT2.x's own box-shadow-based nth-child stripe/hover never actually fires;
+   the bare `tbody tr:nth-child(odd/even)`/`:hover` rules below are what
+   actually paints every row today.  The `table.dataTable.stripe`/`.hover`/
+   `.display` forms are ALSO covered for any future consumer that opts into
+   those convenience classes, with the vendored --dt-row-stripe/--dt-row-hover
+   CSS variables neutralized (white, near-zero alpha) so that DataTables'
+   own inset box-shadow overlay can never visibly fight these backgrounds.
+   ========================================================================== */
+
+table[data-juneau-view],
+table.dataTable {
+  font-family: var(--jc-font);
+  color: var(--jc-text);
+  border-color: var(--jc-table-border, #dee2e6);  /* outer/grid frame — gray, not --jc-text */
+  border-top-color: var(--jc-table-border, #dee2e6); /* 1px gray hairline, not --jc-border-2 / ink */
+  border-bottom-color: var(--jc-table-rule, #bbbbbb);
+  --dt-row-stripe: 255, 255, 255;
+  --dt-row-hover: 255, 255, 255;
+}
+
+table[data-juneau-view] > thead > tr > th,
+table[data-juneau-view] > thead > tr > td,
+table.dataTable > thead > tr > th,
+table.dataTable > thead > tr > td {
+  background-color: var(--jc-table-header-bg);
+  color: var(--jc-text-soft);
+  border-color: var(--jc-table-border, #dee2e6);
+  border-bottom-color: var(--jc-table-rule, #bbbbbb);
+}
+
+table[data-juneau-view] > tbody > tr > th,
+table[data-juneau-view] > tbody > tr > td,
+table.dataTable > tbody > tr > th,
+table.dataTable > tbody > tr > td {
+  border-left-color: var(--jc-table-border, #dee2e6);
+  border-right-color: var(--jc-table-border, #dee2e6);
+  border-top: none;
+  border-bottom: none;
+}
+
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > th,
+table[data-juneau-view] > tbody > tr:first-child:not(.child) > td,
+table.dataTable > tbody > tr:first-child:not(.child) > th,
+table.dataTable > tbody > tr:first-child:not(.child) > td {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: var(--jc-table-rule, #bbbbbb);
+}
+
+/* Zebra: first data row is the stripe (#FAFAF9) so it does not blend into the white
+   header.  CSS :nth-child is 1-based (odd = stripe).  DataTables often stamps the first
+   row `even` (0-based) — invert those classes, then `nth-child` / `nth-child(odd of
+   :not(.child))` so visual position wins and an inserted expander row does not shift
+   the stripe.  .stripe/.display convenience-class forms kept for future consumers. */
+table[data-juneau-view] > tbody > tr.even:not(.child),
+table.dataTable > tbody > tr.even:not(.child) {
+  background-color: var(--jc-table-stripe-bg);
+}
+table[data-juneau-view] > tbody > tr.odd:not(.child),
+table.dataTable > tbody > tr.odd:not(.child) {
+  background-color: var(--jc-table-row-bg);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),
+table.dataTable > tbody > tr:nth-child(odd):not(.child),
+table.dataTable.stripe > tbody > tr:nth-child(odd):not(.child),
+table.dataTable.display > tbody > tr:nth-child(odd):not(.child) {
+  background-color: var(--jc-table-stripe-bg);
+}
+table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),
+table.dataTable > tbody > tr:nth-child(even):not(.child),
+table.dataTable.stripe > tbody > tr:nth-child(even):not(.child),
+table.dataTable.display > tbody > tr:nth-child(even):not(.child) {
+  background-color: var(--jc-table-row-bg);
+}
+table[data-juneau-view] > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable.stripe > tbody > tr:nth-child(odd of :not(.child)),
+table.dataTable.display > tbody > tr:nth-child(odd of :not(.child)) {
+  background-color: var(--jc-table-stripe-bg);
+}
+table[data-juneau-view] > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable.stripe > tbody > tr:nth-child(even of :not(.child)),
+table.dataTable.display > tbody > tr:nth-child(even of :not(.child)) {
+  background-color: var(--jc-table-row-bg);
+}
+
+/* Row hover - bare :hover (the mechanism actually in effect today) plus the .hover/.display convenience-class
+   form; wins over the zebra background-color above by source order (this rule is declared after it). */
+table[data-juneau-view] > tbody > tr:hover,
+table.dataTable > tbody > tr:hover,
+table.dataTable.hover > tbody > tr:hover,
+table.dataTable.display > tbody > tr:hover {
+  background-color: var(--jc-accent-wash);
+}
+
+/* ==========================================================================
+   DataTables ribbon visual parity (juneau-console-views' ".juneau-view-*"
+   classes) - additive themed accent layer only.  -views ships the neutral
+   base shape (border/color via currentColor); this file themes the SAME
+   class names with --jc-accent/--jc-accent-wash, sink-property-allowlist
+   compliant (color/background-color only - see the file header comment).
+   ========================================================================== */
+
+/* Base thin-neutral-border shape - -views ships only a currentColor-fallback border, which
+   inherits the body's near-black text color instead of a subtle gray; themed here with
+   --jc-control-border (same leaf as toolbar Search / --jc-border-2) for ribbon/pager enabled
+   AND disabled.  White face so a button reads as a distinct control against the card's
+   tinted background. */
+.juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-chrome-icon); }
+.juneau-view-ribbon-btn:disabled { border-color: var(--jc-control-border); }
+.juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
+.juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
+
+/* Icon/ghost appearance: hover recolors the glyph only. Restates idle fill + border so this wins over
+   the default chrome hover (and over a later blue-border hover on the same selector). Opt-in via
+   RibbonAction.appearance("icon") / helpers.button({appearance:"icon"}). */
+.juneau-view-ribbon-btn.juneau-view-ribbon-btn--icon:hover:not(:disabled) {
+	background-color: var(--jc-control-bg);
+	border-color: var(--jc-control-border);
+	color: var(--jc-accent);
+}
+.juneau-view-helper-btn.juneau-view-helper-btn--icon:hover:not(:disabled) {
+	color: var(--jc-accent);
+}
+
+/* Themed accent for an ACTIVE toggle (option/optionGroup member button's aria-pressed="true" - see -views'
+   neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
+   (e.g. a column-scoped "option" toggle whose state survived a browser refresh) is visually indistinguishable
+   from an unpressed button - clicking it once and never again can silently keep filtering out every row.  Also
+   matches the blue "active" export button in the ribbon. */
+.juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); border-color: var(--jc-accent); }
+
+/* Shared strip widget - TAB-MODE (row-detail multi-section pane switcher).  -views ships the neutral folder-tab
+   SHAPE (floor line + squared bottom caps + overlap, all via currentColor); this themes the floor line with
+   --jc-border and the ONE selected tab with a solid, OPAQUE --jc-accent-selected fill + --jc-on-accent label/mark -
+   the SAME aria-pressed treatment used elsewhere in this file (deliberately, per the operator's WCAG 1.4.11
+   ruling: a tablist's one persistent selection reads fine with the pressed-button treatment, superseding this
+   comment's own prior "NOT the solid aria-pressed fill" framing).  Each var(--jc-*) is the entire value of a
+   color/background-color/border-color property (sink-property discipline - see file header). */
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
+	background-color: var(--jc-accent-selected);
+	color: var(--jc-on-accent);
+	border-bottom-color: var(--jc-accent-selected);
+}
+
+/* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
+   track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
+   instead of a tab strip, and it also doubled the accent band under the header's own wash.  That reasoning still
+   holds for THIS strip specifically (a settled decision, not reopened here) - it is not a project-wide
+   "no solid fill" rule, though: the generic tab-mode rules directly above now use a solid fill too, deliberately,
+   per the ruling noted there.  The fix for the detail strip was still to remove the override, not to re-theme it:
+   the correct diff for the detail strip adds ZERO declarations to this file.  Note in particular that the deleted
+   hover rule was UNGUARDED - it out-specified the disabled-guarded generic hover rule above and re-lit disabled
+   tabs.  Deleting it is what fixes that; do not re-add a guarded copy here, because the guard already exists once
+   and a second copy is the duplication that produced this block in the first place. */
+
+/* Detail-panel header bar (instance-detail header wash). */
+.juneau-view-detail-header {
+	background-color: var(--jc-accent-wash);
+}
+.juneau-view-detail-header .juneau-view-detail-title {
+	color: var(--jc-text);
+}
+
+/* Header icon tile.  -views ships the square + radius; this is the fill and the contrasting glyph.  With the
+   tab track wash gone this is the panel's only solid accent, so it anchors the title rather than competing
+   with a second band.  There is no per-record-type variant: a colour hook on RowDetailDef would be
+   author-facing colour API, which the -views/-console split keeps out of the definition beans. */
+.juneau-view-detail-icon {
+	background-color: var(--jc-accent);
+	color: var(--jc-on-accent);
+}
+
+/* Field grid.  -views now ships the row separator as a light NEUTRAL hairline (its --jc-detail-field-border
+   default), so it reads as a hairline rather than a rule on its own and does NOT need a console override to
+   "make it light" - the previous border-bottom-color:var(--jc-border) tinted the separator with the theme
+   accent (pinkish under light-red, brownish under light-brown), which is exactly the accent-tint this neutral
+   default removes so every theme shows the same quiet gray.  The label/value pair still carries the inverted
+   emphasis in colour as -views carries it in size and weight: muted key, full-strength value.  The em-dash on
+   an unset value is generated content in -views and is muted here so it reads as "known, unset" rather than as
+   a value someone typed. */
+.juneau-view-detail-field-title { color: var(--jc-text-muted); }
+.juneau-view-detail-field-value { color: var(--jc-text); }
+.juneau-view-detail-field-value:empty::after { color: var(--jc-text-muted); }
+
+.jc-editable-field-pencil { color: var(--jc-text-muted); }
+.jc-editable-field:hover .jc-editable-field-pencil,
+.jc-editable-field:focus-within .jc-editable-field-pencil,
+.jc-editable-field-pencil:hover,
+.jc-editable-field-pencil:focus-visible {
+  color: var(--jc-text);
+  background-color: var(--jc-hover-bg);
+}
+.jc-editable-field-input {
+  background-color: var(--jc-control-bg);
+  border-color: var(--jc-control-border);
+  color: var(--jc-text);
+}
+.jc-editable-field.is-error .jc-editable-field-input { border-color: var(--jc-danger); }
+.jc-editable-field-error { color: var(--jc-danger-text); }
+.jc-toast {
+  background-color: var(--jc-card-bg);
+  border-color: var(--jc-border);
+  color: var(--jc-text);
+  box-shadow: var(--jc-card-shadow);
+}
+.jc-toast.is-error {
+  color: var(--jc-danger-text);
+  border-color: var(--jc-danger);
+  background-color: var(--jc-danger-wash);
+}
+.jc-toast.is-success { color: var(--jc-success-text); }
+.jc-toast.is-info { color: var(--jc-text); }
+
+/* Dedicated expander column (.juneau-view-detail-control): muted glyph, accent on hover. */
+.juneau-view-detail-th,
+.juneau-view-detail-control { color: var(--jc-text-muted); }
+.juneau-view-detail-control:hover { color: var(--jc-accent); }
+
+/* Unified paging ribbon (nav + page-size menu) - same --jc-control-border/white-face treatment as the
+   icon ribbon and toolbar search.  Segment borders ARE the pill (views.css: no container stroke).
+   Idle gray is top/bottom on every segment plus first left / last right.  Hover recolors those same
+   edges — longhand top/bottom only, so a UA leftover left/right on a chevron cannot turn into extra
+   verticals.  End-caps add the outer side.  Do not restore border-color:accent on all four sides. */
+.juneau-view-pagingpill { background-color: var(--jc-control-bg); }
+.juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-chrome-icon); }
+.juneau-view-pagingpill-btn:disabled { border-color: var(--jc-control-border); }
+.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
+.juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }
+.juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }
+.juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
+.juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
+.juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
+.juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }
+.juneau-view-pagingpill-menu { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }
+.juneau-view-pagingpill-menu-option:hover,
+.juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
+
+/* Toolbar Search - same --jc-control-border as ribbon/paging so a theme that splits --jc-border from
+   --jc-border-2 cannot leave Search on a different leaf than the adjacent icon ribbon.
+   appearance:none / background / box-shadow resets live in juneau-views.css (structural).
+   Selectors beat DataTables `div.dt-container .dt-search input` (0,2,2 / #aaa) at (0,2,3). */
+div.dt-container div.dt-search input,
+div.dataTables_wrapper div.dataTables_filter input {
+  border-color: var(--jc-control-border);
+}
+
+/* Toolbar Search focus: field border takes --jc-chrome-control-focus-border (the accent in light,
+   --jc-focus in dark; plain accent when the views stylesheet is absent); kill the generic 2px
+   :focus-visible ring.  outline/box-shadow are literals (none) — token only in border-color
+   (sink-property discipline). */
+div.dt-container div.dt-search input:focus,
+div.dt-container div.dt-search input:focus-visible,
+div.dataTables_wrapper div.dataTables_filter input:focus,
+div.dataTables_wrapper div.dataTables_filter input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--jc-chrome-control-focus-border, var(--jc-accent));
+}
+
+/* Header sort / column-search icons: idle is views.css opacity on each triangle; the
+   active direction spends accent. DT ::before/::after glyphs are suppressed; color the
+   Juneau stacked-triangle SVG, not the whole 12×24 control (that would paint both ▲ and ▼). */
+table.dataTable thead > tr > th.dt-ordering-asc .juneau-sort-asc,
+table.dataTable thead > tr > td.dt-ordering-asc .juneau-sort-asc,
+table.dataTable thead > tr > th.dt-ordering-desc .juneau-sort-desc,
+table.dataTable thead > tr > td.dt-ordering-desc .juneau-sort-desc {
+  fill: var(--jc-accent);
+  opacity: 1;
+}
+.juneau-view-col-search-icon.is-active { color: var(--jc-accent); }
+.juneau-view-col-search-popover {
+  border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+  box-shadow: var(--jc-card-shadow);
+}
+.juneau-view-col-search-popover-input {
+  border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+}
+.juneau-view-col-search-popover-input:focus,
+.juneau-view-col-search-popover-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--jc-chrome-control-focus-border, var(--jc-accent));
+}
+
+/* ==========================================================================
+   Page footer
+   One muted line in the themed band below .jc-main. Public class:
+   .jc-page-footer (alias .jc-footer). Apps that emit HTML use
+   <footer class="jc-page-footer">; ConsoleChromeMixin.Builder.footer(String)
+   paints the same line via body::after content so a template change is
+   not required. Use one or the other, not both. body::after has no box until
+   content is set (CSS default none). Padding is the --jc-space-3 scale —
+   tighter than a typical app-local strip; body padding-bottom is the
+   trailing gutter under the line.
+   ========================================================================== */
+
+.jc-page-footer,
+.jc-footer,
+body::after {
+  flex: 0 0 auto;
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--jc-text-muted);
+  padding: var(--jc-space-3) var(--jc-space-3) 0;
+}
+
+/* ==========================================================================
+   Prose typography (.jc-prose)
+   Opt-in scoping class for rendered documents (runbooks, onboarding docs,
+   "what this surface means" explainers) so prose reads as the console rather
+   than as the browser default.  Vertical rhythm consumes the --jc-space-*
+   scale, so a themed density change flows through here too.
+   `table.jc-table` is the DATA-GRID rule; a `.jc-prose table` is a
+   static in-document table, styled separately below via a descendant rule
+   (not a new class) since the distinction that matters is
+   data-grid-versus-prose.
+   ========================================================================== */
+
+.jc-prose {
+  color: var(--jc-text);
+  line-height: 1.6;
+}
+
+.jc-prose > :first-child { margin-top: 0; }
+.jc-prose > :last-child { margin-bottom: 0; }
+
+.jc-prose h1,
+.jc-prose h2,
+.jc-prose h3,
+.jc-prose h4,
+.jc-prose h5,
+.jc-prose h6 {
+  color: var(--jc-text);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: var(--jc-space-3);
+}
+
+.jc-prose h1 { font-size: 2rem;     margin-top: var(--jc-space-6); }
+.jc-prose h2 { font-size: 1.5rem;   margin-top: var(--jc-space-5); }
+.jc-prose h3 { font-size: 1.25rem;  margin-top: var(--jc-space-4); }
+.jc-prose h4 { font-size: 1.125rem; margin-top: var(--jc-space-4); }
+.jc-prose h5 { font-size: 1rem;     margin-top: var(--jc-space-3); }
+.jc-prose h6 {
+  font-size: 0.875rem;
+  margin-top: var(--jc-space-3);
+  color: var(--jc-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.jc-prose p { margin: 0 0 var(--jc-space-3); }
+
+.jc-prose ul,
+.jc-prose ol { margin: 0 0 var(--jc-space-3); padding-left: var(--jc-space-5); }
+.jc-prose li { margin-bottom: var(--jc-space-1); }
+.jc-prose li > ul,
+.jc-prose li > ol { margin-bottom: 0; margin-top: var(--jc-space-1); }
+
+.jc-prose a { color: var(--jc-link); }
+.jc-prose a:hover { text-decoration: underline; }
+
+.jc-prose code {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  background-color: var(--jc-chrome-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  padding: var(--jc-space-1) var(--jc-space-2);
+}
+
+.jc-prose pre {
+  background-color: var(--jc-chrome-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  padding: var(--jc-space-3) var(--jc-space-4);
+  overflow: auto;
+  margin: 0 0 var(--jc-space-3);
+}
+
+.jc-prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+.jc-prose blockquote {
+  margin: 0 0 var(--jc-space-3);
+  padding: var(--jc-space-2) var(--jc-space-4);
+  border-left: var(--jc-nav-indicator-width) solid var(--jc-border);
+  color: var(--jc-text-soft);
+}
+
+.jc-prose table {
+  border-collapse: collapse;
+  margin: 0 0 var(--jc-space-3);
+}
+
+.jc-prose table th,
+.jc-prose table td {
+  border: 1px solid var(--jc-border);
+  padding: var(--jc-space-2) var(--jc-space-3);
+  text-align: left;
+}
+
+.jc-prose table th {
+  background-color: var(--jc-table-header-bg);
+  color: var(--jc-text-soft);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Dialog chrome (ModalDef / .juneau-view-dialog)
+   Palette only — shape lives in juneau-views.css. Light gray header/footer bars,
+   green toggle-on, Cancel outline / Confirm primary. Original tokens.
+   ========================================================================== */
+
+.juneau-view-dialog-header,
+.juneau-view-dialog-actions {
+  background-color: var(--jc-chrome-bg);
+  border-bottom-color: var(--jc-text-muted);
+  border-top-color: var(--jc-text-muted);
+}
+
+.juneau-view-dialog-figure {
+  background-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
+}
+
+.juneau-view-dialog-title {
+  color: var(--jc-text);
+}
+
+.juneau-view-dialog-dismiss {
+  color: var(--jc-text-muted);
+}
+.juneau-view-dialog-dismiss:hover {
+  color: var(--jc-danger-text);
+}
+
+.juneau-view-dialog-cancel,
+.juneau-view-dialog-close {
+  background-color: var(--jc-surface);
+  color: var(--jc-btn-primary-ink, var(--jc-btn-primary-bg));
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+}
+.juneau-view-dialog-cancel:hover,
+.juneau-view-dialog-close:hover {
+  background-color: var(--jc-hover-bg);
+}
+
+.juneau-view-dialog-confirm {
+  background-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+}
+.juneau-view-dialog-confirm:hover {
+  background-color: var(--jc-btn-primary-bg-hover);
+}
+
+.juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger {
+  background-color: var(--jc-danger);
+  color: var(--jc-on-btn-primary);
+  border-color: var(--jc-danger);
+}
+.juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger:hover {
+  filter: brightness(0.92);
+}
+
+.juneau-view-dialog-form-row input:not([type="checkbox"]):not([type="hidden"]),
+.juneau-view-dialog-form-row textarea,
+.juneau-view-dialog-form-row select {
+  border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+}
+
+.juneau-view-dialog-form-row input[aria-invalid="true"]:not([type="checkbox"]),
+.juneau-view-dialog-form-row textarea[aria-invalid="true"],
+.juneau-view-dialog-form-row select[aria-invalid="true"],
+.juneau-view-dialog-form-row input:not([type="checkbox"]):invalid,
+.juneau-view-dialog-form-row textarea:invalid,
+.juneau-view-dialog-form-row select:invalid {
+  border-color: var(--jc-danger);
+}
+
+/* View Settings dialog controls (juneau-config.css is shape-only): console control tokens, not UA defaults,
+   in both schemes.  Tabs keep their transparent face and open bottom edge from juneau-config.css. */
+.juneau-config-dialog button,
+.juneau-config-dialog select,
+.juneau-config-dialog input:not([type="checkbox"]):not([type="radio"]),
+.juneau-config-dialog textarea {
+  color: var(--jc-text);
+  border-color: var(--jc-control-border);
+}
+.juneau-config-dialog button:not(.juneau-config-tab),
+.juneau-config-dialog select,
+.juneau-config-dialog input:not([type="checkbox"]):not([type="radio"]),
+.juneau-config-dialog textarea {
+  background-color: var(--jc-control-bg);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: var(--jc-radius);
+}
+.juneau-config-dialog button:disabled {
+  color: var(--jc-text-muted);
+}
+
+.juneau-view-toggle {
+  background-color: var(--jc-border-2);
+  border-color: var(--jc-border-2);
+  color: var(--jc-white);
+}
+.juneau-view-toggle:checked {
+  background-color: var(--jc-success);
+  border-color: var(--jc-success);
+  color: var(--jc-white);
+}
+.juneau-view-toggle::after {
+  background-color: var(--jc-white);
+}
+
+/* Header color-scheme control (juneau-console.js): a three-way radio group. */
+.jc-scheme-toggle {
+  display: inline-flex;
+  border: 1px solid var(--jc-control-border);
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-control-bg);
+  overflow: hidden;
+}
+.jc-scheme-toggle button {
+  margin: 0;
+  padding: var(--jc-space-1) var(--jc-space-2);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  color: var(--jc-text);
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.jc-scheme-toggle button[aria-checked="true"] {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-text);
+  border-bottom-color: var(--jc-accent);
+}
+.jc-scheme-toggle button:focus-visible {
+  outline: 2px solid var(--jc-focus);
+  outline-offset: -2px;
+}
+
+/* ==========================================================================
+   Chart card (juneau-charts.js)
+   ========================================================================== */
+
+.jc-chart { margin: 0; }
+.jc-chart-caption { font-size: 0.75rem; color: var(--jc-text-muted); margin-bottom: var(--jc-space-2); }
+.jc-chart-plot { position: relative; width: 100%; min-height: 120px; }
+.jc-chart-plot:focus-visible { outline: 2px solid var(--jc-focus); outline-offset: 2px; }
+.jc-chart-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background-color: var(--jc-surface, #fff); font-size: 0.75rem; color: var(--jc-text-muted); }
+.jc-chart-overlay[hidden] { display: none; }
+.jc-chart-banner { margin: 0; padding: var(--jc-space-1) var(--jc-space-2); background-color: var(--jc-card-bg); border-width: 1px; border-style: solid; border-color: var(--jc-border); font-size: 0.75rem; color: var(--jc-text); }
+.jc-chart-banner[hidden] { display: none; }
+.jc-chart-live { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.jc-chart-toggle { margin-top: var(--jc-space-2); font-size: 0.75rem; }
+.jc-chart-table-box { overflow-x: auto; }
+.jc-chart-table { border-collapse: collapse; margin-top: var(--jc-space-2); font-size: 0.8125rem; }
+.jc-chart-table th,
+.jc-chart-table td { padding: 2px 8px; text-align: left; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: var(--jc-border); }
+.jc-chart-table-note { margin: 0; font-size: 0.75rem; color: var(--jc-text-muted); }
+.jc-chart-empty { color: var(--jc-text-muted); margin: 0; }
+.jc-chart--stale { opacity: 0.6; }
+
+/* ==========================================================================
+   Job-log card (juneau-joblog.js)
+   ========================================================================== */
+
+.jc-joblog-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--jc-space-3); margin-bottom: var(--jc-space-3); }
+.jc-joblog-field { display: flex; flex-direction: column; gap: 2px; font-size: 0.8125rem; color: var(--jc-text); }
+.jc-joblog-input { background-color: var(--jc-control-bg); color: var(--jc-text); border-width: 1px; border-style: solid; border-color: var(--jc-control-border); border-radius: var(--jc-radius); padding: 4px 8px; font: inherit; }
+textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
+.jc-joblog-actions { display: flex; gap: var(--jc-space-2); }
+.jc-joblog-banner { margin-bottom: var(--jc-space-2); padding: 6px 10px; border-width: 1px; border-style: solid; border-radius: var(--jc-radius); font-size: 0.875rem; }
+.jc-joblog-banner.jc-joblog-ok      { background-color: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
+.jc-joblog-banner.jc-joblog-error   { background-color: var(--jc-tag-red-bg);   color: var(--jc-tag-red-text);   border-color: var(--jc-tag-red-border); }
+.jc-joblog-banner.jc-joblog-warning { background-color: var(--jc-tag-amber-bg); color: var(--jc-tag-amber-text); border-color: var(--jc-tag-amber-border); }
+.jc-joblog-banner.jc-joblog-info    { background-color: var(--jc-control-bg); color: var(--jc-text); border-color: var(--jc-border); }
+.jc-joblog-output { margin: 0; padding: var(--jc-space-2); overflow: auto; box-sizing: border-box; background-color: var(--jc-control-bg); border-width: 1px; border-style: solid; border-color: var(--jc-border); border-radius: var(--jc-radius); font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.8125rem; white-space: pre-wrap; }
+.jc-joblog-line { display: block; }
+.jc-joblog-notice { color: var(--jc-text-muted); font-style: italic; }
+/* In a row's detail panel: the optional field grid above the form, and the region's own polite announce span. */
+.jc-joblog-detail { margin-bottom: var(--jc-space-3); }
+.jc-joblog-detail:empty { display: none; }
+.jc-joblog-sr { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ==========================================================================
+   Dashboard chrome (juneau-dashboard.js)
+   ========================================================================== */
+
+.jc-dash {
+  container-type: inline-size;
+  container-name: jc-dash;
+  display: block;
+  margin-bottom: var(--jc-space-4);
+}
+.jc-dash-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--jc-space-3);
+  margin-bottom: var(--jc-space-3);
+}
+.jc-dash-title {
+  margin: 0;
+  color: var(--jc-text);
+}
+.jc-dash-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--jc-space-2);
+  color: var(--jc-text-muted);
+}
+.jc-dash-status-line[data-tone="warning"] {
+  background-color: var(--jc-tag-amber-bg);
+  color: var(--jc-tag-amber-text);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-tag-amber-border);
+  border-radius: var(--jc-radius);
+  padding: 0 var(--jc-space-1);
+}
+.jc-dash-status-line[data-tone="error"] {
+  background-color: var(--jc-tag-red-bg);
+  color: var(--jc-tag-red-text);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-tag-red-border);
+  border-radius: var(--jc-radius);
+  padding: 0 var(--jc-space-1);
+}
+.jc-dash-refresh {
+  display: inline-flex;
+  position: relative;
+}
+.jc-dash-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  background-color: var(--jc-card-bg);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+  border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
+  padding: var(--jc-space-1);
+}
+.jc-dash-menu[hidden] {
+  display: none;
+}
+.jc-dash-copy-field {
+  display: flex;
+  gap: var(--jc-space-2);
+  align-items: center;
+  margin-top: var(--jc-space-2);
+  color: var(--jc-text-muted);
+}
+.jc-dash-copy-field input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.jc-dash-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+.jc-dash-body {
+  display: grid;
+  grid-template-columns: var(--jc-dash-rail, 280px) 8px minmax(0, 1fr);
+  align-items: start;
+}
+.jc-dash-body[data-rail="right"] {
+  grid-template-columns: minmax(0, 1fr) 8px var(--jc-dash-rail, 280px);
+}
+.jc-dash-body[data-rail="none"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.jc-dash-filters {
+  display: none;
+}
+.jc-dash-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jc-space-3);
+  min-width: 0;
+}
+.jc-dash-section {
+  margin: 0;
+  padding: var(--jc-space-2) var(--jc-space-3);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-card-bg);
+}
+.jc-dash-section > legend {
+  color: var(--jc-text-soft);
+  padding: 0 var(--jc-space-1);
+}
+.jc-dash-section .jc-card {
+  margin: 0;
+  max-width: none;
+  box-shadow: none;
+}
+.jc-dash-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jc-space-1);
+}
+.jc-dash-presets button[aria-pressed="true"] {
+  background-color: var(--jc-accent-wash);
+  border-color: var(--jc-accent-selected);
+  box-shadow: 0 0 0 1px var(--jc-accent-selected);
+}
+.jc-dash-choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jc-space-1);
+}
+.jc-dash-choice label[data-missing] {
+  color: var(--jc-text-soft);
+}
+.jc-dash-count,
+.jc-dash-missing-note {
+  color: var(--jc-text-muted);
+  margin-left: var(--jc-space-1);
+}
+.jc-dash-error {
+  color: var(--jc-danger-text);
+  margin: var(--jc-space-1) 0 0;
+}
+.jc-dash-splitter {
+  align-self: stretch;
+  cursor: col-resize;
+  background-color: transparent;
+  border-radius: var(--jc-radius);
+  touch-action: none;
+}
+.jc-dash-splitter:hover,
+.jc-dash-splitter:focus-visible {
+  background-color: var(--jc-accent-wash);
+}
+.jc-dash-grid {
+  display: grid;
+  gap: var(--jc-space-3);
+  min-width: 0;
+}
+.jc-dash-grid[data-cols="1"] { grid-template-columns: minmax(0, 1fr); }
+.jc-dash-grid[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.jc-dash-grid[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.jc-dash-grid[data-cols="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.jc-dash-panel { min-width: 0; }
+.jc-dash-panel[data-span="2"] { grid-column: span 2; }
+.jc-dash-panel[data-span="3"] { grid-column: span 3; }
+.jc-dash-panel[data-span="4"] { grid-column: span 4; }
+.jc-dash-panel > .jc-card {
+  margin: 0;
+  max-width: none;
+  min-width: 0;
+}
+.jc-dash-body[data-rail="right"] > .jc-dash-filters,
+.jc-dash-body[data-rail="right"] > .jc-dash-rail { order: 3; }
+.jc-dash-body[data-rail="right"] > .jc-dash-splitter { order: 2; }
+.jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 1; }
+
+@container jc-dash (max-width: 899px) {
+  .jc-dash-body,
+  .jc-dash-body[data-rail="right"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--jc-space-3);
+  }
+  .jc-dash-filters { display: inline-flex; align-self: flex-start; }
+  .jc-dash-rail { display: none; width: 100%; }
+  .jc-dash-body[data-filters-open] .jc-dash-rail { display: flex; }
+  .jc-dash-splitter { display: none; }
+  .jc-dash-grid[data-cols] { grid-template-columns: minmax(0, 1fr); width: 100%; }
+  .jc-dash-panel[data-span] { grid-column: auto; }
+  .jc-dash-body[data-rail="right"] > .jc-dash-filters,
+  .jc-dash-body[data-rail="right"] > .jc-dash-rail,
+  .jc-dash-body[data-rail="right"] > .jc-dash-splitter,
+  .jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 0; }
+}
+
+@supports not (container-type: inline-size) {
+  @media (max-width: 899px) {
+    .jc-dash-body,
+    .jc-dash-body[data-rail="right"] {
+      display: flex;
+      flex-direction: column;
+      gap: var(--jc-space-3);
+    }
+    .jc-dash-filters { display: inline-flex; align-self: flex-start; }
+    .jc-dash-rail { display: none; width: 100%; }
+    .jc-dash-body[data-filters-open] .jc-dash-rail { display: flex; }
+    .jc-dash-splitter { display: none; }
+    .jc-dash-grid[data-cols] { grid-template-columns: minmax(0, 1fr); width: 100%; }
+    .jc-dash-panel[data-span] { grid-column: auto; }
+    .jc-dash-body[data-rail="right"] > .jc-dash-filters,
+    .jc-dash-body[data-rail="right"] > .jc-dash-rail,
+    .jc-dash-body[data-rail="right"] > .jc-dash-splitter,
+    .jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 0; }
+  }
+}
