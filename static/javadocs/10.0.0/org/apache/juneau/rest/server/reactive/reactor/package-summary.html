@@ -68,9 +68,9 @@ loadScripts(document, 'script');</script>
 
  <p>
  This module is opt-in. It ships three <a href="../ReactiveStreamsAdapter.html" title="interface in org.apache.juneau.rest.server.reactive"><code>ReactiveStreamsAdapter</code></a>
- implementations &mdash; <code>org.apache.juneau.rest.server.reactive.bridge.ReactorReactiveAdapter</code>,
- <code>org.apache.juneau.rest.server.reactive.bridge.RxJavaReactiveAdapter</code>, and
- <code>org.apache.juneau.rest.server.reactive.bridge.ReactiveStreamsPublisherAdapter</code> &mdash; registered via a
+ implementations &mdash; <a href="ReactorReactiveAdapter.html" title="class in org.apache.juneau.rest.server.reactive.reactor"><code>ReactorReactiveAdapter</code></a>,
+ <a href="RxJavaReactiveAdapter.html" title="class in org.apache.juneau.rest.server.reactive.reactor"><code>RxJavaReactiveAdapter</code></a>, and
+ <a href="ReactiveStreamsPublisherAdapter.html" title="class in org.apache.juneau.rest.server.reactive.reactor"><code>ReactiveStreamsPublisherAdapter</code></a> &mdash; registered via a
  <code>META-INF/services</code> file so merely placing this jar (plus the desired reactive library) on the
  classpath enables <code>Mono</code> / <code>Flux</code> / <code>Single</code> / <code>Maybe</code> / <code>Flowable</code> /
  <code>Observable</code> / <code>Publisher</code> return types from <code>@RestOp</code> handlers.

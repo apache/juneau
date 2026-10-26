@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 
  <ul>
    <li><code>juneau-rest-server-tracing-otel</code> ships <code>OtelTracerHook</code> backed by an
-      <code>OpenTelemetry</code> instance &mdash; per-request span
+      <code>io.opentelemetry.api.OpenTelemetry</code> instance &mdash; per-request span
       creation, OTel HTTP semantic-convention attributes, and W3C <code>traceparent</code> /
       <code>tracestate</code> context propagation.
    <li>Custom tracers (Brave, application-specific span beans, etc.) can implement

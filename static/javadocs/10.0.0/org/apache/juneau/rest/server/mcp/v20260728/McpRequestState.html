@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><span id="param-expiresAtMs">expiresAtMs</span></code> - Absolute expiry timestamp in epoch milliseconds.</dd>
 <dd><code><span id="param-jti">jti</span></code> - A fresh, per-token random identifier minted on every PAUSE (see <code>McpRevision#pause</code>), used
    only to detect replay of THIS exact token. Opt-in: consulted by the dispatcher only when an operator has
-   wired a <code>ReplayCache</code> via <a href="McpMrtrConfig.html#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)"><code>McpMrtrConfig.setReplayCache(ReplayCache)</code></a>; otherwise it rides in the
+   wired a <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> via <a href="McpMrtrConfig.html#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)"><code>McpMrtrConfig.setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)</code></a>; otherwise it rides in the
    sealed plaintext unused. Not wire-visible on its own &mdash; like every other field on this record, it only
    ever travels inside the opaque, AEAD-sealed <code>requestState</code> string.</dd>
 <dd><code><span id="param-argumentsHash">argumentsHash</span></code> - A canonical hash of the original request's <code>arguments</code> (RFC 8785 JSON
