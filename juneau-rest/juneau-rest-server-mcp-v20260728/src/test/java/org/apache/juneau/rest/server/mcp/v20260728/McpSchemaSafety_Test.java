@@ -497,4 +497,42 @@ class McpSchemaSafety_Test {
 			return null;
 		}
 	}
+
+	/** A valid map whose first walk stalls past the {@link JsonValueSafety} deadline, like a loaded host or GC pause. */
+	@SuppressWarnings({
+		"java:S2160", // Test double: equality is irrelevant, only the stalled entrySet() matters.
+		"java:S2925"  // The sleep simulates a stalled host, not a wait for a condition.
+	})
+	private static final class StallingMap extends LinkedHashMap<String,Object> {
+		private static final long serialVersionUID = 1L;
+		private boolean stalled;
+
+		@Override
+		public Set<Map.Entry<String,Object>> entrySet() {
+			if (! stalled) {
+				stalled = true;
+				try {
+					Thread.sleep(JsonValueSafety.MAX_TRAVERSAL_MILLIS + 50);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			return super.entrySet();
+		}
+	}
+
+	@Test
+	void d09_validateInput_slowArgumentWalk_notRejected() {
+		var schema = McpSchema.of(JsonMap.of("type", "object"));
+		var args = new StallingMap();
+		args.put("a", 1);
+		assertDoesNotThrow(() -> McpSchemaSafety.validateInput(schema, args));
+	}
+
+	@Test
+	void d10_argumentsHash_slowWalk_notRejected() {
+		var args = new StallingMap();
+		args.put("a", 1);
+		assertDoesNotThrow(() -> McpRevision.argumentsHash(args));
+	}
 }

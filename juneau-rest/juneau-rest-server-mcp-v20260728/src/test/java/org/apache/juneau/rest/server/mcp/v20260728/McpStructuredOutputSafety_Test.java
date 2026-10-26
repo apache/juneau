@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.McpExchange;
 import org.apache.juneau.rest.server.mcp.McpResponseResult;
@@ -196,6 +197,38 @@ class McpStructuredOutputSafety_Test {
 	@Test
 	void b06_null_accepted() {
 		var resp = send(configReturning(null), requestWithId(1));
+		assertNull(resp.getError());
+		assertInstanceOf(CallToolResult.class, resp.getResult());
+	}
+
+	/** A valid map whose first walk stalls past the {@link JsonValueSafety} deadline, like a loaded host or GC pause. */
+	@SuppressWarnings({
+		"java:S2160", // Test double: equality is irrelevant, only the stalled entrySet() matters.
+		"java:S2925"  // The sleep simulates a stalled host, not a wait for a condition.
+	})
+	private static final class StallingMap extends LinkedHashMap<String,Object> {
+		private static final long serialVersionUID = 1L;
+		private boolean stalled;
+
+		@Override
+		public Set<Map.Entry<String,Object>> entrySet() {
+			if (! stalled) {
+				stalled = true;
+				try {
+					Thread.sleep(JsonValueSafety.MAX_TRAVERSAL_MILLIS + 50);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			return super.entrySet();
+		}
+	}
+
+	@Test
+	void b07_slowWalk_notRejected() {
+		var slow = new StallingMap();
+		slow.put("a", 1);
+		var resp = send(configReturning(slow), requestWithId(1));
 		assertNull(resp.getError());
 		assertInstanceOf(CallToolResult.class, resp.getResult());
 	}

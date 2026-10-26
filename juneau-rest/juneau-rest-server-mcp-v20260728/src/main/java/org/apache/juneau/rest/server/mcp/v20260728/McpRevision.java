@@ -694,7 +694,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (outcome == null || outcome.getStructuredContent() == null)
 			return;
 		try {
-			JsonValueSafety.check(outcome.getStructuredContent(), "Tool structuredContent");
+			// No deadline: the node bound caps the walk, and a slow host must not fail a valid result.
+			JsonValueSafety.check(outcome.getStructuredContent(), "Tool structuredContent", JsonValueSafety.NO_DEADLINE);
 		} catch (IllegalArgumentException e) {
 			throw new McpException(CODE_INTERNAL_ERROR, e.getMessage());
 		}
@@ -1071,7 +1072,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 */
 	static String argumentsHash(Map<String,Object> arguments) {
 		try {
-			JsonValueSafety.check(arguments, PARAM_ARGUMENTS);
+			JsonValueSafety.check(arguments, PARAM_ARGUMENTS, JsonValueSafety.NO_DEADLINE); // Node-bounded; no wall clock.
 		} catch (IllegalArgumentException e) {
 			throw new McpException(CODE_INVALID_PARAMS, e.getMessage());
 		}

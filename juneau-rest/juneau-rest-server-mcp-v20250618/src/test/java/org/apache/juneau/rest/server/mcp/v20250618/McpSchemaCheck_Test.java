@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.mcp.*;
 import org.junit.jupiter.api.*;
@@ -294,5 +295,45 @@ class McpSchemaCheck_Test {
 		var schema = JsonMap.of("type", "object", "items", new Object[] {JsonMap.of("enum", List.of("a"))});
 		var config = new McpServerConfig().addTool(tool("t", schema, null));
 		assertThrows(IllegalArgumentException.class, () -> McpRevision.validateSchemas(config));
+	}
+
+	/** A valid schema whose first walk stalls past the {@link JsonValueSafety} deadline, like a loaded host or GC pause. */
+	@SuppressWarnings({
+		"java:S2160" // Test double: equality is irrelevant, only the stalled entrySet() matters.
+	})
+	private static final class StallingSchema extends JsonMap {
+		private static final long serialVersionUID = 1L;
+		private boolean stalled;
+
+		@Override
+		public Set<Map.Entry<String,Object>> entrySet() {
+			if (! stalled) {
+				stalled = true;
+				try {
+					Thread.sleep(JsonValueSafety.MAX_TRAVERSAL_MILLIS + 50);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			return super.entrySet();
+		}
+	}
+
+	@Test
+	void e04_validateSchemas_slowWalk_notRejected() {
+		var schema = new StallingSchema();
+		schema.put("type", "object");
+		var config = new McpServerConfig().addTool(tool("t", null, schema));
+		assertDoesNotThrow(() -> McpRevision.validateSchemas(config));
+	}
+
+	@Test
+	void e05_badConfig_failsOnEveryRequest() {
+		var config = new McpServerConfig().addTool(tool("risky", JsonMap.of("type", "object", "oneOf", List.of()), null));
+		var revision = new McpRevision(null);
+		var exchange = ping();
+		assertThrows(IllegalArgumentException.class, () -> revision.dispatch(exchange, config, ctx));
+		// A config is marked validated only after its schemas pass, so the second request still fails.
+		assertThrows(IllegalArgumentException.class, () -> revision.dispatch(exchange, config, ctx));
 	}
 }

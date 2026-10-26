@@ -84,7 +84,7 @@ public final class McpTypedHandlers {
 				var result = typed.call(bound, ctx);
 				var tree = canonicalize(result);
 				try {
-					JsonValueSafety.check(tree, "Tool structuredContent");
+					JsonValueSafety.check(tree, "Tool structuredContent", JsonValueSafety.NO_DEADLINE); // Node-bounded; no wall clock.
 				} catch (IllegalArgumentException e) {
 					throw new McpException(-32603, e.getMessage());
 				}

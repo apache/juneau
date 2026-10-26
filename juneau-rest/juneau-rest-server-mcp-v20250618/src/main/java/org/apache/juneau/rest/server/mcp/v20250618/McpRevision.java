@@ -128,8 +128,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 *
 	 * <p>
 	 * Before walking, each schema is passed through {@link JsonValueSafety} to bound nesting depth,
-	 * node count, traversal time, and cyclic/shared references, so a pathological config cannot stall
-	 * or exhaust the walk.
+	 * node count, and cyclic/shared references, so a pathological config cannot stall or exhaust the
+	 * walk. The wall-clock deadline is not applied: the schemas are server-authored and the node bound
+	 * already limits the work, so a slow walk (a loaded CI host, a GC pause) must not reject a valid
+	 * config.
 	 *
 	 * <p>
 	 * Note this cannot be a complete guarantee against every possible wire shape: {@code JsonSchema}
@@ -155,7 +157,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (schema == null)
 			return;
 		var raw = schema.toJsonMap();
-		JsonValueSafety.check(raw, "Tool '" + toolName + "' " + role + " for MCP revision 2025-06-18");
+		// No deadline: a server-authored schema must not fail validation because the host is slow.
+		JsonValueSafety.check(raw, "Tool '" + toolName + "' " + role + " for MCP revision 2025-06-18", JsonValueSafety.NO_DEADLINE);
 		if (neq(raw.get("type"), "object"))
 			throw iaex("Tool ''%s'' %s root type ''%s'' is not object; MCP revision 2025-06-18 requires object schemas.",
 				toolName, role, raw.get("type"));
@@ -231,8 +234,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		reqnn("config", config);
 		reqnn("ctx", ctx);
 
-		if (VALIDATED.add(config))
+		if (! VALIDATED.contains(config)) {
 			validateSchemas(config);
+			VALIDATED.add(config); // Only after success, so a bad config keeps failing on every request.
+		}
 
 		var req = exchange.request();
 		if (req == null)
@@ -338,7 +343,8 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			throw new McpException(CODE_INTERNAL_ERROR,
 				"Tool structuredContent must be a JSON object for MCP revision 2025-06-18");
 		try {
-			JsonValueSafety.check(outcome.getStructuredContent(), "Tool structuredContent");
+			// No deadline: the node bound caps the walk, and a slow host must not fail a valid result.
+			JsonValueSafety.check(outcome.getStructuredContent(), "Tool structuredContent", JsonValueSafety.NO_DEADLINE);
 		} catch (IllegalArgumentException e) {
 			throw new McpException(CODE_INTERNAL_ERROR, e.getMessage());
 		}

@@ -46,6 +46,15 @@ public final class JsonValueSafety {
 	/** Maximum allowed wall-clock time, in milliseconds, for a single traversal. */
 	public static final long MAX_TRAVERSAL_MILLIS = 100;
 
+	/**
+	 * Deadline value meaning "no wall-clock limit": the depth, {@link #MAX_NODES node-count} and cycle bounds still apply.
+	 *
+	 * <p>
+	 * Use this for server-authored or already size-bounded values, where a slow walk (a loaded host, a GC pause)
+	 * must not be reported as a violation.
+	 */
+	public static final long NO_DEADLINE = Long.MAX_VALUE;
+
 	private JsonValueSafety() {}
 
 	/**

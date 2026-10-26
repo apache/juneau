@@ -80,17 +80,11 @@ class McpSerializerParity_Test extends TestBase {
 	}
 
 	/**
-	 * Typed tool adapted then re-exposed <em>without</em> an input schema.
+	 * Typed tool adapted then re-exposed with its derived schemas.
 	 *
 	 * <p>
-	 * {@link Result} still drives output-schema {@code $defs}/{@code $ref} and the structured-content
-	 * URI/fragment fields under test. Input schema is deliberately omitted: {@code tools/call} runs
-	 * {@code McpSchemaSafety.validateInput}, which shares a 100&nbsp;ms wall-clock
-	 * {@link org.apache.juneau.commons.utils.JsonValueSafety} deadline across the schema and argument walks.
-	 * Under CI load ({@code forkCount=8}) one of the two sequential servlet/mixin calls can trip
-	 * {@code Tool input schema traversal exceeded 100 ms} while the other succeeds, breaking byte-identity.
-	 * A null input schema makes {@code validateInput} a no-op so both sides stay on the success path;
-	 * serializer policy under test does not depend on input-schema validation.
+	 * {@link Result} drives output-schema {@code $defs}/{@code $ref} and the structured-content
+	 * URI/fragment fields under test.
 	 *
 	 * <p>
 	 * Argument type remains {@code Map.class} (not a bean {@code Args}) so the typed adapter's schema
@@ -108,6 +102,7 @@ class McpSerializerParity_Test extends TestBase {
 			@Override public McpToolSpec descriptor() {
 				return new McpToolSpec()
 					.setName(adapted.descriptor().getName())
+					.setInputSchema(adapted.descriptor().getInputSchema())
 					.setOutputSchema(adapted.descriptor().getOutputSchema());
 			}
 			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx) {

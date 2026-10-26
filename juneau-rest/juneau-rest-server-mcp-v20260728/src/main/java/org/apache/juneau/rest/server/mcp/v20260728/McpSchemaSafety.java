@@ -35,10 +35,10 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * <p>
  * The neutral {@link McpSchema} is an unconstrained JSON object carrier, and a client can send an
  * arbitrarily large or deep argument object. Before any validation runs, both the schema graph and the
- * argument graph are checked against the shared {@link JsonValueSafety} depth/node/deadline bounds,
+ * argument graph are checked against the shared {@link JsonValueSafety} depth/node bounds
+ * (no wall-clock deadline: the node bound caps the work, and a slow host must not reject valid input),
  * so a hostile or accidentally-huge input is rejected up front rather than blowing the stack or spinning
- * indefinitely. The two checks share a single deadline, so a slow schema graph cannot buy the argument
- * graph extra time (or vice versa).
+ * indefinitely.
  *
  * <p>
  * <b>No external fetches.</b> The schema is converted to a {@link JsonSchema} bean and validated as-is. No
@@ -172,10 +172,10 @@ final class McpSchemaSafety {
 		if (schema == null)
 			return;
 		var schemaMap = schema.toJsonMap();
-		var deadline = JsonValueSafety.deadlineNanos();
 		try {
-			JsonValueSafety.check(schemaMap, "Tool input schema", deadline);
-			JsonValueSafety.check(args, "Tool input", deadline);
+			// No wall clock here: both walks are node-bounded, and the validation step below has its own compute budget.
+			JsonValueSafety.check(schemaMap, "Tool input schema", JsonValueSafety.NO_DEADLINE);
+			JsonValueSafety.check(args, "Tool input", JsonValueSafety.NO_DEADLINE);
 		} catch (IllegalArgumentException e) {
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, e.getMessage());
 		}
@@ -186,8 +186,7 @@ final class McpSchemaSafety {
 	/**
 	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces a fresh {@link #MAX_VALIDATION_MILLIS}
 	 * compute budget against the task's own compute time - deliberately <b>not</b> the caller's remaining share
-	 * of the structural-traversal deadline computed in {@link #validateInput}. That deadline is a wall-clock
-	 * budget that is already partially spent by the two {@link JsonValueSafety#check} calls and the
+	 * of any structural-traversal wall clock. Such a budget would already be partially spent by the two {@link JsonValueSafety#check} calls and the
 	 * schema-to-bean conversion above, both of which run on the (possibly preempted) request thread under load;
 	 * deriving the validation budget from whatever wall-clock happened to remain would let purely-external
 	 * scheduling pressure - not any property of the schema or arguments being validated - trip a false-positive
