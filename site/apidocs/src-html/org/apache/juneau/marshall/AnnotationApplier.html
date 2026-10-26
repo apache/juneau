@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> *    }</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;jc&gt;// The applier that applies the annotation to the bean context builder.&lt;/jc&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;jk&gt;public class&lt;/jk&gt; MarshalledConfigAnnotationApplier &lt;jk&gt;extends&lt;/jk&gt; AnnotationApplier&amp;lt;&lt;ja&gt;MarshalledConfig&lt;/ja&gt;,MarshallingContext.Builder&lt;?&gt;&amp;gt; {</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;jk&gt;public class&lt;/jk&gt; MarshalledConfigAnnotationApplier &lt;jk&gt;extends&lt;/jk&gt; AnnotationApplier&amp;lt;&lt;ja&gt;MarshalledConfig&lt;/ja&gt;,MarshallingContext.Builder&amp;lt;?&amp;gt;&amp;gt; {</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;jc&gt;// Required constructor. &lt;/jc&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;jk&gt;public&lt;/jk&gt; Applier(VarResolverSession &lt;jv&gt;vr&lt;/jv&gt;) {</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59"> *       }</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
 <span class="source-line-no">061</span><span id="line-61"> *       &lt;ja&gt;@Override&lt;/ja&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *       &lt;jk&gt;public void&lt;/jk&gt; apply(AnnotationInfo&amp;lt;MarshalledConfig&amp;gt; &lt;jv&gt;annotationInfo&lt;/jv&gt;, MarshallingContext.Builder&lt;?&gt; &lt;jv&gt;builder&lt;/jv&gt;) {</span>
+<span class="source-line-no">062</span><span id="line-62"> *       &lt;jk&gt;public void&lt;/jk&gt; apply(AnnotationInfo&amp;lt;MarshalledConfig&amp;gt; &lt;jv&gt;annotationInfo&lt;/jv&gt;, MarshallingContext.Builder&amp;lt;?&amp;gt; &lt;jv&gt;builder&lt;/jv&gt;) {</span>
 <span class="source-line-no">063</span><span id="line-63"> *          &lt;ja&gt;MarshalledConfig&lt;/ja&gt; &lt;jv&gt;beanConfig&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.getAnnotation();</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
 <span class="source-line-no">065</span><span id="line-65"> *          String &lt;jv&gt;unsortedProperties&lt;/jv&gt; = &lt;jv&gt;beanConfig&lt;/jv&gt;.unsortedProperties();</span>

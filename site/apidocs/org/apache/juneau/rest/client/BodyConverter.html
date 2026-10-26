@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
  <code>true</code> wins. The default converter list (applied automatically by <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>) handles
  the common cases:
  <ol>
-   <li><code>HttpBody</code> — passed through directly (streaming preferred over buffering)
+   <li><a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> — passed through directly (streaming preferred over buffering)
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> — wrapped in a streaming body
    <li><code>byte[]</code> — wrapped in a byte-array body
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> — wrapped in a file body
@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  </ul></div>
 <dl class="notes">
 <dt>Since:</dt>

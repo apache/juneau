@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * @param expiresAtMs Absolute expiry timestamp in epoch milliseconds.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * @param jti A fresh, per-token random identifier minted on every PAUSE (see {@code McpRevision#pause}), used</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	only to detect replay of THIS exact token. Opt-in: consulted by the dispatcher only when an operator has</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	wired a {@link ReplayCache} via {@link McpMrtrConfig#setReplayCache(ReplayCache)}; otherwise it rides in the</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	wired a {@link org.apache.juneau.commons.concurrent.ReplayCache} via {@link McpMrtrConfig#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)}; otherwise it rides in the</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 	sealed plaintext unused. Not wire-visible on its own &amp;mdash; like every other field on this record, it only</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 	ever travels inside the opaque, AEAD-sealed {@code requestState} string.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * @param argumentsHash A canonical hash of the original request's {@code arguments} (RFC 8785 JSON</em>

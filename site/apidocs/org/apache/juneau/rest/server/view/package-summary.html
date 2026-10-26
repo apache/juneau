@@ -92,8 +92,8 @@ loadScripts(document, 'script');</script>
  (i.e. <a href="../processor/SerializedPojoProcessor.html" title="class in org.apache.juneau.rest.server.processor"><code>SerializedPojoProcessor</code></a>)
  during <a href="../processor/ResponseProcessorList.html" title="class in org.apache.juneau.rest.server.processor"><code>ResponseProcessorList</code></a>
  construction.  This ensures that a <code>@RestOp</code> method returning a typed <code>View</code>
- subclass (<a href="jsp/JspView.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspView</code></a>,
- <a href="thymeleaf/ThymeleafView.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafView</code></a>, etc.) reaches the
+ subclass (<code>JspView</code>,
+ <code>ThymeleafView</code>, etc.) reaches the
  matching renderer without the user having to enumerate a full custom processor chain.
 
  <p>

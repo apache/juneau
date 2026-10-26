@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	}</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// The applier that applies the annotation to the bean context builder.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;public class&lt;/jk&gt; MarshalledConfigAnnotationApplier &lt;jk&gt;extends&lt;/jk&gt; AnnotationApplier&amp;lt;&lt;ja&gt;MarshalledConfig&lt;/ja&gt;,MarshallingContext.Builder&lt;?&gt;&amp;gt; {</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;public class&lt;/jk&gt; MarshalledConfigAnnotationApplier &lt;jk&gt;extends&lt;/jk&gt; AnnotationApplier&amp;lt;&lt;ja&gt;MarshalledConfig&lt;/ja&gt;,MarshallingContext.Builder&amp;lt;?&amp;gt;&amp;gt; {</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> *		&lt;jc&gt;// Required constructor. &lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;public&lt;/jk&gt; Applier(VarResolverSession &lt;jv&gt;vr&lt;/jv&gt;) {</em>
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 		}</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 		&lt;ja&gt;@Override&lt;/ja&gt;</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;public void&lt;/jk&gt; apply(AnnotationInfo&amp;lt;MarshalledConfig&amp;gt; &lt;jv&gt;annotationInfo&lt;/jv&gt;, MarshallingContext.Builder&lt;?&gt; &lt;jv&gt;builder&lt;/jv&gt;) {</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;public void&lt;/jk&gt; apply(AnnotationInfo&amp;lt;MarshalledConfig&amp;gt; &lt;jv&gt;annotationInfo&lt;/jv&gt;, MarshallingContext.Builder&amp;lt;?&amp;gt; &lt;jv&gt;builder&lt;/jv&gt;) {</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 			&lt;ja&gt;MarshalledConfig&lt;/ja&gt; &lt;jv&gt;beanConfig&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.getAnnotation();</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 			String &lt;jv&gt;unsortedProperties&lt;/jv&gt; = &lt;jv&gt;beanConfig&lt;/jv&gt;.unsortedProperties();</em>
