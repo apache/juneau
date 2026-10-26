@@ -27,7 +27,7 @@ import org.apache.juneau.http.*;
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 9.2.1

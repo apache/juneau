@@ -27,7 +27,7 @@ import org.apache.juneau.http.*;
  * The request has been fulfilled, resulting in the creation of a new resource.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 9.2.1

@@ -44,7 +44,7 @@ import org.apache.juneau.http.header.*;
  * inherits leaf-typed fluent setters with no covariant overrides.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @param <SELF> The self type for fluent setters.

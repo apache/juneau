@@ -28,7 +28,7 @@ import org.apache.juneau.commons.http.*;
  * Base type for headers whose wire format is an <c>Accept</c>-style list of media ranges.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 9.2.1

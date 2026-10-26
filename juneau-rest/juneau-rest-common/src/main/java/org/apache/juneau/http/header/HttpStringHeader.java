@@ -22,7 +22,7 @@ import java.util.function.*;
  * Base type for HTTP headers whose value is an opaque string (or lazy {@link Supplier} of string).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 9.2.1

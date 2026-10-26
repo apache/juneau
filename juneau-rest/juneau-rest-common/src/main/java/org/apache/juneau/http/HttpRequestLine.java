@@ -24,7 +24,7 @@ package org.apache.juneau.http;
  * The default immutable implementation is {@link org.apache.juneau.http.request.HttpRequestLineBean}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 10.0.0

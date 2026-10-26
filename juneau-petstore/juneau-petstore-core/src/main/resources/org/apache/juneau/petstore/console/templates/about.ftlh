@@ -27,7 +27,7 @@ and a bearer-token guard.</p>
 <ul>
 <li><a href="/petstore/api">The REST API</a>, with its generated Swagger page.</li>
 <li><a href="/petstore-ui">The React app</a>, a standalone single-page client of the same API.</li>
-<li><a href="https://juneau.apache.org/docs/topics/JuneauPetstore">The petstore docs</a>.</li>
+<li><a href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>.</li>
 </ul>
 </div>
 </@card>

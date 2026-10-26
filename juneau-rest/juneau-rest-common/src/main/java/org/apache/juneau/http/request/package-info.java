@@ -19,7 +19,7 @@
  * Default immutable bean implementations of {@link org.apache.juneau.http.HttpRequestLine} and related request-line types.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  */
 package org.apache.juneau.http.request;

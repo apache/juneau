@@ -120,7 +120,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
  * 	<li class='link'>{@link Json5Serializer} - For JSON5-style output (single quotes, etc.)
  * </ul>
  */

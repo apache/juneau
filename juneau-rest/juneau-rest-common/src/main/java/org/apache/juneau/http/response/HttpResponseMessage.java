@@ -29,7 +29,7 @@ import org.apache.juneau.http.*;
  * Mirrors the semantics of {@code org.apache.http.HttpResponse} without the Apache HttpCore dependency.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
  * @since 9.2.1
