@@ -42,6 +42,7 @@ CHECKS = [
     (14, 'anchors'),
     (15, 'hygiene'),
     (16, 'guides'),
+    (17, 'lockfile'),
 ]
 NAME_BY_NUM = {n: name for n, name in CHECKS}
 NUM_BY_NAME = {name: n for n, name in CHECKS}
@@ -55,6 +56,9 @@ NAME_PART_RE = re.compile(r'^\d\d(?:\.\d\d)*\.([A-Z][A-Za-z0-9]*)\.md$')
 # The Guides section: its landing page is the category link target and is served at /docs/guides.
 GUIDES_LINK_ID = 'guides/00.Guides'
 GUIDES_LANDING_SLUG = '/guides'
+# Every `resolved` URL in package-lock.json must be on the public npm registry.
+LOCKFILE_RESOLVED_RE = re.compile(r'"resolved":\s*"([^"]*)"')
+PUBLIC_NPM_REGISTRY = 'https://registry.npmjs.org/'
 # A numbered landing row that links a topic (`8. [Title](/docs/topics/Slug)...`): a guide kept as a sidebar `ref`.
 LANDING_TOPIC_ROW_RE = re.compile(r'^\d+\. \[[^\]]*\]\(/docs/topics/([A-Za-z][A-Za-z0-9]*)\)', re.M)
 
@@ -716,7 +720,26 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
     if on(16) and guides_dir.is_dir():
         _check_guides(guides, sidebar_tree, effid_to_topic, findings)
 
+    # --- 17. lockfile ------------------------------------------------------
+    if on(17):
+        _check_lockfile(docs_dir / 'package-lock.json', findings)
+
     return file_count
+
+
+def _check_lockfile(lockfile, findings):
+    """Check 17: every `resolved` URL in package-lock.json is on the public npm registry (a mirror leaks in when npm runs
+    against a local registry setting).  Skipped when there is no lockfile."""
+    if not lockfile.is_file():
+        return
+    for line, text in enumerate(lockfile.read_text(encoding='utf-8').splitlines(), 1):
+        m = LOCKFILE_RESOLVED_RE.search(text)
+        if not m:
+            continue
+        url = m.group(1)
+        if not url.startswith(PUBLIC_NPM_REGISTRY):
+            findings.error(17, f'`resolved` URL is not on the public npm registry: {url}',
+                           file=lockfile.name, line=line)
 
 
 def _check_guides(guides, sidebar_tree, effid_to_topic, findings):

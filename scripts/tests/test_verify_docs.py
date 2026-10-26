@@ -270,3 +270,22 @@ def test_parser_rejects_other_calls(call, error):
 def test_retired_check_10_is_rejected(docs, selection):
     assert verify.main(['--docs-dir', str(docs), '--only', selection]) == 2
     assert verify.main(['--docs-dir', str(docs), '--skip', selection]) == 2
+
+
+LOCK_OK = '{"packages": {"node_modules/a": {"resolved": "https://registry.npmjs.org/a/-/a-1.0.0.tgz"}}}\n'
+
+
+def test_lockfile_on_public_registry_passes(docs):
+    write(docs / 'package-lock.json', LOCK_OK)
+    assert run(docs, ['lockfile']) == []
+
+
+def test_lockfile_absent_is_skipped(docs):
+    assert run(docs, ['lockfile']) == []
+
+
+def test_lockfile_other_host_fails(docs):
+    write(docs / 'package-lock.json', LOCK_OK.replace('https://registry.npmjs.org/', 'https://mirror.example.net/npm/'))
+    assert run(docs, ['lockfile']) == [(17, '`resolved` URL is not on the public npm registry: '
+                                            'https://mirror.example.net/npm/a/-/a-1.0.0.tgz', 'package-lock.json')]
+    assert verify.main(['--docs-dir', str(docs), '--only', 'lockfile']) == 1

@@ -54,6 +54,7 @@ The checks, in reporting order (errors unless marked warning):
 | 14 | `anchors` | `/docs/topics/<slug>#<fragment>` heading targets exist; only with `--anchors` (warning). |
 | 15 | `hygiene` | Duplicate titles, near-empty pages, stray files (warning). |
 | 16 | `guides` | Only when `pages/guides/` exists. Each guide has `id`, `title` and `slug`; the file name matches check 3's pattern; `id` equals the file stem; `slug` equals the name part (the landing's is `/guides`); `00.Guides.md` exists; `mainSidebar` has exactly one category, at the top level, whose link is `guides/00.Guides`; in it every `guides/` doc resolves to a file, every `topics/` ref resolves to a topic, every guide except the landing is listed exactly once, the guides are listed in file order, the refs come after the guides, and every numbered landing row that links `/docs/topics/<slug>` has a ref to that topic (so a sidebar regeneration cannot drop guides 8 and 9 unnoticed). |
+| 17 | `lockfile` | Only when `package-lock.json` exists. Every `resolved` URL starts with `https://registry.npmjs.org/` (a local npm mirror setting can otherwise leak into the lockfile). |
 
 ## Output and exit codes
 
