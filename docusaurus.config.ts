@@ -82,19 +82,6 @@ const baseThemeConfig: Preset.ThemeConfig = {
         position: 'left',
         label: 'Documentation',
       },
-      {to: '/docs/guides', label: 'Guides', position: 'left', activeBasePath: '/docs/guides'},
-      {
-        type: 'docSidebar',
-        sidebarId: 'developerSidebar',
-        position: 'left',
-        label: 'Developer Info',
-      },
-      {
-        type: 'docSidebar',
-        sidebarId: 'releaseNotesSidebar',
-        position: 'left',
-        label: 'Release Notes',
-      },
       {to: '/downloads', label: 'Downloads', position: 'left'},
       {to: '/security', label: 'Security Analysis', position: 'left'},
       {to: '/apache', label: 'Apache', position: 'left'},
@@ -187,7 +174,7 @@ const themeConfig: Preset.ThemeConfig = baseThemeConfig;
 const config: Config = {
   title: 'Apache Juneau',
   tagline: 'Universal toolkit for marshalling POJOs to a wide variety of content types using a common framework',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/oakleaf.svg',
 
   // Render ```mermaid fenced blocks as diagrams (see themes below).
   markdown: {

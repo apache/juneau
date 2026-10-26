@@ -10,7 +10,8 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
-"""Tests for verify-docs.py: check 16 (guides) and the guide cases of check 11 (links)."""
+"""Tests for verify-docs.py: the sidebars.ts parser, check 16 (guides), the guide cases of check 11 (links) and the check
+selection."""
 
 from pathlib import Path
 
@@ -30,9 +31,9 @@ GUIDES = {
     '01.FirstGuide.md': 'id: 01.FirstGuide\ntitle: "First"\nslug: FirstGuide',
     '02.SecondGuide.md': 'id: 02.SecondGuide\ntitle: "Second"\nslug: SecondGuide',
 }
-GUIDE_ITEMS = ("{type: 'doc', id: 'guides/01.FirstGuide', label: '1. First'},"
-               "{type: 'doc', id: 'guides/02.SecondGuide', label: '2. It\\'s second'},"
-               "{type: 'ref', id: 'topics/10.01.ConsolePage', label: '3. Console Page'},")
+GUIDE_ITEMS = ("{type: 'doc', id: 'guides/01.FirstGuide', label: 'First'},"
+               "{type: 'doc', id: 'guides/02.SecondGuide', label: 'It\\'s second'},"
+               "{type: 'ref', id: 'topics/10.01.ConsolePage', label: 'Console Page'},")
 
 LANDING_BODY = ('Intro links [Getting Started](/docs/topics/GettingStarted).\n\n'
                 '1. [First](/docs/guides/FirstGuide): one.\n'
@@ -40,15 +41,31 @@ LANDING_BODY = ('Intro links [Getting Started](/docs/topics/GettingStarted).\n\n
                 '3. [Console Page](/docs/topics/ConsolePage): an existing topic.\n')
 
 
+# The helper code above `mainSidebar` holds braces and quotes the parser must never look at.
+HELPERS = ("function numbered(items) { return items.map((i) => ({...i, label: `1. ${i.label}`})); }\n"
+           "function group(category) { return {...category, customProps: {unnumbered: true}}; }\n")
+
+
 def sidebar(guide_items=GUIDE_ITEMS, guide_categories=1):
-    guides = ("{type: 'category', label: 'Guides', link: {type: 'doc', id: 'guides/00.Guides'}, items: ["
-              + guide_items + "]},") * guide_categories
-    return ("const sidebars = {mainSidebar: [{type: 'category', label: 'Documentation', items: ["
-            "{type: 'category', label: 'Getting Started', link: {type: 'doc', id: 'topics/00.GettingStarted'}, items: ["
-            "{type: 'doc', id: 'topics/00.01.GettingStartedInstall', label: '1. Install'}]},"
+    """The production shape: no Documentation wrapper around Getting Started and Guides, numbered() and group()."""
+    guides = ("{type: 'category', label: 'Guides', link: {type: 'doc', id: 'guides/00.Guides'}, items: numbered(["
+              + guide_items + "])},") * guide_categories
+    return (HELPERS + "const sidebars = {mainSidebar: ["
+            "{type: 'category', label: 'Getting Started', link: {type: 'doc', id: 'topics/00.GettingStarted'}, items: numbered(["
+            "{type: 'doc', id: 'topics/00.01.GettingStartedInstall', label: 'Install'}])},"
             + guides +
-            "{type: 'category', label: 'Console', items: [{type: 'doc', id: 'topics/10.01.ConsolePage', label: '10.1. Console'}]},"
-            "]}]};\nexport default sidebars;\n")
+            "{type: 'category', label: 'Documentation', items: numbered(["
+            "group({type: 'category', label: 'Console', items: [{type: 'doc', id: 'topics/10.01.ConsolePage', label: 'Console'}]}),"
+            "])},"
+            "] as SidebarsConfig[string]};\nexport default sidebars;\n")
+
+
+# The shape before the one-sidebar reorganization: a Documentation wrapper and typed numbers.
+LEGACY_SIDEBAR = ("const sidebars = {mainSidebar: [{type: 'category', label: 'Documentation', items: ["
+                  "{type: 'category', label: 'Getting Started', link: {type: 'doc', id: 'topics/00.GettingStarted'}, items: ["
+                  "{type: 'doc', id: 'topics/00.01.GettingStartedInstall', label: '1. Install'}]},"
+                  "{type: 'category', label: 'Console', items: [{type: 'doc', id: 'topics/10.01.ConsolePage', label: '10.1. Console'}]},"
+                  "]}]};\nexport default sidebars;\n")
 
 
 def write(path, text):
@@ -133,29 +150,29 @@ def test_exactly_one_guides_category(docs, count):
 
 
 def test_sidebar_doc_without_file(docs):
-    write(docs / 'sidebars.ts', sidebar(GUIDE_ITEMS + "{type: 'doc', id: 'guides/09.Gone', label: '9. Gone'},"))
+    write(docs / 'sidebars.ts', sidebar(GUIDE_ITEMS + "{type: 'doc', id: 'guides/09.Gone', label: 'Gone'},"))
     assert 'Sidebar doc `guides/09.Gone` has no file in pages/guides/' in messages(docs, ['guides'])
 
 
 def test_ref_must_resolve_to_a_topic(docs):
-    write(docs / 'sidebars.ts', sidebar(GUIDE_ITEMS + "{type: 'ref', id: 'topics/99.Nope', label: '9. Nope'},"))
+    write(docs / 'sidebars.ts', sidebar(GUIDE_ITEMS + "{type: 'ref', id: 'topics/99.Nope', label: 'Nope'},"))
     assert ('Sidebar ref `topics/99.Nope` in the Guides category does not resolve to a topic'
             in messages(docs, ['guides']))
 
 
 def test_landing_topic_row_needs_a_ref(docs):
     # A regeneration that drops the ref must not pass: the landing still lists the topic as guide 3.
-    items = ("{type: 'doc', id: 'guides/01.FirstGuide', label: '1. First'},"
-             "{type: 'doc', id: 'guides/02.SecondGuide', label: '2. Second'},")
+    items = ("{type: 'doc', id: 'guides/01.FirstGuide', label: 'First'},"
+             "{type: 'doc', id: 'guides/02.SecondGuide', label: 'Second'},")
     write(docs / 'sidebars.ts', sidebar(items))
     assert messages(docs, ['guides']) == [
         'Landing lists `/docs/topics/ConsolePage` but the Guides category has no ref to it']
 
 
 def test_refs_come_after_the_guides(docs):
-    items = ("{type: 'doc', id: 'guides/01.FirstGuide', label: '1. First'},"
-             "{type: 'ref', id: 'topics/10.01.ConsolePage', label: '3. Console Page'},"
-             "{type: 'doc', id: 'guides/02.SecondGuide', label: '2. Second'},")
+    items = ("{type: 'doc', id: 'guides/01.FirstGuide', label: 'First'},"
+             "{type: 'ref', id: 'topics/10.01.ConsolePage', label: 'Console Page'},"
+             "{type: 'doc', id: 'guides/02.SecondGuide', label: 'Second'},")
     write(docs / 'sidebars.ts', sidebar(items))
     assert messages(docs, ['guides']) == [
         'Sidebar doc `guides/02.SecondGuide` follows a ref; the Guides category lists its refs last']
@@ -167,13 +184,13 @@ def test_guide_not_listed(docs):
 
 
 def test_guide_listed_twice(docs):
-    write(docs / 'sidebars.ts', sidebar(GUIDE_ITEMS + "{type: 'doc', id: 'guides/02.SecondGuide', label: '2. Again'},"))
+    write(docs / 'sidebars.ts', sidebar(GUIDE_ITEMS + "{type: 'doc', id: 'guides/02.SecondGuide', label: 'Again'},"))
     assert 'Guide is listed 2 times in the sidebar Guides category' in messages(docs, ['guides'])
 
 
 def test_listed_order_must_be_file_order(docs):
-    items = ("{type: 'doc', id: 'guides/02.SecondGuide', label: '2. Second'},"
-             "{type: 'doc', id: 'guides/01.FirstGuide', label: '1. First'},")
+    items = ("{type: 'doc', id: 'guides/02.SecondGuide', label: 'Second'},"
+             "{type: 'doc', id: 'guides/01.FirstGuide', label: 'First'},")
     write(docs / 'sidebars.ts', sidebar(items))
     assert ("Guides category order != file order: ['02.SecondGuide', '01.FirstGuide']"
             in messages(docs, ['guides']))
@@ -224,3 +241,32 @@ def test_collect_section_returns_nested_items():
         {'type': 'category', 'label': 'More', 'items': [{'type': 'ref', 'id': 'topics/02.B'}]},
     ]}, {'type': 'doc', 'id': 'topics/03.C'}]
     assert verify.collect_section(tree, 'guides/00.Guides') == [[('doc', 'guides/01.A'), ('ref', 'topics/02.B')]]
+
+
+def test_parser_reads_through_numbered_and_group():
+    tree = verify.parse_sidebars(sidebar())
+    assert [n['label'] for n in tree] == ['Getting Started', 'Guides', 'Documentation']
+    doc_refs, landing_ids, preorder = verify.collect_sidebar(tree)
+    assert preorder == ['00.GettingStarted', '00.01.GettingStartedInstall', '10.01.ConsolePage']
+    assert doc_refs == ['00.01.GettingStartedInstall', '10.01.ConsolePage']
+    assert landing_ids == ['00.GettingStarted']
+
+
+def test_parser_still_reads_the_legacy_shape():
+    _refs, _landing, preorder = verify.collect_sidebar(verify.parse_sidebars(LEGACY_SIDEBAR))
+    assert preorder == ['00.GettingStarted', '00.01.GettingStartedInstall', '10.01.ConsolePage']
+
+
+@pytest.mark.parametrize('call, error', [
+    ("foo([{type: 'doc', id: 'topics/x'}])", 'unsupported call `foo(`'),
+    ("numbered([], 2)", 'expected `)` closing `numbered(`'),
+])
+def test_parser_rejects_other_calls(call, error):
+    with pytest.raises(ValueError, match=error.replace('(', r'\(').replace(')', r'\)')):
+        verify.parse_sidebars("const s = {mainSidebar: [{type: 'category', label: 'X', items: " + call + "}]};")
+
+
+@pytest.mark.parametrize('selection', ['labels', '10'])
+def test_retired_check_10_is_rejected(docs, selection):
+    assert verify.main(['--docs-dir', str(docs), '--only', selection]) == 2
+    assert verify.main(['--docs-dir', str(docs), '--skip', selection]) == 2

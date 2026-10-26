@@ -14,6 +14,7 @@
 
 import json
 import os
+import re
 import socket
 import sys
 
@@ -361,6 +362,27 @@ def test_svg_places_panes_side_by_side_and_is_deterministic():
     svg = docs_images.render_svg([left, right], 't', 'd')
     assert svg == docs_images.render_svg([left, right], 't', 'd')
     assert svg.count('<text ') == 2 and f'fill="{docs_images.TERM_DIVIDER}"' in svg
+
+
+def test_svg_stacks_panes_in_a_column_with_a_divider():
+    left, top, bottom = docs_images.parse_ansi('left\nl2\nl3\nl4'), docs_images.parse_ansi('top'), docs_images.parse_ansi('bottom!')
+    svg = docs_images.render_svg([left, (top, bottom)], 't', 'd')
+    assert svg == docs_images.render_svg([left, (top, bottom)], 't', 'd')
+    # 4 rows tall (left is 4; the column is 1 + divider + 1 = 3); 4 + 1 + 7 columns wide
+    assert f'height="{4 * docs_images.TERM_LINE_H + 2 * docs_images.TERM_PAD}"' in svg
+    assert f'width="{12 * docs_images.TERM_CELL_W + 2 * docs_images.TERM_PAD:g}"' in svg
+    dividers = re.findall(rf'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="{docs_images.TERM_DIVIDER}"/>', svg)
+    pad, cell, line = docs_images.TERM_PAD, docs_images.TERM_CELL_W, docs_images.TERM_LINE_H
+    assert [float(v) for d in dividers for v in d] == pytest.approx([
+        pad + 4 * cell, pad, cell, 4 * line,                     # vertical, full height
+        pad + 5 * cell, pad + line, 7 * cell, line])             # horizontal, one row, the widest pane wide
+    assert svg.count('<text ') == 4 + 2
+
+
+def test_svg_without_a_stack_is_unchanged_by_stack_support():
+    pane = docs_images.parse_ansi('a\nb')
+    assert docs_images.render_svg([pane], 't', 'd') == docs_images.render_svg([(pane,)], 't', 'd')
+    assert f'fill="{docs_images.TERM_DIVIDER}"' not in docs_images.render_svg([pane], 't', 'd')
 
 
 def test_mask_text_and_trim_rows():

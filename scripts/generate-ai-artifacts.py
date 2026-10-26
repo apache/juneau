@@ -288,7 +288,11 @@ def extract_api_metadata_records(juneau_root: Path, default_version: str) -> lis
 
 
 def parse_sidebar_tree(sidebars_text: str) -> list[dict[str, Any]]:
-    """Tokenize sidebars.ts into a tree of {type,label,id,link,children} dicts (top-level array items)."""
+    """Tokenize the mainSidebar array of sidebars.ts into a tree of {type,label,id,link,children} dicts."""
+    start = re.search(r"\bmainSidebar\s*:", sidebars_text)
+    if start is None:
+        raise ValueError("Could not find 'mainSidebar' in sidebars.ts")
+    sidebars_text = sidebars_text[start.end():]
     token_re = re.compile(
         r"(?P<link>\blink\s*:\s*\{)|(?P<open>\{)|(?P<close>\})"
         r"|\b(?P<key>type|label|id)\s*:\s*'(?P<val>(?:[^'\\]|\\.)*)'"
@@ -368,9 +372,11 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
         by_id["topics/" + (fm.get("id") or stem)] = rec
 
     tree = parse_sidebar_tree(read_text(docs_root / SIDEBARS_FILE))
-    documentation = find_node(tree, "Documentation")
-    if documentation is None:
-        raise ValueError("Could not find 'Documentation' category in sidebars.ts")
+    top = {n.get("label"): n for n in tree if n.get("type") == "category"}
+    for name in ("Getting Started", "Guides", "Documentation"):
+        if name not in top:
+            raise ValueError(f"Could not find '{name}' category in sidebars.ts")
+    sections = [top["Getting Started"], top["Guides"], *top["Documentation"]["children"]]
 
     lines = [
         "# Apache Juneau",
@@ -378,12 +384,12 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
         "> Apache Juneau is a Java toolkit for marshalling POJOs to and from many formats (JSON, XML, HTML, "
         "UON, URL-encoding, MessagePack, RDF, CSV, YAML and more), building REST servers and clients, "
         "and writing configurable microservices, built around a common bean-context and annotation model. "
-        "This index links to the documentation topics, grouped as in the site sidebar.",
+        "This index links to the documentation topics, grouped as in the Getting Started, Guides and Documentation sections of the site sidebar.",
         "",
     ]
 
     seen: set[str] = set()
-    for section in documentation["children"]:
+    for section in sections:
         if section.get("type") != "category":
             continue
         entries = []

@@ -1,6 +1,6 @@
 # Apache Juneau
 
-> Apache Juneau is a Java toolkit for marshalling POJOs to and from many formats (JSON, XML, HTML, UON, URL-encoding, MessagePack, RDF, CSV, YAML and more), building REST servers and clients, and writing configurable microservices, built around a common bean-context and annotation model. This index links to the documentation topics, grouped as in the site sidebar.
+> Apache Juneau is a Java toolkit for marshalling POJOs to and from many formats (JSON, XML, HTML, UON, URL-encoding, MessagePack, RDF, CSV, YAML and more), building REST servers and clients, and writing configurable microservices, built around a common bean-context and annotation model. This index links to the documentation topics, grouped as in the Getting Started, Guides and Documentation sections of the site sidebar.
 
 ## Getting Started
 

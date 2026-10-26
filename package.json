@@ -22,6 +22,7 @@
     "@docusaurus/preset-classic": "3.8.1",
     "@docusaurus/theme-mermaid": "3.8.1",
     "@mdx-js/react": "^3.0.0",
+    "asciinema-player": "^3.17.0",
     "clsx": "^2.0.0",
     "jsdom": "^27.0.0",
     "markdown-it": "^14.1.0",

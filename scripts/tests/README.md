@@ -20,4 +20,8 @@ python3 -m pytest -q scripts/tests
 
 `test_check_entry_pages.py` covers `check-entry-pages.py` (K0-K5 and the allow-list), building small docs and Juneau trees under `tmp_path`.
 
-`test_verify_docs.py` covers `verify-docs.py` check 16 (the Guides section) and the guide-link cases of check 11.
+`test_verify_docs.py` covers `verify-docs.py`: the `sidebars.ts` parser (`numbered(...)` and `group(...)` read through, other calls rejected, the legacy shape still parsed), the retired check 10, check 16 (the Guides section) and the guide-link cases of check 11.
+
+`test_generate_ai_artifacts.py` covers `generate-ai-artifacts.py`: the records, `llms.txt` (sections taken from Getting Started, Guides and the children of Documentation) and `--check`.
+
+`test_sidebars.py` loads the real `sidebars.ts` with jiti (needs `node` and `npm ci`; it fails rather than skips without them) and checks the generated numbers, the groups, Articles, Release Notes, that every page id appears in the sidebar exactly once, and that the Python parser agrees with the resolved tree.

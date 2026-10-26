@@ -13,7 +13,7 @@
 # ***************************************************************************************************************************
 """
 Renumber pages/topics files gap-free in mainSidebar order: rename the files, rewrite front-matter ids, patch the
-sidebars.ts ids and labels in place, and rewrite references to the old ids and file names.  Dry run by default.
+sidebars.ts ids in place, and rewrite references to the old ids and file names.  Dry run by default.
 
 Full docs: renumber-topics.md
 """
@@ -29,8 +29,6 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 CHAPTER_RE = re.compile(r'^\d\d$')
 TOPIC_ID_RE = re.compile(r"""(['"])topics/([^'"]+)\1""")
-LABEL_RE = re.compile(r"""(\blabel:\s*)('(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*")""")
-LABEL_NUMBER_RE = re.compile(r'^\s*\d+(?:\.\d+)*\.\s+')
 TMP_SUFFIX = '.renumtmp'
 
 
@@ -62,28 +60,8 @@ def _node_id(node):
     return None
 
 
-def _js_string(literal):
-    """Decode a quoted JS string literal as written in sidebars.ts."""
-    return re.sub(r'\\(.)', r'\1', literal[1:-1])
-
-
-def _js_quote(value, quote):
-    return quote + value.replace('\\', '\\\\').replace(quote, '\\' + quote) + quote
-
-
-def main_sidebar_span(text):
-    """(start, end) offsets of the mainSidebar array in sidebars.ts (the array ends at the first tab-indented ']')."""
-    m = re.search(r'\bmainSidebar\s*:\s*\[', text)
-    if not m:
-        raise RenumberError('mainSidebar not found in sidebars.ts')
-    end = text.find('\n\t]', m.end())
-    if end < 0:
-        raise RenumberError('end of mainSidebar not found in sidebars.ts')
-    return m.start(), end
-
-
 def plan(docs_dir, chapter=None):
-    """Return the renumber plan: renames, relabels, unmapped files and the mapped count."""
+    """Return the renumber plan: renames, unmapped files and the mapped count."""
     topics_dir = docs_dir / 'pages' / 'topics'
     topics = [vd.Topic(p) for p in sorted(topics_dir.glob('*.md'))]
     by_id = {}
@@ -94,7 +72,6 @@ def plan(docs_dir, chapter=None):
     tree = vd.parse_sidebars((docs_dir / 'sidebars.ts').read_text(encoding='utf-8'))
 
     mapping = {}   # old effective id -> (topic, new file name, new effective id)
-    relabels = []  # (chapter, old label, new label)
 
     def topic(i):
         if i not in by_id:
@@ -126,13 +103,6 @@ def plan(docs_dir, chapter=None):
         t = topic(i)
         is_landing = n['type'] == 'category'
         assign(t, p, is_landing)
-        label = n.get('label')
-        if label is not None:
-            padded = vd._padded_prefix_from_label(label)
-            if padded is not None and (padded == t.numeric_prefix or padded + '.00' == t.numeric_prefix):
-                new_label = '.'.join(str(x) for x in p) + '. ' + LABEL_NUMBER_RE.sub('', label)
-                if new_label != label:
-                    relabels.append((t.numeric_prefix[:2], label, new_label))
         if is_landing:
             walk(n.get('items', []), p, 0)
 
@@ -177,7 +147,6 @@ def plan(docs_dir, chapter=None):
         'mapped': len(mapping),
         'total': len(topics),
         'renames': renames,
-        'relabels': [{'old': old, 'new': new} for ch, old, new in relabels if chapter is None or ch == chapter],
         'unmapped': unmapped,
     }
 
@@ -185,31 +154,10 @@ def plan(docs_dir, chapter=None):
 # ---------------------------------------------------------------------------
 # Applying
 # ---------------------------------------------------------------------------
-def patch_sidebars(text, renames, relabels):
-    """Rewrite 'topics/<old id>' strings anywhere and the relabelled labels inside mainSidebar, in one pass each."""
+def patch_sidebars(text, renames):
+    """Rewrite 'topics/<old id>' strings anywhere in sidebars.ts."""
     id_map = {r['old_id']: r['new_id'] for r in renames if r['old_id'] != r['new_id']}
-    text = TOPIC_ID_RE.sub(lambda m: m.group(1) + 'topics/' + id_map.get(m.group(2), m.group(2)) + m.group(1), text)
-    if not relabels:
-        return text
-    label_map = {r['old']: r['new'] for r in relabels}
-    start, end = main_sidebar_span(text)
-    span = text[start:end]
-    seen = {}
-    for m in LABEL_RE.finditer(span):
-        value = _js_string(m.group(2))
-        if value in label_map:
-            seen[value] = seen.get(value, 0) + 1
-    for old in label_map:
-        if seen.get(old, 0) != 1:
-            raise RenumberError(f'label {old!r} occurs {seen.get(old, 0)} times in mainSidebar; expected exactly 1')
-
-    def relabel(m):
-        value = _js_string(m.group(2))
-        if value not in label_map:
-            return m.group(0)
-        return m.group(1) + _js_quote(label_map[value], m.group(2)[0])
-
-    return text[:start] + LABEL_RE.sub(relabel, span) + text[end:]
+    return TOPIC_ID_RE.sub(lambda m: m.group(1) + 'topics/' + id_map.get(m.group(2), m.group(2)) + m.group(1), text)
 
 
 def _token_regex(tokens):
@@ -227,7 +175,7 @@ def rewrite_references(text, tokens, token_rx):
 def apply(docs_dir, result):
     """Rename the files and rewrite ids, sidebar entries and references.  Everything is computed before any write."""
     renames = result['renames']
-    if not renames and not result['relabels']:
+    if not renames:
         return
     topics_dir = docs_dir / 'pages' / 'topics'
     tokens = {}
@@ -269,7 +217,7 @@ def apply(docs_dir, result):
                 writes[path] = (path, new_text)
     sidebars = docs_dir / 'sidebars.ts'
     sidebar_text = sidebars.read_text(encoding='utf-8')
-    new_sidebar = patch_sidebars(sidebar_text, renames, result['relabels'])
+    new_sidebar = patch_sidebars(sidebar_text, renames)
 
     # 2. Two-phase rename, then write the new contents.
     moved = [(topics_dir / r['old_file'], topics_dir / r['new_file']) for r in renames if r['old_file'] != r['new_file']]
@@ -292,12 +240,10 @@ def print_text(result, applied):
             print(f"RENAME {r['old_file']} -> {r['new_file']}")
         if r['old_id'] != r['new_id']:
             print(f"ID     {r['old_id']} -> {r['new_id']}")
-    for r in result['relabels']:
-        print(f"LABEL  {r['old']!r} -> {r['new']!r}")
     for name in result['unmapped']:
         print(f"UNMAPPED {name} (not in mainSidebar; left alone)")
     print(f"mapped {result['mapped']} of {result['total']} topic pages; {len(result['renames'])} renamed, "
-          f"{len(result['relabels'])} relabelled, {len(result['unmapped'])} unmapped"
+          f"{len(result['unmapped'])} unmapped"
           + ('; applied' if applied else '; dry run, nothing written'))
 
 

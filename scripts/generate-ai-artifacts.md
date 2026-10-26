@@ -33,7 +33,7 @@ npm run build:ai-artifacts
 2. Builds one record per `pages/topics/*.md` and per `pages/release-notes/*.md` (`build_doc_record`), plus one `about` record per `src/pages/about/*.mdx` page (`build_about_records`; ids `about` and `about-<slug>`, the project's first module or `general`, with a Modules line placed before the body): id, title (frontmatter, then first heading, then file name), summary (first paragraph), description (body truncated to 2000 characters), module (from the topic file name), version and tags.
 3. Adds an `api-metadata` record for every `.java` file under `juneau-core` and `juneau-rest` in the Juneau checkout that declares a `summary()` or `su()` annotation attribute with an empty default (`extract_api_metadata_records`).
 4. Sorts the records, validates the required fields, and builds the taxonomy (counts by module and source type) and the manifest (schema version, release, a content-hash `generated_at`, source commits, record count).
-5. Renders `llms.txt` from the `Documentation` category of `sidebars.ts`, grouping topics as in the sidebar, plus an About section (the overview, then each project page in `projects.ts` order; omitted when there are no About pages) and a Resources section (release notes, the migration guide when present, javadocs, the knowledge base files).
+5. Renders `llms.txt` from the top-level `Getting Started` and `Guides` categories and the children of the `Documentation` category of `sidebars.ts` (one section each, in that order), grouping topics as in the sidebar, plus an About section (the overview, then each project page in `projects.ts` order; omitted when there are no About pages) and a Resources section (release notes, the migration guide when present, javadocs, the knowledge base files).
 6. Without `--check`: writes each file only when its content changed and prints `Updated` or `No change` per file.
 7. With `--check`: compares each file with the expected content. For `manifest.json` the `source_commit` key is ignored, so a new commit with no content change is not stale.
 
@@ -46,13 +46,14 @@ Stdout: one `Updated <path>` or `No change <path>` line per output and `Done. N 
 | 0 | Generated, or `--check` found everything current. |
 | 1 | `--check` found stale or missing artifacts. |
 
-A missing `Documentation` category in `sidebars.ts` or an invalid record raises an exception (exit 1 with a traceback).
+A missing `Getting Started`, `Guides` or `Documentation` category in `sidebars.ts` or an invalid record raises an exception (exit 1 with a traceback).
 
 ## Gotchas
 
 - Output is deterministic: the same inputs give byte-identical files, so a diff after a run reflects real content changes.
 - `unknown` is written as the version if `current-release.py` cannot be run; check the Juneau root.
 - `llms-full.txt` is deliberately not generated (the concatenated topics are large).
+- The sidebar is read as text, starting at `mainSidebar:` so the helper code above it is never tokenized. Only the one-sidebar shape (Getting Started, Guides and Documentation as siblings) is supported.
 
 ## See also
 

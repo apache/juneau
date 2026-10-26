@@ -14,7 +14,7 @@ Documentation-integrity checker: verifies that the topic and guide pages, their 
 python3 scripts/verify-docs.py
 python3 scripts/verify-docs.py --strict --anchors
 python3 scripts/verify-docs.py --only links,imports
-python3 scripts/verify-docs.py --skip 10,15 --json
+python3 scripts/verify-docs.py --skip 13,15 --json
 ```
 
 ## Options
@@ -30,9 +30,9 @@ python3 scripts/verify-docs.py --skip 10,15 --json
 
 ## What it does
 
-Topic pages live in `pages/topics/*.md`. Each needs frontmatter with a `title` and a `slug` (an `id` is optional; the effective id is the `id` when present, else the file name without `.md`). File names look like `NN(.NN)*.PascalName.md`; landing pages (the target of a sidebar category link) carry a trailing `.00`. Sidebars reference pages as `topics/<id>`, and body links use `/docs/topics/<slug>`.
+Topic pages live in `pages/topics/*.md`. Each needs frontmatter with a `title` and a `slug` (an `id` is optional; the effective id is the `id` when present, else the file name without `.md`). File names look like `NN(.NN)*.PascalName.md`; landing pages (the target of a sidebar category link) carry a trailing `.00`. Sidebars reference pages as `topics/<id>`, and body links use `/docs/topics/<slug>`. It reads `sidebars.ts` as text (no Node), starting at `mainSidebar:` and looking through the `numbered(...)` and `group(...)` helper calls; any other call expression is a parse error (check 6).
 
-Guide pages live in `pages/guides/*.md`, with the same file-name rules but no `.00` landing suffix. Each sets `id` equal to its file stem (Docusaurus would otherwise strip the `NN.` prefix) and `slug` equal to the name part, and body links use `/docs/guides/<slug>`. The landing `00.Guides.md` is the exception: its slug is `/guides`, so it is served at `/docs/guides`. Checks 1-10 and 12-15 look only at topics; guides have check 16.
+Guide pages live in `pages/guides/*.md`, with the same file-name rules but no `.00` landing suffix. Each sets `id` equal to its file stem (Docusaurus would otherwise strip the `NN.` prefix) and `slug` equal to the name part, and body links use `/docs/guides/<slug>`. The landing `00.Guides.md` is the exception: its slug is `/guides`, so it is served at `/docs/guides`. Checks 1-9 and 12-15 look only at topics; guides have check 16.
 
 The checks, in reporting order (errors unless marked warning):
 
@@ -47,13 +47,13 @@ The checks, in reporting order (errors unless marked warning):
 | 7 | `orphans` | Every topic file is referenced in `sidebars.ts`, except ids listed in `scripts/verify-docs-allowlist.txt`. |
 | 8 | `counts` | File count versus distinct sidebar references. |
 | 9 | `order` | Sidebar depth-first order equals directory order. |
-| 10 | `labels` | The sidebar's dotted-number label matches the target file prefix (warning). |
+| 10 | (retired) | Retired: sidebar labels carry no numbers (`numbered()` in `sidebars.ts` generates them from position), so there is nothing to compare with the file prefix. `--only 10` and `--only labels` are rejected as unknown checks. |
 | 11 | `links` | `/docs/topics/<slug>` and `/docs/guides/<slug>` links resolve (`/docs/guides` itself is the landing); bare relative links on topic and guide pages are errors (the site uses trailing slashes, so write `/docs/topics/<slug>` or `/docs/guides/<slug>`). |
 | 12 | `imports` | `@site/pages/topics/<file>` imports resolve. |
 | 13 | `javadoc` | `/site/apidocs/...` link count and format sanity (warning). |
 | 14 | `anchors` | `/docs/topics/<slug>#<fragment>` heading targets exist; only with `--anchors` (warning). |
 | 15 | `hygiene` | Duplicate titles, near-empty pages, stray files (warning). |
-| 16 | `guides` | Only when `pages/guides/` exists. Each guide has `id`, `title` and `slug`; the file name matches check 3's pattern; `id` equals the file stem; `slug` equals the name part (the landing's is `/guides`); `00.Guides.md` exists; `mainSidebar` has exactly one category whose link is `guides/00.Guides`; in it every `guides/` doc resolves to a file, every `topics/` ref resolves to a topic, every guide except the landing is listed exactly once, the guides are listed in file order, the refs come after the guides, and every numbered landing row that links `/docs/topics/<slug>` has a ref to that topic (so a sidebar regeneration cannot drop guides 8 and 9 unnoticed). |
+| 16 | `guides` | Only when `pages/guides/` exists. Each guide has `id`, `title` and `slug`; the file name matches check 3's pattern; `id` equals the file stem; `slug` equals the name part (the landing's is `/guides`); `00.Guides.md` exists; `mainSidebar` has exactly one category, at the top level, whose link is `guides/00.Guides`; in it every `guides/` doc resolves to a file, every `topics/` ref resolves to a topic, every guide except the landing is listed exactly once, the guides are listed in file order, the refs come after the guides, and every numbered landing row that links `/docs/topics/<slug>` has a ref to that topic (so a sidebar regeneration cannot drop guides 8 and 9 unnoticed). |
 
 ## Output and exit codes
 

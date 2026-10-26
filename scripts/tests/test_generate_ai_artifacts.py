@@ -21,21 +21,28 @@ from conftest import load_script
 
 gen = load_script('generate-ai-artifacts.py')
 
-SIDEBARS = """export default {
+SIDEBARS = """function numbered(items) { return items; }
+function group(category) { return category; }
+
+const sidebars = {
   mainSidebar: [
+    {type: 'category', label: 'Getting Started', items: numbered([{type: 'doc', id: 'topics/Intro'}])},
+    {type: 'category', label: 'Guides', items: numbered([])},
     {
       type: 'category',
       label: 'Documentation',
-      items: [
+      items: numbered([
         {
           type: 'category',
           label: 'Basics',
           items: [{type: 'doc', id: 'topics/Alpha'}, {type: 'doc', id: 'topics/Beta'}],
         },
-      ],
+      ]),
     },
   ],
 };
+
+export default sidebars;
 """
 
 
@@ -201,3 +208,21 @@ def test_no_about_pages_means_no_about_section(layout):
     docs, juneau, _ = layout
     config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
     assert '## About' not in gen.render_llms_txt(config, gen.build_records(config, '10.0.0'), '10.0.0')
+
+
+def test_parse_sidebar_tree_skips_helper_code_before_main_sidebar():
+    tree = gen.parse_sidebar_tree(SIDEBARS)
+    assert [n['label'] for n in tree] == ['Getting Started', 'Guides', 'Documentation']
+
+
+def test_parse_sidebar_tree_requires_main_sidebar():
+    with pytest.raises(ValueError, match='mainSidebar'):
+        gen.parse_sidebar_tree('const sidebars = {};')
+
+
+def test_llms_txt_requires_the_three_top_level_categories(layout):
+    docs, juneau, _ = layout
+    (docs / 'sidebars.ts').write_text(SIDEBARS.replace("label: 'Guides'", "label: 'Other'"), encoding='utf-8')
+    config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
+    with pytest.raises(ValueError, match="'Guides'"):
+        gen.render_llms_txt(config, gen.build_records(config, '10.0.0'), '10.0.0')

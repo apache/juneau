@@ -36,7 +36,6 @@ CHECKS = [
     (7, 'orphans'),
     (8, 'counts'),
     (9, 'order'),
-    (10, 'labels'),
     (11, 'links'),
     (12, 'imports'),
     (13, 'javadoc'),
@@ -46,7 +45,9 @@ CHECKS = [
 ]
 NAME_BY_NUM = {n: name for n, name in CHECKS}
 NUM_BY_NAME = {name: n for n, name in CHECKS}
-WARNING_CHECKS = {10, 13, 14, 15}
+WARNING_CHECKS = {13, 14, 15}
+# sidebars.ts helpers that return their one argument unchanged in shape; the parser reads straight through them.
+TRANSPARENT_CALLS = {'numbered', 'group'}
 
 FILENAME_RE = re.compile(r'^(\d\d(?:\.\d\d)*)\.([A-Z][A-Za-z0-9]*)\.md$')
 # Leading numeric prefix + trailing '.md' stripped => PascalCase name part.
@@ -210,9 +211,19 @@ class _JsParser:
 
     def _bareword(self):
         start = self.i
-        while self.i < self.n and self.s[self.i] not in ',}] \t\r\n':
+        while self.i < self.n and self.s[self.i] not in ',}]( \t\r\n':
             self.i += 1
         word = self.s[start:self.i]
+        if self.i < self.n and self.s[self.i] == '(':
+            if word not in TRANSPARENT_CALLS:
+                raise ValueError(f'unsupported call `{word}(` at offset {start}')
+            self.i += 1  # consume '('
+            value = self.parse_value()
+            self._ws()
+            if self.i >= self.n or self.s[self.i] != ')':
+                raise ValueError(f'expected `)` closing `{word}(` at offset {self.i}')
+            self.i += 1
+            return value
         if word == 'true':
             return True
         if word == 'false':
@@ -255,12 +266,10 @@ def collect_sidebar(nodes):
     - landing_ids: effective ids that are a category link.id (LANDING pages).
     - preorder:    depth-first pre-order sequence of topic ids (category link first,
                    then its items).
-    - labels:      list of (effective_id, label) pairs for topics targets.
     """
     doc_refs = []
     landing_ids = []
     preorder = []
-    labels = []
 
     def walk(node):
         if isinstance(node, list):
@@ -275,8 +284,6 @@ def collect_sidebar(nodes):
             if tid is not None:
                 doc_refs.append(tid)
                 preorder.append(tid)
-                if 'label' in node:
-                    labels.append((tid, node['label']))
         elif ntype == 'category':
             link = node.get('link')
             link_id = None
@@ -285,20 +292,18 @@ def collect_sidebar(nodes):
             if link_id is not None:
                 landing_ids.append(link_id)
                 preorder.append(link_id)
-                if 'label' in node:
-                    labels.append((link_id, node['label']))
             for item in node.get('items', []):
                 walk(item)
 
     walk(nodes)
-    return doc_refs, landing_ids, preorder, labels
+    return doc_refs, landing_ids, preorder
 
 
 def collect_section(nodes, link_id):
     """Find every category whose link.id is `link_id`.
 
     Returns one list per such category: its `doc` and `ref` items as (type, raw id) pairs, depth-first, nested
-    categories included.  Separate from collect_sidebar so that checks 5-10 stay topics-only.
+    categories included.  Separate from collect_sidebar so that checks 5-9 stay topics-only.
     """
     sections = []
 
@@ -367,17 +372,6 @@ def _split_frontmatter(text):
             val = val[1:-1]
         fm[key] = val
     return fm, m.group(2)
-
-
-def _padded_prefix_from_label(label):
-    """Extract a zero-padded numeric prefix from a sidebar label, or None.
-
-    '3.3.1. Java Beans Support' -> '03.03.01' ; '8. juneau-rest' -> '08'.
-    """
-    m = re.match(r'^\s*(\d+(?:\.\d+)*)\.\s', label)
-    if not m:
-        return None
-    return '.'.join(seg.zfill(2) for seg in m.group(1).split('.'))
 
 
 # ---------------------------------------------------------------------------
@@ -453,11 +447,11 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
 
     # Parse sidebars.ts once.
     sidebar_tree = None
-    doc_refs = landing_ids = preorder = labels = None
+    doc_refs = landing_ids = preorder = None
     if sidebars_path.exists():
         try:
             sidebar_tree = parse_sidebars(sidebars_path.read_text(encoding='utf-8'))
-            doc_refs, landing_ids, preorder, labels = collect_sidebar(sidebar_tree)
+            doc_refs, landing_ids, preorder = collect_sidebar(sidebar_tree)
         except Exception as e:  # noqa: BLE001 - report parse failure as an error
             findings.error(6, f'Failed to parse sidebars.ts: {e}', file='sidebars.ts')
     landing_set = set(landing_ids or [])
@@ -595,22 +589,6 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
             hi = idx + 3
             findings.note(9, 'sidebar[{}:{}]  = {}'.format(lo, hi, seq_files[lo:hi]))
             findings.note(9, 'directory[{}:{}] = {}'.format(lo, hi, expected[lo:hi]))
-
-    # --- 10. labels (warning) ---------------------------------------------
-    if on(10) and sidebar_tree is not None:
-        for eid, label in labels:
-            padded = _padded_prefix_from_label(label)
-            if padded is None:
-                continue
-            t = effid_to_topic.get(eid)
-            if t is None or t.numeric_prefix is None:
-                continue
-            prefix = t.numeric_prefix
-            if prefix != padded and prefix != padded + '.00':
-                findings.warning(
-                    10,
-                    f'Sidebar label `{label}` -> `{padded}` does not match '
-                    f'file prefix `{prefix}` ({t.name})')
 
     # --- 11. links ---------------------------------------------------------
     if on(11):

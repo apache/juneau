@@ -13,6 +13,7 @@
 """Tests for renumber-topics.py."""
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -21,17 +22,23 @@ from conftest import load_script
 
 rt = load_script('renumber-topics.py')
 
-# Chapter 03 has a hole at 03.02 (a folded page) and chapter 10 one at 10.02.
+# Chapter 03 has a hole at 03.02 (a folded page) and chapter 10 one at 10.02.  The shape is the production one: labels
+# carry no numbers, `numbered([...])` and `group({...})` wrap items, and helper code with braces sits above `mainSidebar`.
 SIDEBARS = """\
-export default {
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
+
+function numbered(items) { return items; }
+function group(category) { return category; }
+
+const sidebars: SidebarsConfig = {
 \tmainSidebar: [
 \t\t{
 \t\t\ttype: 'category',
 \t\t\tlabel: 'Documentation',
-\t\t\titems: [
+\t\t\titems: numbered([
 \t\t\t\t{
 \t\t\t\t\ttype: 'category',
-\t\t\t\t\tlabel: '3. juneau-marshall',
+\t\t\t\t\tlabel: 'juneau-marshall',
 \t\t\t\t\tlink: {
 \t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\tid: 'topics/03.JuneauMarshall',
@@ -40,12 +47,12 @@ export default {
 \t\t\t\t\t\t{
 \t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\tid: 'topics/03.01.Alpha',
-\t\t\t\t\t\t\tlabel: '3.1. Alpha',
+\t\t\t\t\t\t\tlabel: 'Alpha',
 \t\t\t\t\t\t},
 \t\t\t\t\t\t// A comment the renumber must keep.
 \t\t\t\t\t\t{
 \t\t\t\t\t\t\ttype: 'category',
-\t\t\t\t\t\t\tlabel: '3.3. Beta',
+\t\t\t\t\t\t\tlabel: 'Beta',
 \t\t\t\t\t\t\tlink: {
 \t\t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\t\tid: 'topics/03.03.Beta',
@@ -54,25 +61,26 @@ export default {
 \t\t\t\t\t\t\t\t{
 \t\t\t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\t\t\tid: 'topics/03.03.01.BetaOne',
-\t\t\t\t\t\t\t\t\tlabel: '3.3.1. Beta one',
+\t\t\t\t\t\t\t\t\tlabel: 'Beta one',
 \t\t\t\t\t\t\t\t},
 \t\t\t\t\t\t\t\t{
 \t\t\t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\t\t\tid: 'topics/03.03.02.BetaTwo',
+\t\t\t\t\t\t\t\t\tlabel: 'Beta two',
 \t\t\t\t\t\t\t\t},
 \t\t\t\t\t\t\t],
 \t\t\t\t\t\t},
-\t\t\t\t\t\t{
+\t\t\t\t\t\tgroup({
 \t\t\t\t\t\t\ttype: 'category',
 \t\t\t\t\t\t\tlabel: 'Extras',
 \t\t\t\t\t\t\titems: [
 \t\t\t\t\t\t\t\t{
 \t\t\t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\t\t\tid: 'topics/03.04.Gamma',
-\t\t\t\t\t\t\t\t\tlabel: '3.4. Gamma',
+\t\t\t\t\t\t\t\t\tlabel: 'Gamma',
 \t\t\t\t\t\t\t\t},
 \t\t\t\t\t\t\t],
-\t\t\t\t\t\t},
+\t\t\t\t\t\t}),
 \t\t\t\t\t\t{
 \t\t\t\t\t\t\ttype: 'ref',
 \t\t\t\t\t\t\tid: 'topics/03.04.Gamma',
@@ -81,13 +89,13 @@ export default {
 \t\t\t\t\t\t{
 \t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\tid: 'guides/Intro',
-\t\t\t\t\t\t\tlabel: '1. Intro guide',
+\t\t\t\t\t\t\tlabel: 'Intro guide',
 \t\t\t\t\t\t},
 \t\t\t\t\t],
 \t\t\t\t},
 \t\t\t\t{
 \t\t\t\t\ttype: 'category',
-\t\t\t\t\tlabel: '10. juneau-rest-server',
+\t\t\t\t\tlabel: 'juneau-rest-server',
 \t\t\t\t\tlink: {
 \t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\tid: 'topics/10.RestServer',
@@ -96,25 +104,29 @@ export default {
 \t\t\t\t\t\t{
 \t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\tid: 'topics/10.01.Delta',
-\t\t\t\t\t\t\tlabel: '10.1. Delta',
+\t\t\t\t\t\t\tlabel: 'Delta',
 \t\t\t\t\t\t},
 \t\t\t\t\t\t{
 \t\t\t\t\t\t\ttype: 'doc',
 \t\t\t\t\t\t\tid: 'topics/10.03.Eps',
-\t\t\t\t\t\t\tlabel: '10.3. Eps',
+\t\t\t\t\t\t\tlabel: 'Eps',
 \t\t\t\t\t\t},
 \t\t\t\t\t],
 \t\t\t\t},
-\t\t\t],
+\t\t\t]),
 \t\t},
-\t],
-\tdeveloperSidebar: [
 \t\t{
-\t\t\ttype: 'doc',
-\t\t\tid: 'developer-info/03.04.Gamma',
-\t\t\tlabel: '3.4. Gamma',
+\t\t\ttype: 'category',
+\t\t\tlabel: 'Developer Info',
+\t\t\titems: numbered([
+\t\t\t\t{
+\t\t\t\t\ttype: 'doc',
+\t\t\t\t\tid: 'developer-info/03.04.Gamma',
+\t\t\t\t\tlabel: 'Gamma',
+\t\t\t\t},
+\t\t\t]),
 \t\t},
-\t],
+\t] as SidebarsConfig[string],
 };
 """
 
@@ -161,8 +173,7 @@ def test_dry_run_reports_and_writes_nothing(docs, capsys):
     out = capsys.readouterr().out
     assert 'RENAME 03.03.00.Beta.md -> 03.02.00.Beta.md' in out
     assert 'ID     03.03.Beta -> 03.02.Beta' in out
-    assert "LABEL  '3.4. Gamma' -> '3.3. Gamma'" in out
-    assert 'mapped 9 of 9 topic pages; 5 renamed, 4 relabelled, 0 unmapped; dry run, nothing written' in out
+    assert 'mapped 9 of 9 topic pages; 5 renamed, 0 unmapped; dry run, nothing written' in out
     assert topic_names(docs) == sorted(PAGES)
     assert (docs / 'sidebars.ts').read_text() == SIDEBARS
 
@@ -181,16 +192,15 @@ def test_apply_patches_sidebar_in_place(docs):
     assert run(docs, '--apply') == 0
     text = (docs / 'sidebars.ts').read_text()
     assert "id: 'topics/03.02.Beta'," in text
-    assert "label: '3.2. Beta'," in text
-    assert "label: '3.2.1. Beta one'," in text
     assert "id: 'topics/03.02.02.BetaTwo'," in text
-    assert "label: '3.3. Gamma'," in text
-    assert "label: '10.2. Eps'," in text
+    assert "id: 'topics/10.02.Eps'," in text
     assert '// A comment the renumber must keep.' in text
     assert text.count("id: 'topics/03.03.Gamma',") == 2       # the doc and the ref
-    assert "id: 'guides/Intro'," in text and "label: '1. Intro guide'," in text
-    assert "id: 'developer-info/03.04.Gamma',\n\t\t\tlabel: '3.4. Gamma'," in text  # outside mainSidebar
-    assert text.count('\n') == SIDEBARS.count('\n')  # patched in place, not re-serialized
+    assert "id: 'guides/Intro'," in text
+    assert "id: 'developer-info/03.04.Gamma'," in text         # not a topics id: untouched
+    labels = re.compile(r"label: '[^']*'")
+    assert labels.findall(text) == labels.findall(SIDEBARS)    # labels are never rewritten
+    assert text.count('\n') == SIDEBARS.count('\n')            # patched in place, not re-serialized
 
 
 def test_apply_rewrites_references(docs):
@@ -210,7 +220,7 @@ def test_second_run_is_a_no_op(docs, capsys):
     capsys.readouterr()
     assert run(docs, '--json') == 0
     result = json.loads(capsys.readouterr().out)
-    assert result['renames'] == [] and result['relabels'] == []
+    assert result['renames'] == [] and 'relabels' not in result
 
 
 def test_chapter_scope(docs, capsys):
@@ -219,7 +229,7 @@ def test_chapter_scope(docs, capsys):
     assert '10.02.Eps.md' in names
     assert '03.03.00.Beta.md' in names and '03.04.Gamma.md' in names
     text = (docs / 'sidebars.ts').read_text()
-    assert "label: '10.2. Eps'," in text and "label: '3.4. Gamma'," in text
+    assert "id: 'topics/10.02.Eps'," in text and "id: 'topics/03.04.Gamma'," in text
 
 
 def test_json_output(docs, capsys):
@@ -248,14 +258,6 @@ def test_dangling_sidebar_id_is_an_error(docs, capsys):
     (docs / 'pages' / 'topics' / '10.03.Eps.md').unlink()
     assert run(docs) == 1
     assert 'topics/10.03.Eps has no page' in capsys.readouterr().err
-
-
-def test_ambiguous_label_is_an_error(docs, capsys):
-    sidebars = docs / 'sidebars.ts'
-    sidebars.write_text(SIDEBARS.replace("label: 'Gamma (shortcut)',", "label: '3.4. Gamma',"))
-    assert run(docs, '--apply') == 1
-    assert "label '3.4. Gamma' occurs 2 times" in capsys.readouterr().err
-    assert '03.04.Gamma.md' in topic_names(docs)   # nothing renamed
 
 
 def test_missing_sidebars_exits_2(tmp_path):

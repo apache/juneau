@@ -416,44 +416,54 @@ def num(v):
 
 def render_svg(panes, title, description):
     """
-    Render one or more panes (each a list of rows of cells, as parse_ansi returns) side by side as an SVG whose
-    text is real <text>: one <text> per row, one <tspan> per same-style run, each placed at its column.
+    Render one or more panes side by side as an SVG whose text is real <text>: one <text> per row, one <tspan> per
+    same-style run, each placed at its column.  A pane is a list of rows of cells, as parse_ansi returns; a tuple of
+    panes is a column of panes stacked top to bottom, one row apart.
     """
-    gap = 1 if len(panes) > 1 else 0
-    cols = [max([sum(c[1] for c in row) for row in rows] + [1]) for rows in panes]
-    total_cols = sum(cols) + gap * (len(panes) - 1)
-    n_rows = max(max(len(rows) for rows in panes), 1)
+    columns = [p if isinstance(p, tuple) else (p,) for p in panes]
+    gap = 1 if len(columns) > 1 else 0
+    cols = [max([sum(c[1] for c in row) for rows in column for row in rows] + [1]) for column in columns]
+    heights = [sum(len(rows) for rows in column) + len(column) - 1 for column in columns]
+    total_cols = sum(cols) + gap * (len(columns) - 1)
+    n_rows = max(max(heights), 1)
     width, height = total_cols * TERM_CELL_W + 2 * TERM_PAD, n_rows * TERM_LINE_H + 2 * TERM_PAD
     bg_parts, text_parts, x_col = [], [], 0
-    for p, rows in enumerate(panes):
+    for p, column in enumerate(columns):
         if p:
             bg_parts.append(f'<rect x="{num(TERM_PAD + (x_col - gap) * TERM_CELL_W)}" y="{num(TERM_PAD)}" '
                             f'width="{num(gap * TERM_CELL_W)}" height="{num(n_rows * TERM_LINE_H)}" fill="{TERM_DIVIDER}"/>')
-        for r, cells in enumerate(rows):
-            y = TERM_PAD + r * TERM_LINE_H
-            spans = []
-            for col, w, text, style in row_runs(cells):
-                fg, bg = style_colors(style)
-                x = TERM_PAD + (x_col + col) * TERM_CELL_W
-                if bg != TERM_BG:
-                    bg_parts.append(f'<rect x="{num(x)}" y="{num(y)}" width="{num(w * TERM_CELL_W)}" '
-                                    f'height="{TERM_LINE_H}" fill="{bg}"/>')
-                # Words are placed one by one, so a run's inner spaces never stretch; an underlined run stays whole.
-                segments = [(col, w, text)] if style[4] else [
-                    (col + sum(map(char_width, text[:m.start()])), sum(map(char_width, m.group())), m.group())
-                    for m in re.finditer(r'[^ ]+', text)]
-                for seg_col, seg_w, seg_text in segments:
-                    attrs = f'x="{num(TERM_PAD + (x_col + seg_col) * TERM_CELL_W)}" ' \
-                            f'textLength="{num(seg_w * TERM_CELL_W)}" fill="{fg}"'
-                    if style[2]:
-                        attrs += ' font-weight="bold"'
-                    if style[3]:
-                        attrs += ' fill-opacity="0.6"'
-                    if style[4]:
-                        attrs += ' text-decoration="underline"'
-                    spans.append(f'<tspan {attrs}>{html.escape(seg_text, quote=True)}</tspan>')
-            if spans:
-                text_parts.append(f'<text y="{num(y + TERM_LINE_H * 0.75)}">' + ''.join(spans) + '</text>')
+        y_row = 0
+        for q, rows in enumerate(column):
+            if q:
+                bg_parts.append(f'<rect x="{num(TERM_PAD + x_col * TERM_CELL_W)}" y="{num(TERM_PAD + y_row * TERM_LINE_H)}" '
+                                f'width="{num(cols[p] * TERM_CELL_W)}" height="{TERM_LINE_H}" fill="{TERM_DIVIDER}"/>')
+                y_row += 1
+            for r, cells in enumerate(rows):
+                y = TERM_PAD + (y_row + r) * TERM_LINE_H
+                spans = []
+                for col, w, text, style in row_runs(cells):
+                    fg, bg = style_colors(style)
+                    x = TERM_PAD + (x_col + col) * TERM_CELL_W
+                    if bg != TERM_BG:
+                        bg_parts.append(f'<rect x="{num(x)}" y="{num(y)}" width="{num(w * TERM_CELL_W)}" '
+                                        f'height="{TERM_LINE_H}" fill="{bg}"/>')
+                    # Words are placed one by one, so a run's inner spaces never stretch; an underlined run stays whole.
+                    segments = [(col, w, text)] if style[4] else [
+                        (col + sum(map(char_width, text[:m.start()])), sum(map(char_width, m.group())), m.group())
+                        for m in re.finditer(r'[^ ]+', text)]
+                    for seg_col, seg_w, seg_text in segments:
+                        attrs = f'x="{num(TERM_PAD + (x_col + seg_col) * TERM_CELL_W)}" ' \
+                                f'textLength="{num(seg_w * TERM_CELL_W)}" fill="{fg}"'
+                        if style[2]:
+                            attrs += ' font-weight="bold"'
+                        if style[3]:
+                            attrs += ' fill-opacity="0.6"'
+                        if style[4]:
+                            attrs += ' text-decoration="underline"'
+                        spans.append(f'<tspan {attrs}>{html.escape(seg_text, quote=True)}</tspan>')
+                if spans:
+                    text_parts.append(f'<text y="{num(y + TERM_LINE_H * 0.75)}">' + ''.join(spans) + '</text>')
+            y_row += len(rows)
         x_col += cols[p] + gap
     return '\n'.join([
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{num(width)}" height="{num(height)}" '
@@ -539,10 +549,12 @@ def trim_rows(rows):
 
 
 def render_terminal_case(case, juneau_root, docs_root):
-    """The SVG text of one terminal case (a single pane, or its "panes" side by side)."""
+    """The SVG text of one terminal case (a single pane, or its "panes" side by side; a {"stack": [...]} entry is a column)."""
     specs = case.get('panes') or [case]
     with tempfile.TemporaryDirectory(prefix='docs-images-term-') as cwd:
-        grids = [trim_rows(parse_ansi(capture_pane({**spec, 'id': f"{case['id']}-{i}"}, juneau_root, docs_root, cwd)))
+        def grid(spec, name):
+            return trim_rows(parse_ansi(capture_pane({**spec, 'id': f"{case['id']}-{name}"}, juneau_root, docs_root, cwd)))
+        grids = [tuple(grid(s, f'{i}-{j}') for j, s in enumerate(spec['stack'])) if 'stack' in spec else grid(spec, i)
                  for i, spec in enumerate(specs)]
     return render_svg(grids, case.get('title', case['id']), case.get('description', ''))
 

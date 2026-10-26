@@ -26,11 +26,14 @@
 		{
 			"id": "side-pane",
 			"image": "topics/AgentSidePane.Approach.1.svg",
-			"title": "An agent pane beside a run pane",
-			"description": "A tmux window split in two: on the left an AI agent waiting for its command, on the right juneau-terminal's live view of that command.",
+			"title": "An agent pane beside a leader pane and a follower pane",
+			"description": "A tmux window split in two: on the left an AI agent waiting for its command; on the right, above, juneau-terminal's live view of that command (the leader pane) and, below it, the raw Maven output from tail -F on the full log (the follower pane).",
 			"panes": [
 				{"columns": 50, "rows": 12, "command": ["bash", "{fixtures}/agent-chat.sh"], "waitFor": "waiting for the run"},
-				{"columns": 60, "rows": 12, "command": ["python3", "{juneau_terminal}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log", "76"], "waitFor": "Demo Module B", "mask": [["[\\u2800-\\u28ff]", "\u280b"], ["(?<![\\d:])\\d+:\\d\\d(?![\\d:])", "0:03"]]}
+				{"stack": [
+					{"columns": 60, "rows": 12, "command": ["python3", "{juneau_terminal}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log", "76"], "waitFor": "Demo Module B", "mask": [["[\\u2800-\\u28ff]", "\u280b"], ["(?<![\\d:])\\d+:\\d\\d(?![\\d:])", "0:03"]]},
+					{"columns": 60, "rows": 6, "command": ["bash", "{fixtures}/tail-log.sh", "{fixtures}/maven-demo.log", "76", "6"], "waitFor": "Skipped: 1"}
+				]}
 			]
 		}
 	]
