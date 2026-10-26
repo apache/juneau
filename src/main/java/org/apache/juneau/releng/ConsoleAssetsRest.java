@@ -18,7 +18,7 @@ package org.apache.juneau.releng;
 
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.rest.server.Rest;
-import org.apache.juneau.rest.server.console.ConsoleChromeMixin;
+import org.apache.juneau.console.ConsoleChromeMixin;
 import org.apache.juneau.rest.server.servlet.BasicRestServlet;
 
 /**

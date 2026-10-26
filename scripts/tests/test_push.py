@@ -18,7 +18,7 @@ refuse-on-unreviewed-changes gate, ported from the already-reviewed gate in apac
 scripts/push.py and sandbox-support-console's scripts/push.py, and the build gates (Compile,
 Java Tests, Python Tests, Browser Tests) with their skip flags, --test-only and --dry-run. The review-gate tests cover:
 the toolkit's path readers as push.py uses them, and the refuse / no-op / proceed decision (the
-three refusal shapes plus the allowed staged-only case). push.py is built on the juneau_scripts
+three refusal shapes plus the allowed staged-only case). push.py is built on the juneau_terminal_scripts
 toolkit; the tests drive it through main(argv, repo_dir) and read the exit code.
 
 Real temp git repos, real git -- no mocked subprocess. A bare repo stands in for the remote and
@@ -58,16 +58,16 @@ def _load_push_module():
 
 @pytest.fixture(autouse=True)
 def clean_run_env(monkeypatch):
-    """Keep the developer's shell (e.g. JUNEAU_RUN_CONSOLE=board) out of every push test, and forget any
-    juneau_run a previous test loaded.  JUNEAU_RUN_PY / JUNEAU_SCRIPTS_ZIP stay: they locate the toolkit."""
-    keep = {"JUNEAU_RUN_PY", "JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR"}  # the history pair is the conftest's guard
-    for key in [k for k in os.environ if k.startswith("JUNEAU_RUN_") and k not in keep]:
+    """Keep the developer's shell (e.g. JUNEAU_TERMINAL_CONSOLE=board) out of every push test, and forget any
+    juneau_terminal a previous test loaded.  JUNEAU_TERMINAL_PY / JUNEAU_TERMINAL_SCRIPTS_ZIP stay: they locate the toolkit."""
+    keep = {"JUNEAU_TERMINAL_PY", "JUNEAU_TERMINAL_HISTORY", "JUNEAU_TERMINAL_HISTORY_DIR"}  # the history pair is the conftest's guard
+    for key in [k for k in os.environ if k.startswith("JUNEAU_TERMINAL_") and k not in keep]:
         monkeypatch.delenv(key)
-    monkeypatch.delenv("RUN_MARKERS", raising=False)
-    monkeypatch.delenv("RUN_ARTIFACTS", raising=False)
-    monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
+    monkeypatch.delenv("TERMINAL_MARKERS", raising=False)
+    monkeypatch.delenv("TERMINAL_ARTIFACTS", raising=False)
+    monkeypatch.delitem(sys.modules, "juneau_terminal", raising=False)
     # Pin the plain view: push.py itself now defaults to board; the tests below that want the default unset this.
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
     monkeypatch.setenv("JRM_SCRIPT_TESTS_ACTIVE", "1")  # second line of defence against a nested suite run
     monkeypatch.setenv("JRM_PUSH_NO_BELL", "1")  # keep the main()-calling tests quiet under `pytest -s`
 
@@ -518,7 +518,7 @@ class TestEndOfRunBell:
     def clean_env(self, monkeypatch):
         monkeypatch.delenv("JRM_PUSH_NO_BELL", raising=False)
         monkeypatch.delenv("SANDBOX_RUNTIME", raising=False)
-        monkeypatch.delenv("JUNEAU_SCRIPTS_QUIET", raising=False)
+        monkeypatch.delenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", raising=False)
 
     def test_rings_on_tty_after_success(self, push_module, monkeypatch):
         code, fake = _run_main(push_module, monkeypatch, tty=True)
@@ -581,12 +581,12 @@ class TestEndOfRunBell:
 
 
 class TestConsoleFlag:
-    """--console full|board|none sets JUNEAU_RUN_CONSOLE before the toolkit is loaded."""
+    """--console full|board|none sets JUNEAU_TERMINAL_CONSOLE before the toolkit is loaded."""
 
     @pytest.fixture(autouse=True)
     def clean_env(self, monkeypatch):
         monkeypatch.delenv("JRM_PUSH_NO_BELL", raising=False)
-        monkeypatch.delenv("JUNEAU_RUN_CONSOLE", raising=False)
+        monkeypatch.delenv("JUNEAU_TERMINAL_CONSOLE", raising=False)
 
     def _main(self, push_module, monkeypatch, *flags):
         monkeypatch.setattr(sys, "stdout", _FakeStdout(False))
@@ -596,24 +596,24 @@ class TestConsoleFlag:
     @pytest.mark.parametrize("mode", ["full", "none"])
     def test_flag_sets_the_env_var(self, push_module, monkeypatch, mode):
         assert self._main(push_module, monkeypatch, "--console", mode) == 0
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == mode
 
     def test_flag_beats_the_env_var(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
+        monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
         assert self._main(push_module, monkeypatch, "--console", "none") == 0
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "none"
 
     def test_env_var_is_left_alone_without_the_flag(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+        monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
         assert self._main(push_module, monkeypatch) == 0
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "full"
 
     def test_no_flag_and_no_env_var_defaults_to_board(self, push_module, monkeypatch):
         assert self._main(push_module, monkeypatch) == 0
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "board"
+        assert os.environ["JUNEAU_TERMINAL_CONSOLE"] == "board"
 
     def test_unknown_mode_in_the_environment_is_an_error(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "loud")
+        monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "loud")
         assert self._main(push_module, monkeypatch) == 2
 
     def test_unknown_mode_is_a_usage_error(self, push_module):
@@ -630,9 +630,9 @@ class TestBoardConsole:
         assert push_module.main(["--console", "board", "msg"], repo_dir=repo) == 0
         assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
 
-    def test_a_plain_run_loads_no_juneau_run(self, push_module, repo):
+    def test_a_plain_run_loads_no_juneau_terminal(self, push_module, repo):
         assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
-        assert "juneau_run" not in sys.modules
+        assert "juneau_terminal" not in sys.modules
 
     def test_the_header_is_project_and_branch_and_the_message_is_its_own_line(self, push_module, repo, remote_repo,
                                                                              capfd):
@@ -934,30 +934,30 @@ class TestScriptTests:
         assert rows["script-tests"]
 
     def test_child_env_drops_the_parent_runs_protocol_variables(self, push_module, monkeypatch):
-        for name in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_SESSION", "RUN_MARKERS", "RUN_ARTIFACTS"):
+        for name in ("JUNEAU_TERMINAL_CONSOLE", "JUNEAU_TERMINAL_SESSION", "TERMINAL_MARKERS", "TERMINAL_ARTIFACTS"):
             monkeypatch.setenv(name, "x")
-        monkeypatch.setenv("JUNEAU_RUN_PY", "/x/juneau_run.py")
+        monkeypatch.setenv("JUNEAU_TERMINAL_PY", "/x/juneau_terminal.py")
         env = push_module.script_tests_env()
-        assert not {"JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_SESSION", "RUN_MARKERS", "RUN_ARTIFACTS"} & set(env)
-        assert env["JUNEAU_RUN_PY"] == "/x/juneau_run.py"  # kept: the release CLI tests need it
+        assert not {"JUNEAU_TERMINAL_CONSOLE", "JUNEAU_TERMINAL_SESSION", "TERMINAL_MARKERS", "TERMINAL_ARTIFACTS"} & set(env)
+        assert env["JUNEAU_TERMINAL_PY"] == "/x/juneau_terminal.py"  # kept: the release CLI tests need it
 
     def test_child_env_carries_the_recursion_guard(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_PY", "/x/juneau_run.py")
+        monkeypatch.setenv("JUNEAU_TERMINAL_PY", "/x/juneau_terminal.py")
         env = push_module.script_tests_env()
         assert env["JRM_SCRIPT_TESTS_ACTIVE"] == "1"
-        assert env["JUNEAU_RUN_PY"] == "/x/juneau_run.py"  # a set value is never replaced
+        assert env["JUNEAU_TERMINAL_PY"] == "/x/juneau_terminal.py"  # a set value is never replaced
 
-    def test_unset_juneau_run_py_is_exported_when_the_canonical_file_exists(self, push_module, monkeypatch, tmp_path):
-        fake = tmp_path / "juneau_run.py"
+    def test_unset_juneau_terminal_py_is_exported_when_the_canonical_file_exists(self, push_module, monkeypatch, tmp_path):
+        fake = tmp_path / "juneau_terminal.py"
         fake.write_text("", encoding="utf-8")
-        monkeypatch.delenv("JUNEAU_RUN_PY", raising=False)
-        monkeypatch.setattr(push_module.module, "JUNEAU_RUN_PY_DEFAULT", fake)
-        assert push_module.script_tests_env()["JUNEAU_RUN_PY"] == str(fake)
+        monkeypatch.delenv("JUNEAU_TERMINAL_PY", raising=False)
+        monkeypatch.setattr(push_module.module, "JUNEAU_TERMINAL_PY_DEFAULT", fake)
+        assert push_module.script_tests_env()["JUNEAU_TERMINAL_PY"] == str(fake)
 
-    def test_unset_juneau_run_py_stays_unset_without_the_canonical_file(self, push_module, monkeypatch, tmp_path):
-        monkeypatch.delenv("JUNEAU_RUN_PY", raising=False)
-        monkeypatch.setattr(push_module.module, "JUNEAU_RUN_PY_DEFAULT", tmp_path / "missing.py")
-        assert "JUNEAU_RUN_PY" not in push_module.script_tests_env()
+    def test_unset_juneau_terminal_py_stays_unset_without_the_canonical_file(self, push_module, monkeypatch, tmp_path):
+        monkeypatch.delenv("JUNEAU_TERMINAL_PY", raising=False)
+        monkeypatch.setattr(push_module.module, "JUNEAU_TERMINAL_PY_DEFAULT", tmp_path / "missing.py")
+        assert "JUNEAU_TERMINAL_PY" not in push_module.script_tests_env()
 
     def test_failing_suite_commits_nothing_through_main(self, push_module, repo, remote_repo, monkeypatch):
         (repo / "README.md").write_text("new content\n", encoding="utf-8")
@@ -1062,8 +1062,8 @@ class TestBuildGates:
         assert push_module.REPO_DIR / "target" not in [push_module.TOOLKIT_CACHE_DIR,
                                                        *push_module.TOOLKIT_CACHE_DIR.parents]
 
-    def test_maven_parser_is_none_without_a_run_view(self, push_module, monkeypatch):
-        monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
+    def test_maven_parser_is_none_without_a_terminal_view(self, push_module, monkeypatch):
+        monkeypatch.delitem(sys.modules, "juneau_terminal", raising=False)
         assert push_module.maven_parser() is None
 
 
@@ -1150,15 +1150,15 @@ ALL_GATES = ["compile", "tests", "script-tests", "e2e"]
 
 class TestRunHistoryGuard:
     def test_the_suite_never_points_at_the_real_run_history(self):
-        assert os.environ.get("JUNEAU_RUN_HISTORY") == "0"
-        history = Path(os.environ["JUNEAU_RUN_HISTORY_DIR"]).resolve()
-        assert history != (Path.home() / ".cache" / "juneau-run" / "history").resolve()
+        assert os.environ.get("JUNEAU_TERMINAL_HISTORY") == "0"
+        history = Path(os.environ["JUNEAU_TERMINAL_HISTORY_DIR"]).resolve()
+        assert history != (Path.home() / ".cache" / "juneau-terminal" / "history").resolve()
         assert history.is_relative_to(Path(tempfile.gettempdir()).resolve())
 
     def test_a_push_run_keeps_the_guard_in_place(self, push_module, repo):
         assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
-        assert os.environ.get("JUNEAU_RUN_HISTORY") == "0"
-        assert "juneau-run-test-history-" in os.environ["JUNEAU_RUN_HISTORY_DIR"]
+        assert os.environ.get("JUNEAU_TERMINAL_HISTORY") == "0"
+        assert "juneau-terminal-test-history-" in os.environ["JUNEAU_TERMINAL_HISTORY_DIR"]
 
 
 class TestPlannedSteps:

@@ -110,12 +110,12 @@ class ReleaseProcessServiceTest {
 	@Test
 	void a06_failedLaunchLeavesNoAttempt(@TempDir Path home) throws Exception {
 		var s = service(home, "{\"sleep\":0}");
-		var previous = System.getProperty("juneau.run.script");
-		System.clearProperty("juneau.run.script");
+		var previous = System.getProperty("juneau.terminal.script");
+		System.clearProperty("juneau.terminal.script");
 		try {
 			assertThrows(IllegalStateException.class, () -> s.start(false));
 		} finally {
-			System.setProperty("juneau.run.script", previous);
+			System.setProperty("juneau.terminal.script", previous);
 		}
 		assertTrue(s.live().isEmpty());
 		assertTrue(new RunFiles(home, d -> false).history().isEmpty(), "no phantom interrupted row");

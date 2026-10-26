@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.release;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.function.Supplier;

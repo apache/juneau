@@ -105,8 +105,8 @@ and re-swept 2026-09-13 (WORK-R0008 leftover pass):
   `System.currentTimeMillis()` calls in `src/main`.
 - **Size assertions (`assertSize`)** — **Applied** (leftover pass 2026-09-13). R0005 recorded N/A
   because `juneau-bct` is not a declared dependency and was not added solely for the idiom. Reconfirm
-  at pickup: `BctAssertions` (`org.apache.juneau.test.bct`) is already on the test classpath as a
-  compile-scope transitive of `juneau-rest-mock` → `juneau-test` (no new dependency added). Migrated
+  at pickup: `BctAssertions` (`org.apache.juneau.bct`) is already on the test classpath as a
+  compile-scope transitive of `juneau-rest-mock` → `juneau-bct` (no new dependency added). Migrated
   26 `assertEquals(N, x.size())` collection sites to `assertSize(N, x)` / `assertSize(() -> "msg", N,
   x)`. Left `RunLogTest.assertEquals(4, log.size())` — `RunLog.size()` is file-byte length, not a
   collection. Message overload is `assertSize(Supplier<String>, int, Object)`, not a raw `String`.

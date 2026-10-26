@@ -32,13 +32,13 @@ from jrm_release.svn import Svn  # noqa: E402
 
 @pytest.fixture(scope="session", autouse=True)
 def _no_real_run_history():
-    """Keep the suite out of ~/.cache/juneau-run/history: main()-calling tests would otherwise record their stub
+    """Keep the suite out of ~/.cache/juneau-terminal/history: main()-calling tests would otherwise record their stub
     steps beside the real push and release records.  No fixture may strip these two variables."""
-    tmp = tempfile.mkdtemp(prefix="juneau-run-test-history-")
-    names = ("JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR")
+    tmp = tempfile.mkdtemp(prefix="juneau-terminal-test-history-")
+    names = ("JUNEAU_TERMINAL_HISTORY", "JUNEAU_TERMINAL_HISTORY_DIR")
     saved = {n: os.environ.get(n) for n in names}
-    os.environ["JUNEAU_RUN_HISTORY"] = "0"
-    os.environ["JUNEAU_RUN_HISTORY_DIR"] = tmp
+    os.environ["JUNEAU_TERMINAL_HISTORY"] = "0"
+    os.environ["JUNEAU_TERMINAL_HISTORY_DIR"] = tmp
     try:
         yield
     finally:
@@ -57,7 +57,7 @@ class PauseExc(Exception):
 
 
 class FakeRunner:
-    """Stands in for juneau_scripts.run: records run.cmd calls, answers them from scripted rules."""
+    """Stands in for juneau_terminal_scripts.run: records run.cmd calls, answers them from scripted rules."""
 
     def __init__(self):
         self.calls, self.rules, self.said = [], [], []
@@ -190,14 +190,14 @@ class FakeNexus:
 
 @pytest.fixture
 def clean_env(monkeypatch):
-    """Scrub JUNEAU_RUN_* for the release tests (each opts in with pytestmark; test_push has its own scrub)."""
+    """Scrub JUNEAU_TERMINAL_* for the release tests (each opts in with pytestmark; test_push has its own scrub)."""
     for k in list(os.environ):
-        if k.startswith("JUNEAU_RUN_") and k not in ("JUNEAU_RUN_PY", "JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR"):
+        if k.startswith("JUNEAU_TERMINAL_") and k not in ("JUNEAU_TERMINAL_PY", "JUNEAU_TERMINAL_HISTORY", "JUNEAU_TERMINAL_HISTORY_DIR"):
             monkeypatch.delenv(k)
-    monkeypatch.delenv("RUN_MARKERS", raising=False)
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+    monkeypatch.delenv("TERMINAL_MARKERS", raising=False)
+    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
     monkeypatch.delenv("JUNEAU_RELEASE_HOME", raising=False)
-    sys.modules.pop("juneau_run", None)
+    sys.modules.pop("juneau_terminal", None)
 
 
 @pytest.fixture
@@ -232,14 +232,14 @@ def make_ctx(home):
     return make
 
 
-# Every JUNEAU_RUN_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
-# header and pending/overall rows, or the fact that one is active).  JUNEAU_RUN_CONSOLE, _DETAIL and _HISTORY* are
+# Every JUNEAU_TERMINAL_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
+# header and pending/overall rows, or the fact that one is active).  JUNEAU_TERMINAL_CONSOLE, _DETAIL and _HISTORY* are
 # settings, not pointers, and are handled elsewhere.
 LIVE_RUN_ENV = (
-    "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_LIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_LABEL_WIDTH",
-    "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_CANCEL", "JUNEAU_RUN_HEADER",
-    "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HANDBACK",
-    "JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS",
+    "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_SESSION", "JUNEAU_TERMINAL_LIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_LABEL_WIDTH",
+    "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_TERMINAL_CANCEL", "JUNEAU_TERMINAL_HEADER",
+    "JUNEAU_TERMINAL_PENDING", "JUNEAU_TERMINAL_OVERALL", "JUNEAU_TERMINAL_HANDBACK",
+    "JUNEAU_TERMINAL_MARKERS_FILE", "JUNEAU_TERMINAL_RESULT", "JUNEAU_TERMINAL_RESULT_PARTS",
 )
 
 

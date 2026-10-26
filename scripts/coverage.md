@@ -17,7 +17,7 @@ python3 scripts/coverage.py --run --by-module
 python3 scripts/coverage.py --help
 ```
 
-This file only supplies this repository's settings (`REPO_ROOT`, base package `org/apache/juneau/releng`, report name, Maven arguments). The implementation is `juneau_scripts.coverage` from the Juneau `juneau-run` artifact, loaded through `scripts/bootstrap.py`.
+This file only supplies this repository's settings (`REPO_ROOT`, base package `org/apache/juneau/releng`, report name, Maven arguments). The implementation is `juneau_terminal_scripts.coverage` from the Juneau `juneau-terminal` artifact, loaded through `scripts/bootstrap.py`.
 
 ## Options
 
@@ -35,7 +35,7 @@ An unknown option that starts with `-` prints `ERROR: Unknown option: ...` and e
 
 ## What it does
 
-1. Loads the toolkit through `bootstrap.load(pom.xml, run=False, cache_dir=target/juneau-run)`. If the installed toolkit has no `juneau_scripts.coverage`, it exits with an error asking you to refresh `juneau-run`.
+1. Loads the toolkit through `bootstrap.load(pom.xml, terminal=False, cache_dir=target/juneau-terminal)`. If the installed toolkit has no `juneau_terminal_scripts.coverage`, it exits with an error asking you to refresh `juneau-terminal`.
 2. Parses the arguments. With `--run`, runs `mvn test -Drat.skip=true -q`.
 3. Requires `target/jacoco.exec` (otherwise exits 1, telling you to run `mvn clean test -Drat.skip=true` or pass `--run`), then runs the JaCoCo CLI over `target/classes` and `src/main/java` to write `target/coverage/jacoco.xml`.
 4. Prints the `--by-module` table or the detail report for the named package. Lines marked with a standalone `HTT` token in a comment (hard to test) are dropped from the uncovered list and subtracted from the totals; their reasons are printed.
@@ -52,7 +52,7 @@ Reports go to stdout. The generated XML is `target/coverage/jacoco.xml`.
 
 ## Gotchas
 
-- Needs the Juneau `juneau-run` toolkit (build or install Juneau first, or set `JUNEAU_SCRIPTS_ZIP`); see `bootstrap.py`.
+- Needs the Juneau `juneau-terminal` toolkit (build or install Juneau first, or set `JUNEAU_TERMINAL_SCRIPTS_ZIP`); see `bootstrap.py`.
 - Coverage data comes from the JaCoCo agent wired into `pom.xml`, so a plain compile does not produce it.
 - `HTT` matches only as a whole word inside a comment, not `HTTP`, and not inside a string literal.
 

@@ -33,7 +33,7 @@ python3 scripts/release.py --dry-run
 | `--version` | `x.y.z` | none | With `--list-steps`, which run's marks to show; on a new release, prefills the details. Must look like `x.y.z`. |
 | `--revert` | none | off | Undo the current release candidate. Cannot be combined with `--resume`, `--start-step` or `--skip-step`. |
 | `--dry-run` | none | off | Run read-only commands; print every mutation instead of running it. State is kept in memory, and `run.json` is never written. |
-| `--console` | `full`, `board`, `none` | toolkit default | Console view; the flag beats `JUNEAU_RUN_CONSOLE`. |
+| `--console` | `full`, `board`, `none` | toolkit default | Console view; the flag beats `JUNEAU_TERMINAL_CONSOLE`. |
 | `--home` | `DIR` | `$JUNEAU_RELEASE_HOME`, else `~/.juneau-release-manager` | State directory. |
 
 `--attempt-dir` also exists but is hidden from the help (used by tests).
@@ -42,7 +42,7 @@ python3 scripts/release.py --dry-run
 
 1. Parses and validates the arguments (a bad combination exits 2). `--list-steps` prints the table and exits 0.
 2. Looks for the active run under `<home>/runs/<version>/run.json` (the newest one with details that is not yet `released`). `--resume`, `--revert` and `--start-step` with no active run exit 2; starting a new release while one is in progress also exits 2 and tells you to use `--resume` or `--revert`.
-3. Loads the `juneau_scripts` toolkit through `bootstrap.py` (needs `juneau-run` 10.0.0-SNAPSHOT in `~/.m2`; build Juneau first).
+3. Loads the `juneau_terminal_scripts` toolkit through `bootstrap.py` (needs `juneau-terminal` 10.0.0-SNAPSHOT in `~/.m2`; build Juneau first).
 4. Creates an attempt directory `<home>/attempts/<YYYYMMDD-HHMMSS>-<NNN>/` with `full.log` (a dry run uses `attempts/dry-run`).
 5. Runs the prerequisite checks before asking anything (tools and minimum versions: `git`, `mvn` 3.6, `java` 17, `svn` and `svnmucc` 1.10, `gpg` 2.1, `gh` 2.28, `unzip`). Every failure is listed together; nothing was asked or changed. Skipped for `--revert`.
 6. For a new release, asks for the release details (version, development version, RC number, summary, highlights, known issues, acknowledgements) and starts a fresh `run.json`.

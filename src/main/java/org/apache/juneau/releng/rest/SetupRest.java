@@ -31,8 +31,8 @@ import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
-import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
-import org.apache.juneau.rest.server.views.ViewsMixin;
+import org.apache.juneau.console.freemarker.ConsoleFreemarkerMixin;
+import org.apache.juneau.console.views.ViewsMixin;
 
 import jakarta.servlet.http.HttpServletRequest;
 

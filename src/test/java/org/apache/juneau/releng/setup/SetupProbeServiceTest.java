@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.setup;
 
-import static org.apache.juneau.test.bct.BctAssertions.assertBean;
+import static org.apache.juneau.bct.BctAssertions.assertBean;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Files;

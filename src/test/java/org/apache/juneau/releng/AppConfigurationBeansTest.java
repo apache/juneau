@@ -150,10 +150,10 @@ class AppConfigurationBeansTest {
 	void e01_releaseTabWiring(@TempDir Path dir) throws Exception {
 		var answers = cfg.credentialAnswers(mapStores(), cfg.accountStore(dir.toString()), "x@apache.org");
 		var events = cfg.runEvents();
-		var previousScript = System.getProperty("juneau.run.script");
-		var processes = cfg.releaseProcessService(dir.toString(), dir.toString(), "/nonexistent/juneau_run.py", answers, events);
+		var previousScript = System.getProperty("juneau.terminal.script");
+		var processes = cfg.releaseProcessService(dir.toString(), dir.toString(), "/nonexistent/juneau_terminal.py", answers, events);
 		try {
-			assertEquals("/nonexistent/juneau_run.py", System.getProperty("juneau.run.script"));
+			assertEquals("/nonexistent/juneau_terminal.py", System.getProperty("juneau.terminal.script"));
 			var runFiles = cfg.runFiles(dir.toString(), new org.springframework.beans.factory.support.StaticListableBeanFactory(
 				java.util.Map.of("p", processes)).getBeanProvider(org.apache.juneau.releng.run.ReleaseProcessService.class));
 			assertNotNull(cfg.releaseRunRest(runFiles, processes));
@@ -163,9 +163,9 @@ class AppConfigurationBeansTest {
 			}
 		} finally {
 			if (previousScript == null)
-				System.clearProperty("juneau.run.script");
+				System.clearProperty("juneau.terminal.script");
 			else
-				System.setProperty("juneau.run.script", previousScript);
+				System.setProperty("juneau.terminal.script", previousScript);
 			processes.shutdown();
 		}
 	}

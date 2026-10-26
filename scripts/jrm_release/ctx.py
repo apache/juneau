@@ -41,13 +41,13 @@ def _now():
 class Ctx:
     args: Any                 # parsed CLI namespace
     home: Path                # <JUNEAU_RELEASE_HOME>
-    run: Any                  # juneau_scripts.run (say, cmd, ...) or a fake
-    prompt: Any               # juneau_scripts.prompt or FakePrompts
+    run: Any                  # juneau_terminal_scripts.run (say, cmd, ...) or a fake
+    prompt: Any               # juneau_terminal_scripts.prompt or FakePrompts
     runner: Any               # jrm_release.runner.Runner
     nexus: Any                # jrm_release.nexus.Nexus or FakeNexus
     svn: Any                  # jrm_release.svn.Svn
     rf: Any                   # jrm_release.runfile.RunFile
-    pause: Any                # juneau_scripts.steps.Pause (an exception class)
+    pause: Any                # juneau_terminal_scripts.steps.Pause (an exception class)
     http_ok: Callable[[str], bool] = lambda url: False
     http_text: Callable[[str], Any] = lambda url: None   # fn(url) -> body text, or None when unreachable
     sleep: Callable[[float], None] = lambda s: None

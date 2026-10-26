@@ -72,7 +72,7 @@ def _warn_unpublished(ctx, chosen):
 def release_checks(ctx):
     """The Release checks row's checks, after the credential questions: the branch exists and the RC tag does not.
     The ls-remote probes run quietly, so they are bar cells rather than rows of their own."""
-    from juneau_scripts import checks as ck
+    from juneau_terminal_scripts import checks as ck
     cur = ctx.d
     ctx.cred("credential.apache.availid")
     ctx.cred("credential.apache.email")
@@ -95,7 +95,7 @@ def release_checks(ctx):
 @step
 def prechecks(ctx):
     """release_checks as a plain step: a ✔/❌ line each (the console row of release.py's registry shows a bar instead)."""
-    from juneau_scripts import checks as ck
+    from juneau_terminal_scripts import checks as ck
     found = release_checks(ctx)
     failed = []
     for c in found:

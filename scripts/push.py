@@ -27,8 +27,8 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 
 # Set in the pytest child so a test that reaches the Python Tests step again cannot launch the suite recursively.
 SCRIPT_TESTS_ACTIVE = "JRM_SCRIPT_TESTS_ACTIVE"
-# Where the canonical Juneau checkout keeps juneau_run.py; test_release_cli.py skips without JUNEAU_RUN_PY.
-JUNEAU_RUN_PY_DEFAULT = Path.home() / "git" / "apache" / "juneau" / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
+# Where the canonical Juneau checkout keeps juneau_terminal.py; test_release_cli.py skips without JUNEAU_TERMINAL_PY.
+JUNEAU_TERMINAL_PY_DEFAULT = Path.home() / "git" / "apache" / "juneau" / "juneau-terminal" / "src" / "main" / "python" / "juneau_terminal.py"
 # The personal JDK layout (~/jdk/default -> the current JDK 17), the default e2e/playwright.config.ts also uses.
 DEFAULT_JAVA_HOME = Path.home() / "jdk" / "default"
 # Variables e2e/playwright.config.ts reads that point the suite away from the tree under test; a stray exported value
@@ -38,7 +38,7 @@ DEFAULT_JAVA_HOME = Path.home() / "jdk" / "default"
 E2E_REDIRECT_ENV = ("JRM_E2E_REUSE", "JRM_E2E_BASE_URL", "JRM_E2E_HOME")
 # Where bootstrap extracts the toolkit when ~/.m2 lacks it.  Outside target/ because Compile runs `mvn clean`, which
 # would delete the extracted copy before the later (lazy) imports, the commit and the push.
-TOOLKIT_CACHE_DIR = Path.home() / ".cache" / "juneau-run" / "juneau-release-manager"
+TOOLKIT_CACHE_DIR = Path.home() / ".cache" / "juneau-terminal" / "juneau-release-manager"
 
 # bootstrap.py sits beside this file.  A direct run already has scripts/ on sys.path; an importlib load (the tests)
 # does not, so keep the insert.
@@ -52,7 +52,7 @@ git = run = notify = checks = tools = None
 
 
 class _NoMarkers:
-    """Stands in for juneau_run when it isn't loaded: the calls this script makes directly are no-ops or False."""
+    """Stands in for juneau_terminal when it isn't loaded: the calls this script makes directly are no-ops or False."""
 
     def console_active(self):
         return False
@@ -62,16 +62,16 @@ class _NoMarkers:
         pass
 
 
-# The run-protocol module in use: juneau_run when the environment asks for it and it loads, otherwise the stand-in.
+# The terminal-protocol module in use: juneau_terminal when the environment asks for it and it loads, otherwise the stand-in.
 run_markers = _NoMarkers()
 
 
 def toolkit():
-    """Load juneau_scripts (once per process) and bind git, run, notify, checks and tools.  Returns the package."""
+    """Load juneau_terminal_scripts (once per process) and bind git, run, notify, checks and tools.  Returns the package."""
     global git, run, notify, checks, tools
     # cache_dir: the first load fixes it for the process; not under target/, which Compile cleans mid-run.
-    _, js = bootstrap.load(REPO_DIR / "pom.xml", run=False, cache_dir=TOOLKIT_CACHE_DIR)
-    from juneau_scripts import checks, git, notify, run, tools  # noqa: F811
+    _, js = bootstrap.load(REPO_DIR / "pom.xml", terminal=False, cache_dir=TOOLKIT_CACHE_DIR)
+    from juneau_terminal_scripts import checks, git, notify, run, tools  # noqa: F811
     return js
 
 
@@ -152,11 +152,11 @@ def script_tests_command(launcher):
 
 
 def script_tests_env():
-    """The child's environment: the recursion guard, no bytecode, and JUNEAU_RUN_PY when it is unset and findable."""
-    # child_env: the suite must not inherit this run's markers or console (JUNEAU_RUN_CONSOLE, JUNEAU_RUN_SESSION, ...).
+    """The child's environment: the recursion guard, no bytecode, and JUNEAU_TERMINAL_PY when it is unset and findable."""
+    # child_env: the suite must not inherit this run's markers or console (JUNEAU_TERMINAL_CONSOLE, JUNEAU_TERMINAL_SESSION, ...).
     env = dict(run.child_env(), PYTHONDONTWRITEBYTECODE="1", **{SCRIPT_TESTS_ACTIVE: "1"})
-    if not env.get("JUNEAU_RUN_PY") and JUNEAU_RUN_PY_DEFAULT.is_file():
-        env["JUNEAU_RUN_PY"] = str(JUNEAU_RUN_PY_DEFAULT)
+    if not env.get("JUNEAU_TERMINAL_PY") and JUNEAU_TERMINAL_PY_DEFAULT.is_file():
+        env["JUNEAU_TERMINAL_PY"] = str(JUNEAU_TERMINAL_PY_DEFAULT)
     return env
 
 
@@ -225,11 +225,11 @@ def _would_run(step_id, title, what):
 
 def maven_parser():
     """
-    juneau_run's Maven parser plus the report marker it can't give a single-module build: it announces Surefire reports
-    per reactor module, and a one-module build has no reactor lines.  Returns None when no run view is active (the
+    juneau_terminal's Maven parser plus the report marker it can't give a single-module build: it announces Surefire reports
+    per reactor module, and a one-module build has no reactor lines.  Returns None when no terminal view is active (the
     plain "maven" parser name then applies).
     """
-    jr = sys.modules.get("juneau_run")
+    jr = sys.modules.get("juneau_terminal")
     if jr is None or not run.routed():
         return None
 
@@ -510,7 +510,7 @@ playwright test in e2e/), Commit, Push.  A failing gate refuses the push; nothin
     parser.add_argument(
         "--console",
         choices=("full", "board", "none"),
-        help="Console view of the steps: full, board (default) or none (also JUNEAU_RUN_CONSOLE).",
+        help="Console view of the steps: full, board (default) or none (also JUNEAU_TERMINAL_CONSOLE).",
     )
     return parser
 
@@ -520,12 +520,12 @@ def main(argv=None, repo_dir=REPO_DIR):
     args = build_parser().parse_args(argv)
     try:
         toolkit()
-        # Before juneau_run loads: the flag beats JUNEAU_RUN_CONSOLE, which beats the board default.
+        # Before juneau_terminal loads: the flag beats JUNEAU_TERMINAL_CONSOLE, which beats the board default.
         run.export_console(args.console)
         jr, _ = bootstrap.load(REPO_DIR / "pom.xml")
     except bootstrap.BootstrapError as e:
         print(f"❌ ERROR: {e}", file=sys.stderr)
-        print("   (juneau-run 10.0.0-SNAPSHOT must be in ~/.m2: build Juneau first.)", file=sys.stderr)
+        print("   (juneau-terminal 10.0.0-SNAPSHOT must be in ~/.m2: build Juneau first.)", file=sys.stderr)
         return 1
     except ValueError as e:
         print(f"❌ ERROR: {e}", file=sys.stderr)

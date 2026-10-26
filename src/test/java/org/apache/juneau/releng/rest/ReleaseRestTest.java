@@ -17,8 +17,8 @@
 
 package org.apache.juneau.releng.rest;
 
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.assertPage;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.console.test.PageContractAssert.assertPage;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.mock.MockRestClient;
-import org.apache.juneau.rest.server.datatables.DataTablesRequest;
+import org.apache.juneau.console.datatables.DataTablesRequest;
 import org.junit.jupiter.api.Test;
 
 import jakarta.servlet.http.HttpServletRequest;

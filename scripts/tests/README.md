@@ -9,10 +9,10 @@ release-manager`) in the shared tracker scripts, which live outside this repo, w
 This repo's `scripts/push.py` (moved here from the repo root, matching `apache/juneau` and
 `sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Compile (`mvn clean test-compile`), Java Tests (`mvn verify`), Python Tests
 (this suite), Browser Tests (`npx playwright test` in `e2e/`), Commit, Push. The suite never writes the real run history:
-`conftest.py` points `JUNEAU_RUN_HISTORY_DIR` at a temp dir and sets `JUNEAU_RUN_HISTORY=0`. Its review gate refuses to commit or push **anything** when the working tree has
+`conftest.py` points `JUNEAU_TERMINAL_HISTORY_DIR` at a temp dir and sets `JUNEAU_TERMINAL_HISTORY=0`. Its review gate refuses to commit or push **anything** when the working tree has
 any unstaged modification to a tracked file, or any untracked file that isn't gitignored (`_prechecks()` /
-`commit_and_push()`, built on the `juneau_scripts` toolkit's `git`, `run` and `tools` modules, loaded through
-the vendored `scripts/bootstrap.py`, which needs juneau-run 10.0.0-SNAPSHOT in `~/.m2` -- build Juneau first;
+`commit_and_push()`, built on the `juneau_terminal_scripts` toolkit's `git`, `run` and `tools` modules, loaded through
+the vendored `scripts/bootstrap.py`, which needs juneau-terminal 10.0.0-SNAPSHOT in `~/.m2` -- build Juneau first;
 the tests drive `push.main(argv, repo_dir)` and read its exit code).
 A staged path is the operator's record of having reviewed it, so `push.py` commits the index
 exactly as it finds it and never runs `git add`. `test_push.py` covers the three refusal
@@ -67,13 +67,13 @@ real release is touched.
 | `test_release_steps.py` | each rc, vote and promote step against the fakes |
 | `test_release_emails.py` | vote, result and announce emails, `mailto:` length handling |
 | `test_release_revert.py` | `--revert` checks and actions |
-| `test_release_cli.py` | arguments, guards, lock, resume, exit codes (needs `JUNEAU_RUN_PY`) |
+| `test_release_cli.py` | arguments, guards, lock, resume, exit codes (needs `JUNEAU_TERMINAL_PY`) |
 | `test_release_dryrun.py` | `--dry-run` runs read-only commands only and never writes `run.json` |
 | `test_release_secrets.py` | no secret on argv, in `run.json` or in logs; `askpass.py` |
 
 `test_release_cli.py` loads the shared toolkit through `scripts/bootstrap.py`, so point it at the Juneau checkout:
 
 ```bash
-export JUNEAU_RUN_PY=$HOME/git/apache/juneau/juneau-run/src/main/python/juneau_run.py
+export JUNEAU_TERMINAL_PY=$HOME/git/apache/juneau/juneau-terminal/src/main/python/juneau_terminal.py
 uv run --offline --with pytest pytest -q -p no:cacheprovider scripts/tests/
 ```

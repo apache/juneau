@@ -116,7 +116,7 @@ def _tool_failure(ctx, name):
 
 
 def _verdict(failure):
-    from juneau_scripts import checks   # the toolkit's gate-check model; on sys.path once release.py has bootstrapped
+    from juneau_terminal_scripts import checks   # the toolkit's gate-check model; on sys.path once release.py has bootstrapped
     return checks.Verdict("fail", failure) if failure else checks.PASS
 
 
@@ -149,7 +149,7 @@ def check(ctx):
 def checks(ctx):
     """The Prerequisites row's checks, one bar cell each: the early result replayed (run now if release.py has not
     run it)."""
-    from juneau_scripts import checks as ck
+    from juneau_terminal_scripts import checks as ck
     if ctx.prereq_verdicts is None:
         check(ctx)
     return [ck.Check(name, lambda v=v: v) for name, v in ctx.prereq_verdicts.items()]

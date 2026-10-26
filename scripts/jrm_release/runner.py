@@ -76,7 +76,7 @@ class Runner:
         if not self.gate(" ".join(argv), mutating) or self._no_dir(argv, cwd):
             return Outcome(True, 0, "")
         child_env = getattr(self.run_mod, "child_env", None)
-        if child_env is not None:   # the toolkit's: this process's environment minus juneau-run's own variables
+        if child_env is not None:   # the toolkit's: this process's environment minus juneau-terminal's own variables
             env = {**child_env(), **(env or {})}
         r = self.run_mod.cmd(argv, title=title, tool=tool, cwd=cwd, env=env, input=input, tty=tty,
                              capture=(not mutating) if capture is None else capture)

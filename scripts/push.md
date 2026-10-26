@@ -32,11 +32,11 @@ Run it from the repository root. The commit message is prompted for when omitted
 | `--skip-tests` | none | off | Skip Compile and Java Tests (the Maven build). |
 | `--skip-e2e` | none | off | Skip Browser Tests (the Playwright suite). |
 | `--skip-pytest` | none | off | Skip Python Tests (the `scripts/tests` suite). |
-| `--console` | `full`, `board`, `none` | `board` | Console view of the steps; also `JUNEAU_RUN_CONSOLE`. The flag wins over the environment. |
+| `--console` | `full`, `board`, `none` | `board` | Console view of the steps; also `JUNEAU_TERMINAL_CONSOLE`. The flag wins over the environment. |
 
 ## What it does
 
-1. Parses the arguments and loads the `juneau_scripts` toolkit through `bootstrap.py`, applying `--console` before `juneau_run` loads.
+1. Parses the arguments and loads the `juneau_terminal_scripts` toolkit through `bootstrap.py`, applying `--console` before `juneau_terminal` loads.
 2. Prechecks (skipped by `--test-only`): one row of four checks that all run, none stopping at the first failure: git identity, unreviewed changes (any unstaged modification to a tracked file, or any untracked file that is not gitignored), staged (nothing staged ends the run with "nothing to do", before any gate), and upstream (fetches; refuses when the branch is behind its upstream; no upstream proceeds; a fetch error fails closed).
 3. Compile: `mvn clean test-compile`. Java Tests: `mvn verify` (the Java tests plus Apache RAT). Never `install`, since this repo only consumes the Juneau snapshot already in `~/.m2`. Both are removed by `--skip-tests`.
 4. Python Tests: the `scripts/tests` pytest suite, so a push cannot ship a broken release CLI. The launcher is `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest pytest` when `uv` is on the `PATH`, else the step is skipped with a notice. Removed by `--skip-pytest`.
@@ -58,12 +58,12 @@ Progress is a board view (rows: Prechecks, Compile, Java Tests, Python Tests, Br
 
 - It never runs `git add`, `git config`, `--force` or `--no-verify`. A staged path is treated as reviewed, so any unstaged tracked change or untracked non-ignored file makes the review gate refuse, with no override. Use `git stash push -- <paths>` for genuinely partial work.
 - A fully clean tree is a benign no-op and runs no gate.
-- Needs `juneau-run` 10.0.0-SNAPSHOT in `~/.m2` (build Juneau first).
+- Needs `juneau-terminal` 10.0.0-SNAPSHOT in `~/.m2` (build Juneau first).
 - `JRM_PUSH_NO_BELL=1` silences the bell (it is also skipped when `SANDBOX_RUNTIME=1`).
 - `JAVA_HOME` defaults to `~/jdk/default` when unset and that directory exists.
 - `JRM_E2E_REUSE`, `JRM_E2E_BASE_URL` and `JRM_E2E_HOME` are removed from the Playwright environment; `PLAYWRIGHT_HTML_OPEN` defaults to `never`.
-- `JRM_SCRIPT_TESTS_ACTIVE` is set in the pytest child and the step is skipped when it is already set, so tests that call `main()` cannot recurse. `JUNEAU_RUN_PY` is exported to the child when unset and the canonical Juneau checkout has `juneau_run.py`.
-- The toolkit is cached under `~/.cache/juneau-run/juneau-release-manager` because Compile's `mvn clean` would delete a copy under `target/`.
+- `JRM_SCRIPT_TESTS_ACTIVE` is set in the pytest child and the step is skipped when it is already set, so tests that call `main()` cannot recurse. `JUNEAU_TERMINAL_PY` is exported to the child when unset and the canonical Juneau checkout has `juneau_terminal.py`.
+- The toolkit is cached under `~/.cache/juneau-terminal/juneau-release-manager` because Compile's `mvn clean` would delete a copy under `target/`.
 
 ## See also
 

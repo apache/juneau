@@ -51,7 +51,7 @@ mvn clean verify        # build + run tests + apache-rat license check
 runs read-only commands, prints every mutation and writes no `runs/`:
 
 ```bash
-JUNEAU_RUN_PY=~/git/apache/juneau/juneau-run/src/main/python/juneau_run.py \
+JUNEAU_TERMINAL_PY=~/git/apache/juneau/juneau-terminal/src/main/python/juneau_terminal.py \
   uv run --native-tls python scripts/release.py --dry-run --version 9.2.1
 ```
 
@@ -81,8 +81,8 @@ The **Release** page (`/rest/runs`) runs `scripts/release.py` for you and stream
 through dialogs, and lists past attempts (real runs and dry runs) under **History**, where each can be replayed.
 
 - **Properties.** `rm.home` (default `~/.juneau-release-manager`) is where `runs/` and attempt directories live.
-  `rm.scripts.dir` (default `<working dir>/scripts`) holds `release.py`. `rm.juneau.run.script` is the
-  `juneau_run.py` the script runs under; it defaults to the `juneau-run` script in `~/.m2`, and the `JUNEAU_RUN_PY`
+  `rm.scripts.dir` (default `<working dir>/scripts`) holds `release.py`. `rm.juneau.terminal.script` is the
+  `juneau_terminal.py` the script runs under; it defaults to the `juneau-terminal` script in `~/.m2`, and the `JUNEAU_TERMINAL_PY`
   environment variable overrides it.
 - **Credentials.** Stored credentials answer the script's `credential.*` prompts automatically; anything not stored is
   asked in a dialog.

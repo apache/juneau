@@ -22,12 +22,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def main():
-    bootstrap.load(REPO_ROOT / "pom.xml", run=False, cache_dir=REPO_ROOT / "target" / "juneau-run")
+    bootstrap.load(REPO_ROOT / "pom.xml", terminal=False, cache_dir=REPO_ROOT / "target" / "juneau-terminal")
     try:
-        from juneau_scripts import coverage
+        from juneau_terminal_scripts import coverage
     except ImportError:
-        sys.exit("ERROR: the installed juneau-run predates juneau_scripts.coverage. Refresh it by building or installing "
-                 "juneau-run from apache/juneau, or set JUNEAU_SCRIPTS_ZIP to a current juneau-run.")
+        sys.exit("ERROR: the installed juneau-terminal predates juneau_terminal_scripts.coverage. Refresh it by building or installing "
+                 "juneau-terminal from apache/juneau, or set JUNEAU_TERMINAL_SCRIPTS_ZIP to a current juneau-terminal.")
     coverage.main(coverage.Config(
         repo_root=REPO_ROOT,
         base_pkg="org/apache/juneau/releng",

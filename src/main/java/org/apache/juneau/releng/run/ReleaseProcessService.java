@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.log.EventBroadcaster;
-import org.apache.juneau.rest.server.terminal.TerminalProcess;
+import org.apache.juneau.terminal.region.TerminalProcess;
 
 /**
  * Runs {@code scripts/release.py} under a pty, one process at a time.

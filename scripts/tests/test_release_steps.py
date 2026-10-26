@@ -688,7 +688,7 @@ def test_release_checks_are_two_quiet_cells(make_ctx):
 def test_registry_runs_both_check_groups_as_labelled_bars():
     import release
     from conftest import FakeRunner
-    reg = release.registry(release.Deps(run=FakeRunner(), steps=__import__("juneau_scripts.steps", fromlist=["x"]),
+    reg = release.registry(release.Deps(run=FakeRunner(), steps=__import__("juneau_terminal_scripts.steps", fromlist=["x"]),
                                         prompt=None, lock=None), release.impl_map())
     assert reg._labels["prerequisites"] == "Prerequisites"
     assert reg._labels["prechecks"] == "Release checks"

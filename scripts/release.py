@@ -172,11 +172,11 @@ class Deps:
 
     @classmethod
     def real(cls, args):
-        cache = REPO_DIR / "target" / "juneau-run"
-        bootstrap.load(REPO_DIR / "pom.xml", run=False, cache_dir=cache)
-        from juneau_scripts import lock, prompt, run, steps
-        run.export_console(args.console)   # before juneau_run loads: the flag beats JUNEAU_RUN_CONSOLE
-        bootstrap.load(REPO_DIR / "pom.xml", run=True, cache_dir=cache)
+        cache = REPO_DIR / "target" / "juneau-terminal"
+        bootstrap.load(REPO_DIR / "pom.xml", terminal=False, cache_dir=cache)
+        from juneau_terminal_scripts import lock, prompt, run, steps
+        run.export_console(args.console)   # before juneau_terminal loads: the flag beats JUNEAU_TERMINAL_CONSOLE
+        bootstrap.load(REPO_DIR / "pom.xml", terminal=True, cache_dir=cache)
         return cls(run, steps, prompt, lock)
 
 
@@ -267,7 +267,7 @@ def _execute(args, deps, ctx, attempt):
         run_args = argparse.Namespace(list_steps=False, start_step=None, resume=False, skip_step=[])
     else:
         reg, checkpoint, run_args = registry(deps, impl_map()), rf, args
-    from juneau_scripts import prompt
+    from juneau_terminal_scripts import prompt
     origin = "ui" if prompt.channel() else "cli"
     rf.attempt_start(attempt, _command(args), origin=origin, pid=os.getpid())
 
@@ -347,8 +347,8 @@ def run_release(args, deps, path, active):
               else version or "new release")
     plan = ([(n, t) for n, t, _ in __import__("jrm_release.revert", fromlist=["ROWS"]).ROWS] if args.revert
             else [(s.name, s.title) for s in inventory.STEPS])
-    saved = os.environ.get("JUNEAU_RUN_FULL_LOG")
-    os.environ["JUNEAU_RUN_FULL_LOG"] = str(attempt / "full.log")
+    saved = os.environ.get("JUNEAU_TERMINAL_FULL_LOG")
+    os.environ["JUNEAU_TERMINAL_FULL_LOG"] = str(attempt / "full.log")
     try:
         with deps.run.session(TITLE, header=header, bell=True, silence_env="JRM_RELEASE_NO_BELL", mode="release",
                               project="juneau-release-manager", repo=REPO_DIR, exit=False, plan=plan) as s:
@@ -357,9 +357,9 @@ def run_release(args, deps, path, active):
                 raise SystemExit(code)
     finally:
         if saved is None:
-            os.environ.pop("JUNEAU_RUN_FULL_LOG", None)
+            os.environ.pop("JUNEAU_TERMINAL_FULL_LOG", None)
         else:
-            os.environ["JUNEAU_RUN_FULL_LOG"] = saved
+            os.environ["JUNEAU_TERMINAL_FULL_LOG"] = saved
     return s.code
 
 
@@ -382,7 +382,7 @@ def main(argv=None, deps=None):
                 deps = Deps.real(args)
             except bootstrap.BootstrapError as e:
                 print(f"❌ ERROR: {e}", file=sys.stderr)
-                print("   (juneau-run 10.0.0-SNAPSHOT must be in ~/.m2: build Juneau first.)", file=sys.stderr)
+                print("   (juneau-terminal 10.0.0-SNAPSHOT must be in ~/.m2: build Juneau first.)", file=sys.stderr)
                 return 1
         return run_release(args, deps, path, active)
     except RunFileError as e:

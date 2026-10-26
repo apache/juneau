@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.rest.mock.MockRestClient;
-import org.apache.juneau.rest.server.console.ConsoleChromeMixin;
+import org.apache.juneau.console.ConsoleChromeMixin;
 import org.junit.jupiter.api.Test;
 
 class ConsoleAssetsRestTest {

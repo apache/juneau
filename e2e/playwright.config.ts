@@ -95,7 +95,7 @@ export default defineConfig({
         env: {
           ...process.env,
           JAVA_HOME,
-          JUNEAU_RUN_PY: process.env.JUNEAU_RUN_PY ?? path.join(os.homedir(), 'git/apache/juneau/juneau-run/src/main/python/juneau_run.py'),
+          JUNEAU_TERMINAL_PY: process.env.JUNEAU_TERMINAL_PY ?? path.join(os.homedir(), 'git/apache/juneau/juneau-terminal/src/main/python/juneau_terminal.py'),
           PATH: `${path.join(JAVA_HOME, 'bin')}:${process.env.PATH}`,
         },
       },

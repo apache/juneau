@@ -17,7 +17,7 @@
 
 package org.apache.juneau.releng.rest;
 
-import static org.apache.juneau.rest.server.console.test.PageContractAssert.assertPage;
+import static org.apache.juneau.console.test.PageContractAssert.assertPage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;

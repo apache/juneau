@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 
-import org.apache.juneau.rest.server.view.freemarker.console.ConsoleTemplateValidator;
+import org.apache.juneau.console.freemarker.ConsoleTemplateValidator;
 import org.junit.jupiter.api.Test;
 
 /**

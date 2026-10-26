@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
 /**
- * Locates the real {@code juneau_run.py} (the installed 10.0.0-SNAPSHOT, or {@code JUNEAU_RUN_PY}) and the fixture
+ * Locates the real {@code juneau_terminal.py} (the installed 10.0.0-SNAPSHOT, or {@code JUNEAU_TERMINAL_PY}) and the fixture
  * {@code fake-scripts/release.py}; skips the test when python3 or the runner is missing.
  */
 final class RunnerFixture {
@@ -32,9 +32,9 @@ final class RunnerFixture {
 	private RunnerFixture() {}
 
 	static Path scriptsDir() throws Exception {
-		var runner = System.getenv("JUNEAU_RUN_PY") != null ? Path.of(System.getenv("JUNEAU_RUN_PY"))
-			: Path.of(System.getProperty("user.home"), ".m2/repository/org/apache/juneau/juneau-run/10.0.0-SNAPSHOT/juneau-run-10.0.0-SNAPSHOT.py");
-		assumeTrue(Files.isRegularFile(runner), "juneau-run is not installed: " + runner);
+		var runner = System.getenv("JUNEAU_TERMINAL_PY") != null ? Path.of(System.getenv("JUNEAU_TERMINAL_PY"))
+			: Path.of(System.getProperty("user.home"), ".m2/repository/org/apache/juneau/juneau-terminal/10.0.0-SNAPSHOT/juneau-terminal-10.0.0-SNAPSHOT.py");
+		assumeTrue(Files.isRegularFile(runner), "juneau-terminal is not installed: " + runner);
 		boolean python;
 		try {
 			python = new ProcessBuilder("python3", "--version").start().waitFor() == 0;
@@ -42,7 +42,7 @@ final class RunnerFixture {
 			python = false;
 		}
 		assumeTrue(python, "python3 is not on PATH");
-		System.setProperty("juneau.run.script", runner.toString());
+		System.setProperty("juneau.terminal.script", runner.toString());
 		return Path.of(RunnerFixture.class.getResource("/fake-scripts/release.py").toURI()).getParent();
 	}
 

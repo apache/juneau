@@ -53,7 +53,7 @@ import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter;
 import org.apache.juneau.rest.server.filter.SynchronizerToken;
-import org.apache.juneau.rest.server.terminal.TerminalProcess;
+import org.apache.juneau.terminal.region.TerminalProcess;
 import org.apache.juneau.secret.macos.keychain.KeychainSecretStore;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -312,7 +312,7 @@ public class AppConfiguration {
 	 */
 	@Bean(destroyMethod = "shutdown")
 	public ReleaseProcessService releaseProcessService(@Value("${rm.home}") String home,
-			@Value("${rm.scripts.dir}") String scriptsDir, @Value("${rm.juneau.run.script}") String runScript,
+			@Value("${rm.scripts.dir}") String scriptsDir, @Value("${rm.juneau.terminal.script}") String runScript,
 			CredentialAnswers credentials, EventBroadcaster runEvents) {
 		System.setProperty(TerminalProcess.SCRIPT_PROPERTY, runScript);
 		return new ReleaseProcessService(Path.of(home), Path.of(scriptsDir), credentials::lookup, runEvents);

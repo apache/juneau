@@ -34,20 +34,20 @@ import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.RestRequest;
-import org.apache.juneau.rest.server.datatables.DataTablesMixin;
-import org.apache.juneau.rest.server.datatables.DataTablesRequest;
-import org.apache.juneau.rest.server.datatables.DataTablesResults;
-import org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery;
+import org.apache.juneau.console.datatables.DataTablesMixin;
+import org.apache.juneau.console.datatables.DataTablesRequest;
+import org.apache.juneau.console.datatables.DataTablesResults;
+import org.apache.juneau.console.datatables.adapter.DataTablesQuery;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
-import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.console.ToolkitPack;
-import org.apache.juneau.rest.server.view.freemarker.console.ToolkitPackRegistry;
+import org.apache.juneau.console.freemarker.ConsoleFreemarkerMixin;
+import org.apache.juneau.console.freemarker.ToolkitPack;
+import org.apache.juneau.console.freemarker.ToolkitPackRegistry;
 import org.apache.juneau.rest.server.staticfile.WebJarResolver;
 import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
-import org.apache.juneau.rest.server.views.ViewsMixin;
+import org.apache.juneau.console.views.ViewsMixin;
 
 import jakarta.servlet.http.HttpServletRequest;
 

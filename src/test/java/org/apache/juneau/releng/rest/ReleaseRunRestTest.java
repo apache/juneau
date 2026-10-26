@@ -32,8 +32,8 @@ import org.apache.juneau.releng.run.ReleaseProcessService;
 import org.apache.juneau.releng.run.RunFiles;
 import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.marshall.marshaller.Json;
-import org.apache.juneau.rest.server.terminal.TerminalProcess;
-import org.apache.juneau.rest.server.views.IdempotencyKey;
+import org.apache.juneau.terminal.region.TerminalProcess;
+import org.apache.juneau.console.views.IdempotencyKey;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.commons.utils.IoUtils;
@@ -68,7 +68,7 @@ class ReleaseRunRestTest {
 		if (prompt)
 			broker.onLine(PROMPT);
 		var proc = mock(TerminalProcess.class);
-		var source = mock(org.apache.juneau.rest.server.terminal.FileTerminalSource.class);
+		var source = mock(org.apache.juneau.terminal.region.FileTerminalSource.class);
 		when(proc.terminal()).thenReturn(source);
 		return new ReleaseProcessService.Live(attemptId, java.nio.file.Path.of("x"), "start", true, proc, broker);
 	}

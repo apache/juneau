@@ -20,7 +20,7 @@ import pytest
 import release  # scripts/release.py, importable via conftest's sys.path
 
 pytestmark = [pytest.mark.usefixtures("clean_env"),
-              pytest.mark.skipif(not os.environ.get("JUNEAU_RUN_PY"), reason="needs JUNEAU_RUN_PY toolkit")]
+              pytest.mark.skipif(not os.environ.get("JUNEAU_TERMINAL_PY"), reason="needs JUNEAU_TERMINAL_PY toolkit")]
 
 
 def run_main(argv, home, capsys, deps=None):
@@ -53,7 +53,7 @@ def test_exit_codes(home, capsys):
 
 
 class RunProxy:
-    """The real juneau_scripts.run for session/say, with command execution replaced by a FakeRunner."""
+    """The real juneau_terminal_scripts.run for session/say, with command execution replaced by a FakeRunner."""
 
     child_env = None
 
@@ -66,8 +66,8 @@ class RunProxy:
 
 def toolkit_deps(tmp_path, fake, prompts, **kw):
     import bootstrap
-    bootstrap.load(release.REPO_DIR / "pom.xml", run=False, cache_dir=tmp_path / "tk")
-    from juneau_scripts import lock, run, steps
+    bootstrap.load(release.REPO_DIR / "pom.xml", terminal=False, cache_dir=tmp_path / "tk")
+    from juneau_terminal_scripts import lock, run, steps
     return release.Deps(RunProxy(run, fake), steps, prompts, lock, **kw)
 
 

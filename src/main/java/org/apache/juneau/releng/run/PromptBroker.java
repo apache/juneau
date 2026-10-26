@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.log.EventBroadcaster;
-import org.apache.juneau.rest.server.terminal.TerminalPrompts;
+import org.apache.juneau.terminal.region.TerminalPrompts;
 
 /**
  * Brokers one release.py process's prompts (protocol v1).
