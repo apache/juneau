@@ -1117,6 +1117,25 @@ class TestE2EGate:
         assert "Browser Tests failed" in s.failed
         assert "nothing committed" in s.failed
 
+    def test_a_lockfile_off_the_public_registry_fails_the_gate_before_the_install(self, push_module, cmds, npx, tmp_path, capsys):
+        lock = tmp_path / "e2e" / "package-lock.json"
+        lock.parent.mkdir()
+        lock.write_text('{"resolved": "https://mirror.example.net/npm/a/-/a-1.0.0.tgz"}\n')
+        s = _FakeSession()
+        with pytest.raises(SystemExit):
+            push_module._real_e2e(s, tmp_path, False)
+        assert "off the public npm registry" in s.failed
+        assert "e2e/package-lock.json:1:" in capsys.readouterr().out
+        assert not cmds
+        assert npx == []
+
+    def test_a_lockfile_on_the_public_registry_lets_the_suite_run(self, push_module, cmds, npx, tmp_path):
+        lock = tmp_path / "e2e" / "package-lock.json"
+        lock.parent.mkdir()
+        lock.write_text('{"resolved": "https://registry.npmjs.org/a/-/a-1.0.0.tgz"}\n')
+        push_module._real_e2e(_FakeSession(), tmp_path, False)
+        assert cmds[0][0] == ["npx", "playwright", "test"]
+
     def test_a_failed_install_fails_the_gate_before_the_suite(self, push_module, cmds, monkeypatch, tmp_path):
         monkeypatch.setattr(push_module.module.shutil, "which", lambda name: f"/bin/{name}")
         monkeypatch.setattr(push_module.tools, "playwright_ensure", lambda _d: _Result(1))
@@ -1146,6 +1165,7 @@ class TestE2EGate:
 # The step plan, the skip flags, --test-only and the gate order through main().
 # ---------------------------------------------------------------------------------------
 ALL_GATES = ["compile", "tests", "script-tests", "e2e"]
+PLANNED_GATES = [*ALL_GATES, "traces"]    # the Traces row is drawn by traces.gate, not a stubbed gate, so it is planned but never in gate_calls
 
 
 class TestRunHistoryGuard:
@@ -1166,22 +1186,22 @@ class TestPlannedSteps:
         return [step for step, _ in push_module.planned_steps(push_module.build_parser().parse_args(list(argv)))]
 
     def test_a_push_plans_every_step_in_order(self, push_module):
-        assert self._plan(push_module, "msg") == ["prechecks", *ALL_GATES, "commit", "push"]
+        assert self._plan(push_module, "msg") == ["prechecks", *PLANNED_GATES, "commit", "push"]
 
     def test_the_labels(self, push_module):
         assert dict(push_module.planned_steps(push_module.build_parser().parse_args(["msg"]))) == {
             "prechecks": "Prechecks", "compile": "Compile", "tests": "Java Tests", "script-tests": "Python Tests",
-            "e2e": "Browser Tests", "commit": "Commit", "push": "Push"}
+            "e2e": "Browser Tests", "traces": "Traces", "commit": "Commit", "push": "Push"}
 
     @pytest.mark.parametrize("flag, removed", [("--skip-pytest", ["script-tests"]),
                                                ("--skip-tests", ["compile", "tests"]),
                                                ("--skip-e2e", ["e2e"])])
     def test_each_skip_flag_removes_exactly_its_steps(self, push_module, flag, removed):
-        full = ["prechecks", *ALL_GATES, "commit", "push"]
+        full = ["prechecks", *PLANNED_GATES, "commit", "push"]
         assert self._plan(push_module, flag, "msg") == [s for s in full if s not in removed]
 
     def test_test_only_plans_the_gates_alone(self, push_module):
-        assert self._plan(push_module, "--test-only") == ALL_GATES
+        assert self._plan(push_module, "--test-only") == PLANNED_GATES
 
 
 class TestGatesThroughMain:

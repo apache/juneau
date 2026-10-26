@@ -17,6 +17,7 @@
 """Build, test, commit and push juneau-release-manager.  Full docs: push.md"""
 
 import argparse
+import importlib.util
 import os
 import shutil
 import subprocess
@@ -48,7 +49,10 @@ import bootstrap  # noqa: E402
 from bootstrap import run_requested  # noqa: E402,F401  (push.run_requested is the environment rule tests check)
 
 # The toolkit modules, bound by toolkit() on first use so that importing this file has no side effects.
-git = run = notify = checks = tools = None
+git = run = notify = checks = tools = traces = None
+
+TRACE_ALLOWLIST = REPO_DIR / "scripts" / "trace-allowlist.txt"
+TRACE_REPORT = REPO_DIR / "target" / "trace-guard.txt"
 
 
 class _NoMarkers:
@@ -68,10 +72,16 @@ run_markers = _NoMarkers()
 
 def toolkit():
     """Load juneau_terminal_scripts (once per process) and bind git, run, notify, checks and tools.  Returns the package."""
-    global git, run, notify, checks, tools
+    global git, run, notify, checks, tools, traces
     # cache_dir: the first load fixes it for the process; not under target/, which Compile cleans mid-run.
     _, js = bootstrap.load(REPO_DIR / "pom.xml", terminal=False, cache_dir=TOOLKIT_CACHE_DIR)
     from juneau_terminal_scripts import checks, git, notify, run, tools  # noqa: F811
+    try:
+        from juneau_terminal_scripts import traces  # noqa: F811
+    except ImportError as e:
+        raise bootstrap.BootstrapError(
+            f"the juneau-terminal snapshot in ~/.m2 has no traces module ({e}); "
+            "run `mvn install -DskipTests` in apache/juneau's juneau-terminal") from e
     return js
 
 
@@ -282,13 +292,25 @@ def e2e_env():
     return env
 
 
+def _lockfile_off_registry(lockfile):
+    """The (line, url) pairs in the lockfile whose `resolved` URL is not on the public npm registry (check-lockfile-registry.py
+    holds the rule).  Empty when the lockfile does not exist."""
+    if not lockfile.is_file():
+        return []
+    spec = importlib.util.spec_from_file_location("check_lockfile_registry", REPO_DIR / "scripts" / "check-lockfile-registry.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.bad_urls(lockfile)
+
+
 def _e2e(s, repo_dir, dry_run):
     """
     The Browser Tests row: the full Playwright suite (`npx playwright test` in e2e/).  Its webServer boots the app on the test
     port itself, so no server is started here.  The playwright parser adds its reporter through PW_TEST_REPORTER and no
     CLI arguments, so the config's own html reporter still runs.  Skipped with a warning when npx is not on the PATH;
-    npm dependencies and Chromium are installed only when missing, and a failed install fails the gate.  A failing
-    suite refuses the push: nothing is committed.
+    npm dependencies and Chromium are installed only when missing, and a failed install fails the gate.  A lockfile with a
+    `resolved` URL off the public npm registry fails the gate before anything is installed.  A failing suite refuses the push:
+    nothing is committed.
     """
     if dry_run:
         _would_run("e2e", "Browser Tests", "npx playwright test (in e2e/)")
@@ -300,6 +322,12 @@ def _e2e(s, repo_dir, dry_run):
             st.skip("npx not found")
         return
     e2e_dir = Path(repo_dir) / "e2e"
+    off_registry = _lockfile_off_registry(e2e_dir / "package-lock.json")
+    if off_registry:
+        for line, url in off_registry:
+            say(f"e2e/package-lock.json:{line}: `resolved` URL is not on the public npm registry: {url}")
+        s.fail(f"\n❌ ERROR: Browser Tests setup failed (e2e/package-lock.json has {len(off_registry)} `resolved` URL(s) off the "
+               "public npm registry; see scripts/check-lockfile-registry.md); nothing committed.")
     say("\n🎭 Running Browser Tests (npx playwright test in e2e/)...")
     if not tools.playwright_ensure(e2e_dir).ok:
         s.fail("\n❌ ERROR: Browser Tests setup failed (npm dependencies or Chromium could not be installed); nothing committed.")
@@ -376,12 +404,30 @@ def _skipped(flag, what):
     say(f"\n⏭️  Skipping {what} ({flag}).")
 
 
+def _trace_guard(s, args, since):
+    """The Traces row: the gates' output since `since` (traces.mark()) must hold no stack trace that is not in
+    scripts/trace-allowlist.txt.  --warn-traces downgrades a failure to a warning.  Under --dry-run the gates did not run,
+    so the row is only shown; with every gate skipped there is nothing to scan."""
+    if args.skip_tests and args.skip_pytest and args.skip_e2e:
+        return
+    if args.dry_run:
+        _would_run("traces", "Traces", "scan the gates' output for stack traces")
+        return
+    full_run = not (args.skip_tests or args.skip_pytest or args.skip_e2e)
+    code = traces.gate("traces", "Traces", TRACE_ALLOWLIST, since=since, warn_only=args.warn_traces, full_run=full_run,
+                       report=TRACE_REPORT, label="Traces")
+    if code:
+        s.fail("\n❌ ERROR: Traces gate failed (a stack trace not in scripts/trace-allowlist.txt); nothing committed.  "
+               "Fix it, allowlist it with a reason, or use --warn-traces.")
+
+
 def _gates(s, repo_dir, args):
     """
     Compile, Java Tests, Python Tests and Browser Tests, in that order (every test step after Compile), each unless its skip flag is
-    set.  A failing gate ends the session with nothing committed.  Returns False only for a Python Tests "would refuse" under --dry-run;
-    otherwise True.
+    set, then the Traces row over what they printed.  A failing gate ends the session with nothing committed.  Returns False only for a
+    Python Tests "would refuse" under --dry-run; otherwise True.
     """
+    since = traces.mark()
     if args.skip_tests:
         _skipped("--skip-tests", "Compile and Java Tests")
     else:
@@ -395,6 +441,7 @@ def _gates(s, repo_dir, args):
         _skipped("--skip-e2e", "Browser Tests")
     else:
         _e2e(s, repo_dir, args.dry_run)
+    _trace_guard(s, args, since)
     return True
 
 
@@ -464,7 +511,9 @@ def planned_steps(args):
     steps += [(step_id, label) for step_id, label, skipped in (("compile", "Compile", args.skip_tests),
                                                                ("tests", "Java Tests", args.skip_tests),
                                                                ("script-tests", "Python Tests", args.skip_pytest),
-                                                               ("e2e", "Browser Tests", args.skip_e2e)) if not skipped]
+                                                               ("e2e", "Browser Tests", args.skip_e2e),
+                                                               ("traces", "Traces", args.skip_tests and args.skip_pytest
+                                                                and args.skip_e2e)) if not skipped]
     if not args.test_only:
         steps += [("commit", "Commit"), ("push", "Push")]
     return steps
@@ -507,6 +556,9 @@ playwright test in e2e/), Commit, Push.  A failing gate refuses the push; nothin
     parser.add_argument("--skip-tests", action="store_true", help="Skip Compile and Java Tests (the Maven build).")
     parser.add_argument("--skip-e2e", action="store_true", help="Skip Browser Tests (the Playwright suite).")
     parser.add_argument("--skip-pytest", action="store_true", help="Skip Python Tests (the scripts/tests suite).")
+    parser.add_argument("--warn-traces", action="store_true",
+                        help="Report stack traces in the gates' output as a warning instead of failing "
+                             "(scripts/trace-allowlist.txt still applies).")
     parser.add_argument(
         "--console",
         choices=("full", "board", "none"),

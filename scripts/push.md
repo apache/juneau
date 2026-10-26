@@ -32,6 +32,7 @@ Run it from the repository root. The commit message is prompted for when omitted
 | `--skip-tests` | none | off | Skip Compile and Java Tests (the Maven build). |
 | `--skip-e2e` | none | off | Skip Browser Tests (the Playwright suite). |
 | `--skip-pytest` | none | off | Skip Python Tests (the `scripts/tests` suite). |
+| `--warn-traces` | none | off | Report stack traces in the gates' output as a warning instead of failing the run. Allowlist errors still fail. |
 | `--console` | `full`, `board`, `none` | `board` | Console view of the steps; also `JUNEAU_TERMINAL_CONSOLE`. The flag wins over the environment. |
 
 ## What it does
@@ -40,13 +41,14 @@ Run it from the repository root. The commit message is prompted for when omitted
 2. Prechecks (skipped by `--test-only`): one row of four checks that all run, none stopping at the first failure: git identity, unreviewed changes (any unstaged modification to a tracked file, or any untracked file that is not gitignored), staged (nothing staged ends the run with "nothing to do", before any gate), and upstream (fetches; refuses when the branch is behind its upstream; no upstream proceeds; a fetch error fails closed).
 3. Compile: `mvn clean test-compile`. Java Tests: `mvn verify` (the Java tests plus Apache RAT). Never `install`, since this repo only consumes the Juneau snapshot already in `~/.m2`. Both are removed by `--skip-tests`.
 4. Python Tests: the `scripts/tests` pytest suite, so a push cannot ship a broken release CLI. The launcher is `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest pytest` when `uv` is on the `PATH`, else the step is skipped with a notice. Removed by `--skip-pytest`.
-5. Browser Tests: `npx playwright test` in `e2e/`, whose web server boots the app itself. Skipped with a warning when `npx` is not on the `PATH`. Removed by `--skip-e2e`.
-6. A failing gate refuses the push; nothing is committed.
-7. Commits the staged index exactly as found (message on stdin) and pushes to the tracked upstream (setting it with `-u` when the branch has none). It never stages anything.
+5. Browser Tests: `npx playwright test` in `e2e/`, whose web server boots the app itself. Skipped with a warning when `npx` is not on the `PATH`. Before anything is installed it runs the `check-lockfile-registry.py` rule on `e2e/package-lock.json` and fails the row when a `resolved` URL is not on the public npm registry. Removed by `--skip-e2e`.
+6. Traces: scans what steps 3 to 5 printed (read back from the run's full log) for stack traces and fails on any whose header line is not matched by `scripts/trace-allowlist.txt`. Skipped with a warning when the run has no full log (use the default `--console board`), shown but not run under `--dry-run`, and absent when all three gates are skipped.
+7. A failing gate refuses the push; nothing is committed.
+8. Commits the staged index exactly as found (message on stdin) and pushes to the tracked upstream (setting it with `-u` when the branch has none). It never stages anything.
 
 ## Output and exit codes
 
-Progress is a board view (rows: Prechecks, Compile, Java Tests, Python Tests, Browser Tests, Commit, Push). The full log path is printed in the session header. On success it prints the branch, short commit and remote URL. When a run ends on a terminal it rings the bell.
+Progress is a board view (rows: Prechecks, Compile, Java Tests, Python Tests, Browser Tests, Traces, Commit, Push). The full log path is printed in the session header. On success it prints the branch, short commit and remote URL. When a run ends on a terminal it rings the bell.
 
 | Code | Meaning |
 |---|---|
@@ -58,6 +60,7 @@ Progress is a board view (rows: Prechecks, Compile, Java Tests, Python Tests, Br
 
 - It never runs `git add`, `git config`, `--force` or `--no-verify`. A staged path is treated as reviewed, so any unstaged tracked change or untracked non-ignored file makes the review gate refuse, with no override. Use `git stash push -- <paths>` for genuinely partial work.
 - A fully clean tree is a benign no-op and runs no gate.
+- `scripts/trace-allowlist.txt` holds one header regex per line followed by `# <reason>`; a line with no reason, a bad regex or a duplicate regex fails the Traces row even with `--warn-traces`. An entry that matched nothing in a run with no `--skip-*` flag is reported as stale (a warning). Every trace found, allowed or not, is listed in `target/trace-guard.txt`.
 - Needs `juneau-terminal` 10.0.0-SNAPSHOT in `~/.m2` (build Juneau first).
 - `JRM_PUSH_NO_BELL=1` silences the bell (it is also skipped when `SANDBOX_RUNTIME=1`).
 - `JAVA_HOME` defaults to `~/jdk/default` when unset and that directory exists.
@@ -67,5 +70,5 @@ Progress is a board view (rows: Prechecks, Compile, Java Tests, Python Tests, Br
 
 ## See also
 
-- `release.md`, `coverage.md`
+- `release.md`, `coverage.md`, `check-lockfile-registry.md`
 - `tests/README.md`
