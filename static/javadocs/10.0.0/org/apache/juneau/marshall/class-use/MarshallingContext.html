@@ -56,40 +56,77 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
-<div class="col-last even-row-color">
-<div class="block">Marshalling API</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.parquet">org.apache.juneau.marshall.parquet</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Apache Parquet serialization and parsing support.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.stream">org.apache.juneau.marshall.stream</a></div>
-<div class="col-last even-row-color">
-<div class="block">Public low-level token-streaming API (pull parser + push generator) shared by every Juneau
- format.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Swap API</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.utils">org.apache.juneau.marshall.utils</a></div>
-<div class="col-last even-row-color">
-<div class="block">URL-Encoding Annotations</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST Server API</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.datatables">org.apache.juneau.console.datatables</a></div>
 <div class="col-last even-row-color">
 <div class="block">The DataTables server-side-processing JSON beans implementing the
  <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
  contract.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Marshalling API</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.parquet">org.apache.juneau.marshall.parquet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache Parquet serialization and parsing support.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.stream">org.apache.juneau.marshall.stream</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Public low-level token-streaming API (pull parser + push generator) shared by every Juneau
+ format.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
+<div class="col-last even-row-color">
+<div class="block">Swap API</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.utils">org.apache.juneau.marshall.utils</a></div>
+<div class="col-last odd-row-color">
+<div class="block">URL-Encoding Annotations</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last even-row-color">
+<div class="block">REST Server API</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.console.datatables">
+<h2>Uses of <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a> in <a href="../../console/datatables/package-summary.html">org.apache.juneau.console.datatables</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/datatables/package-summary.html">org.apache.juneau.console.datatables</a> with parameters of type <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesColumns.</span><code><a href="../../console/datatables/DataTablesColumns.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.Class)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanClass)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Generates the DataTables <code>columns</code> array for the specified bean type using the specified marshalling context.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../bean/html5/Table.html" title="class in org.apache.juneau.bean.html5">Table</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DataTablesTable.</span><code><a href="../../console/datatables/DataTablesTable.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.String,java.util.Collection,java.lang.Class)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;rows,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;rowType)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds a DataTables-ready table using the specified marshalling context, deriving the columns from the specified
+ row bean type via <a href="../../console/datatables/DataTablesColumns.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.Class)"><code>DataTablesColumns.of(MarshallingContext, Class)</code></a>, additively honoring each bean
+ property's <a href="../html/Html.html" title="annotation interface in org.apache.juneau.marshall.html"><code>@Html(render)</code></a> the same way the ordinary <code>HtmlSerializer</code>/<code>HtmlDocSerializer</code>
+ path already does.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../../bean/html5/Table.html" title="class in org.apache.juneau.bean.html5">Table</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesTable.</span><code><a href="../../console/datatables/DataTablesTable.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.String,java.util.Collection,java.util.List)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;rows,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;columns)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds a DataTables-ready table from an explicit column list using the specified marshalling context for
+ bean-property cell reads.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.marshall">
 <h2>Uses of <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a> in <a href="../package-summary.html">org.apache.juneau.marshall</a></h2>
@@ -335,43 +372,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../../rest/server/RestOpContext.html#getMarshallingContext()" class="member-name-link">getMarshallingContext</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns the marshalling context associated with this context.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.datatables">
-<h2>Uses of <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a> in <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></h2>
-<div class="caption"><span>Methods in <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a> with parameters of type <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DataTablesColumns.</span><code><a href="../../rest/server/datatables/DataTablesColumns.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.Class)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanClass)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Generates the DataTables <code>columns</code> array for the specified bean type using the specified marshalling context.</div>
-</div>
-<div class="col-first odd-row-color"><code>static <a href="../../bean/html5/Table.html" title="class in org.apache.juneau.bean.html5">Table</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">DataTablesTable.</span><code><a href="../../rest/server/datatables/DataTablesTable.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.String,java.util.Collection,java.lang.Class)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;rows,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;rowType)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Builds a DataTables-ready table using the specified marshalling context, deriving the columns from the specified
- row bean type via <a href="../../rest/server/datatables/DataTablesColumns.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.Class)"><code>DataTablesColumns.of(MarshallingContext, Class)</code></a>, additively honoring each bean
- property's <a href="../html/Html.html" title="annotation interface in org.apache.juneau.marshall.html"><code>@Html(render)</code></a> the same way the ordinary <code>HtmlSerializer</code>/<code>HtmlDocSerializer</code>
- path already does.</div>
-</div>
-<div class="col-first even-row-color"><code>static <a href="../../bean/html5/Table.html" title="class in org.apache.juneau.bean.html5">Table</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DataTablesTable.</span><code><a href="../../rest/server/datatables/DataTablesTable.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.String,java.util.Collection,java.util.List)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;rows,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;columns)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Builds a DataTables-ready table from an explicit column list using the specified marshalling context for
- bean-property cell reads.</div>
 </div>
 </div>
 </section>

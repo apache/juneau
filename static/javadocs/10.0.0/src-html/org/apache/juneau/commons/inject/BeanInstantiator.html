@@ -512,11 +512,11 @@
 <span class="source-line-no">499</span><span id="line-499">   boolean autoWireUnwrapSuppliers = true;</span>
 <span class="source-line-no">500</span><span id="line-500">   private boolean noBuilder = false;</span>
 <span class="source-line-no">501</span><span id="line-501"></span>
-<span class="source-line-no">502</span><span id="line-502">   private Memoizer&lt;ClassInfo&gt; builderType = memoizer(() -&gt; findBuilderType());</span>
-<span class="source-line-no">503</span><span id="line-503">   private Memoizer&lt;List&lt;ClassInfo&gt;&gt; builderTypes = memoizer(() -&gt; findBuilderTypes());</span>
-<span class="source-line-no">504</span><span id="line-504">   private Memoizer&lt;List&lt;ClassInfo&gt;&gt; beanSubTypes = memoizer(() -&gt; findBeanSubTypes());</span>
-<span class="source-line-no">505</span><span id="line-505">   private Memoizer&lt;Object&gt; builderMemoizer = memoizer(() -&gt; findBuilder());</span>
-<span class="source-line-no">506</span><span id="line-506">   private Memoizer&lt;T&gt; beanImpl = memoizer(() -&gt; processBean(findBeanImpl()));</span>
+<span class="source-line-no">502</span><span id="line-502">   private final Memoizer&lt;ClassInfo&gt; builderType = memoizer(() -&gt; findBuilderType());</span>
+<span class="source-line-no">503</span><span id="line-503">   private final Memoizer&lt;List&lt;ClassInfo&gt;&gt; builderTypes = memoizer(() -&gt; findBuilderTypes());</span>
+<span class="source-line-no">504</span><span id="line-504">   private final Memoizer&lt;List&lt;ClassInfo&gt;&gt; beanSubTypes = memoizer(() -&gt; findBeanSubTypes());</span>
+<span class="source-line-no">505</span><span id="line-505">   private final Memoizer&lt;Object&gt; builderMemoizer = memoizer(() -&gt; findBuilder());</span>
+<span class="source-line-no">506</span><span id="line-506">   private final Memoizer&lt;T&gt; beanImpl = memoizer(() -&gt; processBean(findBeanImpl()));</span>
 <span class="source-line-no">507</span><span id="line-507"></span>
 <span class="source-line-no">508</span><span id="line-508">   /**</span>
 <span class="source-line-no">509</span><span id="line-509">    * Constructor.</span>

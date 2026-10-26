@@ -56,18 +56,39 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.views">org.apache.juneau.console.views</a></div>
 <div class="col-last even-row-color">
-<div class="block">Marshalling API</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
-<div class="col-last odd-row-color">
 <div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
  contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Marshalling API</div>
 </div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.console.views">
+<h2>Uses of <a href="../Uri.html" title="annotation interface in org.apache.juneau.marshall">Uri</a> in <a href="../../console/views/package-summary.html">org.apache.juneau.console.views</a></h2>
+<div class="caption"><span>Fields in <a href="../../console/views/package-summary.html">org.apache.juneau.console.views</a> with annotations of type <a href="../Uri.html" title="annotation interface in org.apache.juneau.marshall">Uri</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AsyncJobRef.</span><code><a href="../../console/views/AsyncJobRef.html#cancelUrl" class="member-name-link">cancelUrl</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The URL of the cancel endpoint (a non-safe POST); embeds <a href="../../console/views/AsyncJobRef.html#jobId"><code>AsyncJobRef.jobId</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AsyncJobRef.</span><code><a href="../../console/views/AsyncJobRef.html#streamUrl" class="member-name-link">streamUrl</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The URL of the SSE progress stream (a browser <code>EventSource</code> target); embeds <a href="../../console/views/AsyncJobRef.html#jobId"><code>AsyncJobRef.jobId</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.marshall">
 <h2>Uses of <a href="../Uri.html" title="annotation interface in org.apache.juneau.marshall">Uri</a> in <a href="../package-summary.html">org.apache.juneau.marshall</a></h2>
@@ -102,27 +123,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">UriApplyAnnotation.Builder.</span><code><a href="../UriApplyAnnotation.Builder.html#value(org.apache.juneau.marshall.Uri)" class="member-name-link">value</a><wbr>(<a href="../Uri.html" title="annotation interface in org.apache.juneau.marshall">Uri</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the <a href="../UriApply.html#value()"><code>UriApply.value()</code></a> property on this annotation.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.views">
-<h2>Uses of <a href="../Uri.html" title="annotation interface in org.apache.juneau.marshall">Uri</a> in <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></h2>
-<div class="caption"><span>Fields in <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a> with annotations of type <a href="../Uri.html" title="annotation interface in org.apache.juneau.marshall">Uri</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AsyncJobRef.</span><code><a href="../../rest/server/views/AsyncJobRef.html#cancelUrl" class="member-name-link">cancelUrl</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">The URL of the cancel endpoint (a non-safe POST); embeds <a href="../../rest/server/views/AsyncJobRef.html#jobId"><code>AsyncJobRef.jobId</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AsyncJobRef.</span><code><a href="../../rest/server/views/AsyncJobRef.html#streamUrl" class="member-name-link">streamUrl</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">The URL of the SSE progress stream (a browser <code>EventSource</code> target); embeds <a href="../../rest/server/views/AsyncJobRef.html#jobId"><code>AsyncJobRef.jobId</code></a>.</div>
 </div>
 </div>
 </section>

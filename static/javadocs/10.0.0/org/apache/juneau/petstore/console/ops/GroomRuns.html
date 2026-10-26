@@ -88,10 +88,10 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">The groom-pet demo runs behind the Jobs page's terminal cards.
 
  <p>
- A run writes about 60 ANSI-styled lines to a <a href="../../../rest/server/terminal/MemoryTerminalSource.html" title="class in org.apache.juneau.rest.server.terminal"><code>MemoryTerminalSource</code></a>, one step per tick: INFO and FINE lines
+ A run writes about 60 ANSI-styled lines to a <a href="../../../terminal/region/MemoryTerminalSource.html" title="class in org.apache.juneau.terminal.region"><code>MemoryTerminalSource</code></a>, one step per tick: INFO and FINE lines
  (FINE is dim), a WARNING, <code>check</code>/<code>cross</code> marks, a progress strip of coloured blocks, a multi-line
  SEVERE entry, bold marker lines, and a canned ANSI transcript written as-is.  Each tick also appends one ANSI line to
- a temp file, read through one <a href="../../../rest/server/terminal/FileTerminalSource.html" title="class in org.apache.juneau.rest.server.terminal"><code>FileTerminalSource</code></a> per run.  A verbose run first writes 8000
+ a temp file, read through one <a href="../../../terminal/region/FileTerminalSource.html" title="class in org.apache.juneau.terminal.region"><code>FileTerminalSource</code></a> per run.  A verbose run first writes 8000
  FINE lines.
 
  <p>
@@ -196,7 +196,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates the runs and starts one verbose run, so the Jobs page always has a log to show.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../rest/server/terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#source(java.lang.String)" class="member-name-link">source</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Resolves a terminal id: <code>&lt;runId&gt;</code> is the in-memory terminal, <code>&lt;runId&gt;-file</code> the file source.</div>
@@ -365,7 +365,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="source(java.lang.String)">
 <h3>source</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../rest/server/terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/GroomRuns.html#line-283">source</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/GroomRuns.html#line-283">source</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId)</span></div>
 <div class="block">Resolves a terminal id: <code>&lt;runId&gt;</code> is the in-memory terminal, <code>&lt;runId&gt;-file</code> the file source.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

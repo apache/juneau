@@ -104,7 +104,7 @@
 <span class="source-line-no">091</span><span id="line-91">      private String clientId;</span>
 <span class="source-line-no">092</span><span id="line-92">      private Supplier&lt;String&gt; clientSecretSupplier;</span>
 <span class="source-line-no">093</span><span id="line-93">      private URI redirectUri;</span>
-<span class="source-line-no">094</span><span id="line-94">      private Set&lt;String&gt; scopes = st();</span>
+<span class="source-line-no">094</span><span id="line-94">      private final Set&lt;String&gt; scopes = st();</span>
 <span class="source-line-no">095</span><span id="line-95">      private URI resource;</span>
 <span class="source-line-no">096</span><span id="line-96">      private Duration httpTimeout = Flows.DEFAULT_HTTP_TIMEOUT;</span>
 <span class="source-line-no">097</span><span id="line-97">      private Consumer&lt;HTTPRequest&gt; httpRequestConfigurator;</span>

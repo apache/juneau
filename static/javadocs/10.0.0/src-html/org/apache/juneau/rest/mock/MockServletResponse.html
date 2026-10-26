@@ -68,13 +68,13 @@
 <span class="source-line-no">055</span><span id="line-55">   }</span>
 <span class="source-line-no">056</span><span id="line-56"></span>
 <span class="source-line-no">057</span><span id="line-57">   private String characterEncoding = "UTF-8";</span>
-<span class="source-line-no">058</span><span id="line-58">   private ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="source-line-no">058</span><span id="line-58">   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
 <span class="source-line-no">059</span><span id="line-59">   private int bufferSize;</span>
 <span class="source-line-no">060</span><span id="line-60">   private Locale locale;</span>
 <span class="source-line-no">061</span><span id="line-61">   private int sc = 200;</span>
 <span class="source-line-no">062</span><span id="line-62">   private String msg;</span>
 <span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   private Map&lt;String,String[]&gt; headerMap = map();</span>
+<span class="source-line-no">064</span><span id="line-64">   private final Map&lt;String,String[]&gt; headerMap = map();</span>
 <span class="source-line-no">065</span><span id="line-65"></span>
 <span class="source-line-no">066</span><span id="line-66">   @Override /* Overridden from HttpServletResponse */</span>
 <span class="source-line-no">067</span><span id="line-67">   public void addCookie(Cookie cookie) {</span>

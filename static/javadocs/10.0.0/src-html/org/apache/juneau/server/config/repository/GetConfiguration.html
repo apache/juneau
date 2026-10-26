@@ -51,13 +51,13 @@
 <span class="source-line-no">038</span><span id="line-38">   private static final String PROJECT = "PROJECT";</span>
 <span class="source-line-no">039</span><span id="line-39">   private static final String EXT = ".cfg";</span>
 <span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">   private Map&lt;String,ConfigItem&gt; configs = new HashMap&lt;&gt;();</span>
+<span class="source-line-no">041</span><span id="line-41">   private final Map&lt;String,ConfigItem&gt; configs = new HashMap&lt;&gt;();</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
 <span class="source-line-no">043</span><span id="line-43">   @SuppressWarnings({</span>
 <span class="source-line-no">044</span><span id="line-44">      "java:S1845" // Field name intentionally differs only by case from static field PROJECT</span>
 <span class="source-line-no">045</span><span id="line-45">   })</span>
 <span class="source-line-no">046</span><span id="line-46">   private String project;</span>
-<span class="source-line-no">047</span><span id="line-47">   private String branch;</span>
+<span class="source-line-no">047</span><span id="line-47">   private final String branch;</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
 <span class="source-line-no">049</span><span id="line-49">   /**</span>
 <span class="source-line-no">050</span><span id="line-50">    * Constructor.</span>

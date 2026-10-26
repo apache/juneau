@@ -130,9 +130,9 @@
 <span class="source-line-no">117</span><span id="line-117">    */</span>
 <span class="source-line-no">118</span><span id="line-118">   static class Builder extends Context.Builder {</span>
 <span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">      private Method restMethod;</span>
-<span class="source-line-no">121</span><span id="line-121">      private RestContext restContext;</span>
-<span class="source-line-no">122</span><span id="line-122">      private Supplier&lt;Object&gt; restResourceSupplier;</span>
+<span class="source-line-no">120</span><span id="line-120">      private final Method restMethod;</span>
+<span class="source-line-no">121</span><span id="line-121">      private final RestContext restContext;</span>
+<span class="source-line-no">122</span><span id="line-122">      private final Supplier&lt;Object&gt; restResourceSupplier;</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
 <span class="source-line-no">124</span><span id="line-124">      Builder(Method method, RestContext context) {</span>
 <span class="source-line-no">125</span><span id="line-125">         this(method, context, null);</span>
@@ -1213,7 +1213,7 @@
 <span class="source-line-no">1200</span><span id="line-1200">         return Stream.empty();</span>
 <span class="source-line-no">1201</span><span id="line-1201">      return Arrays.stream(values)</span>
 <span class="source-line-no">1202</span><span id="line-1202">         .filter(Objects::nonNull)</span>
-<span class="source-line-no">1203</span><span id="line-1203">         .map(s -&gt; RestOpContext.this.context.getVarResolver().resolve(s))</span>
+<span class="source-line-no">1203</span><span id="line-1203">         .map(s -&gt; context.getVarResolver().resolve(s))</span>
 <span class="source-line-no">1204</span><span id="line-1204">         .map(StringUtils::split)</span>
 <span class="source-line-no">1205</span><span id="line-1205">         .flatMap(Collection::stream)</span>
 <span class="source-line-no">1206</span><span id="line-1206">         .map(String::trim)</span>

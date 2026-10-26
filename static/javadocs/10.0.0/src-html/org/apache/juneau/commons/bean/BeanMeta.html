@@ -136,10 +136,10 @@
 <span class="source-line-no">123</span><span id="line-123">    * Temporary getter/setter method struct used for calculating bean methods.</span>
 <span class="source-line-no">124</span><span id="line-124">    */</span>
 <span class="source-line-no">125</span><span id="line-125">   private static class BeanMethod {</span>
-<span class="source-line-no">126</span><span id="line-126">      private String propertyName;</span>
-<span class="source-line-no">127</span><span id="line-127">      private MethodType methodType;</span>
-<span class="source-line-no">128</span><span id="line-128">      private Method method;</span>
-<span class="source-line-no">129</span><span id="line-129">      private ClassInfo type;</span>
+<span class="source-line-no">126</span><span id="line-126">      private final String propertyName;</span>
+<span class="source-line-no">127</span><span id="line-127">      private final MethodType methodType;</span>
+<span class="source-line-no">128</span><span id="line-128">      private final Method method;</span>
+<span class="source-line-no">129</span><span id="line-129">      private final ClassInfo type;</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
 <span class="source-line-no">131</span><span id="line-131">      private BeanMethod(String propertyName, MethodType type, Method method) {</span>
 <span class="source-line-no">132</span><span id="line-132">         this.propertyName = propertyName;</span>

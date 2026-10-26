@@ -103,7 +103,7 @@
 <span class="source-line-no">090</span><span id="line-90">         RestResponse res = opSession.getResponse();</span>
 <span class="source-line-no">091</span><span id="line-91">         ResponseBeanMeta meta2 = req.getOpContext().getResponseBeanMeta(o);</span>
 <span class="source-line-no">092</span><span id="line-92">         if (meta2 == null)</span>
-<span class="source-line-no">093</span><span id="line-93">            meta2 = ResponseBeanArg.this.meta;</span>
+<span class="source-line-no">093</span><span id="line-93">            meta2 = meta;</span>
 <span class="source-line-no">094</span><span id="line-94">         res.setResponseBeanMeta(meta2);</span>
 <span class="source-line-no">095</span><span id="line-95">         res.setContent(o);</span>
 <span class="source-line-no">096</span><span id="line-96">      });</span>

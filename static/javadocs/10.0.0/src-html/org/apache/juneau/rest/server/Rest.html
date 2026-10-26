@@ -216,7 +216,7 @@
 <span class="source-line-no">203</span><span id="line-203">    * Children are &lt;b&gt;isolated from the parent's resolution chain&lt;/b&gt; by design — a child's serializers, parsers,</span>
 <span class="source-line-no">204</span><span id="line-204">    * guards, hooks, etc. are all resolved against the child's own {@link RestContext} only, NOT walked</span>
 <span class="source-line-no">205</span><span id="line-205">    * through the parent.  This is the opposite of how {@link #mixins() mixins} resolve.  See the</span>
-<span class="source-line-no">206</span><span id="line-206">    * &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence"&gt;REST Server — Mixin Sub-Contexts&lt;/a&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence"&gt;Mixin-vs-child divergence&lt;/a&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    * topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers</span>
 <span class="source-line-no">208</span><span id="line-208">    * sharing the host's URL namespace and resolution chain).</span>
 <span class="source-line-no">209</span><span id="line-209">    *</span>
@@ -268,7 +268,7 @@
 <span class="source-line-no">255</span><span id="line-255">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">256</span><span id="line-256">    *    &lt;li class='ja'&gt;{@link Child}</span>
 <span class="source-line-no">257</span><span id="line-257">    *    &lt;li class='jm'&gt;{@link #children()}</span>
-<span class="source-line-no">258</span><span id="line-258">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000"&gt;Child Resources&lt;/a&gt;</span>
+<span class="source-line-no">258</span><span id="line-258">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000"&gt;Host-side seeding with @Child (10.0.0)&lt;/a&gt;</span>
 <span class="source-line-no">259</span><span id="line-259">    * &lt;/ul&gt;</span>
 <span class="source-line-no">260</span><span id="line-260">    *</span>
 <span class="source-line-no">261</span><span id="line-261">    * @return The annotation value.</span>
@@ -316,7 +316,7 @@
 <span class="source-line-no">303</span><span id="line-303">    * Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.</span>
 <span class="source-line-no">304</span><span id="line-304">    * {@link #children() Children} are independently-mounted resources isolated from the host's resolution chain.</span>
 <span class="source-line-no">305</span><span id="line-305">    * See the</span>
-<span class="source-line-no">306</span><span id="line-306">    * &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence"&gt;REST Server — Mixin Sub-Contexts&lt;/a&gt;</span>
+<span class="source-line-no">306</span><span id="line-306">    * &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence"&gt;Mixin-vs-child divergence&lt;/a&gt;</span>
 <span class="source-line-no">307</span><span id="line-307">    * topic for the rationale.</span>
 <span class="source-line-no">308</span><span id="line-308">    *</span>
 <span class="source-line-no">309</span><span id="line-309">    * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</span>
@@ -546,7 +546,7 @@
 <span class="source-line-no">533</span><span id="line-533">    * Use {@link #noInherit()} to prevent inheriting less-derived contributions.</span>
 <span class="source-line-no">534</span><span id="line-534">    *</span>
 <span class="source-line-no">535</span><span id="line-535">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">536</span><span id="line-536">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties"&gt;Session Options via HTTP&lt;/a&gt;</span>
+<span class="source-line-no">536</span><span id="line-536">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties"&gt;Safe Properties&lt;/a&gt;</span>
 <span class="source-line-no">537</span><span id="line-537">    * &lt;/ul&gt;</span>
 <span class="source-line-no">538</span><span id="line-538">    *</span>
 <span class="source-line-no">539</span><span id="line-539">    * @return The annotation value.</span>
@@ -565,7 +565,7 @@
 <span class="source-line-no">552</span><span id="line-552">    * Use {@link #noInherit()} to prevent inheriting less-derived contributions.</span>
 <span class="source-line-no">553</span><span id="line-553">    *</span>
 <span class="source-line-no">554</span><span id="line-554">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">555</span><span id="line-555">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties"&gt;Session Options via HTTP&lt;/a&gt;</span>
+<span class="source-line-no">555</span><span id="line-555">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties"&gt;Safe Properties&lt;/a&gt;</span>
 <span class="source-line-no">556</span><span id="line-556">    * &lt;/ul&gt;</span>
 <span class="source-line-no">557</span><span id="line-557">    *</span>
 <span class="source-line-no">558</span><span id="line-558">    * @return The annotation value.</span>

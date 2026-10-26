@@ -56,21 +56,21 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
-<div class="col-last even-row-color">
-<div class="block">Engine-agnostic server-side-rendered view extension point.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
- module.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.freemarker">org.apache.juneau.console.freemarker</a></div>
 <div class="col-last even-row-color">
 <div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
- <code>&lt;@tag&gt;</code> macro, and <a href="../freemarker/console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ <code>&lt;@tag&gt;</code> macro, and <a href="../../../../console/freemarker/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker"><code>ConsoleFreemarkerMixin</code></a>
  (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
  configuration).</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Engine-agnostic server-side-rendered view extension point.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
+ module.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
 <div class="col-last odd-row-color">
@@ -87,6 +87,22 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.console.freemarker">
+<h2>Uses of <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a> in <a href="../../../../console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></h2>
+<div class="caption"><span>Classes in <a href="../../../../console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a> that implement <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../console/freemarker/ConsoleFreemarkerMixin.Builder.html" class="type-name-link" title="class in org.apache.juneau.console.freemarker">ConsoleFreemarkerMixin.Builder</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Builder for <a href="../../../../console/freemarker/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker"><code>ConsoleFreemarkerMixin</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.rest.server.view">
 <h2>Uses of <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a> in <a href="../package-summary.html">org.apache.juneau.rest.server.view</a></h2>
@@ -117,22 +133,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../freemarker/FreemarkerMixin.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder for <a href="../freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a>.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
-<h2>Uses of <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a> in <a href="../freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></h2>
-<div class="caption"><span>Classes in <a href="../freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a> that implement <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../freemarker/console/ConsoleFreemarkerMixin.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server.view.freemarker.console">ConsoleFreemarkerMixin.Builder</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Builder for <a href="../freemarker/console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>.</div>
 </div>
 </div>
 </section>

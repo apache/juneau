@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">   private static final String HEADER_ContentType = "Content-Type";</span>
 <span class="source-line-no">134</span><span id="line-134">   private static final Pattern ENCODING_DISABLED_PATTERN = Pattern.compile("(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0)");</span>
 <span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   private HttpServletResponse inner;</span>
+<span class="source-line-no">136</span><span id="line-136">   private final HttpServletResponse inner;</span>
 <span class="source-line-no">137</span><span id="line-137">   private final RestRequest request;</span>
 <span class="source-line-no">138</span><span id="line-138"></span>
 <span class="source-line-no">139</span><span id="line-139">   private Optional&lt;Object&gt; content;  // The POJO being sent to the output.</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141">   private FinishableServletOutputStream os;</span>
 <span class="source-line-no">142</span><span id="line-142">   private FinishablePrintWriter w;</span>
 <span class="source-line-no">143</span><span id="line-143">   private ResponseBeanMeta responseBeanMeta;</span>
-<span class="source-line-no">144</span><span id="line-144">   private RestOpContext opContext;</span>
+<span class="source-line-no">144</span><span id="line-144">   private final RestOpContext opContext;</span>
 <span class="source-line-no">145</span><span id="line-145">   private Optional&lt;HttpPartSchema&gt; contentSchema;</span>
 <span class="source-line-no">146</span><span id="line-146">   private Serializer serializer;</span>
 <span class="source-line-no">147</span><span id="line-147">   private Optional&lt;SerializerMatch&gt; serializerMatch;</span>
@@ -590,7 +590,7 @@
 <span class="source-line-no">577</span><span id="line-577">    */</span>
 <span class="source-line-no">578</span><span id="line-578">   @Override</span>
 <span class="source-line-no">579</span><span id="line-579">   public void sendRedirect(String uri) throws IOException {</span>
-<span class="source-line-no">580</span><span id="line-580">      var c = (!uri.isEmpty() ? uri.charAt(0) : 0);</span>
+<span class="source-line-no">580</span><span id="line-580">      var c = (uri.isEmpty() ? 0 : uri.charAt(0));</span>
 <span class="source-line-no">581</span><span id="line-581">      if (c != '/' &amp;&amp; uri.indexOf("://") == -1)</span>
 <span class="source-line-no">582</span><span id="line-582">         uri = request.getContextPath() + '/' + uri;</span>
 <span class="source-line-no">583</span><span id="line-583">      inner.sendRedirect(uri);</span>

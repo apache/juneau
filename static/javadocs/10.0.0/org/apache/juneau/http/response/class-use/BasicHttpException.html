@@ -60,28 +60,28 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Adapters that build <a href="../../../bean/rfc7807/Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a> beans from Juneau HTTP error types.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.response">org.apache.juneau.http.response</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.data">org.apache.juneau.console.data</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Server helpers for console data sources: <a href="../../../console/data/SeriesSource.html" title="class in org.apache.juneau.console.data"><code>SeriesSource</code></a> streams
+ rows as CSV or NDJSON, and <a href="../../../console/data/SeriesAggregator.html" title="class in org.apache.juneau.console.data"><code>SeriesAggregator</code></a> answers the
+ aggregate request a data source sends when its result is too large to load raw.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.response">org.apache.juneau.http.response</a></div>
+<div class="col-last even-row-color">
 <div class="block">Next-generation HTTP response types.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.arg">org.apache.juneau.rest.server.arg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.arg">org.apache.juneau.rest.server.arg</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Method Argument Beans</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.auth">org.apache.juneau.rest.server.auth</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.auth">org.apache.juneau.rest.server.auth</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Authentication (AuthN) guards, servlet-layer filters, SPIs, and request-time helpers for
  <code>juneau-rest-server</code>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console.data">org.apache.juneau.rest.server.console.data</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Server helpers for console data sources: <a href="../../../rest/server/console/data/SeriesSource.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesSource</code></a> streams
- rows as CSV or NDJSON, and <a href="../../../rest/server/console/data/SeriesAggregator.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesAggregator</code></a> answers the
- aggregate request a data source sends when its result is too large to load raw.</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
 <div class="col-last even-row-color">
@@ -151,6 +151,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Builds a <a href="../../../bean/rfc7807/Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a> from a <a href="../BasicHttpException.html" title="class in org.apache.juneau.http.response"><code>BasicHttpException</code></a> (or any subclass like <code>NotFound</code>,
  <code>InternalServerError</code>, etc).</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.data">
+<h2>Uses of <a href="../BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> in <a href="../../../console/data/package-summary.html">org.apache.juneau.console.data</a></h2>
+<div class="caption"><span>Subclasses of <a href="../BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> in <a href="../../../console/data/package-summary.html">org.apache.juneau.console.data</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../console/data/SeriesAggregator.RequestException.html" class="type-name-link" title="class in org.apache.juneau.console.data">SeriesAggregator.RequestException</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A rejected aggregate request: HTTP 400 with an E-75 message.</div>
 </div>
 </div>
 </section>
@@ -805,22 +821,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Specialization of <a href="../Unauthorized.html" title="class in org.apache.juneau.http.response"><code>Unauthorized</code></a> thrown by <a href="../../../rest/server/auth/BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a>, <a href="../../../rest/server/auth/ApiKeyGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>ApiKeyGuard</code></a>, and
  user-supplied <a href="../../../rest/server/auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a> / <a href="../../../rest/server/auth/ApiKeyStore.html" title="interface in org.apache.juneau.rest.server.auth"><code>ApiKeyStore</code></a> implementations to signal AuthN failure.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.console.data">
-<h2>Uses of <a href="../BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> in <a href="../../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></h2>
-<div class="caption"><span>Subclasses of <a href="../BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> in <a href="../../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../rest/server/console/data/SeriesAggregator.RequestException.html" class="type-name-link" title="class in org.apache.juneau.rest.server.console.data">SeriesAggregator.RequestException</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">A rejected aggregate request: HTTP 400 with an E-75 message.</div>
 </div>
 </div>
 </section>

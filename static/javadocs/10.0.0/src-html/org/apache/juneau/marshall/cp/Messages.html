@@ -381,10 +381,10 @@
 <span class="source-line-no">368</span><span id="line-368">      return new Messages(c.c, c.rb, c.locale, spliceLeafParent(c.parent2, newLeafParent));</span>
 <span class="source-line-no">369</span><span id="line-369">   }</span>
 <span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   private ResourceBundle rb;</span>
-<span class="source-line-no">372</span><span id="line-372">   private Class&lt;?&gt; c;</span>
-<span class="source-line-no">373</span><span id="line-373">   private Messages parent2;</span>
-<span class="source-line-no">374</span><span id="line-374">   private Locale locale;</span>
+<span class="source-line-no">371</span><span id="line-371">   private final ResourceBundle rb;</span>
+<span class="source-line-no">372</span><span id="line-372">   private final Class&lt;?&gt; c;</span>
+<span class="source-line-no">373</span><span id="line-373">   private final Messages parent2;</span>
+<span class="source-line-no">374</span><span id="line-374">   private final Locale locale;</span>
 <span class="source-line-no">375</span><span id="line-375"></span>
 <span class="source-line-no">376</span><span id="line-376">   // Cache of message bundles per locale.</span>
 <span class="source-line-no">377</span><span id="line-377">   private final ConcurrentHashMap&lt;Locale,Messages&gt; localizedMessages = new ConcurrentHashMap&lt;&gt;();</span>

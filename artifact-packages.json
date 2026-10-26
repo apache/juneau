@@ -1,4 +1,5 @@
 {
+  "juneau-bct": "org/apache/juneau/bct",
   "juneau-bean-atom": "org/apache/juneau/bean/atom",
   "juneau-bean-common": "org/apache/juneau/bean",
   "juneau-bean-hal": "org/apache/juneau/bean/hal",
@@ -16,6 +17,14 @@
   "juneau-beanquery-sql": "org/apache/juneau/beanquery/sql",
   "juneau-commons": "org/apache/juneau/commons",
   "juneau-config": "org/apache/juneau/config",
+  "juneau-console": "org/apache/juneau/console",
+  "juneau-console-bus": "org/apache/juneau/console/bus",
+  "juneau-console-bus-websocket": "org/apache/juneau/console/bus/websocket",
+  "juneau-console-datatables": "org/apache/juneau/console/datatables",
+  "juneau-console-freemarker": "org/apache/juneau/console/freemarker",
+  "juneau-console-views": "org/apache/juneau/console/views",
+  "juneau-console-views-markdown": "org/apache/juneau/console/views/markdown",
+  "juneau-console-widgets": "org/apache/juneau/console/widgets",
   "juneau-marshall": "org/apache/juneau/marshall",
   "juneau-marshall-rdf": "org/apache/juneau/marshall/jena",
   "juneau-microservice": "org/apache/juneau/microservice",
@@ -61,6 +70,9 @@
   "juneau-rest-server-view-thymeleaf": "org/apache/juneau/rest/server/view/thymeleaf",
   "juneau-sc-server": "org/apache/juneau/server/config",
   "juneau-secret-macos-keychain": "org/apache/juneau/secret/macos/keychain",
+  "juneau-terminal-bus": "org/apache/juneau/terminal/bus",
+  "juneau-terminal-region": "org/apache/juneau/terminal/region",
+  "juneau-terminal-report": "org/apache/juneau/terminal/report",
   "juneau-test-marshall-utils": "org/apache/juneau",
   "juneau-test-utils": "org/apache/juneau"
 }

@@ -31,100 +31,99 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.http.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> * Converts a Java object passed to {@link RestRequest#body(Object)} into a {@link TransportBody}.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * A list of converters is consulted in order; the first converter whose {@link #canConvert(Object)} returns</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@code true} wins. The default converter list (applied automatically by {@link RestClient}) handles</span>
-<span class="source-line-no">029</span><span id="line-29"> * the common cases:</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;ol&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;{@link HttpBody} — passed through directly (streaming preferred over buffering)</span>
-<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;{@link InputStream} — wrapped in a streaming body</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;{@code byte[]} — wrapped in a byte-array body</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;{@link File} — wrapped in a file body</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;/ol&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> * Custom converters are registered on the builder and are prepended to the default list</span>
-<span class="source-line-no">039</span><span id="line-39"> * (checked before the defaults). Use the {@link #of(Class, ThrowingConverter)} factory for concise lambdas:</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    RestClient &lt;jv&gt;client&lt;/jv&gt; = RestClient.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
-<span class="source-line-no">044</span><span id="line-44"> *       .bodyConverter(BodyConverter.&lt;jsm&gt;of&lt;/jsm&gt;(MyBean.&lt;jk&gt;class&lt;/jk&gt;,</span>
-<span class="source-line-no">045</span><span id="line-45"> *          &lt;jv&gt;bean&lt;/jv&gt; -&amp;gt; TransportBody.&lt;jsm&gt;of&lt;/jsm&gt;(StringBody.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;mySerializer&lt;/jv&gt;.write(&lt;jv&gt;bean&lt;/jv&gt;)))))</span>
-<span class="source-line-no">046</span><span id="line-46"> *       .build();</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * @param &lt;T&gt; The type this converter handles.</span>
-<span class="source-line-no">054</span><span id="line-54"> * @since 9.2.1</span>
-<span class="source-line-no">055</span><span id="line-55"> */</span>
-<span class="source-line-no">056</span><span id="line-56">@SuppressWarnings({</span>
-<span class="source-line-no">057</span><span id="line-57">   "java:S2326" // 'T' is a phantom type parameter binding a converter to its handled type for type-safe registration (BodyConverter&lt;?&gt; lists) and the of() factory; removing it would break this public API.</span>
-<span class="source-line-no">058</span><span id="line-58">})</span>
-<span class="source-line-no">059</span><span id="line-59">public interface BodyConverter&lt;T&gt; {</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   /**</span>
-<span class="source-line-no">062</span><span id="line-62">    * Returns {@code true} if this converter can handle the given value.</span>
-<span class="source-line-no">063</span><span id="line-63">    *</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param value The value passed to {@link RestRequest#body(Object)}. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @return {@code true} if {@link #convert(Object)} should be called with this value.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   boolean canConvert(Object value);</span>
-<span class="source-line-no">068</span><span id="line-68"></span>
-<span class="source-line-no">069</span><span id="line-69">   /**</span>
-<span class="source-line-no">070</span><span id="line-70">    * Converts the value to a {@link TransportBody}.</span>
-<span class="source-line-no">071</span><span id="line-71">    *</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param value The value. Never &lt;jk&gt;null&lt;/jk&gt; (converters are only called when {@link #canConvert} returns true).</span>
-<span class="source-line-no">073</span><span id="line-73">    * @return The transport body. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">074</span><span id="line-74">    * @throws IOException If conversion fails.</span>
-<span class="source-line-no">075</span><span id="line-75">    */</span>
-<span class="source-line-no">076</span><span id="line-76">   TransportBody convert(Object value) throws IOException;</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Creates a {@link BodyConverter} from a type predicate and a converting lambda.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * &lt;p&gt;</span>
-<span class="source-line-no">082</span><span id="line-82">    * The converter matches any value that is an instance of the given type.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param &lt;T&gt; The type to handle.</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param type The type to match via {@code instanceof}. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param converter The conversion function. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">087</span><span id="line-87">    * @return A new converter. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   static &lt;T&gt; BodyConverter&lt;T&gt; of(Class&lt;T&gt; type, ThrowingConverter&lt;T&gt; converter) {</span>
-<span class="source-line-no">090</span><span id="line-90">      return new BodyConverter&lt;&gt;() {</span>
-<span class="source-line-no">091</span><span id="line-91">         @Override public boolean canConvert(Object value) { return type.isInstance(value); }</span>
-<span class="source-line-no">092</span><span id="line-92">         @Override public TransportBody convert(Object value) throws IOException { return converter.apply(type.cast(value)); }</span>
-<span class="source-line-no">093</span><span id="line-93">      };</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   /**</span>
-<span class="source-line-no">097</span><span id="line-97">    * A checked function used by {@link BodyConverter#of(Class, ThrowingConverter)}.</span>
-<span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param &lt;T&gt; The input type.</span>
-<span class="source-line-no">100</span><span id="line-100">    * @since 9.2.1</span>
-<span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   @FunctionalInterface</span>
-<span class="source-line-no">103</span><span id="line-103">   interface ThrowingConverter&lt;T&gt; {</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">      /**</span>
-<span class="source-line-no">106</span><span id="line-106">       * Converts the given value to a {@link TransportBody}.</span>
-<span class="source-line-no">107</span><span id="line-107">       *</span>
-<span class="source-line-no">108</span><span id="line-108">       * @param value The value. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">109</span><span id="line-109">       * @return The transport body. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">110</span><span id="line-110">       * @throws IOException If conversion fails.</span>
-<span class="source-line-no">111</span><span id="line-111">       */</span>
-<span class="source-line-no">112</span><span id="line-112">      TransportBody apply(T value) throws IOException;</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114">}</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">/**</span>
+<span class="source-line-no">023</span><span id="line-23"> * Converts a Java object passed to {@link RestRequest#body(Object)} into a {@link TransportBody}.</span>
+<span class="source-line-no">024</span><span id="line-24"> *</span>
+<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
+<span class="source-line-no">026</span><span id="line-26"> * A list of converters is consulted in order; the first converter whose {@link #canConvert(Object)} returns</span>
+<span class="source-line-no">027</span><span id="line-27"> * {@code true} wins. The default converter list (applied automatically by {@link RestClient}) handles</span>
+<span class="source-line-no">028</span><span id="line-28"> * the common cases:</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;ol&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> *    &lt;li&gt;{@link HttpBody} — passed through directly (streaming preferred over buffering)</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;{@link InputStream} — wrapped in a streaming body</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;{@code byte[]} — wrapped in a byte-array body</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;{@link File} — wrapped in a file body</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;/ol&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * Custom converters are registered on the builder and are prepended to the default list</span>
+<span class="source-line-no">038</span><span id="line-38"> * (checked before the defaults). Use the {@link #of(Class, ThrowingConverter)} factory for concise lambdas:</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    RestClient &lt;jv&gt;client&lt;/jv&gt; = RestClient.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
+<span class="source-line-no">043</span><span id="line-43"> *       .bodyConverter(BodyConverter.&lt;jsm&gt;of&lt;/jsm&gt;(MyBean.&lt;jk&gt;class&lt;/jk&gt;,</span>
+<span class="source-line-no">044</span><span id="line-44"> *          &lt;jv&gt;bean&lt;/jv&gt; -&amp;gt; TransportBody.&lt;jsm&gt;of&lt;/jsm&gt;(StringBody.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;mySerializer&lt;/jv&gt;.write(&lt;jv&gt;bean&lt;/jv&gt;)))))</span>
+<span class="source-line-no">045</span><span id="line-45"> *       .build();</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/p&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *</span>
+<span class="source-line-no">052</span><span id="line-52"> * @param &lt;T&gt; The type this converter handles.</span>
+<span class="source-line-no">053</span><span id="line-53"> * @since 9.2.1</span>
+<span class="source-line-no">054</span><span id="line-54"> */</span>
+<span class="source-line-no">055</span><span id="line-55">@SuppressWarnings({</span>
+<span class="source-line-no">056</span><span id="line-56">   "java:S2326" // 'T' is a phantom type parameter binding a converter to its handled type for type-safe registration (BodyConverter&lt;?&gt; lists) and the of() factory; removing it would break this public API.</span>
+<span class="source-line-no">057</span><span id="line-57">})</span>
+<span class="source-line-no">058</span><span id="line-58">public interface BodyConverter&lt;T&gt; {</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   /**</span>
+<span class="source-line-no">061</span><span id="line-61">    * Returns {@code true} if this converter can handle the given value.</span>
+<span class="source-line-no">062</span><span id="line-62">    *</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param value The value passed to {@link RestRequest#body(Object)}. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">064</span><span id="line-64">    * @return {@code true} if {@link #convert(Object)} should be called with this value.</span>
+<span class="source-line-no">065</span><span id="line-65">    */</span>
+<span class="source-line-no">066</span><span id="line-66">   boolean canConvert(Object value);</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">   /**</span>
+<span class="source-line-no">069</span><span id="line-69">    * Converts the value to a {@link TransportBody}.</span>
+<span class="source-line-no">070</span><span id="line-70">    *</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param value The value. Never &lt;jk&gt;null&lt;/jk&gt; (converters are only called when {@link #canConvert} returns true).</span>
+<span class="source-line-no">072</span><span id="line-72">    * @return The transport body. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @throws IOException If conversion fails.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   TransportBody convert(Object value) throws IOException;</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">   /**</span>
+<span class="source-line-no">078</span><span id="line-78">    * Creates a {@link BodyConverter} from a type predicate and a converting lambda.</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81">    * The converter matches any value that is an instance of the given type.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param &lt;T&gt; The type to handle.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param type The type to match via {@code instanceof}. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param converter The conversion function. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">086</span><span id="line-86">    * @return A new converter. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">087</span><span id="line-87">    */</span>
+<span class="source-line-no">088</span><span id="line-88">   static &lt;T&gt; BodyConverter&lt;T&gt; of(Class&lt;T&gt; type, ThrowingConverter&lt;T&gt; converter) {</span>
+<span class="source-line-no">089</span><span id="line-89">      return new BodyConverter&lt;&gt;() {</span>
+<span class="source-line-no">090</span><span id="line-90">         @Override public boolean canConvert(Object value) { return type.isInstance(value); }</span>
+<span class="source-line-no">091</span><span id="line-91">         @Override public TransportBody convert(Object value) throws IOException { return converter.apply(type.cast(value)); }</span>
+<span class="source-line-no">092</span><span id="line-92">      };</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * A checked function used by {@link BodyConverter#of(Class, ThrowingConverter)}.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param &lt;T&gt; The input type.</span>
+<span class="source-line-no">099</span><span id="line-99">    * @since 9.2.1</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   @FunctionalInterface</span>
+<span class="source-line-no">102</span><span id="line-102">   interface ThrowingConverter&lt;T&gt; {</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">      /**</span>
+<span class="source-line-no">105</span><span id="line-105">       * Converts the given value to a {@link TransportBody}.</span>
+<span class="source-line-no">106</span><span id="line-106">       *</span>
+<span class="source-line-no">107</span><span id="line-107">       * @param value The value. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">108</span><span id="line-108">       * @return The transport body. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">109</span><span id="line-109">       * @throws IOException If conversion fails.</span>
+<span class="source-line-no">110</span><span id="line-110">       */</span>
+<span class="source-line-no">111</span><span id="line-111">      TransportBody apply(T value) throws IOException;</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113">}</span>
 
 
 

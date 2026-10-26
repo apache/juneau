@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">   public SortedArrayList(Comparator&lt;? super E&gt; comparator, Collection&lt;? extends E&gt; c) {</span>
 <span class="source-line-no">159</span><span id="line-159">      this.comparator = reqnn("comparator", comparator);</span>
 <span class="source-line-no">160</span><span id="line-160">      this.list = new ArrayList&lt;&gt;(c);</span>
-<span class="source-line-no">161</span><span id="line-161">      Collections.sort(this.list, this.comparator);</span>
+<span class="source-line-no">161</span><span id="line-161">      this.list.sort(this.comparator);</span>
 <span class="source-line-no">162</span><span id="line-162">   }</span>
 <span class="source-line-no">163</span><span id="line-163"></span>
 <span class="source-line-no">164</span><span id="line-164">   /**</span>

@@ -107,18 +107,18 @@
 <span class="source-line-no">094</span><span id="line-94">})</span>
 <span class="source-line-no">095</span><span id="line-95">public class Operation extends OpenApiElement {</span>
 <span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   private List&lt;String&gt; tags = list();</span>
+<span class="source-line-no">097</span><span id="line-97">   private final List&lt;String&gt; tags = list();</span>
 <span class="source-line-no">098</span><span id="line-98">   private String summary;</span>
 <span class="source-line-no">099</span><span id="line-99">   private String description;</span>
 <span class="source-line-no">100</span><span id="line-100">   private String operationId;</span>
 <span class="source-line-no">101</span><span id="line-101">   private ExternalDocumentation externalDocs;</span>
-<span class="source-line-no">102</span><span id="line-102">   private List&lt;Parameter&gt; parameters = list();</span>
+<span class="source-line-no">102</span><span id="line-102">   private final List&lt;Parameter&gt; parameters = list();</span>
 <span class="source-line-no">103</span><span id="line-103">   private RequestBodyInfo requestBody;</span>
-<span class="source-line-no">104</span><span id="line-104">   private Map&lt;String,Response&gt; responses = map();</span>
-<span class="source-line-no">105</span><span id="line-105">   private Map&lt;String,Callback&gt; callbacks = map();</span>
+<span class="source-line-no">104</span><span id="line-104">   private final Map&lt;String,Response&gt; responses = map();</span>
+<span class="source-line-no">105</span><span id="line-105">   private final Map&lt;String,Callback&gt; callbacks = map();</span>
 <span class="source-line-no">106</span><span id="line-106">   private Boolean deprecated;</span>
-<span class="source-line-no">107</span><span id="line-107">   private List&lt;SecurityRequirement&gt; security = list();</span>
-<span class="source-line-no">108</span><span id="line-108">   private List&lt;Server&gt; servers = list();</span>
+<span class="source-line-no">107</span><span id="line-107">   private final List&lt;SecurityRequirement&gt; security = list();</span>
+<span class="source-line-no">108</span><span id="line-108">   private final List&lt;Server&gt; servers = list();</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
 <span class="source-line-no">110</span><span id="line-110">   /**</span>
 <span class="source-line-no">111</span><span id="line-111">    * Default constructor.</span>

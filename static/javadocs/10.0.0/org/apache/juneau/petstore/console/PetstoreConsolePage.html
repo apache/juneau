@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  The views and DataTables toolkit packs link their assets page-relative (e.g. <code>/console/store/juneau-views.js</code>),
- so every page also composes <a href="../../rest/server/views/ViewsMixin.html" title="class in org.apache.juneau.rest.server.views"><code>ViewsMixin</code></a> and <a href="../../rest/server/datatables/DataTablesMixin.html" title="class in org.apache.juneau.rest.server.datatables"><code>DataTablesMixin</code></a> to serve them from its own mount.
+ so every page also composes <a href="../../console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views"><code>ViewsMixin</code></a> and <a href="../../console/datatables/DataTablesMixin.html" title="class in org.apache.juneau.console.datatables"><code>DataTablesMixin</code></a> to serve them from its own mount.
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -199,8 +199,8 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#store()" class="member-name-link">store</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.view.freemarker.console.PageSpec)" class="member-name-link">twin</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
- <a href="../../rest/server/view/freemarker/console/PageSpec.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageSpec</a>&nbsp;spec)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.console.freemarker.PageSpec)" class="member-name-link">twin</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a>&nbsp;spec)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Renders a builder-twin page, marked with <a href="#PAGE_HEADER"><code>PAGE_HEADER</code></a>.</div>
 </div>
@@ -291,15 +291,15 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>req</code> - The request.</dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if the page should render from its <a href="../../rest/server/view/freemarker/console/PageSpec.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>PageSpec</code></a>.</dd>
+<dd><jk>true</jk> if the page should render from its <a href="../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker"><code>PageSpec</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.view.freemarker.console.PageSpec)">
+<section class="detail" id="twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.console.freemarker.PageSpec)">
 <h3>twin</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsolePage.html#line-80">twin</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
- <a href="../../rest/server/view/freemarker/console/PageSpec.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageSpec</a>&nbsp;spec)</span></div>
+ <a href="../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a>&nbsp;spec)</span></div>
 <div class="block">Renders a builder-twin page, marked with <a href="#PAGE_HEADER"><code>PAGE_HEADER</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

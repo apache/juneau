@@ -80,6 +80,40 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Internal classes</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console">org.apache.juneau.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../../../console/Theme.html" title="class in org.apache.juneau.console"><code>Theme</code></a>, the stock
+ theme stylesheets, the bundled <code>chrome.css</code> asset, and
+ <a href="../../../console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console"><code>ConsoleChromeMixin</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.bus">org.apache.juneau.console.bus</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Server half of the console message bus.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.data">org.apache.juneau.console.data</a></div>
+<div class="col-last even-row-color">
+<div class="block">Server helpers for console data sources: <a href="../../../console/data/SeriesSource.html" title="class in org.apache.juneau.console.data"><code>SeriesSource</code></a> streams
+ rows as CSV or NDJSON, and <a href="../../../console/data/SeriesAggregator.html" title="class in org.apache.juneau.console.data"><code>SeriesAggregator</code></a> answers the
+ aggregate request a data source sends when its result is too large to load raw.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.freemarker">org.apache.juneau.console.freemarker</a></div>
+<div class="col-last odd-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="../../../console/freemarker/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.console.freemarker"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.test">org.apache.juneau.console.test</a></div>
+<div class="col-last even-row-color">
+<div class="block">Test helpers for console pages: <a href="../../../console/test/PageContractAssert.html" title="class in org.apache.juneau.console.test"><code>PageContractAssert</code></a> asserts on the
+ <code>#juneau-page</code> contract of a rendered page instead of on rendered chrome HTML, and
+ <a href="../../../console/test/AssetResolutionAssert.html" title="class in org.apache.juneau.console.test"><code>AssetResolutionAssert</code></a> asserts that every asset a page links resolves.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.views">org.apache.juneau.console.views</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
 <div class="col-last even-row-color">
 <div class="block">Marshalling API</div>
@@ -144,48 +178,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Petstore console users page and its JSON endpoints.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.bus">org.apache.juneau.rest.server.bus</a></div>
-<div class="col-last even-row-color">
-<div class="block">Server half of the console message bus.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console">org.apache.juneau.rest.server.console</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../../../rest/server/console/Theme.html" title="class in org.apache.juneau.rest.server.console"><code>Theme</code></a>, the stock
- theme stylesheets, the bundled <code>chrome.css</code> asset, and
- <a href="../../../rest/server/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.rest.server.console"><code>ConsoleChromeMixin</code></a>.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.console.data">org.apache.juneau.rest.server.console.data</a></div>
-<div class="col-last even-row-color">
-<div class="block">Server helpers for console data sources: <a href="../../../rest/server/console/data/SeriesSource.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesSource</code></a> streams
- rows as CSV or NDJSON, and <a href="../../../rest/server/console/data/SeriesAggregator.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesAggregator</code></a> answers the
- aggregate request a data source sends when its result is too large to load raw.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console.test">org.apache.juneau.rest.server.console.test</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Test helpers for console pages: <a href="../../../rest/server/console/test/PageContractAssert.html" title="class in org.apache.juneau.rest.server.console.test"><code>PageContractAssert</code></a> asserts on the
- <code>#juneau-page</code> contract of a rendered page instead of on rendered chrome HTML, and
- <a href="../../../rest/server/console/test/AssetResolutionAssert.html" title="class in org.apache.juneau.rest.server.console.test"><code>AssetResolutionAssert</code></a> asserts that every asset a page links resolves.</div>
-</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
 <div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.terminal.bus">org.apache.juneau.rest.server.terminal.bus</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.terminal.bus">org.apache.juneau.terminal.bus</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Connects terminals to the Juneau server bus: the <code>term.input</code> upstream handler, and the <code>term.nudge:&lt;id&gt;</code>
  downstream nudges that tell a terminal card when new bytes are ready.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
-<div class="col-last even-row-color">
-<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
- <code>&lt;@tag&gt;</code> macro, and <a href="../../../rest/server/view/freemarker/console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
- (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
- configuration).</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
-<div class="col-last odd-row-color">
-<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
- contract consumed by the first-party client runtime.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -379,6 +379,367 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">ConfigMap.</span><code><a href="../../../config/internal/ConfigMap.html#asMap()" class="member-name-link">asMap</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns the values in this config map as a map of maps.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../console/package-summary.html">org.apache.juneau.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../../console/package-summary.html">org.apache.juneau.console</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CardSource.</span><code><a href="../../../console/CardSource.html#json()" class="member-name-link">json</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Parses the body as JSON5 (cached after the first call).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CardTypeRegistry.</span><code><a href="../../../console/CardTypeRegistry.html#toCard(org.apache.juneau.console.CardSource)" class="member-name-link">toCard</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The single server path for both <code>&lt;@card&gt;</code> and C3's <code>PageSpec</code>: validates the body (E-23),
+ dispatches to <a href="../../../console/CardTypeRegistry.html#handler(java.lang.String)"><code>CardTypeRegistry.handler(String)</code></a>, and merges the fragment flat onto the card's base keys.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CardTypeHandler.</span><code><a href="../../../console/CardTypeHandler.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Validates the authored card and returns its contract fragment.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlCardType.</span><code><a href="../../../console/HtmlCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BridgeDecl.</span><code><a href="../../../console/BridgeDecl.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Subscription.</span><code><a href="../../../console/Subscription.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TopicDecl.</span><code><a href="../../../console/TopicDecl.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TopicDecl.</span><code><a href="../../../console/TopicDecl.html#toPublicationMap()" class="member-name-link">toPublicationMap</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../../console/package-summary.html">org.apache.juneau.console</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CardTypeHandler.</span><code><a href="../../../console/CardTypeHandler.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">implicitTopics</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;card)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Topics this card publishes without declaring them, for R-10.</div>
+</div>
+<div class="col-first odd-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CardTypeHandler.</span><code><a href="../../../console/CardTypeHandler.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../console/BusWiringValidator.Problem.html" title="class in org.apache.juneau.console">BusWiringValidator.Problem</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusWiringValidator.</span><code><a href="../../../console/BusWiringValidator.html#validate(org.apache.juneau.marshall.collections.JsonMap,org.apache.juneau.console.CardTypeRegistry)" class="member-name-link">validate</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;contract,
+ <a href="../../../console/CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a>&nbsp;registry)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Checks a page contract's bus wiring.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.bus">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../console/bus/package-summary.html">org.apache.juneau.console.bus</a></h2>
+<div class="caption"><span>Methods in <a href="../../../console/bus/package-summary.html">org.apache.juneau.console.bus</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusFrames.</span><code><a href="../../../console/bus/BusFrames.html#decode(java.lang.String)" class="member-name-link">decode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Decodes and validates one frame.</div>
+</div>
+<div class="col-first odd-row-color"><code>default <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusEventsMixin.</span><code><a href="../../../console/bus/BusEventsMixin.html#openBusSession(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">openBusSession</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[POST /juneau-bus/session] &mdash; opens a bus session.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusRefusal.</span><code><a href="../../../console/bus/BusRefusal.html#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The refusal body: <code>{code, message, denied?}</code>.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../../console/bus/package-summary.html">org.apache.juneau.console.bus</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UpstreamHandler.</span><code><a href="../../../console/bus/UpstreamHandler.html#handle(org.apache.juneau.console.bus.BusSession,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">handle</a><wbr>(<a href="../../../console/bus/BusSession.html" title="interface in org.apache.juneau.console.bus">BusSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;payload)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Handles one upstream publish.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../console/bus/BusSession.html" title="interface in org.apache.juneau.console.bus">BusSession</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ServerBus.</span><code><a href="../../../console/bus/ServerBus.html#openSession(jakarta.servlet.http.HttpServletRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">openSession</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Transport SPI: opens a session from a session POST body.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.data">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../console/data/package-summary.html">org.apache.juneau.console.data</a></h2>
+<div class="caption"><span>Methods in <a href="../../../console/data/package-summary.html">org.apache.juneau.console.data</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SeriesAggregator.Result.</span><code><a href="../../../console/data/SeriesAggregator.Result.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The response body: <c>{schemaVersion, dims:[{name,type}], columns, truncated}</c>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.freemarker">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></h2>
+<div class="caption"><span>Methods in <a href="../../../console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../console/freemarker/ChartDef.html#legendItem(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">legendItem</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tone)</code></div>
+<div class="col-last even-row-color">
+<div class="block">One entry of a treemap colour key.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Fn.</span><code><a href="../../../console/freemarker/Fn.html#ref(java.lang.String)" class="member-name-link">ref</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Fn.</span><code><a href="../../../console/freemarker/Fn.html#ref(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">ref</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ChartCardType.</span><code><a href="../../../console/freemarker/ChartCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DatatablesCardType.</span><code><a href="../../../console/freemarker/DatatablesCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JobLogCardType.</span><code><a href="../../../console/freemarker/JobLogCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalCardType.</span><code><a href="../../../console/freemarker/TerminalCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Annotations.</span><code><a href="../../../console/freemarker/Annotations.html#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Bands.</span><code><a href="../../../console/freemarker/Bands.html#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Decorator.</span><code><a href="../../../console/freemarker/Decorator.html#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Markers.</span><code><a href="../../../console/freemarker/Markers.html#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Thresholds.</span><code><a href="../../../console/freemarker/Thresholds.html#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataSourceDef.</span><code><a href="../../../console/freemarker/DataSourceDef.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The <c>contract.dataSources[]</c> entry; checks the cross-field rules.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Derived.</span><code><a href="../../../console/freemarker/Derived.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The <c>contract.dataSources[]</c> entry.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../../console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../console/freemarker/ChartDef.html#colorBy(java.lang.String,org.apache.juneau.marshall.collections.JsonMap...)" class="member-name-link">colorBy</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>...&nbsp;legend)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static <a href="../../../console/freemarker/Section.Custom.html" title="class in org.apache.juneau.console.freemarker">Section.Custom</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Section.</span><code><a href="../../../console/freemarker/Section.html#custom(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">custom</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a section implemented in JS by a <code>JuneauDashboard.section.register(name, ...)</code> section.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../console/freemarker/ChartDef.html#decorate(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">decorate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ChartCardType.</span><code><a href="../../../console/freemarker/ChartCardType.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">implicitTopics</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;card)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DatatablesCardType.</span><code><a href="../../../console/freemarker/DatatablesCardType.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">implicitTopics</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;card)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>filter:</code> and <code>redraw:</code> always; <code>selection:</code>, <code>detail:</code> and <code>bulk:</code>
+ only when the catalog sets that key.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../console/freemarker/ChartDef.html#option(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">option</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../console/freemarker/ChartDef.html#patch(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">patch</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;v)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Fn.</span><code><a href="../../../console/freemarker/Fn.html#ref(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">ref</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DatatablesCardType.</span><code><a href="../../../console/freemarker/DatatablesCardType.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color">
+<div class="block">A datatables card whose detail region is a job-log region needs the <code>joblog</code> pack's populator.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../console/freemarker/Derived.html" title="class in org.apache.juneau.console.freemarker">Derived</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Derived.</span><code><a href="../../../console/freemarker/Derived.html#transform(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">transform</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Appends a transform.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.test">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../console/test/package-summary.html">org.apache.juneau.console.test</a></h2>
+<div class="caption"><span>Methods in <a href="../../../console/test/package-summary.html">org.apache.juneau.console.test</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PageContractAssert.</span><code><a href="../../../console/test/PageContractAssert.html#card(java.lang.String)" class="member-name-link">card</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PageContractAssert.</span><code><a href="../../../console/test/PageContractAssert.html#contract()" class="member-name-link">contract</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Escape hatch for asserts this class does not offer.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.views">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../console/views/package-summary.html">org.apache.juneau.console.views</a></h2>
+<div class="caption"><span>Methods in <a href="../../../console/views/package-summary.html">org.apache.juneau.console.views</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowJobSubmit.</span><code><a href="../../../console/views/RowJobSubmit.html#fields()" class="member-name-link">fields</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the value of the <a href="../../../../../../org/apache/juneau/console/views/RowJobSubmit.html#param-fields"><code>fields</code></a> record component.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../../../console/views/RowDetail.html#response(java.lang.Object)" class="member-name-link">response</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;fields)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds the detail GET endpoint's own JSON response (not the card fragment).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../../../console/views/Column.html#searchMeta()" class="member-name-link">searchMeta</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes this column's effective search configuration to the <code>VIEW_META</code> <code>search</code> block: the wire
+ <a href="../../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery"><code>SearchType</code></a> token plus one entry per
+ <a href="../../../console/views/Column.html#effectiveOperators()"><code>effective operator</code></a>, each carrying the metadata the header popup renders.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../../../console/views/Column.html#searchMeta(java.lang.String,java.lang.String,java.util.List,java.util.List)" class="member-name-link">searchMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;searchTypeWire,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;operatorAllowList,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&nbsp;customOperators)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds the per-column <code>search</code> block for the <code>VIEW_META</code> wire contract
+ directly from author-catalog inputs, without the caller having to touch the search-engine beans.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../../../console/views/Column.html#searchMeta(org.apache.juneau.commons.beanquery.SearchOperatorSet)" class="member-name-link">searchMeta</a><wbr>(<a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a>&nbsp;tableDefault)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes this column's effective search configuration to the <code>VIEW_META</code> <code>search</code> block, inheriting
+ the specified table-level operator set when this column has none of its
+ own.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../../../console/views/TableSpec.html#toCardBody()" class="member-name-link">toCardBody</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds this table's catalog-form card body, with no <code>contractVersion</code> anywhere (the client stamps every
+ contract version).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../../../console/views/Column.html#toCatalogMap()" class="member-name-link">toCatalogMap</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds this column's catalog entry: <code>key</code> and <code>label</code> plus the display (<code>render</code>,
+ <code>href</code>, <code>className</code>, <code>defaultVisible</code>) and search (<code>searchType</code>,
+ <code>searchOperators</code>, <code>customOperators</code>) metadata, flattened onto one entry, in the form the
+ <code>datatables</code> card type resolves.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../../../console/views/Column.html#toCatalogMap(org.apache.juneau.commons.beanquery.SearchOperatorSet)" class="member-name-link">toCatalogMap</a><wbr>(<a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a>&nbsp;tableDefault)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds this column's catalog entry like <a href="../../../console/views/Column.html#toCatalogMap()"><code>Column.toCatalogMap()</code></a>, but emits the column's <i>effective</i>
+ operator set: its own set if it has one, else <code>tableDefault</code>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">QuickStat.</span><code><a href="../../../console/views/QuickStat.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds this item's <code>quickStats.items[]</code> entry.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../../../console/views/RibbonItem.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds this item's ribbon entry.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../../../console/views/RowDetail.html#toMap()" class="member-name-link">toMap</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds this detail's card-body entry: <code>{endpoint, title?, icon?, region?}</code>.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../../console/views/package-summary.html">org.apache.juneau.console.views</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../../console/views/RowJobSubmit.html" title="class in org.apache.juneau.console.views">RowJobSubmit</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowJobSubmit.</span><code><a href="../../../console/views/RowJobSubmit.html#parse(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">parse</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Parses the envelope.</div>
+</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../../../console/views/package-summary.html">org.apache.juneau.console.views</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../console/views/RowJobSubmit.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">RowJobSubmit</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;action,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetId,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey,
+ <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;fields)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates an instance of a <code>RowJobSubmit</code> record class.</div>
 </div>
 </div>
 </section>
@@ -876,7 +1237,7 @@ loadScripts(document, 'script');</script>
 <div class="block">The series request counter.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">InventoryGaugeCardType.</span><code><a href="../../../petstore/console/dev/InventoryGaugeCardType.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">InventoryGaugeCardType.</span><code><a href="../../../petstore/console/dev/InventoryGaugeCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../console/CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a> that return types with arguments of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
@@ -942,7 +1303,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#groom(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">groom</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;json)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Starts a groom run.</div>
@@ -954,7 +1315,7 @@ loadScripts(document, 'script');</script>
  dialog form the views runtime posts, <code>{action, targetId, idempotencyKey, fields:{DOG:"2"}}</code>, or the
  job-log card's flat form <code>{DOG:2, slowMs:0, idempotencyKey}</code>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#regroom(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">regroom</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
@@ -988,7 +1349,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../../petstore/console/orders/OrdersRest.html#create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">create</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
@@ -1022,20 +1383,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">create</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a pet.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first odd-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#stage(org.apache.juneau.rest.server.RestRequest,long,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">stage</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  long&nbsp;id,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Stages an inline edit for review on the Pending changes page.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#update(org.apache.juneau.rest.server.RestRequest,long,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">update</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  long&nbsp;id,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
@@ -1053,163 +1414,18 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">UsersRest.</span><code><a href="../../../petstore/console/users/UsersRest.html#create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">create</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a user.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first odd-row-color"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">UsersRest.</span><code><a href="../../../petstore/console/users/UsersRest.html#update(org.apache.juneau.rest.server.RestRequest,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">update</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Updates a user.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.bus">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/bus/package-summary.html">org.apache.juneau.rest.server.bus</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/bus/package-summary.html">org.apache.juneau.rest.server.bus</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusFrames.</span><code><a href="../../../rest/server/bus/BusFrames.html#decode(java.lang.String)" class="member-name-link">decode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Decodes and validates one frame.</div>
-</div>
-<div class="col-first odd-row-color"><code>default <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BusEventsMixin.</span><code><a href="../../../rest/server/bus/BusEventsMixin.html#openBusSession(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">openBusSession</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
- <a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[POST /juneau-bus/session] &mdash; opens a bus session.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusRefusal.</span><code><a href="../../../rest/server/bus/BusRefusal.html#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">The refusal body: <code>{code, message, denied?}</code>.</div>
-</div>
-</div>
-<div class="caption"><span>Methods in <a href="../../../rest/server/bus/package-summary.html">org.apache.juneau.rest.server.bus</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UpstreamHandler.</span><code><a href="../../../rest/server/bus/UpstreamHandler.html#handle(org.apache.juneau.rest.server.bus.BusSession,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">handle</a><wbr>(<a href="../../../rest/server/bus/BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;payload)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Handles one upstream publish.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/bus/BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ServerBus.</span><code><a href="../../../rest/server/bus/ServerBus.html#openSession(jakarta.servlet.http.HttpServletRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">openSession</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Transport SPI: opens a session from a session POST body.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.console">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CardSource.</span><code><a href="../../../rest/server/console/CardSource.html#json()" class="member-name-link">json</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Parses the body as JSON5 (cached after the first call).</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">CardTypeRegistry.</span><code><a href="../../../rest/server/console/CardTypeRegistry.html#toCard(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toCard</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">The single server path for both <code>&lt;@card&gt;</code> and C3's <code>PageSpec</code>: validates the body (E-23),
- dispatches to <a href="../../../rest/server/console/CardTypeRegistry.html#handler(java.lang.String)"><code>CardTypeRegistry.handler(String)</code></a>, and merges the fragment flat onto the card's base keys.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CardTypeHandler.</span><code><a href="../../../rest/server/console/CardTypeHandler.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Validates the authored card and returns its contract fragment.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HtmlCardType.</span><code><a href="../../../rest/server/console/HtmlCardType.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BridgeDecl.</span><code><a href="../../../rest/server/console/BridgeDecl.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Subscription.</span><code><a href="../../../rest/server/console/Subscription.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TopicDecl.</span><code><a href="../../../rest/server/console/TopicDecl.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TopicDecl.</span><code><a href="../../../rest/server/console/TopicDecl.html#toPublicationMap()" class="member-name-link">toPublicationMap</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
-<div class="caption"><span>Methods in <a href="../../../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CardTypeHandler.</span><code><a href="../../../rest/server/console/CardTypeHandler.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">implicitTopics</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;card)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Topics this card publishes without declaring them, for R-10.</div>
-</div>
-<div class="col-first odd-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">CardTypeHandler.</span><code><a href="../../../rest/server/console/CardTypeHandler.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.</div>
-</div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../rest/server/console/BusWiringValidator.Problem.html" title="class in org.apache.juneau.rest.server.console">BusWiringValidator.Problem</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BusWiringValidator.</span><code><a href="../../../rest/server/console/BusWiringValidator.html#validate(org.apache.juneau.marshall.collections.JsonMap,org.apache.juneau.rest.server.console.CardTypeRegistry)" class="member-name-link">validate</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;contract,
- <a href="../../../rest/server/console/CardTypeRegistry.html" title="class in org.apache.juneau.rest.server.console">CardTypeRegistry</a>&nbsp;registry)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Checks a page contract's bus wiring.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.console.data">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SeriesAggregator.Result.</span><code><a href="../../../rest/server/console/data/SeriesAggregator.Result.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">The response body: <c>{schemaVersion, dims:[{name,type}], columns, truncated}</c>.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.console.test">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/console/test/package-summary.html">org.apache.juneau.rest.server.console.test</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/console/test/package-summary.html">org.apache.juneau.rest.server.console.test</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PageContractAssert.</span><code><a href="../../../rest/server/console/test/PageContractAssert.html#card(java.lang.String)" class="member-name-link">card</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PageContractAssert.</span><code><a href="../../../rest/server/console/test/PageContractAssert.html#contract()" class="member-name-link">contract</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Escape hatch for asserts this class does not offer.</div>
 </div>
 </div>
 </section>
@@ -1242,235 +1458,19 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.terminal.bus">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/terminal/bus/package-summary.html">org.apache.juneau.rest.server.terminal.bus</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/terminal/bus/package-summary.html">org.apache.juneau.rest.server.terminal.bus</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
+<section class="detail" id="org.apache.juneau.terminal.bus">
+<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../terminal/bus/package-summary.html">org.apache.juneau.terminal.bus</a></h2>
+<div class="caption"><span>Methods in <a href="../../../terminal/bus/package-summary.html">org.apache.juneau.terminal.bus</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TerminalInput.</span><code><a href="../../../rest/server/terminal/bus/TerminalInput.html#handle(org.apache.juneau.rest.server.bus.BusSession,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">handle</a><wbr>(<a href="../../../rest/server/bus/BusSession.html" title="interface in org.apache.juneau.rest.server.bus">BusSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">TerminalInput.</span><code><a href="../../../terminal/bus/TerminalInput.html#handle(org.apache.juneau.console.bus.BusSession,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">handle</a><wbr>(<a href="../../../console/bus/BusSession.html" title="interface in org.apache.juneau.console.bus">BusSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
  <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;payload)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Handles one <code>term.input</code> frame.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/view/freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/view/freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html#legendItem(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">legendItem</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tone)</code></div>
-<div class="col-last even-row-color">
-<div class="block">One entry of a treemap colour key.</div>
-</div>
-<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Fn.</span><code><a href="../../../rest/server/view/freemarker/console/Fn.html#ref(java.lang.String)" class="member-name-link">ref</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Fn.</span><code><a href="../../../rest/server/view/freemarker/console/Fn.html#ref(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">ref</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ChartCardType.</span><code><a href="../../../rest/server/view/freemarker/console/ChartCardType.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DatatablesCardType.</span><code><a href="../../../rest/server/view/freemarker/console/DatatablesCardType.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JobLogCardType.</span><code><a href="../../../rest/server/view/freemarker/console/JobLogCardType.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TerminalCardType.</span><code><a href="../../../rest/server/view/freemarker/console/TerminalCardType.html#toFragment(org.apache.juneau.rest.server.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="../../../rest/server/console/CardSource.html" title="class in org.apache.juneau.rest.server.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Annotations.</span><code><a href="../../../rest/server/view/freemarker/console/Annotations.html#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Bands.</span><code><a href="../../../rest/server/view/freemarker/console/Bands.html#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Decorator.</span><code><a href="../../../rest/server/view/freemarker/console/Decorator.html#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Markers.</span><code><a href="../../../rest/server/view/freemarker/console/Markers.html#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Thresholds.</span><code><a href="../../../rest/server/view/freemarker/console/Thresholds.html#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DataSourceDef.</span><code><a href="../../../rest/server/view/freemarker/console/DataSourceDef.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">The <c>contract.dataSources[]</c> entry; checks the cross-field rules.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Derived.</span><code><a href="../../../rest/server/view/freemarker/console/Derived.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">The <c>contract.dataSources[]</c> entry.</div>
-</div>
-</div>
-<div class="caption"><span>Methods in <a href="../../../rest/server/view/freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">ChartDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html#colorBy(java.lang.String,org.apache.juneau.marshall.collections.JsonMap...)" class="member-name-link">colorBy</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>...&nbsp;legend)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static <a href="../../../rest/server/view/freemarker/console/Section.Custom.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">Section.Custom</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Section.</span><code><a href="../../../rest/server/view/freemarker/console/Section.html#custom(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">custom</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Creates a section implemented in JS by a <code>JuneauDashboard.section.register(name, ...)</code> section.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">ChartDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html#decorate(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">decorate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ChartCardType.</span><code><a href="../../../rest/server/view/freemarker/console/ChartCardType.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">implicitTopics</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;card)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DatatablesCardType.</span><code><a href="../../../rest/server/view/freemarker/console/DatatablesCardType.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">implicitTopics</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;card)</code></div>
-<div class="col-last even-row-color">
-<div class="block"><code>filter:</code> and <code>redraw:</code> always; <code>selection:</code>, <code>detail:</code> and <code>bulk:</code>
- only when the catalog sets that key.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">ChartDef</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html#option(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">option</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;v)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">ChartDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ChartDef.</span><code><a href="../../../rest/server/view/freemarker/console/ChartDef.html#patch(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">patch</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;v)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Fn.</span><code><a href="../../../rest/server/view/freemarker/console/Fn.html#ref(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">ref</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DatatablesCardType.</span><code><a href="../../../rest/server/view/freemarker/console/DatatablesCardType.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
-<div class="col-last even-row-color">
-<div class="block">A datatables card whose detail region is a job-log region needs the <code>joblog</code> pack's populator.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/view/freemarker/console/Derived.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">Derived</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Derived.</span><code><a href="../../../rest/server/view/freemarker/console/Derived.html#transform(java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">transform</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;args)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Appends a transform.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.views">
-<h2>Uses of <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a> in <a href="../../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a> that return <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RowJobSubmit.</span><code><a href="../../../rest/server/views/RowJobSubmit.html#fields()" class="member-name-link">fields</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns the value of the <a href="../../../../../../org/apache/juneau/rest/server/views/RowJobSubmit.html#param-fields"><code>fields</code></a> record component.</div>
-</div>
-<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../../../rest/server/views/RowDetail.html#response(java.lang.Object)" class="member-name-link">response</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;fields)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Builds the detail GET endpoint's own JSON response (not the card fragment).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../../../rest/server/views/Column.html#searchMeta()" class="member-name-link">searchMeta</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Serializes this column's effective search configuration to the <code>VIEW_META</code> <code>search</code> block: the wire
- <a href="../../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery"><code>SearchType</code></a> token plus one entry per
- <a href="../../../rest/server/views/Column.html#effectiveOperators()"><code>effective operator</code></a>, each carrying the metadata the header popup renders.</div>
-</div>
-<div class="col-first odd-row-color"><code>static <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../../../rest/server/views/Column.html#searchMeta(java.lang.String,java.lang.String,java.util.List,java.util.List)" class="member-name-link">searchMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;searchTypeWire,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;operatorAllowList,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&nbsp;customOperators)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Builds the per-column <code>search</code> block for the <code>VIEW_META</code> wire contract
- directly from author-catalog inputs, without the caller having to touch the search-engine beans.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../../../rest/server/views/Column.html#searchMeta(org.apache.juneau.commons.beanquery.SearchOperatorSet)" class="member-name-link">searchMeta</a><wbr>(<a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a>&nbsp;tableDefault)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Serializes this column's effective search configuration to the <code>VIEW_META</code> <code>search</code> block, inheriting
- the specified table-level operator set when this column has none of its
- own.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../../../rest/server/views/TableSpec.html#toCardBody()" class="member-name-link">toCardBody</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Builds this table's catalog-form card body, with no <code>contractVersion</code> anywhere (the client stamps every
- contract version).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../../../rest/server/views/Column.html#toCatalogMap()" class="member-name-link">toCatalogMap</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Builds this column's catalog entry: <code>key</code> and <code>label</code> plus the display (<code>render</code>,
- <code>href</code>, <code>className</code>, <code>defaultVisible</code>) and search (<code>searchType</code>,
- <code>searchOperators</code>, <code>customOperators</code>) metadata, flattened onto one entry, in the form the
- <code>datatables</code> card type resolves.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../../../rest/server/views/Column.html#toCatalogMap(org.apache.juneau.commons.beanquery.SearchOperatorSet)" class="member-name-link">toCatalogMap</a><wbr>(<a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a>&nbsp;tableDefault)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Builds this column's catalog entry like <a href="../../../rest/server/views/Column.html#toCatalogMap()"><code>Column.toCatalogMap()</code></a>, but emits the column's <i>effective</i>
- operator set: its own set if it has one, else <code>tableDefault</code>.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">QuickStat.</span><code><a href="../../../rest/server/views/QuickStat.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Builds this item's <code>quickStats.items[]</code> entry.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../../../rest/server/views/RibbonItem.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Builds this item's ribbon entry.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../../../rest/server/views/RowDetail.html#toMap()" class="member-name-link">toMap</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Builds this detail's card-body entry: <code>{endpoint, title?, icon?, region?}</code>.</div>
-</div>
-</div>
-<div class="caption"><span>Methods in <a href="../../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../../../rest/server/views/RowJobSubmit.html" title="class in org.apache.juneau.rest.server.views">RowJobSubmit</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RowJobSubmit.</span><code><a href="../../../rest/server/views/RowJobSubmit.html#parse(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">parse</a><wbr>(<a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Parses the envelope.</div>
-</div>
-</div>
-<div class="caption"><span>Constructors in <a href="../../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a> with parameters of type <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier</div>
-<div class="table-header col-second">Constructor</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../rest/server/views/RowJobSubmit.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">RowJobSubmit</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;action,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetId,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey,
- <a href="../JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;fields)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Creates an instance of a <code>RowJobSubmit</code> record class.</div>
 </div>
 </div>
 </section>
