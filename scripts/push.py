@@ -566,6 +566,8 @@ def build_test_command(test_script, args):
         cmd.append("--js-tests")
     if getattr(args, "no_js_tests", False):
         cmd.append("--no-js-tests")
+    if getattr(args, "warn_traces", False):
+        cmd.append("--warn-traces")
     return cmd
 
 
@@ -1029,7 +1031,7 @@ def main():
 PLAN_LABELS = {
     "prechecks": "Prechecks", "tracker": "Tracker", "container-tags": "Tags",
     "bom": "BOM", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
-    "js-tests": "Browser Tests", "timing": "Timing",
+    "js-tests": "Browser Tests", "traces": "Traces", "timing": "Timing",
     "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": DOCS_BUILD_LABEL,
     "docs-commit": "Docs", "docs-push": "Docs push",
 }
@@ -1050,7 +1052,7 @@ def push_plan(args, script_dir, juneau_root, console):
         ids += [step_id for step_id, name in (("container-tags", "check-container-tags.py"),
                                              ("bom", "check-bom-completeness.py")) if (script_dir / name).exists()]
         if (script_dir / "test.py").exists():
-            ids += ["build", "tests", "perf", "py-tests", "js-tests"]
+            ids += ["build", "tests", "perf", "py-tests", "js-tests", "traces"]
         else:
             ids.append("tests")
         if console and (script_dir / PUSH_TIMINGS_SCRIPT).exists():
@@ -1179,6 +1181,16 @@ Examples:
     )
 
     parser.add_argument(
+        "--warn-traces",
+        action="store_true",
+        dest="warn_traces",
+        help=(
+            "Report stack traces in the test output as a warning instead of failing the Traces row "
+            "(scripts/trace-allowlist.txt still applies; an allowlist error still fails)."
+        )
+    )
+
+    parser.add_argument(
         "--console",
         choices=("full", "board", "none"),
         help="Maven output on the console: full, board (default) or none (also JUNEAU_TERMINAL_CONSOLE; the flag wins)."
@@ -1236,6 +1248,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             print("🌐 Browser Tests FORCED (--js-tests)")
         if args.no_js_tests:
             print("🌐 Browser Tests DISABLED (--no-js-tests)")
+        if args.warn_traces:
+            print("⚠ Stack traces in the test output are a warning (--warn-traces)")
         if args.dry_run:
             print("🔍 DRY RUN MODE - No actual changes will be made")
         print("=" * 70)

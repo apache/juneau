@@ -1,0 +1,14 @@
+[INFO] Running org.apache.juneau.rest.server.DebugMarshalling_Behavior_Test
+org.apache.juneau.rest.server.RestException: Response failed
+	at org.apache.juneau.rest.server.RestContext.handle(RestContext.java:5534)
+	at org.apache.juneau.rest.server.RestSession.run(RestSession.java:799)
+Caused by: org.apache.juneau.marshall.parser.ParseException: Unrecognized syntax.  Expected='null', Actual='name'
+	At: line 1, column 1
+	While parsing into: 
+		currentClass: DebugMarshalling_Behavior_Test.Bean
+	Use BEAN_debug setting to display content.
+	at org.apache.juneau.marshall.json.JsonParserSession.readKeyword(JsonParserSession.java:553)
+	at org.apache.juneau.marshall.json.JsonParserSession.readFieldName(JsonParserSession.java:307)
+	... 109 more
+
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0

@@ -1,0 +1,26 @@
+PASS src/test/js/view_a.test.js
+  ● Console
+
+    console.warn
+      resolveSettings: clearing unreadable settings TypeError: storage.getItem is not a function
+          at getItem (/work/app/static/views.js:3366:28)
+          at resolveSettings (/work/app/static/views.js:3425:15)
+          at Array.forEach (<anonymous>)
+          at new Promise (<anonymous>)
+          at /work/app/node_modules/jest-circus/build/run.js:12:5
+
+      3377 |     );
+      3378 |   } catch (e) {
+    > 3379 |     console.warn('resolveSettings: clearing unreadable settings', e);
+           |             ^
+
+      at evalmachine.<anonymous>:2184:32
+
+PASS src/test/js/view_b.test.js
+  ● Console
+
+    console.log
+      only a message
+
+      at evalmachine.<anonymous>:10:3
+

@@ -39,6 +39,7 @@ Options:
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
                              juneau-console-views, juneau-petstore-core and juneau-terminal-region).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
+    --warn-traces            Report stack traces in the test output as a warning instead of failing (see "Trace guard" below)
     --console <mode>         Maven output on the console: full (default), board or none
     --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_TERMINAL_DETAIL)
     --full-log <path>        Also write every byte Maven prints to this file (appended)
@@ -63,6 +64,13 @@ Browser Tests:
     file under a src/ tree differs from origin/master (committed, uncommitted or untracked).  If Node/npm
     are not on the PATH, an auto-enabled run prints a notice and skips; an explicit --js-tests fails instead.
     The first run downloads Playwright + Chromium (needs network); later runs reuse target/js.
+
+Trace guard:
+    After the other steps pass, a Traces row scans what they printed (read back from the run's full log) for stack
+    traces, and fails on any whose header line is not matched by scripts/trace-allowlist.txt.  The log exists with
+    --console board or none; with the default --console full there is none, so the row is skipped with a warning.
+    --warn-traces reports traces as a warning instead; an allowlist error still fails.  The report of every trace,
+    allowed or not, goes to target/trace-guard.txt.
 
 Perf guard:
     After the tests pass, the guard compares the measured wall clock of `mvn test` against 'suite' in the
@@ -99,6 +107,8 @@ import _juneau  # noqa: E402
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+TRACE_ALLOWLIST = Path(__file__).resolve().parent / "trace-allowlist.txt"
+TRACE_REPORT = REPO_ROOT / "target" / "trace-guard.txt"
 _step_n = 0
 
 
@@ -806,7 +816,7 @@ def js_tests(installed=False):
 #: test.py's top-level steps in run order, as (id, label).  The labels are push.py's PLAN_LABELS for the same ids:
 #: under push.py this script's pending rows stand in for the parent's.
 PLAN = (("build", "Compile"), ("tests", "Java Tests"), ("perf", "Perf"), ("py-tests", "Python Tests"),
-	("js-tests", "Browser Tests"))
+	("js-tests", "Browser Tests"), ("traces", "Traces"))
 
 
 def planned_steps(build_only, test_only, full, no_js_tests):
@@ -815,8 +825,20 @@ def planned_steps(build_only, test_only, full, no_js_tests):
 	row is left out of the count."""
 	ids = {"build"} if build_only or full else set()
 	if test_only or full:
-		ids |= {"tests", "perf", "py-tests"} | (set() if no_js_tests else {"js-tests"})
+		ids |= {"tests", "perf", "py-tests", "traces"} | (set() if no_js_tests else {"js-tests"})
 	return [(step_id, label) for step_id, label in PLAN if step_id in ids]
+
+
+_js_skipped = False    # the Browser Tests row was skipped this run, so JS-only allowlist entries cannot have matched
+
+
+def run_trace_guard(since, warn_only, full_run):
+	"""The Traces row: the output of the steps since `since` (traces.mark(), taken before the build) must hold no stack
+	trace that is not in scripts/trace-allowlist.txt.  warn_only (--warn-traces) downgrades a failure to a warning.
+	full_run lets the guard report allowlist entries that matched nothing.  Returns 0 or 1."""
+	from juneau_terminal_scripts import traces
+	return traces.gate("traces", "Traces", TRACE_ALLOWLIST, since=since, warn_only=warn_only, full_run=full_run,
+		report=TRACE_REPORT, label="Traces")
 
 
 def skip_py_tests_row(reason):
@@ -827,6 +849,8 @@ def skip_py_tests_row(reason):
 
 def skip_js_tests_row(reason):
 	"""Draw the Browser Tests row as skipped, with the reason as its text."""
+	global _js_skipped
+	_js_skipped = True
 	with _juneau.load()[0].row("js-tests", "Browser Tests", label="Browser Tests") as row:
 		row.skip(reason)
 
@@ -907,6 +931,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	parser.add_argument("--min-runs", type=int, default=5, dest="min_runs")
 	parser.add_argument("--js-tests", action="store_true", dest="js_tests")
 	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
+	parser.add_argument("--warn-traces", action="store_true", dest="warn_traces")
 	parser.add_argument("--profile")
 	parser.add_argument("--console", choices=("full", "board", "none"))
 	parser.add_argument("--detail")
@@ -955,6 +980,10 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 
 	exit_code = 0
 	last_test_output = ""
+	global _js_skipped
+	_js_skipped = False
+	from juneau_terminal_scripts import traces
+	since = traces.mark()
 	if build_only or full:
 		exit_code, _ = build()
 		if exit_code != 0:
@@ -991,6 +1020,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed, installed=full)
 		if js_exit != 0:
 			return js_exit
+		full_run = not (args.no_container or args.no_js_tests or _js_skipped)
+		return run_trace_guard(since, args.warn_traces, full_run)
 	return exit_code
 
 

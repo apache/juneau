@@ -1,0 +1,7 @@
+Oct 26, 2026 6:29:10 AM org.apache.juneau.commons.logging.RichLogger log
+WARNING: Error occurred during REST call.
+HTTP/1.1 404 Not Found
+	at org.apache.juneau.rest.server.RestContext.handleNotFound(RestContext.java:5534)
+	at org.apache.juneau.rest.server.RestSession.run(RestSession.java:799)
+	at org.apache.juneau.rest.server.RestContext.execute(RestContext.java:3951)
+	at org.apache.juneau.rest.mock.classic.MockRestClient.receiveResponseHeader(MockRestClient.java:857)

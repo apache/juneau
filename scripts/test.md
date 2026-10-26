@@ -16,6 +16,7 @@ python3 scripts/test.py
 python3 scripts/test.py --test-only --no-container
 python3 scripts/test.py --build-only
 python3 scripts/test.py --enforce-perf
+python3 scripts/test.py --console board --warn-traces
 python3 scripts/test.py --profile juneau-core/juneau-marshall
 python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 ```
@@ -36,6 +37,7 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 | `--min-runs` | N (integer) | 5 | With `--rebaseline`: skip keys with fewer runs. |
 | `--js-tests` | none | auto | Also run the headless-browser tests (`mvn -Pjs-tests`). Fails if Node or npm are missing. |
 | `--no-js-tests` | none | off | Never run the browser tests. Cannot be combined with `--js-tests`. |
+| `--warn-traces` | none | off | Report stack traces in the test output as a warning instead of failing the Traces row. Allowlist errors still fail. |
 | `--console` | `full`, `board` or `none` | `full` | How Maven output appears on the console. |
 | `--detail` | `summary`, `actionable`, `modules` or `all` | `actionable` | Console detail level. |
 | `--full-log` | path | none | Also append everything Maven prints to this file. |
@@ -51,7 +53,8 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 4. Perf guard: compares the suite wall clock with the `suite` line of `perf-baseline.txt`, and each module's reactor time with its `[modules]` entry. The report is written to `target/perf-guard.txt` (`run_perf_guard`).
 5. Python tests: runs `scripts/tests` with `python3 -m pytest`, or `uv run --native-tls --with pytest --with pyyaml pytest` when pytest is not importable (`script_tests`).
 6. Browser tests: with `-Pjs-tests` in the views, petstore-core and terminal modules (`maybe_run_js_tests`). Without `--js-tests` or `--no-js-tests`, they run automatically when a `.js`, `.cjs`, `.css` or `.ftl` file under a `src/` tree differs from `origin/master`.
-7. `--profile` runs `mvn test -Drat.skip=true -Djacoco.skip=true` from the module's directory, with the JFR flags (including `stackdepth=1024`) appended to the module's own `-Dsurefire.extraArgs`. It writes one `hotspot-pid-<pid>-id-<n>-<time>.jfr` per forked JVM under `<repo>/target/profile-results/<module>-<timestamp>/`, and fails if Maven passes but no file exists (`profile`). Read a recording with `jfr print --json --stack-depth 300 <file>`; the default depth of 5 hides every Juneau frame.
+7. Traces: scans what steps 3 to 6 printed (read back from the run's full log, from a mark taken before the build) for stack traces, and fails on any whose header line is not matched by [`trace-allowlist.txt`](trace-allowlist.txt) (`run_trace_guard`). With the default `--console full` there is no full log, so the row is skipped with a warning; use `--console board`. The report of every trace, allowed or not, is `target/trace-guard.txt`.
+8. `--profile` runs `mvn test -Drat.skip=true -Djacoco.skip=true` from the module's directory, with the JFR flags (including `stackdepth=1024`) appended to the module's own `-Dsurefire.extraArgs`. It writes one `hotspot-pid-<pid>-id-<n>-<time>.jfr` per forked JVM under `<repo>/target/profile-results/<module>-<timestamp>/`, and fails if Maven passes but no file exists (`profile`). Read a recording with `jfr print --json --stack-depth 300 <file>`; the default depth of 5 hides every Juneau frame.
 
 ## Output and exit codes
 
@@ -69,6 +72,7 @@ Maven output, a status line per step, and the perf-guard report. The run header 
 
 - The perf guard only warns unless `--enforce-perf` is given. A suite breaches above baseline times `1 + JUNEAU_CI_PERF_THRESHOLD` (default 0.20). A module breaches only when it is over that and more than `JUNEAU_CI_PERF_MIN_SECONDS` (default 3) over its baseline. A module with no baseline entry warns and never fails.
 - `JUNEAU_MVN_WRAPPER` adds a prefix to every `mvn` command, for example a lock script that serializes runs. The value is a command plus arguments, not a shell fragment: it is split like a shell would (so `'/a b/lock.sh' --x` works), then re-quoted word by word, so a path with spaces or `$`/`;` is never interpreted. An unquoted path with spaces also works, taken as the longest leading run of words that names an existing file. A word that is exactly `&&`, `||`, `;` or `|` stays a shell operator, so `lock.sh --x &&` still chains.
+- `scripts/trace-allowlist.txt` holds one header regex per line followed by `# <reason>`; a line with no reason, a bad regex or a duplicate regex fails the Traces row even with `--warn-traces`. An entry that matched nothing is reported as stale (a warning) only when the browser tests ran and neither `--no-container` nor `--no-js-tests` was given.
 - The pytest step is skipped with a notice when neither pytest nor `uv` is available. Nothing is installed.
 - The browser tests download Playwright and Chromium on the first run, so they need network access.
 - `JUNEAU_TERMINAL_HISTORY=0` turns off the run history, which `--rebaseline` and `push-timings.py` depend on.

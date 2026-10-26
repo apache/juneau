@@ -876,7 +876,7 @@ class RunnerTest(unittest.TestCase):
     def test_a_ctrl_c_that_ends_the_tool_on_a_terminal_cancels(self):
         os.environ.pop("TERMINAL_MARKERS")
         bus = jr.subscribe(Events())
-        for code in ("import sys; sys.exit(130)", "import os, signal; os.kill(os.getpid(), signal.SIGINT)"):
+        for code in ("import sys; sys.exit(130)", "import os, signal; signal.signal(signal.SIGINT, signal.SIG_DFL); os.kill(os.getpid(), signal.SIGINT)"):
             with self.subTest(code=code), mock.patch.object(jr, "_foreground_tty", return_value=0), \
                     mock.patch.object(jr, "_set_foreground"), \
                     mock.patch.object(jr, "_wait_in_foreground", side_effect=lambda proc, fd: proc.wait()), \

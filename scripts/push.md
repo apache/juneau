@@ -15,6 +15,7 @@ Builds, tests, commits and pushes Juneau (and, when present, the sibling juneau-
 python3 scripts/push.py "Fixed bug in RestClient"
 python3 scripts/push.py "Updated topic page" --docs-only
 python3 scripts/push.py --test-only
+python3 scripts/push.py "Fix a test" --warn-traces
 python3 scripts/push.py "Quick fix" --skip-tests --dry-run
 ```
 
@@ -32,6 +33,7 @@ The commit message is optional on the command line. It is prompted for when omit
 | `--tracker-audit`, `--todo-audit` | none | off | Opt-in gate for maintainers who keep an external work-tracker checkout: blocks the push if its audit flags a file. |
 | `--js-tests` | none | auto | Force the headless-browser JS harness. Fails if Node or npm is missing. Mutually exclusive with `--no-js-tests`. |
 | `--no-js-tests` | none | off | Never run the JS harness, even when JS, CSS or FTL files changed. |
+| `--warn-traces` | none | off | Report stack traces in the test output as a warning instead of failing the Traces row. Allowlist errors still fail. |
 | `--console` | `full`, `board`, `none` | `board` | Maven output on the console. Also `JUNEAU_TERMINAL_CONSOLE`; the flag wins. |
 | `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_TERMINAL_DETAIL`. |
 
@@ -40,7 +42,7 @@ The commit message is optional on the command line. It is prompted for when omit
 1. Parses and validates the arguments. A bad combination exits 2 (`parse_args`).
 2. Prechecks, before any build work (`prechecks`): git `user.email` is the committer identity the script requires (`REQUIRED_GIT_EMAIL`), the tree has no unstaged or untracked-and-not-ignored changes, the branch is not behind its upstream, and every `.github/workflows/*.yml` / `*.yaml` parses as YAML (PyYAML; the refusal names `file:line:col`). The first three run for juneau-docs when it is present and has staged changes or unpushed commits.
 3. Optional gate, when asked: tracker audit (`run_tracker_audit_gate`).
-4. Unless `--skip-tests`: `check-container-tags.py`, `check-bom-completeness.py`, then `test.py --full` (which builds, installs and runs the Java, Python and, when needed, browser tests), then `push-timings.py`.
+4. Unless `--skip-tests`: `check-container-tags.py`, `check-bom-completeness.py`, then `test.py --full` (which builds, installs and runs the Java, Python and, when needed, browser tests, then fails on any stack trace they printed that [`trace-allowlist.txt`](trace-allowlist.txt) does not allow), then `push-timings.py`.
 5. Commits whatever is already staged and pushes to the tracked upstream (`commit_and_push`). It stages nothing itself.
 6. Repeats the follow-up for juneau-docs when it exists (`run_docs_followup`), after its docs build check.
 

@@ -1073,7 +1073,7 @@ def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch
 
 
 @pytest.mark.parametrize("argv, expected", [
-    (["--test-only"], ["container-tags", "bom", "build", "tests", "perf", "py-tests", "js-tests", "timing", "install"]),
+    (["--test-only"], ["container-tags", "bom", "build", "tests", "perf", "py-tests", "js-tests", "traces", "timing", "install"]),
     (["Quick fix", "--skip-tests", "--tracker-audit"],
      ["prechecks", "tracker", "tests", "install", "commit", "push"]),
 ])
@@ -1108,7 +1108,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
     (tmp_path / "juneau-docs").mkdir()
     args = argparse.Namespace(tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
     assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
-        "prechecks", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "install", "commit", "push",
+        "prechecks", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "traces", "install", "commit", "push",
         "docs-smoke", "docs-commit", "docs-push"]  
 
 

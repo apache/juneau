@@ -281,16 +281,17 @@ def _stub_steps(test_mod, monkeypatch):
     monkeypatch.setattr(test_mod, "script_tests", lambda *a, **k: 0)
     monkeypatch.setattr(test_mod, "changed_files_vs_origin", lambda: [])
     monkeypatch.setattr(test_mod, "maybe_run_js_tests", lambda *a, **k: 0)
+    monkeypatch.setattr(test_mod, "run_trace_guard", lambda *a, **k: 0)
 
 
 @pytest.mark.parametrize("argv,ids", [
-    ([], ["build", "tests", "perf", "py-tests", "js-tests"]),
-    (["--full"], ["build", "tests", "perf", "py-tests", "js-tests"]),
+    ([], ["build", "tests", "perf", "py-tests", "js-tests", "traces"]),
+    (["--full"], ["build", "tests", "perf", "py-tests", "js-tests", "traces"]),
     (["--build-only"], ["build"]),
-    (["--test-only"], ["tests", "perf", "py-tests", "js-tests"]),
-    (["--test-only", "--no-js-tests"], ["tests", "perf", "py-tests"]),
-    (["--no-js-tests"], ["build", "tests", "perf", "py-tests"]),
-    (["--js-tests"], ["build", "tests", "perf", "py-tests", "js-tests"]),
+    (["--test-only"], ["tests", "perf", "py-tests", "js-tests", "traces"]),
+    (["--test-only", "--no-js-tests"], ["tests", "perf", "py-tests", "traces"]),
+    (["--no-js-tests"], ["build", "tests", "perf", "py-tests", "traces"]),
+    (["--js-tests"], ["build", "tests", "perf", "py-tests", "js-tests", "traces"]),
 ])
 def test_main_declares_the_steps_its_own_flags_will_run(test_mod, bus, monkeypatch, argv, ids):
     _stub_steps(test_mod, monkeypatch)
@@ -321,7 +322,7 @@ def test_the_plan_labels_are_push_pys(test_mod):
 def test_a_nested_run_under_a_parents_overall_has_an_overall_figure(test_mod, monkeypatch):
     run = test_mod._juneau.load()[0]
     monkeypatch.setenv("JUNEAU_TERMINAL_OVERALL", json.dumps({"elapsed": 60, "done": 2, "pending": [
-        ["tests", 120], ["perf", None], ["py-tests", 20], ["js-tests", 40], ["install", 10]]}))
+        ["tests", 120], ["perf", None], ["py-tests", 20], ["js-tests", 40], ["traces", None], ["install", 10]]}))
     board = run.Board(nested=True)
     feed = run.subscribe(lambda kind, fields: board.apply(kind, fields))
     try:
@@ -329,7 +330,7 @@ def test_a_nested_run_under_a_parents_overall_has_an_overall_figure(test_mod, mo
         monkeypatch.setattr(sys, "argv", ["test.py", "--test-only"])
         assert board.overall() is None                    # no plan yet: no Overall (today's nested test.py)
         assert test_mod._main() == 0
-        assert board.plan == ["tests", "perf", "py-tests", "js-tests"]
+        assert board.plan == ["tests", "perf", "py-tests", "js-tests", "traces"]
         assert board.overall() is not None                # the view's region now ends with ▶ Overall
     finally:
         run.unsubscribe(feed)

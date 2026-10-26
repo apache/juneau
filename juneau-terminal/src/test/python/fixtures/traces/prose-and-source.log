@@ -1,0 +1,6 @@
+[INFO] Running org.example.NotATraceTest
+Waiting at the gate for (2) seconds
+    at least one retry is expected
+The call arrived at foo(bar)
+	at com.example.Lonely.method(Lonely.java:1)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0

@@ -1,0 +1,7 @@
+2026-10-26 06:37:08.123 [main] WARN  com.example.service.ReportService - report failed
+
+java.lang.IllegalStateException: boom
+	at com.example.service.ReportService.run(ReportService.java:41) ~[classes/:na]
+	at com.example.service.ReportServiceTest.fails(ReportServiceTest.java:20) ~[test-classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+2026-10-26 06:37:08.456 [main] INFO  com.example.service.ReportService - done

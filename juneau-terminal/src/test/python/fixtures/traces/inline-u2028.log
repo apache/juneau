@@ -1,0 +1,4 @@
+before
+WARN  com.example.Cache - lookup failed
+java.io.IOException: disk full 	at com.example.Cache.get(Cache.java:10) 	at com.example.Cache.load(Cache.java:22) 	at com.example.Main.main(Main.java:5)
+after
