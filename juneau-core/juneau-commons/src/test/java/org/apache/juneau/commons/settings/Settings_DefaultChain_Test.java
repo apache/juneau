@@ -85,7 +85,7 @@ class Settings_DefaultChain_Test extends TestBase {
 	}
 
 	private static String camel(String envKey) {
-		var parts = envKey.toLowerCase(Locale.ROOT).split("_");
+		var parts = envKey.toLowerCase(Locale.ROOT).split("_", -1);
 		var sb = new StringBuilder(parts[0]);
 		for (var i = 1; i < parts.length; i++)
 			if (! parts[i].isEmpty())
@@ -227,6 +227,12 @@ class Settings_DefaultChain_Test extends TestBase {
 			System.clearProperty("d06.k");
 		}
 		assertNull(c.get("d06.k").orElse(null));
+	}
+
+	@Test void d10_camel_underscoreOnlyEnvKeys_doNotThrow() {
+		assertEquals("", camel("_"));
+		assertEquals("", camel("__"));
+		assertEquals("fooBar", camel("FOO__BAR"));
 	}
 
 	@Test void d09_commonsProviderOrders_arePinned() {
