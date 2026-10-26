@@ -106,7 +106,7 @@ class RequestIdDebugCapture_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_early404RecordCarriesRequestId() throws Exception {
-		try (var c = RichLogger.getLogger(A_Resource.class).captureEvents(Level.FINEST)) {
+		try (var quiet = LogRecordCapture.quiet(A_Resource.class); var c = RichLogger.getLogger(A_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(A_Resource.class).ignoreErrors().debug().build();
 			var res = client.get("/does-not-exist").run().assertStatus(404);
 			var echoed = res.getHeader("X-Request-Id").asString().orElseThrow();

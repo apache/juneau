@@ -656,7 +656,15 @@ public class RestChildren {
 		// Servlet-backed resources delegate Servlet.destroy() through to RestContext.destroy() (see RestServlet.destroy),
 		// so we must avoid double-destruction in that case — call Servlet.destroy() and let it transitively call
 		// RestContext.destroy() exactly once.
-		if (child.getResource() instanceof Servlet s)
+		Object resource;
+		try {
+			resource = child.getResource();
+		} catch (NoSuchElementException e) {
+			// The resource bean was already removed by the owning container (e.g. a closed Spring context),
+			// so there is no instance left to destroy.
+			return;
+		}
+		if (resource instanceof Servlet s)
 			s.destroy();
 		else
 			child.destroy();

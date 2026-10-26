@@ -383,7 +383,7 @@ class LogRecordCapture_Test extends TestBase {
 	@Test void j03_lastAndAssertHelpers_returnRawValues() {
 		var logger = RichLogger.getLogger("j03");
 		var ex = new RuntimeException("x");
-		try (var capture = logger.captureEvents()) {
+		try (var quiet = LogRecordCapture.quiet("j03"); var capture = logger.captureEvents()) {
 			logger.info("a");
 			logger.warning(ex, "b");
 

@@ -25,6 +25,7 @@ import java.sql.*;
 import java.util.*;
 
 import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
@@ -538,10 +539,13 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a032_printStackTrace_integer() {
-		// Redirects to System.err — just verify it doesn't throw
+		// Logged as a warning on the ThrowableUtils logger; capture it so the trace stays off the console.
 		var ex = new RuntimeException("test error");
-		assertDoesNotThrow(() -> printStackTrace(ex, (Integer)null));
-		assertDoesNotThrow(() -> printStackTrace(ex, 2));
+		var records = LogRecordCapture.quietly(ThrowableUtils.class, () -> {
+			assertDoesNotThrow(() -> printStackTrace(ex, (Integer)null));
+			assertDoesNotThrow(() -> printStackTrace(ex, 2));
+		});
+		assertEquals(2, records.size());
 	}
 
 	//====================================================================================================

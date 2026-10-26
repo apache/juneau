@@ -437,7 +437,7 @@ class RestDebugCapture_Test {
 	 * headers and bodies are never rendered when no operation was resolved.
 	 */
 	@Test void g01_noOpPath_atFinestTier_neverRendersHeadersOrBody() throws Exception {
-		try (var c = RichLogger.getLogger(A_Resource.class).captureEvents(Level.FINEST)) {
+		try (var quiet = LogRecordCapture.quiet(A_Resource.class); var c = RichLogger.getLogger(A_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(A_Resource.class).debug().build();
 
 			client.get("/does-not-exist").header("X-Secret-Header", "leak-test-value").ignoreErrors().run()
@@ -527,7 +527,7 @@ class RestDebugCapture_Test {
 
 	@Test void a05_captureByHostName_observesOpAndNoOpLoggerPaths() throws Exception {
 		var hostName = A05_HostResource.class.getName();
-		try (var c = RichLogger.getLogger(A05_HostResource.class).captureEvents(Level.FINEST)) {
+		try (var quiet = LogRecordCapture.quiet(A05_HostResource.class); var c = RichLogger.getLogger(A05_HostResource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient
 				.create(A05_HostResource.class)
 				.debug()

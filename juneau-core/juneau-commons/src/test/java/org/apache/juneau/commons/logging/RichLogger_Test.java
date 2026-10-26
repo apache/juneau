@@ -900,7 +900,9 @@ class RichLogger_Test extends TestBase {
 			rec.setLoggerName(name);
 			logger.log(rec);
 			logger.info("commons");
-			logger.log(Level.WARNING, new RuntimeException("ignored"), () -> "supplier");
+			var ignored = new RuntimeException("ignored");
+			ignored.setStackTrace(new StackTraceElement[0]);  // Keep the console handler from printing a trace.
+			logger.log(Level.WARNING, ignored, () -> "supplier");
 
 			assertSize(3, capture.getRecords());
 			assertEquals(3, published.get());

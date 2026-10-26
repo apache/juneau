@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -282,9 +283,11 @@ class Rest_MethodOverrideAgreement_Test extends TestBase {
 	}
 
 	@Test void b13_conflict_withCallLoggerAndDebug_stays400() throws Exception {
-		var c = MockRestClient.create(Star.class).ignoreErrors().debug().build();
-		var r = c.get("/x").header("X-Method", "DELETE").header("X-HTTP-Method", "PUT").run();
-		assertEquals(400, r.getStatusCode());
+		try (var quiet = LogRecordCapture.quiet(Star.class)) {  // The debug logger would otherwise print the 400's stack trace.
+			var c = MockRestClient.create(Star.class).ignoreErrors().debug().build();
+			var r = c.get("/x").header("X-Method", "DELETE").header("X-HTTP-Method", "PUT").run();
+			assertEquals(400, r.getStatusCode());
+		}
 	}
 
 	@Test void b14_nonConflictingHeaders_stillDispatchWithTrailingSpace405() throws Exception {

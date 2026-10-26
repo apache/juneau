@@ -21,6 +21,7 @@ import static org.apache.juneau.http.classic.header.ContentType.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -75,7 +76,8 @@ class DebugMarshalling_Behavior_Test extends TestBase {
 		var logger = Logger.getLogger(resourceClass.getName());
 		var prev = logger.getLevel();
 		logger.setLevel(level);
-		try {
+		// At FINE the server logs the failed request with its stack trace; keep that off the console.
+		try (var quiet = LogRecordCapture.quiet(resourceClass)) {
 			action.run();
 		} finally {
 			logger.setLevel(prev);
