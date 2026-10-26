@@ -103,3 +103,38 @@ def test_unclosed_object_fails():
 
 def test_aggregators_constant_is_exposed():
     assert 'juneau' in pi.AGGREGATOR_POMS and 'juneau-core' in pi.AGGREGATOR_POMS
+
+
+MODULE_DOCS_FILE = FILE + """
+export const MODULE_DOCS: Record<string, string> = {
+  'juneau-marshall': 'JuneauMarshall',
+  'juneau-marshall-rdf': 'JuneauMarshallRdf',
+};
+"""
+
+
+def test_parses_module_docs():
+    assert pi.parse_module_docs(MODULE_DOCS_FILE) == {
+        'juneau-marshall': 'JuneauMarshall', 'juneau-marshall-rdf': 'JuneauMarshallRdf'}
+
+
+def test_module_docs_missing_is_an_error():
+    with pytest.raises(pi.ProjectIndexError, match='MODULE_DOCS'):
+        pi.parse_module_docs(FILE)
+
+
+def test_module_docs_rejects_bad_line():
+    bad = MODULE_DOCS_FILE.replace("'juneau-marshall': 'JuneauMarshall',", "'juneau-marshall': JuneauMarshall,")
+    with pytest.raises(pi.ProjectIndexError, match=r'line \d+'):
+        pi.parse_module_docs(bad)
+
+
+def test_module_docs_rejects_duplicate_key():
+    bad = MODULE_DOCS_FILE.replace("'juneau-marshall-rdf'", "'juneau-marshall'")
+    with pytest.raises(pi.ProjectIndexError, match=r'line \d+.*duplicate'):
+        pi.parse_module_docs(bad)
+
+
+def test_module_docs_does_not_disturb_projects():
+    groups, projects = pi.parse(MODULE_DOCS_FILE)
+    assert len(projects) == 1

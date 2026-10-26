@@ -53,17 +53,17 @@ def _literal(value, lineno):
     raise ProjectIndexError(f'line {lineno}: not a single-quoted string or one-line array: {value}')
 
 
-def _block(lines, name):
-    """The (lineno, text) pairs strictly between `export const NAME` and its closing `];`."""
+def _block(lines, name, closer='];'):
+    """The (lineno, text) pairs strictly between `export const NAME` and its closing line (`];` unless told)."""
     start = next((i for i, ln in enumerate(lines) if re.match(rf'^export const {name}\b', ln)), None)
     if start is None:
         raise ProjectIndexError(f'export const {name} not found')
     out = []
     for i in range(start + 1, len(lines)):
-        if lines[i].rstrip() == '];':
+        if lines[i].rstrip() == closer:
             return out
         out.append((i + 1, lines[i]))
-    raise ProjectIndexError(f'line {start + 1}: {name} is not closed by a line `];`')
+    raise ProjectIndexError(f'line {start + 1}: {name} is not closed by a line `{closer}`')
 
 
 def _entries(block):
@@ -95,6 +95,28 @@ def parse(text):
     """(groups, projects): lists of dicts, one per entry, keyed by the field names in the file."""
     lines = text.splitlines()
     return _entries(_block(lines, 'GROUPS')), _entries(_block(lines, 'PROJECTS'))
+
+
+_PAIR_RE = re.compile(r'^\s*' + _STR + r':\s*' + _STR + r',\s*$')
+
+
+def parse_module_docs(text):
+    """The MODULE_DOCS map (module name -> topic slug): one `'module': 'Slug',` per line, no duplicate keys."""
+    out = {}
+    for lineno, line in _block(text.splitlines(), 'MODULE_DOCS', '};'):
+        if not line.strip():
+            continue
+        m = _PAIR_RE.match(line)
+        if not m:
+            raise ProjectIndexError(f"line {lineno}: expected `'module': 'Slug',` in MODULE_DOCS: {line.strip()}")
+        if m.group(1) in out:
+            raise ProjectIndexError(f'line {lineno}: duplicate MODULE_DOCS key "{m.group(1)}"')
+        out[m.group(1)] = m.group(2)
+    return out
+
+
+def load_module_docs(docs_root):
+    return parse_module_docs(Path(docs_root, PROJECTS_FILE).read_text(encoding='utf-8'))
 
 
 def load(docs_root):

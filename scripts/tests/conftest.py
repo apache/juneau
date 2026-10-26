@@ -33,14 +33,14 @@ def load_script(filename):
     return module
 
 
-# Every JUNEAU_RUN_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
-# header and pending/overall rows, or the fact that one is active).  JUNEAU_RUN_CONSOLE, _DETAIL and _HISTORY* are
+# Every JUNEAU_TERMINAL_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
+# header and pending/overall rows, or the fact that one is active).  JUNEAU_TERMINAL_CONSOLE, _DETAIL and _HISTORY* are
 # settings, not pointers, and are handled elsewhere.
 LIVE_RUN_ENV = (
-    "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_LIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_LABEL_WIDTH",
-    "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_CANCEL", "JUNEAU_RUN_HEADER",
-    "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HANDBACK",
-    "JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS",
+    "JUNEAU_TERMINAL_ACTIVE", "JUNEAU_TERMINAL_SESSION", "JUNEAU_TERMINAL_LIVE", "JUNEAU_TERMINAL_N_BASE", "JUNEAU_TERMINAL_LABEL_WIDTH",
+    "JUNEAU_TERMINAL_FULL_LOG", "JUNEAU_TERMINAL_BOARD_LOG", "JUNEAU_TERMINAL_CANCEL", "JUNEAU_TERMINAL_HEADER",
+    "JUNEAU_TERMINAL_PENDING", "JUNEAU_TERMINAL_OVERALL", "JUNEAU_TERMINAL_HANDBACK",
+    "JUNEAU_TERMINAL_MARKERS_FILE", "JUNEAU_TERMINAL_RESULT", "JUNEAU_TERMINAL_RESULT_PARTS",
 )
 
 

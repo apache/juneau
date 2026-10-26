@@ -59,8 +59,7 @@ const juneauJavadocPackages = loadArtifactMap('JUNEAU_JAVADOC_PACKAGES', 'artifa
 const siteUrl = process.env.SITE_URL || 'https://juneau.apache.org';
 
 const baseThemeConfig: Preset.ThemeConfig = {
-  // Replace with your project's social card
-  image: 'img/docusaurus-social-card.jpg',
+  image: 'img/juneau-social-card.png',
   announcementBar: {
     id: 'prerelease-10-0',
     content:

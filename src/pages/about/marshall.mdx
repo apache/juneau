@@ -1,0 +1,45 @@
+---
+title: Juneau Marshall
+description: One bean. Every format.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="marshall">
+
+```java
+import org.apache.juneau.marshall.marshaller.*;
+
+public class Person {
+    public String name = "John Smith";
+    public int age = 21;
+}
+
+String json = Json.of(new Person());
+String xml  = Xml.of(new Person());
+String yaml = Yaml.of(new Person());
+
+Person back = Json.to(json, Person.class);
+```
+
+```json
+{"age":21,"name":"John Smith"}
+```
+
+```xml
+<object><age>21</age><name>John Smith</name></object>
+```
+
+```yaml
+age: 21
+name: John Smith
+```
+
+- One API for JSON, JSON5, XML, HTML, YAML, CSV, UON, MessagePack and RDF.
+- One annotation model (`@BeanType`, `@BeanProp`) across every format.
+- Round-trip parsing back to the same beans.
+- Swaps for types you can't annotate.
+- No required dependencies: `juneau-marshall` needs only `juneau-commons`.
+
+</ProjectLayout>

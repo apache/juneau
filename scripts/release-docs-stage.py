@@ -27,7 +27,7 @@ import traceback
 import webbrowser
 from pathlib import Path
 
-import run_view
+import terminal_view
 from juneau_root import find_juneau_root
 
 _HELP_EPILOG = """
@@ -49,10 +49,10 @@ Options:
     --commit-message   Custom commit message (default: "Deploy documentation staging")
     --juneau-root      Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master,
                        then sibling ../juneau); passed on to build-docs.py
-    --console          Console output when the Juneau checkout has juneau-run: full, board
-                       (default) or none (also $JUNEAU_RUN_CONSOLE)
+    --console          Console output when the Juneau checkout has juneau-terminal: full, board
+                       (default) or none (also $JUNEAU_TERMINAL_CONSOLE)
 
-With juneau-run available, the run is one live view: Prechecks, build-docs.py's rows, Stage push
+With juneau-terminal available, the run is one live view: Prechecks, build-docs.py's rows, Stage push
 (Fetch, Copy, Commit, Push) and the staged URL.  Without it the output is plain.
 """
 
@@ -87,7 +87,7 @@ def identity_problem(repo_dir):
 
 def branch_problem(repo_dir):
     """None when the docs checkout is current; otherwise a warning (it never stops the release)."""
-    warning = run_view.branch_warning(repo_dir)
+    warning = terminal_view.branch_warning(repo_dir)
     return None if warning is None else ('warn', warning, ())
 
 
@@ -98,7 +98,7 @@ def staging_dir_for(docs_dir):
 
 def stage_plan():
     """The run's top-level rows, in order, as (id, label): Prechecks, build-docs.py's rows, Stage push and URL."""
-    return [('prechecks', 'Prechecks'), *run_view.BUILD_ROWS, ('stage', 'Stage push'), ('url', 'URL')]
+    return [('prechecks', 'Prechecks'), *terminal_view.BUILD_ROWS, ('stage', 'Stage push'), ('url', 'URL')]
 
 
 def get_git_remote_url():
@@ -364,14 +364,14 @@ def main():
         default=None,
         help='Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)'
     )
-    run_view.add_console_argument(parser)
+    terminal_view.add_console_argument(parser)
 
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
     juneau_root = find_juneau_root(docs_dir, args.juneau_root, allow_missing=True, validate=False)
-    view = run_view.open_view(juneau_root, args.console)
+    view = terminal_view.open_view(juneau_root, args.console)
 
     if view.live:
         header = ["Juneau Docs"]

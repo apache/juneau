@@ -25,7 +25,7 @@ Run from the docs checkout.
 | `--no-push` | none | off | Build and commit in the staging checkout but do not push, and do not open the browser. |
 | `--commit-message` | text | `Deploy documentation staging` | Commit message for the staging commit. |
 | `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau source checkout; passed on to `build-docs.py`. |
-| `--console` | `full`, `board`, `none` | `board` | Console output when the Juneau checkout provides `juneau-run`; also `JUNEAU_RUN_CONSOLE` (the flag wins). Passed on to `build-docs.py`. |
+| `--console` | `full`, `board`, `none` | `board` | Console output when the Juneau checkout provides `juneau-terminal`; also `JUNEAU_TERMINAL_CONSOLE` (the flag wins). Passed on to `build-docs.py`. |
 
 ## What it does
 
@@ -40,7 +40,7 @@ Run from the docs checkout.
 
 ## Output and exit codes
 
-Progress is the `juneau-run` live view (rows Prechecks, the build rows, Stage push and URL) or plain text. The commit lives in `../asf-staging`.
+Progress is the `juneau-terminal` live view (rows Prechecks, the build rows, Stage push and URL) or plain text. The commit lives in `../asf-staging`.
 
 | Code | Meaning |
 |---|---|

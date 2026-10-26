@@ -7,19 +7,19 @@
 	"cases": [
 		{
 			"id": "run-live",
-			"image": "topics/JuneauRun.ConsoleView.1.svg",
+			"image": "topics/JuneauTerminal.ConsoleView.1.svg",
 			"title": "The board console view of a Maven run, part-way through",
-			"description": "juneau-run's board view during a three-module Maven build: the progress bar at one of three modules and the running module's line under the row.",
-			"command": ["python3", "{juneau_run}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log", "76"],
+			"description": "juneau-terminal's board view during a three-module Maven build: the progress bar at one of three modules and the running module's line under the row.",
+			"command": ["python3", "{juneau_terminal}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log", "76"],
 			"waitFor": "Demo Module B",
 			"mask": [["[\\u2800-\\u28ff]", "\u280b"], ["(?<![\\d:])\\d+:\\d\\d(?![\\d:])", "0:03"]]
 		},
 		{
 			"id": "run-final",
-			"image": "topics/JuneauRun.ConsoleView.2.svg",
+			"image": "topics/JuneauTerminal.ConsoleView.2.svg",
 			"title": "The board console view of a finished Maven run",
-			"description": "juneau-run's board view after the build: one row with the full progress bar and the test count, and the final line.",
-			"command": ["python3", "{juneau_run}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log"],
+			"description": "juneau-terminal's board view after the build: one row with the full progress bar and the test count, and the final line.",
+			"command": ["python3", "{juneau_terminal}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log"],
 			"waitFor": "Done in",
 			"mask": [["(?<![\\d:])\\d+:\\d\\d(?![\\d:])", "0:07"]]
 		},
@@ -27,10 +27,10 @@
 			"id": "side-pane",
 			"image": "topics/AgentSidePane.Approach.1.svg",
 			"title": "An agent pane beside a run pane",
-			"description": "A tmux window split in two: on the left an AI agent waiting for its command, on the right juneau-run's live view of that command.",
+			"description": "A tmux window split in two: on the left an AI agent waiting for its command, on the right juneau-terminal's live view of that command.",
 			"panes": [
 				{"columns": 50, "rows": 12, "command": ["bash", "{fixtures}/agent-chat.sh"], "waitFor": "waiting for the run"},
-				{"columns": 60, "rows": 12, "command": ["python3", "{juneau_run}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log", "76"], "waitFor": "Demo Module B", "mask": [["[\\u2800-\\u28ff]", "\u280b"], ["(?<![\\d:])\\d+:\\d\\d(?![\\d:])", "0:03"]]}
+				{"columns": 60, "rows": 12, "command": ["python3", "{juneau_terminal}", "--console", "board", "--full-log", "run.log", "--board-log", "run.board.log", "--step", "build", "--title", "mvn verify", "maven", "--", "bash", "{fixtures}/replay-log.sh", "{fixtures}/maven-demo.log", "76"], "waitFor": "Demo Module B", "mask": [["[\\u2800-\\u28ff]", "\u280b"], ["(?<![\\d:])\\d+:\\d\\d(?![\\d:])", "0:03"]]}
 			]
 		}
 	]

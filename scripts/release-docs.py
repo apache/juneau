@@ -26,7 +26,7 @@ import sys
 import traceback
 from pathlib import Path
 
-import run_view
+import terminal_view
 from juneau_root import find_juneau_root
 
 _HELP_EPILOG = """
@@ -48,12 +48,12 @@ Usage:
 Options:
     --no-push          Perform all steps except the final git push
     --commit-message   Not used (kept for consistency with release-docs-stage.py)
-    --juneau-root      Juneau source checkout whose juneau-run draws the live view (default:
+    --juneau-root      Juneau source checkout whose juneau-terminal draws the live view (default:
                        $JUNEAU_ROOT, then sibling ../master, then sibling ../juneau)
-    --console          Console output when juneau-run is available: full, board (default)
-                       or none (also $JUNEAU_RUN_CONSOLE)
+    --console          Console output when juneau-terminal is available: full, board (default)
+                       or none (also $JUNEAU_TERMINAL_CONSOLE)
 
-With juneau-run available, the run is one live view: Prechecks, then Promote (Fetch, Switch,
+With juneau-terminal available, the run is one live view: Prechecks, then Promote (Fetch, Switch,
 Push).  Without it the output is plain.
 """
 
@@ -260,17 +260,17 @@ def main():
         '--juneau-root',
         type=Path,
         default=None,
-        help='Juneau source checkout whose juneau-run draws the live view (default: $JUNEAU_ROOT, then sibling '
+        help='Juneau source checkout whose juneau-terminal draws the live view (default: $JUNEAU_ROOT, then sibling '
              '../master, then ../juneau)'
     )
-    run_view.add_console_argument(parser)
+    terminal_view.add_console_argument(parser)
 
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
     juneau_root = find_juneau_root(docs_dir, args.juneau_root, allow_missing=True, validate=False)
-    view = run_view.open_view(juneau_root, args.console)
+    view = terminal_view.open_view(juneau_root, args.console)
 
     if view.live:
         header = ["Juneau Docs", "--no-push: nothing is pushed" if args.no_push else "makes asf-staging LIVE on asf-site"]

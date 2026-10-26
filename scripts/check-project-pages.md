@@ -39,6 +39,7 @@ Parses `projects.ts` with `project_index.py` (it does not run TypeScript), then 
 | C10 | Each group's projects are contiguous in `projects.ts`, in `GROUPS` order. |
 | C11 | Each project page's `title` and `description` front matter equal its `name` and `tagline`. The overview needs a title and description. Every about page needs `hide_table_of_contents: true`. |
 | C12 | Every `/docs/topics/<X>` link in an about page matches a topic `slug:`. |
+| C13 | Every `MODULE_DOCS` key in `projects.ts` is a module some project lists, and every value is a topic `slug:` (same rule as C7). |
 
 A file that breaks the `projects.ts` format rules is reported as `C0`, with the line number, and stops the run.
 

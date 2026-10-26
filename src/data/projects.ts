@@ -20,7 +20,8 @@
  *   - one object per entry; each field on its own line as `key: <literal>,`;
  *   - strings are single-quoted with no backslash or inner quote (use the typographic apostrophe, U+2019);
  *   - `modules` and `docs` are single-line arrays of single-quoted strings;
- *   - no comments inside the GROUPS or PROJECTS literals;
+ *   - MODULE_DOCS has one `'module': 'Slug',` pair per line, no duplicate keys;
+ *   - no comments inside the GROUPS, PROJECTS or MODULE_DOCS literals;
  *   - PROJECTS is in display order, and each group's entries are contiguous, in GROUPS order.
  */
 
@@ -143,6 +144,59 @@ export const PROJECTS: Project[] = [
     docs: ['JuneauTerminal'],
   },
 ];
+
+// Module name -> topic slug, for the modules whose topic page clearly covers them.  Unmapped modules render as plain code.
+export const MODULE_DOCS: Record<string, string> = {
+  'juneau-marshall': 'JuneauMarshall',
+  'juneau-marshall-rdf': 'JuneauMarshallRdf',
+  'juneau-bean-openapi-v3': 'JuneauBeanOpenApi3',
+  'juneau-bean-swagger-v2': 'JuneauBeanSwagger2',
+  'juneau-bean-jsonschema': 'JuneauBeanJsonSchema',
+  'juneau-bean-html5': 'JuneauBeanHtml5',
+  'juneau-bean-atom': 'JuneauBeanAtom',
+  'juneau-bean-hal': 'JuneauBeanHal',
+  'juneau-bean-jsonapi': 'JuneauBeanJsonApi',
+  'juneau-bean-jsonrpc': 'JuneauBeanJsonRpc',
+  'juneau-bean-jsonpatch': 'JuneauBeanJsonPatch',
+  'juneau-bean-rfc7807': 'JuneauBeanRfc7807',
+  'juneau-bean-mcp-v20250618': 'JuneauBeanMcp',
+  'juneau-bean-mcp-v20260728': 'JuneauBeanMcp',
+  'juneau-bean-common': 'JuneauBeanCommon',
+  'juneau-commons': 'JuneauCommons',
+  'juneau-rest-server': 'JuneauRestServer',
+  'juneau-rest-common': 'JuneauRestCommon',
+  'juneau-microservice': 'JuneauMicroservice',
+  'juneau-microservice-jetty': 'JuneauMicroserviceJetty',
+  'juneau-microservice-tomcat': 'JuneauMicroserviceTomcat',
+  'juneau-rest-server-springboot': 'JuneauRestServerSpringboot',
+  'juneau-rest-mock': 'JuneauRestMock',
+  'juneau-rest-server-auth-oauth': 'OAuthAuthSupport',
+  'juneau-rest-server-auth-oidc-rp': 'OidcRelyingParty',
+  'juneau-rest-server-auth-saml': 'SamlAuthSupport',
+  'juneau-rest-server-metrics-micrometer': 'RestServerMicrometerMetrics',
+  'juneau-rest-server-tracing-otel': 'RestServerOtelTracing',
+  'juneau-rest-client': 'JuneauRestClient',
+  'juneau-rest-client-apache-httpclient-45': 'RestClientApacheHttpClient45',
+  'juneau-rest-client-apache-httpclient-50': 'RestClientApacheHttpClient50',
+  'juneau-rest-client-jetty': 'RestClientJetty',
+  'juneau-rest-client-okhttp': 'RestClientOkHttp',
+  'juneau-console-datatables': 'DataTables',
+  'juneau-console-bus': 'ConsoleMessageBus',
+  'juneau-rest-server-view-jsp': 'JspViewSupport',
+  'juneau-rest-server-view-thymeleaf': 'ThymeleafViewSupport',
+  'juneau-rest-server-view-mustache': 'MustacheViewSupport',
+  'juneau-rest-server-view-freemarker': 'FreemarkerViewSupport',
+  'juneau-rest-server-mcp': 'JuneauRestServerMcp',
+  'juneau-rest-client-mcp': 'JuneauRestClientMcp',
+  'juneau-config': 'JuneauConfig',
+  'juneau-bct': 'JuneauBct',
+  'juneau-terminal': 'JuneauTerminal',
+  'juneau-terminal-region': 'TerminalRegion',
+};
+
+export function topicForModule(module: string): string | undefined {
+  return MODULE_DOCS[module];
+}
 
 export function projectBySlug(slug: string): Project | undefined {
   return PROJECTS.find((p) => p.slug === slug);

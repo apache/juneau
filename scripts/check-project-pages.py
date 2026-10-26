@@ -12,7 +12,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Check that src/data/projects.ts, the /about MDX pages and their links agree (checks C1 to C12).
+Check that src/data/projects.ts, the /about MDX pages and their links agree (checks C1 to C13).
 
 Full docs: check-project-pages.md
 """
@@ -82,6 +82,7 @@ def check(docs_root):
     docs_root = Path(docs_root)
     try:
         groups, projects = project_index.load(docs_root)
+        module_docs = project_index.load_module_docs(docs_root)
     except project_index.ProjectIndexError as e:
         return [f'C0: {project_index.PROJECTS_FILE}: {e}']
     errors = []
@@ -145,6 +146,15 @@ def check(docs_root):
             if d not in topics:
                 errors.append(f'C7: {project_index.PROJECTS_FILE}: project "{p.get("slug")}" lists topic "{d}", '
                               f'which is no pages/topics slug')
+
+    # C13: every MODULE_DOCS key is a module some project lists, and every value is a real topic slug.
+    listed = {m for p in projects for m in p.get('modules', [])}
+    for mod, slug in module_docs.items():
+        if mod not in listed:
+            errors.append(f'C13: {project_index.PROJECTS_FILE}: MODULE_DOCS key "{mod}" is no project\'s module')
+        if slug not in topics:
+            errors.append(f'C13: {project_index.PROJECTS_FILE}: MODULE_DOCS maps "{mod}" to "{slug}", '
+                          f'which is no pages/topics slug')
 
     # C8: names start with "Juneau " and taglines are not empty.
     for p in projects:

@@ -69,7 +69,7 @@ Apache Juneau™ excels in the following scenarios:
 * **Serverless unit testing of REST APIs** - Test REST services without servlet containers using MockRestClient for fast, comprehensive testing
 * **Microservice development** - Build lightweight microservices with embedded Jetty or Spring Boot integration
 * **Data transformation and mapping** - Convert between different data formats and handle complex object hierarchies with swap mechanisms
-* **Bean-Centric Testing and fluent-style assertions** - Write readable test assertions with comprehensive validation capabilities using juneau-test
+* **Bean-Centric Testing and fluent-style assertions** - Write readable test assertions with comprehensive validation capabilities using juneau-bct
 * **Content negotiation and HTTP/2 support** - Handle multiple content types automatically with modern HTTP features
 
 ## Getting Started in 5 Minutes
@@ -288,7 +288,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 * **juneau-marshall-rdf**	- Additional support for various RDF languages.
 * **juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi-v3**	- A variety of predefined serializable beans such as HTML5, Swagger and ATOM.
 * **juneau-config**	- A sophisticated configuration file API.
-* **juneau-test** - Fluent-style assertions, Bean-Centric Testing, and JUnit 5 extensions.
+* **juneau-bct** - Fluent-style assertions, Bean-Centric Testing, and JUnit 5 extensions.
 * **juneau-svl** - Simple Variable Language for dynamic string processing.
 * **juneau-rest-common** - REST APIs common to client and server side.
 * **juneau-rest-server**	- A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. Includes Spring Boot and JAX-RS integration support.
@@ -352,7 +352,7 @@ python3 scripts/build-docs.py --staging             # set SITE_URL to juneau.sta
 python3 scripts/build-docs.py --console full        # live view with every tool's output
 ```
 
-When the Juneau checkout has `juneau-run`, the build and release scripts show a live view, one row per stage (`--console full|board|none`, default board); otherwise they print plain output.
+When the Juneau checkout has `juneau-terminal`, the build and release scripts show a live view, one row per stage (`--console full|board|none`, default board); otherwise they print plain output.
 
 Output lands in `build/`. On a successful full build the script prints a publish reminder.
 

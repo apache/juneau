@@ -1,0 +1,35 @@
+---
+title: Juneau AI
+description: Expose your services to AI agents over MCP.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="ai">
+
+```java
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.mcp.*;
+import org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet;
+
+@Rest(path="/mcp")
+public class MyMcpServlet extends McpRestServlet {
+
+    @Override
+    protected McpServerConfig createMcpConfig() {
+        return new McpServerConfig()
+            .setName("my-server").setVersion("1.0.0")
+            .addTool(new MyEchoTool());
+    }
+}
+```
+
+- MCP tools, prompts and resources served from a REST resource.
+- Two MCP protocol versions, each in its own module.
+- An MCP client, with auth.
+- Typed beans for the MCP wire messages.
+- A [quickstart](/docs/topics/JuneauMcpQuickstart), and a guide to
+  [choosing your MCP setup](/docs/topics/JuneauMcpChoosingSetup).
+
+</ProjectLayout>

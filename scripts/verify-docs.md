@@ -6,7 +6,7 @@ Documentation-integrity checker: verifies that the topic and guide pages, their 
 
 - After adding, renaming, moving or deleting a topic or guide page, or editing `sidebars.ts`.
 - As part of a full build: `build-docs.py` runs it in its Verify stage and fails the build on errors.
-- For links from Juneau source and Javadoc to topics, use `check-topic-links.py`. For the module list on the About page, use `check-doc-inventory.py`.
+- For links from Juneau source and Javadoc to topics, use `check-topic-links.py`. For the project modules in `src/data/projects.ts`, use `check-doc-inventory.py`.
 
 ## Usage
 

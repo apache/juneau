@@ -80,11 +80,11 @@ OLD_NAME_PATTERNS = (
     ('tool slug', _slug('Juneau' + 'Test')),
     ('tool slug', _slug('Juneau' + 'Test' + 'JUnitExtensions')),
     # The run feature
-    ('run feature', re.compile('##' + 'run ')),
+    ('run feature', re.compile('##' + r'run(?!\w)')),
     ('run feature', _word('Run' + 'Event')),
     ('run feature', _word('Run' + 'View' + 'Checks')),
     ('run feature', _word('Run' + 'View' + 'CardType')),
-    ('run feature', _prefix('Run' + 'View' + r'(?:Def|Endpoints|Log|Mixin|Page|Source|_BrowserTest|Css_Test)')),
+    ('run feature', _prefix('Run' + 'View' + r'(?:Def|Endpoints|Log|Mixin|Page|Source|_BrowserTest|Css_Test)(?![a-z0-9])')),
     ('run feature', _tok(_JUNEAU, 'run', 'view')),
     ('run feature', _tok('run', 'view')),
     ('run feature', _word('run' + 'View')),

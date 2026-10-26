@@ -1,5 +1,5 @@
-# Modules that are intentionally NOT listed on /about's ecosystem table (or any other
-# inventory page checked by check-doc-inventory.py).
+# Modules that are intentionally NOT in any project's modules[] in src/data/projects.ts
+# (the inventory source checked by check-doc-inventory.py).
 #
 # One module name per line. Lines starting with '#' and blank lines are ignored.
 # Every entry here must have a one-line rationale in the comment above it.
@@ -13,11 +13,34 @@ juneau-test-utils
 juneau-test-marshall-utils
 juneau-microservice-test
 juneau-microservice-examples
-juneau-rest-server-console-ui-freemarker-tests
+juneau-console-freemarker-tests
 juneau-examples-guides
 
-# --- Petstore submodules: /about intentionally shows one rolled-up "juneau-petstore"
-#     row rather than breaking out the three deployment variants. ---
+# --- Petstore submodules: the Ecosystem overview shows one rolled-up "juneau-petstore"
+#     entry rather than breaking out the three deployment variants. ---
 juneau-petstore-core
 juneau-petstore-jetty
 juneau-petstore-springboot
+
+# --- Examples, bundles and shaded jars: packaging, not a project. They stay with the Ecosystem overview. ---
+juneau-examples-core
+juneau-examples-mcp
+juneau-microservice-jetty-bundle
+juneau-microservice-tomcat-bundle
+juneau-observability-otlp-bundle
+juneau-springboot-bundle
+juneau-shaded-all
+juneau-shaded-core
+juneau-shaded-rest-client
+juneau-shaded-rest-server
+juneau-shaded-rest-server-springboot
+
+# --- Modules with no project page yet: optional or internal pieces documented in their own topics. ---
+juneau-sc-server
+juneau-secret-macos-keychain
+juneau-rest-server-management-logging
+juneau-rest-server-reactive
+juneau-rest-server-reactive-reactor
+juneau-rest-server-rdf
+juneau-rest-common-classic
+juneau-rest-auth-oauth-flow

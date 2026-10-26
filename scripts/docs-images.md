@@ -4,7 +4,7 @@ Regenerates the generated images of the docs site (petstore UI screenshots and t
 
 ## When to use
 
-- A petstore page or a `juneau-run` display changed and its documentation image must be refreshed.
+- A petstore page or a `juneau-terminal` display changed and its documentation image must be refreshed.
 - You want to know whether every generated image exists and every image reference in `pages/` resolves: use `--check` (it writes nothing).
 - You are adding a screenshot: add a case to `docs-images/ui-cases.json` or `docs-images/terminal-cases.json`, then run this script for just that case.
 
@@ -39,7 +39,7 @@ python3 scripts/docs-images.py --juneau-root ~/git/apache/juneau
    - `ORPHANED`: an image under `static/topics` or `static/developer-info` that no case produces and the `unmanaged` globs do not exempt;
    - `DANGLING`: an image reference in `pages/` to a file that does not exist;
    - `UNREFERENCED`: a case whose image no page references (a warning; does not fail the check).
-3. **Terminal cases:** for each case, starts its `command` (the placeholders `{juneau_run}` and `{fixtures}` expand to the Juneau checkout's `juneau_run.py` and `scripts/docs-images/fixtures`) in a detached `tmux` session of fixed size on a private tmux server. It waits for the case's `waitFor` regex to appear and the pane to stop changing, captures it with `tmux capture-pane -e -p`, applies the `mask` regex replacements, and renders SVG text. A case with `panes` renders its panes side by side. Defaults are 100 columns, 30 rows and a 60 second timeout.
+3. **Terminal cases:** for each case, starts its `command` (the placeholders `{juneau_terminal}` and `{fixtures}` expand to the Juneau checkout's `juneau_terminal.py` and `scripts/docs-images/fixtures`) in a detached `tmux` session of fixed size on a private tmux server. It waits for the case's `waitFor` regex to appear and the pane to stop changing, captures it with `tmux capture-pane -e -p`, applies the `mask` regex replacements, and renders SVG text. A case with `panes` renders its panes side by side. Defaults are 100 columns, 30 rows and a 60 second timeout.
 4. **UI cases:** reuses a petstore already answering on `http://localhost:<port>`, or starts `<juneau-root>/scripts/start-petstore-jetty.py --port <port>` with the clock fixed (`PETSTORE_FIXED_NOW=seed`) and stops it on exit. Installs Playwright and Chromium under `<juneau-root>/juneau-petstore/juneau-petstore-core/target/js` if missing, then runs the Juneau checkout's `petstore-browser.cjs` harness over the cases (`path`, `actions`, `selector`, `viewport`, `waitUntil`, `initScript`).
 5. Moves images into `static/` only after every case of the run succeeded.
 

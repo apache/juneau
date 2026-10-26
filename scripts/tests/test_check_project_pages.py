@@ -113,7 +113,7 @@ def _arr(items):
     return '[' + ', '.join(f"'{i}'" for i in items) + ']'
 
 
-def render_projects_ts(groups, projects):
+def render_projects_ts(groups, projects, module_docs=None):
     def entries(rows):
         out = ''
         for row in rows:
@@ -123,7 +123,9 @@ def render_projects_ts(groups, projects):
             out += '  },\n'
         return out
     return ('// header comment\nexport const GROUPS: Group[] = [\n' + entries(groups) + '];\n\n'
-            'export const PROJECTS: Project[] = [\n' + entries(projects) + '];\n')
+            'export const PROJECTS: Project[] = [\n' + entries(projects) + '];\n' +
+            ('\nexport const MODULE_DOCS: Record<string, string> = {\n' +
+             ''.join(f"  '{k}': '{v}',\n" for k, v in module_docs.items()) + '};\n' if module_docs is not None else ''))
 
 
 def page_text(project, *, title=None, description=None, attrs=None, body='See [it](/docs/topics/Alpha).', toc=True):
@@ -146,10 +148,11 @@ def write(root, rel, text):
     f.write_text(text, encoding='utf-8')
 
 
-def make_tree(tmp_path, *, projects=None, groups=None, paths=None, topics=('Alpha',), overview=OVERVIEW, skip=()):
+def make_tree(tmp_path, *, projects=None, groups=None, paths=None, topics=('Alpha',), overview=OVERVIEW, skip=(),
+              module_docs=None):
     """projects.ts, src/pages/about/*.mdx, artifact-paths.json and pages/topics/*.md in a throwaway docs root."""
     projects = PROJECTS if projects is None else projects
-    write(tmp_path, 'src/data/projects.ts', render_projects_ts(GROUPS if groups is None else groups, projects))
+    write(tmp_path, 'src/data/projects.ts', render_projects_ts(GROUPS if groups is None else groups, projects, {} if module_docs is None else module_docs))
     for p in projects:
         if p['slug'] not in skip:
             write(tmp_path, f'src/pages/about/{p["slug"]}.mdx', page_text(p))
@@ -265,8 +268,27 @@ def test_topic_without_slug_uses_file_stem(tmp_path):
     make_tree(tmp_path)
     write(tmp_path, 'pages/topics/02.Stemmed.md', '# no front matter\n')
     ok = [{**PROJECTS[0], 'docs': ['02.Stemmed']}, PROJECTS[1]]
-    write(tmp_path, 'src/data/projects.ts', render_projects_ts(GROUPS, ok))
+    write(tmp_path, 'src/data/projects.ts', render_projects_ts(GROUPS, ok, {}))
     assert check.check(tmp_path) == []
+
+
+# C13
+def test_module_docs_valid_passes(tmp_path):
+    assert check.check(make_tree(tmp_path, module_docs={'juneau-a': 'Alpha'})) == []
+
+
+def test_module_docs_unlisted_module_fails(tmp_path):
+    assert 'C13' in ids(check.check(make_tree(tmp_path, module_docs={'juneau-zzz': 'Alpha'})))
+
+
+def test_module_docs_unknown_topic_fails(tmp_path):
+    assert 'C13' in ids(check.check(make_tree(tmp_path, module_docs={'juneau-a': 'Nope'})))
+
+
+def test_module_docs_absent_is_c0(tmp_path):
+    make_tree(tmp_path)
+    write(tmp_path, 'src/data/projects.ts', render_projects_ts(GROUPS, PROJECTS))
+    assert 'C0' in ids(check.check(tmp_path))
 
 
 # C8

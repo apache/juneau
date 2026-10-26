@@ -1,0 +1,59 @@
+---
+title: Juneau Console
+description: Browser admin consoles built from your REST resources.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="console">
+
+```java
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.console.*;
+import org.apache.juneau.console.datatables.*;
+import org.apache.juneau.console.freemarker.*;
+import org.apache.juneau.console.views.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.staticfile.*;
+import org.apache.juneau.rest.server.view.*;
+import org.apache.juneau.rest.server.view.freemarker.*;
+
+@Rest(
+    path="/console",
+    mixins={
+        FreemarkerMixin.class,        // renders .ftlh views
+        ConsoleChromeMixin.class,     // chrome.css, theme CSS, juneau-console.js
+        ViewsMixin.class,             // the views toolkit scripts and CSS
+        DataTablesMixin.class,        // juneau-datatables.js
+        WebJarsMixin.class            // /webjars/*: jQuery and DataTables
+    }
+)
+public class PetConsole extends BasicRestServlet {
+
+    @Bean
+    public FreemarkerMixin freemarker() {
+        // Typed as FreemarkerMixin: the return type is load-bearing.
+        return ConsoleFreemarkerMixin.create()
+            .basePath("/templates/")
+            .chromeTemplate("console/chrome.ftlh")
+            .build();
+    }
+
+    @RestGet(path="/pets")
+    public View pets() {
+        return FreemarkerView.of("console/pets.ftlh");
+    }
+}
+```
+
+- Themeable, server-rendered console chrome: header, navigation tree and footer.
+- Rich table views with search, sort, paging and row actions.
+- Chart cards, the Terminal view and Terminal regions.
+- Job-log cards, row jobs and async jobs over the console message bus.
+- Declarative widgets and Markdown.
+- JSP, Thymeleaf, Mustache and FreeMarker views.
+- No front-end build. [Build a console page](/docs/topics/BuildingAConsolePage) step by step.
+
+</ProjectLayout>

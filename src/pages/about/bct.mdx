@@ -1,0 +1,22 @@
+---
+title: Juneau BCT
+description: 'Bean-Centric Testing: assert on whole beans in one line.'
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="bct">
+
+```java
+import static org.apache.juneau.bct.BctAssertions.*;
+
+assertBean(person, "name,age", "Ada,36");
+```
+
+- Property-path assertions on beans, lists and maps.
+- Fluent assertions in `org.apache.juneau.bct.assertions`.
+- Readable failure diffs.
+- Built for JUnit 5.
+
+</ProjectLayout>

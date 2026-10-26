@@ -275,7 +275,7 @@ def generate_ui(docs_root, juneau_root, cases, base_url):
 # ---------------------------------------------------------------------------------------------------------------------
 
 TERM_DEFAULT_COLUMNS, TERM_DEFAULT_ROWS, TERM_DEFAULT_TIMEOUT = 100, 30, 60
-JUNEAU_RUN_PY = Path('juneau-run') / 'src' / 'main' / 'python' / 'juneau_run.py'
+JUNEAU_TERMINAL_PY = Path('juneau-terminal') / 'src' / 'main' / 'python' / 'juneau_terminal.py'
 FIXTURES_DIR = Path('scripts') / CASES_DIR_NAME / 'fixtures'
 # The font stack of the site's code blocks (Infima's default); the SVG's text is real text in this font.
 TERM_FONT = 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
@@ -481,7 +481,7 @@ def tmux(socket_name, *args):
 
 
 def expand_command(command, juneau_root, docs_root):
-    subs = {'{juneau_run}': str(Path(juneau_root) / JUNEAU_RUN_PY), '{fixtures}': str(Path(docs_root) / FIXTURES_DIR)}
+    subs = {'{juneau_terminal}': str(Path(juneau_root) / JUNEAU_TERMINAL_PY), '{fixtures}': str(Path(docs_root) / FIXTURES_DIR)}
     out = []
     for arg in command:
         for key, value in subs.items():
@@ -550,8 +550,8 @@ def render_terminal_case(case, juneau_root, docs_root):
 def generate_terminal(docs_root, juneau_root, cases):
     if not shutil.which('tmux'):
         raise Problem("'tmux' is not on the PATH; the terminal source needs tmux")
-    if not (Path(juneau_root) / JUNEAU_RUN_PY).is_file():
-        raise Problem(f"juneau_run.py not found: {Path(juneau_root) / JUNEAU_RUN_PY}")
+    if not (Path(juneau_root) / JUNEAU_TERMINAL_PY).is_file():
+        raise Problem(f"juneau_terminal.py not found: {Path(juneau_root) / JUNEAU_TERMINAL_PY}")
     print(f"-> Capturing {len(cases)} terminal case(s)")
     rendered = {}
     for c in cases:

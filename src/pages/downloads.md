@@ -22,7 +22,7 @@
   - `juneau-marshall.jar` - Marshalling
   - `juneau-marshall-rdf.jar` - Marshalling RDF extension (requires Apache Jena)
   - `juneau-config.jar` - Config File
-  - `juneau-test.jar` - Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions
+  - `juneau-bct.jar` - Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions
   - `juneau-bean-atom.jar` - ATOM Data Transfer Object Beans
   - `juneau-bean-common.jar` - Common Data Transfer Object Beans
   - `juneau-bean-html5.jar` - HTML5 Data Transfer Object Beans

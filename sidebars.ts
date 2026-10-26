@@ -1289,7 +1289,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'category',
-							label: '7. juneau-test',
+							label: '7. juneau-bct',
 							collapsed: true,
 							items: [
 								{
@@ -1346,13 +1346,13 @@ const sidebars: SidebarsConfig = {
 								},
 								{
 									type: 'doc',
-									id: 'topics/07.03.JuneauTestJUnitExtensions',
+									id: 'topics/07.03.JuneauBctJUnitExtensions',
 									label: '7.3. JUnit Extensions',
 								},
 							],
 							link: {
 								type: 'doc',
-								id: 'topics/07.juneau-test',
+								id: 'topics/07.juneau-bct',
 							},
 						},
 					],
@@ -1991,7 +1991,7 @@ const sidebars: SidebarsConfig = {
 									items: [
 										{
 											type: 'category',
-											label: '10.62. Admin-Console Chrome (juneau-rest-server-console-ui)',
+											label: '10.62. Admin-Console Chrome (juneau-console)',
 											collapsed: true,
 											link: {
 												type: 'doc',
@@ -2023,21 +2023,21 @@ const sidebars: SidebarsConfig = {
 										{
 											type: 'doc',
 											id: 'topics/10.63.MarkdownViewRendering',
-											label: '10.63. Markdown View Rendering (juneau-rest-server-views-markdown)',
+											label: '10.63. Markdown View Rendering (juneau-console-views-markdown)',
 										},
 										{
 											type: 'doc',
 											id: 'topics/10.64.DataTables',
-											label: '10.64. DataTables Server-Side Processing (juneau-rest-server-datatables)',
+											label: '10.64. DataTables Server-Side Processing (juneau-console-datatables)',
 										},
 										{
 											type: 'doc',
 											id: 'topics/10.65.DeclarativeWidgets',
-											label: '10.65. Declarative Widgets (juneau-rest-server-widgets)',
+											label: '10.65. Declarative Widgets (juneau-console-widgets)',
 										},
 										{
 											type: 'category',
-											label: '10.66. Rich Table Views (juneau-rest-server-views)',
+											label: '10.66. Rich Table Views (juneau-console-views)',
 											collapsed: true,
 											link: {
 												type: 'doc',
@@ -2091,8 +2091,8 @@ const sidebars: SidebarsConfig = {
 												},
 												{
 													type: 'doc',
-													id: 'topics/10.66.10.RunViewRegion',
-													label: '10.66.10. Run View Region',
+													id: 'topics/10.66.10.TerminalViewRegion',
+													label: '10.66.10. Terminal View Region',
 												},
 												{
 													type: 'doc',
@@ -2114,7 +2114,7 @@ const sidebars: SidebarsConfig = {
 										{
 											type: 'doc',
 											id: 'topics/10.67.DatatableViewSettings',
-											label: '10.67. Datatable View Settings (juneau-rest-server-views)',
+											label: '10.67. Datatable View Settings (juneau-console-views)',
 										},
 									],
 								},
@@ -2704,7 +2704,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'category',
-							label: '22. juneau-run',
+							label: '22. juneau-terminal',
 							collapsed: true,
 							items: [
 								{
@@ -2714,13 +2714,13 @@ const sidebars: SidebarsConfig = {
 								},
 								{
 									type: 'doc',
-									id: 'topics/22.02.DrivingARun',
+									id: 'topics/22.02.DrivingTheTerminal',
 									label: '22.2. Driving a Run from Another Tool',
 								},
 							],
 							link: {
 								type: 'doc',
-								id: 'topics/22.JuneauRun',
+								id: 'topics/22.JuneauTerminal',
 							},
 						},
 						{

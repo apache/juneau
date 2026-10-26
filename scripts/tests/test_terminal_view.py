@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
-"""The juneau-run adapter: loading the toolkit, the plain fallback, and the scripts' row plans."""
+"""The juneau-terminal adapter: loading the toolkit, the plain fallback, and the scripts' row plans."""
 
 import argparse
 import contextlib
@@ -22,7 +22,7 @@ from pathlib import Path
 
 import pytest
 
-import run_view
+import terminal_view
 from conftest import SCRIPTS_DIR, load_script
 
 build_docs = load_script('build-docs.py')
@@ -52,25 +52,25 @@ def repo(tmp_path):
 
 @pytest.fixture
 def clean_modules(monkeypatch):
-    """Lets a test load a fake bootstrap/juneau_scripts without leaking it into later tests."""
-    for name in [n for n in sys.modules if n == 'bootstrap' or n.split('.')[0] == 'juneau_scripts']:
+    """Lets a test load a fake bootstrap/juneau_terminal_scripts without leaking it into later tests."""
+    for name in [n for n in sys.modules if n == 'bootstrap' or n.split('.')[0] == 'juneau_terminal_scripts']:
         monkeypatch.delitem(sys.modules, name)
     monkeypatch.setattr(sys, 'path', list(sys.path))
     monkeypatch.setattr(sys, 'dont_write_bytecode', sys.dont_write_bytecode)
     yield
-    for name in [n for n in sys.modules if n == 'bootstrap' or n.split('.')[0] == 'juneau_scripts']:
+    for name in [n for n in sys.modules if n == 'bootstrap' or n.split('.')[0] == 'juneau_terminal_scripts']:
         sys.modules.pop(name, None)
 
 
 def fake_toolkit(root, run_source):
-    """A Juneau checkout whose juneau-run bootstrap puts a juneau_scripts package with run_source on the path."""
-    src = run_view.toolkit_dir(root)
-    (src / 'juneau_scripts').mkdir(parents=True)
-    (src / 'juneau_scripts' / '__init__.py').write_text('')
-    (src / 'juneau_scripts' / 'run.py').write_text(run_source)
+    """A Juneau checkout whose juneau-terminal bootstrap puts a juneau_terminal_scripts package with run_source on the path."""
+    src = terminal_view.toolkit_dir(root)
+    (src / 'juneau_terminal_scripts').mkdir(parents=True)
+    (src / 'juneau_terminal_scripts' / '__init__.py').write_text('')
+    (src / 'juneau_terminal_scripts' / 'run.py').write_text(run_source)
     (src / 'bootstrap.py').write_text(
         'import sys\n'
-        f'def load(pom=None, run=False):\n    sys.path.insert(0, {str(src)!r})\n')
+        f'def load(pom=None, terminal=False):\n    sys.path.insert(0, {str(src)!r})\n')
     (root / 'pom.xml').write_text('<project/>')
 
 
@@ -78,41 +78,41 @@ def fake_toolkit(root, run_source):
 # Loading the toolkit
 
 def test_no_root_is_plain_and_silent(capsys):
-    assert run_view.load_toolkit(None) is None
-    assert run_view.load_toolkit('/nonexistent/juneau') is None
+    assert terminal_view.load_toolkit(None) is None
+    assert terminal_view.load_toolkit('/nonexistent/juneau') is None
     assert capsys.readouterr().err == ''
 
 
-def test_checkout_without_juneau_run_warns_and_is_plain(tmp_path, capsys):
+def test_checkout_without_juneau_terminal_warns_and_is_plain(tmp_path, capsys):
     (tmp_path / 'pom.xml').write_text('<project/>')
-    assert run_view.load_toolkit(tmp_path) is None
-    assert 'juneau-run unavailable' in capsys.readouterr().err
+    assert terminal_view.load_toolkit(tmp_path) is None
+    assert 'juneau-terminal unavailable' in capsys.readouterr().err
 
 
 def test_bootstrap_that_raises_is_plain(tmp_path, capsys, clean_modules):
-    src = run_view.toolkit_dir(tmp_path)
+    src = terminal_view.toolkit_dir(tmp_path)
     src.mkdir(parents=True)
-    (src / 'bootstrap.py').write_text('def load(pom=None, run=False):\n    raise RuntimeError("needs Python 3.99")\n')
-    assert run_view.load_toolkit(tmp_path) is None
+    (src / 'bootstrap.py').write_text('def load(pom=None, terminal=False):\n    raise RuntimeError("needs Python 3.99")\n')
+    assert terminal_view.load_toolkit(tmp_path) is None
     assert 'needs Python 3.99' in capsys.readouterr().err
 
 
 def test_toolkit_missing_a_function_is_plain(tmp_path, capsys, clean_modules):
     fake_toolkit(tmp_path, 'def session(*a, **k): pass\n')
-    assert run_view.load_toolkit(tmp_path) is None
+    assert terminal_view.load_toolkit(tmp_path) is None
     assert 'has no step' in capsys.readouterr().err
 
 
 def test_complete_toolkit_loads(tmp_path, capsys, clean_modules):
-    fake_toolkit(tmp_path, ''.join(f'def {name}(*a, **k): pass\n' for name in run_view._REQUIRED))
-    run = run_view.load_toolkit(tmp_path)
-    assert run is not None and run.__name__ == 'juneau_scripts.run'
+    fake_toolkit(tmp_path, ''.join(f'def {name}(*a, **k): pass\n' for name in terminal_view._REQUIRED))
+    run = terminal_view.load_toolkit(tmp_path)
+    assert run is not None and run.__name__ == 'juneau_terminal_scripts.run'
     assert capsys.readouterr().err == ''
 
 
 def test_plain_never_loads(tmp_path, clean_modules):
     fake_toolkit(tmp_path, 'raise AssertionError("loaded")\n')
-    view = run_view.open_view(tmp_path, 'board', plain=True)
+    view = terminal_view.open_view(tmp_path, 'board', plain=True)
     assert not view.live
 
 
@@ -120,7 +120,7 @@ def test_plain_never_loads(tmp_path, clean_modules):
 # The plain View
 
 def test_plain_cmd_runs_and_raises_on_failure(capfd):
-    view = run_view.View()
+    view = terminal_view.View()
     view.cmd([sys.executable, '-c', 'print("hi")'], id='x', title='X')
     assert 'hi' in capfd.readouterr().out
     with pytest.raises(subprocess.CalledProcessError) as e:
@@ -129,7 +129,7 @@ def test_plain_cmd_runs_and_raises_on_failure(capfd):
 
 
 def test_plain_stage_and_skip_print_the_reason(capsys):
-    view = run_view.View()
+    view = terminal_view.View()
     with view.stage('copy', 'Copy', 'Copying') as step:
         step.skip('--skip-maven')
     view.skip('npm', 'npm', 'npm install', '--skip-npm')
@@ -139,7 +139,7 @@ def test_plain_stage_and_skip_print_the_reason(capsys):
 
 
 def test_plain_prechecks_fail_only_on_fail(capsys):
-    view = run_view.View()
+    view = terminal_view.View()
     assert view.prechecks([('a', lambda: None), ('b', lambda: ('warn', 'behind', ()))])
     assert not view.prechecks([('c', lambda: ('fail', 'wrong email', ('fix it',))), ('d', lambda: None)])
     out = capsys.readouterr().out
@@ -147,19 +147,19 @@ def test_plain_prechecks_fail_only_on_fail(capsys):
 
 
 def test_plain_handoff_adds_nothing():
-    with run_view.View().handoff() as extra:
+    with terminal_view.View().handoff() as extra:
         assert extra == {}
 
 
 @pytest.mark.parametrize('code', ['import sys; sys.exit(2)'])
 def test_plain_remote_cmd_failure_says_why_and_raises(code, capsys):
     with pytest.raises(subprocess.CalledProcessError):
-        run_view.View().remote_cmd([sys.executable, '-c', code], id='fetch', title='Fetch')
+        terminal_view.View().remote_cmd([sys.executable, '-c', code], id='fetch', title='Fetch')
     assert 'credentials' in capsys.readouterr().out
 
 
 def test_plain_remote_cmd_success_is_silent(capsys):
-    run_view.View().remote_cmd([sys.executable, '-c', 'pass'], id='fetch', title='Fetch')
+    terminal_view.View().remote_cmd([sys.executable, '-c', 'pass'], id='fetch', title='Fetch')
     assert 'credentials' not in capsys.readouterr().out
 
 
@@ -190,7 +190,7 @@ def test_stage_clone_and_fetch_go_through_remote_cmd(tmp_path):
 
 
 def test_plain_paused_is_a_noop(capsys):
-    with run_view.View().paused() as entered:
+    with terminal_view.View().paused() as entered:
         assert entered is None
     assert capsys.readouterr().out == ''
 
@@ -205,7 +205,7 @@ def test_live_paused_goes_through_the_toolkit():
             yield
             events.append('resume')
 
-    with run_view.View(Run()).paused():
+    with terminal_view.View(Run()).paused():
         events.append('body')
     assert events == ['pause', 'body', 'resume']
 
@@ -289,7 +289,7 @@ def test_session_passes_header_lines_through():
             seen.append((title, kw))
             yield types.SimpleNamespace(code=0)
 
-    view = run_view.View(Run())
+    view = terminal_view.View(Run())
     assert view.session('Build', lambda: 0, header=['Juneau Docs'], lines=['Docs: /d'], repo='/r') == 0
     assert seen[0][0] == 'Build'
     assert (seen[0][1]['header'], seen[0][1]['lines']) == (('Juneau Docs',), ('Docs: /d',))
@@ -304,7 +304,7 @@ def test_session_lines_default_to_none():
             seen.append(kw)
             yield types.SimpleNamespace(code=0)
 
-    run_view.View(Run()).session('Build', lambda: 0, header=['Juneau Docs'], repo='/r')
+    terminal_view.View(Run()).session('Build', lambda: 0, header=['Juneau Docs'], repo='/r')
     assert seen[0]['lines'] == ()
 
 
@@ -313,7 +313,7 @@ def test_session_lines_default_to_none():
 
 def test_build_rows_default_runs_everything():
     plan = build_docs.row_plan(build_args())
-    assert [(id, label) for id, label, _ in plan] == list(run_view.BUILD_ROWS)
+    assert [(id, label) for id, label, _ in plan] == list(terminal_view.BUILD_ROWS)
     assert all(reason is None for _, _, reason in plan)
 
 
@@ -339,7 +339,7 @@ def test_dev_server_skips_npm_and_docs_but_flag_wins():
 def test_stage_plan_nests_the_build_rows():
     plan = release_stage.stage_plan()
     assert plan[0] == ('prechecks', 'Prechecks')
-    assert plan[1:-2] == list(run_view.BUILD_ROWS)
+    assert plan[1:-2] == list(terminal_view.BUILD_ROWS)
     assert plan[-2:] == [('stage', 'Stage push'), ('url', 'URL')]
     assert len({id for id, _ in plan}) == len(plan)
 
@@ -360,16 +360,16 @@ def test_identity_check(module, repo):
 
 
 def test_branch_warning(repo):
-    assert run_view.branch_warning(repo) is None   # on a branch with no upstream
+    assert terminal_view.branch_warning(repo) is None   # on a branch with no upstream
     git(repo, 'checkout', '-q', '--detach')
-    assert run_view.branch_warning(repo) == 'detached HEAD, not on a branch'
+    assert terminal_view.branch_warning(repo) == 'detached HEAD, not on a branch'
     assert release_stage.branch_problem(repo) == ('warn', 'detached HEAD, not on a branch', ())
 
 
 def test_branch_behind_upstream(repo, tmp_path):
     git(tmp_path, 'clone', '-q', str(repo), 'clone')
     git(repo, 'commit', '-q', '--allow-empty', '-m', 'two')
-    assert run_view.branch_warning(tmp_path / 'clone') == 'docs is 1 commit behind its upstream'
+    assert terminal_view.branch_warning(tmp_path / 'clone') == 'docs is 1 commit behind its upstream'
 
 
 
@@ -378,24 +378,24 @@ def test_branch_warning_fetch_never_prompts(repo, tmp_path, monkeypatch):
     git(tmp_path / 'clone', 'remote', 'set-url', 'origin', str(tmp_path / 'missing'))
     seen = []
     real = subprocess.run
-    monkeypatch.setattr(run_view.subprocess, 'run', lambda *a, **k: seen.append(k['env']) or real(*a, **k))
-    assert run_view.branch_warning(tmp_path / 'clone') == 'docs: could not fetch its upstream'
+    monkeypatch.setattr(terminal_view.subprocess, 'run', lambda *a, **k: seen.append(k['env']) or real(*a, **k))
+    assert terminal_view.branch_warning(tmp_path / 'clone') == 'docs: could not fetch its upstream'
     assert all(e['GIT_TERMINAL_PROMPT'] == '0' and 'BatchMode=yes' in e['GIT_SSH_COMMAND'] for e in seen)
 
 
 def test_branch_warning_reports_instead_of_raising(repo, monkeypatch):
     def hang(*a, **k):
         raise subprocess.TimeoutExpired(a[0], 60)
-    monkeypatch.setattr(run_view.subprocess, 'run', hang)
-    assert run_view.branch_warning(repo).startswith('could not check the branch (')
+    monkeypatch.setattr(terminal_view.subprocess, 'run', hang)
+    assert terminal_view.branch_warning(repo).startswith('could not check the branch (')
 
 
 def test_open_view_falls_back_to_plain_on_bad_console(monkeypatch, capsys):
     class Run:
         def export_console(self, console):
             raise ValueError(f"bad console {console!r}")
-    monkeypatch.setattr(run_view, 'load_toolkit', lambda root: Run())
-    view = run_view.open_view('/nowhere', 'bogus')
+    monkeypatch.setattr(terminal_view, 'load_toolkit', lambda root: Run())
+    view = terminal_view.open_view('/nowhere', 'bogus')
     assert view.run is None and 'console setting rejected' in capsys.readouterr().err
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -412,7 +412,7 @@ def test_dry_run_is_plain_with_skipped_rows(tmp_path):
     assert result.returncode == 0, result.stdout + result.stderr
     assert '-> Skipping Maven install (--skip-maven)' in result.stdout
     assert '-> Skipping Docusaurus build (--skip-npm)' in result.stdout
-    assert 'juneau-run' not in result.stderr
+    assert 'juneau-terminal' not in result.stderr
 
 
 def test_bogus_juneau_root_fails_as_before(tmp_path):

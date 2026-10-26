@@ -1,0 +1,40 @@
+---
+title: Juneau REST Client
+description: Call REST APIs through typed Java interfaces.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="rest-client">
+
+```java
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.remote.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.rest.client.*;
+
+@Remote(path="/pets")
+public interface PetStore {
+
+    @RemoteGet("/{id}")
+    Pet getPet(@Path("id") long id);
+}
+
+RestClient client = RestClient.builder()
+    .serializer(Json5Serializer.DEFAULT)
+    .parser(Json5Parser.DEFAULT)
+    .rootUrl("https://api.example.com")
+    .build();
+
+PetStore store = client.remote(PetStore.class);
+Pet pet = store.getPet(123);
+```
+
+- A fluent client that maps request and response bodies to POJOs.
+- Remote proxies: call a REST API through a plain Java interface.
+- Pluggable transports: Java’s built-in `HttpClient` by default, or Apache HttpClient 4.5 and 5, Jetty and OkHttp.
+- Tests without a server through `juneau-rest-mock`.
+- The [classic client](/docs/topics/JuneauRestClient), built on Apache HttpClient, for existing code.
+
+</ProjectLayout>

@@ -1,0 +1,37 @@
+---
+title: Juneau Beans
+description: Ready-made beans for the specs you already use.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="beans">
+
+```java
+import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+
+import org.apache.juneau.marshall.marshaller.*;
+
+Object mytable = table(
+    tr(
+        th("c1"), th("c2")
+    ),
+    tr(
+        td("v1"), td("v2")
+    )
+);
+
+String html = Html.of(mytable);
+```
+
+```html
+<table><tr><th>c1</th><th>c2</th></tr><tr><td>v1</td><td>v2</td></tr></table>
+```
+
+- Beans for OpenAPI v3, Swagger v2, JSON Schema, HTML5, ATOM, HAL, JSON:API, JSON-RPC, JSON Patch, RFC 7807 problem
+  details and MCP messages.
+- Fluent setters and builders, so a document is a few lines of Java.
+- Each bean serializes and parses in every Juneau format.
+
+</ProjectLayout>

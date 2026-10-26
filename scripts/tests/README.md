@@ -16,6 +16,8 @@ python3 -m pytest -q scripts/tests
 
 `test_check_guide_snippets.py` covers `check-guide-snippets.py` (pointer resolution, region markers, normalization, the guide-page pointer rule).
 
-`test_project_index.py` covers the `projects.ts` parser (`project_index.py`); `test_check_project_pages.py` covers `check-project-pages.py` and the old-name patterns (`project_old_names.py`), building small trees under `tmp_path`.
+`test_project_index.py` covers the `projects.ts` parser (`project_index.py`); `test_check_project_pages.py` covers `check-project-pages.py` and the old-name patterns (`project_old_names.py`), building small trees under `tmp_path`. `test_check_doc_inventory.py` covers `check-doc-inventory.py`, which now reads the module list from `projects.ts`.
+
+`test_check_entry_pages.py` covers `check-entry-pages.py` (K0-K5 and the allow-list), building small docs and Juneau trees under `tmp_path`.
 
 `test_verify_docs.py` covers `verify-docs.py` check 16 (the Guides section) and the guide-link cases of check 11.

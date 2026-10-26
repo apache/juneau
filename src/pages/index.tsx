@@ -12,6 +12,7 @@
  */
 
 import Link from '@docusaurus/Link';
+import ProjectStrip from '@site/src/components/ProjectStrip';
 import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
 import TabItem from '@theme/TabItem';
@@ -74,6 +75,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <ProjectStrip />
         <section className={styles.strip}>
           <div className="container">
             <div className={styles.stripRow}>

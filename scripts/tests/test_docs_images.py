@@ -377,8 +377,8 @@ def test_terminal_cases_load_with_defaults(tmp_path):
 
 
 def test_expand_command_placeholders(tmp_path):
-    out = docs_images.expand_command(['{juneau_run}', '{fixtures}/x.sh', 'plain'], tmp_path / 'j', tmp_path / 'd')
-    assert out == [str(tmp_path / 'j' / docs_images.JUNEAU_RUN_PY), str(tmp_path / 'd' / docs_images.FIXTURES_DIR / 'x.sh'),
+    out = docs_images.expand_command(['{juneau_terminal}', '{fixtures}/x.sh', 'plain'], tmp_path / 'j', tmp_path / 'd')
+    assert out == [str(tmp_path / 'j' / docs_images.JUNEAU_TERMINAL_PY), str(tmp_path / 'd' / docs_images.FIXTURES_DIR / 'x.sh'),
                    'plain']
 
 

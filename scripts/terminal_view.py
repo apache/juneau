@@ -12,14 +12,14 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Optional juneau-run live view for build-docs.py, release-docs-stage.py and release-docs.py.
+Optional juneau-terminal live view for build-docs.py, release-docs-stage.py and release-docs.py.
 
-The scripts load juneau-run's toolkit from the Juneau checkout they resolve
-(<juneau-root>/juneau-run/src/main/python).  With it, each stage is a row of the console view
-(--console full|board|none, default board, or JUNEAU_RUN_CONSOLE), with the full and
-board logs under ~/.cache/juneau-run/.  When it can't be found or imported, View is plain:
+The scripts load juneau-terminal's toolkit from the Juneau checkout they resolve
+(<juneau-root>/juneau-terminal/src/main/python).  With it, each stage is a row of the console view
+(--console full|board|none, default board, or JUNEAU_TERMINAL_CONSOLE), with the full and
+board logs under ~/.cache/juneau-terminal/.  When it can't be found or imported, View is plain:
 banners and the tools' own output on the terminal, as the scripts printed before.  juneau-docs
-never depends on juneau-run.
+never depends on juneau-terminal.
 """
 
 import contextlib
@@ -44,21 +44,21 @@ BUILD_ROWS = (
     ('links', 'Links'),
 )
 
-# The toolkit functions the scripts call; an older juneau-run without one of them counts as unavailable.
+# The toolkit functions the scripts call; an older juneau-terminal without one of them counts as unavailable.
 _REQUIRED = ('session', 'step', 'cmd', 'say', 'handoff', 'checks', 'export_console', 'paused')
 
 
 def toolkit_dir(juneau_root):
-    """Where juneau-run's Python sources sit in a Juneau checkout."""
-    return Path(juneau_root) / 'juneau-run' / 'src' / 'main' / 'python'
+    """Where juneau-terminal's Python sources sit in a Juneau checkout."""
+    return Path(juneau_root) / 'juneau-terminal' / 'src' / 'main' / 'python'
 
 
 def load_toolkit(juneau_root):
     """
-    juneau_scripts.run from the Juneau checkout, or None.
+    juneau_terminal_scripts.run from the Juneau checkout, or None.
 
     Returns None silently when juneau_root is None or doesn't exist (e.g. a CI runner with only
-    the docs checkout), and with one warning on stderr when the checkout has no usable juneau-run.
+    the docs checkout), and with one warning on stderr when the checkout has no usable juneau-terminal.
     """
     if juneau_root is None or not Path(juneau_root).is_dir():
         return None
@@ -73,28 +73,28 @@ def load_toolkit(juneau_root):
             bootstrap = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(bootstrap)
             sys.modules['bootstrap'] = bootstrap
-        bootstrap.load(pom=str(Path(juneau_root) / 'pom.xml'), run=True)
-        run = importlib.import_module('juneau_scripts.run')
+        bootstrap.load(pom=str(Path(juneau_root) / 'pom.xml'), terminal=True)
+        run = importlib.import_module('juneau_terminal_scripts.run')
         missing = [name for name in _REQUIRED if not hasattr(run, name)]
         if missing:
-            raise ImportError(f"juneau_scripts.run has no {', '.join(missing)}")
+            raise ImportError(f"juneau_terminal_scripts.run has no {', '.join(missing)}")
         return run
     except Exception as e:  # any failure means plain output, never a failed build
-        print(f"warning: juneau-run unavailable ({e}); running with plain output", file=sys.stderr)
+        print(f"warning: juneau-terminal unavailable ({e}); running with plain output", file=sys.stderr)
         return None
 
 
 def open_view(juneau_root, console=None, *, verbose=False, plain=False):
     """
-    The View for a script run.  console is the --console value (None: JUNEAU_RUN_CONSOLE, else
-    board).  plain=True (e.g. --dry-run) skips juneau-run altogether.
+    The View for a script run.  console is the --console value (None: JUNEAU_TERMINAL_CONSOLE, else
+    board).  plain=True (e.g. --dry-run) skips juneau-terminal altogether.
     """
     run = None if plain else load_toolkit(juneau_root)
     if run is not None:
         try:
             run.export_console(console)
-        except Exception as e:  # e.g. a bad JUNEAU_RUN_CONSOLE value: plain output, never a failed build
-            print(f"warning: juneau-run console setting rejected ({e}); running with plain output", file=sys.stderr)
+        except Exception as e:  # e.g. a bad JUNEAU_TERMINAL_CONSOLE value: plain output, never a failed build
+            print(f"warning: juneau-terminal console setting rejected ({e}); running with plain output", file=sys.stderr)
             run = None
     return View(run, verbose=verbose)
 
@@ -102,8 +102,8 @@ def open_view(juneau_root, console=None, *, verbose=False, plain=False):
 def add_console_argument(parser):
     """--console, for the docs scripts.  Validated here, since the toolkit may not be loaded."""
     parser.add_argument('--console', choices=CONSOLE_MODES, default=None,
-                        help='Console output when juneau-run is available: full, board (default) or none '
-                             '(also JUNEAU_RUN_CONSOLE; the flag wins)')
+                        help='Console output when juneau-terminal is available: full, board (default) or none '
+                             '(also JUNEAU_TERMINAL_CONSOLE; the flag wins)')
 
 
 def branch_warning(repo):
@@ -144,7 +144,7 @@ class _PlainStep:
         self.status = 'ok'
         self.summary = None
 
-    def fail(self, exit=None):  # NOSONAR python:S5806 - mirrors juneau_run.Step.fail
+    def fail(self, exit=None):  # NOSONAR python:S5806 - mirrors juneau_terminal.Step.fail
         self.status = 'fail'
 
     def skip(self, reason=None):
@@ -156,7 +156,7 @@ class _PlainStep:
 
 
 class View:
-    """The live view through juneau-run (run set), or plain output (run None)."""
+    """The live view through juneau-terminal (run set), or plain output (run None)."""
 
     def __init__(self, run=None, *, verbose=False):
         self.run = run
@@ -164,7 +164,7 @@ class View:
 
     @property
     def live(self):
-        """True when juneau-run is loaded (the rows are drawn unless --console full)."""
+        """True when juneau-terminal is loaded (the rows are drawn unless --console full)."""
         return self.run is not None
 
     def say(self, text='', level='info'):
@@ -180,7 +180,7 @@ class View:
             print(f"\n=== {title} ===" if self.verbose else f"-> {title}", flush=True)
 
     @contextlib.contextmanager
-    def stage(self, id, label, title, *, parent=None):  # NOSONAR python:S5806 - mirrors juneau_run.step
+    def stage(self, id, label, title, *, parent=None):  # NOSONAR python:S5806 - mirrors juneau_terminal.step
         """A row around the block.  Set .summary on what it yields, or call .skip(reason) or .fail()."""
         if self.run is None:
             self.banner(title)
@@ -192,7 +192,7 @@ class View:
         with self.run.step(id, title, label=label, parent=parent) as step:
             yield step
 
-    def skip(self, id, label, title, reason, *, parent=None):  # NOSONAR python:S5806 - mirrors juneau_run.step
+    def skip(self, id, label, title, reason, *, parent=None):  # NOSONAR python:S5806 - mirrors juneau_terminal.step
         """A row shown skipped, with reason as its text."""
         if self.run is None:
             print(f"\n=== Skipping {title} ({reason}) ===" if self.verbose else f"-> Skipping {title} ({reason})",
@@ -209,7 +209,7 @@ class View:
 
     def cmd(self, cmd, *, id, title, label=None, tool=None, cwd=None, env=None, parent=None, tty=False):  # NOSONAR python:S5806
         """
-        Run cmd as its own row (a child row with parent).  tool is juneau-run's parser (None picks it
+        Run cmd as its own row (a child row with parent).  tool is juneau-terminal's parser (None picks it
         from the command: mvn is maven, npm is npm).  Raises CalledProcessError when it fails.
         """
         if self.run is None:
@@ -254,7 +254,7 @@ class View:
                     print(f"   {line}", flush=True)
                 ok = ok and status != 'fail'
             return ok
-        jc = importlib.import_module('juneau_scripts.checks')
+        jc = importlib.import_module('juneau_terminal_scripts.checks')
 
         def verdict(fn):
             def check():
@@ -276,7 +276,7 @@ class View:
 
     def session(self, title, body, *, header=(), lines=(), plan=None, repo='.', mode=None):
         """
-        Run body() -- which returns an exit code -- inside a juneau-run session and return the
+        Run body() -- which returns an exit code -- inside a juneau-terminal session and return the
         session's code: 0, 1 on a failure (a failed command's row already says why), 130 on Ctrl-C.
         header is the items after the title; lines are header lines under it (one each, cut to one
         line on the live screen).  Only for a live View.

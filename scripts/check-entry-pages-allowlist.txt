@@ -1,0 +1,5 @@
+# Exceptions for check-entry-pages.py: one per line, four TAB-separated fields:
+#   path<TAB>rule<TAB>literal<TAB>reason
+# path is relative to the docs root; rule is K1a, K2a, K2b, K3a, K3b, K3c, K4a, K4b or K5; literal is the text the
+# failure names (for K5, the banned phrase as listed in the script; for K3, the stripped fence line).
+# An entry that matches no failure is itself a failure, so remove entries when the page changes.

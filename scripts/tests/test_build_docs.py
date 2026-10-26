@@ -157,7 +157,7 @@ def test_links_stage_runs_every_checker_in_order(monkeypatch, tmp_path):
     args = argparse.Namespace(skip_npm=True, skip_maven=False, skip_verify=True, skip_copy=True, staging=False)
     monkeypatch.setattr(build_docs, 'DRY_RUN', True)
     monkeypatch.setattr(build_docs, 'row_plan', lambda a, d=None: [
-        (id, id, None if id == 'links' else 'skipped') for id, _label in build_docs.run_view.BUILD_ROWS])
+        (id, id, None if id == 'links' else 'skipped') for id, _label in build_docs.terminal_view.BUILD_ROWS])
     for name in ('generate_artifact_paths', 'get_current_release', 'ensure_apidocs_symlink', 'resolve_javadocs_version'):
         monkeypatch.setattr(build_docs, name, lambda *a, **kw: None)
     calls = []
@@ -188,8 +188,27 @@ def test_check_project_pages_runs_as_a_child_of_verify(monkeypatch, tmp_path):
     assert kw['parent'] == 'verify' and kw['cwd'] == tmp_path
 
 
-def test_verify_stage_runs_the_integrity_checker(monkeypatch, tmp_path):
-    args = argparse.Namespace(skip_npm=True, skip_maven=False, skip_verify=False, skip_copy=True, staging=False)
+def test_check_entry_pages_runs_as_a_child_of_verify(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    juneau = tmp_path / 'juneau'
+    juneau.mkdir()
+    build_docs.check_entry_pages(juneau, tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('check-entry-pages.py')
+    assert cmd[2:] == ['--docs-root', str(tmp_path)]
+    assert kw['id'] == 'verify-entry-pages' and kw['label'] == 'Entry pages'
+    assert kw['parent'] == 'verify' and kw['cwd'] == tmp_path
+    (juneau / 'pom.xml').write_text('<project/>\n', encoding='utf-8')
+    calls.clear()
+    build_docs.check_entry_pages(juneau, tmp_path)
+    (cmd, _kw), = calls
+    assert cmd[2:] == ['--docs-root', str(tmp_path), '--juneau-root', str(juneau)]
+
+
+@pytest.mark.parametrize('skip_maven', [False, True])
+def test_verify_stage_runs_every_checker_in_order(monkeypatch, tmp_path, skip_maven):
+    args = argparse.Namespace(skip_npm=True, skip_maven=skip_maven, skip_verify=False, skip_copy=True, staging=False)
     monkeypatch.setattr(build_docs, 'DRY_RUN', True)
     real_plan = build_docs.row_plan
     monkeypatch.setattr(build_docs, 'row_plan', lambda a, d=None: [
@@ -197,7 +216,7 @@ def test_verify_stage_runs_the_integrity_checker(monkeypatch, tmp_path):
     for name in ('generate_artifact_paths', 'get_current_release', 'ensure_apidocs_symlink', 'resolve_javadocs_version'):
         monkeypatch.setattr(build_docs, name, lambda *a, **kw: None)
     calls = []
-    for name in ('verify_docs_integrity',):
+    for name in ('verify_docs_integrity', 'check_project_pages', 'check_entry_pages'):
         monkeypatch.setattr(build_docs, name, lambda *a, n=name: calls.append(n))
     assert build_docs.build(args, tmp_path / 'juneau', tmp_path) == 0
-    assert calls == ['verify_docs_integrity']  # check_project_pages is re-hooked with the About pages
+    assert calls == ['verify_docs_integrity', 'check_project_pages', 'check_entry_pages']

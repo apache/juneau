@@ -15,13 +15,13 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import {PageMetadata} from '@docusaurus/theme-common';
 import ProjectRail from '@site/src/components/ProjectRail';
-import {projectBySlug} from '@site/src/data/projects';
+import {projectBySlug, topicForModule} from '@site/src/data/projects';
 import styles from './styles.module.css';
 
 type Props = {slug?: string; children: ReactNode};
 
 // Wraps an /about page body: the project rail beside the content, and for a project page its name, tagline, module
-// list and Read-more links.  No slug means the overview, which supplies its own heading.  The MDX page wrapper already
+// list (each module links to its topic when MODULE_DOCS has one) and Read-more links.  No slug means the overview, which supplies its own heading.  The MDX page wrapper already
 // provides the page container and <main>, so this adds neither; every about page sets hide_table_of_contents.
 export default function ProjectLayout({slug, children}: Props): ReactNode {
   const project = slug === undefined ? undefined : projectBySlug(slug);
@@ -48,7 +48,13 @@ export default function ProjectLayout({slug, children}: Props): ReactNode {
               {project.modules.map((m, i) => (
                 <span key={m}>
                   {i > 0 && ', '}
-                  <code>{m}</code>
+                  {topicForModule(m) === undefined ? (
+                    <code>{m}</code>
+                  ) : (
+                    <Link to={`/docs/topics/${topicForModule(m)}/`}>
+                      <code>{m}</code>
+                    </Link>
+                  )}
                 </span>
               ))}
             </p>

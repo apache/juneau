@@ -23,8 +23,8 @@ Run from the docs checkout. The second form makes the staged site live.
 |---|---|---|---|
 | `--no-push` | none | off | Do everything except the final `git push`. |
 | `--commit-message` | text | none | Accepted for consistency with `release-docs-stage.py`; not used. |
-| `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau checkout whose `juneau-run` draws the live view. Not validated. |
-| `--console` | `full`, `board`, `none` | `board` | Console output when `juneau-run` is available; also `JUNEAU_RUN_CONSOLE` (the flag wins). |
+| `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau checkout whose `juneau-terminal` draws the live view. Not validated. |
+| `--console` | `full`, `board`, `none` | `board` | Console output when `juneau-terminal` is available; also `JUNEAU_TERMINAL_CONSOLE` (the flag wins). |
 
 ## What it does
 
@@ -37,7 +37,7 @@ Run from the docs checkout. The second form makes the staged site live.
 
 ## Output and exit codes
 
-Progress is the `juneau-run` live view (rows Prechecks and Promote) or plain text with a warning that the site will go live. Nothing is built or committed; the pushed commit is whatever `asf-staging` points to.
+Progress is the `juneau-terminal` live view (rows Prechecks and Promote) or plain text with a warning that the site will go live. Nothing is built or committed; the pushed commit is whatever `asf-staging` points to.
 
 | Code | Meaning |
 |---|---|

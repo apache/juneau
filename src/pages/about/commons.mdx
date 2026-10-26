@@ -1,0 +1,34 @@
+---
+title: Juneau Commons
+description: The reflection, collection and settings utilities Juneau is built on.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="commons">
+
+```java
+import org.apache.juneau.commons.reflect.*;
+
+// Wrap a class in ClassInfo
+ClassInfo classInfo = ClassInfo.of(MyClass.class);
+
+// Get all methods in parent-to-child order, sorted alphabetically per class
+for (MethodInfo methodInfo : classInfo.getAllMethods()) {
+    // Do something with it
+}
+
+// Get all fields
+for (FieldInfo fieldInfo : classInfo.getAllFields()) {
+    // Do something with it
+}
+```
+
+- Cached reflection through `ClassInfo`, `MethodInfo`, `FieldInfo` and their relatives.
+- Collection, conversion, IO, time and concurrency utilities.
+- `Settings`, with layered property sources.
+- The SVL variable resolver (`$E`, `$S` and others).
+- Injection.
+
+</ProjectLayout>

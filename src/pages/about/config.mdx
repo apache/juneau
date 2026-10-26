@@ -1,0 +1,36 @@
+---
+title: Juneau Config
+description: Configuration files as POJOs, with variables and live reload.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="config">
+
+```ini
+# A set of entries
+[Section1]
+
+# An integer
+key1 = 1
+
+# A boolean
+key2 = true
+```
+
+```java
+import org.apache.juneau.config.*;
+
+Config config = Config.create("MyConfig.cfg").build();
+
+int key1 = config.get("Section1/key1").asInteger().orElse(-1);
+boolean key2 = config.get("Section1/key2").asBoolean().orElse(false);
+```
+
+- INI and [YAML](/docs/topics/YamlConfigFiles) config files.
+- [SVL variables](/docs/topics/Variables) resolved in values.
+- Live file watching and [change listeners](/docs/topics/ConfigListeners).
+- Typed values: numbers, booleans, arrays and POJOs.
+
+</ProjectLayout>

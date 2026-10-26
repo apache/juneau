@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="939.6" height="186" viewBox="0 0 939.6 186" role="img" aria-labelledby="title desc">
 <title id="title">An agent pane beside a run pane</title>
-<desc id="desc">A tmux window split in two: on the left an AI agent waiting for its command, on the right juneau-run&#x27;s live view of that command.</desc>
+<desc id="desc">A tmux window split in two: on the left an AI agent waiting for its command, on the right juneau-terminal&#x27;s live view of that command.</desc>
 <rect width="939.6" height="186" rx="6" fill="#1e1e1e"/>
 <rect x="423.6" y="12" width="8.4" height="162" fill="#3c3c3c"/>
 <g font-family='SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' font-size="14" xml:space="preserve">

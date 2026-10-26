@@ -26,14 +26,14 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-import run_view
+import terminal_view
 from juneau_root import find_juneau_root
 
 # Module-level toggles flipped from main() so every run_command/stage_banner sees the choice.
 DRY_RUN = False
 VERBOSE = False
-# The juneau-run live view, or plain output (the default, and whenever juneau-run is unavailable).
-VIEW = run_view.View()
+# The juneau-terminal live view, or plain output (the default, and whenever juneau-terminal is unavailable).
+VIEW = terminal_view.View()
 
 
 def say(text='', level='info'):
@@ -72,7 +72,7 @@ def row_plan(args, dev_reason=None):
         'verify': '--skip-verify' if args.skip_verify else None,
         'links': maven_skip,
     }
-    return [(id, label, skips.get(id)) for id, label in run_view.BUILD_ROWS]
+    return [(id, label, skips.get(id)) for id, label in terminal_view.BUILD_ROWS]
 
 def dev_server_reason(docs_dir):
     """Why npm ci and the production build must not run now (a Docusaurus dev server is up), or None.
@@ -557,6 +557,19 @@ def check_project_pages(docs_dir):
                 id='verify-projects', label='Project pages', title="Checking project pages", tool='generic',
                 parent='verify')
 
+def check_entry_pages(master_root, docs_dir):
+    """Run the entry-pages checker (a child row of Verify): one story across the entry pages."""
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-entry-pages.py'
+    if not checker_script.exists():
+        say(f"WARNING: Entry pages checker not found at {checker_script}", 'warn')
+        return
+    cmd = ['python3', str(checker_script), '--docs-root', str(docs_dir)]
+    if (Path(master_root) / 'pom.xml').is_file():
+        cmd += ['--juneau-root', str(master_root)]
+    run_command(cmd, cwd=docs_dir, id='verify-entry-pages', label='Entry pages', title="Checking entry pages",
+                tool='generic', parent='verify')
+
 def check_ai_artifacts(master_root, docs_dir):
     """Run AI artifact drift checks (a child row of Links)."""
     script_dir = Path(__file__).parent
@@ -691,14 +704,15 @@ def build(args, master_root, docs_dir):
             stage_banner("Copying .asf.yaml to build directory")
             shutil.copy2(asf_yaml, build_dir)
 
-    # Documentation-integrity and project-page checks — need only the docs checkout, so they run
+    # Documentation-integrity, project-page and entry-page checks — need only the docs checkout, so they run
     # even in --skip-maven CI smoke runs. Fails the build if errors are found.
     if rows['verify']:
         VIEW.skip('verify', 'Verify', "documentation checks", rows['verify'])
     else:
         with VIEW.stage('verify', 'Verify', "Verifying documentation"):
             verify_docs_integrity(docs_dir)
-            # check_project_pages(docs_dir) is re-hooked together with the About pages.
+            check_project_pages(docs_dir)
+            check_entry_pages(master_root, docs_dir)
 
     # Checks that require sibling repos — skip in --skip-maven / CI smoke runs
     # where only the docs repo is checked out.
@@ -737,13 +751,13 @@ def main():
     parser.add_argument('--skip-npm', action='store_true', help='Skip npm install and Docusaurus build')
     parser.add_argument('--skip-maven', action='store_true', help='Skip Maven compilation and site generation')
     parser.add_argument('--skip-copy', action='store_true', help='Skip copying Maven site to static directory')
-    parser.add_argument('--skip-verify', action='store_true', help='Skip the documentation-integrity check (verify-docs.py)')
+    parser.add_argument('--skip-verify', action='store_true', help='Skip the documentation-integrity, project-page and entry-page checks (verify-docs.py, check-project-pages.py, check-entry-pages.py)')
     parser.add_argument('--staging', action='store_true', help='Build for staging (sets SITE_URL to juneau.staged.apache.org)')
     parser.add_argument('--dry-run', action='store_true', help='Print every command/copy that would run; perform no work')
     parser.add_argument('--verbose', action='store_true', help='Print full per-stage banner output (default: one line per stage)')
     parser.add_argument('--juneau-root', type=Path, default=None,
                         help='Juneau source checkout to build against (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)')
-    run_view.add_console_argument(parser)
+    terminal_view.add_console_argument(parser)
 
     args = parser.parse_args()
     DRY_RUN = args.dry_run
@@ -756,7 +770,7 @@ def main():
     # so CI runners (which have no sibling checkout) can still run the Docusaurus smoke.
     master_root = find_juneau_root(script_dir.parent, args.juneau_root,
                                    allow_missing=DRY_RUN or args.skip_maven, validate=not DRY_RUN)
-    VIEW = run_view.open_view(master_root, args.console, verbose=VERBOSE, plain=DRY_RUN)
+    VIEW = terminal_view.open_view(master_root, args.console, verbose=VERBOSE, plain=DRY_RUN)
 
     # Change to docs directory for npm operations
     os.chdir(docs_dir)
@@ -767,7 +781,7 @@ def main():
             header.append("Staging build (SITE_URL juneau.staged.apache.org)")
         lines = [f"Juneau root: {master_root}", f"Docs: {docs_dir}"]
         code = VIEW.session("Build", lambda: build(args, master_root, docs_dir), header=header, lines=lines,
-                            plan=[(id, label) for id, label in run_view.BUILD_ROWS], repo=docs_dir, mode='test')
+                            plan=[(id, label) for id, label in terminal_view.BUILD_ROWS], repo=docs_dir, mode='test')
         if code == 0 and not os.environ.get('JUNEAU_PUSH_ACTIVE'):
             print_completion(args, docs_dir)
         sys.exit(code)

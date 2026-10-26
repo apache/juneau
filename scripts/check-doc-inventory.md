@@ -1,6 +1,6 @@
 # check-doc-inventory.py
 
-Checks that the list of Juneau modules in `artifact-paths.json` matches the module rows on the public About page, and that `artifact-packages.json` and the allow-list agree with it.
+Checks that the list of Juneau modules in `artifact-paths.json` matches the `modules[]` of the projects in `src/data/projects.ts`, and that `artifact-packages.json` and the allow-list agree with it.
 
 ## When to use
 
@@ -28,12 +28,12 @@ Standard library only; it does not invoke Maven or Docusaurus.
 
 ## What it does
 
-1. Loads `artifact-paths.json`, `artifact-packages.json` and `scripts/check-doc-inventory-allowlist.txt` (one module name per line, `#` comments; missing file means empty).
-2. Computes the publishable modules: every key of `artifact-paths.json` minus the hard-coded `AGGREGATOR_POMS` set minus the allow-list.
-3. **inventory:** every publishable module must have a `| [module](...) |` row in each page in `INVENTORY_PAGES` (currently `src/pages/about.md`); a missing page or module is an error.
-4. **stale-rows:** every module row on an inventory page must be a key of `artifact-paths.json`.
+1. Loads `artifact-paths.json`, `artifact-packages.json`, the projects from `src/data/projects.ts` (through `project_index.py`) and `scripts/check-doc-inventory-allowlist.txt` (one module name per line, `#` comments; missing file means empty).
+2. Computes the publishable modules: every key of `artifact-paths.json` minus the `AGGREGATOR_POMS` set (defined in `project_index.py`) minus the allow-list.
+3. **inventory:** every publishable module must be in some project's `modules[]`; a module in none (and not allow-listed) is an error, as is an unreadable `projects.ts`.
+4. **stale-rows:** every module in a project's `modules[]` must be a key of `artifact-paths.json`.
 5. **packages:** every `artifact-packages.json` key must be a key of `artifact-paths.json` (error); a publishable module with no packages entry is a warning.
-6. **allowlist:** each allow-list entry must exist in `artifact-paths.json` (error), and must not also appear on an inventory page (warning).
+6. **allowlist:** each allow-list entry must exist in `artifact-paths.json` (error), and must not also be in a project's `modules[]` (error).
 7. Prints the findings grouped as errors, warnings and notes, with a final count line.
 
 ## Output and exit codes
@@ -48,9 +48,9 @@ Text report on stdout (or JSON with `--json`); nothing is written. The text ends
 
 ## Gotchas
 
-- `AGGREGATOR_POMS` and `INVENTORY_PAGES` are in the source; update them when the reactor structure changes.
+- `AGGREGATOR_POMS` is in `project_index.py`; update it when the reactor structure changes.
 - Both JSON files are regenerated or refreshed by `build-docs.py`, so run this after a build if you want it to see current modules.
-- Only rows shaped like `| [name](...)` count as inventory entries.
+- `modules[]` entries are read by the strict `projects.ts` parser; a format error in that file is reported as an `inventory` error with its line number.
 
 ## See also
 

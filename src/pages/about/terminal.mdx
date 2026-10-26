@@ -1,0 +1,25 @@
+---
+title: Juneau Terminal
+description: Live terminal boards for builds, tests and scripts.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="terminal">
+
+```bash
+python3 juneau_terminal.py --console board maven -- mvn clean install
+```
+
+The board shows one row per step, with its time, a progress bar and test counts, and a line under it for each running
+Maven module:
+
+![The board console view of a finished Maven run](/topics/JuneauTerminal.ConsoleView.2.svg)
+
+- One live row per stage for Maven, npm, pytest and Playwright.
+- Full logs on disk.
+- A plain-output fallback off a terminal.
+- The Terminal view and Terminal regions in the console.
+
+</ProjectLayout>

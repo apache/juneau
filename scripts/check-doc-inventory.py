@@ -12,7 +12,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Check that the module list matches what is actually documented on the Docusaurus site.
+Check that the modules in artifact-paths.json are covered by the projects in src/data/projects.ts.
 
 Full docs: check-doc-inventory.md
 """
@@ -20,9 +20,10 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from pathlib import Path
+
+import project_index
 
 # ---------------------------------------------------------------------------
 # Structural exclusions: pure aggregator/parent POMs.
@@ -31,29 +32,8 @@ from pathlib import Path
 # unconditionally rather than via the (editable) allow-list.  Keep in sync with
 # the reactor's aggregator poms if that set changes.
 # ---------------------------------------------------------------------------
-AGGREGATOR_POMS = {
-    'juneau',
-    'juneau-core',
-    'juneau-rest',
-    'juneau-bean',
-    'juneau-microservice-parent',
-    'juneau-sc',
-    'juneau-shaded',
-    'juneau-bundles',
-    'juneau-examples',
-    'juneau-petstore',
-    'juneau-bom',
-    'juneau-distrib',
-    'juneau-integration-tests',
-}
-
-# Inventory pages checked for module-row coverage, relative to the docs root.
-# Each entry is a Markdown/MDX file containing `| [module-name](...) | ... |` rows.
-INVENTORY_PAGES = [
-    'src/pages/about.md',
-]
-
-MODULE_ROW_RE = re.compile(r'^\s*\|\s*\[([A-Za-z0-9_-]+)\]\(')
+# The set itself lives in project_index.py, next to the projects.ts parser, so the project checker uses the same one.
+AGGREGATOR_POMS = project_index.AGGREGATOR_POMS
 
 
 class Findings:
@@ -92,17 +72,6 @@ def load_allowlist(path: Path) -> set[str]:
     return out
 
 
-def extract_inventory_modules(path: Path) -> set[str]:
-    if not path.exists():
-        return set()
-    modules = set()
-    for line in path.read_text(encoding='utf-8').splitlines():
-        m = MODULE_ROW_RE.match(line)
-        if m:
-            modules.add(m.group(1))
-    return modules
-
-
 def run_checks(docs_dir: Path, findings: Findings) -> None:
     paths_json = load_json(docs_dir / 'artifact-paths.json')
     packages_json = load_json(docs_dir / 'artifact-packages.json')
@@ -116,28 +85,25 @@ def run_checks(docs_dir: Path, findings: Findings) -> None:
                                 f'{len(allowlist)} allow-listed; '
                                 f'{len(publishable)} expected to be publicly documented')
 
-    # --- 1. inventory: every publishable module appears on every inventory page -----
-    for rel in INVENTORY_PAGES:
-        page = docs_dir / rel
-        if not page.exists():
-            findings.error('inventory', f'Configured inventory page not found: {rel}')
-            continue
-        listed = extract_inventory_modules(page)
-        missing = sorted(publishable - listed)
-        for mod in missing:
-            findings.error(
-                'inventory',
-                f'Publishable module `{mod}` is missing from {rel} '
-                f'(add a row, or add it to check-doc-inventory-allowlist.txt with a rationale)')
+    # --- 1. inventory: every publishable module is in some project's modules[] ----
+    try:
+        _, projects = project_index.load(docs_dir)
+    except (FileNotFoundError, project_index.ProjectIndexError) as e:
+        findings.error('inventory', f'cannot read src/data/projects.ts: {e}')
+        projects = []
+    listed = {m for p in projects for m in p['modules']}
+    for mod in sorted(publishable - listed):
+        findings.error(
+            'inventory',
+            f'Publishable module `{mod}` is in no project\'s modules[] in src/data/projects.ts '
+            f'(add it to a project, or add it to check-doc-inventory-allowlist.txt with a rationale)')
 
-        # --- 2. stale-rows: every row references a real module -----------------
-        stale = sorted(listed - all_modules)
-        for mod in stale:
-            findings.error(
-                'stale-rows',
-                f'{rel} references `{mod}`, which is not a key in artifact-paths.json '
-                f'(renamed/removed coordinate, or a page-name collision — e.g. the old '
-                f'un-versioned `juneau-bean-mcp`)')
+    # --- 2. stale-rows: every listed module is a real module ------------------------
+    for mod in sorted(listed - all_modules):
+        findings.error(
+            'stale-rows',
+            f'src/data/projects.ts lists `{mod}`, which is not a key in artifact-paths.json '
+            f'(renamed or removed coordinate)')
 
     # --- 3. packages: artifact-packages.json <-> artifact-paths.json reconciliation --
     pkg_keys = set(packages_json)
@@ -163,17 +129,11 @@ def run_checks(docs_dir: Path, findings: Findings) -> None:
             f'check-doc-inventory-allowlist.txt lists `{mod}`, which is not a key in '
             f'artifact-paths.json (stale allow-list entry — remove it)')
 
-    for rel in INVENTORY_PAGES:
-        page = docs_dir / rel
-        if not page.exists():
-            continue
-        listed = extract_inventory_modules(page)
-        contradicted = sorted(allowlist & listed)
-        for mod in contradicted:
-            findings.warning(
-                'allowlist',
-                f'`{mod}` is both allow-listed as intentionally-undocumented AND listed '
-                f'in {rel} — remove it from the allow-list')
+    for mod in sorted(allowlist & listed):
+        findings.error(
+            'allowlist',
+            f'`{mod}` is both allow-listed as intentionally-undocumented and in a project\'s modules[] '
+            f'in src/data/projects.ts; remove it from the allow-list')
 
 
 def print_report(findings: Findings) -> None:

@@ -1,0 +1,40 @@
+---
+title: Juneau Bean Query
+description: Search, sort, project and page beans with one query, in memory or in a database.
+hide_table_of_contents: true
+---
+
+import ProjectLayout from '@site/src/components/ProjectLayout';
+
+<ProjectLayout slug="bean-query">
+
+```java
+// Once, at startup.
+static final InMemoryBeanQueryContext<Person> PEOPLE = InMemoryBeanQueryContext
+    .create(Person.class)
+    .exclude("passwordHash")                 // Never searchable, sortable or viewable.
+    .guard(p -> ! p.isDeleted())             // Server-only filter a request cannot remove.
+    .defaultLimit(50)
+    .maxLimit(500)
+    .build();
+
+// Per request — binding straight from raw request parameters.
+try (InMemoryBeanQuerySession<Person> session = PEOPLE.getSession(people)) {
+    BeanQuery query = new BeanQuery()
+        .setSearch("age=$gt(21),name=$prefix(Al)")
+        .setSort("name,age-")
+        .setLimit(20)
+        .setOpts("counts=both");
+    Page<Person> page = session.find(query);
+    page.rows().forEach(this::render);
+    page.total().ifPresent(total -> renderFooter(page.matched().orElse(0) + " of " + total));
+}
+```
+
+- One protocol-agnostic query (search, view, sort, position and limit) over a collection or a SQL table.
+- A context-and-session design: the context is built once and shared, and each request opens a session that can
+  narrow it but never widen it.
+- A server-side guard and limits that a request cannot remove.
+- A Postgres dialect in `juneau-beanquery-postgres`.
+
+</ProjectLayout>
