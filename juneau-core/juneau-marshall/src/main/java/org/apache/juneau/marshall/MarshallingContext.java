@@ -1760,7 +1760,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		<ja>@Autowired</ja> ApplicationContext <jv>ctx</jv>;
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> MarshallingContext createBeanContext(MarshallingContext.Builder<?> <jv>builder</jv>) {
+		 * 		<jk>protected</jk> MarshallingContext createBeanContext(MarshallingContext.Builder&lt;?&gt; <jv>builder</jv>) {
 		 * 			<jk>return</jk> <jv>builder</jv>.beanStore(<jk>new</jk> SpringBeanStore(<jv>ctx</jv>)).build();
 		 * 		}
 		 * 	}

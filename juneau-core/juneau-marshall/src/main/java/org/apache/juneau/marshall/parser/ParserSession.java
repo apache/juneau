@@ -1457,7 +1457,7 @@ public class ParserSession extends MarshallingSession {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @param value The parsed value.
 	 * 	<br>Can be <jk>null</jk>, in which case whether the property is ignored is governed by
-	 * 	{@link MarshallingContext.Builder#ignoreUnknownNullBeanProperties()} rather than
+	 * 	{@link MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()} rather than
 	 * 	{@link MarshallingContext.Builder#ignoreUnknownBeanProperties()}.
 	 * @throws ParseException
 	 * 	Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is

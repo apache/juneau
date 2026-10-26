@@ -27,7 +27,7 @@ import java.io.*;
  * {@code true} wins. The default converter list (applied automatically by {@link RestClient}) handles
  * the common cases:
  * <ol>
- * 	<li>{@link HttpBody} — passed through directly (streaming preferred over buffering)
+ * 	<li>{@link org.apache.juneau.http.HttpBody} — passed through directly (streaming preferred over buffering)
  * 	<li>{@link InputStream} — wrapped in a streaming body
  * 	<li>{@code byte[]} — wrapped in a byte-array body
  * 	<li>{@link File} — wrapped in a file body

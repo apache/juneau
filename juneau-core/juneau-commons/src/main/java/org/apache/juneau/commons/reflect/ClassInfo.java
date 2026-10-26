@@ -2663,7 +2663,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>For interfaces, the "abstract" modifier is omitted since it's implicit.
-	 * 	<li>For non-class types (e.g., TypeVariable, ParameterizedType), returns the result of {@link Type#toString()}.
+	 * 	<li>For non-class types (e.g., TypeVariable, ParameterizedType), returns the result of {@code Type.toString()}.
 	 * 	<li>Type parameters include bounds when present (e.g., "&lt;T extends Comparable&lt;T&gt;&gt;").
 	 * </ul>
 	 *

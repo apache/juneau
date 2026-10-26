@@ -40,8 +40,8 @@
  * (i.e. {@link org.apache.juneau.rest.server.processor.SerializedPojoProcessor SerializedPojoProcessor})
  * during {@link org.apache.juneau.rest.server.processor.ResponseProcessorList ResponseProcessorList}
  * construction.  This ensures that a {@code @RestOp} method returning a typed {@code View}
- * subclass ({@link org.apache.juneau.rest.server.view.jsp.JspView JspView},
- * {@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafView ThymeleafView}, etc.) reaches the
+ * subclass ({@code JspView},
+ * {@code ThymeleafView}, etc.) reaches the
  * matching renderer without the user having to enumerate a full custom processor chain.
  *
  * <p>

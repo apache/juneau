@@ -544,9 +544,9 @@ public abstract class Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	Builder <jv>b</jv> = JsonSerializer.<jsm>create</jsm>();
-		 * 	Optional&lt;JsonSerializer.Builder<?>&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
+		 * 	Optional&lt;JsonSerializer.Builder&lt;?&gt;&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
 		 * 	<jk>if</jk> (<jv>jsonBuilder</jv>.isPresent()) {
-		 * 		<jc>// Use JsonSerializer.Builder<?>-specific methods</jc>
+		 * 		<jc>// Use JsonSerializer.Builder&lt;?&gt;-specific methods</jc>
 		 * 		<jv>jsonBuilder</jv>.get().pretty();
 		 * 	}
 		 * </p>

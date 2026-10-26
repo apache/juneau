@@ -19,7 +19,7 @@
  * Next-generation HTTP resource types — bodies bundled with associated headers.
  *
  * <ul>
- * 	<li>{@link HttpResource} — an {@link org.apache.juneau.http.HttpBody} paired with additional headers
+ * 	<li>{@link org.apache.juneau.http.HttpResource} — an {@link org.apache.juneau.http.HttpBody} paired with additional headers
  * </ul>
  */
 package org.apache.juneau.http.resource;

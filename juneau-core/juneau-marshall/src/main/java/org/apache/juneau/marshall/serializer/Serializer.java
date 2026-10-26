@@ -475,7 +475,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NullAndInclusionPolicies">Null & Inclusion Policies</a>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NullAndInclusionPolicies">Null &amp; Inclusion Policies</a>
 		 * </ul>
 		 *
 		 * @return This object.

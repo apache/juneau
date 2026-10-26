@@ -75,6 +75,27 @@
 							</manifestEntries>
 						</transformer>
 					</transformers>
+					<!-- These classes already ship inside juneau-shaded-core; do not copy them in a second time. -->
+					<filters combine.children="append">
+						<filter>
+							<artifact>org.apache.juneau:juneau-commons</artifact>
+							<excludes>
+								<exclude>**</exclude>
+							</excludes>
+						</filter>
+						<filter>
+							<artifact>org.apache.juneau:juneau-config</artifact>
+							<excludes>
+								<exclude>**</exclude>
+							</excludes>
+						</filter>
+						<filter>
+							<artifact>org.apache.juneau:juneau-marshall</artifact>
+							<excludes>
+								<exclude>**</exclude>
+							</excludes>
+						</filter>
+					</filters>
 				</configuration>
 			</plugin>
 		</plugins>

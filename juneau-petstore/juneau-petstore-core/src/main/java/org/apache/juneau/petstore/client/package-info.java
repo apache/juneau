@@ -20,6 +20,6 @@
  * <p>
  * Deployment-agnostic (like {@code org.apache.juneau.petstore.rest}) so it can be consumed by tests in either the
  * {@code juneau-petstore-jetty} or {@code juneau-petstore-springboot} deployment modules via
- * {@link org.apache.juneau.rest.client.RestClient#remote(Class)}.
+ * {@code org.apache.juneau.rest.client.RestClient#remote(Class)}.
  */
 package org.apache.juneau.petstore.client;

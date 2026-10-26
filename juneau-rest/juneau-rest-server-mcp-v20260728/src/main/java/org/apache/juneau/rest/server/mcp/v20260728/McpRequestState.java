@@ -56,7 +56,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
  * @param expiresAtMs Absolute expiry timestamp in epoch milliseconds.
  * @param jti A fresh, per-token random identifier minted on every PAUSE (see {@code McpRevision#pause}), used
  * 	only to detect replay of THIS exact token. Opt-in: consulted by the dispatcher only when an operator has
- * 	wired a {@link ReplayCache} via {@link McpMrtrConfig#setReplayCache(ReplayCache)}; otherwise it rides in the
+ * 	wired a {@link org.apache.juneau.commons.concurrent.ReplayCache} via {@link McpMrtrConfig#setReplayCache(org.apache.juneau.commons.concurrent.ReplayCache)}; otherwise it rides in the
  * 	sealed plaintext unused. Not wire-visible on its own &mdash; like every other field on this record, it only
  * 	ever travels inside the opaque, AEAD-sealed {@code requestState} string.
  * @param argumentsHash A canonical hash of the original request's {@code arguments} (RFC 8785 JSON

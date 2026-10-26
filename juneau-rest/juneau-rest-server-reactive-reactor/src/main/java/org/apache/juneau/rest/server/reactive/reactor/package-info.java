@@ -21,9 +21,9 @@
  *
  * <p>
  * This module is opt-in. It ships three {@link org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter}
- * implementations &mdash; {@link org.apache.juneau.rest.server.reactive.bridge.ReactorReactiveAdapter},
- * {@link org.apache.juneau.rest.server.reactive.bridge.RxJavaReactiveAdapter}, and
- * {@link org.apache.juneau.rest.server.reactive.bridge.ReactiveStreamsPublisherAdapter} &mdash; registered via a
+ * implementations &mdash; {@link org.apache.juneau.rest.server.reactive.reactor.ReactorReactiveAdapter},
+ * {@link org.apache.juneau.rest.server.reactive.reactor.RxJavaReactiveAdapter}, and
+ * {@link org.apache.juneau.rest.server.reactive.reactor.ReactiveStreamsPublisherAdapter} &mdash; registered via a
  * {@code META-INF/services} file so merely placing this jar (plus the desired reactive library) on the
  * classpath enables {@code Mono} / {@code Flux} / {@code Single} / {@code Maybe} / {@code Flowable} /
  * {@code Observable} / {@code Publisher} return types from {@code @RestOp} handlers.

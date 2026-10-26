@@ -29,7 +29,7 @@
  *
  * <ul>
  * 	<li>{@code juneau-rest-server-tracing-otel} ships {@code OtelTracerHook} backed by an
- * 		{@link io.opentelemetry.api.OpenTelemetry OpenTelemetry} instance &mdash; per-request span
+ * 		{@code io.opentelemetry.api.OpenTelemetry} instance &mdash; per-request span
  * 		creation, OTel HTTP semantic-convention attributes, and W3C {@code traceparent} /
  * 		{@code tracestate} context propagation.
  * 	<li>Custom tracers (Brave, application-specific span beans, etc.) can implement

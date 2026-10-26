@@ -44,17 +44,17 @@ public @interface OpenApiConfig {
 	 * Default collection format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link Schema#collectionFormat()}.
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@code Schema.collectionFormat()}.
 	 *
 	 * <ul class='values javatree'>
-	 * 	<li class='jc'>{@link HttpPartCollectionFormat}
+	 * 	<li class='jc'>{@code HttpPartCollectionFormat}
 	 * 	<ul>
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+	 * 		<li class='jf'>{@code CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 		<li class='jf'>{@code SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 		<li class='jf'>{@code TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 		<li class='jf'>{@code PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 		<li class='jf'>{@code MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 		<li class='jf'>{@code UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
 	 * 	</ul>
 	 * </ul>
 	 *
@@ -71,23 +71,23 @@ public @interface OpenApiConfig {
 	 * Default format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link Schema#format()}.
+	 * Specifies the format to use for HTTP parts when not otherwise specified via {@code Schema.format()}.
 	 *
 	 * <ul class='values javatree'>
-	 * 	<li class='jc'>{@link HttpPartFormat}
+	 * 	<li class='jc'>{@code HttpPartFormat}
 	 * 	<ul>
-	 * 		<li class='jf'>{@link HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
-	 * 		<li class='jf'>{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.
-	 * 		<li class='jf'>{@link HttpPartFormat#INT64 INT64} - Signed 64 bits.
-	 * 		<li class='jf'>{@link HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
-	 * 		<li class='jf'>{@link HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
-	 * 		<li class='jf'>{@link HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
-	 * 		<li class='jf'>{@link HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-	 * 		<li class='jf'>{@link HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
-	 * 		<li class='jf'>{@link HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-	 * 		<li class='jf'>{@link HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-	 * 		<li class='jf'>{@link HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
-	 * 		<li class='jf'>{@link HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
+	 * 		<li class='jf'>{@code UON} - UON notation (e.g. <js>"'foo bar'"</js>).
+	 * 		<li class='jf'>{@code INT32} - Signed 32 bits.
+	 * 		<li class='jf'>{@code INT64} - Signed 64 bits.
+	 * 		<li class='jf'>{@code FLOAT} - 32-bit floating point number.
+	 * 		<li class='jf'>{@code DOUBLE} - 64-bit floating point number.
+	 * 		<li class='jf'>{@code BYTE} - BASE-64 encoded characters.
+	 * 		<li class='jf'>{@code BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 		<li class='jf'>{@code BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+	 * 		<li class='jf'>{@code DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 		<li class='jf'>{@code DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 		<li class='jf'>{@code PASSWORD} - Used to hint UIs the input needs to be obscured.
+	 * 		<li class='jf'>{@code NO_FORMAT} - (default) Not specified.
 	 * 	</ul>
 	 * </ul>
 	 *

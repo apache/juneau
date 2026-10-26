@@ -23,7 +23,7 @@ import java.util.*;
  *
  * <p>
  * The session's capability id is deliberately not on this interface: it never leaves the bus module except in the
- * session POST response, and {@link #toString()} redacts it.
+ * session POST response, and {@code toString()} redacts it.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

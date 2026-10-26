@@ -21,8 +21,8 @@
  * <p>
  * Contains everything that knows about the {@code 2025-06-18} wire format: the JSON-RPC method
  * table, the mapping between the revision-neutral model in
- * {@link org.apache.juneau.rest.server.mcp} and the wire beans in
- * {@link org.apache.juneau.bean.mcp.v20250618}, this revision's JSON-RPC error-code table, and the
+ * {@code org.apache.juneau.rest.server.mcp} and the wire beans in
+ * {@code org.apache.juneau.bean.mcp.v20250618}, this revision's JSON-RPC error-code table, and the
  * two entry points a consumer binds against
  * ({@link org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet McpRestServlet} for the
  * servlet-subclass path and

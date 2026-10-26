@@ -51,7 +51,7 @@ import org.apache.juneau.commons.utils.*;
  * 	}
  *
  * 	<jc>// The applier that applies the annotation to the bean context builder.</jc>
- * 	<jk>public class</jk> MarshalledConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>MarshalledConfig</ja>,MarshallingContext.Builder<?>&gt; {
+ * 	<jk>public class</jk> MarshalledConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>MarshalledConfig</ja>,MarshallingContext.Builder&lt;?&gt;&gt; {
  *
  *		<jc>// Required constructor. </jc>
  * 		<jk>public</jk> Applier(VarResolverSession <jv>vr</jv>) {
@@ -59,7 +59,7 @@ import org.apache.juneau.commons.utils.*;
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public void</jk> apply(AnnotationInfo&lt;MarshalledConfig&gt; <jv>annotationInfo</jv>, MarshallingContext.Builder<?> <jv>builder</jv>) {
+ * 		<jk>public void</jk> apply(AnnotationInfo&lt;MarshalledConfig&gt; <jv>annotationInfo</jv>, MarshallingContext.Builder&lt;?&gt; <jv>builder</jv>) {
  * 			<ja>MarshalledConfig</ja> <jv>beanConfig</jv> = <jv>annotationInfo</jv>.getAnnotation();
  *
  * 			String <jv>unsortedProperties</jv> = <jv>beanConfig</jv>.unsortedProperties();
