@@ -23,7 +23,7 @@ export default function NotFound() {
         <ul>
           <li><Link to="/docs/topics/GettingStarted">Getting Started</Link></li>
           <li><Link to="/search">Search the documentation</Link></li>
-          <li><Link to="/about">About Juneau</Link></li>
+          <li><Link to="/">Juneau home</Link></li>
           <li><Link to="/downloads">Downloads</Link></li>
         </ul>
       </main>

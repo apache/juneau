@@ -29,15 +29,15 @@ Parses `projects.ts` with `project_index.py` (it does not run TypeScript), then 
 |---|---|
 | C1 | Every project slug has `src/pages/about/<slug>.mdx`. |
 | C2 | Every `src/pages/about/*.mdx` other than `index.mdx` has a project entry. |
-| C3 | Every project page has exactly one `<ProjectLayout slug="X">` (double or single quotes, or `slug={'X'}` / `slug={"X"}`; the tag may span lines) and `X` is the file name. `index.mdx` has exactly one `<ProjectLayout>` with no `slug`. |
+| C3 | Every project page has exactly one `<ProjectLayout slug="X">` (double or single quotes, or `slug={'X'}` / `slug={"X"}`; the tag may span lines) and `X` is the file name. `index.mdx` is the redirect stub: it must contain `<Redirect to="/" />`, a `<meta http-equiv="refresh">` and a `<meta name="robots" content="noindex">` (for visitors without JavaScript), and no `<ProjectLayout>`. |
 | C4 | Slugs are unique and kebab-case. |
 | C5 | Every `group` is a `GROUPS` id, and every group has at least one project. |
 | C6 | Every `modules[]` entry is a key in `artifact-paths.json` and is not an aggregator pom (`AGGREGATOR_POMS` in `project_index.py`). A module may appear in several projects. |
-| C7 | Every `docs[]` value is a `slug:` front-matter value under `pages/topics/` (a topic with no `slug:` counts under its file name). |
+| C7 | Every `docs[]` value, and a `gettingStarted` value when a project has one, is a `slug:` front-matter value under `pages/topics/` (a topic with no `slug:` counts under its file name). |
 | C8 | `name` starts with `Juneau ` and `tagline` is not empty. |
 | C9 | No about page or `projects.ts` contains a pre-rename module, package, tool, environment-variable, run-feature or topic-slug name from J1047 spec section 6. The patterns are in `project_old_names.py`. |
 | C10 | Each group's projects are contiguous in `projects.ts`, in `GROUPS` order. |
-| C11 | Each project page's `title` and `description` front matter equal its `name` and `tagline`. The overview needs a title and description. Every about page needs `hide_table_of_contents: true`. |
+| C11 | Each project page's `title` and `description` front matter equal its `name` and `tagline`. The redirect stub (`index.mdx`) needs a title and description. Every about page needs `hide_table_of_contents: true`. |
 | C12 | Every `/docs/topics/<X>` link in an about page matches a topic `slug:`. |
 | C13 | Every `MODULE_DOCS` key in `projects.ts` is a module some project lists, and every value is a topic `slug:` (same rule as C7). |
 

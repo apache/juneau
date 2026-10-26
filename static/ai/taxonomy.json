@@ -75,7 +75,6 @@
     "V10MigrationGuide": 1,
     "V9MigrationGuide": 1,
     "api-metadata": 16,
-    "general": 1,
     "juneau-bct": 1,
     "juneau-bean-openapi-v3": 1,
     "juneau-commons": 2,
@@ -90,7 +89,7 @@
   },
   "schema_version": "1.0.0",
   "source_types": {
-    "about": 12,
+    "about": 11,
     "api-metadata": 16,
     "release-note": 14,
     "topic": 442

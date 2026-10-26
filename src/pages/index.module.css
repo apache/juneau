@@ -81,7 +81,73 @@
   padding: 2rem 0 3rem;
 }
 
+.projects {
+  padding: 2rem 0;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-surface-color);
+}
+
+.cardColumns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.groupLabel {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: var(--ifm-font-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.cardList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  color: var(--ifm-font-color-base);
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.card span {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.about {
+  padding: 2rem 0;
+}
+
+.about h2 {
+  margin-top: 1.5rem;
+}
+
+.quickLinks {
+  padding: 0 0 3rem;
+}
+
 @media screen and (max-width: 996px) {
+  .cardColumns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
   .hero {
     padding: 2rem 0;
   }

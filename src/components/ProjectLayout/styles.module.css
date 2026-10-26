@@ -27,6 +27,13 @@
   color: var(--ifm-color-emphasis-700);
 }
 
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
 .modules {
   margin-top: 2rem;
   font-size: 0.875rem;

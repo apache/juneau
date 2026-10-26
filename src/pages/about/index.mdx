@@ -4,83 +4,12 @@ description: Apache Juneau turns Java objects into JSON, XML, HTML, YAML and man
 hide_table_of_contents: true
 ---
 
-import Link from '@docusaurus/Link';
-import ProjectLayout from '@site/src/components/ProjectLayout';
-import {GROUPS, PROJECTS} from '@site/src/data/projects';
+import {Redirect} from '@docusaurus/router';
+import Head from '@docusaurus/Head';
 
-export const LookingFor = () => {
-  // The ids of the headings this list replaced, so old /about/#anchor links still land here.
-  const OLD_IDS = {
-    marshall: 'marshalling',
-    'rest-server': 'rest-servers-and-microservices',
-    'rest-client': 'rest-clients',
-    bct: 'testing',
-    config: 'configuration',
-    console: 'admin-consoles-and-ui',
-    ai: 'ai-and-mcp',
-  };
-  return (
-    <div id="what-you-can-do">
-      <div id="pick-your-module">
-        {GROUPS.map((g) => (
-          <div key={g.id}>
-            <h3>{g.label}</h3>
-            <ul>
-              {PROJECTS.filter((p) => p.group === g.id).map((p) => (
-                <li key={p.slug} id={OLD_IDS[p.slug]}>
-                  <Link to={'/about/' + p.slug + '/'}>{p.name}</Link>: {p.tagline}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+<Head>
+  <meta http-equiv="refresh" content="0; url=/" />
+  <meta name="robots" content="noindex" />
+</Head>
 
-<ProjectLayout>
-
-# About Apache Juneau™
-
-Apache Juneau™ turns Java objects into JSON, XML, HTML, YAML and many other formats, and parses them back, through one
-API. REST servers and clients are built on the same model, so the beans you serialize are the beans you serve and
-call over HTTP.
-
-## Looking for...
-
-<LookingFor />
-
-## See it running
-
-The [juneau-petstore](/docs/topics/JuneauPetstore) sample runs on Jetty and Spring Boot with an admin console that uses
-the projects above, and [juneau-terminal](/docs/topics/JuneauTerminal) turns Maven, npm and other build output into the
-Terminal views the console shows.
-
-<a href="/docs/topics/JuneauPetstore"><img src="/topics/JuneauPetstore.Tour.1.webp" alt="The Juneau Petstore admin console" width="2560" height="1800" loading="lazy" style={{height: "auto", maxWidth: "100%"}} /></a>
-
-## When to Choose Juneau
-
-Not sure if Juneau is right for your project? Check out our detailed [Why Choose Juneau?](/docs/topics/WhyJuneau) page for a comprehensive comparison with alternatives, or see our [Framework Comparisons](/docs/topics/FrameworkComparisons) page for detailed technical comparisons.
-
-**Quick summary:** Choose Juneau when you need multi-format serialization, REST APIs with automatic content negotiation, or want an integrated solution with no required dependencies for marshalling ([Framework Comparisons](/docs/topics/FrameworkComparisons)). Also consider it when the same Java service needs a server-rendered admin console ([console chrome](/docs/topics/AdminConsoleChrome) and [rich table views](/docs/topics/RichTableViews)) or an [MCP](/docs/topics/JuneauRestServerMcp) endpoint, without adding a separate front-end stack. Upgrading from 9.x? See the [V10.0 Migration Guide](/docs/topics/V10MigrationGuide).
-
-For every module, including the bean DTOs, shaded jars and bundles, see the
-[Juneau Ecosystem](/docs/topics/JuneauEcosystemOverview) overview.
-
-Questions via email to [dev@juneau.apache.org](mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question) are always welcome.
-
-Juneau is packed with features that may not be obvious at first. Users are encouraged to ask for code reviews by providing links to specific source files such as through GitHub. Not only can we help you with feedback, but it helps us understand usage patterns to further improve the product.
-
-
----
-
-## Quick Links
-
-### Documentation & Reports
-- <a href="/site/apidocs/" target="_blank">Javadocs</a> - API documentation
-- <a href="/site/" target="_blank">Maven Site</a> - Complete project reports
-- <a href="/site/xref/" target="_blank">Source Cross-Reference</a> - Browsable source code
-- <a href="/site/surefire.html" target="_blank">Test Reports</a> - Unit test results
-
-</ProjectLayout>
+<Redirect to="/" />

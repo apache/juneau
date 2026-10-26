@@ -14,12 +14,13 @@
 /**
  * The Juneau projects: one source of truth for names, order, modules and Read-more topics.
  *
- * Read by the ProjectRail, ProjectLayout and ProjectStrip components, and (through scripts/project_index.py)
+ * Read by the home page, ProjectRail and ProjectLayout, and (through scripts/project_index.py)
  * by scripts/check-project-pages.py, scripts/check-doc-inventory.py and scripts/generate-ai-artifacts.py.
  * Format rules, enforced by project_index.py (it raises with a line number on any violation):
  *   - one object per entry; each field on its own line as `key: <literal>,`;
  *   - strings are single-quoted with no backslash or inner quote (use the typographic apostrophe, U+2019);
  *   - `modules` and `docs` are single-line arrays of single-quoted strings;
+ *   - `gettingStarted` is optional; when present it is a single-quoted topic slug on its own line;
  *   - MODULE_DOCS has one `'module': 'Slug',` pair per line, no duplicate keys;
  *   - no comments inside the GROUPS, PROJECTS or MODULE_DOCS literals;
  *   - PROJECTS is in display order, and each group's entries are contiguous, in GROUPS order.
@@ -37,6 +38,7 @@ export type Project = {
   tagline: string;
   modules: string[];
   docs: string[];
+  gettingStarted?: string;
 };
 
 export const GROUPS: Group[] = [
@@ -62,6 +64,7 @@ export const PROJECTS: Project[] = [
     tagline: 'One bean. Every format.',
     modules: ['juneau-marshall', 'juneau-marshall-rdf'],
     docs: ['JuneauMarshall'],
+    gettingStarted: 'GettingStartedSerializer',
   },
   {
     slug: 'beans',
@@ -86,6 +89,7 @@ export const PROJECTS: Project[] = [
     tagline: 'Annotate a POJO and serve it as REST in every format Juneau speaks.',
     modules: ['juneau-rest-server', 'juneau-rest-common', 'juneau-microservice', 'juneau-microservice-jetty', 'juneau-microservice-tomcat', 'juneau-rest-server-springboot', 'juneau-rest-mock', 'juneau-rest-server-auth-jwt', 'juneau-rest-server-auth-oauth', 'juneau-rest-server-auth-oidc-rp', 'juneau-rest-server-auth-saml', 'juneau-rest-server-metrics-micrometer', 'juneau-rest-server-tracing-otel'],
     docs: ['JuneauRestServer'],
+    gettingStarted: 'GettingStartedRestApp',
   },
   {
     slug: 'rest-client',
@@ -94,6 +98,7 @@ export const PROJECTS: Project[] = [
     tagline: 'Call REST APIs through typed Java interfaces.',
     modules: ['juneau-rest-client', 'juneau-rest-client-apache-httpclient-45', 'juneau-rest-client-apache-httpclient-50', 'juneau-rest-client-jetty', 'juneau-rest-client-okhttp', 'juneau-rest-client-classic'],
     docs: ['NextGenRestClient', 'JuneauRestClient'],
+    gettingStarted: 'GettingStartedClient',
   },
   {
     slug: 'console',

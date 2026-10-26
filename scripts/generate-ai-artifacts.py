@@ -207,8 +207,8 @@ def about_body(content: str) -> str:
 
 
 def build_about_records(config: ExtractConfig, current_release: str) -> list[dict[str, Any]]:
-    """One record per /about page: `about-<slug>` for a project page, `about` for the overview."""
-    pages = sorted(config.docs_root.glob(ABOUT_GLOB))
+    """One record per /about project page: `about-<slug>`. `index.mdx` is the redirect stub and gets no record."""
+    pages = sorted(p for p in config.docs_root.glob(ABOUT_GLOB) if p.stem != "index")
     if not pages:
         return []
     _, projects = project_index.load(config.docs_root)
@@ -410,8 +410,6 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
     if about:
         lines.append("## About")
         lines.append("")
-        if "about" in about:
-            lines.append(f"- [{about['about']['title']}]({SITE_URL}/about/): {one_line(about['about']['summary'])}")
         for project in project_index.load(docs_root)[1]:
             rec = about.get(f"about-{project['slug']}")
             if rec is not None:

@@ -18,6 +18,7 @@ Full docs: check-topic-links.md
 """
 
 import argparse
+import html
 import os
 import re
 import sys
@@ -168,7 +169,7 @@ def check_links(links, topics, anchors=None):
     for link in links:
         full_slug = link['slug']
         slug, _, anchor = full_slug.partition('#')
-        title = link['title']
+        title = html.unescape(link['title'])  # Javadoc link text is HTML, so '&amp;' reads as '&'
         
         if slug in topics and anchor and anchors is not None and anchor not in anchors.get(slug, {}):
             warnings.append({

@@ -138,3 +138,23 @@ def test_module_docs_rejects_duplicate_key():
 def test_module_docs_does_not_disturb_projects():
     groups, projects = pi.parse(MODULE_DOCS_FILE)
     assert len(projects) == 1
+
+
+def test_optional_string_field_parses():
+    text = FILE.replace("    docs: ['JuneauMarshall'],\n",
+                        "    docs: ['JuneauMarshall'],\n    gettingStarted: 'GettingStartedSerializer',\n")
+    assert text != FILE
+    _, projects = pi.parse(text)
+    assert projects[0]['gettingStarted'] == 'GettingStartedSerializer'
+
+
+def test_optional_string_field_is_absent_by_default():
+    _, projects = pi.parse(FILE)
+    assert 'gettingStarted' not in projects[0]
+
+
+def test_optional_string_field_rejects_an_array():
+    bad = FILE.replace("    docs: ['JuneauMarshall'],\n",
+                       "    docs: ['JuneauMarshall'],\n    gettingStarted: ['A'],\n")
+    with pytest.raises(pi.ProjectIndexError, match=r'line \d+: gettingStarted must be a single-quoted string'):
+        pi.parse(bad)

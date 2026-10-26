@@ -93,8 +93,9 @@ def read(docs_root, rel):
 
 
 def about_pages(docs_root):
-    """The About pages: src/pages/about/*.mdx, or src/pages/about.md if there are none."""
-    pages = sorted(p.relative_to(docs_root).as_posix() for p in Path(docs_root, ABOUT_DIR).glob('*.mdx'))
+    """The About pages: src/pages/about/*.mdx except the index.mdx redirect stub, or src/pages/about.md if there are none."""
+    pages = sorted(p.relative_to(docs_root).as_posix() for p in Path(docs_root, ABOUT_DIR).glob('*.mdx')
+                   if p.name != 'index.mdx')
     if not pages and Path(docs_root, ABOUT_FALLBACK).is_file():
         pages = [ABOUT_FALLBACK]
     return pages

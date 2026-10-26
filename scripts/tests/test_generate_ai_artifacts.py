@@ -155,8 +155,8 @@ def add_about(docs):
     about = docs / 'src' / 'pages' / 'about'
     about.mkdir(parents=True)
     (about / 'index.mdx').write_text(
-        f"---\ntitle: About Apache Juneau\ndescription: The overview.\n---\n\n{IMPORT_LAYOUT}\n"
-        "<ProjectLayout>\n\nHello overview.\n\n</ProjectLayout>\n", encoding='utf-8')
+        "---\ntitle: About Apache Juneau\ndescription: The overview.\nhide_table_of_contents: true\n---\n\n"
+        "import {Redirect} from '@docusaurus/router';\n\n<Redirect to=\"/\" />\n", encoding='utf-8')
     (about / 'marshall.mdx').write_text(
         f"---\ntitle: Juneau Marshall\ndescription: One bean. Every format.\n---\n\n{IMPORT_LAYOUT}\n"
         '<ProjectLayout slug="marshall">\n\n```java\nJson.of(bean);\n```\n\n</ProjectLayout>\n', encoding='utf-8')
@@ -168,7 +168,7 @@ def test_about_pages_become_records(layout):
     config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
     recs = [r for r in gen.build_records(config, '10.0.0') if r['source_type'] == 'about']
     by_id = {r['id']: r for r in recs}
-    assert set(by_id) == {'about', 'about-marshall'}
+    assert set(by_id) == {'about-marshall'}
     m = by_id['about-marshall']
     assert m['title'] == 'Juneau Marshall' and m['summary'] == 'One bean. Every format.'
     assert m['module'] == 'juneau-marshall'
@@ -177,9 +177,6 @@ def test_about_pages_become_records(layout):
     assert 'Json.of(bean);' in m['description']
     assert 'import ProjectLayout' not in m['description'] and '<ProjectLayout' not in m['description']
     gen.validate_records(recs)
-    o = by_id['about']
-    assert o['module'] == 'general' and o['source_path'] == 'src/pages/about/index.mdx'
-    assert o['title'] == 'About Apache Juneau' and o['summary'] == 'The overview.'
 
 
 def test_long_about_page_keeps_its_modules_line(layout):
@@ -199,7 +196,8 @@ def test_llms_txt_has_an_about_section(layout):
     config = gen.ExtractConfig(docs_root=docs, juneau_root=juneau, output_dir=docs / 'static' / 'ai')
     text = gen.render_llms_txt(config, gen.build_records(config, '10.0.0'), '10.0.0')
     assert '## About' in text
-    assert '- [About Apache Juneau](https://juneau.apache.org/about/): The overview.' in text
+    assert '- [About Apache Juneau]' not in text
+    assert 'https://juneau.apache.org/about/)' not in text
     assert '- [Juneau Marshall](https://juneau.apache.org/about/marshall/): One bean. Every format.' in text
     assert text.index('## About') < text.index('## Resources')
 

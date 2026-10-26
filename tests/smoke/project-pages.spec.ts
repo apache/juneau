@@ -30,12 +30,45 @@ test.describe('desktop', () => {
     await expect(page.locator('footer')).toHaveCount(1);
   });
 
-  test('the overview marks Overview and scrolls to a project anchor', async ({page}) => {
+  test('/about/ redirects to the home page', async ({page}) => {
     await page.goto('/about/');
-    await expect(page.getByRole('navigation', {name: RAIL}).getByRole('link', {name: 'Overview'}))
-      .toHaveAttribute('aria-current', 'page');
-    await page.goto('/about/#marshalling');
-    await expect(page.locator('#marshalling')).toBeInViewport();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('#projects')).toBeVisible();
+  });
+
+  test('the rail Overview link goes to the home page', async ({page}) => {
+    await page.goto('/about/marshall/');
+    await page.getByRole('navigation', {name: RAIL}).getByRole('link', {name: 'Overview'}).click();
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  for (const [slug, gettingStarted, docs] of [
+    ['marshall', 'GettingStartedSerializer', 'JuneauMarshall'],
+    ['rest-server', 'GettingStartedRestApp', 'JuneauRestServer'],
+    ['rest-client', 'GettingStartedClient', 'NextGenRestClient'],
+    ['beans', 'GettingStarted', 'JuneauBean'],
+  ]) {
+    test(`${slug} has Get started and Documentation buttons`, async ({page}) => {
+      await page.goto(`/about/${slug}/`);
+      await expect(page.locator('main').getByRole('link', {name: 'Get started'}))
+        .toHaveAttribute('href', new RegExp(`/docs/topics/${gettingStarted}/?$`));
+      await expect(page.locator('main').getByRole('link', {name: 'Documentation', exact: true}))
+        .toHaveAttribute('href', new RegExp(`/docs/topics/${docs}/?$`));
+    });
+  }
+
+  test('the home page lists a card per project and the footer Projects link scrolls to them', async ({page}) => {
+    await page.goto('/');
+    await expect(page.locator('.juneau-project-cards a')).toHaveCount(11);
+    await page.locator('footer').getByRole('link', {name: 'Projects'}).click();
+    await expect(page).toHaveURL(/#projects$/);
+    await expect(page.locator('#projects')).toBeInViewport();
+  });
+
+  test('the home hero has a Documentation button', async ({page}) => {
+    await page.goto('/');
+    await expect(page.locator('main').getByRole('link', {name: 'Documentation', exact: true}).first())
+      .toHaveAttribute('href', /JuneauEcosystemOverview/);
   });
 
   test('the rail link color differs between light and dark themes', async ({page}) => {
@@ -64,9 +97,9 @@ test.describe('mobile with JavaScript', () => {
     await expect(page).toHaveURL(/\/about\/config\/$/);
   });
 
-  test('the home strip columns are stacked', async ({page}) => {
+  test('the home project cards are stacked', async ({page}) => {
     await page.goto('/');
-    const headings = page.locator('.juneau-project-strip h3');
+    const headings = page.locator('.juneau-project-cards h3');
     await expect(headings).toHaveCount(3);
     const xs = await headings.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().x));
     expect(new Set(xs).size).toBe(1);
@@ -80,5 +113,18 @@ test.describe('mobile without JavaScript', () => {
     await page.goto('/about/rest-server/');
     await expect(page.getByRole('navigation', {name: RAIL}).locator('ul').first()).toBeVisible();
     await expect(page.locator('select')).toHaveCount(0);
+  });
+
+  test('the /about/ stub carries a meta refresh and noindex', async ({request}) => {
+    // The raw HTML, because a browser acts on the refresh before the page can be inspected.
+    const html = await (await request.get('/about/')).text();
+    expect(html).toMatch(/<meta[^>]*http-equiv="refresh"[^>]*content="0; url=\/"/);
+    expect(html).toMatch(/<meta[^>]*name="robots"[^>]*content="noindex"/);
+  });
+
+  test('the /about/ stub reaches the home page without JavaScript', async ({page}) => {
+    await page.goto('/about/');
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('#projects')).toBeVisible();
   });
 });

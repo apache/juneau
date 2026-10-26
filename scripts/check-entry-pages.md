@@ -25,7 +25,7 @@ python3 scripts/check-entry-pages.py --docs-root /path/to/juneau-docs
 
 ## What it does
 
-The entry pages are the 15 files in `ENTRY_PAGES` plus `src/pages/about/*.mdx` (or `src/pages/about.md` when there are none). "Prose" is a file with its fenced blocks blanked; fences are read with `code_fences.iter_fences`, language = first word of the info string.
+The entry pages are the 15 files in `ENTRY_PAGES` plus `src/pages/about/*.mdx` (or `src/pages/about.md` when there are none). `src/pages/about/index.mdx` is the redirect stub to the home page and is not counted; K0's "there is an About page" means at least one project page. "Prose" is a file with its fenced blocks blanked; fences are read with `code_fences.iter_fences`, language = first word of the info string.
 
 1. **K0:** every entry page exists, and there is an About page.
 2. **K1a** (entry pages, fences included): every `N formats` / `N+ formats` (optionally a link, optionally followed by `(C in ..., R RDF ...)`) has no `+`, N equals the JuneauMarshall badge total, and C and R equal the core and RDF badge counts. A badge linking to `/docs/topics/Rdf` is RDF; the rest are core.

@@ -37,6 +37,9 @@ _FIELD_RE = re.compile(r'^\s*(\w+):\s*(.+?),\s*$')
 _STR_RE = re.compile(r'^' + _STR + r'$')
 _ARR_RE = re.compile(r"^\[\s*(?:" + _STR + r"(?:\s*,\s*" + _STR + r")*)?\s*\]$")
 
+# Fields that, when present, must be a single-quoted string (not an array).
+OPTIONAL_STRING_FIELDS = ('gettingStarted',)
+
 
 class ProjectIndexError(ValueError):
     """The file breaks a format rule; the message names the line."""
@@ -85,7 +88,10 @@ def _entries(block):
             m = _FIELD_RE.match(text)
             if current is None or not m:
                 raise ProjectIndexError(f'line {lineno}: expected `key: literal,` inside an object: {s}')
-            current[m.group(1)] = _literal(m.group(2), lineno)
+            value = _literal(m.group(2), lineno)
+            if m.group(1) in OPTIONAL_STRING_FIELDS and not isinstance(value, str):
+                raise ProjectIndexError(f'line {lineno}: {m.group(1)} must be a single-quoted string: {m.group(2)}')
+            current[m.group(1)] = value
     if current is not None:
         raise ProjectIndexError(f'line {opened}: object is not closed by `}},`')
     return entries

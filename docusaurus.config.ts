@@ -75,7 +75,6 @@ const baseThemeConfig: Preset.ThemeConfig = {
       src: 'img/oakleaf.svg',
     },
     items: [
-      {to: '/about', label: 'About', position: 'left'},
       {
         type: 'docSidebar',
         sidebarId: 'mainSidebar',
@@ -111,8 +110,8 @@ const baseThemeConfig: Preset.ThemeConfig = {
         title: 'Documentation',
         items: [
           {
-            label: 'About',
-            to: '/about',
+            label: 'Projects',
+            to: '/#projects',
           },
           {
             label: 'Downloads',
@@ -250,7 +249,7 @@ const config: Config = {
         indexDocs: true,
         indexBlog: false,
         indexPages: true,
-        ignoreCssSelectors: ['.juneau-project-rail', '.juneau-project-strip'],
+        ignoreCssSelectors: ['.juneau-project-rail', '.juneau-project-cards'],
         docsRouteBasePath: '/docs',
         // Contributor material and release history get their own indexes so a reader
         // searching from the user docs does not see them (search from those pages instead).

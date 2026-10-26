@@ -473,7 +473,6 @@
 
 ## About
 
-- [About Apache Juneau](https://juneau.apache.org/about/): Apache Juneau turns Java objects into JSON, XML, HTML, YAML and many other formats, and parses them back, through one API.
 - [Juneau Marshall](https://juneau.apache.org/about/marshall/): One bean. Every format.
 - [Juneau Beans](https://juneau.apache.org/about/beans/): Ready-made beans for the specs you already use.
 - [Juneau Bean Query](https://juneau.apache.org/about/bean-query/): Search, sort, project and page beans with one query, in memory or in a database.

@@ -46,7 +46,7 @@ def docs(tmp_path):
     for rel in checker.ENTRY_PAGES:
         write(root, rel, '# Page\n\nText.\n')
     write(root, checker.MARSHALL_PAGE, '# Marshall\n\n' + badges(CORE, RDF))
-    write(root, 'src/pages/about/index.mdx', '# About\n\nText.\n')
+    write(root, 'src/pages/about/marshall.mdx', '# About\n\nText.\n')
     return root
 
 
@@ -91,10 +91,19 @@ def test_missing_entry_page_fails(docs, capsys):
 
 
 def test_no_about_page_fails(docs, capsys):
-    (docs / 'src/pages/about/index.mdx').unlink()
+    (docs / 'src/pages/about/marshall.mdx').unlink()
     code, out = run(docs, capsys)
     assert code == 1
     assert 'src/pages/about:1: K0: no About page' in out
+
+
+def test_redirect_stub_is_not_an_about_page(docs, capsys):
+    (docs / 'src/pages/about/marshall.mdx').unlink()
+    write(docs, 'src/pages/about/index.mdx', 'Zero configuration redirect stub.\n')
+    code, out = run(docs, capsys)
+    assert code == 1
+    assert 'src/pages/about:1: K0: no About page' in out
+    assert 'K5' not in out
 
 
 def test_explicit_juneau_root_without_pom_exits_1(docs, tmp_path):
@@ -106,7 +115,7 @@ def test_explicit_juneau_root_without_pom_exits_1(docs, tmp_path):
 
 
 def test_about_md_is_the_fallback(docs, capsys):
-    (docs / 'src/pages/about/index.mdx').unlink()
+    (docs / 'src/pages/about/marshall.mdx').unlink()
     write(docs, 'src/pages/about.md', '# About\n')
     code, out = run(docs, capsys)
     assert code == 0
@@ -296,10 +305,10 @@ def test_k5_banned_phrase_in_prose_fails(docs, capsys):
     assert code == 1 and f"{WHY}:1: K5: 'Zero configuration'" in out
 
 
-def test_k5_minimal_dependencies_fails_on_about(docs, capsys):
-    write(docs, 'src/pages/about/index.mdx', 'An integrated solution with Minimal Dependencies.\n')
+def test_k5_minimal_dependencies_fails_on_the_home_page(docs, capsys):
+    write(docs, 'src/pages/index.tsx', 'An integrated solution with Minimal Dependencies.\n')
     code, out = run(docs, capsys)
-    assert code == 1 and 'src/pages/about/index.mdx:1: K5:' in out
+    assert code == 1 and 'src/pages/index.tsx:1: K5:' in out
 
 
 def test_k5_self_contained_passes(docs, capsys):

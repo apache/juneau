@@ -88,3 +88,9 @@ def test_title_mismatch_still_reported_with_anchor(tmp_path):
     topics, anchors = build(tmp_path)
     warnings = ctl.check_links([link('Swaps#old-id', 'Wrong')], topics, anchors)
     assert [w['type'] for w in warnings] == ['title_mismatch']
+
+
+def test_html_entity_in_link_text_matches_title(tmp_path):
+    topics, anchors = build(tmp_path)
+    topics['Amp'] = 'Null & Inclusion Policies'
+    assert ctl.check_links([link('Amp', 'Null &amp; Inclusion Policies')], topics, anchors) == []

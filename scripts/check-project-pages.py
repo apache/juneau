@@ -29,6 +29,7 @@ from project_old_names import find_old_names
 ABOUT_DIR = 'src/pages/about'
 SLUG_RE = re.compile(r'[a-z0-9]+(-[a-z0-9]+)*')
 LAYOUT_TAG_RE = re.compile(r'<ProjectLayout\b([^>]*)>', re.S)
+REDIRECT_HOME_RE = re.compile(r'<Redirect\b[^>]*\bto\s*=\s*(?:"/"|\'/\'|\{\s*"/"\s*\}|\{\s*\'/\'\s*\})')
 TOPIC_LINK_RE = re.compile(r'/docs/topics/([A-Za-z0-9_.-]+)')
 FRONT_MATTER_RE = re.compile(r'\A---\n(.*?)\n---', re.S)
 FM_KEY_RE = re.compile(r'^(title|description|hide_table_of_contents):\s*(.*?)\s*$', re.M)
@@ -66,11 +67,18 @@ def _check_layout(rel, text, slug, errors):
     tags = LAYOUT_TAG_RE.findall(text)
     if len(tags) != 1:
         errors.append(f'C3: {rel}: expected exactly one <ProjectLayout>, found {len(tags)}')
-    elif slug is None:
-        if re.search(r'\bslug\s*=', tags[0]):
-            errors.append(f'C3: {rel}: the overview <ProjectLayout> must have no slug attribute')
     elif not _layout_slug_ok(tags[0], slug):
         errors.append(f'C3: {rel}: <ProjectLayout> slug must be "{slug}"')
+
+
+def _check_redirect_stub(rel, text, errors):
+    if LAYOUT_TAG_RE.search(text):
+        errors.append(f'C3: {rel}: the redirect stub must not contain a <ProjectLayout>')
+    if not REDIRECT_HOME_RE.search(text):
+        errors.append(f'C3: {rel}: the redirect stub must contain <Redirect to="/" />')
+    if 'http-equiv="refresh"' not in text or 'name="robots"' not in text or 'noindex' not in text:
+        errors.append(f'C3: {rel}: the redirect stub needs <meta http-equiv="refresh"> and '
+                      f'<meta name="robots" content="noindex"> for visitors without JavaScript')
 
 
 def _line_of(text, offset):
@@ -104,13 +112,14 @@ def check(docs_root):
     for stem in sorted(set(pages) - set(slugs)):
         errors.append(f'C2: {ABOUT_DIR}/{stem}.mdx: page has no project in {project_index.PROJECTS_FILE}')
 
-    # C3: each page wraps its content in one <ProjectLayout> with the matching slug; the overview has none.
+    # C3: each project page wraps its content in one <ProjectLayout> with the matching slug; index.mdx is the
+    # redirect stub to the home page and has no layout.
     for stem, page in pages.items():
         _check_layout(f'{ABOUT_DIR}/{stem}.mdx', page.read_text(encoding='utf-8'), stem, errors)
     if overview is None:
-        errors.append(f'C3: {ABOUT_DIR}/index.mdx: the overview page is missing')
+        errors.append(f'C3: {ABOUT_DIR}/index.mdx: the redirect stub is missing')
     else:
-        _check_layout(f'{ABOUT_DIR}/index.mdx', overview.read_text(encoding='utf-8'), None, errors)
+        _check_redirect_stub(f'{ABOUT_DIR}/index.mdx', overview.read_text(encoding='utf-8'), errors)
 
     # C5, C10: every project's group exists, every group has a project, and the order is group by group.
     group_ids = [g.get('id', '') for g in groups]
@@ -139,13 +148,17 @@ def check(docs_root):
                 errors.append(f'C6: {project_index.PROJECTS_FILE}: project "{p.get("slug")}" lists "{mod}", '
                               f'which is not a key in artifact-paths.json')
 
-    # C7: every Read-more topic is a real topic slug.
+    # C7: every Read-more topic and every gettingStarted topic is a real topic slug.
     topics = _topic_slugs(docs_root)
     for p in projects:
         for d in p.get('docs', []):
             if d not in topics:
                 errors.append(f'C7: {project_index.PROJECTS_FILE}: project "{p.get("slug")}" lists topic "{d}", '
                               f'which is no pages/topics slug')
+        gs = p.get('gettingStarted')
+        if gs is not None and gs not in topics:
+            errors.append(f'C7: {project_index.PROJECTS_FILE}: project "{p.get("slug")}" lists gettingStarted topic '
+                          f'"{gs}", which is no pages/topics slug')
 
     # C13: every MODULE_DOCS key is a module some project lists, and every value is a real topic slug.
     listed = {m for p in projects for m in p.get('modules', [])}

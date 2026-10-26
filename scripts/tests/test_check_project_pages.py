@@ -139,7 +139,11 @@ def page_text(project, *, title=None, description=None, attrs=None, body='See [i
 
 
 OVERVIEW = ("---\ntitle: About\ndescription: All of it.\nhide_table_of_contents: true\n---\n\n"
-            "import ProjectLayout from '@site/src/components/ProjectLayout';\n\n<ProjectLayout>\n\nHello.\n\n</ProjectLayout>\n")
+            "import {Redirect} from '@docusaurus/router';\n"
+            "import Head from '@docusaurus/Head';\n\n"
+            "<Head>\n  <meta http-equiv=\"refresh\" content=\"0; url=/\" />\n"
+            "  <meta name=\"robots\" content=\"noindex\" />\n</Head>\n\n"
+            "<Redirect to=\"/\" />\n")
 
 
 def write(root, rel, text):
@@ -205,12 +209,28 @@ def test_layout_slug_quote_forms(tmp_path, attrs):
     assert check.check(tmp_path) == []
 
 
-def test_index_without_slug_passes(tmp_path):
+def test_index_redirect_stub_passes(tmp_path):
     assert check.check(make_tree(tmp_path)) == []
 
 
-def test_index_with_slug_fails(tmp_path):
-    make_tree(tmp_path, overview=OVERVIEW.replace('<ProjectLayout>', '<ProjectLayout slug="alpha">'))
+def test_index_with_project_layout_fails(tmp_path):
+    make_tree(tmp_path, overview=OVERVIEW + '\n<ProjectLayout>\n\nHello.\n\n</ProjectLayout>\n')
+    assert 'C3' in ids(check.check(tmp_path))
+
+
+def test_index_without_redirect_fails(tmp_path):
+    make_tree(tmp_path, overview=OVERVIEW.replace('<Redirect to="/" />', 'Hello.'))
+    assert 'C3' in ids(check.check(tmp_path))
+
+
+def test_index_without_meta_refresh_fails(tmp_path):
+    make_tree(tmp_path, overview=OVERVIEW.replace('http-equiv="refresh"', 'http-equiv="x"'))
+    errors = [e for e in check.check(tmp_path) if e.startswith('C3')]
+    assert len(errors) == 1 and 'meta http-equiv="refresh"' in errors[0]
+
+
+def test_index_redirect_elsewhere_fails(tmp_path):
+    make_tree(tmp_path, overview=OVERVIEW.replace('to="/"', 'to="/downloads"'))
     assert 'C3' in ids(check.check(tmp_path))
 
 
@@ -270,6 +290,18 @@ def test_topic_without_slug_uses_file_stem(tmp_path):
     ok = [{**PROJECTS[0], 'docs': ['02.Stemmed']}, PROJECTS[1]]
     write(tmp_path, 'src/data/projects.ts', render_projects_ts(GROUPS, ok, {}))
     assert check.check(tmp_path) == []
+
+
+# C7: gettingStarted
+def test_unknown_getting_started_topic_fails(tmp_path):
+    projects = [{**PROJECTS[0], 'gettingStarted': 'Nope'}, PROJECTS[1]]
+    errors = [e for e in check.check(make_tree(tmp_path, projects=projects)) if e.startswith('C7')]
+    assert len(errors) == 1 and 'gettingStarted topic "Nope"' in errors[0]
+
+
+def test_known_getting_started_topic_passes(tmp_path):
+    projects = [{**PROJECTS[0], 'gettingStarted': 'Alpha'}, PROJECTS[1]]
+    assert check.check(make_tree(tmp_path, projects=projects)) == []
 
 
 # C13

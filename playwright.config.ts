@@ -23,7 +23,7 @@ export default defineConfig({
   use: {baseURL: 'http://localhost:3111'},
   webServer: {
     command: 'npm run serve -- --port 3111 --no-open',
-    url: 'http://localhost:3111/about/',
+    url: 'http://localhost:3111/',
     reuseExistingServer: false,
   },
 });

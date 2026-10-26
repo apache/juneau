@@ -28,7 +28,7 @@ function MobileSelect({current}: Props): ReactNode {
       <select
         className={styles.select}
         value={current ?? ''}
-        onChange={(e) => history.push(e.target.value ? `/about/${e.target.value}/` : '/about/')}>
+        onChange={(e) => history.push(e.target.value ? `/about/${e.target.value}/` : '/')}>
         <option value="">Overview</option>
         {GROUPS.map((g) => (
           <optgroup key={g.id} label={g.label}>
@@ -53,10 +53,7 @@ export default function ProjectRail({current}: Props): ReactNode {
       data-hydrated={hydrated ? 'true' : undefined}>
       <BrowserOnly>{() => <MobileSelect current={current} />}</BrowserOnly>
       <div className={styles.list}>
-        <Link
-          to="/about/"
-          className={styles.link}
-          aria-current={current === undefined ? 'page' : undefined}>
+        <Link to="/" className={styles.link}>
           Overview
         </Link>
         {GROUPS.map((g) => (
