@@ -21,6 +21,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 import org.apache.juneau.releng.log.EventBroadcaster;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -59,13 +64,30 @@ class RunFileWatcherTest {
 		};
 		var f = Files.createDirectories(home.resolve("runs/9.2.1")).resolve("run.json");
 		Files.writeString(f, "{}");
+		// Capture the expected failure log here instead of letting it print its stack trace to the build output.
+		var records = new CopyOnWriteArrayList<LogRecord>();
+		var h = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no-op: records are held in memory */ }
+			@Override public void close() { /* no-op: nothing to release */ }
+		};
+		var log = Logger.getLogger(RunFileWatcher.class.getName());
+		var useParent = log.getUseParentHandlers();
+		log.setUseParentHandlers(false);
+		log.addHandler(h);
 		try (var w = new RunFileWatcher(home, bus)) {
 			w.start();
 			RunnerFixture.await(() -> attempts.get() >= 1, 10);
 			// a changed mtime makes the next tick publish (and fail) again, so the schedule must still be alive
 			Files.setLastModifiedTime(f, FileTime.fromMillis(Files.getLastModifiedTime(f).toMillis() + 5000));
 			RunnerFixture.await(() -> attempts.get() >= 2, 10);
+		} finally {
+			log.removeHandler(h);
+			log.setUseParentHandlers(useParent);
 		}
 		assertTrue(attempts.get() >= 2, "the schedule survived the failed poll");
+		assertFalse(records.isEmpty(), "the failed poll was logged");
+		assertEquals(Level.WARNING, records.get(0).getLevel());
+		assertEquals("boom", records.get(0).getThrown().getMessage());
 	}
 }

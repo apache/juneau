@@ -27,6 +27,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Resolves {@code {username, password}} for a named {@code <server>} id out of {@code ~/.m2/settings.xml}.
@@ -61,7 +63,13 @@ public final class MavenSettingsCredentials {
 		try {
 			var factory = DocumentBuilderFactory.newInstance();
 			factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-			var doc = factory.newDocumentBuilder().parse(settingsXml.toFile());
+			var builder = factory.newDocumentBuilder();
+			// The default handler prints "[Fatal Error]" to stderr and then throws; the throw is reported below.
+			builder.setErrorHandler(new DefaultHandler() {
+				@Override public void error(SAXParseException e) throws SAXException { throw e; }
+				@Override public void fatalError(SAXParseException e) throws SAXException { throw e; }
+			});
+			var doc = builder.parse(settingsXml.toFile());
 			var servers = doc.getElementsByTagName("server");
 			for (int i = 0; i < servers.getLength(); i++) {
 				var server = (Element) servers.item(i);
