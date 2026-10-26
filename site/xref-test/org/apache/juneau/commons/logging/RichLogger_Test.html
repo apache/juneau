@@ -908,28 +908,30 @@
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 			rec.setLoggerName(name);
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 			logger.log(rec);
 <a class="jxr_linenumber" name="L902" href="#L902">902</a> 			logger.info(<span class="jxr_string">"commons"</span>);
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 			logger.log(Level.WARNING, <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"ignored"</span>), () -&gt; <span class="jxr_string">"supplier"</span>);
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 			assertSize(3, capture.getRecords());
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 			assertEquals(3, published.get());
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 			root.removeHandler(h);
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		}
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	}
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<span class="jxr_string">"java:S2925"</span> <em class="jxr_comment">// Polling for an async GC event has no latch/await equivalent; the sleep is load-bearing for the poll interval.</em>
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	})
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> awaitCollected(WeakReference&lt;?&gt; ref) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 20; i++) {
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			System.gc();
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			Thread.sleep(20);
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 			<strong class="jxr_keyword">if</strong> (ref.get() == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		}
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	}
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> }
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 			<strong class="jxr_keyword">var</strong> ignored = <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"ignored"</span>);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 			ignored.setStackTrace(<strong class="jxr_keyword">new</strong> StackTraceElement[0]);  <em class="jxr_comment">// Keep the console handler from printing a trace.</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 			logger.log(Level.WARNING, ignored, () -&gt; <span class="jxr_string">"supplier"</span>);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 			assertSize(3, capture.getRecords());
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 			assertEquals(3, published.get());
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			root.removeHandler(h);
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		}
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 	}
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<span class="jxr_string">"java:S2925"</span> <em class="jxr_comment">// Polling for an async GC event has no latch/await equivalent; the sleep is load-bearing for the poll interval.</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	})
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> awaitCollected(WeakReference&lt;?&gt; ref) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 20; i++) {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 			System.gc();
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 			Thread.sleep(20);
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			<strong class="jxr_keyword">if</strong> (ref.get() == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		}
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	}
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

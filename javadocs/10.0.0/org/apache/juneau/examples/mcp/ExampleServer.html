@@ -88,7 +88,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Boots <a href="ExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp"><code>ExampleMcpServer</code></a> on an embedded Jetty server.
 
  <p>
- Run <a href="#main(java.lang.String%5B%5D)"><code>main</code></a> to start the server on a fixed port (default <code>5000</code>, or pass a
+ Run <a href="#main(java.lang.String%5B%5D)"><code>main</code></a> to start the server on a fixed port (default <code>10000</code>, or pass a
  port as the first argument) and leave it running so you can point <a href="ExampleClient.html" title="class in org.apache.juneau.examples.mcp"><code>ExampleClient</code></a> (or any MCP
  client) at it. The in-process end-to-end test uses <a href="#start(int)"><code>start(0)</code></a> to boot on an
  OS-assigned ephemeral port instead.
@@ -208,7 +208,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="detail" id="getRootUrl()">
 <h3>getRootUrl</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleServer.html#line-94">getRootUrl</a></span>()</div>
-<div class="block">Returns the root URL the server is listening on (e.g. <code>http://localhost:5000/</code>).</div>
+<div class="block">Returns the root URL the server is listening on (e.g. <code>http://localhost:10000/</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The root URL. Never <jk>null</jk>.</dd>

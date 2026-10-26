@@ -68,6 +68,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">A protocol-agnostic query API for filtering, sorting, and paging collections of beans (design §5).</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.datatables.adapter">org.apache.juneau.console.datatables.adapter</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The DataTables &harr; <a href="BeanQuery.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuery</code></a> adapter.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.views">org.apache.juneau.console.views</a></div>
+<div class="col-last even-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.http">org.apache.juneau.http</a></div>
 <div class="col-last odd-row-color">
 <div class="block">HTTP Part Annotations</div>
@@ -79,15 +88,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
 <div class="col-last odd-row-color">
 <div class="block">REST Response Converters</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.datatables.adapter">org.apache.juneau.rest.server.datatables.adapter</a></div>
-<div class="col-last even-row-color">
-<div class="block">The DataTables &harr; <a href="BeanQuery.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuery</code></a> adapter.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
-<div class="col-last odd-row-color">
-<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
- contract consumed by the first-party client runtime.</div>
 </div>
 </div>
 <section class="package-uses">
@@ -297,6 +297,54 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.console.datatables.adapter">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.beanquery</a> used by <a href="../../console/datatables/adapter/package-summary.html">org.apache.juneau.console.datatables.adapter</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanQuery.html#org.apache.juneau.console.datatables.adapter">BeanQuery</a></div>
+<div class="col-last even-row-color">
+<div class="block">A protocol-agnostic query request against a collection of beans: what to search, which columns to return, how to
+ sort, and which page to return (design §5.1, §5.3).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BeanQueryContext.html#org.apache.juneau.console.datatables.adapter">BeanQueryContext</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The reusable, immutable, server-side half of a BeanQuery engine: which columns may be searched, sorted and viewed,
+ which operators apply, and the limits every session enforces.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/BeanQuerySession.html#org.apache.juneau.console.datatables.adapter">BeanQuerySession</a></div>
+<div class="col-last even-row-color">
+<div class="block">One unit of query work against a <a href="BeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQueryContext</code></a>: the rows (or connection) to query, plus optional
+ per-request narrowing of the context's settings.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.beanquery</a> used by <a href="../../console/views/package-summary.html">org.apache.juneau.console.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SearchOperator.html#org.apache.juneau.console.views">SearchOperator</a></div>
+<div class="col-last even-row-color">
+<div class="block">The immutable definition of a single <code>$</code>-search operator &mdash; its <code>$</code>-name, arity, the value types
+ it applies to, and its popup help text.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/SearchOperatorSet.html#org.apache.juneau.console.views">SearchOperatorSet</a></div>
+<div class="col-last odd-row-color">
+<div class="block">An immutable, ordered collection of <a href="SearchOperator.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperator</code></a>s that governs which <code>$</code>-operators the parser
+ recognizes.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/SearchType.html#org.apache.juneau.console.views">SearchType</a></div>
+<div class="col-last even-row-color">
+<div class="block">The per-column value type that governs which search operators apply to a column and how a bare (no leading
+ <code>$</code>) pattern token is interpreted.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.http">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.beanquery</a> used by <a href="../../http/package-summary.html">org.apache.juneau.http</a></span></div>
 <div class="summary-table two-column-summary">
@@ -340,54 +388,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><a href="class-use/CountPolicy.html#org.apache.juneau.rest.server.converter">CountPolicy</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Which counts a <a href="BeanQuerySession.html#find(org.apache.juneau.commons.beanquery.BeanQuery)"><code>find</code></a> / <a href="BeanQuerySession.html#findValues(org.apache.juneau.commons.beanquery.BeanQuery)"><code>findValues</code></a> call computes alongside its page of rows.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.datatables.adapter">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.beanquery</a> used by <a href="../../rest/server/datatables/adapter/package-summary.html">org.apache.juneau.rest.server.datatables.adapter</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BeanQuery.html#org.apache.juneau.rest.server.datatables.adapter">BeanQuery</a></div>
-<div class="col-last even-row-color">
-<div class="block">A protocol-agnostic query request against a collection of beans: what to search, which columns to return, how to
- sort, and which page to return (design §5.1, §5.3).</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/BeanQueryContext.html#org.apache.juneau.rest.server.datatables.adapter">BeanQueryContext</a></div>
-<div class="col-last odd-row-color">
-<div class="block">The reusable, immutable, server-side half of a BeanQuery engine: which columns may be searched, sorted and viewed,
- which operators apply, and the limits every session enforces.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/BeanQuerySession.html#org.apache.juneau.rest.server.datatables.adapter">BeanQuerySession</a></div>
-<div class="col-last even-row-color">
-<div class="block">One unit of query work against a <a href="BeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQueryContext</code></a>: the rows (or connection) to query, plus optional
- per-request narrowing of the context's settings.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.views">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.beanquery</a> used by <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/SearchOperator.html#org.apache.juneau.rest.server.views">SearchOperator</a></div>
-<div class="col-last even-row-color">
-<div class="block">The immutable definition of a single <code>$</code>-search operator &mdash; its <code>$</code>-name, arity, the value types
- it applies to, and its popup help text.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/SearchOperatorSet.html#org.apache.juneau.rest.server.views">SearchOperatorSet</a></div>
-<div class="col-last odd-row-color">
-<div class="block">An immutable, ordered collection of <a href="SearchOperator.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperator</code></a>s that governs which <code>$</code>-operators the parser
- recognizes.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/SearchType.html#org.apache.juneau.rest.server.views">SearchType</a></div>
-<div class="col-last even-row-color">
-<div class="block">The per-column value type that governs which search operators apply to a column and how a bare (no leading
- <code>$</code>) pattern token is interpreted.</div>
 </div>
 </div>
 </section>

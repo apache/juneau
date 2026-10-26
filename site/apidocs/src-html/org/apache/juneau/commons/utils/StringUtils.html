@@ -4706,7 +4706,7 @@
 <span class="source-line-no">4693</span><span id="line-4693">         i++;</span>
 <span class="source-line-no">4694</span><span id="line-4694">      }</span>
 <span class="source-line-no">4695</span><span id="line-4695"></span>
-<span class="source-line-no">4696</span><span id="line-4696">      return !result.isEmpty() ? result.toString() : upper.substring(0, Math.min(1, upper.length()));</span>
+<span class="source-line-no">4696</span><span id="line-4696">      return result.isEmpty() ? upper.substring(0, Math.min(1, upper.length())) : result.toString();</span>
 <span class="source-line-no">4697</span><span id="line-4697">   }</span>
 <span class="source-line-no">4698</span><span id="line-4698"></span>
 <span class="source-line-no">4699</span><span id="line-4699">   /**</span>

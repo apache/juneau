@@ -3732,7 +3732,7 @@
 <span class="source-line-no">3719</span><span id="line-3719">    * @return {@code true} if parent values should be included.</span>
 <span class="source-line-no">3720</span><span id="line-3720">    */</span>
 <span class="source-line-no">3721</span><span id="line-3721">   protected boolean isInherited(String property) {</span>
-<span class="source-line-no">3722</span><span id="line-3722">      return RestContext.this.parentContext != null &amp;&amp; !noInherit.get().contains(property);</span>
+<span class="source-line-no">3722</span><span id="line-3722">      return parentContext != null &amp;&amp; !noInherit.get().contains(property);</span>
 <span class="source-line-no">3723</span><span id="line-3723">   }</span>
 <span class="source-line-no">3724</span><span id="line-3724"></span>
 <span class="source-line-no">3725</span><span id="line-3725">   /**</span>

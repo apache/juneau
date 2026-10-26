@@ -606,7 +606,7 @@ loadScripts(document, 'script');</script>
  Children are <b>isolated from the parent's resolution chain</b> by design — a child's serializers, parsers,
  guards, hooks, etc. are all resolved against the child's own <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> only, NOT walked
  through the parent.  This is the opposite of how <a href="#mixins()"><code>mixins</code></a> resolve.  See the
- <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">REST Server — Mixin Sub-Contexts</a>
+ <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin-vs-child divergence</a>
  topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers
  sharing the host's URL namespace and resolution chain).
 
@@ -666,7 +666,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>See Also:</h5><ul>
    <li class='ja'><a href="Child.html" title="annotation interface in org.apache.juneau.rest.server"><code>Child</code></a>
    <li class='jm'><a href="#children()"><code>children()</code></a>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Child Resources</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Host-side seeding with @Child (10.0.0)</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -723,7 +723,7 @@ loadScripts(document, 'script');</script>
  Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.
  <a href="#children()"><code>Children</code></a> are independently-mounted resources isolated from the host's resolution chain.
  See the
- <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">REST Server — Mixin Sub-Contexts</a>
+ <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin-vs-child divergence</a>
  topic for the rationale.
 
  <h5 class='section'>Inheritance Rules</h5>
@@ -1019,7 +1019,7 @@ loadScripts(document, 'script');</script>
  Use <a href="#noInherit()"><code>noInherit()</code></a> to prevent inheriting less-derived contributions.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1046,7 +1046,7 @@ loadScripts(document, 'script');</script>
  Use <a href="#noInherit()"><code>noInherit()</code></a> to prevent inheriting less-derived contributions.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options via HTTP</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>

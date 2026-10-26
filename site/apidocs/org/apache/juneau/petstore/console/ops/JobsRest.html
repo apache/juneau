@@ -89,17 +89,17 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code>, <code><a href="../../../rest/server/terminal/TerminalMixin.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalMixin</a></code>, <code><a href="../../../rest/server/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.rest.server.views">AsyncJobsMixin</a></code></dd>
+<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../../console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a></code>, <code><a href="../../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code>, <code><a href="../../../terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-79">JobsRest</a></span>
 <span class="extends-implements">extends <a href="../PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a>
-implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.rest.server.views">AsyncJobsMixin</a>, <a href="../../../rest/server/terminal/TerminalMixin.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalMixin</a></span></div>
+implements <a href="../../../console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a>, <a href="../../../terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></span></div>
 <div class="block">Jobs: the console's async-job reference.  A restock submits once per idempotency key, answers
- 202 with an <a href="../../../rest/server/views/AsyncJobRef.html" title="class in org.apache.juneau.rest.server.views"><code>AsyncJobRef</code></a>, and the views runtime follows its <code>streamUrl</code> until the job settles.
+ 202 with an <a href="../../../console/views/AsyncJobRef.html" title="class in org.apache.juneau.console.views"><code>AsyncJobRef</code></a>, and the views runtime follows its <code>streamUrl</code> until the job settles.
 
  <p>
- The registry de-duplicates on the idempotency key itself (<a href="../../../rest/server/views/AsyncJobRegistry.html#tryCreate(org.apache.juneau.rest.server.views.IdempotencyKey)"><code>AsyncJobRegistry.tryCreate(IdempotencyKey)</code></a>), so a
+ The registry de-duplicates on the idempotency key itself (<a href="../../../console/views/AsyncJobRegistry.html#tryCreate(org.apache.juneau.console.views.IdempotencyKey)"><code>AsyncJobRegistry.tryCreate(IdempotencyKey)</code></a>), so a
  resubmit with the same key returns the same job and this resource keeps no key map of its own.
 
  <p>
@@ -116,7 +116,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 
  <p>
  The page also hosts the terminal demo: a "groom pet" job (<a href="GroomRuns.html" title="class in org.apache.juneau.petstore.console.ops"><code>GroomRuns</code></a>) whose output is served by
- <a href="../../../rest/server/terminal/TerminalMixin.html" title="interface in org.apache.juneau.rest.server.terminal"><code>TerminalMixin</code></a> and shown two ways &mdash; a FreeMarker terminal card over the in-memory output, and a second
+ <a href="../../../terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalMixin</code></a> and shown two ways &mdash; a FreeMarker terminal card over the in-memory output, and a second
  card over the same run's file-backed transcript.
 
  <h5 class='section'>Example:</h5>
@@ -232,11 +232,11 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <h3 id="fields-inherited-from-class-jakarta.servlet.http.HttpServlet">Fields inherited from class&nbsp;jakarta.servlet.http.HttpServlet</h3>
 <code>LEGACY_DO_HEAD</code></div>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.apache.juneau.rest.server.views.AsyncJobsMixin">Fields inherited from interface&nbsp;org.apache.juneau.rest.server.views.<a href="../../../rest/server/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.rest.server.views">AsyncJobsMixin</a></h3>
-<code><a href="../../../rest/server/views/AsyncJobsMixin.html#CANCEL_PATH">CANCEL_PATH</a>, <a href="../../../rest/server/views/AsyncJobsMixin.html#JOBS_PREFIX">JOBS_PREFIX</a>, <a href="../../../rest/server/views/AsyncJobsMixin.html#STREAM_PATH">STREAM_PATH</a>, <a href="../../../rest/server/views/AsyncJobsMixin.html#STREAM_POLL_INTERVAL">STREAM_POLL_INTERVAL</a></code></div>
+<h3 id="fields-inherited-from-class-org.apache.juneau.console.views.AsyncJobsMixin">Fields inherited from interface&nbsp;org.apache.juneau.console.views.<a href="../../../console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a></h3>
+<code><a href="../../../console/views/AsyncJobsMixin.html#CANCEL_PATH">CANCEL_PATH</a>, <a href="../../../console/views/AsyncJobsMixin.html#JOBS_PREFIX">JOBS_PREFIX</a>, <a href="../../../console/views/AsyncJobsMixin.html#STREAM_PATH">STREAM_PATH</a>, <a href="../../../console/views/AsyncJobsMixin.html#STREAM_POLL_INTERVAL">STREAM_POLL_INTERVAL</a></code></div>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.apache.juneau.rest.server.terminal.TerminalMixin">Fields inherited from interface&nbsp;org.apache.juneau.rest.server.terminal.<a href="../../../rest/server/terminal/TerminalMixin.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalMixin</a></h3>
-<code><a href="../../../rest/server/terminal/TerminalMixin.html#BYTES_PATH">BYTES_PATH</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#CSS_PATH">CSS_PATH</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#JS_PATH">JS_PATH</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#RAW_PATH">RAW_PATH</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#TERMINAL_PREFIX">TERMINAL_PREFIX</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#XTERM_CSS_ASSET">XTERM_CSS_ASSET</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#XTERM_JS_ASSET">XTERM_JS_ASSET</a></code></div>
+<h3 id="fields-inherited-from-class-org.apache.juneau.terminal.region.TerminalMixin">Fields inherited from interface&nbsp;org.apache.juneau.terminal.region.<a href="../../../terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></h3>
+<code><a href="../../../terminal/region/TerminalMixin.html#BYTES_PATH">BYTES_PATH</a>, <a href="../../../terminal/region/TerminalMixin.html#CSS_PATH">CSS_PATH</a>, <a href="../../../terminal/region/TerminalMixin.html#JS_PATH">JS_PATH</a>, <a href="../../../terminal/region/TerminalMixin.html#RAW_PATH">RAW_PATH</a>, <a href="../../../terminal/region/TerminalMixin.html#TERMINAL_PREFIX">TERMINAL_PREFIX</a>, <a href="../../../terminal/region/TerminalMixin.html#XTERM_CSS_ASSET">XTERM_CSS_ASSET</a>, <a href="../../../terminal/region/TerminalMixin.html#XTERM_JS_ASSET">XTERM_JS_ASSET</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -263,22 +263,22 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../rest/server/views/AsyncJobRegistry.html" title="class in org.apache.juneau.rest.server.views">AsyncJobRegistry</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/views/AsyncJobRegistry.html" title="class in org.apache.juneau.console.views">AsyncJobRegistry</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asyncJobRegistry()" class="member-name-link">asyncJobRegistry</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the <a href="../../../rest/server/views/AsyncJobRegistry.html" title="class in org.apache.juneau.rest.server.views"><code>AsyncJobRegistry</code></a> backing this resource's async jobs.</div>
+<div class="block">Returns the <a href="../../../console/views/AsyncJobRegistry.html" title="class in org.apache.juneau.console.views"><code>AsyncJobRegistry</code></a> backing this resource's async jobs.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#closeJobs()" class="member-name-link">closeJobs</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Stops the restock pool, the registry's timeout scheduler and the groom runs when the resource is destroyed.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#groom(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">groom</a><wbr>(<a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;json)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Starts a groom run.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../rest/server/widgets/ModalDef.html" title="class in org.apache.juneau.rest.server.widgets">ModalDef</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#groomForm()" class="member-name-link">groomForm</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The Groom dialog's form source.</div>
@@ -306,7 +306,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Renders the Jobs page.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#regroom(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">regroom</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
@@ -321,7 +321,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Submits a restock.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../rest/server/widgets/ModalDef.html" title="class in org.apache.juneau.rest.server.widgets">ModalDef</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restockForm()" class="member-name-link">restockForm</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.</div>
@@ -351,7 +351,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#speciesRows()" class="member-name-link">speciesRows</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../rest/server/terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -362,7 +362,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.petstore.console.PetstoreConsolePage">Methods inherited from class&nbsp;org.apache.juneau.petstore.console.<a href="../PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a></h3>
-<code><a href="../PetstoreConsolePage.html#builder(org.apache.juneau.rest.server.RestRequest)">builder</a>, <a href="../PetstoreConsolePage.html#freemarker()">freemarker</a>, <a href="../PetstoreConsolePage.html#store()">store</a>, <a href="../PetstoreConsolePage.html#twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.view.freemarker.console.PageSpec)">twin</a></code></div>
+<code><a href="../PetstoreConsolePage.html#builder(org.apache.juneau.rest.server.RestRequest)">builder</a>, <a href="../PetstoreConsolePage.html#freemarker()">freemarker</a>, <a href="../PetstoreConsolePage.html#store()">store</a>, <a href="../PetstoreConsolePage.html#twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.console.freemarker.PageSpec)">twin</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.servlet.RestServlet">Methods inherited from class&nbsp;org.apache.juneau.rest.server.servlet.<a href="../../../rest/server/servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet</a></h3>
 <code><a href="../../../rest/server/servlet/RestServlet.html#builder(java.lang.Class)">builder</a>, <a href="../../../rest/server/servlet/RestServlet.html#createAuthenticator(org.apache.juneau.commons.inject.BeanStore)">createAuthenticator</a>, <a href="../../../rest/server/servlet/RestServlet.html#destroy()">destroy</a>, <a href="../../../rest/server/servlet/RestServlet.html#doLog(java.util.logging.Level,java.lang.Throwable,java.util.function.Supplier)">doLog</a>, <a href="../../../rest/server/servlet/RestServlet.html#getContext()">getContext</a>, <a href="../../../rest/server/servlet/RestServlet.html#getPath()">getPath</a>, <a href="../../../rest/server/servlet/RestServlet.html#getPaths()">getPaths</a>, <a href="../../../rest/server/servlet/RestServlet.html#getRequest()">getRequest</a>, <a href="../../../rest/server/servlet/RestServlet.html#getResponse()">getResponse</a>, <a href="../../../rest/server/servlet/RestServlet.html#getRestBuilder()">getRestBuilder</a>, <a href="../../../rest/server/servlet/RestServlet.html#init(jakarta.servlet.ServletConfig)">init</a>, <a href="../../../rest/server/servlet/RestServlet.html#log(java.util.logging.Level,java.lang.String,java.lang.Object...)">log</a>, <a href="../../../rest/server/servlet/RestServlet.html#log(java.util.logging.Level,java.lang.Throwable,java.lang.String,java.lang.Object...)">log</a>, <a href="../../../rest/server/servlet/RestServlet.html#service(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">service</a>, <a href="../../../rest/server/servlet/RestServlet.html#setContext(org.apache.juneau.rest.server.RestContext)">setContext</a></code></div>
@@ -376,11 +376,11 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.views.AsyncJobsMixin">Methods inherited from interface&nbsp;org.apache.juneau.rest.server.views.<a href="../../../rest/server/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.rest.server.views">AsyncJobsMixin</a></h3>
-<code><a href="../../../rest/server/views/AsyncJobsMixin.html#cancelJob(java.lang.String,org.apache.juneau.rest.server.RestResponse)">cancelJob</a>, <a href="../../../rest/server/views/AsyncJobsMixin.html#streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">streamJob</a></code></div>
+<h3 id="methods-inherited-from-class-org.apache.juneau.console.views.AsyncJobsMixin">Methods inherited from interface&nbsp;org.apache.juneau.console.views.<a href="../../../console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a></h3>
+<code><a href="../../../console/views/AsyncJobsMixin.html#cancelJob(java.lang.String,org.apache.juneau.rest.server.RestResponse)">cancelJob</a>, <a href="../../../console/views/AsyncJobsMixin.html#streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">streamJob</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.terminal.TerminalMixin">Methods inherited from interface&nbsp;org.apache.juneau.rest.server.terminal.<a href="../../../rest/server/terminal/TerminalMixin.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalMixin</a></h3>
-<code><a href="../../../rest/server/terminal/TerminalMixin.html#terminalBytes(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">terminalBytes</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#terminalRaw(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">terminalRaw</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#terminalScript()">terminalScript</a>, <a href="../../../rest/server/terminal/TerminalMixin.html#terminalStylesheet()">terminalStylesheet</a></code></div>
+<h3 id="methods-inherited-from-class-org.apache.juneau.terminal.region.TerminalMixin">Methods inherited from interface&nbsp;org.apache.juneau.terminal.region.<a href="../../../terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></h3>
+<code><a href="../../../terminal/region/TerminalMixin.html#terminalBytes(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">terminalBytes</a>, <a href="../../../terminal/region/TerminalMixin.html#terminalRaw(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">terminalRaw</a>, <a href="../../../terminal/region/TerminalMixin.html#terminalScript()">terminalScript</a>, <a href="../../../terminal/region/TerminalMixin.html#terminalStylesheet()">terminalStylesheet</a></code></div>
 </section>
 </li>
 </ul>
@@ -518,12 +518,12 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <li>
 <section class="detail" id="asyncJobRegistry()">
 <h3>asyncJobRegistry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/views/AsyncJobRegistry.html" title="class in org.apache.juneau.rest.server.views">AsyncJobRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-304">asyncJobRegistry</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../rest/server/views/AsyncJobsMixin.html#asyncJobRegistry()">AsyncJobsMixin</a></code></span></div>
-<div class="block">Returns the <a href="../../../rest/server/views/AsyncJobRegistry.html" title="class in org.apache.juneau.rest.server.views"><code>AsyncJobRegistry</code></a> backing this resource's async jobs.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/AsyncJobRegistry.html" title="class in org.apache.juneau.console.views">AsyncJobRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-304">asyncJobRegistry</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../console/views/AsyncJobsMixin.html#asyncJobRegistry()">AsyncJobsMixin</a></code></span></div>
+<div class="block">Returns the <a href="../../../console/views/AsyncJobRegistry.html" title="class in org.apache.juneau.console.views"><code>AsyncJobRegistry</code></a> backing this resource's async jobs.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../../rest/server/views/AsyncJobsMixin.html#asyncJobRegistry()">asyncJobRegistry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../rest/server/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.rest.server.views">AsyncJobsMixin</a></code></dd>
+<dd><code><a href="../../../console/views/AsyncJobsMixin.html#asyncJobRegistry()">asyncJobRegistry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../console/views/AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views">AsyncJobsMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The registry.  Never <jk>null</jk>.</dd>
 </dl>
@@ -557,7 +557,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <li>
 <section class="detail" id="restockForm()">
 <h3>restockForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/widgets/ModalDef.html" title="class in org.apache.juneau.rest.server.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-371">restockForm</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-371">restockForm</a></span>()</div>
 <div class="block">The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.
 
  <p>
@@ -620,13 +620,13 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <li>
 <section class="detail" id="terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">
 <h3>terminalSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../rest/server/terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-521">terminalSource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region">TerminalSource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-521">terminalSource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../rest/server/terminal/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">TerminalMixin</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../terminal/region/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">TerminalMixin</a></code></span></div>
 <div class="block">Resolves the source for a terminal id, applying the application's own access rules.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../../rest/server/terminal/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">terminalSource</a></code>&nbsp;in interface&nbsp;<code><a href="../../../rest/server/terminal/TerminalMixin.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalMixin</a></code></dd>
+<dd><code><a href="../../../terminal/region/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)">terminalSource</a></code>&nbsp;in interface&nbsp;<code><a href="../../../terminal/region/TerminalMixin.html" title="interface in org.apache.juneau.terminal.region">TerminalMixin</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>id</code> - The id from the URL path (already checked against the grammar).</dd>
 <dd><code>req</code> - The in-flight request.</dd>
@@ -638,7 +638,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <li>
 <section class="detail" id="groomForm()">
 <h3>groomForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/widgets/ModalDef.html" title="class in org.apache.juneau.rest.server.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-531">groomForm</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-531">groomForm</a></span>()</div>
 <div class="block">The Groom dialog's form source.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -649,7 +649,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <li>
 <section class="detail" id="groom(org.apache.juneau.marshall.collections.JsonMap)">
 <h3>groom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-551">groom</a></span><wbr><span class="parameters">(<a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-551">groom</a></span><wbr><span class="parameters">(<a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;json)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Starts a groom run.
@@ -739,7 +739,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
  <p>
  The species is the path's <code>{id}</code>, which must equal the body's <code>targetId</code>, which the key must be bound
  to.  The body's <code>fields</code> supply only <code>count</code>; any other field (the panel's hidden <code>species</code>
- included) is ignored.  A replay of a claimed key returns the same job, or a <a href="../../../rest/server/views/JobKeyLedger.html#SPENT_CODE"><code>JobKeyLedger.SPENT_CODE</code></a>
+ included) is ignored.  A replay of a claimed key returns the same job, or a <a href="../../../console/views/JobKeyLedger.html#SPENT_CODE"><code>JobKeyLedger.SPENT_CODE</code></a>
  refusal once the registry has aged the job out.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -792,7 +792,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
 <li>
 <section class="detail" id="regroom(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)">
 <h3>regroom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-734">regroom</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/ops/JobsRest.html#line-734">regroom</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
@@ -805,7 +805,7 @@ implements <a href="../../../rest/server/views/AsyncJobsMixin.html" title="inter
  Ledger keys only, bound to the path's run: the pet comes from the server's run record, never the request.
  <code>/groom</code> stays the dialog's self-targeted endpoint; one endpoint taking both kinds of key would be only as
  strong as the self-targeted one.  A replay returns the same new run while it is kept, then a
- <a href="../../../rest/server/views/JobKeyLedger.html#SPENT_CODE"><code>JobKeyLedger.SPENT_CODE</code></a> refusal once the run list has evicted it; never a second run.</div>
+ <a href="../../../console/views/JobKeyLedger.html#SPENT_CODE"><code>JobKeyLedger.SPENT_CODE</code></a> refusal once the run list has evicted it; never a second run.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The request.</dd>

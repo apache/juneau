@@ -1,0 +1,6 @@
+{"version": 3, "term": {"cols": 80, "rows": 12, "type": "xterm-256color"}, "timestamp": 1793000000, "idle_time_limit": 2, "title": "PLACEHOLDER recording of the juneau-terminal board"}
+[0.3, "o", "\u001b[1mPLACEHOLDER\u001b[0m: the real recording of the juneau-terminal board replaces this file.\r\n\r\n"]
+[0.8, "o", "$ python3 scripts/test.py --console board\r\n"]
+[0.6, "o", "  Compile      #####-----  (placeholder)\r\n"]
+[0.6, "o", "  Java tests   ##########  (placeholder)\r\n"]
+[0.8, "o", "\r\n\u001b[32mplaceholder done\u001b[0m\r\n"]

@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.petstore.console.data.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.terminal.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.terminal.region.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The groom-pet demo runs behind the Jobs page's terminal cards.</em>
@@ -125,11 +125,11 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">final</strong> String pet;
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> verbose;
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">final</strong> Instant submitted = PetstoreSeed.now();
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">final</strong> <a name="MemoryTerminalSource" href="../../../../../../org/apache/juneau/rest/server/terminal/MemoryTerminalSource.html#MemoryTerminalSource">MemoryTerminalSource</a> terminal = MemoryTerminalSource.create(RING_BYTES, COLS, ROWS);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">final</strong> <a name="MemoryTerminalSource" href="../../../../../../org/apache/juneau/terminal/region/MemoryTerminalSource.html#MemoryTerminalSource">MemoryTerminalSource</a> terminal = MemoryTerminalSource.create(RING_BYTES, COLS, ROWS);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">final</strong> Path file;
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">final</strong> Path sizeFile;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">final</strong> AtomicBoolean fileDone = <strong class="jxr_keyword">new</strong> AtomicBoolean();
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">final</strong> <a name="FileTerminalSource" href="../../../../../../org/apache/juneau/rest/server/terminal/FileTerminalSource.html#FileTerminalSource">FileTerminalSource</a> fileSource;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">final</strong> <a name="FileTerminalSource" href="../../../../../../org/apache/juneau/terminal/region/FileTerminalSource.html#FileTerminalSource">FileTerminalSource</a> fileSource;
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">final</strong> AtomicInteger lines = <strong class="jxr_keyword">new</strong> AtomicInteger();
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">final</strong> AtomicInteger step = <strong class="jxr_keyword">new</strong> AtomicInteger();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> done;
@@ -152,10 +152,10 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">public</strong> String pet() { <strong class="jxr_keyword">return</strong> pet; }
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<em class="jxr_javadoccomment">/** @return The in-memory terminal. */</em>
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">public</strong> <a name="MemoryTerminalSource" href="../../../../../../org/apache/juneau/rest/server/terminal/MemoryTerminalSource.html#MemoryTerminalSource">MemoryTerminalSource</a> terminal() { <strong class="jxr_keyword">return</strong> terminal; }
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">public</strong> <a name="MemoryTerminalSource" href="../../../../../../org/apache/juneau/terminal/region/MemoryTerminalSource.html#MemoryTerminalSource">MemoryTerminalSource</a> terminal() { <strong class="jxr_keyword">return</strong> terminal; }
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_javadoccomment">/** @return The cached file-backed source over this run's transcript. */</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">public</strong> <a name="FileTerminalSource" href="../../../../../../org/apache/juneau/rest/server/terminal/FileTerminalSource.html#FileTerminalSource">FileTerminalSource</a> fileSource() { <strong class="jxr_keyword">return</strong> fileSource; }
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">public</strong> <a name="FileTerminalSource" href="../../../../../../org/apache/juneau/terminal/region/FileTerminalSource.html#FileTerminalSource">FileTerminalSource</a> fileSource() { <strong class="jxr_keyword">return</strong> fileSource; }
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<em class="jxr_javadoccomment">/** @return The temp file the run appends to. */</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">public</strong> Path file() { <strong class="jxr_keyword">return</strong> file; }

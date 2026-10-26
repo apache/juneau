@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ViewsJs_TableBus_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/views/ViewsJs_TableBus_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assumptions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * The datatables card type's bus surface: the five publishers, the</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * {@code cmd:&lt;id&gt;} ops, the {@code filter} role, and the per-card gating of {@code selection}/{@code detail}/{@code bulk}.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Runs {@code table-bus.cjs} through {@link BusHarness}.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="ViewsJs_TableBus_Test" href="../../../../../org/apache/juneau/console/views/ViewsJs_TableBus_Test.html#ViewsJs_TableBus_Test">ViewsJs_TableBus_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; report;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@BeforeAll <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runHarness() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		report = BusHarness.run(<span class="jxr_string">"table-bus.cjs"</span>,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			ViewsMixin.BUS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.RIBBON_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	@BeforeEach <strong class="jxr_keyword">void</strong> needsNode() {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assumeTrue(report != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"node not on PATH"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertNull(report.get(<span class="jxr_string">"crash"</span>), () -&gt; <span class="jxr_string">"harness crashed: "</span> + report.get(<span class="jxr_string">"crash"</span>));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertEquals(<strong class="jxr_keyword">true</strong>, report.get(<span class="jxr_string">"hasTableBus"</span>), <span class="jxr_string">"NS.tableBus is not exported"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Test <strong class="jxr_keyword">void</strong> a01_ops() {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(<span class="jxr_string">"[\&quot;reload\&quot;,\&quot;clear-selection\&quot;,\&quot;select\&quot;,\&quot;set-filter\&quot;,\&quot;pause-polling\&quot;,\&quot;resume-polling\&quot;,\&quot;collapse-all\&quot;]"</span>, report.get(<span class="jxr_string">"ops"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@Test <strong class="jxr_keyword">void</strong> a02_selectionPayload() {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;v\&quot;,\&quot;ids\&quot;:[\&quot;b\&quot;,\&quot;c\&quot;],\&quot;rows\&quot;:[{\&quot;id\&quot;:\&quot;b\&quot;},{\&quot;id\&quot;:\&quot;c\&quot;}],\&quot;added\&quot;:[\&quot;c\&quot;],\&quot;removed\&quot;:[\&quot;a\&quot;],\&quot;count\&quot;:2}"</span>, report.get(<span class="jxr_string">"selPure"</span>));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertEquals(Map.of(<span class="jxr_string">"ids"</span>, 3, <span class="jxr_string">"rows"</span>, 2, <span class="jxr_string">"rowsTruncated"</span>, <strong class="jxr_keyword">true</strong>), report.get(<span class="jxr_string">"selCap"</span>));
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(200, report.get(<span class="jxr_string">"selDefaultCap"</span>));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;v\&quot;,\&quot;ids\&quot;:[],\&quot;rows\&quot;:[],\&quot;added\&quot;:[],\&quot;removed\&quot;:[\&quot;a\&quot;],\&quot;count\&quot;:0}"</span>, report.get(<span class="jxr_string">"selEmpty"</span>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Test <strong class="jxr_keyword">void</strong> a03_otherPayloads() {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;v\&quot;,\&quot;search\&quot;:\&quot;ssc\&quot;,\&quot;columns\&quot;:{\&quot;owner\&quot;:\&quot;jb\&quot;,\&quot;state\&quot;:\&quot;open\&quot;},\&quot;options\&quot;:{\&quot;mine\&quot;:true}}"</span>, report.get(<span class="jxr_string">"filterPure"</span>));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;v\&quot;,\&quot;rowCount\&quot;:412,\&quot;page\&quot;:{\&quot;index\&quot;:1,\&quot;size\&quot;:25,\&quot;total\&quot;:17},\&quot;nested\&quot;:false}"</span>, report.get(<span class="jxr_string">"redrawPure"</span>));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;v\&quot;,\&quot;rowId\&quot;:\&quot;c-17\&quot;,\&quot;expanded\&quot;:true,\&quot;generation\&quot;:3}"</span>, report.get(<span class="jxr_string">"detailPure"</span>));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;v\&quot;,\&quot;action\&quot;:\&quot;close\&quot;,\&quot;succeeded\&quot;:[\&quot;c-17\&quot;],\&quot;notFound\&quot;:[],\&quot;failed\&quot;:[{\&quot;id\&quot;:\&quot;c-21\&quot;,\&quot;status\&quot;:409}]}"</span>, report.get(<span class="jxr_string">"bulkPure"</span>));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/** Mirrors {@code DatatablesCardType.implicitTopics}: a card with no {@code dataUrl} (catalog-driven) gets all five. */</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> a04_implicitTopicsFollowTheJavaRule() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(<span class="jxr_string">"[\&quot;selection:changes\&quot;,\&quot;filter:changes\&quot;,\&quot;redraw:changes\&quot;,\&quot;detail:changes\&quot;,\&quot;bulk:changes\&quot;]"</span>, report.get(<span class="jxr_string">"implicitFull"</span>));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(<span class="jxr_string">"[\&quot;filter:t\&quot;,\&quot;redraw:t\&quot;]"</span>, report.get(<span class="jxr_string">"implicitCatalog"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(<span class="jxr_string">"[\&quot;filter:f\&quot;,\&quot;redraw:f\&quot;,\&quot;bulk:f\&quot;]"</span>, report.get(<span class="jxr_string">"implicitFlat"</span>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(<span class="jxr_string">"[\&quot;selection:s\&quot;,\&quot;filter:s\&quot;,\&quot;redraw:s\&quot;,\&quot;detail:s\&quot;,\&quot;bulk:s\&quot;]"</span>, report.get(<span class="jxr_string">"implicitSrcOnly"</span>));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a05_optionStateListsEveryDeclaredOption() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(<span class="jxr_string">"{\&quot;mine\&quot;:false,\&quot;openOnly\&quot;:false,\&quot;age\&quot;:null}"</span>, report.get(<span class="jxr_string">"optionStateEmpty"</span>));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> b01_bindPublishesInitialFilterAndEmptySelection() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(<span class="jxr_string">"changes"</span>, report.get(<span class="jxr_string">"ctxBusCardId"</span>));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;search\&quot;:\&quot;\&quot;,\&quot;columns\&quot;:{},\&quot;options\&quot;:{\&quot;mine\&quot;:false,\&quot;openOnly\&quot;:false,\&quot;age\&quot;:null}}"</span>, report.get(<span class="jxr_string">"bindFilter"</span>));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;ids\&quot;:[],\&quot;rows\&quot;:[],\&quot;added\&quot;:[],\&quot;removed\&quot;:[],\&quot;count\&quot;:0}"</span>, report.get(<span class="jxr_string">"bindSelection"</span>));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertEquals(0, report.get(<span class="jxr_string">"bindRedraws"</span>), <span class="jxr_string">"an ajax table's first redraw: comes from its own draw.dt"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> b02_columnsAndSearchPatch() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"clientColumns"</span>));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:2,\&quot;value\&quot;:\&quot;jb\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true}]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(<span class="jxr_string">"[\&quot;ssc\&quot;]"</span>, m.get(<span class="jxr_string">"globalSearch"</span>));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;search\&quot;:\&quot;ssc\&quot;,\&quot;columns\&quot;:{\&quot;owner\&quot;:\&quot;jb\&quot;},\&quot;options\&quot;:{\&quot;mine\&quot;:false,\&quot;openOnly\&quot;:false,\&quot;age\&quot;:\&quot;all\&quot;}}"</span>, m.get(<span class="jxr_string">"filter"</span>));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> b03_aColumnAnOptionAlsoFiltersIsAnOrdinaryColumn() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"optionColumn"</span>));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:3,\&quot;value\&quot;:\&quot;x\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true}]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(<span class="jxr_string">"{\&quot;owner\&quot;:\&quot;jb\&quot;,\&quot;state\&quot;:\&quot;x\&quot;}"</span>, m.get(<span class="jxr_string">"columns"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> b04_unknownOptionMemberAndColumnAreRefusedLoudly() {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"refused"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> errs = list(m.get(<span class="jxr_string">"errors"</span>));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertTrue(errs.stream().anyMatch(e -&gt; e.toString().contains(<span class="jxr_string">"unknown ribbon option 'nope'"</span>)), errs::toString);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertTrue(errs.stream().anyMatch(e -&gt; e.toString().contains(<span class="jxr_string">"optionGroup 'age' has no member 'nope'"</span>)), errs::toString);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertTrue(errs.stream().anyMatch(e -&gt; e.toString().contains(<span class="jxr_string">"unknown column 'nope'"</span>)), errs::toString);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(<span class="jxr_string">"[]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(<span class="jxr_string">"all"</span>, m.get(<span class="jxr_string">"ageStill"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEquals(0, m.get(<span class="jxr_string">"newFilters"</span>), <span class="jxr_string">"a refused patch changes nothing, so nothing is republished"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test <strong class="jxr_keyword">void</strong> b05_drawPublishesRedrawButNotAnUnchangedFilter() {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"draw"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(0, m.get(<span class="jxr_string">"newFilters"</span>));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertEquals(1, m.get(<span class="jxr_string">"newRedraws"</span>), <span class="jxr_string">"a nested table's draw.dt must not publish the parent's redraw"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;rowCount\&quot;:3,\&quot;page\&quot;:{\&quot;index\&quot;:0,\&quot;size\&quot;:25,\&quot;total\&quot;:1},\&quot;nested\&quot;:false}"</span>, m.get(<span class="jxr_string">"redraw"</span>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> c01_reloadDefaultsToKeepingThePage() {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertEquals(<span class="jxr_string">"[false,null]"</span>, report.get(<span class="jxr_string">"reloads"</span>));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Test <strong class="jxr_keyword">void</strong> c02_selectAndClear() {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> s = map(report.get(<span class="jxr_string">"select"</span>));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertEquals(<span class="jxr_string">"[\&quot;c-21\&quot;]"</span>, s.get(<span class="jxr_string">"selected"</span>), <span class="jxr_string">"select keeps only ids on the current page"</span>);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;ids\&quot;:[\&quot;c-21\&quot;],\&quot;rows\&quot;:[{\&quot;id\&quot;:\&quot;c-21\&quot;,\&quot;owner\&quot;:\&quot;ak\&quot;,\&quot;state\&quot;:\&quot;closed\&quot;}],\&quot;added\&quot;:[\&quot;c-21\&quot;],\&quot;removed\&quot;:[],\&quot;count\&quot;:1}"</span>, s.get(<span class="jxr_string">"payload"</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(1, s.get(<span class="jxr_string">"toolbar"</span>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> c = map(report.get(<span class="jxr_string">"clear"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertEquals(0, c.get(<span class="jxr_string">"selected"</span>));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;ids\&quot;:[],\&quot;rows\&quot;:[],\&quot;added\&quot;:[],\&quot;removed\&quot;:[\&quot;c-21\&quot;],\&quot;count\&quot;:0}"</span>, c.get(<span class="jxr_string">"payload"</span>));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> c03_pauseResumeCollapse() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report.get(<span class="jxr_string">"paused"</span>));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(false, report.get(<span class="jxr_string">"resumed"</span>));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(2, report.get(<span class="jxr_string">"pauseNotes"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(1, report.get(<span class="jxr_string">"collapses"</span>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> c04_unknownOpIsEJS48() {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"unknownOp"</span>));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertNotNull(m, <span class="jxr_string">"an unknown op must throw, not be ignored"</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(<span class="jxr_string">"E-JS-48"</span>, m.get(<span class="jxr_string">"code"</span>));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertTrue(m.get(<span class="jxr_string">"message"</span>).toString().contains(<span class="jxr_string">"card 'changes' (type 'datatables') has no op 'explode'"</span>), m::toString);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Test <strong class="jxr_keyword">void</strong> d01_checkboxChangePublishesSelection() {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;ids\&quot;:[\&quot;c-30\&quot;],\&quot;rows\&quot;:[{\&quot;id\&quot;:\&quot;c-30\&quot;,\&quot;owner\&quot;:\&quot;jb\&quot;,\&quot;state\&quot;:\&quot;open\&quot;}],\&quot;added\&quot;:[\&quot;c-30\&quot;],\&quot;removed\&quot;:[],\&quot;count\&quot;:1}"</span>, report.get(<span class="jxr_string">"checkbox"</span>));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> e01_detailAndBulk() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;rowId\&quot;:\&quot;c-17\&quot;,\&quot;expanded\&quot;:true,\&quot;generation\&quot;:3}"</span>, report.get(<span class="jxr_string">"detail"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;action\&quot;:\&quot;close\&quot;,\&quot;succeeded\&quot;:[\&quot;c-17\&quot;],\&quot;notFound\&quot;:[],\&quot;failed\&quot;:[{\&quot;id\&quot;:\&quot;c-21\&quot;,\&quot;status\&quot;:409}]}"</span>, report.get(<span class="jxr_string">"bulk"</span>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> e02_optionalTopicsAreGatedOnCardKeys() {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(Map.of(<span class="jxr_string">"detail"</span>, 0, <span class="jxr_string">"bulk"</span>, 0, <span class="jxr_string">"selection"</span>, 0, <span class="jxr_string">"filter"</span>, 1, <span class="jxr_string">"redraw"</span>, 0), report.get(<span class="jxr_string">"bare"</span>));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> f01_filterRoleAppliesMappedFieldsAndIgnoresAClear() {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"role"</span>));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:5,\&quot;value\&quot;:\&quot;east\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true}]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(<span class="jxr_string">"east"</span>, m.get(<span class="jxr_string">"region"</span>));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(<span class="jxr_string">"new"</span>, m.get(<span class="jxr_string">"age"</span>));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(<span class="jxr_string">"zz"</span>, m.get(<span class="jxr_string">"search"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertEquals(0, report.get(<span class="jxr_string">"roleCleared"</span>));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> g01_nestedTableHasNoBus() {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertNull(report.get(<span class="jxr_string">"nestedBus"</span>));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertTrue(report.containsKey(<span class="jxr_string">"nestedBus"</span>));
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Test <strong class="jxr_keyword">void</strong> h01_rebuildRepublishesTheUnchangedFilter() {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertEquals(1, map(report.get(<span class="jxr_string">"rebuild"</span>)).get(<span class="jxr_string">"newFilters"</span>), <span class="jxr_string">"a rebuild resets the changed-only check, so Apply re-publishes"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@Test <strong class="jxr_keyword">void</strong> h02_inlineRowsTableAnnouncesItsFirstDraw() {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertEquals(1, map(report.get(<span class="jxr_string">"inline"</span>)).get(<span class="jxr_string">"redraws"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> i01_cardHandlerWiring() {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(1, report.get(<span class="jxr_string">"registrations"</span>));
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> h = map(report.get(<span class="jxr_string">"handler"</span>));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(<span class="jxr_string">"[\&quot;reload\&quot;,\&quot;clear-selection\&quot;,\&quot;select\&quot;,\&quot;set-filter\&quot;,\&quot;pause-polling\&quot;,\&quot;resume-polling\&quot;,\&quot;collapse-all\&quot;]"</span>, h.get(<span class="jxr_string">"ops"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(<span class="jxr_string">"[\&quot;filter\&quot;]"</span>, h.get(<span class="jxr_string">"roles"</span>));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, h.get(<span class="jxr_string">"implicitIsTableBus"</span>));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, h.get(<span class="jxr_string">"filterRoleIsTableBus"</span>));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> r = map(report.get(<span class="jxr_string">"render"</span>));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertEquals(<span class="jxr_string">"mounted"</span>, r.get(<span class="jxr_string">"result"</span>));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(<span class="jxr_string">"rc"</span>, r.get(<span class="jxr_string">"stamped"</span>));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertEquals(<span class="jxr_string">"cleared"</span>, r.get(<span class="jxr_string">"afterDestroy"</span>));
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(<span class="jxr_string">"[false]"</span>, report.get(<span class="jxr_string">"cardOpRan"</span>));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(<span class="jxr_string">"all"</span>, report.get(<span class="jxr_string">"cardRole"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test <strong class="jxr_keyword">void</strong> i02_opOnAnUnmountedCardIsEJS48() {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"unmounted"</span>));
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertNotNull(m);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(<span class="jxr_string">"E-JS-48"</span>, m.get(<span class="jxr_string">"code"</span>));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertTrue(m.get(<span class="jxr_string">"message"</span>).toString().contains(<span class="jxr_string">"before its table is mounted"</span>), m::toString);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Test <strong class="jxr_keyword">void</strong> j01_dslColumnFilterIsInstalledAsAFixedPredicate() {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"dslSet"</span>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(<span class="jxr_string">"[]"</span>, m.get(<span class="jxr_string">"columnSearches"</span>), <span class="jxr_string">"a DSL column never takes a native column search"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:6,\&quot;name\&quot;:\&quot;juneau-dsl\&quot;,\&quot;installed\&quot;:true}]"</span>, m.get(<span class="jxr_string">"fixed"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(<span class="jxr_string">"$eq(open)"</span>, m.get(<span class="jxr_string">"store"</span>));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(<span class="jxr_string">"[null]"</span>, m.get(<span class="jxr_string">"draws"</span>), <span class="jxr_string">"one draw for the whole patch"</span>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(<span class="jxr_string">"[true,false]"</span>, m.get(<span class="jxr_string">"matches"</span>), <span class="jxr_string">"the installed predicate evaluates the row's raw cell"</span>);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertEquals(<span class="jxr_string">"{\&quot;stage\&quot;:\&quot;$eq(open)\&quot;}"</span>, m.get(<span class="jxr_string">"filterColumns"</span>));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Test <strong class="jxr_keyword">void</strong> j02_invalidDslColumnFilterIsRefusedAndKeepsTheOldOne() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"dslBad"</span>));
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> errs = list(m.get(<span class="jxr_string">"errors"</span>));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertSize(errs::toString, 1, errs);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertTrue(errs.get(0).toString().contains(<span class="jxr_string">"column 'stage'"</span>), errs::toString);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertEquals(<span class="jxr_string">"$eq(open)"</span>, m.get(<span class="jxr_string">"store"</span>));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(0, m.get(<span class="jxr_string">"newFixed"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertEquals(0, m.get(<span class="jxr_string">"newFilters"</span>));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(<span class="jxr_string">"{\&quot;stage\&quot;:\&quot;$eq(open)\&quot;}"</span>, m.get(<span class="jxr_string">"filterColumns"</span>));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Test <strong class="jxr_keyword">void</strong> j03_filterPayloadReadsADslColumnFromTheExpressionStore() {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"dslRead"</span>));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertEquals(<span class="jxr_string">"{\&quot;stage\&quot;:\&quot;$eq(closed)\&quot;}"</span>, m.get(<span class="jxr_string">"filterColumns"</span>));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertEquals(<span class="jxr_string">"[]"</span>, m.get(<span class="jxr_string">"columnSearches"</span>));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	@Test <strong class="jxr_keyword">void</strong> j04_blankExpressionRemovesTheDslPredicate() {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"dslClear"</span>));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertEquals(<span class="jxr_string">"{\&quot;index\&quot;:6,\&quot;name\&quot;:\&quot;juneau-dsl\&quot;,\&quot;installed\&quot;:false}"</span>, m.get(<span class="jxr_string">"fixed"</span>));
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertNull(m.get(<span class="jxr_string">"store"</span>));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertEquals(<span class="jxr_string">"{}"</span>, m.get(<span class="jxr_string">"filterColumns"</span>));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> j05_serverModeKeepsTheNativeColumnSearch() {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"dslServer"</span>));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:6,\&quot;value\&quot;:\&quot;$eq(open)\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true}]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertEquals(<span class="jxr_string">"[]"</span>, m.get(<span class="jxr_string">"fixed"</span>));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@Test <strong class="jxr_keyword">void</strong> j06_dslSectionLogsOnlyTheRefusal() {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertSize(() -&gt; report.get(<span class="jxr_string">"dslErrors"</span>).toString(), 1, list(report.get(<span class="jxr_string">"dslErrors"</span>)));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Test <strong class="jxr_keyword">void</strong> k01_roleSkipsForeignOptionsAndColumnsQuietly() {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"roleForeign"</span>));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(List.of(), m.get(<span class="jxr_string">"errors"</span>), <span class="jxr_string">"a foreign payload is expected to carry extras"</span>);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:2,\&quot;value\&quot;:\&quot;jb\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true}]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	@Test <strong class="jxr_keyword">void</strong> k02_roleClearsWhatTheSourceDroppedAndLeavesTheTargetsOwnFilters() {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"roleClearing"</span>));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertEquals(<span class="jxr_string">"{\&quot;owner\&quot;:\&quot;jb\&quot;,\&quot;region\&quot;:\&quot;west\&quot;}"</span>, m.get(<span class="jxr_string">"appliedColumns"</span>));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertEquals(<span class="jxr_string">"{\&quot;mine\&quot;:true,\&quot;openOnly\&quot;:true,\&quot;age\&quot;:null}"</span>, m.get(<span class="jxr_string">"appliedOptions"</span>));
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		assertEquals(<span class="jxr_string">"{\&quot;region\&quot;:\&quot;west\&quot;}"</span>, m.get(<span class="jxr_string">"columns"</span>), <span class="jxr_string">"owner came from the source and is now gone from it; region is the target's own"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(<span class="jxr_string">"{\&quot;mine\&quot;:true,\&quot;openOnly\&quot;:false,\&quot;age\&quot;:null}"</span>, m.get(<span class="jxr_string">"options"</span>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(<span class="jxr_string">"[{\&quot;index\&quot;:2,\&quot;value\&quot;:\&quot;jb\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true},{\&quot;index\&quot;:2,\&quot;value\&quot;:\&quot;\&quot;,\&quot;regex\&quot;:false,\&quot;smart\&quot;:true}]"</span>, m.get(<span class="jxr_string">"searches"</span>));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(List.of(), report.get(<span class="jxr_string">"roleErrors"</span>));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> l01_expandAndCollapseARowPublishDetail() {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"detailToggle"</span>));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertEquals(<span class="jxr_string">"[[\&quot;c-17\&quot;,true,1],[\&quot;c-17\&quot;,false,1]]"</span>, m.get(<span class="jxr_string">"expanded"</span>));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	@Test <strong class="jxr_keyword">void</strong> l02_collapseAllPublishesEveryOpenRowClosing() {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertEquals(<span class="jxr_string">"[[\&quot;c-17\&quot;,true,2],[\&quot;c-21\&quot;,true,1],[\&quot;c-17\&quot;,false,2],[\&quot;c-21\&quot;,false,1]]"</span>, report.get(<span class="jxr_string">"detailCollapseAll"</span>));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	@Test <strong class="jxr_keyword">void</strong> l03_theSafeCollapseButtonPublishesToo() {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(<span class="jxr_string">"[[\&quot;c-21\&quot;,true,2],[\&quot;c-21\&quot;,false,2]]"</span>, report.get(<span class="jxr_string">"detailSafeCollapse"</span>));
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Test <strong class="jxr_keyword">void</strong> m01_aPageScopedPruneOnDrawPublishesTheSelection() {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"selectionPrune"</span>));
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertEquals(1, m.get(<span class="jxr_string">"published"</span>));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertTrue(m.get(<span class="jxr_string">"last"</span>).toString().contains(<span class="jxr_string">"\&quot;ids\&quot;:[\&quot;c-17\&quot;]"</span>) &amp;&amp; m.get(<span class="jxr_string">"last"</span>).toString().contains(<span class="jxr_string">"\&quot;removed\&quot;:[\&quot;c-99\&quot;]"</span>), m::toString);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@Test <strong class="jxr_keyword">void</strong> m02_clearSelectionLinkPublishesTheEmptySelection() {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"clearLink"</span>));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertEquals(0, m.get(<span class="jxr_string">"selected"</span>));
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertEquals(1, m.get(<span class="jxr_string">"published"</span>));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertTrue(m.get(<span class="jxr_string">"last"</span>).toString().contains(<span class="jxr_string">"\&quot;ids\&quot;:[]"</span>) &amp;&amp; m.get(<span class="jxr_string">"last"</span>).toString().contains(<span class="jxr_string">"\&quot;removed\&quot;:[\&quot;c-17\&quot;,\&quot;c-21\&quot;]"</span>), m::toString);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> n01_perRowBulkRunPublishesOutcomeWithHttpStatusAfterItsToast() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"bulkPerRow"</span>));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertEquals(1, m.get(<span class="jxr_string">"published"</span>));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;action\&quot;:\&quot;close\&quot;,\&quot;succeeded\&quot;:[\&quot;c-17\&quot;],\&quot;notFound\&quot;:[\&quot;c-30\&quot;],\&quot;failed\&quot;:[{\&quot;id\&quot;:\&quot;c-21\&quot;,\&quot;status\&quot;:409}]}"</span>, m.get(<span class="jxr_string">"payload"</span>));
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertEquals(<span class="jxr_string">"[\&quot;c-21\&quot;]"</span>, m.get(<span class="jxr_string">"selected"</span>), <span class="jxr_string">"a failed id stays selected for a retry"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(<span class="jxr_string">"[1]"</span>, m.get(<span class="jxr_string">"bulkPublishedAfterToast"</span>), <span class="jxr_string">"bulk: goes out after its summary toast"</span>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> n02_aggregateBulkRunReportsZeroStatusForEveryFailure() {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> m = map(report.get(<span class="jxr_string">"bulkAggregate"</span>));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		assertEquals(1, m.get(<span class="jxr_string">"published"</span>));
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertEquals(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;viewId\&quot;:\&quot;changes\&quot;,\&quot;action\&quot;:\&quot;close\&quot;,\&quot;succeeded\&quot;:[\&quot;c-17\&quot;],\&quot;notFound\&quot;:[],\&quot;failed\&quot;:[{\&quot;id\&quot;:\&quot;c-21\&quot;,\&quot;status\&quot;:0},{\&quot;id\&quot;:\&quot;c-30\&quot;,\&quot;status\&quot;:0}]}"</span>, m.get(<span class="jxr_string">"payload"</span>));
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertEquals(<span class="jxr_string">"[1]"</span>, m.get(<span class="jxr_string">"bulkPublishedAfterToast"</span>));
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	@Test <strong class="jxr_keyword">void</strong> o01_driveSectionLogsNothing() {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(List.of(), report.get(<span class="jxr_string">"driveErrors"</span>));
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	@Test <strong class="jxr_keyword">void</strong> z_noUnexpectedConsoleErrors() {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> errs = list(report.get(<span class="jxr_string">"errors"</span>));
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertSize(() -&gt; <span class="jxr_string">"only the three deliberate refusals may log: "</span> + errs, 3, errs);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	})
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; map(Object o) { <strong class="jxr_keyword">return</strong> (Map&lt;String,Object&gt;)o; }
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">static</strong> List&lt;?&gt; list(Object o) { <strong class="jxr_keyword">return</strong> (List&lt;?&gt;)o; }
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

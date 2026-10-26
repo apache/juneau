@@ -4701,7 +4701,7 @@
 <a class="jxr_linenumber" name="L4693" href="#L4693">4693</a> 			i++;
 <a class="jxr_linenumber" name="L4694" href="#L4694">4694</a> 		}
 <a class="jxr_linenumber" name="L4695" href="#L4695">4695</a> 
-<a class="jxr_linenumber" name="L4696" href="#L4696">4696</a> 		<strong class="jxr_keyword">return</strong> !result.isEmpty() ? result.toString() : upper.substring(0, Math.min(1, upper.length()));
+<a class="jxr_linenumber" name="L4696" href="#L4696">4696</a> 		<strong class="jxr_keyword">return</strong> result.isEmpty() ? upper.substring(0, Math.min(1, upper.length())) : result.toString();
 <a class="jxr_linenumber" name="L4697" href="#L4697">4697</a> 	}
 <a class="jxr_linenumber" name="L4698" href="#L4698">4698</a> 
 <a class="jxr_linenumber" name="L4699" href="#L4699">4699</a> 	<em class="jxr_javadoccomment">/**</em>

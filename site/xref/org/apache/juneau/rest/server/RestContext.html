@@ -3727,7 +3727,7 @@
 <a class="jxr_linenumber" name="L3719" href="#L3719">3719</a> <em class="jxr_javadoccomment">	 * @return {@code true} if parent values should be included.</em>
 <a class="jxr_linenumber" name="L3720" href="#L3720">3720</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L3721" href="#L3721">3721</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isInherited(String property) {
-<a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 		<strong class="jxr_keyword">return</strong> RestContext.<strong class="jxr_keyword">this</strong>.parentContext != <strong class="jxr_keyword">null</strong> &amp;&amp; !noInherit.get().contains(property);
+<a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 		<strong class="jxr_keyword">return</strong> parentContext != <strong class="jxr_keyword">null</strong> &amp;&amp; !noInherit.get().contains(property);
 <a class="jxr_linenumber" name="L3723" href="#L3723">3723</a> 	}
 <a class="jxr_linenumber" name="L3724" href="#L3724">3724</a> 
 <a class="jxr_linenumber" name="L3725" href="#L3725">3725</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -4875,7 +4875,7 @@
 <a class="jxr_linenumber" name="L4867" href="#L4867">4867</a> <em class="jxr_javadoccomment">	 * @return The bound instance. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L4868" href="#L4868">4868</a> <em class="jxr_javadoccomment">	 * @since 10.0.0</em>
 <a class="jxr_linenumber" name="L4869" href="#L4869">4869</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L4870" href="#L4870">4870</a> 	<strong class="jxr_keyword">public</strong> <a name="RestContextProperties" href="../../../../../org/apache/juneau/rest/server/RestContextProperties.html#RestContextProperties">RestContextProperties</a> getRestContextProperties() {
+<a class="jxr_linenumber" name="L4870" href="#L4870">4870</a> 	<strong class="jxr_keyword">public</strong> RestContextProperties getRestContextProperties() {
 <a class="jxr_linenumber" name="L4871" href="#L4871">4871</a> 		<strong class="jxr_keyword">return</strong> restContextProperties.get();
 <a class="jxr_linenumber" name="L4872" href="#L4872">4872</a> 	}
 <a class="jxr_linenumber" name="L4873" href="#L4873">4873</a> 

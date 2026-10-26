@@ -1101,7 +1101,7 @@
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder&lt;SELF <strong class="jxr_keyword">extends</strong> Builder&lt;SELF&gt;&gt; <strong class="jxr_keyword">extends</strong> MarshallingContextable.Builder&lt;SELF&gt; {
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 		<strong class="jxr_keyword">private</strong> BeanInstantiator.Builder&lt;RestCallHandler&gt; callHandler;
-<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 		<strong class="jxr_keyword">private</strong> WritableBeanStore beanStore = <strong class="jxr_keyword">new</strong> BasicBeanStore();
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> WritableBeanStore beanStore = <strong class="jxr_keyword">new</strong> BasicBeanStore();
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 		<strong class="jxr_keyword">private</strong> BiPredicate&lt;RestRequest,RestResponse&gt; logRequestsPredicate;
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> detectLeaks;
 <a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> allowPrivateUrls;

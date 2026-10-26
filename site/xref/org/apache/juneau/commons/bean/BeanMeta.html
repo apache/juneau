@@ -131,10 +131,10 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_comment">	 * Temporary getter/setter method struct used for calculating bean methods.</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanMethod {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">private</strong> String propertyName;
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">private</strong> MethodType methodType;
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">private</strong> Method method;
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">private</strong> ClassInfo type;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String propertyName;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MethodType methodType;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method method;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassInfo type;
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">private</strong> BeanMethod(String propertyName, MethodType type, Method method) {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">this</strong>.propertyName = propertyName;

@@ -221,18 +221,18 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<strong class="jxr_keyword">private</strong> HttpHost target;
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">private</strong> HttpPartSchema contentSchema;
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <a name="HttpPartSerializerSession" href="../../../../../../org/apache/juneau/marshall/httppart/HttpPartSerializerSession.html#HttpPartSerializerSession">HttpPartSerializerSession</a> partSerializerSession;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">private</strong> HeaderList headerData;
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HeaderList headerData;
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">private</strong> List&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;&gt; rethrow;
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	List&lt;RestCallInterceptor&gt; interceptors = list();   <em class="jxr_comment">// Used for intercepting and altering requests.</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">private</strong> Object content;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">private</strong> Parser parser;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">private</strong> PartList formData;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">private</strong> PartList pathData;
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">private</strong> PartList queryData;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> PartList formData;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> PartList pathData;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> PartList queryData;
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">private</strong> Predicate&lt;Integer&gt; errorCodes;
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">private</strong> RestResponse response;                         <em class="jxr_comment">// The response.</em>
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">private</strong> Serializer serializer;
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">private</strong> URIBuilder uriBuilder;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> URIBuilder uriBuilder;
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;HttpPartSerializer,HttpPartSerializerSession&gt; partSerializerSessions = <strong class="jxr_keyword">new</strong> IdentityHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 

@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.UrlPathMatcher.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.time.*;
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		l.add(of(<span class="jxr_string">"*.txt"</span>));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		l.add(of(<span class="jxr_string">"foo.*"</span>));
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		Collections.sort(l);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		l.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertEquals(<span class="jxr_string">"['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']"</span>, Json5Serializer.DEFAULT.toString(l));
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		l.add(of(<span class="jxr_string">"*"</span>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		l.add(of(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Collections.sort(l);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		l.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(<span class="jxr_string">"['foo.txt','foo.*','*.txt','/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*','/','/*','','*']"</span>, Json5Serializer.DEFAULT.toString(l));
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		l.add(of(<span class="jxr_string">"/foo"</span>));
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		l.add(of(<span class="jxr_string">"/foo"</span>));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		Collections.sort(l);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		l.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"['/foo','/foo']"</span>, Json5Serializer.DEFAULT.toString(l));
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ReportResult_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/terminal/report/ReportResult_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.terminal.report;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.terminal.report.TerminalEvent.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">class</strong> <a name="ReportResult_Test" href="../../../../../org/apache/juneau/terminal/report/ReportResult_Test.html#ReportResult_Test">ReportResult_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ReportTest test(String name) {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ReportTest(<span class="jxr_string">"s"</span>, name, TestStatus.PASS, 5L, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	}
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; kinds(List&lt;?&gt; events) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">return</strong> events.stream().map(e -&gt; ((org.apache.juneau.terminal.report.TerminalEvent)e).kind().name().toLowerCase(Locale.ROOT)).toList();
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> b01_toEventsOrder() {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"jest"</span>, List.of(test(<span class="jxr_string">"t1"</span>)), List.of(<span class="jxr_string">"w1"</span>), false, 0);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> ev = r.toEvents(<span class="jxr_string">"tests"</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(List.of(<span class="jxr_string">"replace"</span>, <span class="jxr_string">"test"</span>, <span class="jxr_string">"note"</span>), kinds(ev));
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(<span class="jxr_string">"tests"</span>, ev.get(0).toContractMap().get(<span class="jxr_string">"step"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(<span class="jxr_string">"warn"</span>, ev.get(2).toContractMap().get(<span class="jxr_string">"level"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertEquals(<span class="jxr_string">"tests"</span>, ev.get(2).toContractMap().get(<span class="jxr_string">"step"</span>));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test <strong class="jxr_keyword">void</strong> b02_noTestsAndWarningsKeepsPlaceholders() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> ev = <strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"jest"</span>, List.of(), List.of(<span class="jxr_string">"w"</span>), false, 0).toEvents(<span class="jxr_string">"tests"</span>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertSize(1, ev);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertEquals(<span class="jxr_string">"note"</span>, ev.get(0).toContractMap().get(<span class="jxr_string">"ev"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Test <strong class="jxr_keyword">void</strong> b03_noTestsNoWarningsStillReplaces() {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertEquals(List.of(<span class="jxr_string">"replace"</span>), kinds(<strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"jest"</span>, List.of(), List.of(), false, 0).toEvents(<span class="jxr_string">"tests"</span>)));
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> b04_testsAreBoundToStepAndFw() {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"jest"</span>, List.of(test(<span class="jxr_string">"t1"</span>)), List.of(), false, 0).toEvents(<span class="jxr_string">"tests"</span>).get(1).toContractMap();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(<span class="jxr_string">"tests"</span>, e.get(<span class="jxr_string">"step"</span>));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertEquals(<span class="jxr_string">"jest"</span>, e.get(<span class="jxr_string">"fw"</span>));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(5L, e.get(<span class="jxr_string">"ms"</span>));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Test <strong class="jxr_keyword">void</strong> b05_emptyNamesAndOverlongTextAreRepaired() {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> ReportTest(<span class="jxr_string">""</span>, <strong class="jxr_keyword">null</strong>, TestStatus.FAIL, -1L, <span class="jxr_string">"m"</span>.repeat(5000), <span class="jxr_string">"t"</span>.repeat(20000));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"jest"</span>, List.of(t), List.of(), false, 0).toEvents(<span class="jxr_string">"tests"</span>).get(1).toContractMap();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertEquals(<span class="jxr_string">"(unnamed)"</span>, e.get(<span class="jxr_string">"suite"</span>));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(<span class="jxr_string">"(unnamed)"</span>, e.get(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertFalse(e.containsKey(<span class="jxr_string">"ms"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(2000, ((String)e.get(<span class="jxr_string">"msg"</span>)).length());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(8000, ((String)e.get(<span class="jxr_string">"trace"</span>)).length());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> b06_extremeControlCharsShedTrace() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> ctl = <span class="jxr_string">"\u0001"</span>;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> ReportTest(ctl.repeat(512), ctl.repeat(512), TestStatus.FAIL, <strong class="jxr_keyword">null</strong>, ctl.repeat(2000), ctl.repeat(8000));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> ev = <strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"jest"</span>, List.of(t), List.of(), false, 0).toEvents(<span class="jxr_string">"tests"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertDoesNotThrow(() -&gt; ev.get(1).validate());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertFalse(ev.get(1).toContractMap().containsKey(<span class="jxr_string">"trace"</span>));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> b07_fwGrammar() {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; <strong class="jxr_keyword">new</strong> ReportResult(<span class="jxr_string">"Jest"</span>, List.of(), List.of(), false, 0));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> b08_limitsMustBePositive() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; <strong class="jxr_keyword">new</strong> ReportLimits(0, 1, 1, 1, 1));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(100_000, ReportLimits.DEFAULT.maxTests());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

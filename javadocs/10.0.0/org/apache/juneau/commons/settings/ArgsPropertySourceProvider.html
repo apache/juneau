@@ -157,9 +157,11 @@ implements <a href="PropertySourceProvider.html" title="interface in org.apache.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySourceProvider.html#line-24">create</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertySourceProvider.html#create()">PropertySourceProvider</a></code></span></div>
-<div class="block">Creates a property source.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySourceProvider.html#line-30">create</a></span>()</div>
+<div class="block">Creates a property source.
+
+ <p>
+ The result is wrapped in a <a href="CachingPropertySource.html" title="class in org.apache.juneau.commons.settings"><code>CachingPropertySource</code></a>: this source's answers never change after construction.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="PropertySourceProvider.html#create()">create</a></code>&nbsp;in interface&nbsp;<code><a href="PropertySourceProvider.html" title="interface in org.apache.juneau.commons.settings">PropertySourceProvider</a></code></dd>
@@ -171,7 +173,7 @@ implements <a href="PropertySourceProvider.html" title="interface in org.apache.
 <li>
 <section class="detail" id="order()">
 <h3>order</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySourceProvider.html#line-29">order</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySourceProvider.html#line-35">order</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertySourceProvider.html#order()">PropertySourceProvider</a></code></span></div>
 <div class="block">Sort key used by ServiceLoader wiring.
 

@@ -71,15 +71,14 @@
 <span class="source-line-no">058</span><span id="line-58">   }</span>
 <span class="source-line-no">059</span><span id="line-59"></span>
 <span class="source-line-no">060</span><span id="line-60">   private static Map&lt;String,String&gt; row(Pet p) {</span>
-<span class="source-line-no">061</span><span id="line-61">      Map&lt;String,String&gt; m = map(</span>
+<span class="source-line-no">061</span><span id="line-61">      return map(</span>
 <span class="source-line-no">062</span><span id="line-62">         "name", p.getName(),</span>
 <span class="source-line-no">063</span><span id="line-63">         "species", String.valueOf(p.getSpecies()),</span>
 <span class="source-line-no">064</span><span id="line-64">         "price", String.format(Locale.ROOT, "%.2f", p.getPrice()),</span>
 <span class="source-line-no">065</span><span id="line-65">         "status", String.valueOf(p.getStatus())</span>
 <span class="source-line-no">066</span><span id="line-66">      );</span>
-<span class="source-line-no">067</span><span id="line-67">      return m;</span>
-<span class="source-line-no">068</span><span id="line-68">   }</span>
-<span class="source-line-no">069</span><span id="line-69">}</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68">}</span>
 
 
 

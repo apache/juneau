@@ -432,7 +432,7 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> cs = st.entries().get(section);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> ce = cs == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : cs.entries.get(key);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">if</strong> (ce == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">if</strong> (ce == <strong class="jxr_keyword">null</strong> &amp;&amp; ! st.imports().isEmpty())
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			ce = st.imports().stream().map(y -&gt; y.getConfigMap().getEntry(section, key)).filter(Shorts::nn).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">return</strong> ce;

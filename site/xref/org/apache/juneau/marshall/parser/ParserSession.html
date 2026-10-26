@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> trimStrings;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">private</strong> <a name="Nulls" href="../../../../../org/apache/juneau/marshall/Nulls.html#Nulls">Nulls</a> nulls;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> maxParseDepth = DEFAULT_MAX_PARSE_DEPTH;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">private</strong> Parser ctx;
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Parser ctx;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">		 * Constructor</em>
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<strong class="jxr_keyword">private</strong> BeanPropertyMeta currentProperty;
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; currentClass;
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">private</strong> Object parentBean;
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">private</strong> <a name="Position" href="../../../../../org/apache/juneau/marshall/parser/Position.html#Position">Position</a> mark = <strong class="jxr_keyword">new</strong> <a name="Position" href="../../../../../org/apache/juneau/marshall/parser/Position.html#Position">Position</a>(-1);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Position" href="../../../../../org/apache/juneau/marshall/parser/Position.html#Position">Position</a> mark = <strong class="jxr_keyword">new</strong> <a name="Position" href="../../../../../org/apache/juneau/marshall/parser/Position.html#Position">Position</a>(-1);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">private</strong> ParserPipe pipe;
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> parseDepth;
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 

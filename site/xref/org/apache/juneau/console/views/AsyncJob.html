@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>AsyncJob xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/console/views/AsyncJob.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.nio.charset.StandardCharsets.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.views.ActionResult.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * A single in-memory, one-shot async job &amp;mdash; the streamed-progress + terminal-result unit of a future async write</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * variant.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The stream URL IS the capability&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * A job is addressed by its {@link #id() id}, an unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * {@link java.security.SecureRandom} token minted by the {@link AsyncJobRegistry}, matching</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s bar.  Because a browser {@code EventSource}</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * constructor cannot set an {@code X-Csrf-Token} header and cookies are unsound on a loopback port, the SSE GET that</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * streams a job's progress is Host-checked at the boundary and &lt;b&gt;capability-gated by the unguessability of the</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * id&lt;/b&gt; &amp;mdash; there is no session cookie and no CSRF-on-GET.  Consequently the id is a secret:</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@link #toString()} never renders it.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Server-side hard limits (a data-egress disclosure bound)&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * A job caps its own streamed output at {@link #maxOutputBytes} bytes and terminates itself when that is exceeded,</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * and it terminates itself once past its {@link #deadline() hard-timeout deadline}.  Both are enforced &lt;b&gt;here&lt;/b&gt;,</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * server-side &amp;mdash; a client cannot be trusted to cancel &amp;mdash; and both are disclosure bounds, not only heap</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * bounds: they cap how long, and how much, customer-adjacent triage content is streamed.  The number of concurrent</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * subscribers is capped at {@link #maxSubscribers} (a browser reload plus one straggler), enforced through</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * {@link #acquireSubscriber()} / {@link #releaseSubscriber()}.</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Progress buffer and resume&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * Progress events are kept, in order, for the job's whole life (bounded by the output cap) and are never trimmed, so</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * the position of an event never changes: {@code events[i]} is streamed with SSE id {@code i+1}.  A subscriber that</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * reconnects with a {@code Last-Event-ID} resumes exactly after the last event it saw; a fresh subscriber is</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * live-only (see {@link #resumeCursor(String)}).</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Terminal outcomes reuse the frozen {@link ActionResult} contract&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * A job settles exactly once, to an {@link ActionResult}: a producer-supplied {@link #complete(ActionResult)</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * success/failure/refusal/unknown}, a {@link #cancel() cancellation} (distinguishing {@link Outcome#CANCELLED</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * cancelled} from {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} via</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * {@link #markEffectStarted()}), an output-limit termination, or a timeout.  The reserved async outcomes are read</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * off the frozen {@link Outcome} enum via its public {@code outcome} field &amp;mdash; this contract is reused, never</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * re-versioned.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class is thread-safe: a producer thread appends progress and settles the job while</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 		subscriber threads drain it through {@link #awaitUpdate(int, Duration)}.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link AsyncJobRegistry}</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link AsyncJobsMixin}</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link ActionResult}</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="AsyncJob" href="../../../../../org/apache/juneau/console/views/AsyncJob.html#AsyncJob">AsyncJob</a> {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_javadoccomment">/** A resume value after trimming: 1 to 10 ASCII digits (so {@link Long#parseLong(String)} cannot overflow). */</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern RESUME_VALUE = Pattern.compile(<span class="jxr_string">"&#92;&#92;d{1,10}"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * Bytes charged toward the output cap for every progress event, on top of its payload.  Without it an empty</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * event would cost nothing and a producer could grow the event buffer without bound; with it the event count is</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * bounded by {@link #maxOutputBytes} (roughly one event per byte at worst).</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> EVENT_OVERHEAD_BYTES = 1;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String id;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Instant createdAt;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration timeout;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> maxOutputBytes;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxSubscribers;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object lock = <strong class="jxr_keyword">new</strong> Object();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; events = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> outputBytes;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> chargedBytes;   <em class="jxr_comment">// Payload plus per-event overhead; what the cap is enforced against.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> effectStarted;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> subscribers;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">private</strong> ActionResult result;   <em class="jxr_comment">// Non-null iff terminal; the single settled outcome.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @param id The unguessable capability id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * @param createdAt The instant the job was created (for the hard-timeout deadline).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @param timeout The hard timeout after which the job self-terminates.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @param maxOutputBytes The maximum number of streamed output bytes before the job self-terminates.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @param maxSubscribers The maximum number of concurrent subscribers.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	AsyncJob(String id, Instant createdAt, Duration timeout, <strong class="jxr_keyword">long</strong> maxOutputBytes, <strong class="jxr_keyword">int</strong> maxSubscribers) {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">this</strong>.id = reqnn(<span class="jxr_string">"id"</span>, id);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">this</strong>.createdAt = reqnn(<span class="jxr_string">"createdAt"</span>, createdAt);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">this</strong>.timeout = reqnn(<span class="jxr_string">"timeout"</span>, timeout);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">this</strong>.maxOutputBytes = maxOutputBytes;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">this</strong>.maxSubscribers = maxSubscribers;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * The unguessable capability id &amp;mdash; the whole of the job's access control (see the class javadoc).</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * @return The id.  Never &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> String id() { <strong class="jxr_keyword">return</strong> id; }
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_javadoccomment">/** @return The instant this job was created. */</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> Instant createdAt() { <strong class="jxr_keyword">return</strong> createdAt; }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_javadoccomment">/** @return The instant past which this job self-terminates on the next timeout check. */</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> Instant deadline() { <strong class="jxr_keyword">return</strong> createdAt.plus(timeout); }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_javadoccomment">/** @return The total number of streamed output bytes so far. */</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> outputBytes() { <strong class="jxr_keyword">synchronized</strong> (lock) { <strong class="jxr_keyword">return</strong> outputBytes; } }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_javadoccomment">/** @return The maximum streamed output bytes before self-termination. */</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> maxOutputBytes() { <strong class="jxr_keyword">return</strong> maxOutputBytes; }
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_javadoccomment">/** @return The maximum number of concurrent subscribers. */</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> maxSubscribers() { <strong class="jxr_keyword">return</strong> maxSubscribers; }
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * Appends a progress event.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * A no-op once the job is terminal.  Enforces the server-side output cap: if this event would push the total</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * over {@link #maxOutputBytes}, the job is instead terminated with a {@link Outcome#FAILURE failure} carrying an</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * {@code app:output-limit-exceeded} message and the event is dropped &amp;mdash; the cap is a data-egress bound, so</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * the excess content is never streamed.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * Each event is charged its UTF-8 payload size plus a fixed {@value #EVENT_OVERHEAD_BYTES}-byte overhead toward</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * the cap, so empty events cannot grow the buffer without bound.  {@link #outputBytes()} still reports payload</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * bytes only.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * @param text The progress text.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the event was appended; &lt;jk&gt;false&lt;/jk&gt; if the job was already terminal or the output</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * 	cap was hit (which itself terminates the job).</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> progress(String text) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		reqnn(<span class="jxr_string">"text"</span>, text);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">var</strong> add = (<strong class="jxr_keyword">long</strong>) text.getBytes(UTF_8).length;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">var</strong> charge = add + EVENT_OVERHEAD_BYTES;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">if</strong> (chargedBytes + charge &gt; maxOutputBytes) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				settle(ActionResult.failure().message(<span class="jxr_string">"app:output-limit-exceeded"</span>));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			outputBytes += add;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			chargedBytes += charge;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			events.add(text);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			lock.notifyAll();
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * Marks that this job's outbound effect has begun, so a subsequent {@link #cancel()} settles to</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} rather than {@link Outcome#CANCELLED cancelled}</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * (the two are different outcomes and must not be collapsed).  A no-op once terminal.</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * The mark and the terminal check share one lock acquisition with {@link #cancel()} and</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * {@link #enforceTimeout(Instant)}, so a producer that starts its effect only when this returns &lt;jk&gt;true&lt;/jk&gt; can</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * never start it on a job that has already been cancelled or timed out.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the job is still running and is now marked; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal, in</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * 	which case the producer must not start the effect.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> markEffectStarted() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			effectStarted = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_javadoccomment">/** @return Whether the outbound effect has begun (see {@link #markEffectStarted()}). */</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> effectStarted() { <strong class="jxr_keyword">synchronized</strong> (lock) { <strong class="jxr_keyword">return</strong> effectStarted; } }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 * Settles the job to a producer-supplied terminal result (success/failure/refusal/unknown).</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * @param value The terminal result.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this call settled the job; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal (first settle</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * 	wins).</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> complete(ActionResult value) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		reqnn(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			settle(value);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		}
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 * Cancels the job, settling it to {@link Outcome#CANCELLED cancelled} &amp;mdash; or</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} when {@link #markEffectStarted()} was called</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 * first.  Enforced server-side; a client cannot be trusted to stop the work itself.</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this call settled the job; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> cancel() {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			settle(cancelledResult(effectStarted));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * Terminates the job if it is past its {@link #deadline() hard-timeout deadline}, settling it to a non-optimistic</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * {@link Outcome#UNKNOWN unknown} &amp;mdash; the effect may or may not have completed in the time cut off.  This is</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * the server-side timeout enforcement: it bounds both heap and, as a data-egress disclosure bound, how</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * long triage keeps streaming customer-adjacent content.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @param now The current instant.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this call timed the job out; &lt;jk&gt;false&lt;/jk&gt; if it was already terminal or not yet past</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * 	its deadline.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> enforceTimeout(Instant now) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		reqnn(<span class="jxr_string">"now"</span>, now);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong> || ! now.isAfter(deadline()))
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			settle(ActionResult.unknown().message(<span class="jxr_string">"app:hard-timeout-exceeded"</span>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<em class="jxr_javadoccomment">/** @return Whether the job has settled to a terminal result. */</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isTerminal() { <strong class="jxr_keyword">synchronized</strong> (lock) { <strong class="jxr_keyword">return</strong> result != <strong class="jxr_keyword">null</strong>; } }
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<em class="jxr_javadoccomment">/** @return The terminal result, or &lt;jk&gt;null&lt;/jk&gt; if the job is still running. */</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">public</strong> ActionResult result() { <strong class="jxr_keyword">synchronized</strong> (lock) { <strong class="jxr_keyword">return</strong> result; } }
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<em class="jxr_javadoccomment">/** @return The number of progress events buffered so far. */</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> eventCount() { <strong class="jxr_keyword">synchronized</strong> (lock) { <strong class="jxr_keyword">return</strong> events.size(); } }
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * Snapshots the progress events at or after {@code fromIndex}.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * Not the stream's resume path: this answers empty for an out-of-range index, whereas a past-the-end resume value</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * is refused (see {@link #resumeCursor(String)}).</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * @param fromIndex The zero-based index to start from.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @return A copy of the events from {@code fromIndex} onward (empty if none/out of range).</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">public</strong> List&lt;String&gt; eventsFrom(<strong class="jxr_keyword">int</strong> fromIndex) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">if</strong> (fromIndex &lt; 0 || fromIndex &gt;= events.size())
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">return</strong> List.of();
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">return</strong> List.copyOf(events.subList(fromIndex, events.size()));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * Resolves the zero-based stream start position from a raw resume value (an SSE {@code Last-Event-ID} or the</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * {@code lastEventId} query parameter, already chosen by the caller).</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * Progress event {@code events[i]} is always streamed with SSE id {@code i+1}, so a resume value {@code k} means</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * "events {@code 0..k-1} were delivered" and the stream continues at {@code events[k]}.  The value is trimmed of</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * SP/HTAB, must then match {@code ^[0-9]{1,10}$} (so {@code +1}, {@code -1}, {@code 1e2}, {@code 0x2} and the</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * like are refused before any parsing) and must not be past the end of the buffer.  A &lt;jk&gt;null&lt;/jk&gt; or empty value</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * is a fresh attach: the current event count, so only progress produced from now on is streamed.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * Runs under the job lock, so the bound cannot race {@link #progress(String)}.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 * @param value The raw resume value, or &lt;jk&gt;null&lt;/jk&gt; if none was supplied.</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * @return The cursor to pass to {@link #awaitUpdate(int, Duration)}.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the value is malformed or past the end of the buffered events.</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">int</strong> resumeCursor(String value) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> v = value == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : trimOws(value);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">var</strong> size = events.size();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">if</strong> (v.isEmpty())
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<strong class="jxr_keyword">return</strong> size;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">if</strong> (! RESUME_VALUE.matcher(v).matches())
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Malformed resume value '%s'."</span>, v);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">var</strong> k = Long.parseLong(v);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">if</strong> (k &gt; size)
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Resume value %s is past the end of the job's %s buffered events."</span>, v, size);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>) k;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/** Trims HTTP optional whitespace (SP and HTAB only) from both ends. */</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">static</strong> String trimOws(String value) {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> b = 0;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> e = value.length();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">while</strong> (b &lt; e &amp;&amp; isOws(value.charAt(b)))
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			b++;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">while</strong> (e &gt; b &amp;&amp; isOws(value.charAt(e - 1)))
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			e--;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> value.substring(b, e);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isOws(<strong class="jxr_keyword">char</strong> c) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">return</strong> c == ' ' || c == '\t';
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * Blocks until there is a progress event at or after {@code fromIndex}, or the job is terminal, or {@code timeout}</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * elapses &amp;mdash; then returns whichever is available.</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * A terminal job returns immediately with any remaining buffered events plus its terminal result, so a single</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * subscriber loop drains a completed (or re-attached) job in one pass.</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * @param fromIndex The zero-based index the caller has already consumed up to.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * @param timeout The maximum time to wait for a new event.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * @return The new events (possibly empty) and the terminal result (&lt;jk&gt;null&lt;/jk&gt; while still running).</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">public</strong> Update awaitUpdate(<strong class="jxr_keyword">int</strong> fromIndex, Duration timeout) {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		reqnn(<span class="jxr_string">"timeout"</span>, timeout);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> deadlineNanos = System.nanoTime() + Math.max(0L, timeout.toNanos());
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 				<strong class="jxr_keyword">if</strong> (fromIndex &lt; events.size() || result != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 					<strong class="jxr_keyword">var</strong> newEvents = fromIndex &lt; events.size()
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 						? List.copyOf(events.subList(Math.max(0, fromIndex), events.size()))
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 						: List.&lt;String&gt;of();
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Update(newEvents, result);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				<strong class="jxr_keyword">var</strong> remaining = deadlineNanos - System.nanoTime();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 				<strong class="jxr_keyword">if</strong> (remaining &lt;= 0L)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Update(List.of(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 					lock.wait(remaining / 1_000_000L, (<strong class="jxr_keyword">int</strong>) (remaining % 1_000_000L));
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 				} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 					Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Update(List.of(), result);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * Attempts to register a subscriber, enforcing the {@link #maxSubscribers} cap.</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if a subscriber slot was acquired; &lt;jk&gt;false&lt;/jk&gt; if the cap is already reached.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> acquireSubscriber() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">if</strong> (subscribers &gt;= maxSubscribers)
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			subscribers++;
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		}
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_javadoccomment">/** Releases a subscriber slot previously acquired via {@link #acquireSubscriber()}. */</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> releaseSubscriber() {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">if</strong> (subscribers &gt; 0)
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 				subscribers--;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<em class="jxr_javadoccomment">/** @return The current number of registered subscribers. */</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> subscriberCount() { <strong class="jxr_keyword">synchronized</strong> (lock) { <strong class="jxr_keyword">return</strong> subscribers; } }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_javadoccomment">/** Settles the terminal result and wakes every waiting subscriber.  Caller must hold {@link #lock}. */</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> settle(ActionResult value) {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">synchronized</strong> (lock) {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			result = value;
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			lock.notifyAll();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<em class="jxr_javadoccomment">/** Builds a terminal {@link ActionResult} for a cancellation, reusing the frozen contract's reserved outcomes. */</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ActionResult cancelledResult(<strong class="jxr_keyword">boolean</strong> afterEffect) {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> ActionResult();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		r.outcome = (afterEffect ? Outcome.CANCELLED_AFTER_EFFECT : Outcome.CANCELLED).wire();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">return</strong> r;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * Returns a description that does &lt;b&gt;not&lt;/b&gt; include the capability id.</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * The id is the stream's whole access control (see the class javadoc); a bean-dumping logger or debug view that</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * stringified it would write a live capability somewhere it can be read back and used to attach to the stream.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @return A value-free description.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"AsyncJob(id=&lt;redacted&gt;,terminal="</span> + isTerminal() + <span class="jxr_string">")"</span>;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * The result of {@link AsyncJob#awaitUpdate(int, Duration)}: the newly-available progress events and the terminal</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * result (&lt;jk&gt;null&lt;/jk&gt; while the job is still running).</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @param events The new progress events since the caller's cursor.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @param result The terminal result, or &lt;jk&gt;null&lt;/jk&gt; if the job is still running.</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">public</strong> record Update(List&lt;String&gt; events, ActionResult result) {}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

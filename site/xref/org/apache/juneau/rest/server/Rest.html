@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * Children are &lt;b&gt;isolated from the parent's resolution chain&lt;/b&gt; by design — a child's serializers, parsers,</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * guards, hooks, etc. are all resolved against the child's own {@link RestContext} only, NOT walked</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * through the parent.  This is the opposite of how {@link #mixins() mixins} resolve.  See the</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerMixinSubContexts</a>#mixin-vs-child-divergence"&gt;REST Server — Mixin Sub-Contexts&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerMixinSubContexts</a>#mixin-vs-child-divergence"&gt;Mixin-vs-child divergence&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * sharing the host's URL namespace and resolution chain).</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 *</em>
@@ -263,7 +263,7 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Child}</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link #children()}</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/ChildResources" target="alexandria_uri">https://juneau.apache.org/docs/topics/ChildResources</a>#host-side-seeding-with-child-1000"&gt;Child Resources&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/ChildResources" target="alexandria_uri">https://juneau.apache.org/docs/topics/ChildResources</a>#host-side-seeding-with-child-1000"&gt;Host-side seeding with @Child (10.0.0)&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
@@ -311,7 +311,7 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.</em>
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * {@link #children() Children} are independently-mounted resources isolated from the host's resolution chain.</em>
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * See the</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerMixinSubContexts</a>#mixin-vs-child-divergence"&gt;REST Server — Mixin Sub-Contexts&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerMixinSubContexts</a>#mixin-vs-child-divergence"&gt;Mixin-vs-child divergence&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * topic for the rationale.</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</em>
@@ -541,7 +541,7 @@
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.</em>
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/SessionOptions" target="alexandria_uri">https://juneau.apache.org/docs/topics/SessionOptions</a>#safe-properties"&gt;Session Options via HTTP&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/SessionOptions" target="alexandria_uri">https://juneau.apache.org/docs/topics/SessionOptions</a>#safe-properties"&gt;Safe Properties&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
@@ -560,7 +560,7 @@
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.</em>
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/SessionOptions" target="alexandria_uri">https://juneau.apache.org/docs/topics/SessionOptions</a>#safe-properties"&gt;Session Options via HTTP&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/SessionOptions" target="alexandria_uri">https://juneau.apache.org/docs/topics/SessionOptions</a>#safe-properties"&gt;Safe Properties&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>

@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>TerminalViewDef_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/views/TerminalViewDef_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.BasicTestUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">class</strong> <a name="TerminalViewDef_Test" href="../../../../../org/apache/juneau/console/views/TerminalViewDef_Test.html#TerminalViewDef_Test">TerminalViewDef_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; keysOf(Map&lt;String,Object&gt; m) {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(m.keySet());
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	}
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a01_defaultsToMap() {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">var</strong> d = TerminalViewDef.create(<span class="jxr_string">"run"</span>).eventsUrl(<span class="jxr_string">"/juneau-terminal-view/42/events"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertEquals(List.of(<span class="jxr_string">"eventsUrl"</span>, <span class="jxr_string">"refreshMs"</span>, <span class="jxr_string">"poll"</span>, <span class="jxr_string">"compact"</span>), keysOf(d.toMap()));
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(2000L, d.toMap().get(<span class="jxr_string">"refreshMs"</span>));
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertEquals(<strong class="jxr_keyword">true</strong>, d.toMap().get(<span class="jxr_string">"poll"</span>));
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(false, d.toMap().get(<span class="jxr_string">"compact"</span>));
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	@Test <strong class="jxr_keyword">void</strong> a02_refreshClampedToFloor() {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(1000L, TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).refreshMs(10).toMap().get(<span class="jxr_string">"refreshMs"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Test <strong class="jxr_keyword">void</strong> a03_allKeysInOrder() {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> d = TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).title(<span class="jxr_string">"T"</span>).rawHref(<span class="jxr_string">"#raw-O{offset}"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(TerminalViewDef.KEYS, keysOf(d.toMap()));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> b01_eventsUrlMustBeSameOriginPath() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"eventsUrl"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"https://evil.example/x"</span>).validate());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"eventsUrl"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/a/../b"</span>).validate());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	@Test <strong class="jxr_keyword">void</strong> b02_idTemplateOnlyOnRowDetail() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"{id}"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/runs/{id}/events"</span>).validate());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertDoesNotThrow(() -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).type(RegionDef.TYPE_ROW_DETAIL).eventsUrl(<span class="jxr_string">"/runs/{id}/events"</span>).validate());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Test <strong class="jxr_keyword">void</strong> b03_eventsUrlRequiredUnlessPollFalse() {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"eventsUrl is required"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).validate());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertDoesNotThrow(() -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).poll(false).validate());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"eventsUrl"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).poll(false).eventsUrl(<span class="jxr_string">"//evil"</span>).validate());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> b04_rawHrefTemplate() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertDoesNotThrow(() -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).rawHref(<span class="jxr_string">"#raw-O{offset}"</span>).validate());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertDoesNotThrow(() -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).rawHref(<span class="jxr_string">"#term-O{offset}"</span>).validate());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"rawHref"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).rawHref(<span class="jxr_string">"#raw-L"</span>).validate());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"exactly one {offset}"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).rawHref(<span class="jxr_string">"#a{line}{offset}"</span>).validate());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> b05_typeAndIdAndRefresh() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"type"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).type(<span class="jxr_string">"bogus"</span>).validate());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"id"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">" "</span>).eventsUrl(<span class="jxr_string">"/x"</span>).validate());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"refreshMs"</span>, () -&gt; TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).refreshMs(0).validate());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> c01_fromMapRejectsUnknownKey() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"unknown"</span>, () -&gt; TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, Map.of(<span class="jxr_string">"bogus"</span>, 1)));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"unknown"</span>, () -&gt; TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, Map.of(<span class="jxr_string">"fwLabels"</span>, <span class="jxr_string">"x"</span>)));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> c02_roundTrip() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> d = TerminalViewDef.create(<span class="jxr_string">"r"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).refreshMs(5000).poll(<strong class="jxr_keyword">true</strong>).compact(<strong class="jxr_keyword">true</strong>).title(<span class="jxr_string">"T"</span>).rawHref(<span class="jxr_string">"#raw-O{offset}"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(d.toMap(), TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, d.toMap()).toMap());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> c03_fromMapTypeChecks() {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"must be a string"</span>, () -&gt; TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, Map.of(<span class="jxr_string">"eventsUrl"</span>, 1)));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"must be an integer"</span>, () -&gt; TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, Map.of(<span class="jxr_string">"refreshMs"</span>, <span class="jxr_string">"x"</span>)));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"must be a boolean"</span>, () -&gt; TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, Map.of(<span class="jxr_string">"poll"</span>, <span class="jxr_string">"x"</span>)));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(3000L, TerminalViewDef.fromMap(<span class="jxr_string">"r"</span>, Map.of(<span class="jxr_string">"refreshMs"</span>, 3000.0)).refreshMs);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> d01_forMixin() {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"/app/juneau-terminal-view/{id}/events"</span>, TerminalViewDef.forMixin(<span class="jxr_string">"r"</span>, <span class="jxr_string">"/app"</span>, <span class="jxr_string">"{id}"</span>).toMap().get(<span class="jxr_string">"eventsUrl"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"/app/juneau-terminal-view/r1/events"</span>, TerminalViewDef.forMixin(<span class="jxr_string">"r"</span>, <span class="jxr_string">"/app/"</span>, <span class="jxr_string">"r1"</span>).toMap().get(<span class="jxr_string">"eventsUrl"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"runIdTemplate"</span>, () -&gt; TerminalViewDef.forMixin(<span class="jxr_string">"r"</span>, <span class="jxr_string">"/app"</span>, <span class="jxr_string">"a b"</span>));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> d02_forMixinMatchesRoutes() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> m = TerminalViewDef.forMixin(<span class="jxr_string">"x"</span>, <span class="jxr_string">"/petstore"</span>, <span class="jxr_string">"job-1"</span>).toMap();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(<span class="jxr_string">"/petstore"</span> + TerminalViewMixin.EVENTS_PATH.replace(<span class="jxr_string">"{runId}"</span>, <span class="jxr_string">"job-1"</span>), m.get(<span class="jxr_string">"eventsUrl"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> d03_toRegionValidates() {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> r = TerminalViewDef.create(<span class="jxr_string">"run"</span>).eventsUrl(<span class="jxr_string">"/x"</span>).title(<span class="jxr_string">"T"</span>).rawHref(<span class="jxr_string">"#raw-O{offset}"</span>).toRegion();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertBean(r, <span class="jxr_string">"id,populate"</span>, <span class="jxr_string">"run,terminal-view"</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(List.of(TerminalViewDef.POPULATOR), List.copyOf(r.allowedPopulators));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

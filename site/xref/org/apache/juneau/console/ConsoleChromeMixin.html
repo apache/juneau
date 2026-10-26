@@ -1,0 +1,992 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ConsoleChromeMixin xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/console/ConsoleChromeMixin.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.utils.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * Mixin that serves the admin-console chrome stylesheet at {@code /juneau-console/chrome.css}.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ConsoleChromeMixin.class)} (see</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * {@code DataTablesMixin} in the {@code juneau-console-datatables} module for the identical asset-serving</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * pattern this mirrors &amp;mdash; not linked here since that module is not a dependency of this one). The served</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * response is the static</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * structural {@code chrome.css} (shipped in this module's classpath) with {@link Theme#OPEN}'s block, then the</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * selected stock theme's override block if one other than {@code open} was selected, appended as</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * {@code html:root{}} blocks.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Mount styles:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Both of the following arrangements serve the stylesheets at the {@link #CHROME_CSS_PATH} / {@link #THEME_CSS_DIR}</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * URLs with no path juggling by the host resource:</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Composed&lt;/b&gt; &amp;mdash; the host resource is mounted wherever the application already mounts it (e.g.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 		{@code /rest/*}) and the stylesheets hang off that mount, at</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 		&lt;code&gt;&amp;lt;host-mount&amp;gt;/juneau-console/chrome.css&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Standalone&lt;/b&gt; &amp;mdash; the host resource is registered with the servlet container at url-pattern</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 		{@code /juneau-console/*} so the stylesheets sit at a fixed site-root URL, independent of which page or tab</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 		rendered the referencing {@code &lt;link&gt;}.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * The two arrangements need different operation paths, because a container mount at {@code /juneau-console/*}</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * reports {@code servletPath="/juneau-console"} and Juneau resolves an operation's path against the request URI</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * with {@code contextPath + servletPath} already removed &amp;mdash; leaving only {@code /chrome.css} to match.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * Each operation below therefore declares &lt;i&gt;both&lt;/i&gt; its prefixed path and the same path minus the</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * {@code /juneau-console} prefix, so whichever one the arrangement leaves to be matched resolves.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Theme precedence&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;{@link Builder#theme(String)} if set, else {@link Theme#OPEN}. {@link Theme#OPEN}'s block is always appended</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * first; a selected non-{@code open} stock theme adds exactly one more block.</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Stylesheet load-order band:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * At equal cascade specificity, whichever of {@code juneau-views.css} and this class's {@code chrome.css} is</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * declared later in a page's {@code &lt;head&gt;} wins &amp;mdash; the exact ambiguity the {@code overrideBlock} theme block</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * below is raised to {@code html:root} to make irrelevant. Juneau's own in-tree page emitters (the examples</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * module) don't rely on that fix alone: they declare a five-position stylesheet/script load-order band,</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * enforced by a build-time test, so their own asset order is never left to chance in the first place:</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;vendor stylesheets</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code juneau-views.css} &amp;mdash; the views base layer</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;first-party widget stylesheets that build on the views layer, e.g. {@code juneau-calendar.css}</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;the consumer theme, e.g. this class's {@code chrome.css}</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;page-local {@code &lt;style&gt;}</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * That guard reaches only the pages Juneau itself emits. It says nothing about, and claims no control over, an</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * arbitrary host application's own document &amp;mdash; a consumer is free to link {@code chrome.css} and</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * {@code juneau-views.css} in either order, which is precisely why the {@code html:root} fix exists: so the</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * active theme wins regardless of which order the consumer's links happen to appear in.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Stock chrome.css (Theme.OPEN tokens), mounted standalone at /juneau-console/*.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@Rest&lt;/ja&gt;(mixins=ConsoleChromeMixin.&lt;jk&gt;class&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;public class&lt;/jk&gt; ConsoleAssetsRest &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * 		&lt;ja&gt;@Bean&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;public&lt;/jk&gt; ConsoleChromeMixin consoleChrome() {</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * 			&lt;jk&gt;return&lt;/jk&gt; ConsoleChromeMixin.&lt;jsm&gt;create&lt;/jsm&gt;().build();</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * 		}</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * 	}</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Bake a different stock palette into the served chrome.css.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * 	ConsoleChromeMixin.&lt;jsm&gt;create&lt;/jsm&gt;().theme(&lt;js&gt;"gray"&lt;/js&gt;).build();</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment"> * Custom palettes aren't configured here. Author them in the FreeMarker chrome with {@code &lt;@theme&gt;}/{@code &lt;@token&gt;}</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment"> * (see the {@link Theme} example), which emits the stock-theme {@code &lt;link&gt;} plus an inline override block.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> @Rest
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> @SuppressWarnings({
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<span class="jxr_string">"java:S125"</span>, <em class="jxr_comment">// Comments are explanatory; they are not commented-out code.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<span class="jxr_string">"java:S1192"</span> <em class="jxr_comment">// Duplicated "html:root{" selector text is a CSS protocol fragment; a constant would obscure the emitter.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> })
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ConsoleChromeMixin {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_javadoccomment">/** The URL path at which the chrome stylesheet is served (relative to the host mount). */</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHROME_CSS_PATH = <span class="jxr_string">"/juneau-console/chrome.css"</span>;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_javadoccomment">/** {@link #CHROME_CSS_PATH} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHROME_CSS_PATH_UNPREFIXED = <span class="jxr_string">"/chrome.css"</span>;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/** Classpath location of the shipped structural stylesheet. */</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHROME_CSS_RESOURCE = <span class="jxr_string">"/org/apache/juneau/console/chrome.css"</span>;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * The URL directory the shipped stock-theme stylesheets are served under (relative to the host mount), e.g.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * {@code /juneau-console/themes/juneau-theme-light-red.css}. A subdirectory of the chrome mount so a</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * templated {@code {file}} path cannot collide with the fixed {@link #CHROME_CSS_PATH} endpoint. The FTL</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * {@code &lt;@theme name="…"/&gt;} directive links these; see {@link #themeAssetUrl(RestRequest, String)}.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String THEME_CSS_DIR = <span class="jxr_string">"/juneau-console/themes/"</span>;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_javadoccomment">/** {@link #THEME_CSS_DIR} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String THEME_CSS_DIR_UNPREFIXED = <span class="jxr_string">"/themes/"</span>;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<em class="jxr_javadoccomment">/** Classpath directory the shipped theme stylesheets live in (same package as {@link #CHROME_CSS_RESOURCE}). */</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String THEME_CSS_RESOURCE_DIR = <span class="jxr_string">"/org/apache/juneau/console/"</span>;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_javadoccomment">/** The stock palettes by FTL/builder name, in documented order; the single source for the name list and file allowlist. */</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Theme&gt; STOCK_THEMES = stockThemes();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * The built-in stock-theme names - the kebab-case of the {@link Theme} constants ({@link Theme#OPEN},</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * {@link Theme#LIGHT_RED}, {@link Theme#LIGHT_BROWN}, {@link Theme#RED}, {@link Theme#GRAY}). Each maps to a</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * shipped {@code juneau-theme-&lt;name&gt;.css} stylesheet. Consumed by the FTL {@code &lt;@theme&gt;} directive to fail an</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * unknown name closed, and here to bound the served {@code {file}} to a known stock theme.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; BUILTIN_THEME_NAMES = List.copyOf(STOCK_THEMES.keySet());
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * The colour-scheme pin values, in documented order.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * {@code auto} (the default) follows the browser's {@code prefers-color-scheme}; {@code light} and {@code dark}</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * pin the page to that scheme. Accepted by {@code &lt;@console scheme="…"&gt;}, {@code PageSpec.scheme(String)} and</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * {@link #schemeHead(RestRequest, String, boolean)}.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; SCHEMES = List.of(<span class="jxr_string">"auto"</span>, <span class="jxr_string">"light"</span>, <span class="jxr_string">"dark"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * The inline pre-paint script that picks the page's colour scheme before first paint.</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * It sets {@code data-jc-scheme} on the root element from, in order: the visitor's stored choice (only when the</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * root carries {@code data-jc-scheme-toggle}), the server pin ({@code data-jc-scheme-pin}), then the browser's</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * {@code prefers-color-scheme}. It never throws: storage and media-query failures fall through to the next</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * source, ending at {@code light}.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * The text is a byte-for-byte constant so {@link #SCHEME_SCRIPT_CSP_HASH} is stable. Emit it as the first child</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * of {@code &lt;head&gt;}, ahead of every stylesheet.</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SCHEME_SCRIPT = String.join(<span class="jxr_string">"\n"</span>,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<span class="jxr_string">"(function(d){var e=d.documentElement,k=\&quot;juneau-console:scheme\&quot;,s=null;"</span>,
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<span class="jxr_string">"if(e.hasAttribute(\&quot;data-jc-scheme-toggle\&quot;)){try{s=localStorage.getItem(k)}catch(x){}}"</span>,
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<span class="jxr_string">"if(s!==\&quot;light\&quot;&amp;&amp;s!==\&quot;dark\&quot;){s=e.getAttribute(\&quot;data-jc-scheme-pin\&quot;);}"</span>,
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<span class="jxr_string">"if(s!==\&quot;light\&quot;&amp;&amp;s!==\&quot;dark\&quot;){try{s=matchMedia(\&quot;(prefers-color-scheme: dark)\&quot;).matches?\&quot;dark\&quot;:\&quot;light\&quot;}catch(x){s=\&quot;light\&quot;}}"</span>,
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<span class="jxr_string">"e.setAttribute(\&quot;data-jc-scheme\&quot;,s);})(document);"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * The CSP source expression for {@link #SCHEME_SCRIPT}: {@code 'sha256-&lt;base64&gt;'} over its UTF-8 bytes.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * Add it to a {@code script-src} directive to allow the pre-paint script without a nonce. It covers only the</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * script. The console shell's inline {@code &lt;style&gt;} (theme override blocks) still needs the request nonce or</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * {@code 'unsafe-inline'} in {@code style-src}.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SCHEME_SCRIPT_CSP_HASH = sha256Source(SCHEME_SCRIPT);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<em class="jxr_javadoccomment">/** The served stock stylesheet file names, derived from {@link #BUILTIN_THEME_NAMES}. */</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; ALLOWED_THEME_FILES = Stream.concat(
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			BUILTIN_THEME_NAMES.stream().map(n -&gt; <span class="jxr_string">"juneau-theme-"</span> + n + <span class="jxr_string">".css"</span>),
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<em class="jxr_comment">// The shared dark neutral layer is a served theme file but not a selectable theme, so it is not in</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<em class="jxr_comment">// BUILTIN_THEME_NAMES (theme="dark" must keep failing validation).</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			Stream.of(<span class="jxr_string">"juneau-theme-dark.css"</span>))
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		.collect(Collectors.toUnmodifiableSet());
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Theme&gt; stockThemes() {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		Map&lt;String,Theme&gt; m = m(
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<span class="jxr_string">"open"</span>, Theme.OPEN,
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<span class="jxr_string">"light-red"</span>, Theme.LIGHT_RED,
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<span class="jxr_string">"light-brown"</span>, Theme.LIGHT_BROWN,
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<span class="jxr_string">"red"</span>, Theme.RED,
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<span class="jxr_string">"gray"</span>, Theme.GRAY
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">return</strong> u(m);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_javadoccomment">/** Content type emitted for the chrome stylesheet. */</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONTENT_TYPE = <span class="jxr_string">"text/css;charset=utf-8"</span>;
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_javadoccomment">/** {@code Cache-Control} header emitted for the chrome stylesheet (1 day). */</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CACHE_CONTROL = <span class="jxr_string">"max-age=86400, public"</span>;
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_javadoccomment">/** Context-root-absolute path of the console shell script. */</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONSOLE_JS_PATH = <span class="jxr_string">"/juneau-console/juneau-console.js"</span>;
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_javadoccomment">/** {@link #CONSOLE_JS_PATH} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONSOLE_JS_PATH_UNPREFIXED = <span class="jxr_string">"/juneau-console.js"</span>;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<em class="jxr_javadoccomment">/** Classpath location of the console shell script. */</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONSOLE_JS_RESOURCE = <span class="jxr_string">"/org/apache/juneau/console/juneau-console.js"</span>;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_javadoccomment">/** Context-root-absolute path of the count-badge script. */</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BADGES_JS_PATH = <span class="jxr_string">"/juneau-console/juneau-badges.js"</span>;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<em class="jxr_javadoccomment">/** {@link #BADGES_JS_PATH} minus the {@code /juneau-console} prefix. */</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BADGES_JS_PATH_UNPREFIXED = <span class="jxr_string">"/juneau-badges.js"</span>;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_javadoccomment">/** Classpath location of the count-badge script. */</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BADGES_JS_RESOURCE = <span class="jxr_string">"/org/apache/juneau/console/juneau-badges.js"</span>;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<em class="jxr_javadoccomment">/** Context-root-absolute path of the chart-card runtime. */</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHARTS_JS_PATH = <span class="jxr_string">"/juneau-console/juneau-charts.js"</span>;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<em class="jxr_javadoccomment">/** {@link #CHARTS_JS_PATH} minus the {@code /juneau-console} prefix. */</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHARTS_JS_PATH_UNPREFIXED = <span class="jxr_string">"/juneau-charts.js"</span>;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_javadoccomment">/** Classpath location of the chart-card runtime. */</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CHARTS_JS_RESOURCE = <span class="jxr_string">"/org/apache/juneau/console/juneau-charts.js"</span>;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<em class="jxr_javadoccomment">/** Context-root-absolute path of the job-log card runtime. */</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JOBLOG_JS_PATH = <span class="jxr_string">"/juneau-console/juneau-joblog.js"</span>;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_javadoccomment">/** {@link #JOBLOG_JS_PATH} minus the {@code /juneau-console} prefix. */</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JOBLOG_JS_PATH_UNPREFIXED = <span class="jxr_string">"/juneau-joblog.js"</span>;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<em class="jxr_javadoccomment">/** Classpath location of the job-log card runtime. */</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JOBLOG_JS_RESOURCE = <span class="jxr_string">"/org/apache/juneau/console/juneau-joblog.js"</span>;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<em class="jxr_javadoccomment">/** Context-root-absolute path of the dashboard chrome runtime. */</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DASHBOARD_JS_PATH = <span class="jxr_string">"/juneau-console/juneau-dashboard.js"</span>;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<em class="jxr_javadoccomment">/** {@link #DASHBOARD_JS_PATH} minus the {@code /juneau-console} prefix. */</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DASHBOARD_JS_PATH_UNPREFIXED = <span class="jxr_string">"/juneau-dashboard.js"</span>;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	<em class="jxr_javadoccomment">/** Classpath resource behind {@link #DASHBOARD_JS_PATH}. */</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DASHBOARD_JS_RESOURCE = <span class="jxr_string">"/org/apache/juneau/console/juneau-dashboard.js"</span>;
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<em class="jxr_javadoccomment">/** Context-root-absolute path of the page-contract schema. */</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SCHEMA_PATH = <span class="jxr_string">"/juneau-console/juneau-page.schema.json"</span>;
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<em class="jxr_javadoccomment">/** {@link #SCHEMA_PATH} minus the {@code /juneau-console} prefix. */</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SCHEMA_PATH_UNPREFIXED = <span class="jxr_string">"/juneau-page.schema.json"</span>;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<em class="jxr_javadoccomment">/** Classpath location of the page-contract schema (same file as {@link PageContractSchema#RESOURCE}). */</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SCHEMA_RESOURCE = <span class="jxr_string">"/"</span> + PageContractSchema.RESOURCE;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JS_CONTENT_TYPE = <span class="jxr_string">"text/javascript;charset=utf-8"</span>;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JSON_CONTENT_TYPE = <span class="jxr_string">"application/json;charset=utf-8"</span>;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * The framework-authored role-token alias derivations.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * {@code chrome.css} consumes &lt;i&gt;role&lt;/i&gt;-named tokens ({@code --jc-header-bg}, {@code --jc-surface},</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * {@code --jc-on-accent}, ...); {@link Theme#OPEN} (and every consumer theme) still defines the original</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * &lt;i&gt;colour&lt;/i&gt;-named leaf tokens ({@code --jc-white}, {@code --jc-border-2}, ...). This block bridges the two</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * by deriving each role token &lt;b&gt;from&lt;/b&gt; the legacy token it replaces, so a consumer's existing override of a</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * legacy token still flows through to every derived role, and a consumer who sets a role token directly</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * out-ranks the derived default by cascade order (this block is emitted inside the {@code Theme.OPEN} block,</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * before any active-theme override block).</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * These aliases are &lt;b&gt;permanent&lt;/b&gt; (no deprecation window) and are deliberately &lt;i&gt;not&lt;/i&gt;</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * {@link Theme#OPEN} tokens. A {@code var(--jc-*)}-valued token IS legal Theme-layer syntax &amp;mdash;</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * {@code Theme.Builder} recognizes it as a reference and resolves it to a concrete literal at {@code build()}</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * time &amp;mdash; but that resolution scope deliberately excludes these role aliases, which are appended here</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * outside {@code Theme.OPEN}'s token map. Making them {@code Theme.OPEN} tokens instead would resolve each alias</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * to a &lt;i&gt;fixed literal&lt;/i&gt; at composition time, snapshotting the live CSS cascade (the dark-mode /</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * user-agent overrides that reach these role tokens at use time) into a frozen value &amp;mdash; so</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * {@code Theme.OPEN} is kept all-literal and the aliases stay here as framework-authored literal text that is</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * emitted verbatim (never routed through {@code CssValueGrammar}, which exists to validate &lt;i&gt;consumer&lt;/i&gt;</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * input, not the framework's own stylesheet). {@code Theme.OPEN} owns leaf values; this block owns derived</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * values; no token name is declared by both.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * {@code --jc-danger-text} and {@code --jc-success-text} are the text-ink roles of the danger and success</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * colours; the fills keep {@code --jc-danger} and {@code --jc-success}.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) keys off {@code --jc-white}, not</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * {@code --jc-chrome-bg}: in the light scheme the header and both page-nav rows (Page Tabs and Page Subtabs)</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * stay white on every stock theme (the dark layer sets the header background directly), matching</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * {@link Theme#OPEN}'s blue look. Theme accent still paints the selected-tab</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * indicator, page-nav floor, and the rest of the page; {@code --jc-chrome-bg} remains the page-chrome</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * fallback under {@code --jc-page-bg}, the hover fill, and dialog chrome. Pinning header/nav to</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * {@code --jc-chrome-bg} washed those bars in light-red / light-brown / red / gray. {@code --jc-page-nav-accent}</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * defaults to {@code --jc-accent} so a consumer can retint the page-nav floor / selected-section bar without</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * recoloring buttons. {@code --jc-table-header-bg} also keys off {@code --jc-white} so DataTable / views-table</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * column headers stay white (the original artwork gives {@code table.dataTable thead th} no background), not the page-chrome grey.</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OPEN_ROLE_ALIASES = String.join(<span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<span class="jxr_string">"--jc-surface:var(--jc-white);"</span>,
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<span class="jxr_string">"--jc-header-bg:var(--jc-white);"</span>,
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<span class="jxr_string">"--jc-nav-bg:var(--jc-header-bg);"</span>,
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<span class="jxr_string">"--jc-page-nav-accent:var(--jc-accent);"</span>,
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<span class="jxr_string">"--jc-control-bg:var(--jc-surface);"</span>,
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<span class="jxr_string">"--jc-table-bg:var(--jc-surface);"</span>,
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<span class="jxr_string">"--jc-table-row-bg:var(--jc-surface);"</span>,
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<span class="jxr_string">"--jc-on-accent:var(--jc-white);"</span>,
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<span class="jxr_string">"--jc-on-btn-primary:var(--jc-on-accent);"</span>,
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<span class="jxr_string">"--jc-hover-bg:var(--jc-chrome-bg);"</span>,
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<em class="jxr_comment">// DataTable / views-table headers are white (the original artwork gives `table.dataTable thead th` no background;</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<em class="jxr_comment">// the white card shows through). Do not key this off --jc-chrome-bg — that page-chrome grey tints</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<em class="jxr_comment">// every column header and is the wrong surface (the detail-table thead grey is a different widget).</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<span class="jxr_string">"--jc-table-header-bg:var(--jc-white);"</span>,
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<span class="jxr_string">"--jc-control-border:var(--jc-border-2);"</span>,
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<span class="jxr_string">"--jc-header-icon-text:var(--jc-header-icon-color);"</span>,
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<span class="jxr_string">"--jc-btn-primary-bg:var(--jc-btn-primary);"</span>,
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<span class="jxr_string">"--jc-btn-primary-bg-hover:var(--jc-btn-primary-hover);"</span>,
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<em class="jxr_comment">// Text roles: danger/success used as ink, so the dark layer can lighten them without touching the fills.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<span class="jxr_string">"--jc-danger-text:var(--jc-danger);"</span>,
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<span class="jxr_string">"--jc-success-text:var(--jc-success);"</span>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * The names of the role aliases the chrome declares (for example {@code --jc-surface} and</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * {@code --jc-danger-text}), derived from the same declarations the stylesheet emits.</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; ROLE_ALIAS_NAMES = Arrays.stream(OPEN_ROLE_ALIASES.split(<span class="jxr_string">";"</span>))
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		.map(d -&gt; d.substring(0, d.indexOf(':')))
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		.collect(Collectors.toUnmodifiableSet());
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * Returns the names of the role aliases the chrome declares, such as {@code --jc-surface},</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * {@code --jc-danger-text} and {@code --jc-header-bg}.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * These are the custom properties the chrome derives from the {@link Theme#OPEN} tokens. They are not tokens of</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * any {@link Theme}, but a page resolves them at run time, so the FreeMarker {@code &lt;@token scheme="dark"&gt;}</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * alias check accepts them as targets.</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable set of custom-property names; never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; roleAliasNames() {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">return</strong> ROLE_ALIAS_NAMES;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_javadoccomment">/** The shipped static chrome.css bytes, read once from the classpath (shared - the static file never varies by theme). */</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">volatile</strong> String staticCss;
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * Read+cache+hash+serve helper for the configured theme/chrome assets, anchored on this class so</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * {@link ClasspathAssetCache#buildVersion()} resolves this module's own implementation version (see that</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * class's javadoc's version-anchor section).</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ClasspathAssetCache" href="../../../../org/apache/juneau/rest/server/util/ClasspathAssetCache.html#ClasspathAssetCache">ClasspathAssetCache</a> ASSET_CACHE = <strong class="jxr_keyword">new</strong> <a name="ClasspathAssetCache" href="../../../../org/apache/juneau/rest/server/util/ClasspathAssetCache.html#ClasspathAssetCache">ClasspathAssetCache</a>(ConsoleChromeMixin.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> cacheAssets;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Theme theme;
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_javadoccomment">/** Per-mixin-instance cache of the fully-assembled (static + theme blocks) response body, keyed by mount (see {@link #mountKey}). */</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,byte[]&gt; cachedBodies = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<em class="jxr_javadoccomment">/** Test-only diagnostic: counts every call to {@link #buildBody(RestRequest)} (i.e. every cache miss / every call when caching is disabled). */</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> AtomicInteger buildCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * No-arg constructor, mirroring {@code FreemarkerMixin()}'s equivalent so a bean-store lookup miss can fall back</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * to a default-configured instance without relying on {@code BeanInstantiator}'s builder-pattern detection.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<strong class="jxr_keyword">public</strong> ConsoleChromeMixin() {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">this</strong>(create());
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * @param builder The builder.</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<strong class="jxr_keyword">protected</strong> ConsoleChromeMixin(Builder builder) {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">this</strong>.cacheAssets = builder.cacheAssets;
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">this</strong>.theme = builder.theme;
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * Creates a new builder.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/chrome.css] &amp;mdash; serve the admin-console chrome stylesheet.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * @param req The current request, used to key the per-mount body cache.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * @return The chrome stylesheet as a CSS {@link HttpResource}.</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * @throws IOException If the shipped {@code chrome.css} resource could not be read (effectively unreachable</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * 	&amp;mdash; the resource is shipped in the same jar as this class).</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@RestGet(
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		path={CHROME_CSS_PATH, CHROME_CSS_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		summary=<span class="jxr_string">"Admin-console chrome stylesheet"</span>,
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		description=<span class="jxr_string">"Structural CSS for the admin-console chrome, with the selected stock theme's tokens appended."</span>,
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	)
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getChromeCss(RestRequest req) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> body = cacheAssets ? cachedBody(req) : buildBody();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.wrap(body, CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/themes/{file}] &amp;mdash; serve one of the shipped stock-theme stylesheets.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * The {@code {file}} segment is fail-closed to the known {@link #BUILTIN_THEME_NAMES} stylesheet filenames, so</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * this endpoint can never read an arbitrary classpath resource. Each stylesheet is a structure-free</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * {@code html:root{}} token block (one per {@link Theme} constant); the FTL {@code &lt;@theme name="…"/&gt;} directive</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * links the winning one after {@code chrome.css} so its tokens override {@code chrome.css}'s baked-in</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * {@link Theme#OPEN} block.</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * @param file The requested stylesheet filename (e.g. {@code juneau-theme-light-red.css}).</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * @return The theme stylesheet as a CSS {@link HttpResource}.</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * @throws NotFound If {@code file} is not one of the shipped stylesheet filenames.</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@RestGet(
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		path={THEME_CSS_DIR + <span class="jxr_string">"{file}"</span>, THEME_CSS_DIR_UNPREFIXED + <span class="jxr_string">"{file}"</span>},
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		summary=<span class="jxr_string">"Admin-console stock theme stylesheet"</span>,
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		description=<span class="jxr_string">"One of the shipped juneau-theme-&lt;name&gt;.css stock theme stylesheets (html:root token block), linked by the FTL &lt;@theme&gt; directive."</span>,
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	)
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getThemeCss(@Path(<span class="jxr_string">"file"</span>) String file) {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">if</strong> (! ALLOWED_THEME_FILES.contains(file))
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"Unknown theme stylesheet: "</span> + file);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(THEME_CSS_RESOURCE_DIR + file, CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/juneau-console.js] &amp;mdash; serve the console shell.</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * @return The script.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	@RestGet(
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		path={CONSOLE_JS_PATH, CONSOLE_JS_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		summary=<span class="jxr_string">"Console shell script"</span>,
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		description=<span class="jxr_string">"Renders the #juneau-page contract into header, nav, cards and footer."</span>,
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	)
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getConsoleJs() {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(CONSOLE_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/juneau-badges.js] &amp;mdash; serve the count-badge script.</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * @return The script.</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	@RestGet(
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		path={BADGES_JS_PATH, BADGES_JS_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		summary=<span class="jxr_string">"Console count-badge script"</span>,
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		description=<span class="jxr_string">"Polls and renders the header.badges entries of the #juneau-page contract."</span>,
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	)
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getBadgesJs() {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(BADGES_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/juneau-charts.js] &amp;mdash; serve the chart-card runtime.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * @return The script.</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	@RestGet(
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		path={CHARTS_JS_PATH, CHARTS_JS_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		summary=<span class="jxr_string">"Console chart-card runtime"</span>,
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		description=<span class="jxr_string">"Renders type='chart' cards of the #juneau-page contract as inline SVG."</span>,
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	)
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getChartsJs() {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(CHARTS_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	}
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/juneau-joblog.js] &amp;mdash; serve the job-log card runtime.</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * @return The script.</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	@RestGet(
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		path={JOBLOG_JS_PATH, JOBLOG_JS_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		summary=<span class="jxr_string">"Console job-log card runtime"</span>,
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		description=<span class="jxr_string">"Submits, streams and cancels AsyncJobsMixin jobs for type='job-log' cards."</span>,
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	)
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getJobLogJs() {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(JOBLOG_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	}
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/juneau-dashboard.js] &amp;mdash; serve the dashboard chrome runtime.</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * @return The script.</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	@RestGet(
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		path={DASHBOARD_JS_PATH, DASHBOARD_JS_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		summary=<span class="jxr_string">"Console dashboard chrome runtime"</span>,
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		description=<span class="jxr_string">"The rail, grid, status header, persistence and share links of a PageSpec dashboard."</span>,
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	)
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getDashboardJs() {
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(DASHBOARD_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	}
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * [GET /juneau-console/juneau-page.schema.json] &amp;mdash; serve the page-contract schema.</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * @return The schema.</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	@RestGet(
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		path={SCHEMA_PATH, SCHEMA_PATH_UNPREFIXED},
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		summary=<span class="jxr_string">"Console page-contract schema"</span>,
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		description=<span class="jxr_string">"JSON Schema 2020-12 for the #juneau-page contract."</span>,
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	)
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> getPageSchema() {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">return</strong> ASSET_CACHE.serve(SCHEMA_RESOURCE, JSON_CONTENT_TYPE, CACHE_CONTROL);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	}
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * Returns a real, browser-fetchable URL for a shipped theme stylesheet, resolved against the request's</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;context root&lt;/b&gt; (not the page resource) and carrying the same {@code ?v=&lt;buildVersion&gt;-&lt;hash8&gt;}</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * content-sensitive cache-buster {@link #chromeCssUrl(RestRequest)} uses.</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * The console document shell ({@code &lt;@console&gt;} / {@code &lt;@theme&gt;}) emits this as a {@code &lt;link href&gt;} to the</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 * standalone {@code /juneau-console/*} mount. Resolving with {@code context:} rather than {@code servlet:} is</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * load-bearing: a page resource at {@code /rest/setup} reports that path as its servlet path, so</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 * {@code servlet:/juneau-console/themes/…} would become {@code /rest/setup/juneau-console/themes/…} and 404.</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * A template-rendering consumer sits downstream of Juneau's {@code servlet:}-rewriting serializer, so it needs</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * the URL already resolved here.</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * @param req The current request, supplying the context path to resolve against.</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * @param name One of the {@link #BUILTIN_THEME_NAMES}.</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * @return The context-root-absolute theme-stylesheet URL with the version+content-hash cache-buster appended.</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String themeAssetUrl(RestRequest req, String name) {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">var</strong> file = <span class="jxr_string">"juneau-theme-"</span> + name + <span class="jxr_string">".css"</span>;
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">return</strong> consoleMountUrl(req, THEME_CSS_DIR + file, THEME_CSS_RESOURCE_DIR + file);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * Returns a real, browser-fetchable URL for the shipped {@code chrome.css}, resolved against the request's</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;context root&lt;/b&gt; (not the page resource) and carrying the same content-sensitive {@code ?v=…} cache-buster</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 * the theme stylesheets use.</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * The console document shell ({@code &lt;@console&gt;}) emits this as the first stylesheet in its head cascade. See</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 * {@link #themeAssetUrl(RestRequest, String)} for why the resolution is {@code context:} rather than</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * {@code servlet:}.</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * @param req The current request, supplying the context path to resolve against.</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * @return The context-root-absolute {@code chrome.css} URL with the version+content-hash cache-buster appended.</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String chromeCssUrl(RestRequest req) {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">return</strong> consoleMountUrl(req, CHROME_CSS_PATH, CHROME_CSS_RESOURCE);
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	}
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * Context-root-absolute, cache-busted URL of the console shell script.</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * @param req The current request.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * @return The URL.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String consoleJsUrl(RestRequest req) {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">return</strong> consoleMountUrl(req, CONSOLE_JS_PATH, CONSOLE_JS_RESOURCE);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	}
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 * Context-root-absolute, cache-busted URL of the count-badge script.</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 * @param req The current request.</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * @return The URL.</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String badgesJsUrl(RestRequest req) {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">return</strong> consoleMountUrl(req, BADGES_JS_PATH, BADGES_JS_RESOURCE);
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	}
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 * Context-root-absolute, cache-busted URL of a console card runtime; the resolver of the {@code charts} and</em>
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 * {@code joblog} toolkit packs.</em>
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 * @param req The current request.</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 * @param path {@link #CHARTS_JS_PATH}, {@link #JOBLOG_JS_PATH} or {@link #DASHBOARD_JS_PATH}.</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * @return The URL.</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code path} is neither.</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String consoleAssetUrl(RestRequest req, String path) {
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">if</strong> (CHARTS_JS_PATH.equals(path))
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">return</strong> consoleMountUrl(req, CHARTS_JS_PATH, CHARTS_JS_RESOURCE);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">if</strong> (JOBLOG_JS_PATH.equals(path))
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">return</strong> consoleMountUrl(req, JOBLOG_JS_PATH, JOBLOG_JS_RESOURCE);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">if</strong> (DASHBOARD_JS_PATH.equals(path))
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			<strong class="jxr_keyword">return</strong> consoleMountUrl(req, DASHBOARD_JS_PATH, DASHBOARD_JS_RESOURCE);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Unknown console asset '%s'."</span>, path);
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	}
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * Context-root-absolute URL for an asset on the standalone {@code /juneau-console/*} mount.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">	 * Always the prefixed path ({@link #CHROME_CSS_PATH} / {@link #THEME_CSS_DIR}), resolved with {@code context:}</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 * so the href is {@code {contextPath}/juneau-console/…} regardless of which page resource rendered the shell.</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String consoleMountUrl(RestRequest req, String prefixedPath, String resource) {
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">return</strong> req.getUriResolver().resolve(<span class="jxr_string">"context:"</span> + prefixedPath) + ASSET_CACHE.cacheBuster(resource);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	}
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * Maps one of the {@link #BUILTIN_THEME_NAMES} stock names to its {@link Theme} constant.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * The single place the kebab-case stock name (as written on FTL {@code &lt;@theme name="…"&gt;} / the</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 * {@code theme(String)} builder) is resolved to its shipped {@link Theme}, without a second copy of the</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 * name&amp;rarr;theme table.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">	 * @param name One of the {@link #BUILTIN_THEME_NAMES}.</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">	 * @return The stock {@link Theme} for {@code name}.</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code name} is not a built-in stock-theme name.</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Theme stockTheme(String name) {
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">var</strong> t = STOCK_THEMES.get(name);
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Unknown stock theme name: '%s'.  Built-in themes: %s."</span>, name, String.join(<span class="jxr_string">", "</span>, BUILTIN_THEME_NAMES));
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * Returns the fully-assembled response body for the mount the request arrived under, computing (and caching) it</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * on first call for that mount.</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * The cache is keyed by mount rather than held in a single field so one mixin instance registered under more</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 * than one container mapping (see the class javadoc's mount-styles section) builds and caches its body</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">	 * independently for each mount it is reached under.</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	<strong class="jxr_keyword">private</strong> byte[] cachedBody(RestRequest req) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">return</strong> cachedBodies.computeIfAbsent(mountKey(req), k -&gt; {
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 					<strong class="jxr_keyword">return</strong> buildBody();
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {  <em class="jxr_comment">// HTT: staticCss() is the only throwing call and reads a resource shipped in this jar.</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UncheckedIOException(e);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 				}
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			});
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		} <strong class="jxr_keyword">catch</strong> (UncheckedIOException e) {  <em class="jxr_comment">// HTT: see above - the wrapped read cannot fail in a well-formed jar.</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">throw</strong> e.getCause();
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		}
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	}
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	<em class="jxr_javadoccomment">/** The request's mount identity: the two request properties every emitted asset URL is derived from. */</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String mountKey(RestRequest req) {
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> req.getContextPath() + '\n' + req.getServletPath();
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * Builds the response body: the static structural CSS, then {@link Theme#OPEN}'s block, then the selected stock</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * theme's override block if a non-{@code open} stock theme was selected.</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<strong class="jxr_keyword">private</strong> byte[] buildBody() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		buildCount.incrementAndGet();
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(staticCss());
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		sb.append('\n').append(openRootBlock());
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">var</strong> active = theme == <strong class="jxr_keyword">null</strong> ? Theme.OPEN : theme;
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">if</strong> (! active.getName().equals(Theme.OPEN.getName()))
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			sb.append('\n').append(overrideBlock(active));
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<strong class="jxr_keyword">return</strong> sb.toString().getBytes(StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	}
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> <em class="jxr_javadoccomment">	 * Test-only diagnostic: the number of times this instance has (re)assembled its response body.</em>
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> <em class="jxr_javadoccomment">	 * @return The build count.</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<strong class="jxr_keyword">int</strong> debugBuildCount() { <strong class="jxr_keyword">return</strong> buildCount.get(); }
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * Renders a theme's override block: one {@code html:root&amp;#123;...&amp;#125;} carrying the theme's leaf tokens, then its</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * alias tokens, each in declaration order.</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * The two halves are escaped differently. A leaf is a validated literal and goes through</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * {@link CssValueEscaper}: a grammar-accepted value can still carry a character such as {@code ;} that would end</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 * the declaration early. An alias is a single anchored {@code var(--jc-name)} reference</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * ({@link Theme.Builder#alias(String, String)}), in which nothing dangerous is representable, so it is emitted</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 * verbatim. That asymmetry is the reason {@link Theme#getAliases()} stays a map.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * The block uses the {@code html} type prefix. Two {@code :root} blocks in separately linked stylesheets tie at</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * specificity {@code (0,0,1,0)} and are resolved by {@code &lt;link&gt;} order, which this framework neither sets</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * nor observes. {@code html:root} scores {@code (0,0,1,1)}, so a theme override wins in either order.</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 * A theme with no leaves and no aliases renders as the empty string. Each declared name is re-checked against</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 * the reserved {@code --jc-chrome-*} namespace (defense in depth; a {@link Theme} built by its builder can't</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * carry one). This method is public so the FreeMarker {@code &lt;@theme&gt;} directive renders its inline block with</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * the same code that serves {@code chrome.css}.</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 * 	Theme &lt;jv&gt;theme&lt;/jv&gt; = Theme.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"corporate"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * 		.token(&lt;js&gt;"--jc-accent"&lt;/js&gt;, &lt;js&gt;"#b45309"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * 		.alias(&lt;js&gt;"--jc-tab-bar-bg"&lt;/js&gt;, &lt;js&gt;"var(--jc-card-bg)"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * 		.build();</em>
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;css&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;overrideBlock&lt;/jsm&gt;(&lt;jv&gt;theme&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// html:root{--jc-accent:#b45309;--jc-tab-bar-bg:var(--jc-card-bg);}&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">	 * @param theme The theme.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">	 * @return The override block, or an empty string if the theme declares nothing.</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String overrideBlock(Theme theme) {
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">if</strong> (theme.getTokens().isEmpty() &amp;&amp; theme.getAliases().isEmpty())
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"html:root{"</span>);
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : theme.getTokens().entrySet()) {
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			Theme.rejectReservedChromeDeclaration(e.getKey(), <span class="jxr_string">"theme '"</span> + theme.getName() + <span class="jxr_string">"' leaf token"</span>);
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		}
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : theme.getAliases().entrySet()) {
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 			Theme.rejectReservedChromeDeclaration(e.getKey(), <span class="jxr_string">"theme '"</span> + theme.getName() + <span class="jxr_string">"' alias"</span>);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			sb.append(e.getKey()).append(':').append(e.getValue()).append(';');
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		}
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">return</strong> sb.append('}').toString();
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	}
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">	 * The two head insertion points for a colour-scheme-aware page.</em>
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 * They are separate because they land in different places: {@link #htmlAttributes()} goes inside the</em>
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 * {@code &lt;html&gt;} start tag, and {@link #head()} goes immediately after {@code &lt;head&gt;}, ahead of every stylesheet.</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 * @param htmlAttributes The attributes for the {@code &lt;html&gt;} start tag, space-separated with no leading space,</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * 	or an empty string when the page is neither pinned nor toggleable.</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * @param head The pre-paint script element followed by the dark-layer stylesheet link, newline-terminated.</em>
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">public</strong> record SchemeHead(String htmlAttributes, String head) {}
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 * Returns the colour-scheme head pieces for a page that does not render through the FreeMarker console directive.</em>
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * A pinned page ({@code light} or {@code dark}) gets {@code data-jc-scheme} and {@code data-jc-scheme-pin} set to</em>
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * the pin, so it paints in that scheme even with scripts disabled. A toggleable page gets</em>
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 * {@code data-jc-scheme-toggle}, which lets the pre-paint script honour the visitor's stored choice. The head</em>
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * piece is {@link #SCHEME_SCRIPT} (stamped with the request's CSP nonce when one is set) followed by a link to the</em>
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 * shipped dark layer.</em>
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * 	SchemeHead &lt;jv&gt;h&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;schemeHead&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, &lt;js&gt;"auto"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;);</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;attrs&lt;/jv&gt; = &lt;jv&gt;h&lt;/jv&gt;.htmlAttributes().isEmpty() ? &lt;js&gt;""&lt;/js&gt; : &lt;js&gt;" "&lt;/js&gt; + &lt;jv&gt;h&lt;/jv&gt;.htmlAttributes();</em>
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;out&lt;/jv&gt;.write(&lt;js&gt;"&amp;lt;html lang=\&quot;en\&quot;"&lt;/js&gt; + &lt;jv&gt;attrs&lt;/jv&gt; + &lt;js&gt;"&amp;gt;&amp;lt;head&amp;gt;"&lt;/js&gt; + &lt;jv&gt;h&lt;/jv&gt;.head());</em>
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> <em class="jxr_javadoccomment">	 * The head piece carries only the scheme script and the dark layer.  It does not replace the page's own links to</em>
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 * the chrome stylesheet and a theme palette, which the caller still emits.</em>
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">	 * @param req The current request, supplying the context path and any CSP nonce.</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">	 * @param pin One of the {@link #SCHEMES}.</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * @param toggle Whether the visitor may override the scheme with a stored choice.</em>
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 * @return The head pieces.</em>
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code pin} is &lt;jk&gt;null&lt;/jk&gt; or not one of the {@link #SCHEMES}.</em>
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> SchemeHead schemeHead(RestRequest req, String pin, <strong class="jxr_keyword">boolean</strong> toggle) {
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">var</strong> attrs = schemeHtmlAttributes(pin, toggle);
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<strong class="jxr_keyword">var</strong> nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		<strong class="jxr_keyword">var</strong> head = schemeScriptElement(nonce) + <span class="jxr_string">"\n&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;"</span> + attrEscape(themeAssetUrl(req, <span class="jxr_string">"dark"</span>)) + <span class="jxr_string">"\&quot;&gt;\n"</span>;
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SchemeHead(attrs, head);
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	}
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> <em class="jxr_javadoccomment">	 * Returns the {@code &lt;html&gt;} start-tag attributes for a scheme pin and toggle flag.</em>
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> <em class="jxr_javadoccomment">	 * The FreeMarker console directive and {@link #schemeHead(RestRequest, String, boolean)} share this so the two</em>
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> <em class="jxr_javadoccomment">	 * shells stamp identical attributes.</em>
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> <em class="jxr_javadoccomment">	 * @param pin One of the {@link #SCHEMES}.</em>
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> <em class="jxr_javadoccomment">	 * @param toggle Whether the visitor may override the scheme with a stored choice.</em>
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> <em class="jxr_javadoccomment">	 * @return The attributes, space-separated with no leading space, or an empty string.</em>
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code pin} is &lt;jk&gt;null&lt;/jk&gt; or not one of the {@link #SCHEMES}.</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String schemeHtmlAttributes(String pin, <strong class="jxr_keyword">boolean</strong> toggle) {
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<strong class="jxr_keyword">if</strong> (pin == <strong class="jxr_keyword">null</strong> || ! SCHEMES.contains(pin))
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Unknown scheme '%s'.  Schemes: %s."</span>, pin, String.join(<span class="jxr_string">", "</span>, SCHEMES));
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"auto"</span>.equals(pin))
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 			sb.append(<span class="jxr_string">"data-jc-scheme=\&quot;"</span>).append(pin).append(<span class="jxr_string">"\&quot; data-jc-scheme-pin=\&quot;"</span>).append(pin).append('&quot;');
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">if</strong> (toggle)
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 			sb.append(sb.isEmpty() ? <span class="jxr_string">""</span> : <span class="jxr_string">" "</span>).append(<span class="jxr_string">"data-jc-scheme-toggle"</span>);
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 	}
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 * Returns the {@link #SCHEME_SCRIPT} element, carrying {@code nonce} as an attribute when it is not &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> <em class="jxr_javadoccomment">	 * @param nonce The request's CSP nonce, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> <em class="jxr_javadoccomment">	 * @return The {@code &lt;script&gt;} element, with no trailing newline.</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String schemeScriptElement(String nonce) {
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;script"</span> + nonceAttr(nonce) + <span class="jxr_string">"&gt;"</span> + SCHEME_SCRIPT + <span class="jxr_string">"&lt;/script&gt;"</span>;
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 	}
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> <em class="jxr_javadoccomment">	 * Returns {@code  nonce="…"} (with a leading space, attribute-escaped) or an empty string for &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 * @param nonce The request's CSP nonce, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">	 * @return The attribute text.</em>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String nonceAttr(String nonce) {
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		<strong class="jxr_keyword">return</strong> nonce == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : <span class="jxr_string">" nonce=\&quot;"</span> + attrEscape(nonce) + <span class="jxr_string">"\&quot;"</span>;
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	}
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * Renders the dark-scheme override rule for app-declared dark tokens.</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * The rule is {@code @media not print{html:root[data-jc-scheme="dark"]{…}}}, so it wins over the light override</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * block only while the page is dark and never reaches print. Leaves come first, then aliases, each in declaration</em>
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * order. A leaf must be a literal: a dark leaf that is itself a {@code var()} reference is rejected, because it</em>
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * would resolve against the light palette. A live link belongs in an alias. Names and values get the same checks</em>
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * as {@link Theme.Builder}: the name shape, the reserved {@code --jc-chrome-*} namespace, the value grammar, and</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * one channel per name.</em>
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;css&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;schemeOverrideBlock&lt;/jsm&gt;(</em>
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 * 		Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"--jc-link"&lt;/js&gt;, &lt;js&gt;"#6cb4ff"&lt;/js&gt;), Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"--jc-focus"&lt;/js&gt;, &lt;js&gt;"var(--jc-accent)"&lt;/js&gt;));</em>
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// @media not print{html:root[data-jc-scheme="dark"]{--jc-link:#6cb4ff;--jc-focus:var(--jc-accent);}}&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * @param tokens The dark leaf tokens by name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * @param aliases The dark aliases by name, each a {@code var(--jc-name)} reference.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 * @return The rule, or an empty string if both maps are empty.</em>
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If a name or value fails validation.</em>
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String schemeOverrideBlock(Map&lt;String,String&gt; tokens, Map&lt;String,String&gt; aliases) {
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		<strong class="jxr_keyword">if</strong> (tokens.isEmpty() &amp;&amp; aliases.isEmpty())
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		<strong class="jxr_keyword">var</strong> b = Theme.create(<span class="jxr_string">"dark"</span>);
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : tokens.entrySet()) {
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 			<strong class="jxr_keyword">if</strong> (CssValueGrammar.normalize(e.getValue()).toLowerCase(Locale.ROOT).contains(<span class="jxr_string">"var("</span>))
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Dark token '%s' is '%s', but dark values must be literals.  Declare a live reference as an alias."</span>, e.getKey(), e.getValue());
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 			b.token(e.getKey(), e.getValue());
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		}
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : aliases.entrySet())
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 			b.alias(e.getKey(), e.getValue());
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<strong class="jxr_keyword">var</strong> t = b.build();
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"@media not print{html:root[data-jc-scheme=\&quot;dark\&quot;]{"</span>);
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : t.getTokens().entrySet())
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : t.getAliases().entrySet())
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 			sb.append(e.getKey()).append(':').append(e.getValue()).append(';');
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		<strong class="jxr_keyword">return</strong> sb.append(<span class="jxr_string">"}}"</span>).toString();
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 	}
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 	<em class="jxr_javadoccomment">/** Escapes text for a double-quoted HTML attribute value. */</em>
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String attrEscape(String s) {
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		<strong class="jxr_keyword">return</strong> s.replace(<span class="jxr_string">"&amp;"</span>, <span class="jxr_string">"&amp;amp;"</span>).replace(<span class="jxr_string">"&lt;"</span>, <span class="jxr_string">"&amp;lt;"</span>).replace(<span class="jxr_string">"&gt;"</span>, <span class="jxr_string">"&amp;gt;"</span>).replace(<span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">"&amp;quot;"</span>);
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 	}
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<em class="jxr_javadoccomment">/** Returns the CSP {@code 'sha256-…'} source expression for {@code text}'s UTF-8 bytes. */</em>
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String sha256Source(String text) {
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 			<strong class="jxr_keyword">var</strong> digest = java.security.MessageDigest.getInstance(<span class="jxr_string">"SHA-256"</span>).digest(text.getBytes(StandardCharsets.UTF_8));
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"'sha256-"</span> + Base64.getEncoder().encodeToString(digest) + <span class="jxr_string">"'"</span>;
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		} <strong class="jxr_keyword">catch</strong> (java.security.NoSuchAlgorithmException e) {  <em class="jxr_comment">// HTT: every Java platform must provide SHA-256.</em>
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(e);
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		}
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 	}
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 * Renders {@link Theme#OPEN}'s {@code html:root{}} block with the framework-authored role-token alias</em>
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 * derivations ({@link #OPEN_ROLE_ALIASES}) appended inside the same block, immediately after the leaf tokens.</em>
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 * The aliases are appended as trusted framework literal text (not routed through {@code CssValueEscaper},</em>
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 * which is for consumer-supplied values); folding them into {@code Theme.OPEN}'s block keeps the served</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 * response at exactly one {@code html:root{}} block for the default theme while still placing every derived</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> <em class="jxr_javadoccomment">	 * default before any active-theme override block. See {@link #overrideBlock(Theme)} for why the selector carries</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> <em class="jxr_javadoccomment">	 * the {@code html} type prefix.</em>
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String openRootBlock() {
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		sb.append(<span class="jxr_string">"html:root{"</span>);
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : Theme.OPEN.getTokens().entrySet())
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		sb.append(OPEN_ROLE_ALIASES);
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		sb.append('}');
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	}
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<em class="jxr_javadoccomment">/** Returns the shipped static chrome.css text, reading (and caching, process-wide - the static file never varies) it from the classpath on first call. */</em>
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String staticCss() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<strong class="jxr_keyword">var</strong> s = staticCss;
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			<strong class="jxr_keyword">synchronized</strong> (ConsoleChromeMixin.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 				s = staticCss;
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {  <em class="jxr_comment">// HTT: the "already set" branch is only reachable under a lock-acquisition race - unhittable single-threaded.</em>
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 					<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ConsoleChromeMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(CHROME_CSS_RESOURCE)) {
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 						<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Classpath resource not found: "</span> + CHROME_CSS_RESOURCE);
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 						s = IoUtils.read(in);
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 					}
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 					staticCss = s;
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 				}
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 			}
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		}
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 	}
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * Builder for {@link ConsoleChromeMixin}.</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		<strong class="jxr_keyword">boolean</strong> cacheAssets = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		Theme theme;
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">		 * Whether to cache the assembled response body after the first request (default &lt;jk&gt;true&lt;/jk&gt;).</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">		 * @param value The new value.</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">public</strong> Builder cacheAssets(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 			<strong class="jxr_keyword">this</strong>.cacheAssets = value;
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		}
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">		 * Selects one of the shipped stock palettes by name (the same names FTL {@code &lt;@theme name="…"&gt;} accepts).</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">		 * A custom palette is authored in FTL with {@code &lt;@theme&gt;}/{@code &lt;@token&gt;}.</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">		 * @param stockName One of the {@link ConsoleChromeMixin#BUILTIN_THEME_NAMES}</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">		 * 	({@code open}, {@code light-red}, {@code light-brown}, {@code red}, {@code gray}).</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@code stockName} is not a built-in stock-theme name.</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">public</strong> Builder theme(String stockName) {
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<strong class="jxr_keyword">this</strong>.theme = stockTheme(stockName);
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		}
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">		 * Builds the mixin.</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">		 * @return A new {@link ConsoleChromeMixin}.</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<strong class="jxr_keyword">public</strong> ConsoleChromeMixin build() {
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ConsoleChromeMixin(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		}
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	}
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

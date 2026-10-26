@@ -391,7 +391,7 @@
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> j03_lastAndAssertHelpers_returnRawValues() {
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> logger = RichLogger.getLogger(<span class="jxr_string">"j03"</span>);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> ex = <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"x"</span>);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> capture = logger.captureEvents()) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> quiet = LogRecordCapture.quiet(<span class="jxr_string">"j03"</span>); <strong class="jxr_keyword">var</strong> capture = logger.captureEvents()) {
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 			logger.info(<span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			logger.warning(ex, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 

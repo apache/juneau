@@ -1106,7 +1106,7 @@
 <span class="source-line-no">1093</span><span id="line-1093">   public abstract static class Builder&lt;SELF extends Builder&lt;SELF&gt;&gt; extends MarshallingContextable.Builder&lt;SELF&gt; {</span>
 <span class="source-line-no">1094</span><span id="line-1094"></span>
 <span class="source-line-no">1095</span><span id="line-1095">      private BeanInstantiator.Builder&lt;RestCallHandler&gt; callHandler;</span>
-<span class="source-line-no">1096</span><span id="line-1096">      private WritableBeanStore beanStore = new BasicBeanStore();</span>
+<span class="source-line-no">1096</span><span id="line-1096">      private final WritableBeanStore beanStore = new BasicBeanStore();</span>
 <span class="source-line-no">1097</span><span id="line-1097">      private BiPredicate&lt;RestRequest,RestResponse&gt; logRequestsPredicate;</span>
 <span class="source-line-no">1098</span><span id="line-1098">      private boolean detectLeaks;</span>
 <span class="source-line-no">1099</span><span id="line-1099">      private boolean allowPrivateUrls;</span>

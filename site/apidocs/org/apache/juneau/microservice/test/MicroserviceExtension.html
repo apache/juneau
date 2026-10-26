@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.api.extension.AfterAllCallback, org.junit.jupiter.api.extension.ParameterResolver</span></div>
 <div class="block">JUnit 5 extension behind <a href="MicroserviceTest.html" title="annotation interface in org.apache.juneau.microservice.test"><code>@MicroserviceTest</code></a>: boots a whole
  <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a> (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with
- <code>@TestBean</code> mock-bean injection and convenience parameter resolution.
+ <a href="../../bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a> mock-bean injection and convenience parameter resolution.
 
  <h5 class='topic'>Lifecycle (per class)</h5>
 
@@ -101,8 +101,8 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
  <h5 class='topic'>Mock-bean injection</h5>
 
  <p>
- <code>@TestBean</code> declarations are discovered via
- <code>JuneauBeanStoreExtension.discoverOverrides(Object)</code>. <b>Mode INJECT</b> (the default) installs the
+ <a href="../../bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a> declarations are discovered via
+ <a href="../../bct/junit/JuneauBeanStoreExtension.html#discoverOverrides(java.lang.Object)"><code>JuneauBeanStoreExtension.discoverOverrides(Object)</code></a>. <b>Mode INJECT</b> (the default) installs the
  overrides via <code>Microservice.Builder.overridingBeanStore(...)</code> <i>before</i> boot, so the service reads
  them from startup. <b>Mode OVERLAY</b> pushes the overrides onto the booted instance's bean store for the
  class duration and pops them in teardown.

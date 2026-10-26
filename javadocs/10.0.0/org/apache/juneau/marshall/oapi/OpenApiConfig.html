@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="../ContextApply.html" title="annotation interface in org.apache.juneau.marshall">@ContextApply</a>({<a href="OpenApiConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.marshall.oapi">SerializerApply.class</a>,<a href="OpenApiConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.marshall.oapi">ParserApply.class</a>})
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-39">OpenApiConfig</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-37">OpenApiConfig</a></span></div>
 <div class="block">Annotation for specifying config properties defined in <a href="../msgpack/MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackSerializer</code></a> and <a href="../msgpack/MsgPackParser.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackParser</code></a>.
 
  <p>
@@ -124,21 +124,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="collectionFormat()">
 <h3>collectionFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-70">collectionFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-68">collectionFormat</a></span></div>
 <div class="block">Default collection format for HTTP parts.
 
  <p>
- Specifies the collection format to use for HTTP parts when not otherwise specified via <a href="../../commons/Schema.html#collectionFormat()"><code>Schema.collectionFormat()</code></a>.
+ Specifies the collection format to use for HTTP parts when not otherwise specified via <code>Schema#collectionFormat()</code>.
 
  <ul class='values javatree'>
-   <li class='jc'><a href="../../commons/httppart/HttpPartCollectionFormat.html" title="enum class in org.apache.juneau.commons.httppart"><code>HttpPartCollectionFormat</code></a>
+   <li class='jc'><code>HttpPartCollectionFormat</code>
    <ul>
-      <li class='jf'><a href="../../commons/httppart/HttpPartCollectionFormat.html#CSV"><code>CSV</code></a> - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartCollectionFormat.html#SSV"><code>SSV</code></a> - Space-separated values (e.g. <js>"foo bar"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartCollectionFormat.html#TSV"><code>TSV</code></a> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartCollectionFormat.html#PIPES"><code>PIPES</code></a> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartCollectionFormat.html#MULTI"><code>MULTI</code></a> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartCollectionFormat.html#UONC"><code>UONC</code></a> - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+      <li class='jf'><code>CSV</code> - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+      <li class='jf'><code>SSV</code> - Space-separated values (e.g. <js>"foo bar"</js>).
+      <li class='jf'><code>TSV</code> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+      <li class='jf'><code>PIPES</code> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+      <li class='jf'><code>MULTI</code> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+      <li class='jf'><code>UONC</code> - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
    </ul>
  </ul>
 
@@ -159,27 +159,27 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="format()">
 <h3>format</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-103">format</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-101">format</a></span></div>
 <div class="block">Default format for HTTP parts.
 
  <p>
- Specifies the format to use for HTTP parts when not otherwise specified via <a href="../../commons/Schema.html#format()"><code>Schema.format()</code></a>.
+ Specifies the format to use for HTTP parts when not otherwise specified via <code>Schema#format()</code>.
 
  <ul class='values javatree'>
-   <li class='jc'><a href="../../commons/httppart/HttpPartFormat.html" title="enum class in org.apache.juneau.commons.httppart"><code>HttpPartFormat</code></a>
+   <li class='jc'><code>HttpPartFormat</code>
    <ul>
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#UON"><code>UON</code></a> - UON notation (e.g. <js>"'foo bar'"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#INT32"><code>INT32</code></a> - Signed 32 bits.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#INT64"><code>INT64</code></a> - Signed 64 bits.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#FLOAT"><code>FLOAT</code></a> - 32-bit floating point number.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#DOUBLE"><code>DOUBLE</code></a> - 64-bit floating point number.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#BYTE"><code>BYTE</code></a> - BASE-64 encoded characters.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#BINARY"><code>BINARY</code></a> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#BINARY_SPACED"><code>BINARY_SPACED</code></a> - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#DATE"><code>DATE</code></a> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#DATE_TIME"><code>DATE_TIME</code></a> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#PASSWORD"><code>PASSWORD</code></a> - Used to hint UIs the input needs to be obscured.
-      <li class='jf'><a href="../../commons/httppart/HttpPartFormat.html#NO_FORMAT"><code>NO_FORMAT</code></a> - (default) Not specified.
+      <li class='jf'><code>UON</code> - UON notation (e.g. <js>"'foo bar'"</js>).
+      <li class='jf'><code>INT32</code> - Signed 32 bits.
+      <li class='jf'><code>INT64</code> - Signed 64 bits.
+      <li class='jf'><code>FLOAT</code> - 32-bit floating point number.
+      <li class='jf'><code>DOUBLE</code> - 64-bit floating point number.
+      <li class='jf'><code>BYTE</code> - BASE-64 encoded characters.
+      <li class='jf'><code>BINARY</code> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+      <li class='jf'><code>BINARY_SPACED</code> - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+      <li class='jf'><code>DATE</code> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+      <li class='jf'><code>DATE_TIME</code> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+      <li class='jf'><code>PASSWORD</code> - Used to hint UIs the input needs to be obscured.
+      <li class='jf'><code>NO_FORMAT</code> - (default) Not specified.
    </ul>
  </ul>
 
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-113">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiConfig.html#line-111">rank</a></span></div>
 <div class="block">Optional rank for this config.
 
  <p>

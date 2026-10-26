@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line-72">import org.apache.juneau.rest.server.httppart.*;</span>
 <span class="source-line-no">073</span><span id="line-73">import org.apache.juneau.rest.server.staticfile.*;</span>
 <span class="source-line-no">074</span><span id="line-74">import org.apache.juneau.rest.server.util.*;</span>
-<span class="source-line-no">075</span><span id="line-75">import org.apache.juneau.test.assertions.*;</span>
+<span class="source-line-no">075</span><span id="line-75">import org.apache.juneau.bct.assertions.*;</span>
 <span class="source-line-no">076</span><span id="line-76"></span>
 <span class="source-line-no">077</span><span id="line-77">import jakarta.servlet.*;</span>
 <span class="source-line-no">078</span><span id="line-78">import jakarta.servlet.http.*;</span>
@@ -253,7 +253,7 @@
 <span class="source-line-no">240</span><span id="line-240">   }</span>
 <span class="source-line-no">241</span><span id="line-241"></span>
 <span class="source-line-no">242</span><span id="line-242">   // Constructor initialized.</span>
-<span class="source-line-no">243</span><span id="line-243">   private HttpServletRequest inner;</span>
+<span class="source-line-no">243</span><span id="line-243">   private final HttpServletRequest inner;</span>
 <span class="source-line-no">244</span><span id="line-244">   private final RestContext context;</span>
 <span class="source-line-no">245</span><span id="line-245">   private final RestOpContext opContext;</span>
 <span class="source-line-no">246</span><span id="line-246">   private final RequestContent content;</span>

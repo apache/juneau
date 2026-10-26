@@ -56,6 +56,27 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console">org.apache.juneau.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../../console/Theme.html" title="class in org.apache.juneau.console"><code>Theme</code></a>, the stock
+ theme stylesheets, the bundled <code>chrome.css</code> asset, and
+ <a href="../../console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console"><code>ConsoleChromeMixin</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.datatables">org.apache.juneau.console.datatables</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The DataTables server-side-processing JSON beans implementing the
+ <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
+ contract.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.views">org.apache.juneau.console.views</a></div>
+<div class="col-last even-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.widgets">org.apache.juneau.console.widgets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
+</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.http.resource">org.apache.juneau.http.resource</a></div>
 <div class="col-last even-row-color">
 <div class="block">Next-generation HTTP resource types — bodies bundled with associated headers.</div>
@@ -64,23 +85,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Petstore REST resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.console">org.apache.juneau.rest.server.console</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.convention">org.apache.juneau.rest.server.convention</a></div>
 <div class="col-last even-row-color">
-<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../../rest/server/console/Theme.html" title="class in org.apache.juneau.rest.server.console"><code>Theme</code></a>, the stock
- theme stylesheets, the bundled <code>chrome.css</code> asset, and
- <a href="../../rest/server/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.rest.server.console"><code>ConsoleChromeMixin</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.convention">org.apache.juneau.rest.server.convention</a></div>
-<div class="col-last odd-row-color">
 <div class="block">Convention-endpoints mixin pack — composable <code>@Rest(mixins=...)</code> resources that ship the
  "internet conventions" surface (favicon, robots, sitemap, version, well-known) every public-facing
  service eventually grows.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
-<div class="col-last even-row-color">
-<div class="block">The DataTables server-side-processing JSON beans implementing the
- <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
- contract.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.ops">org.apache.juneau.rest.server.ops</a></div>
 <div class="col-last odd-row-color">
@@ -92,27 +101,221 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">REST Static Files Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.terminal">org.apache.juneau.rest.server.terminal</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.util">org.apache.juneau.rest.server.util</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../../rest/server/terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal"><code>TerminalSource</code></a>
- and an xterm.js panel that renders it the way a terminal would.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.util">org.apache.juneau.rest.server.util</a></div>
-<div class="col-last even-row-color">
 <div class="block">REST Server Utilities</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
-<div class="col-last odd-row-color">
-<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
- contract consumed by the first-party client runtime.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.terminal.region">org.apache.juneau.terminal.region</a></div>
 <div class="col-last even-row-color">
-<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
+<div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalSource</code></a>
+ and an xterm.js panel that renders it the way a terminal would.</div>
 </div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.console">
+<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../console/package-summary.html">org.apache.juneau.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/package-summary.html">org.apache.juneau.console</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getBadgesJs()" class="member-name-link">getBadgesJs</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-console/juneau-badges.js] &mdash; serve the count-badge script.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getChartsJs()" class="member-name-link">getChartsJs</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-console/juneau-charts.js] &mdash; serve the chart-card runtime.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getChromeCss(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">getChromeCss</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-console/chrome.css] &mdash; serve the admin-console chrome stylesheet.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getConsoleJs()" class="member-name-link">getConsoleJs</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-console/juneau-console.js] &mdash; serve the console shell.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getDashboardJs()" class="member-name-link">getDashboardJs</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-console/juneau-dashboard.js] &mdash; serve the dashboard chrome runtime.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getJobLogJs()" class="member-name-link">getJobLogJs</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-console/juneau-joblog.js] &mdash; serve the job-log card runtime.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getPageSchema()" class="member-name-link">getPageSchema</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../console/ConsoleChromeMixin.html#getThemeCss(java.lang.String)" class="member-name-link">getThemeCss</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-console/themes/{file}] &mdash; serve one of the shipped stock-theme stylesheets.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.datatables">
+<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../console/datatables/package-summary.html">org.apache.juneau.console.datatables</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/datatables/package-summary.html">org.apache.juneau.console.datatables</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesMixin.</span><code><a href="../../console/datatables/DataTablesMixin.html#getGlueScript()" class="member-name-link">getGlueScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-datatables.js] &mdash; serve the first-party DataTables glue script.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.views">
+<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../console/views/package-summary.html">org.apache.juneau.console.views</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/views/package-summary.html">org.apache.juneau.console.views</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getBusScript()" class="member-name-link">getBusScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-bus.js] &mdash; serve the in-page message bus.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getCalendarScript()" class="member-name-link">getCalendarScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Compose <a href="../../console/widgets/WidgetsMixin.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.</div>
+</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getCalendarStylesheet()" class="member-name-link">getCalendarStylesheet</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Compose <a href="../../console/widgets/WidgetsMixin.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.</div>
+</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getConfigScript()" class="member-name-link">getConfigScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-config.js] &mdash; serve the opt-in column-chooser runtime (column configuration is localStorage-persisted).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getConfigStylesheet()" class="member-name-link">getConfigStylesheet</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-config.css] &mdash; serve the opt-in column-chooser stylesheet.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getConsoleJs()" class="member-name-link">getConsoleJs</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-console.js] &mdash; serve the console shell runtime from the console-ui module's classpath.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getDataScript()" class="member-name-link">getDataScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-data.js] &mdash; serve the DataRegistry runtime.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getHelpersScript()" class="member-name-link">getHelpersScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-helpers.js] &mdash; serve the opt-in region-populate paint library.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getIconsScript()" class="member-name-link">getIconsScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-icons.js] &mdash; serve the icon registry.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getPageStateScript()" class="member-name-link">getPageStateScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-pagestate.js] &mdash; serve the general page-state store.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getRegionsScript()" class="member-name-link">getRegionsScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-regions.js] &mdash; serve the opt-in region-populate runtime.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getRendersScript()" class="member-name-link">getRendersScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-renders.js] &mdash; serve the renderer registry.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getRibbonScript()" class="member-name-link">getRibbonScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-ribbon.js] &mdash; serve the ribbon/toolbar runtime.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getSearchScript()" class="member-name-link">getSearchScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-search.js] &mdash; serve the column-search engine.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getSymbolsMaterialSvg()" class="member-name-link">getSymbolsMaterialSvg</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-symbols-material.svg] &mdash; serve the opt-in Material Symbols Outlined sprite.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getSymbolsSvg()" class="member-name-link">getSymbolsSvg</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getTerminalViewScript()" class="member-name-link">getTerminalViewScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-terminal-view.js] &mdash; serve the opt-in terminal-view module.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getUrlStateScript()" class="member-name-link">getUrlStateScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-urlstate.js] &mdash; serve the shareable-link URL-state codec.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getViewsScript()" class="member-name-link">getViewsScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-views.js] &mdash; serve the client initializer.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../console/views/ViewsMixin.html#getViewsStylesheet()" class="member-name-link">getViewsStylesheet</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-views.css] &mdash; serve the base view stylesheet.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.widgets">
+<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../console/widgets/package-summary.html">org.apache.juneau.console.widgets</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/widgets/package-summary.html">org.apache.juneau.console.widgets</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">WidgetsMixin.</span><code><a href="../../console/widgets/WidgetsMixin.html#getCalendarScript()" class="member-name-link">getCalendarScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-calendar.js] &mdash; serve the reusable-calendar runtime.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">WidgetsMixin.</span><code><a href="../../console/widgets/WidgetsMixin.html#getCalendarStylesheet()" class="member-name-link">getCalendarStylesheet</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-calendar.css] &mdash; serve the reusable-calendar stylesheet.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.http.resource">
 <h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../resource/package-summary.html">org.apache.juneau.http.resource</a></h2>
@@ -148,57 +351,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.console">
-<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a></h2>
-<div class="caption"><span>Methods in <a href="../../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getBadgesJs()" class="member-name-link">getBadgesJs</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-console/juneau-badges.js] &mdash; serve the count-badge script.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getChartsJs()" class="member-name-link">getChartsJs</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-console/juneau-charts.js] &mdash; serve the chart-card runtime.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getChromeCss(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">getChromeCss</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-console/chrome.css] &mdash; serve the admin-console chrome stylesheet.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getConsoleJs()" class="member-name-link">getConsoleJs</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-console/juneau-console.js] &mdash; serve the console shell.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getDashboardJs()" class="member-name-link">getDashboardJs</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-console/juneau-dashboard.js] &mdash; serve the dashboard chrome runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getJobLogJs()" class="member-name-link">getJobLogJs</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-console/juneau-joblog.js] &mdash; serve the job-log card runtime.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getPageSchema()" class="member-name-link">getPageSchema</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../rest/server/console/ConsoleChromeMixin.html#getThemeCss(java.lang.String)" class="member-name-link">getThemeCss</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-console/themes/{file}] &mdash; serve one of the shipped stock-theme stylesheets.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="org.apache.juneau.rest.server.convention">
 <h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/convention/package-summary.html">org.apache.juneau.rest.server.convention</a></h2>
 <div class="caption"><span>Methods in <a href="../../rest/server/convention/package-summary.html">org.apache.juneau.rest.server.convention</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
@@ -225,22 +377,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">FaviconProvider.</span><code><a href="../../rest/server/convention/FaviconProvider.html#serve()" class="member-name-link">serve</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serves the configured favicon bytes.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.datatables">
-<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></h2>
-<div class="caption"><span>Methods in <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DataTablesMixin.</span><code><a href="../../rest/server/datatables/DataTablesMixin.html#getGlueScript()" class="member-name-link">getGlueScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-datatables.js] &mdash; serve the first-party DataTables glue script.</div>
 </div>
 </div>
 </section>
@@ -353,37 +489,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.terminal">
-<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/terminal/package-summary.html">org.apache.juneau.rest.server.terminal</a></h2>
-<div class="caption"><span>Methods in <a href="../../rest/server/terminal/package-summary.html">org.apache.juneau.rest.server.terminal</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../rest/server/terminal/TerminalEndpoints.html#script()" class="member-name-link">script</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">The terminal runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code>static <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../rest/server/terminal/TerminalEndpoints.html#stylesheet()" class="member-name-link">stylesheet</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">The terminal stylesheet.</div>
-</div>
-<div class="col-first even-row-color"><code>default <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../rest/server/terminal/TerminalMixin.html#terminalScript()" class="member-name-link">terminalScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-terminal.js] &mdash; the terminal runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code>default <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../rest/server/terminal/TerminalMixin.html#terminalStylesheet()" class="member-name-link">terminalStylesheet</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-terminal.css] &mdash; the terminal stylesheet.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="org.apache.juneau.rest.server.util">
 <h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/util/package-summary.html">org.apache.juneau.rest.server.util</a></h2>
 <div class="caption"><span>Methods in <a href="../../rest/server/util/package-summary.html">org.apache.juneau.rest.server.util</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
@@ -412,137 +517,32 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.views">
-<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></h2>
-<div class="caption"><span>Methods in <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
+<section class="detail" id="org.apache.juneau.terminal.region">
+<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../terminal/region/package-summary.html">org.apache.juneau.terminal.region</a></h2>
+<div class="caption"><span>Methods in <a href="../../terminal/region/package-summary.html">org.apache.juneau.terminal.region</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getBusScript()" class="member-name-link">getBusScript</a>()</code></div>
+<div class="col-first even-row-color"><code>static <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../terminal/region/TerminalEndpoints.html#script()" class="member-name-link">script</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">[GET /juneau-bus.js] &mdash; serve the in-page message bus.</div>
+<div class="block">The terminal runtime.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getCalendarScript()" class="member-name-link">getCalendarScript</a>()</code></div>
+<div class="col-first odd-row-color"><code>static <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../../terminal/region/TerminalEndpoints.html#stylesheet()" class="member-name-link">stylesheet</a>()</code></div>
 <div class="col-last odd-row-color">
-<div class="block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">Compose <a href="../../rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.</div>
+<div class="block">The terminal stylesheet.</div>
 </div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getCalendarStylesheet()" class="member-name-link">getCalendarStylesheet</a>()</code></div>
+<div class="col-first even-row-color"><code>default <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../terminal/region/TerminalMixin.html#terminalScript()" class="member-name-link">terminalScript</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">Compose <a href="../../rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.</div>
+<div class="block">[GET /juneau-terminal.js] &mdash; the terminal runtime.</div>
 </div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getConfigScript()" class="member-name-link">getConfigScript</a>()</code></div>
+<div class="col-first odd-row-color"><code>default <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../../terminal/region/TerminalMixin.html#terminalStylesheet()" class="member-name-link">terminalStylesheet</a>()</code></div>
 <div class="col-last odd-row-color">
-<div class="block">[GET /juneau-config.js] &mdash; serve the opt-in column-chooser runtime (column configuration is localStorage-persisted).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getConfigStylesheet()" class="member-name-link">getConfigStylesheet</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-config.css] &mdash; serve the opt-in column-chooser stylesheet.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getConsoleJs()" class="member-name-link">getConsoleJs</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-console.js] &mdash; serve the console shell runtime from the console-ui module's classpath.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getDataScript()" class="member-name-link">getDataScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-data.js] &mdash; serve the DataRegistry runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getHelpersScript()" class="member-name-link">getHelpersScript</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-helpers.js] &mdash; serve the opt-in region-populate paint library.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getIconsScript()" class="member-name-link">getIconsScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-icons.js] &mdash; serve the icon registry.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getPageStateScript()" class="member-name-link">getPageStateScript</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-pagestate.js] &mdash; serve the general page-state store.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getRegionsScript()" class="member-name-link">getRegionsScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-regions.js] &mdash; serve the opt-in region-populate runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getRendersScript()" class="member-name-link">getRendersScript</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-renders.js] &mdash; serve the renderer registry.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getRibbonScript()" class="member-name-link">getRibbonScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-ribbon.js] &mdash; serve the ribbon/toolbar runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getRunViewScript()" class="member-name-link">getRunViewScript</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-run-view.js] &mdash; serve the opt-in run-view module.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getSearchScript()" class="member-name-link">getSearchScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-search.js] &mdash; serve the column-search engine.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getSymbolsMaterialSvg()" class="member-name-link">getSymbolsMaterialSvg</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-symbols-material.svg] &mdash; serve the opt-in Material Symbols Outlined sprite.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getSymbolsSvg()" class="member-name-link">getSymbolsSvg</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getUrlStateScript()" class="member-name-link">getUrlStateScript</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-urlstate.js] &mdash; serve the shareable-link URL-state codec.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getViewsScript()" class="member-name-link">getViewsScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-views.js] &mdash; serve the client initializer.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../rest/server/views/ViewsMixin.html#getViewsStylesheet()" class="member-name-link">getViewsStylesheet</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-views.css] &mdash; serve the base view stylesheet.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.widgets">
-<h2>Uses of <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a> in <a href="../../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></h2>
-<div class="caption"><span>Methods in <a href="../../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a> that return <a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">WidgetsMixin.</span><code><a href="../../rest/server/widgets/WidgetsMixin.html#getCalendarScript()" class="member-name-link">getCalendarScript</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">[GET /juneau-calendar.js] &mdash; serve the reusable-calendar runtime.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">WidgetsMixin.</span><code><a href="../../rest/server/widgets/WidgetsMixin.html#getCalendarStylesheet()" class="member-name-link">getCalendarStylesheet</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">[GET /juneau-calendar.css] &mdash; serve the reusable-calendar stylesheet.</div>
+<div class="block">[GET /juneau-terminal.css] &mdash; the terminal stylesheet.</div>
 </div>
 </div>
 </section>

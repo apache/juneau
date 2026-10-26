@@ -56,127 +56,136 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http">org.apache.juneau.http</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console">org.apache.juneau.console</a></div>
 <div class="col-last even-row-color">
-<div class="block">HTTP Part Annotations</div>
+<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../console/Theme.html" title="class in org.apache.juneau.console"><code>Theme</code></a>, the stock
+ theme stylesheets, the bundled <code>chrome.css</code> asset, and
+ <a href="../console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console"><code>ConsoleChromeMixin</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic">org.apache.juneau.http.classic</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Predefined HTTP headers, parts, entities, resources, and responses built on the classic Apache HttpComponents API.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic.entity">org.apache.juneau.http.classic.entity</a></div>
-<div class="col-last even-row-color">
-<div class="block">HTTP Entity Beans</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic.header">org.apache.juneau.http.classic.header</a></div>
-<div class="col-last odd-row-color">
-<div class="block">HTTP Header Beans</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic.part">org.apache.juneau.http.classic.part</a></div>
-<div class="col-last even-row-color">
-<div class="block">HTTP Part Beans</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic.resource">org.apache.juneau.http.classic.resource</a></div>
-<div class="col-last odd-row-color">
-<div class="block">HTTP Resource Beans</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response</a></div>
-<div class="col-last even-row-color">
-<div class="block">HTTP Response Exception Beans</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.entity">org.apache.juneau.http.entity</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Next-generation HTTP body (entity) implementations.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http.header">org.apache.juneau.http.header</a></div>
-<div class="col-last even-row-color">
-<div class="block">Next-generation HTTP header implementations.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.part">org.apache.juneau.http.part</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Next-generation HTTP part (query/form/path) implementations.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http.request">org.apache.juneau.http.request</a></div>
-<div class="col-last even-row-color">
-<div class="block">Default immutable bean implementations of <a href="HttpRequestLine.html" title="interface in org.apache.juneau.http"><code>HttpRequestLine</code></a> and related request-line types.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.resource">org.apache.juneau.http.resource</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Next-generation HTTP resource types — bodies bundled with associated headers.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.http.response">org.apache.juneau.http.response</a></div>
-<div class="col-last even-row-color">
-<div class="block">Next-generation HTTP response types.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Example / demo Microservice REST Resources</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.client">org.apache.juneau.petstore.client</a></div>
-<div class="col-last even-row-color">
-<div class="block">Typed <code>@Remote</code> client view of the petstore API.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
-<div class="col-last even-row-color">
-<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.orders">org.apache.juneau.petstore.console.orders</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Petstore console orders page and its JSON endpoints.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
-<div class="col-last even-row-color">
-<div class="block">Petstore console pets pages and their JSON endpoints.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Petstore console users page and its JSON endpoints.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
-<div class="col-last even-row-color">
-<div class="block">Petstore REST resources.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client">org.apache.juneau.rest.client</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
-<div class="col-last even-row-color">
-<div class="block">REST Server API</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.assertions">org.apache.juneau.rest.server.assertions</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST Assertions</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
-<div class="col-last even-row-color">
-<div class="block">REST Interface Helper Classes</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.bus">org.apache.juneau.rest.server.bus</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.bus">org.apache.juneau.console.bus</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Server half of the console message bus.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.console">org.apache.juneau.rest.server.console</a></div>
-<div class="col-last even-row-color">
-<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../rest/server/console/Theme.html" title="class in org.apache.juneau.rest.server.console"><code>Theme</code></a>, the stock
- theme stylesheets, the bundled <code>chrome.css</code> asset, and
- <a href="../rest/server/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.rest.server.console"><code>ConsoleChromeMixin</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.convention">org.apache.juneau.rest.server.convention</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Convention-endpoints mixin pack — composable <code>@Rest(mixins=...)</code> resources that ship the
- "internet conventions" surface (favicon, robots, sitemap, version, well-known) every public-facing
- service eventually grows.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.datatables">org.apache.juneau.console.datatables</a></div>
 <div class="col-last even-row-color">
 <div class="block">The DataTables server-side-processing JSON beans implementing the
  <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
  contract.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.views">org.apache.juneau.console.views</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.console.widgets">org.apache.juneau.console.widgets</a></div>
+<div class="col-last even-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http">org.apache.juneau.http</a></div>
+<div class="col-last odd-row-color">
+<div class="block">HTTP Part Annotations</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic">org.apache.juneau.http.classic</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined HTTP headers, parts, entities, resources, and responses built on the classic Apache HttpComponents API.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic.entity">org.apache.juneau.http.classic.entity</a></div>
+<div class="col-last odd-row-color">
+<div class="block">HTTP Entity Beans</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic.header">org.apache.juneau.http.classic.header</a></div>
+<div class="col-last even-row-color">
+<div class="block">HTTP Header Beans</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic.part">org.apache.juneau.http.classic.part</a></div>
+<div class="col-last odd-row-color">
+<div class="block">HTTP Part Beans</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic.resource">org.apache.juneau.http.classic.resource</a></div>
+<div class="col-last even-row-color">
+<div class="block">HTTP Resource Beans</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response</a></div>
+<div class="col-last odd-row-color">
+<div class="block">HTTP Response Exception Beans</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.entity">org.apache.juneau.http.entity</a></div>
+<div class="col-last even-row-color">
+<div class="block">Next-generation HTTP body (entity) implementations.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.header">org.apache.juneau.http.header</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Next-generation HTTP header implementations.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.part">org.apache.juneau.http.part</a></div>
+<div class="col-last even-row-color">
+<div class="block">Next-generation HTTP part (query/form/path) implementations.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.request">org.apache.juneau.http.request</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Default immutable bean implementations of <a href="HttpRequestLine.html" title="interface in org.apache.juneau.http"><code>HttpRequestLine</code></a> and related request-line types.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.resource">org.apache.juneau.http.resource</a></div>
+<div class="col-last even-row-color">
+<div class="block">Next-generation HTTP resource types — bodies bundled with associated headers.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.response">org.apache.juneau.http.response</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Next-generation HTTP response types.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
+<div class="col-last even-row-color">
+<div class="block">Example / demo Microservice REST Resources</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.client">org.apache.juneau.petstore.client</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Typed <code>@Remote</code> client view of the petstore API.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.orders">org.apache.juneau.petstore.console.orders</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console orders page and its JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console users page and its JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore REST resources.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client">org.apache.juneau.rest.client</a></div>
+<div class="col-last even-row-color">
+<div class="block">Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last odd-row-color">
+<div class="block">REST Server API</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.assertions">org.apache.juneau.rest.server.assertions</a></div>
+<div class="col-last even-row-color">
+<div class="block">REST Assertions</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
+<div class="col-last odd-row-color">
+<div class="block">REST Interface Helper Classes</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.convention">org.apache.juneau.rest.server.convention</a></div>
+<div class="col-last even-row-color">
+<div class="block">Convention-endpoints mixin pack — composable <code>@Rest(mixins=...)</code> resources that ship the
+ "internet conventions" surface (favicon, robots, sitemap, version, well-known) every public-facing
+ service eventually grows.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.httppart">org.apache.juneau.rest.server.httppart</a></div>
 <div class="col-last odd-row-color">
@@ -212,52 +221,120 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">REST Static Files Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.terminal">org.apache.juneau.rest.server.terminal</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.util">org.apache.juneau.rest.server.util</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../rest/server/terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal"><code>TerminalSource</code></a>
- and an xterm.js panel that renders it the way a terminal would.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.util">org.apache.juneau.rest.server.util</a></div>
-<div class="col-last even-row-color">
 <div class="block">REST Server Utilities</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
+<div class="col-last even-row-color">
 <div class="block">Engine-agnostic server-side-rendered view extension point.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
  module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSP view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-jsp</code> module.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.mustache">org.apache.juneau.rest.server.view.mustache</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.mustache">org.apache.juneau.rest.server.view.mustache</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Mustache view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-mustache</code> module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.thymeleaf">org.apache.juneau.rest.server.view.thymeleaf</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.thymeleaf">org.apache.juneau.rest.server.view.thymeleaf</a></div>
+<div class="col-last even-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
-<div class="col-last even-row-color">
-<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
- contract consumed by the first-party client runtime.</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.server.config.rest">org.apache.juneau.server.config.rest</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.server.config.rest">org.apache.juneau.server.config.rest</a></div>
-<div class="col-last even-row-color">
 <div class="block">Server Configuration REST</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.terminal.region">org.apache.juneau.terminal.region</a></div>
+<div class="col-last even-row-color">
+<div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../terminal/region/TerminalSource.html" title="interface in org.apache.juneau.terminal.region"><code>TerminalSource</code></a>
+ and an xterm.js panel that renders it the way a terminal would.</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../console/package-summary.html">org.apache.juneau.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.console">HttpResource</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
+ <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/Path.html#org.apache.juneau.console">Path</a></div>
+<div class="col-last odd-row-color">
+<div class="block">REST request path annotation.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.bus">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../console/bus/package-summary.html">org.apache.juneau.console.bus</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/Path.html#org.apache.juneau.console.bus">Path</a></div>
+<div class="col-last even-row-color">
+<div class="block">REST request path annotation.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.datatables">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../console/datatables/package-summary.html">org.apache.juneau.console.datatables</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.console.datatables">HttpResource</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
+ <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../console/views/package-summary.html">org.apache.juneau.console.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.console.views">HttpResource</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
+ <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/Path.html#org.apache.juneau.console.views">Path</a></div>
+<div class="col-last odd-row-color">
+<div class="block">REST request path annotation.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.widgets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../console/widgets/package-summary.html">org.apache.juneau.console.widgets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.console.widgets">HttpResource</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
+ <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.http">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="package-summary.html">org.apache.juneau.http</a></span></div>
@@ -794,57 +871,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.bus">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/bus/package-summary.html">org.apache.juneau.rest.server.bus</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/Path.html#org.apache.juneau.rest.server.bus">Path</a></div>
-<div class="col-last even-row-color">
-<div class="block">REST request path annotation.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.console">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.rest.server.console">HttpResource</a></div>
-<div class="col-last even-row-color">
-<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
- <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/Path.html#org.apache.juneau.rest.server.console">Path</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST request path annotation.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="org.apache.juneau.rest.server.convention">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/convention/package-summary.html">org.apache.juneau.rest.server.convention</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.rest.server.convention">HttpResource</a></div>
-<div class="col-last even-row-color">
-<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
- <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.datatables">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.rest.server.datatables">HttpResource</a></div>
 <div class="col-last even-row-color">
 <div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
  <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
@@ -983,24 +1015,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.terminal">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/terminal/package-summary.html">org.apache.juneau.rest.server.terminal</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.rest.server.terminal">HttpResource</a></div>
-<div class="col-last even-row-color">
-<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
- <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/Path.html#org.apache.juneau.rest.server.terminal">Path</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST request path annotation.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="org.apache.juneau.rest.server.util">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/util/package-summary.html">org.apache.juneau.rest.server.util</a></span></div>
 <div class="summary-table two-column-summary">
@@ -1080,38 +1094,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.views">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.rest.server.views">HttpResource</a></div>
-<div class="col-last even-row-color">
-<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
- <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/Path.html#org.apache.juneau.rest.server.views">Path</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST request path annotation.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.widgets">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.rest.server.widgets">HttpResource</a></div>
-<div class="col-last even-row-color">
-<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
- <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="org.apache.juneau.server.config.rest">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../server/config/rest/package-summary.html">org.apache.juneau.server.config.rest</a></span></div>
 <div class="summary-table two-column-summary">
@@ -1119,6 +1101,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/Path.html#org.apache.juneau.server.config.rest">Path</a></div>
 <div class="col-last even-row-color">
+<div class="block">REST request path annotation.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.terminal.region">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http</a> used by <a href="../terminal/region/package-summary.html">org.apache.juneau.terminal.region</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/HttpResource.html#org.apache.juneau.terminal.region">HttpResource</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that carries additional headers (such as <code>Content-Type</code>,
+ <code>Content-Disposition</code>, or <code>Content-Language</code>) alongside the body.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/Path.html#org.apache.juneau.terminal.region">Path</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST request path annotation.</div>
 </div>
 </div>

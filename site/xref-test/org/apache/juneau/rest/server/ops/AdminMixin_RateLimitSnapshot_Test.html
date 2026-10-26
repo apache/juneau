@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.ops;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.assertSize;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		Assertions.assertTrue(keys.contains(<span class="jxr_string">"10.0.0.20"</span>));
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		Assertions.assertTrue(keys.contains(<span class="jxr_string">"10.0.0.30"</span>));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> sorted = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(keys);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		Collections.sort(sorted);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		sorted.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		Assertions.assertEquals(sorted, keys, <span class="jxr_string">"snapshot entries should be sorted ascending by key"</span>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 

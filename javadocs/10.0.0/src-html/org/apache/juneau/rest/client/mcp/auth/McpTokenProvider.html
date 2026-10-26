@@ -299,139 +299,142 @@
 <span class="source-line-no">286</span><span id="line-286"></span>
 <span class="source-line-no">287</span><span id="line-287">   private final Object lock = new Object();</span>
 <span class="source-line-no">288</span><span id="line-288">   private OAuthToken currentToken;</span>
-<span class="source-line-no">289</span><span id="line-289">   private String currentRefreshToken;</span>
-<span class="source-line-no">290</span><span id="line-290">   private boolean refreshTerminallyRejected;</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   /**</span>
-<span class="source-line-no">293</span><span id="line-293">    * Constructor.</span>
-<span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * @param b The builder.</span>
-<span class="source-line-no">296</span><span id="line-296">    */</span>
-<span class="source-line-no">297</span><span id="line-297">   protected McpTokenProvider(Builder b) {</span>
-<span class="source-line-no">298</span><span id="line-298">      this.mode = b.mode;</span>
-<span class="source-line-no">299</span><span id="line-299">      this.staticToken = b.staticToken;</span>
-<span class="source-line-no">300</span><span id="line-300">      this.tokenEndpoint = b.tokenEndpoint;</span>
-<span class="source-line-no">301</span><span id="line-301">      this.clientId = b.clientId;</span>
-<span class="source-line-no">302</span><span id="line-302">      this.clientSecretSupplier = b.clientSecretSupplier;</span>
-<span class="source-line-no">303</span><span id="line-303">      this.scopes = u(cp(b.scopes));</span>
-<span class="source-line-no">304</span><span id="line-304">      this.resource = b.resource;</span>
-<span class="source-line-no">305</span><span id="line-305">      this.expirySkew = b.expirySkew;</span>
-<span class="source-line-no">306</span><span id="line-306">      this.clock = b.clock;</span>
-<span class="source-line-no">307</span><span id="line-307">      this.httpTimeout = b.httpTimeout;</span>
-<span class="source-line-no">308</span><span id="line-308">      this.httpRequestConfigurator = b.httpRequestConfigurator;</span>
-<span class="source-line-no">309</span><span id="line-309">      this.currentRefreshToken = b.initialRefreshToken;</span>
-<span class="source-line-no">310</span><span id="line-310">   }</span>
-<span class="source-line-no">311</span><span id="line-311"></span>
-<span class="source-line-no">312</span><span id="line-312">   /**</span>
-<span class="source-line-no">313</span><span id="line-313">    * Returns the current valid bearer token, acquiring or refreshing one on demand.</span>
-<span class="source-line-no">314</span><span id="line-314">    *</span>
-<span class="source-line-no">315</span><span id="line-315">    * &lt;p&gt;</span>
-<span class="source-line-no">316</span><span id="line-316">    * Dynamic modes acquire under a single-flight monitor so concurrent callers don't stampede the IdP; the per-request</span>
-<span class="source-line-no">317</span><span id="line-317">    * HTTP timeout ({@link Builder#httpTimeout(Duration)}, default 10s) is the backstop that prevents one hung IdP from</span>
-<span class="source-line-no">318</span><span id="line-318">    * wedging the monitor indefinitely.  In refresh mode a terminal {@code invalid_grant} latches the provider: every</span>
-<span class="source-line-no">319</span><span id="line-319">    * subsequent call throws a distinguishable {@link McpAuthException} rather than re-hammering the IdP with a dead</span>
-<span class="source-line-no">320</span><span id="line-320">    * refresh token (SEP-2207).</span>
-<span class="source-line-no">321</span><span id="line-321">    *</span>
-<span class="source-line-no">322</span><span id="line-322">    * @return A non-blank bearer token.  Never {@code null} for a successfully configured provider.</span>
-<span class="source-line-no">323</span><span id="line-323">    * @throws OAuthFlowException If a token acquisition/refresh HTTP round-trip fails or the IdP returns an error.</span>
-<span class="source-line-no">324</span><span id="line-324">    * @throws McpAuthException If a prior refresh was terminally rejected ({@code invalid_grant}); re-authorization is</span>
-<span class="source-line-no">325</span><span id="line-325">    *    required.</span>
-<span class="source-line-no">326</span><span id="line-326">    */</span>
-<span class="source-line-no">327</span><span id="line-327">   @Override</span>
-<span class="source-line-no">328</span><span id="line-328">   public String get() {</span>
-<span class="source-line-no">329</span><span id="line-329">      if (mode == Mode.STATIC)</span>
-<span class="source-line-no">330</span><span id="line-330">         return staticToken;</span>
-<span class="source-line-no">331</span><span id="line-331">      synchronized (lock) {</span>
-<span class="source-line-no">332</span><span id="line-332">         if (mode == Mode.REFRESH &amp;&amp; refreshTerminallyRejected)</span>
-<span class="source-line-no">333</span><span id="line-333">            throw new McpAuthException("Refresh token was rejected by the authorization server (invalid_grant); re-authorization required");</span>
-<span class="source-line-no">334</span><span id="line-334">         if (currentToken != null &amp;&amp; !currentToken.isExpired(clock.instant(), expirySkew))</span>
-<span class="source-line-no">335</span><span id="line-335">            return currentToken.accessToken();</span>
-<span class="source-line-no">336</span><span id="line-336">         OAuthToken t;</span>
-<span class="source-line-no">337</span><span id="line-337">         try {</span>
-<span class="source-line-no">338</span><span id="line-338">            t = acquire();</span>
-<span class="source-line-no">339</span><span id="line-339">         } catch (OAuthFlowException e) {</span>
-<span class="source-line-no">340</span><span id="line-340">            if (mode == Mode.REFRESH &amp;&amp; e.errorCode().filter("invalid_grant"::equals).isPresent()) {</span>
-<span class="source-line-no">341</span><span id="line-341">               refreshTerminallyRejected = true;</span>
-<span class="source-line-no">342</span><span id="line-342">               throw new McpAuthException("Refresh token was rejected by the authorization server (invalid_grant); re-authorization required", e);</span>
-<span class="source-line-no">343</span><span id="line-343">            }</span>
-<span class="source-line-no">344</span><span id="line-344">            throw e;</span>
-<span class="source-line-no">345</span><span id="line-345">         }</span>
-<span class="source-line-no">346</span><span id="line-346">         currentToken = t;</span>
-<span class="source-line-no">347</span><span id="line-347">         if (mode == Mode.REFRESH)</span>
-<span class="source-line-no">348</span><span id="line-348">            t.refreshToken().ifPresent(rt -&gt; currentRefreshToken = rt);</span>
-<span class="source-line-no">349</span><span id="line-349">         return t.accessToken();</span>
-<span class="source-line-no">350</span><span id="line-350">      }</span>
-<span class="source-line-no">351</span><span id="line-351">   }</span>
-<span class="source-line-no">352</span><span id="line-352"></span>
-<span class="source-line-no">353</span><span id="line-353">   private OAuthToken acquire() {</span>
-<span class="source-line-no">354</span><span id="line-354">      if (mode == Mode.CLIENT_CREDENTIALS) {</span>
-<span class="source-line-no">355</span><span id="line-355">         var f = OAuthClientCredentialsFlow.create()</span>
-<span class="source-line-no">356</span><span id="line-356">            .tokenEndpoint(tokenEndpoint)</span>
-<span class="source-line-no">357</span><span id="line-357">            .clientId(clientId)</span>
-<span class="source-line-no">358</span><span id="line-358">            .clientSecretSupplier(clientSecretSupplier);</span>
-<span class="source-line-no">359</span><span id="line-359">         f.httpTimeout(httpTimeout);</span>
-<span class="source-line-no">360</span><span id="line-360">         scopes.forEach(f::scope);</span>
-<span class="source-line-no">361</span><span id="line-361">         f.resource(resource);</span>
-<span class="source-line-no">362</span><span id="line-362">         if (httpRequestConfigurator != null)</span>
-<span class="source-line-no">363</span><span id="line-363">            f.httpRequestConfigurator(httpRequestConfigurator);</span>
-<span class="source-line-no">364</span><span id="line-364">         return f.build().acquire();</span>
-<span class="source-line-no">365</span><span id="line-365">      }</span>
-<span class="source-line-no">366</span><span id="line-366">      // REFRESH</span>
-<span class="source-line-no">367</span><span id="line-367">      var f = OAuthRefreshTokenFlow.create()</span>
-<span class="source-line-no">368</span><span id="line-368">         .tokenEndpoint(tokenEndpoint)</span>
-<span class="source-line-no">369</span><span id="line-369">         .clientId(clientId)</span>
-<span class="source-line-no">370</span><span id="line-370">         .refreshToken(currentRefreshToken);</span>
-<span class="source-line-no">371</span><span id="line-371">      if (clientSecretSupplier != null)</span>
-<span class="source-line-no">372</span><span id="line-372">         f.clientSecretSupplier(clientSecretSupplier);</span>
-<span class="source-line-no">373</span><span id="line-373">      f.httpTimeout(httpTimeout);</span>
-<span class="source-line-no">374</span><span id="line-374">      scopes.forEach(f::scope);</span>
-<span class="source-line-no">375</span><span id="line-375">      f.resource(resource);</span>
-<span class="source-line-no">376</span><span id="line-376">      if (httpRequestConfigurator != null)</span>
-<span class="source-line-no">377</span><span id="line-377">         f.httpRequestConfigurator(httpRequestConfigurator);</span>
-<span class="source-line-no">378</span><span id="line-378">      return f.build().acquire();</span>
-<span class="source-line-no">379</span><span id="line-379">   }</span>
-<span class="source-line-no">380</span><span id="line-380"></span>
-<span class="source-line-no">381</span><span id="line-381">   /**</span>
-<span class="source-line-no">382</span><span id="line-382">    * Returns the refresh token currently held (the most recently rotated value in refresh mode).</span>
-<span class="source-line-no">383</span><span id="line-383">    *</span>
-<span class="source-line-no">384</span><span id="line-384">    * &lt;p&gt;</span>
-<span class="source-line-no">385</span><span id="line-385">    * Callers persisting refresh tokens across process restarts read this after each {@link #get()} to capture a</span>
-<span class="source-line-no">386</span><span id="line-386">    * rotated token (SEP-2207).</span>
-<span class="source-line-no">387</span><span id="line-387">    *</span>
-<span class="source-line-no">388</span><span id="line-388">    * @return The current refresh token, or {@link Optional#empty()} if none is held.</span>
-<span class="source-line-no">389</span><span id="line-389">    */</span>
-<span class="source-line-no">390</span><span id="line-390">   public Optional&lt;String&gt; currentRefreshToken() {</span>
-<span class="source-line-no">391</span><span id="line-391">      synchronized (lock) {</span>
-<span class="source-line-no">392</span><span id="line-392">         return o(currentRefreshToken);</span>
-<span class="source-line-no">393</span><span id="line-393">      }</span>
-<span class="source-line-no">394</span><span id="line-394">   }</span>
-<span class="source-line-no">395</span><span id="line-395"></span>
-<span class="source-line-no">396</span><span id="line-396">   /**</span>
-<span class="source-line-no">397</span><span id="line-397">    * Creates an {@link McpAuthInterceptor} backed by this provider, ready to attach to an MCP client builder.</span>
-<span class="source-line-no">398</span><span id="line-398">    *</span>
-<span class="source-line-no">399</span><span id="line-399">    * @return A new interceptor.</span>
-<span class="source-line-no">400</span><span id="line-400">    */</span>
-<span class="source-line-no">401</span><span id="line-401">   public McpAuthInterceptor interceptor() {</span>
-<span class="source-line-no">402</span><span id="line-402">      return new McpAuthInterceptor(this);</span>
-<span class="source-line-no">403</span><span id="line-403">   }</span>
-<span class="source-line-no">404</span><span id="line-404"></span>
-<span class="source-line-no">405</span><span id="line-405">   /**</span>
-<span class="source-line-no">406</span><span id="line-406">    * Redacts token/secret material so nothing sensitive reaches logs via this provider's {@code toString()}.</span>
-<span class="source-line-no">407</span><span id="line-407">    *</span>
-<span class="source-line-no">408</span><span id="line-408">    * @return A redacted string form disclosing only non-secret configuration.</span>
-<span class="source-line-no">409</span><span id="line-409">    */</span>
-<span class="source-line-no">410</span><span id="line-410">   @Override</span>
-<span class="source-line-no">411</span><span id="line-411">   public String toString() {</span>
-<span class="source-line-no">412</span><span id="line-412">      return "McpTokenProvider[mode=" + mode</span>
-<span class="source-line-no">413</span><span id="line-413">         + ", tokenEndpoint=" + tokenEndpoint</span>
-<span class="source-line-no">414</span><span id="line-414">         + ", clientId=" + clientId</span>
-<span class="source-line-no">415</span><span id="line-415">         + ", scopes=" + scopes</span>
-<span class="source-line-no">416</span><span id="line-416">         + ", resource=" + resource</span>
-<span class="source-line-no">417</span><span id="line-417">         + ", staticToken=" + (staticToken != null ? "&lt;redacted&gt;" : "&lt;none&gt;")</span>
-<span class="source-line-no">418</span><span id="line-418">         + ", refreshToken=" + (currentRefreshToken != null ? "&lt;redacted&gt;" : "&lt;none&gt;")</span>
-<span class="source-line-no">419</span><span id="line-419">         + "]";</span>
-<span class="source-line-no">420</span><span id="line-420">   }</span>
-<span class="source-line-no">421</span><span id="line-421">}</span>
+<span class="source-line-no">289</span><span id="line-289">   @SuppressWarnings({</span>
+<span class="source-line-no">290</span><span id="line-290">      "java:S9438" // Reassigned inside a lambda in the token-fetch path; Sonar misses the lambda assignment.</span>
+<span class="source-line-no">291</span><span id="line-291">   })</span>
+<span class="source-line-no">292</span><span id="line-292">   private String currentRefreshToken;</span>
+<span class="source-line-no">293</span><span id="line-293">   private boolean refreshTerminallyRejected;</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">   /**</span>
+<span class="source-line-no">296</span><span id="line-296">    * Constructor.</span>
+<span class="source-line-no">297</span><span id="line-297">    *</span>
+<span class="source-line-no">298</span><span id="line-298">    * @param b The builder.</span>
+<span class="source-line-no">299</span><span id="line-299">    */</span>
+<span class="source-line-no">300</span><span id="line-300">   protected McpTokenProvider(Builder b) {</span>
+<span class="source-line-no">301</span><span id="line-301">      this.mode = b.mode;</span>
+<span class="source-line-no">302</span><span id="line-302">      this.staticToken = b.staticToken;</span>
+<span class="source-line-no">303</span><span id="line-303">      this.tokenEndpoint = b.tokenEndpoint;</span>
+<span class="source-line-no">304</span><span id="line-304">      this.clientId = b.clientId;</span>
+<span class="source-line-no">305</span><span id="line-305">      this.clientSecretSupplier = b.clientSecretSupplier;</span>
+<span class="source-line-no">306</span><span id="line-306">      this.scopes = u(cp(b.scopes));</span>
+<span class="source-line-no">307</span><span id="line-307">      this.resource = b.resource;</span>
+<span class="source-line-no">308</span><span id="line-308">      this.expirySkew = b.expirySkew;</span>
+<span class="source-line-no">309</span><span id="line-309">      this.clock = b.clock;</span>
+<span class="source-line-no">310</span><span id="line-310">      this.httpTimeout = b.httpTimeout;</span>
+<span class="source-line-no">311</span><span id="line-311">      this.httpRequestConfigurator = b.httpRequestConfigurator;</span>
+<span class="source-line-no">312</span><span id="line-312">      this.currentRefreshToken = b.initialRefreshToken;</span>
+<span class="source-line-no">313</span><span id="line-313">   }</span>
+<span class="source-line-no">314</span><span id="line-314"></span>
+<span class="source-line-no">315</span><span id="line-315">   /**</span>
+<span class="source-line-no">316</span><span id="line-316">    * Returns the current valid bearer token, acquiring or refreshing one on demand.</span>
+<span class="source-line-no">317</span><span id="line-317">    *</span>
+<span class="source-line-no">318</span><span id="line-318">    * &lt;p&gt;</span>
+<span class="source-line-no">319</span><span id="line-319">    * Dynamic modes acquire under a single-flight monitor so concurrent callers don't stampede the IdP; the per-request</span>
+<span class="source-line-no">320</span><span id="line-320">    * HTTP timeout ({@link Builder#httpTimeout(Duration)}, default 10s) is the backstop that prevents one hung IdP from</span>
+<span class="source-line-no">321</span><span id="line-321">    * wedging the monitor indefinitely.  In refresh mode a terminal {@code invalid_grant} latches the provider: every</span>
+<span class="source-line-no">322</span><span id="line-322">    * subsequent call throws a distinguishable {@link McpAuthException} rather than re-hammering the IdP with a dead</span>
+<span class="source-line-no">323</span><span id="line-323">    * refresh token (SEP-2207).</span>
+<span class="source-line-no">324</span><span id="line-324">    *</span>
+<span class="source-line-no">325</span><span id="line-325">    * @return A non-blank bearer token.  Never {@code null} for a successfully configured provider.</span>
+<span class="source-line-no">326</span><span id="line-326">    * @throws OAuthFlowException If a token acquisition/refresh HTTP round-trip fails or the IdP returns an error.</span>
+<span class="source-line-no">327</span><span id="line-327">    * @throws McpAuthException If a prior refresh was terminally rejected ({@code invalid_grant}); re-authorization is</span>
+<span class="source-line-no">328</span><span id="line-328">    *    required.</span>
+<span class="source-line-no">329</span><span id="line-329">    */</span>
+<span class="source-line-no">330</span><span id="line-330">   @Override</span>
+<span class="source-line-no">331</span><span id="line-331">   public String get() {</span>
+<span class="source-line-no">332</span><span id="line-332">      if (mode == Mode.STATIC)</span>
+<span class="source-line-no">333</span><span id="line-333">         return staticToken;</span>
+<span class="source-line-no">334</span><span id="line-334">      synchronized (lock) {</span>
+<span class="source-line-no">335</span><span id="line-335">         if (mode == Mode.REFRESH &amp;&amp; refreshTerminallyRejected)</span>
+<span class="source-line-no">336</span><span id="line-336">            throw new McpAuthException("Refresh token was rejected by the authorization server (invalid_grant); re-authorization required");</span>
+<span class="source-line-no">337</span><span id="line-337">         if (currentToken != null &amp;&amp; !currentToken.isExpired(clock.instant(), expirySkew))</span>
+<span class="source-line-no">338</span><span id="line-338">            return currentToken.accessToken();</span>
+<span class="source-line-no">339</span><span id="line-339">         OAuthToken t;</span>
+<span class="source-line-no">340</span><span id="line-340">         try {</span>
+<span class="source-line-no">341</span><span id="line-341">            t = acquire();</span>
+<span class="source-line-no">342</span><span id="line-342">         } catch (OAuthFlowException e) {</span>
+<span class="source-line-no">343</span><span id="line-343">            if (mode == Mode.REFRESH &amp;&amp; e.errorCode().filter("invalid_grant"::equals).isPresent()) {</span>
+<span class="source-line-no">344</span><span id="line-344">               refreshTerminallyRejected = true;</span>
+<span class="source-line-no">345</span><span id="line-345">               throw new McpAuthException("Refresh token was rejected by the authorization server (invalid_grant); re-authorization required", e);</span>
+<span class="source-line-no">346</span><span id="line-346">            }</span>
+<span class="source-line-no">347</span><span id="line-347">            throw e;</span>
+<span class="source-line-no">348</span><span id="line-348">         }</span>
+<span class="source-line-no">349</span><span id="line-349">         currentToken = t;</span>
+<span class="source-line-no">350</span><span id="line-350">         if (mode == Mode.REFRESH)</span>
+<span class="source-line-no">351</span><span id="line-351">            t.refreshToken().ifPresent(rt -&gt; currentRefreshToken = rt);</span>
+<span class="source-line-no">352</span><span id="line-352">         return t.accessToken();</span>
+<span class="source-line-no">353</span><span id="line-353">      }</span>
+<span class="source-line-no">354</span><span id="line-354">   }</span>
+<span class="source-line-no">355</span><span id="line-355"></span>
+<span class="source-line-no">356</span><span id="line-356">   private OAuthToken acquire() {</span>
+<span class="source-line-no">357</span><span id="line-357">      if (mode == Mode.CLIENT_CREDENTIALS) {</span>
+<span class="source-line-no">358</span><span id="line-358">         var f = OAuthClientCredentialsFlow.create()</span>
+<span class="source-line-no">359</span><span id="line-359">            .tokenEndpoint(tokenEndpoint)</span>
+<span class="source-line-no">360</span><span id="line-360">            .clientId(clientId)</span>
+<span class="source-line-no">361</span><span id="line-361">            .clientSecretSupplier(clientSecretSupplier);</span>
+<span class="source-line-no">362</span><span id="line-362">         f.httpTimeout(httpTimeout);</span>
+<span class="source-line-no">363</span><span id="line-363">         scopes.forEach(f::scope);</span>
+<span class="source-line-no">364</span><span id="line-364">         f.resource(resource);</span>
+<span class="source-line-no">365</span><span id="line-365">         if (httpRequestConfigurator != null)</span>
+<span class="source-line-no">366</span><span id="line-366">            f.httpRequestConfigurator(httpRequestConfigurator);</span>
+<span class="source-line-no">367</span><span id="line-367">         return f.build().acquire();</span>
+<span class="source-line-no">368</span><span id="line-368">      }</span>
+<span class="source-line-no">369</span><span id="line-369">      // REFRESH</span>
+<span class="source-line-no">370</span><span id="line-370">      var f = OAuthRefreshTokenFlow.create()</span>
+<span class="source-line-no">371</span><span id="line-371">         .tokenEndpoint(tokenEndpoint)</span>
+<span class="source-line-no">372</span><span id="line-372">         .clientId(clientId)</span>
+<span class="source-line-no">373</span><span id="line-373">         .refreshToken(currentRefreshToken);</span>
+<span class="source-line-no">374</span><span id="line-374">      if (clientSecretSupplier != null)</span>
+<span class="source-line-no">375</span><span id="line-375">         f.clientSecretSupplier(clientSecretSupplier);</span>
+<span class="source-line-no">376</span><span id="line-376">      f.httpTimeout(httpTimeout);</span>
+<span class="source-line-no">377</span><span id="line-377">      scopes.forEach(f::scope);</span>
+<span class="source-line-no">378</span><span id="line-378">      f.resource(resource);</span>
+<span class="source-line-no">379</span><span id="line-379">      if (httpRequestConfigurator != null)</span>
+<span class="source-line-no">380</span><span id="line-380">         f.httpRequestConfigurator(httpRequestConfigurator);</span>
+<span class="source-line-no">381</span><span id="line-381">      return f.build().acquire();</span>
+<span class="source-line-no">382</span><span id="line-382">   }</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">   /**</span>
+<span class="source-line-no">385</span><span id="line-385">    * Returns the refresh token currently held (the most recently rotated value in refresh mode).</span>
+<span class="source-line-no">386</span><span id="line-386">    *</span>
+<span class="source-line-no">387</span><span id="line-387">    * &lt;p&gt;</span>
+<span class="source-line-no">388</span><span id="line-388">    * Callers persisting refresh tokens across process restarts read this after each {@link #get()} to capture a</span>
+<span class="source-line-no">389</span><span id="line-389">    * rotated token (SEP-2207).</span>
+<span class="source-line-no">390</span><span id="line-390">    *</span>
+<span class="source-line-no">391</span><span id="line-391">    * @return The current refresh token, or {@link Optional#empty()} if none is held.</span>
+<span class="source-line-no">392</span><span id="line-392">    */</span>
+<span class="source-line-no">393</span><span id="line-393">   public Optional&lt;String&gt; currentRefreshToken() {</span>
+<span class="source-line-no">394</span><span id="line-394">      synchronized (lock) {</span>
+<span class="source-line-no">395</span><span id="line-395">         return o(currentRefreshToken);</span>
+<span class="source-line-no">396</span><span id="line-396">      }</span>
+<span class="source-line-no">397</span><span id="line-397">   }</span>
+<span class="source-line-no">398</span><span id="line-398"></span>
+<span class="source-line-no">399</span><span id="line-399">   /**</span>
+<span class="source-line-no">400</span><span id="line-400">    * Creates an {@link McpAuthInterceptor} backed by this provider, ready to attach to an MCP client builder.</span>
+<span class="source-line-no">401</span><span id="line-401">    *</span>
+<span class="source-line-no">402</span><span id="line-402">    * @return A new interceptor.</span>
+<span class="source-line-no">403</span><span id="line-403">    */</span>
+<span class="source-line-no">404</span><span id="line-404">   public McpAuthInterceptor interceptor() {</span>
+<span class="source-line-no">405</span><span id="line-405">      return new McpAuthInterceptor(this);</span>
+<span class="source-line-no">406</span><span id="line-406">   }</span>
+<span class="source-line-no">407</span><span id="line-407"></span>
+<span class="source-line-no">408</span><span id="line-408">   /**</span>
+<span class="source-line-no">409</span><span id="line-409">    * Redacts token/secret material so nothing sensitive reaches logs via this provider's {@code toString()}.</span>
+<span class="source-line-no">410</span><span id="line-410">    *</span>
+<span class="source-line-no">411</span><span id="line-411">    * @return A redacted string form disclosing only non-secret configuration.</span>
+<span class="source-line-no">412</span><span id="line-412">    */</span>
+<span class="source-line-no">413</span><span id="line-413">   @Override</span>
+<span class="source-line-no">414</span><span id="line-414">   public String toString() {</span>
+<span class="source-line-no">415</span><span id="line-415">      return "McpTokenProvider[mode=" + mode</span>
+<span class="source-line-no">416</span><span id="line-416">         + ", tokenEndpoint=" + tokenEndpoint</span>
+<span class="source-line-no">417</span><span id="line-417">         + ", clientId=" + clientId</span>
+<span class="source-line-no">418</span><span id="line-418">         + ", scopes=" + scopes</span>
+<span class="source-line-no">419</span><span id="line-419">         + ", resource=" + resource</span>
+<span class="source-line-no">420</span><span id="line-420">         + ", staticToken=" + (staticToken != null ? "&lt;redacted&gt;" : "&lt;none&gt;")</span>
+<span class="source-line-no">421</span><span id="line-421">         + ", refreshToken=" + (currentRefreshToken != null ? "&lt;redacted&gt;" : "&lt;none&gt;")</span>
+<span class="source-line-no">422</span><span id="line-422">         + "]";</span>
+<span class="source-line-no">423</span><span id="line-423">   }</span>
+<span class="source-line-no">424</span><span id="line-424">}</span>
 
 
 

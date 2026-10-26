@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		});
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		Collections.sort(offenders);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		offenders.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertTrue(offenders.isEmpty(), () -&gt; <span class="jxr_string">"Tracker ids found in source trees (state what the code does instead of citing a work item): "</span> + offenders.stream().collect(Collectors.joining(<span class="jxr_string">"\n  "</span>, <span class="jxr_string">"\n  "</span>, <span class="jxr_string">""</span>)));
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  

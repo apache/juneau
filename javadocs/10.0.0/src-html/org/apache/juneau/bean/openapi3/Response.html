@@ -91,9 +91,9 @@
 <span class="source-line-no">078</span><span id="line-78">public class Response extends OpenApiElement {</span>
 <span class="source-line-no">079</span><span id="line-79"></span>
 <span class="source-line-no">080</span><span id="line-80">   private String description;</span>
-<span class="source-line-no">081</span><span id="line-81">   private Map&lt;String,HeaderInfo&gt; headers = map();</span>
-<span class="source-line-no">082</span><span id="line-82">   private Map&lt;String,MediaType&gt; content = map();</span>
-<span class="source-line-no">083</span><span id="line-83">   private Map&lt;String,Link&gt; links = map();</span>
+<span class="source-line-no">081</span><span id="line-81">   private final Map&lt;String,HeaderInfo&gt; headers = map();</span>
+<span class="source-line-no">082</span><span id="line-82">   private final Map&lt;String,MediaType&gt; content = map();</span>
+<span class="source-line-no">083</span><span id="line-83">   private final Map&lt;String,Link&gt; links = map();</span>
 <span class="source-line-no">084</span><span id="line-84"></span>
 <span class="source-line-no">085</span><span id="line-85">   /**</span>
 <span class="source-line-no">086</span><span id="line-86">    * Default constructor.</span>

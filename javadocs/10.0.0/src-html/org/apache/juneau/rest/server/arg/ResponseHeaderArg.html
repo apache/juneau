@@ -131,7 +131,7 @@
 <span class="source-line-no">118</span><span id="line-118">         var res = opSession.getResponse();</span>
 <span class="source-line-no">119</span><span id="line-119">         var rpm = req.getOpContext().getResponseHeaderMeta(o);</span>
 <span class="source-line-no">120</span><span id="line-120">         if (rpm == null)</span>
-<span class="source-line-no">121</span><span id="line-121">            rpm = ResponseHeaderArg.this.meta;</span>
+<span class="source-line-no">121</span><span id="line-121">            rpm = meta;</span>
 <span class="source-line-no">122</span><span id="line-122">         var pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();</span>
 <span class="source-line-no">123</span><span id="line-123">         var s = pss.write(HttpPartType.HEADER, rpm.getSchema(), o);</span>
 <span class="source-line-no">124</span><span id="line-124">         res.setHeader(HttpStringHeader.of(name, s));</span>

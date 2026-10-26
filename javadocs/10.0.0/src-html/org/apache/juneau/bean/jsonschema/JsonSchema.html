@@ -243,7 +243,7 @@
 <span class="source-line-no">230</span><span id="line-230"></span>
 <span class="source-line-no">231</span><span id="line-231">      @Override /* Overridden from ObjectSwap */</span>
 <span class="source-line-no">232</span><span id="line-232">      public Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) throws ParseException {</span>
-<span class="source-line-no">233</span><span id="line-233">         var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(Boolean.class));</span>
+<span class="source-line-no">233</span><span id="line-233">         var cm = session.getClassMeta(o instanceof Collection ? JsonSchemaArray.class : Boolean.class);</span>
 <span class="source-line-no">234</span><span id="line-234">         return session.convertToType(o, cm);</span>
 <span class="source-line-no">235</span><span id="line-235">      }</span>
 <span class="source-line-no">236</span><span id="line-236">   }</span>
@@ -270,7 +270,7 @@
 <span class="source-line-no">257</span><span id="line-257"></span>
 <span class="source-line-no">258</span><span id="line-258">      @Override /* Overridden from ObjectSwap */</span>
 <span class="source-line-no">259</span><span id="line-259">      public Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) throws ParseException {</span>
-<span class="source-line-no">260</span><span id="line-260">         var cm = (o instanceof Boolean ? session.getClassMeta(Boolean.class) : session.getClassMeta(JsonSchema.class));</span>
+<span class="source-line-no">260</span><span id="line-260">         var cm = session.getClassMeta(o instanceof Boolean ? Boolean.class : JsonSchema.class);</span>
 <span class="source-line-no">261</span><span id="line-261">         return session.convertToType(o, cm);</span>
 <span class="source-line-no">262</span><span id="line-262">      }</span>
 <span class="source-line-no">263</span><span id="line-263">   }</span>
@@ -297,7 +297,7 @@
 <span class="source-line-no">284</span><span id="line-284"></span>
 <span class="source-line-no">285</span><span id="line-285">      @Override /* Overridden from ObjectSwap */</span>
 <span class="source-line-no">286</span><span id="line-286">      public Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) throws ParseException {</span>
-<span class="source-line-no">287</span><span id="line-287">         var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(JsonSchema.class));</span>
+<span class="source-line-no">287</span><span id="line-287">         var cm = session.getClassMeta(o instanceof Collection ? JsonSchemaArray.class : JsonSchema.class);</span>
 <span class="source-line-no">288</span><span id="line-288">         return session.convertToType(o, cm);</span>
 <span class="source-line-no">289</span><span id="line-289">      }</span>
 <span class="source-line-no">290</span><span id="line-290">   }</span>
@@ -324,7 +324,7 @@
 <span class="source-line-no">311</span><span id="line-311"></span>
 <span class="source-line-no">312</span><span id="line-312">      @Override /* Overridden from ObjectSwap */</span>
 <span class="source-line-no">313</span><span id="line-313">      public Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) throws ParseException {</span>
-<span class="source-line-no">314</span><span id="line-314">         var cm = (o instanceof Collection ? session.getClassMeta(JsonTypeArray.class) : session.getClassMeta(JsonType.class));</span>
+<span class="source-line-no">314</span><span id="line-314">         var cm = session.getClassMeta(o instanceof Collection ? JsonTypeArray.class : JsonType.class);</span>
 <span class="source-line-no">315</span><span id="line-315">         return session.convertToType(o, cm);</span>
 <span class="source-line-no">316</span><span id="line-316">      }</span>
 <span class="source-line-no">317</span><span id="line-317">   }</span>

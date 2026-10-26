@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">      private boolean trimStrings;</span>
 <span class="source-line-no">085</span><span id="line-85">      private Nulls nulls;</span>
 <span class="source-line-no">086</span><span id="line-86">      private int maxParseDepth = DEFAULT_MAX_PARSE_DEPTH;</span>
-<span class="source-line-no">087</span><span id="line-87">      private Parser ctx;</span>
+<span class="source-line-no">087</span><span id="line-87">      private final Parser ctx;</span>
 <span class="source-line-no">088</span><span id="line-88"></span>
 <span class="source-line-no">089</span><span id="line-89">      /**</span>
 <span class="source-line-no">090</span><span id="line-90">       * Constructor</span>
@@ -341,7 +341,7 @@
 <span class="source-line-no">328</span><span id="line-328">   private BeanPropertyMeta currentProperty;</span>
 <span class="source-line-no">329</span><span id="line-329">   private ClassMeta&lt;?&gt; currentClass;</span>
 <span class="source-line-no">330</span><span id="line-330">   private Object parentBean;</span>
-<span class="source-line-no">331</span><span id="line-331">   private Position mark = new Position(-1);</span>
+<span class="source-line-no">331</span><span id="line-331">   private final Position mark = new Position(-1);</span>
 <span class="source-line-no">332</span><span id="line-332">   private ParserPipe pipe;</span>
 <span class="source-line-no">333</span><span id="line-333">   private int parseDepth;</span>
 <span class="source-line-no">334</span><span id="line-334"></span>

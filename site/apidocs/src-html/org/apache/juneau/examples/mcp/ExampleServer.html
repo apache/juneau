@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * Boots {@link ExampleMcpServer} on an embedded Jetty server.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * Run {@link #main(String[]) main} to start the server on a fixed port (default {@code 5000}, or pass a</span>
+<span class="source-line-no">033</span><span id="line-33"> * Run {@link #main(String[]) main} to start the server on a fixed port (default {@code 10000}, or pass a</span>
 <span class="source-line-no">034</span><span id="line-34"> * port as the first argument) and leave it running so you can point {@link ExampleClient} (or any MCP</span>
 <span class="source-line-no">035</span><span id="line-35"> * client) at it. The in-process end-to-end test uses {@link #start(int) start(0)} to boot on an</span>
 <span class="source-line-no">036</span><span id="line-36"> * OS-assigned ephemeral port instead.</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49">public final class ExampleServer implements AutoCloseable {</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">   /** Default listen port used by {@link #main(String[])} when none is supplied. */</span>
-<span class="source-line-no">052</span><span id="line-52">   public static final int DEFAULT_PORT = 5000;</span>
+<span class="source-line-no">052</span><span id="line-52">   public static final int DEFAULT_PORT = 10000;</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
 <span class="source-line-no">054</span><span id="line-54">   private final Microservice microservice;</span>
 <span class="source-line-no">055</span><span id="line-55">   private final URI rootUrl;</span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">   }</span>
 <span class="source-line-no">088</span><span id="line-88"></span>
 <span class="source-line-no">089</span><span id="line-89">   /**</span>
-<span class="source-line-no">090</span><span id="line-90">    * Returns the root URL the server is listening on (e.g. {@code http://localhost:5000/}).</span>
+<span class="source-line-no">090</span><span id="line-90">    * Returns the root URL the server is listening on (e.g. {@code http://localhost:10000/}).</span>
 <span class="source-line-no">091</span><span id="line-91">    *</span>
 <span class="source-line-no">092</span><span id="line-92">    * @return The root URL. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">093</span><span id="line-93">    */</span>

@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">class</strong> <a name="HtmlDocSerializer_Nonce_Test" href="../../../../../org/apache/juneau/marshall/html/HtmlDocSerializer_Nonce_Test.html#HtmlDocSerializer_Nonce_Test">HtmlDocSerializer_Nonce_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String serialize(String nonce, Object o) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String serialize(String nonce, Object o) {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">var</strong> s = HtmlDocSerializer.create().build();
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">return</strong> s.createSession().nonce(nonce).build().writeToString(o);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	}

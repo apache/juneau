@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">public</strong> Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">var</strong> cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.<strong class="jxr_keyword">class</strong>) : session.getClassMeta(Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">var</strong> cm = session.getClassMeta(o instanceof Collection ? JsonSchemaArray.<strong class="jxr_keyword">class</strong> : Boolean.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">return</strong> session.convertToType(o, cm);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
@@ -265,7 +265,7 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">public</strong> Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> cm = (o instanceof Boolean ? session.getClassMeta(Boolean.<strong class="jxr_keyword">class</strong>) : session.getClassMeta(JsonSchema.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> cm = session.getClassMeta(o instanceof Boolean ? Boolean.<strong class="jxr_keyword">class</strong> : JsonSchema.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">return</strong> session.convertToType(o, cm);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
@@ -292,7 +292,7 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">public</strong> Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">var</strong> cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.<strong class="jxr_keyword">class</strong>) : session.getClassMeta(JsonSchema.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">var</strong> cm = session.getClassMeta(o instanceof Collection ? JsonSchemaArray.<strong class="jxr_keyword">class</strong> : JsonSchema.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">return</strong> session.convertToType(o, cm);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Object unswap(MarshallingSession session, Object o, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">var</strong> cm = (o instanceof Collection ? session.getClassMeta(JsonTypeArray.<strong class="jxr_keyword">class</strong>) : session.getClassMeta(JsonType.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">var</strong> cm = session.getClassMeta(o instanceof Collection ? JsonTypeArray.<strong class="jxr_keyword">class</strong> : JsonType.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">return</strong> session.convertToType(o, cm);
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		}
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}

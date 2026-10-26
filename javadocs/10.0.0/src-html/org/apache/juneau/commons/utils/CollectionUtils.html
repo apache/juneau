@@ -1649,7 +1649,7 @@
 <span class="source-line-no">1636</span><span id="line-1636">    */</span>
 <span class="source-line-no">1637</span><span id="line-1637">   public static &lt;E&gt; List&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, Collection&lt;E&gt; value) {</span>
 <span class="source-line-no">1638</span><span id="line-1638">      List&lt;E&gt; l = toList(value);</span>
-<span class="source-line-no">1639</span><span id="line-1639">      Collections.sort(l, comparator);</span>
+<span class="source-line-no">1639</span><span id="line-1639">      l.sort(comparator);</span>
 <span class="source-line-no">1640</span><span id="line-1640">      return l;</span>
 <span class="source-line-no">1641</span><span id="line-1641">   }</span>
 <span class="source-line-no">1642</span><span id="line-1642"></span>
@@ -1663,7 +1663,7 @@
 <span class="source-line-no">1650</span><span id="line-1650">    */</span>
 <span class="source-line-no">1651</span><span id="line-1651">   public static &lt;E&gt; List&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, E[] values) {</span>
 <span class="source-line-no">1652</span><span id="line-1652">      List&lt;E&gt; l = list(values);</span>
-<span class="source-line-no">1653</span><span id="line-1653">      Collections.sort(l, comparator);</span>
+<span class="source-line-no">1653</span><span id="line-1653">      l.sort(comparator);</span>
 <span class="source-line-no">1654</span><span id="line-1654">      return l;</span>
 <span class="source-line-no">1655</span><span id="line-1655">   }</span>
 <span class="source-line-no">1656</span><span id="line-1656"></span>
@@ -1677,7 +1677,7 @@
 <span class="source-line-no">1664</span><span id="line-1664">   @SafeVarargs</span>
 <span class="source-line-no">1665</span><span id="line-1665">   public static &lt;E&gt; List&lt;E&gt; sortedList(E...values) {</span>
 <span class="source-line-no">1666</span><span id="line-1666">      List&lt;E&gt; l = list(values);</span>
-<span class="source-line-no">1667</span><span id="line-1667">      Collections.sort((List&lt;Comparable&gt;)l);</span>
+<span class="source-line-no">1667</span><span id="line-1667">      ((List&lt;Comparable&gt;)l).sort(null);</span>
 <span class="source-line-no">1668</span><span id="line-1668">      return l;</span>
 <span class="source-line-no">1669</span><span id="line-1669">   }</span>
 <span class="source-line-no">1670</span><span id="line-1670"></span>

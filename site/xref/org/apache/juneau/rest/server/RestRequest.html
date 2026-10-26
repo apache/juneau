@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.httppart.*;
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.staticfile.*;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.*;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.test.assertions.*;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bct.assertions.*;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.*;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
@@ -248,7 +248,7 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_comment">// Constructor initialized.</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> HttpServletRequest <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpServletRequest <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestContext context;
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestOpContext opContext;
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RequestContent content;

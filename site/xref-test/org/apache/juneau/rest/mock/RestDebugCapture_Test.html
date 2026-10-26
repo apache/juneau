@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.logging.RestDebugDumpGateTestSupport.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.assertSize;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.*;
@@ -445,7 +445,7 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * headers and bodies are never rendered when no operation was resolved.</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	@Test <strong class="jxr_keyword">void</strong> g01_noOpPath_atFinestTier_neverRendersHeadersOrBody() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RichLogger.getLogger(A_Resource.<strong class="jxr_keyword">class</strong>).captureEvents(Level.FINEST)) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> quiet = LogRecordCapture.quiet(A_Resource.<strong class="jxr_keyword">class</strong>); <strong class="jxr_keyword">var</strong> c = RichLogger.getLogger(A_Resource.<strong class="jxr_keyword">class</strong>).captureEvents(Level.FINEST)) {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">var</strong> client = org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.MockRestClient.create(A_Resource.<strong class="jxr_keyword">class</strong>).debug().build();
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 			client.get(<span class="jxr_string">"/does-not-exist"</span>).header(<span class="jxr_string">"X-Secret-Header"</span>, <span class="jxr_string">"leak-test-value"</span>).ignoreErrors().run()
@@ -535,7 +535,7 @@
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 	@Test <strong class="jxr_keyword">void</strong> a05_captureByHostName_observesOpAndNoOpLoggerPaths() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">var</strong> hostName = A05_HostResource.<strong class="jxr_keyword">class</strong>.getName();
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RichLogger.getLogger(A05_HostResource.<strong class="jxr_keyword">class</strong>).captureEvents(Level.FINEST)) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> quiet = LogRecordCapture.quiet(A05_HostResource.<strong class="jxr_keyword">class</strong>); <strong class="jxr_keyword">var</strong> c = RichLogger.getLogger(A05_HostResource.<strong class="jxr_keyword">class</strong>).captureEvents(Level.FINEST)) {
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">var</strong> client = org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.MockRestClient
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 				.create(A05_HostResource.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 				.debug()

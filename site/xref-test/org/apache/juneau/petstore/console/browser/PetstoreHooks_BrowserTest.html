@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.browser;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.*;
@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 				ids.add(m.getLong(<span class="jxr_string">"id"</span>));
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		Collections.sort(ids);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		ids.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		cancelled = ids.get(0);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		deleted = ids.get(1);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		report = run(<span class="jxr_string">"hooks"</span>, base, List.of(

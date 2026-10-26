@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-70">AdminServlet</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-69">AdminServlet</a></span>
 <span class="extends-implements">extends <a href="../servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet</a></span></div>
 <div class="block">Standalone servlet companion of the <a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminMixin</code></a> mixin.
 
@@ -237,14 +237,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AdminServlet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-81">AdminServlet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-80">AdminServlet</a></span>()</div>
 <div class="block">No-arg constructor &mdash; uses a default <a href="AdminProvider.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminProvider</code></a> worker.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.ops.AdminProvider)">
 <h3>AdminServlet</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-91">AdminServlet</a></span><wbr><span class="parameters">(<a href="AdminProvider.html" title="class in org.apache.juneau.rest.server.ops">AdminProvider</a>&nbsp;worker)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-90">AdminServlet</a></span><wbr><span class="parameters">(<a href="AdminProvider.html" title="class in org.apache.juneau.rest.server.ops">AdminProvider</a>&nbsp;worker)</span></div>
 <div class="block">Worker constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getThreads(org.apache.juneau.rest.server.RestResponse)">
 <h3>getThreads</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-101">getThreads</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-100">getThreads</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[GET /threads] &mdash; emit a JSON list of currently-live threads.</div>
 <dl class="notes">
@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHeap(org.apache.juneau.rest.server.RestResponse)">
 <h3>getHeap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-117">getHeap</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-116">getHeap</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[GET /heap] &mdash; emit JVM heap and non-heap memory statistics.</div>
 <dl class="notes">
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="postCacheFlush(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>postCacheFlush</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-134">postCacheFlush</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-133">postCacheFlush</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[POST /cache/flush] &mdash; run all registered cache-flush hooks (or a subset).</div>
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRateLimit(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>getRateLimit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-153">getRateLimit</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminServlet.html#line-152">getRateLimit</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[GET /ratelimit] &mdash; emit registered <a href="../guard/RateLimitGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RateLimitGuard</code></a> bean configuration.</div>
@@ -318,7 +318,7 @@ loadScripts(document, 'script');</script>
 <dd><code>res</code> - The current REST response.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If an I/O error occurs while writing the response.</dd>
-<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If no <a href="../guard/RateLimitGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RateLimitGuard</code></a> bean is registered on the importer's bean
+<dd><code>NotFound</code> - If no <a href="../guard/RateLimitGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RateLimitGuard</code></a> bean is registered on the importer's bean
    store.</dd>
 </dl>
 </section>

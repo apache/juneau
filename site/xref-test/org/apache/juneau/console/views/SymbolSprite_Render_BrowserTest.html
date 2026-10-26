@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SymbolSprite_Render_BrowserTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/views/SymbolSprite_Render_BrowserTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.nio.charset.StandardCharsets.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Rasterises every glyph in {@code juneau-symbols.svg} at its real render sizes and writes a set of review sheets</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * plus a per-glyph metric report under {@code target/symbol-sprite/}.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Why a rasteriser and not a source assertion:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * {@code juneau-icons.js} paints an icon by injecting a host {@code &lt;svg viewBox="0 0 24 24"&gt;} carrying a single</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@code &lt;use href="#juneau-sym-{stem}"/&gt;}, and it deliberately does &lt;b&gt;not&lt;/b&gt; fall back when a stem fails to</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * resolve - the host element is simply left empty. So a mangled, mis-scaled or entirely unresolvable glyph</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * renders as &lt;b&gt;nothing, silently&lt;/b&gt;, with no error anywhere. Reading the sprite's ids catches a rename;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * fingerprinting its bytes catches a paste; neither can tell a drawing from a blank square. Only a rasteriser</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * can, and that is what {@link #a01_everyStemRendersWithInkAtBothRenderSizes()} asserts.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The other half is a report, not an assertion, and that is deliberate:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * These glyphs are painted at the stylesheet's ribbon and paging-pill sizes. At that size a stroke either lands on the</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * pixel grid or smears across it, and no source-level review can see which. The sheets and metrics written here</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * exist so a human can compare a redrawn set against its predecessor &lt;i&gt;as pixels&lt;/i&gt;, and - the part per-glyph</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * review structurally cannot do - see the four document glyphs beside each other, where family drift lives.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Do not add a threshold assertion on any of the four per-glyph metrics above (ink/solid/gradient/mush).&lt;/b&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * Antialiasing coverage is a property of the Chromium build doing the rasterising. The {@code js-tests} profile</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * pins that build, which makes these numbers &lt;i&gt;reproducible&lt;/i&gt; today but not &lt;i&gt;stable&lt;/i&gt; across a future pin</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * bump - so a numeric gate on one of them would convert a routine Playwright version bump into a false artwork</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * regression, and the reflex fix for a false regression is to loosen the number until it passes, which leaves a</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * gate that asserts nothing. The numbers are for a human to read.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;The one exception is {@link #c01_fourLockedGlyphsStayMutuallyDistinguishable()}&lt;/b&gt; ({@code</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * the locked-scope glyph distinguishability pin}), which thresholds the prober's {@code adjacencyDiffs} - the mean per-pixel luminance</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * difference &lt;i&gt;between two glyphs rasterised in the same run, same size, same Chromium build&lt;/i&gt;, not either</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * glyph's absolute coverage. A pin bump moves both sides of that comparison together, so the pairwise diff does</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * not carry the non-reproducibility problem the paragraph above describes; it is safe to threshold precisely</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * because it is relative, not absolute. Before this class, `cancel`, `columns`, `edit` and `settings` had zero</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * glyph-specific automated coverage - only the generic non-vacuous ink check every stem gets.</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What is real and what is restated:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * The sprite, the stylesheet and the icon registry are all read from the &lt;b&gt;real&lt;/b&gt; classpath resources</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * {@link ViewsMixin} serves, and the host markup for every glyph comes from {@code juneau-icons.js}'s own</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * {@code resolveIcon()} at runtime rather than being re-spelled here - every stem happens to be registered under</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * its own name, which is what makes that possible. The render sizes are read out of</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * {@code juneau-views.css}'s {@code --jc-chrome-glyph-size} / {@code -small} custom properties rather than typed</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * as literals, because those values are expected to move. The one restatement is the set of CSS class names used</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * to build the two UI-context strips ({@code juneau-view-ribbon-btn}, the paging-pill classes, and</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * {@code juneau-sym-flip-x}); those live in the prober, because building them from the real emitters would mean</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * loading the whole view runtime to look at eight buttons.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Off by default:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * Disabled unless the {@value #GATE} system property is set, which only the module's opt-in {@code js-tests}</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * Maven profile does. Run it with</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * {@code mvn -Pjs-tests -f juneau-rest/juneau-console-views/pom.xml test}. See</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * {@code src/test/js/symbol-sprite-render.cjs} for the prober this drives.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link SymbolSprite_StemIds_Test} &amp;mdash; pins the stem id set, always on.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link SymbolSprite_Provenance_Test} &amp;mdash; pins the approved artwork bytes, always on.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  @EnabledIfSystemProperty(named=SymbolSprite_Render_BrowserTest.GATE, matches=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	disabledReason=<span class="jxr_string">"Rasterisation harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-console-views/pom.xml test`"</span>)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <strong class="jxr_keyword">class</strong> <a name="SymbolSprite_Render_BrowserTest" href="../../../../../org/apache/juneau/console/views/SymbolSprite_Render_BrowserTest.html#SymbolSprite_Render_BrowserTest">SymbolSprite_Render_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_javadoccomment">/** System property the {@code js-tests} profile sets to enable this class. */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String GATE = <span class="jxr_string">"juneau.jsTests"</span>;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * A stem that is deliberately not in the sprite.  The prober measures it like any other, and it must come</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * back as zero ink - see {@link #a02_theInkMeasurementCanActuallyFail()}.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BOGUS_STEM = <span class="jxr_string">"not-a-real-glyph-anti-vacuous-probe"</span>;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern GLYPH_SIZE =
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		Pattern.compile(<span class="jxr_string">"--jc-chrome-glyph-size:&#92;&#92;s*(&#92;&#92;d+(?:&#92;&#92;.&#92;&#92;d+)?)px"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern GLYPH_SIZE_SMALL =
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		Pattern.compile(<span class="jxr_string">"--jc-chrome-glyph-size-small:&#92;&#92;s*(&#92;&#92;d+(?:&#92;&#92;.&#92;&#92;d+)?)px"</span>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern SYMBOL_ID = Pattern.compile(<span class="jxr_string">"&lt;symbol&#92;&#92;s+id=\&quot;juneau-sym-([^\&quot;]+)\&quot;"</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; report;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Path outputDir;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<em class="jxr_javadoccomment">/** Ribbon / paging-pill sizes from {@code juneau-views.css}; the prober keys {@code ink*} from these. */</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> ribbonPx;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> pillPx;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resource(String path) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(path)) {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			assertNotNull(in, () -&gt; <span class="jxr_string">"missing classpath resource: "</span> + path);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/** Every stem in the sprite, in document order - i.e. the key sheet's grid order. */</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; stems(String sprite) {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> m = SYMBOL_ID.matcher(sprite);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">while</strong> (m.find())
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			out.add(m.group(1));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertFalse(out.isEmpty(), <span class="jxr_string">"no stems found in the sprite"</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_javadoccomment">/** A render size read out of the real stylesheet rather than typed here, because these values move. */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> cssPx(Pattern p, String css) {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> m = p.matcher(css);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertTrue(m.find(), () -&gt; <span class="jxr_string">"no match for "</span> + p.pattern() + <span class="jxr_string">" in juneau-views.css; the render sizes are"</span>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			+ <span class="jxr_string">" read from the stylesheet on purpose - if the custom property was renamed, follow it here"</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">return</strong> Double.parseDouble(m.group(1));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * Matches the prober's {@code 'ink' + size} JSON key so assertions follow the stylesheet, not a typed</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * {@code 16px}.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String inkKey(<strong class="jxr_keyword">double</strong> px) {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"ink"</span> + (px == Math.rint(px) ? Long.toString((<strong class="jxr_keyword">long</strong>) Math.rint(px)) : Double.toString(px));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String pxLabel(<strong class="jxr_keyword">double</strong> px) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> (px == Math.rint(px) ? Long.toString((<strong class="jxr_keyword">long</strong>) Math.rint(px)) : Double.toString(px)) + <span class="jxr_string">"px"</span>;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * The fixture: the real stylesheet, the real sprite, and the real icon registry.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * The sprite is parked in an inert {@code &lt;script type="text/plain"&gt;} and handed to the registry through a</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * stubbed {@code fetch}, so {@code loadSymbolSprite()}'s real parse-and-inject path runs. A {@code file://}</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * page cannot fetch a sibling file, and inlining the sprite directly would skip that path entirely and log a</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * console error the prober would then have to learn to ignore.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String fixture(String css, String sprite, String iconsJs) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=\&quot;utf-8\&quot;&gt;&lt;style&gt;\n"</span>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			+ css
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			+ <span class="jxr_string">"\n&lt;/style&gt;&lt;/head&gt;&lt;body style=\&quot;margin:0;background:#ffffff;color:#16325c\&quot;&gt;\n"</span>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			+ <span class="jxr_string">"&lt;script type=\&quot;text/plain\&quot; id=\&quot;sprite-xml\&quot;&gt;"</span> + sprite + <span class="jxr_string">"&lt;/script&gt;\n"</span>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			+ <span class="jxr_string">"&lt;script&gt;\n"</span>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			+ <span class="jxr_string">"window.fetch = function () {\n"</span>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			+ <span class="jxr_string">"  var xml = document.getElementById('sprite-xml').textContent;\n"</span>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			+ <span class="jxr_string">"  return Promise.resolve({ ok: true, text: function () { return Promise.resolve(xml); } });\n"</span>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			+ <span class="jxr_string">"};\n"</span>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			+ <span class="jxr_string">"&lt;/script&gt;\n"</span>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			+ <span class="jxr_string">"&lt;script&gt;\n"</span> + iconsJs + <span class="jxr_string">"\n&lt;/script&gt;\n"</span>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			+ <span class="jxr_string">"&lt;div id=\&quot;stage\&quot;&gt;&lt;/div&gt;\n"</span>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			+ <span class="jxr_string">"&lt;/body&gt;&lt;/html&gt;"</span>;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@BeforeAll
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> dir = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.dir"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> harness = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.harness"</span>)).getParent()
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			.resolve(<span class="jxr_string">"symbol-sprite-render.cjs"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> sprite = resource(ViewsMixin.SYMBOLS_SVG_RESOURCE);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> css = resource(ViewsMixin.VIEWS_CSS_RESOURCE);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> iconsJs = resource(ViewsMixin.ICONS_JS_RESOURCE);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> fixtureFile = Files.createDirectories(dir.resolve(<span class="jxr_string">"fixtures"</span>)).resolve(<span class="jxr_string">"symbol-sprite.html"</span>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		Files.write(fixtureFile, fixture(css, sprite, iconsJs).getBytes(UTF_8));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<em class="jxr_comment">// Beside target/js rather than inside it: target/js is the profile's node/browser scratch space and is</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<em class="jxr_comment">// what a developer deletes to force a re-provision, while these sheets are the deliverable.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		outputDir = Files.createDirectories(dir.getParent().resolve(<span class="jxr_string">"symbol-sprite"</span>));
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		ribbonPx = cssPx(GLYPH_SIZE, css);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		pillPx = cssPx(GLYPH_SIZE_SMALL, css);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> request = Json.of(Map.of(
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<span class="jxr_string">"outputDir"</span>, outputDir.toString(),
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<span class="jxr_string">"stems"</span>, stems(sprite),
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<span class="jxr_string">"bogusStem"</span>, BOGUS_STEM,
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<span class="jxr_string">"sizes"</span>, List.of(pillPx, ribbonPx, 24.0),
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<span class="jxr_string">"ribbonSize"</span>, ribbonPx,
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<span class="jxr_string">"pillSize"</span>, pillPx,
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// The four-glyph document family plus the one glyph the redraw gave a new meaning, whose ribbon-size</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<em class="jxr_comment">// distinguishability against both settings and spreadsheet is a named review check.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<span class="jxr_string">"family"</span>, List.of(<span class="jxr_string">"csv"</span>, <span class="jxr_string">"pdf"</span>, <span class="jxr_string">"spreadsheet"</span>, <span class="jxr_string">"copy"</span>),
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<em class="jxr_comment">// the glyph distinguishability pin: every pairwise combination of the four locked-scope glyphs (cancel, columns,</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<em class="jxr_comment">// edit, settings), plus the pre-existing columns-spreadsheet review-only pair (columns-settings is</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<em class="jxr_comment">// reused rather than duplicated). See c01_fourLockedGlyphsStayMutuallyDistinguishable() below.</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<span class="jxr_string">"adjacencies"</span>, List.of(
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				List.of(<span class="jxr_string">"columns"</span>, <span class="jxr_string">"spreadsheet"</span>),
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 				List.of(<span class="jxr_string">"cancel"</span>, <span class="jxr_string">"columns"</span>),
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 				List.of(<span class="jxr_string">"cancel"</span>, <span class="jxr_string">"edit"</span>),
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 				List.of(<span class="jxr_string">"cancel"</span>, <span class="jxr_string">"settings"</span>),
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				List.of(<span class="jxr_string">"columns"</span>, <span class="jxr_string">"edit"</span>),
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				List.of(<span class="jxr_string">"columns"</span>, <span class="jxr_string">"settings"</span>),
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				List.of(<span class="jxr_string">"edit"</span>, <span class="jxr_string">"settings"</span>))));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		report = Json.to(run(dir, harness, fixtureFile, request), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<em class="jxr_javadoccomment">/** Runs the prober, failing with its stderr attached (its exit code alone is not a diagnosis). */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String run(Path dir, Path harness, Path fixture, String request) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> cmd = List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString(),
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			fixture.toString(), request);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> stdout = dir.resolve(<span class="jxr_string">"symbol-sprite-render-stdout.json"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> stderr = dir.resolve(<span class="jxr_string">"symbol-sprite-render-stderr.txt"</span>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(cmd).redirectOutput(stdout.toFile()).redirectError(stderr.toFile());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		pb.environment().put(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		pb.environment().put(<span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, requiredProperty(<span class="jxr_string">"juneau.jsTests.browsers"</span>));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> p = pb.start();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">if</strong> (!p.waitFor(5, TimeUnit.MINUTES)) {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			p.destroyForcibly();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			fail(<span class="jxr_string">"prober did not finish within 5m; stderr:\n"</span> + quietRead(stderr));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		}
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(0, p.exitValue(), () -&gt; <span class="jxr_string">"prober exited non-zero; stderr:\n"</span> + quietRead(stderr));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">return</strong> Files.readString(stdout);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String quietRead(Path p) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">return</strong> Files.readString(p);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unreadable: "</span> + e + <span class="jxr_string">"&gt;"</span>;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		}
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<em class="jxr_javadoccomment">/** {@code report.glyphs[stem]["ink12"]} and friends, as a number. */</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> metric(String stem, String key) {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> glyphs = (Map&lt;?,?&gt;) report.get(<span class="jxr_string">"glyphs"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertNotNull(glyphs, () -&gt; <span class="jxr_string">"prober report has no glyphs section: "</span> + report);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> g = (Map&lt;?,?&gt;) glyphs.get(stem);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertNotNull(g, () -&gt; <span class="jxr_string">"prober report has no entry for stem "</span> + stem + <span class="jxr_string">": "</span> + glyphs.keySet());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">var</strong> v = (Number) g.get(key);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"prober report has no "</span> + key + <span class="jxr_string">" for stem "</span> + stem + <span class="jxr_string">": "</span> + g);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">return</strong> v.doubleValue();
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<em class="jxr_comment">// a: nothing renders blank  (the silent-blank guard - the only durable assertion in this class)</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	@Test <strong class="jxr_keyword">void</strong> a01_everyStemRendersWithInkAtBothRenderSizes() {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">var</strong> stems = (List&lt;?&gt;) report.get(<span class="jxr_string">"stems"</span>);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertNotNull(stems, () -&gt; <span class="jxr_string">"prober report has no stem list: "</span> + report);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertFalse(stems.isEmpty(), <span class="jxr_string">"prober measured no stems at all"</span>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : stems) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">var</strong> stem = (String) s;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			assertTrue(metric(stem, inkKey(ribbonPx)) &gt; 0,
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				() -&gt; stem + <span class="jxr_string">" rasterised to an empty "</span> + pxLabel(ribbonPx) + <span class="jxr_string">" box; juneau-icons.js renders an"</span>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 					+ <span class="jxr_string">" unresolvable or mangled glyph as nothing at all, with no error on either side"</span>);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertTrue(metric(stem, inkKey(pillPx)) &gt; 0,
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				() -&gt; stem + <span class="jxr_string">" rasterised to an empty "</span> + pxLabel(pillPx) + <span class="jxr_string">" box"</span>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> a02_theInkMeasurementCanActuallyFail() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<em class="jxr_comment">// Without this, a prober that silently stopped rendering would report zero ink for nothing and pass a01</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<em class="jxr_comment">// for every stem - a harness that measures nothing reads exactly like a harness that measures a clean set.</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertEquals(0.0, metric(BOGUS_STEM, inkKey(ribbonPx)),
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<span class="jxr_string">"a stem that is not in the sprite measured as having ink, so the ink measurement is not measuring"</span>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				+ <span class="jxr_string">" the sprite"</span>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertEquals(0.0, metric(BOGUS_STEM, inkKey(pillPx)));
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_comment">// c: the four locked-scope glyphs stay mutually distinguishable  (real coverage, not a human PNG review)</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<em class="jxr_javadoccomment">/** The exact locked scope - these four stems, and no others. */</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; FOUR_GLYPHS = List.of(<span class="jxr_string">"cancel"</span>, <span class="jxr_string">"columns"</span>, <span class="jxr_string">"edit"</span>, <span class="jxr_string">"settings"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * Minimum acceptable mean per-pixel luminance diff (0..255 scale; see the prober's {@code PIXEL_DIFF}, in</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * {@code symbol-sprite-render.cjs}) between any two of {@link #FOUR_GLYPHS}, at either render size.</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * Chosen against the six pairwise diffs measured on {@code HEAD} at filing time, which ranged</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;30.66 - 50.45&lt;/b&gt; (the tightest pair was {@code columns} vs {@code settings} at the 12px paging-pill</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * size). This floor sits well under half the smallest of those - loose enough that ordinary antialiasing</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * jitter from a future Playwright/Chromium pin bump should not trip it (both sides of the comparison move</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * together across a pin bump; see the class javadoc), but tight enough that two glyphs actually drifting</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * into each other visually - the real risk this check exists for, as in the earlier scare where</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * {@code columns} briefly appeared to have been left as a copy of the {@code settings} cog - would have to</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * land far closer to identical than any plausible accidental redraw before this goes green.</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> MIN_PAIR_PIXEL_DIFF = 15.0;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_javadoccomment">/** Looks up the prober's {@code adjacencyDiffs} entry for an unordered glyph pair. */</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; adjacencyDiff(String a, String b) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> diffs = (List&lt;?&gt;) report.get(<span class="jxr_string">"adjacencyDiffs"</span>);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertNotNull(diffs, () -&gt; <span class="jxr_string">"prober report has no adjacencyDiffs section: "</span> + report);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d : diffs) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">var</strong> m = (Map&lt;?,?&gt;) d;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">var</strong> names = (List&lt;?&gt;) m.get(<span class="jxr_string">"names"</span>);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (names != <strong class="jxr_keyword">null</strong> &amp;&amp; names.size() == 2 &amp;&amp; names.contains(a) &amp;&amp; names.contains(b))
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		}
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> c01_fourLockedGlyphsStayMutuallyDistinguishable() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; FOUR_GLYPHS.size(); i++) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> j = i + 1; j &lt; FOUR_GLYPHS.size(); j++) {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<strong class="jxr_keyword">var</strong> a = FOUR_GLYPHS.get(i);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">var</strong> b = FOUR_GLYPHS.get(j);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<strong class="jxr_keyword">var</strong> pair = adjacencyDiff(a, b);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 				assertNotNull(pair, () -&gt; <span class="jxr_string">"no adjacencyDiffs entry for "</span> + a + <span class="jxr_string">" vs "</span> + b + <span class="jxr_string">"; the prober's"</span>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 					+ <span class="jxr_string">" adjacencies request list must carry every pairwise combination of "</span> + FOUR_GLYPHS);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				<strong class="jxr_keyword">var</strong> ribbon = ((Number) pair.get(<span class="jxr_string">"pixelDiffRibbon"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				<strong class="jxr_keyword">var</strong> small = ((Number) pair.get(<span class="jxr_string">"pixelDiffSmall"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				assertTrue(ribbon &gt;= MIN_PAIR_PIXEL_DIFF, () -&gt; a + <span class="jxr_string">" and "</span> + b + <span class="jxr_string">" are only "</span> + ribbon
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 					+ <span class="jxr_string">" luminance levels apart at the ribbon ("</span> + pxLabel(ribbonPx) + <span class="jxr_string">") render size - below the "</span>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 					+ MIN_PAIR_PIXEL_DIFF + <span class="jxr_string">" distinguishability floor, i.e. they risk reading as the same glyph"</span>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				assertTrue(small &gt;= MIN_PAIR_PIXEL_DIFF, () -&gt; a + <span class="jxr_string">" and "</span> + b + <span class="jxr_string">" are only "</span> + small
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 					+ <span class="jxr_string">" luminance levels apart at the paging-pill ("</span> + pxLabel(pillPx) + <span class="jxr_string">") render size - below the "</span>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					+ MIN_PAIR_PIXEL_DIFF + <span class="jxr_string">" distinguishability floor"</span>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			}
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<em class="jxr_comment">// b: the review package exists  (it is a deliverable, so its absence is a failure and not a warning)</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> b01_everyReviewSheetWasWritten() {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : List.of(<span class="jxr_string">"sheet.png"</span>, <span class="jxr_string">"family.png"</span>, <span class="jxr_string">"contexts.png"</span>, <span class="jxr_string">"metrics.txt"</span>)) {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">var</strong> f = outputDir.resolve(name);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			assertTrue(Files.isRegularFile(f), () -&gt; <span class="jxr_string">"review artifact not written: "</span> + f);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertTrue(f.toFile().length() &gt; 0, () -&gt; <span class="jxr_string">"review artifact is empty: "</span> + f);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		}
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> b02_theRuntimeRanCleanly() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<em class="jxr_comment">// The registry logs a console error rather than throwing when the sprite fails to load, so a fixture whose</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<em class="jxr_comment">// stub fetch had broken would still produce sheets - of twenty empty boxes.</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(List.of(), report.get(<span class="jxr_string">"jsFailures"</span>), () -&gt; <span class="jxr_string">"the page logged errors: "</span> + report.get(<span class="jxr_string">"jsFailures"</span>));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

@@ -102,11 +102,11 @@
 <span class="source-line-no">089</span><span id="line-89">   })</span>
 <span class="source-line-no">090</span><span id="line-90">   private String openapi = "3.0.0";</span>
 <span class="source-line-no">091</span><span id="line-91">   private Info info;</span>
-<span class="source-line-no">092</span><span id="line-92">   private List&lt;Server&gt; servers = list();</span>
+<span class="source-line-no">092</span><span id="line-92">   private final List&lt;Server&gt; servers = list();</span>
 <span class="source-line-no">093</span><span id="line-93">   private Map&lt;String,PathItem&gt; paths;</span>
 <span class="source-line-no">094</span><span id="line-94">   private Components components;</span>
 <span class="source-line-no">095</span><span id="line-95">   private List&lt;SecurityRequirement&gt; security = list();</span>
-<span class="source-line-no">096</span><span id="line-96">   private List&lt;Tag&gt; tags = list();</span>
+<span class="source-line-no">096</span><span id="line-96">   private final List&lt;Tag&gt; tags = list();</span>
 <span class="source-line-no">097</span><span id="line-97">   private ExternalDocumentation externalDocs;</span>
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">   /**</span>

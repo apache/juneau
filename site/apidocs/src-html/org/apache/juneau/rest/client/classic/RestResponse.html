@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.marshall.httppart.*;</span>
 <span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.marshall.parser.*;</span>
 <span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.rest.client.classic.assertion.*;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.test.assertions.*;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.bct.assertions.*;</span>
 <span class="source-line-no">037</span><span id="line-37"></span>
 <span class="source-line-no">038</span><span id="line-38">/**</span>
 <span class="source-line-no">039</span><span id="line-39"> * Represents a response from a remote REST resource.</span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">   private boolean isClosed;</span>
 <span class="source-line-no">088</span><span id="line-88">   private HeaderList headers;</span>
 <span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   private Map&lt;HttpPartParser,HttpPartParserSession&gt; partParserSessions = new IdentityHashMap&lt;&gt;();</span>
+<span class="source-line-no">090</span><span id="line-90">   private final Map&lt;HttpPartParser,HttpPartParserSession&gt; partParserSessions = new IdentityHashMap&lt;&gt;();</span>
 <span class="source-line-no">091</span><span id="line-91">   private HttpPartParserSession partParserSession;</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
 <span class="source-line-no">093</span><span id="line-93">   /**</span>

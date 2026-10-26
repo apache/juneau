@@ -33,127 +33,221 @@
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.function.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import org.springframework.core.env.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Bridges a Spring {@link Environment} into the Juneau {@link org.apache.juneau.commons.settings.Settings Settings}</span>
-<span class="source-line-no">029</span><span id="line-29"> * singleton as a {@link org.apache.juneau.commons.settings.PropertySource PropertySource}.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * Allows {@link org.apache.juneau.commons.inject.Value @Value("&amp;#123;spring.property.key&amp;#125;")} resolution</span>
-<span class="source-line-no">033</span><span id="line-33"> * against the same property sources that Spring Boot would resolve through</span>
-<span class="source-line-no">034</span><span id="line-34"> * {@code @org.springframework.beans.factory.annotation.Value}: {@code application.yaml},</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@code application.properties}, command-line args, environment variables, and any custom</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@code org.springframework.core.env.PropertySource} that Spring loads.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Lifecycle:&lt;/h5&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * Instances are auto-registered by {@link SpringBeanStore#SpringBeanStore(org.springframework.context.ApplicationContext,</span>
-<span class="source-line-no">041</span><span id="line-41"> * org.apache.juneau.commons.inject.BeanStore) SpringBeanStore}'s constructor and removed from</span>
-<span class="source-line-no">042</span><span id="line-42"> * {@link org.apache.juneau.commons.settings.Settings#removeSource(org.apache.juneau.commons.settings.PropertySource)</span>
-<span class="source-line-no">043</span><span id="line-43"> * Settings} when {@link SpringBeanStore#clear()} is called.  Callers that want explicit lifecycle</span>
-<span class="source-line-no">044</span><span id="line-44"> * control can construct the source directly and add it via {@code Settings.get().addSource(...)}.</span>
-<span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Lazy resolution:&lt;/h5&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> * The {@code Environment} is resolved lazily on the first {@link #get(String)} call so that</span>
-<span class="source-line-no">049</span><span id="line-49"> * constructors that build the source from an {@code ApplicationContext} do not interact with the</span>
-<span class="source-line-no">050</span><span id="line-50"> * context until a lookup actually happens.  This matters for tests that mock the context and assert</span>
-<span class="source-line-no">051</span><span id="line-51"> * "no interactions" until a Spring-side bean is requested.</span>
-<span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Ordering:&lt;/h5&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> * Because {@code Settings} walks property sources in reverse insertion order, the Spring</span>
-<span class="source-line-no">056</span><span id="line-56"> * {@code Environment} bridge — registered when Spring creates the bean store — shadows any</span>
-<span class="source-line-no">057</span><span id="line-57"> * classpath-default {@code juneau.cfg} loaded earlier through the SPI-discovered</span>
-<span class="source-line-no">058</span><span id="line-58"> * {@code ConfigPropertySourceProvider}.  Programmatic {@code addSource()} calls made after the</span>
-<span class="source-line-no">059</span><span id="line-59"> * Spring context is built (e.g. from a user-provided microservice {@code Config}) still win.</span>
-<span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation"&gt;@Value Annotation Basics&lt;/a&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link SpringBeanStore}</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> */</span>
-<span class="source-line-no">066</span><span id="line-66">public class SpringEnvironmentPropertySource implements org.apache.juneau.commons.settings.PropertySource {</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   private final Supplier&lt;Environment&gt; envSupplier;</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   // Guarded by the synchronized block in get(...); volatile reads cover the fast-path check.</span>
-<span class="source-line-no">071</span><span id="line-71">   private volatile boolean resolved;</span>
-<span class="source-line-no">072</span><span id="line-72">   @SuppressWarnings({</span>
-<span class="source-line-no">073</span><span id="line-73">      "java:S3077" // Publish-once reference: env is fully resolved before its single assignment (constructor or inside the synchronized block) and is never compound-mutated, so volatile visibility is sufficient.</span>
-<span class="source-line-no">074</span><span id="line-74">   })</span>
-<span class="source-line-no">075</span><span id="line-75">   private volatile Environment env;</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Constructor that bridges a pre-built {@link Environment}.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param env The Spring environment to bridge.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public SpringEnvironmentPropertySource(Environment env) {</span>
-<span class="source-line-no">083</span><span id="line-83">      this.env = Objects.requireNonNull(env, "env");</span>
-<span class="source-line-no">084</span><span id="line-84">      this.envSupplier = null;</span>
-<span class="source-line-no">085</span><span id="line-85">      this.resolved = true;</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.concurrent.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.function.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import org.springframework.boot.context.properties.source.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.springframework.core.env.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Bridges a Spring {@link Environment} into the Juneau {@link org.apache.juneau.commons.settings.Settings Settings}</span>
+<span class="source-line-no">031</span><span id="line-31"> * singleton as a {@link org.apache.juneau.commons.settings.PropertySource PropertySource}.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * Allows {@link org.apache.juneau.commons.inject.Value @Value("&amp;#123;spring.property.key&amp;#125;")} resolution</span>
+<span class="source-line-no">035</span><span id="line-35"> * against the same property sources that Spring Boot would resolve through</span>
+<span class="source-line-no">036</span><span id="line-36"> * {@code @org.springframework.beans.factory.annotation.Value}: {@code application.yaml},</span>
+<span class="source-line-no">037</span><span id="line-37"> * {@code application.properties}, command-line args, environment variables, and any custom</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@code org.springframework.core.env.PropertySource} that Spring loads.</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Lifecycle:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * {@link SpringBeanStore} registers one instance per {@link org.springframework.context.ApplicationContext} in</span>
+<span class="source-line-no">043</span><span id="line-43"> * {@link org.apache.juneau.commons.settings.Settings Settings}, shared by every store on that context.  It is removed</span>
+<span class="source-line-no">044</span><span id="line-44"> * when every such store has been {@link SpringBeanStore#clear() cleared}, or when the context closes (for a</span>
+<span class="source-line-no">045</span><span id="line-45"> * {@link org.springframework.context.ConfigurableApplicationContext ConfigurableApplicationContext}).  Callers that</span>
+<span class="source-line-no">046</span><span id="line-46"> * want explicit lifecycle control can construct the source directly and add it via {@code Settings.get().addSource(...)};</span>
+<span class="source-line-no">047</span><span id="line-47"> * such instances are not shared.</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Miss cache:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * Juneau's builder keys (e.g. {@code MarshallingContext.unsortedProperties}) are not valid Spring Boot property names,</span>
+<span class="source-line-no">052</span><span id="line-52"> * so Spring walks every raw property source for each of them.  This source remembers up to 4096 such keys that were</span>
+<span class="source-line-no">053</span><span id="line-53"> * absent.  Every lookup checks the Environment's property-source list by identity (an added, removed or replaced</span>
+<span class="source-line-no">054</span><span id="line-54"> * source drops the cache) and re-checks {@link System#getProperty(String)} for a cached key.  Valid Boot names and</span>
+<span class="source-line-no">055</span><span id="line-55"> * {@code juneau.profiles.active} are never cached, and hits are never cached.  A source whose &lt;em&gt;contents&lt;/em&gt; change</span>
+<span class="source-line-no">056</span><span id="line-56"> * in place (a mutated map, {@code MockEnvironment.setProperty}) is not detected for a key already cached as missing;</span>
+<span class="source-line-no">057</span><span id="line-57"> * call {@link #invalidate()} after such a change.  Setting {@code juneau.spring.missCache.disable=true} in the Spring</span>
+<span class="source-line-no">058</span><span id="line-58"> * Environment before the first lookup turns the cache off.</span>
+<span class="source-line-no">059</span><span id="line-59"> *</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;Lazy resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;p&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * The {@code Environment} is resolved lazily on the first {@link #get(String)} call so that</span>
+<span class="source-line-no">063</span><span id="line-63"> * constructors that build the source from an {@code ApplicationContext} do not interact with the</span>
+<span class="source-line-no">064</span><span id="line-64"> * context until a lookup actually happens.  This matters for tests that mock the context and assert</span>
+<span class="source-line-no">065</span><span id="line-65"> * "no interactions" until a Spring-side bean is requested.</span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Ordering:&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;p&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * Because {@code Settings} walks property sources in reverse insertion order, the Spring</span>
+<span class="source-line-no">070</span><span id="line-70"> * {@code Environment} bridge — registered when Spring creates the bean store — shadows any</span>
+<span class="source-line-no">071</span><span id="line-71"> * classpath-default {@code juneau.cfg} loaded earlier through the SPI-discovered</span>
+<span class="source-line-no">072</span><span id="line-72"> * {@code ConfigPropertySourceProvider}.  Programmatic {@code addSource()} calls made after the</span>
+<span class="source-line-no">073</span><span id="line-73"> * Spring context is built (e.g. from a user-provided microservice {@code Config}) still win.</span>
+<span class="source-line-no">074</span><span id="line-74"> *</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation"&gt;@Value Annotation Basics&lt;/a&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='jc'&gt;{@link SpringBeanStore}</span>
+<span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> */</span>
+<span class="source-line-no">080</span><span id="line-80">public class SpringEnvironmentPropertySource implements org.apache.juneau.commons.settings.PropertySource {</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   /** Soft cap on cached misses per bridge; same policy as J1037's source cache (copied, not referenced). */</span>
+<span class="source-line-no">083</span><span id="line-83">   static final int MISS_CACHE_MAX_ENTRIES = 4096;</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /** Opt-out switch, read once at first resolve from the bridged Environment itself (never through Settings). */</span>
+<span class="source-line-no">086</span><span id="line-86">   private static final String MISS_CACHE_DISABLE_KEY = "juneau.spring.missCache.disable";</span>
 <span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   /**</span>
-<span class="source-line-no">089</span><span id="line-89">    * Constructor that lazily resolves the {@link Environment} on first lookup.</span>
-<span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * &lt;p&gt;</span>
-<span class="source-line-no">092</span><span id="line-92">    * Use this overload when wiring through {@link org.springframework.context.ApplicationContext}: pass</span>
-<span class="source-line-no">093</span><span id="line-93">    * {@code appContext::getEnvironment} so the application context isn't invoked until a lookup</span>
-<span class="source-line-no">094</span><span id="line-94">    * actually occurs.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param envSupplier Supplier of the Spring environment.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  May return</span>
-<span class="source-line-no">097</span><span id="line-97">    *    &lt;jk&gt;null&lt;/jk&gt;, in which case this source returns</span>
-<span class="source-line-no">098</span><span id="line-98">    *    {@link org.apache.juneau.commons.settings.PropertyLookupResult#missing()} for every key.</span>
-<span class="source-line-no">099</span><span id="line-99">    */</span>
-<span class="source-line-no">100</span><span id="line-100">   public SpringEnvironmentPropertySource(Supplier&lt;Environment&gt; envSupplier) {</span>
-<span class="source-line-no">101</span><span id="line-101">      this.envSupplier = Objects.requireNonNull(envSupplier, "envSupplier");</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   @Override</span>
-<span class="source-line-no">105</span><span id="line-105">   @SuppressWarnings({</span>
-<span class="source-line-no">106</span><span id="line-106">      "java:S2589" // Double-checked locking: the inner resolved re-check and its else branch look redundant under Sonar's single-threaded symbolic execution, but are essential for correctness under concurrency — another thread can flip resolved to true between the outer and inner checks.</span>
-<span class="source-line-no">107</span><span id="line-107">   })</span>
-<span class="source-line-no">108</span><span id="line-108">   public org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {</span>
-<span class="source-line-no">109</span><span id="line-109">      var e = env;</span>
-<span class="source-line-no">110</span><span id="line-110">      if (! resolved) {</span>
-<span class="source-line-no">111</span><span id="line-111">         synchronized (this) {</span>
-<span class="source-line-no">112</span><span id="line-112">            if (! resolved) {  // HTT: double-checked locking second check; false only when another thread resolves between the outer check and lock acquisition, which a single-threaded test cannot force</span>
-<span class="source-line-no">113</span><span id="line-113">               // safeOpt swallows exceptions thrown by the supplier — e.g. a mocked</span>
-<span class="source-line-no">114</span><span id="line-114">               // ApplicationContext that returns null or throws during getEnvironment().</span>
-<span class="source-line-no">115</span><span id="line-115">               env = e = safeOpt(envSupplier::get).orElse(null);</span>
-<span class="source-line-no">116</span><span id="line-116">               resolved = true;</span>
-<span class="source-line-no">117</span><span id="line-117">            } else {</span>
-<span class="source-line-no">118</span><span id="line-118">               e = env;  // HTT: double-checked locking else branch; reachable only under a concurrent resolve race</span>
-<span class="source-line-no">119</span><span id="line-119">            }</span>
-<span class="source-line-no">120</span><span id="line-120">         }</span>
-<span class="source-line-no">121</span><span id="line-121">      }</span>
-<span class="source-line-no">122</span><span id="line-122">      if (e == null)</span>
-<span class="source-line-no">123</span><span id="line-123">         return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
-<span class="source-line-no">124</span><span id="line-124">      // Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a</span>
-<span class="source-line-no">125</span><span id="line-125">      // Spring-Boot deployment has a single source of truth for which profiles are active.  Only answered when the</span>
-<span class="source-line-no">126</span><span id="line-126">      // caller has NOT explicitly set juneau.profiles.active as a property (that exact key wins if present).</span>
-<span class="source-line-no">127</span><span id="line-127">      if (eq(name, PROFILES_ACTIVE_KEY) &amp;&amp; ! e.containsProperty(name)) {</span>
-<span class="source-line-no">128</span><span id="line-128">         var active = e.getActiveProfiles();</span>
-<span class="source-line-no">129</span><span id="line-129">         if (active.length &gt; 0)  // getActiveProfiles() never returns null per the Environment contract.</span>
-<span class="source-line-no">130</span><span id="line-130">            return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(String.join(",", active)));</span>
-<span class="source-line-no">131</span><span id="line-131">         return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
-<span class="source-line-no">132</span><span id="line-132">      }</span>
-<span class="source-line-no">133</span><span id="line-133">      if (! e.containsProperty(name))</span>
-<span class="source-line-no">134</span><span id="line-134">         return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
-<span class="source-line-no">135</span><span id="line-135">      // Spring's getProperty() returns null only for unresolved placeholders, which</span>
-<span class="source-line-no">136</span><span id="line-136">      // containsProperty() already filtered out.  Wrap defensively anyway.</span>
-<span class="source-line-no">137</span><span id="line-137">      var v = e.getProperty(name);</span>
-<span class="source-line-no">138</span><span id="line-138">      return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(v));</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   /** The Juneau config-profile activation key that piggybacks on Spring's active profiles. */</span>
-<span class="source-line-no">142</span><span id="line-142">   private static final String PROFILES_ACTIVE_KEY = "juneau.profiles.active";</span>
-<span class="source-line-no">143</span><span id="line-143">}</span>
+<span class="source-line-no">088</span><span id="line-88">   private final Supplier&lt;Environment&gt; envSupplier;</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   // Written inside resolve() before resolved; readers read resolved first, so plain fields are safely published.</span>
+<span class="source-line-no">091</span><span id="line-91">   private volatile boolean resolved;</span>
+<span class="source-line-no">092</span><span id="line-92">   @SuppressWarnings({</span>
+<span class="source-line-no">093</span><span id="line-93">      "java:S3077" // Publish-once reference: env is assigned before resolved is set (constructor or resolve()) and is never compound-mutated, so volatile visibility is sufficient.</span>
+<span class="source-line-no">094</span><span id="line-94">   })</span>
+<span class="source-line-no">095</span><span id="line-95">   private volatile Environment env;</span>
+<span class="source-line-no">096</span><span id="line-96">   private boolean cacheEnabled;</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   // The miss set for the source list it was built from; replaced, never edited, when the list changes.</span>
+<span class="source-line-no">099</span><span id="line-99">   private volatile MissGeneration generation;</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /**</span>
+<span class="source-line-no">102</span><span id="line-102">    * Constructor that bridges a pre-built {@link Environment}.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @param env The Spring environment to bridge.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   public SpringEnvironmentPropertySource(Environment env) {</span>
+<span class="source-line-no">107</span><span id="line-107">      this.env = Objects.requireNonNull(env, "env");</span>
+<span class="source-line-no">108</span><span id="line-108">      this.envSupplier = null;</span>
+<span class="source-line-no">109</span><span id="line-109">   }</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   /**</span>
+<span class="source-line-no">112</span><span id="line-112">    * Constructor that lazily resolves the {@link Environment} on first lookup.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    * Use this overload when wiring through {@link org.springframework.context.ApplicationContext}: pass</span>
+<span class="source-line-no">116</span><span id="line-116">    * {@code appContext::getEnvironment} so the application context isn't invoked until a lookup</span>
+<span class="source-line-no">117</span><span id="line-117">    * actually occurs.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param envSupplier Supplier of the Spring environment.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  May return</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;jk&gt;null&lt;/jk&gt;, in which case this source returns</span>
+<span class="source-line-no">121</span><span id="line-121">    *    {@link org.apache.juneau.commons.settings.PropertyLookupResult#missing()} for every key.</span>
+<span class="source-line-no">122</span><span id="line-122">    */</span>
+<span class="source-line-no">123</span><span id="line-123">   public SpringEnvironmentPropertySource(Supplier&lt;Environment&gt; envSupplier) {</span>
+<span class="source-line-no">124</span><span id="line-124">      this.envSupplier = Objects.requireNonNull(envSupplier, "envSupplier");</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">   private synchronized void resolve() {</span>
+<span class="source-line-no">128</span><span id="line-128">      if (resolved)  // HTT: another thread resolved between the caller's check and lock acquisition; a single-threaded test cannot force it</span>
+<span class="source-line-no">129</span><span id="line-129">         return;</span>
+<span class="source-line-no">130</span><span id="line-130">      // safeOpt swallows exceptions thrown by the supplier, e.g. a mocked ApplicationContext that returns null or</span>
+<span class="source-line-no">131</span><span id="line-131">      // throws during getEnvironment().</span>
+<span class="source-line-no">132</span><span id="line-132">      var e = nn(envSupplier) ? safeOpt(envSupplier::get).orElse(null) : env;</span>
+<span class="source-line-no">133</span><span id="line-133">      env = e;</span>
+<span class="source-line-no">134</span><span id="line-134">      cacheEnabled = e instanceof ConfigurableEnvironment &amp;&amp; ! safeOpt(() -&gt; e.getProperty(MISS_CACHE_DISABLE_KEY)).map(Boolean::parseBoolean).orElse(false);</span>
+<span class="source-line-no">135</span><span id="line-135">      resolved = true;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   @Override</span>
+<span class="source-line-no">139</span><span id="line-139">   public org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {</span>
+<span class="source-line-no">140</span><span id="line-140">      if (! resolved)</span>
+<span class="source-line-no">141</span><span id="line-141">         resolve();</span>
+<span class="source-line-no">142</span><span id="line-142">      // Read env only after resolved: reading it first could see null, then resolved == true, and miss wrongly.</span>
+<span class="source-line-no">143</span><span id="line-143">      var e = env;</span>
+<span class="source-line-no">144</span><span id="line-144">      if (e == null)</span>
+<span class="source-line-no">145</span><span id="line-145">         return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
+<span class="source-line-no">146</span><span id="line-146">      // Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a</span>
+<span class="source-line-no">147</span><span id="line-147">      // Spring-Boot deployment has a single source of truth for which profiles are active.  Only answered when the</span>
+<span class="source-line-no">148</span><span id="line-148">      // caller has NOT explicitly set juneau.profiles.active as a property (that exact key wins if present).</span>
+<span class="source-line-no">149</span><span id="line-149">      if (eq(name, PROFILES_ACTIVE_KEY) &amp;&amp; ! e.containsProperty(name)) {</span>
+<span class="source-line-no">150</span><span id="line-150">         var active = e.getActiveProfiles();</span>
+<span class="source-line-no">151</span><span id="line-151">         if (active.length &gt; 0)  // getActiveProfiles() never returns null per the Environment contract.</span>
+<span class="source-line-no">152</span><span id="line-152">            return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(String.join(",", active)));</span>
+<span class="source-line-no">153</span><span id="line-153">         return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
+<span class="source-line-no">154</span><span id="line-154">      }</span>
+<span class="source-line-no">155</span><span id="line-155">      var g = cacheEnabled &amp;&amp; nn(name) ? currentGeneration((ConfigurableEnvironment)e) : null;</span>
+<span class="source-line-no">156</span><span id="line-156">      if (nn(g) &amp;&amp; g.misses.contains(name)) {</span>
+<span class="source-line-no">157</span><span id="line-157">         // For an invalid Boot name, the raw systemProperties source (exact key) is the only one whose contents</span>
+<span class="source-line-no">158</span><span id="line-158">         // can change without a source-list change; systemEnvironment wraps System.getenv(), which cannot.</span>
+<span class="source-line-no">159</span><span id="line-159">         if (! g.hasSystemProperties || System.getProperty(name) == null)</span>
+<span class="source-line-no">160</span><span id="line-160">            return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
+<span class="source-line-no">161</span><span id="line-161">         g.misses.remove(name);</span>
+<span class="source-line-no">162</span><span id="line-162">      }</span>
+<span class="source-line-no">163</span><span id="line-163">      if (! e.containsProperty(name)) {</span>
+<span class="source-line-no">164</span><span id="line-164">         // Valid Boot names are never cached: Boot's relaxed binding can answer them from a changed source.</span>
+<span class="source-line-no">165</span><span id="line-165">         // isValid allocates, so it runs only here, on an uncached miss.</span>
+<span class="source-line-no">166</span><span id="line-166">         if (nn(g) &amp;&amp; g.misses.size() &lt; MISS_CACHE_MAX_ENTRIES &amp;&amp; ! ConfigurationPropertyName.isValid(name))</span>
+<span class="source-line-no">167</span><span id="line-167">            g.misses.add(name);</span>
+<span class="source-line-no">168</span><span id="line-168">         return org.apache.juneau.commons.settings.PropertyLookupResult.missing();</span>
+<span class="source-line-no">169</span><span id="line-169">      }</span>
+<span class="source-line-no">170</span><span id="line-170">      // Spring's getProperty() returns null for a key mapped to an explicit null value, and throws</span>
+<span class="source-line-no">171</span><span id="line-171">      // IllegalArgumentException for an unresolvable nested placeholder.  o() maps the null to an empty value.</span>
+<span class="source-line-no">172</span><span id="line-172">      var v = e.getProperty(name);</span>
+<span class="source-line-no">173</span><span id="line-173">      return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(v));</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175"></span>
+<span class="source-line-no">176</span><span id="line-176">   /**</span>
+<span class="source-line-no">177</span><span id="line-177">    * Clears this bridge's miss cache.</span>
+<span class="source-line-no">178</span><span id="line-178">    *</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;p&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    * Needed only after a property source's contents change in place (for example a mutated</span>
+<span class="source-line-no">181</span><span id="line-181">    * {@code MapPropertySource} map, or {@code MockEnvironment.setProperty} in a test) for a key that is not a valid</span>
+<span class="source-line-no">182</span><span id="line-182">    * Spring Boot property name and that was already looked up and missed.  Adding, removing or replacing a property</span>
+<span class="source-line-no">183</span><span id="line-183">    * source, and setting a system property, are detected without it.  A lookup already in progress on another thread</span>
+<span class="source-line-no">184</span><span id="line-184">    * may still answer from the old cache; lookups that start after this method returns do not.</span>
+<span class="source-line-no">185</span><span id="line-185">    *</span>
+<span class="source-line-no">186</span><span id="line-186">    * @since 10.0.0</span>
+<span class="source-line-no">187</span><span id="line-187">    */</span>
+<span class="source-line-no">188</span><span id="line-188">   public void invalidate() {</span>
+<span class="source-line-no">189</span><span id="line-189">      generation = null;</span>
+<span class="source-line-no">190</span><span id="line-190">   }</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">   /** @return The number of cached misses (tests). */</span>
+<span class="source-line-no">193</span><span id="line-193">   int missCount() {</span>
+<span class="source-line-no">194</span><span id="line-194">      var g = generation;</span>
+<span class="source-line-no">195</span><span id="line-195">      return g == null ? 0 : g.misses.size();</span>
+<span class="source-line-no">196</span><span id="line-196">   }</span>
+<span class="source-line-no">197</span><span id="line-197"></span>
+<span class="source-line-no">198</span><span id="line-198">   private MissGeneration currentGeneration(ConfigurableEnvironment e) {</span>
+<span class="source-line-no">199</span><span id="line-199">      var live = e.getPropertySources();</span>
+<span class="source-line-no">200</span><span id="line-200">      var g = generation;</span>
+<span class="source-line-no">201</span><span id="line-201">      if (nn(g) &amp;&amp; g.matches(live))</span>
+<span class="source-line-no">202</span><span id="line-202">         return g;</span>
+<span class="source-line-no">203</span><span id="line-203">      // Racing threads may each build one; the loser's misses go to an unused generation, which only costs a walk.</span>
+<span class="source-line-no">204</span><span id="line-204">      g = new MissGeneration(live);</span>
+<span class="source-line-no">205</span><span id="line-205">      generation = g;</span>
+<span class="source-line-no">206</span><span id="line-206">      return g;</span>
+<span class="source-line-no">207</span><span id="line-207">   }</span>
+<span class="source-line-no">208</span><span id="line-208"></span>
+<span class="source-line-no">209</span><span id="line-209">   /**</span>
+<span class="source-line-no">210</span><span id="line-210">    * Cached misses for one snapshot of the Environment's property-source list.  A new generation replaces the old one</span>
+<span class="source-line-no">211</span><span id="line-211">    * when the list changes, so a miss computed against an old list can only land in a generation nobody reads.</span>
+<span class="source-line-no">212</span><span id="line-212">    */</span>
+<span class="source-line-no">213</span><span id="line-213">   private static final class MissGeneration {</span>
+<span class="source-line-no">214</span><span id="line-214">      final org.springframework.core.env.PropertySource&lt;?&gt;[] sources;</span>
+<span class="source-line-no">215</span><span id="line-215">      final boolean hasSystemProperties;</span>
+<span class="source-line-no">216</span><span id="line-216">      final Set&lt;String&gt; misses = ConcurrentHashMap.newKeySet();</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">      MissGeneration(MutablePropertySources live) {</span>
+<span class="source-line-no">219</span><span id="line-219">         sources = live.stream().toArray(org.springframework.core.env.PropertySource&lt;?&gt;[]::new);</span>
+<span class="source-line-no">220</span><span id="line-220">         hasSystemProperties = Arrays.stream(sources).anyMatch(x -&gt; StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME.equals(x.getName()));</span>
+<span class="source-line-no">221</span><span id="line-221">      }</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">      // Identity, element by element, then count.  MutablePropertySources iterates its copy-on-write array without copying.</span>
+<span class="source-line-no">224</span><span id="line-224">      boolean matches(MutablePropertySources live) {</span>
+<span class="source-line-no">225</span><span id="line-225">         var i = 0;</span>
+<span class="source-line-no">226</span><span id="line-226">         for (var s : live) {</span>
+<span class="source-line-no">227</span><span id="line-227">            if (i &gt;= sources.length || s != sources[i])</span>
+<span class="source-line-no">228</span><span id="line-228">               return false;</span>
+<span class="source-line-no">229</span><span id="line-229">            i++;</span>
+<span class="source-line-no">230</span><span id="line-230">         }</span>
+<span class="source-line-no">231</span><span id="line-231">         return i == sources.length;</span>
+<span class="source-line-no">232</span><span id="line-232">      }</span>
+<span class="source-line-no">233</span><span id="line-233">   }</span>
+<span class="source-line-no">234</span><span id="line-234"></span>
+<span class="source-line-no">235</span><span id="line-235">   /** The Juneau config-profile activation key that piggybacks on Spring's active profiles. */</span>
+<span class="source-line-no">236</span><span id="line-236">   private static final String PROFILES_ACTIVE_KEY = "juneau.profiles.active";</span>
+<span class="source-line-no">237</span><span id="line-237">}</span>
 
 
 

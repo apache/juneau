@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.prototext;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.*;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -214,7 +214,7 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		});
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> b01_compactHasSeparatorAfterClosingBrace() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> b01_compactHasSeparatorAfterClosingBrace() {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Mixed();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		b.first = <strong class="jxr_keyword">new</strong> Beans();
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		b.first.ins = List.of(<strong class="jxr_keyword">new</strong> Inner(<span class="jxr_string">"z"</span>, 9));
@@ -223,14 +223,14 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertFalse(proto.matches(<span class="jxr_string">"(?s).*&#92;&#92;}[A-Za-z\&quot;].*"</span>), proto);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@Test <strong class="jxr_keyword">void</strong> b02_exactOutput() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@Test <strong class="jxr_keyword">void</strong> b02_exactOutput() {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Mixed();
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		b.ins = List.of(<strong class="jxr_keyword">new</strong> Inner(<span class="jxr_string">"a"</span>, 1), <strong class="jxr_keyword">new</strong> Inner(<span class="jxr_string">"b"</span>, 2));
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		b.nums = List.of(4);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertEquals(<span class="jxr_string">"ins {n: 1\nname: \&quot;a\&quot;\n}\nins {n: 2\nname: \&quot;b\&quot;\n}\nnums: [4]\n"</span>, COMPACT.write(b));
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Test <strong class="jxr_keyword">void</strong> b03_nestedListOutput() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Test <strong class="jxr_keyword">void</strong> b03_nestedListOutput() {
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Nested();
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		b.grid = List.of(List.of(1), List.of(2, 3), List.of());
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertEquals(<span class="jxr_string">"grid {_value: [1]\n}\ngrid {_value: [2, 3]\n}\ngrid {_value: []\n}\n"</span>, COMPACT.write(b));

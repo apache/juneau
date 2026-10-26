@@ -56,35 +56,52 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.inject">org.apache.juneau.commons.inject</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.bct">org.apache.juneau.bct</a></div>
 <div class="col-last even-row-color">
+<div class="block">Bean-Centric Testing Framework.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.inject">org.apache.juneau.commons.inject</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Lightweight bean lookup, contribution, and injection support for Juneau.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.secret">org.apache.juneau.commons.secret</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.secret">org.apache.juneau.commons.secret</a></div>
+<div class="col-last even-row-color">
 <div class="block">A small, JDK-only SPI for storing and retrieving secrets by key &mdash; the secure, mutable sibling of
  <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.settings">org.apache.juneau.commons.settings</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.settings">org.apache.juneau.commons.settings</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Thread-safe system property access with support for global and per-thread overrides,
  making it useful for unit tests and configuration management.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.utils">org.apache.juneau.commons.utils</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.utils">org.apache.juneau.commons.utils</a></div>
+<div class="col-last even-row-color">
 <div class="block">Common internal utilities.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.config">org.apache.juneau.config</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.config">org.apache.juneau.config</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Configuration Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last even-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.bct">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.settings</a> used by <a href="../../bct/package-summary.html">org.apache.juneau.bct</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/StringSetting.html#org.apache.juneau.bct">StringSetting</a></div>
+<div class="col-last even-row-color">
+<div class="block">A specialized <a href="Setting.html" title="class in org.apache.juneau.commons.settings"><code>Setting</code></a> for string values that provides convenience methods for type conversion.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.commons.inject">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.settings</a> used by <a href="../inject/package-summary.html">org.apache.juneau.commons.inject</a></span></div>
@@ -125,48 +142,52 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Property source backed by <a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime"><code>Args</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/FunctionalPropertySource.html#org.apache.juneau.commons.settings">FunctionalPropertySource</a></div>
+<div class="col-first odd-row-color"><a href="class-use/CachingPropertySource.html#org.apache.juneau.commons.settings">CachingPropertySource</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Memoizing decorator for a <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a> whose answers can never change after construction.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/FunctionalPropertySource.html#org.apache.juneau.commons.settings">FunctionalPropertySource</a></div>
+<div class="col-last even-row-color">
 <div class="block">A functional interface for creating read-only <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a> instances from a function.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/FunctionalPropertyStore.html#org.apache.juneau.commons.settings">FunctionalPropertyStore</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/FunctionalPropertyStore.html#org.apache.juneau.commons.settings">FunctionalPropertyStore</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A writable <a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings"><code>PropertyStore</code></a> implementation created from functional interfaces.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ManifestFilePropertySource.html#org.apache.juneau.commons.settings">ManifestFilePropertySource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ManifestFilePropertySource.html#org.apache.juneau.commons.settings">ManifestFilePropertySource</a></div>
+<div class="col-last even-row-color">
 <div class="block">Property source backed by <a href="../runtime/ManifestFile.html" title="class in org.apache.juneau.commons.runtime"><code>ManifestFile</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/PropertyLookupResult.html#org.apache.juneau.commons.settings">PropertyLookupResult</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/PropertyLookupResult.html#org.apache.juneau.commons.settings">PropertyLookupResult</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Tri-state result of a property lookup.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/PropertySource.html#org.apache.juneau.commons.settings">PropertySource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/PropertySource.html#org.apache.juneau.commons.settings">PropertySource</a></div>
+<div class="col-last even-row-color">
 <div class="block">Interface for pluggable property sources used by <a href="Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/PropertySourceProvider.html#org.apache.juneau.commons.settings">PropertySourceProvider</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/PropertySourceProvider.html#org.apache.juneau.commons.settings">PropertySourceProvider</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Provider SPI for augmenting <a href="Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> with additional property sources.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/PropertyStore.html#org.apache.juneau.commons.settings">PropertyStore</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/PropertyStore.html#org.apache.juneau.commons.settings">PropertyStore</a></div>
+<div class="col-last even-row-color">
 <div class="block">A writable extension of <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a> that supports modifying property values.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Setting.html#org.apache.juneau.commons.settings">Setting</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Setting.html#org.apache.juneau.commons.settings">Setting</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A memoizer that provides convenience methods for type conversion.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Settings.html#org.apache.juneau.commons.settings">Settings</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Settings.html#org.apache.juneau.commons.settings">Settings</a></div>
+<div class="col-last even-row-color">
 <div class="block">Encapsulates Java system properties with support for global and per-thread overrides for unit testing.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Settings.Builder.html#org.apache.juneau.commons.settings">Settings.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Settings.Builder.html#org.apache.juneau.commons.settings">Settings.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder for creating Settings instances.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/StringSetting.html#org.apache.juneau.commons.settings">StringSetting</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/StringSetting.html#org.apache.juneau.commons.settings">StringSetting</a></div>
+<div class="col-last even-row-color">
 <div class="block">A specialized <a href="Setting.html" title="class in org.apache.juneau.commons.settings"><code>Setting</code></a> for string values that provides convenience methods for type conversion.</div>
 </div>
 </div>

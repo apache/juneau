@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Render_Pill_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/views/Render_Pill_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.widgets.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@link Render#pill()} / {@link Render#pill(String)} factory sugar: canonical {@code {id:"pill",meta:…}} wire form</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * and boxed-omission rules (dot default on, absent/blank tone omitted).  These factories are pure sugar over</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * {@link Render#of(String)} &amp;mdash; they carry no host-specific behavior of their own; they are not tied to any host or sink.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">class</strong> <a name="Render_Pill_Test" href="../../../../../org/apache/juneau/console/views/Render_Pill_Test.html#Render_Pill_Test">Render_Pill_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; wire(Render r) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">return</strong> Json.to(Json.of(r), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	@Test <strong class="jxr_keyword">void</strong> a01_pill_noArgs_isBareIdWithNoMeta() {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">var</strong> r = Render.pill();
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertEquals(<span class="jxr_string">"pill"</span>, r.id);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertNull(r.meta, <span class="jxr_string">"dot default is on in JS; the factory must not emit a dot key"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(Map.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"pill"</span>), wire(r));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> a02_pill_withTone_emitsToneMetaOnly() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> tone : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"info"</span>, <span class="jxr_string">"success"</span>, <span class="jxr_string">"warning"</span>, <span class="jxr_string">"error"</span>, <span class="jxr_string">"neutral"</span>}) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			<strong class="jxr_keyword">var</strong> r = Render.pill(tone);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			assertEquals(<span class="jxr_string">"pill"</span>, r.id);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			assertEquals(Map.of(<span class="jxr_string">"tone"</span>, tone), r.meta, tone);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			assertEquals(Map.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"pill"</span>, <span class="jxr_string">"meta"</span>, Map.of(<span class="jxr_string">"tone"</span>, tone)), wire(r), tone);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test <strong class="jxr_keyword">void</strong> a03_pill_nullOrBlankTone_omitsToneMeta() {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> tone : <strong class="jxr_keyword">new</strong> String[]{<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, <span class="jxr_string">"   "</span>}) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">var</strong> r = Render.pill(tone);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			assertEquals(<span class="jxr_string">"pill"</span>, r.id);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			assertNull(r.meta, () -&gt; <span class="jxr_string">"blank tone must be omitted, identical to pill(): "</span> + Json.of(r));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			assertEquals(Map.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"pill"</span>), wire(r));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Test <strong class="jxr_keyword">void</strong> a03b_pill_typedTone_matchesWireToken() {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> tone : StatusTone.values()) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">var</strong> r = Render.pill(tone);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			assertBean(r, <span class="jxr_string">"id,meta"</span>, <span class="jxr_string">"pill,{tone="</span> + tone.wire() + <span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			assertBean(wire(r), <span class="jxr_string">"id,meta"</span>, <span class="jxr_string">"pill,{tone="</span> + tone.wire() + <span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> n = Render.pill((StatusTone)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertNull(n.meta);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(Map.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"pill"</span>), wire(n));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a04_chainedMeta_carriesFieldDotAction() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> r = Render.pill(<span class="jxr_string">"success"</span>).meta(<span class="jxr_string">"field"</span>, <span class="jxr_string">"state"</span>).meta(<span class="jxr_string">"dot"</span>, <span class="jxr_string">"off"</span>).meta(<span class="jxr_string">"action"</span>, <span class="jxr_string">"ack"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertEquals(Map.of(<span class="jxr_string">"tone"</span>, <span class="jxr_string">"success"</span>, <span class="jxr_string">"field"</span>, <span class="jxr_string">"state"</span>, <span class="jxr_string">"dot"</span>, <span class="jxr_string">"off"</span>, <span class="jxr_string">"action"</span>, <span class="jxr_string">"ack"</span>), r.meta);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			Map.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"pill"</span>, <span class="jxr_string">"meta"</span>, Map.of(<span class="jxr_string">"tone"</span>, <span class="jxr_string">"success"</span>, <span class="jxr_string">"field"</span>, <span class="jxr_string">"state"</span>, <span class="jxr_string">"dot"</span>, <span class="jxr_string">"off"</span>, <span class="jxr_string">"action"</span>, <span class="jxr_string">"ack"</span>)),
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			wire(r));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a05_stringSugarUnaffected_bareIdAndColonField() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<em class="jxr_comment">// Render.parse still treats "id:field" the same; "pill" gains no special parsing.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(<span class="jxr_string">"pill"</span>, Render.parse(<span class="jxr_string">"pill"</span>).id);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertNull(Render.parse(<span class="jxr_string">"pill"</span>).meta);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> withField = Render.parse(<span class="jxr_string">"pill:state"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(<span class="jxr_string">"pill"</span>, withField.id);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(Map.of(<span class="jxr_string">"field"</span>, <span class="jxr_string">"state"</span>), withField.meta);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * Companion pin: the {@code pill} block of the shipped {@code juneau-renders.js} must carry NO hardcoded</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * hex colour.  A pill chip's colour comes exclusively from the console-ui {@code --jc-pill-*} palette classes</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * (via {@code chrome.css}); the renderer only stamps the palette classes, never a literal colour.  This is the</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * source-scan pin; the shipped renderer must never stamp a literal colour.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> a06_pillBlockOfRendersJs_carriesNoHardcodedHex() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<em class="jxr_comment">// The test CWD is the module root; the shipped renderer lives under src/main/resources.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> src = Paths.get(<span class="jxr_string">"src/main/resources/org/apache/juneau/views/juneau-renders.js"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertTrue(Files.exists(src), () -&gt; <span class="jxr_string">"shipped juneau-renders.js not found at "</span> + src.toAbsolutePath());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> js = Files.readString(src, StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<em class="jxr_comment">// Isolate the pill renderer block: from its banner comment to the next renderer section (TIMESTAMP POPUP).</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> start = js.indexOf(<span class="jxr_string">"--- pill renderer"</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertTrue(start &gt;= 0, <span class="jxr_string">"could not locate the pill renderer block banner in juneau-renders.js"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> end = js.indexOf(<span class="jxr_string">"TIMESTAMP POPUP"</span>, start);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertTrue(end &gt; start, <span class="jxr_string">"could not locate the end of the pill renderer block in juneau-renders.js"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> block = js.substring(start, end);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> hex = Pattern.compile(<span class="jxr_string">"#[0-9a-fA-F]{3,8}&#92;&#92;b"</span>).matcher(block);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertFalse(hex.find(),
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			() -&gt; <span class="jxr_string">"pill block of juneau-renders.js must contain no hardcoded hex colour; found '"</span>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 				+ hex.group() + <span class="jxr_string">"' - colour must come from the --jc-pill-* palette classes only."</span>);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Test <strong class="jxr_keyword">void</strong> a20_meta_numericValue_serializesAsNumber() {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> r = Render.of(<span class="jxr_string">"decimal"</span>).meta(<span class="jxr_string">"places"</span>, 2).meta(<span class="jxr_string">"field"</span>, <span class="jxr_string">"price"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;decimal\&quot;,\&quot;meta\&quot;:{\&quot;places\&quot;:2,\&quot;field\&quot;:\&quot;price\&quot;}}"</span>, Json.of(r));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(2, ((Map&lt;?,?&gt;)wire(r).get(<span class="jxr_string">"meta"</span>)).get(<span class="jxr_string">"places"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

@@ -266,96 +266,95 @@
 <span class="source-line-no">253</span><span id="line-253">   }</span>
 <span class="source-line-no">254</span><span id="line-254"></span>
 <span class="source-line-no">255</span><span id="line-255">   private static Map&lt;String,Object&gt; describeRateLimitGuard(RateLimitGuard g) {</span>
-<span class="source-line-no">256</span><span id="line-256">      Map&lt;String,Object&gt; m = m(</span>
+<span class="source-line-no">256</span><span id="line-256">      return m(</span>
 <span class="source-line-no">257</span><span id="line-257">         "class", cn(g),</span>
 <span class="source-line-no">258</span><span id="line-258">         "limit", g.getCapacity(),</span>
 <span class="source-line-no">259</span><span id="line-259">         "permitsPerSecond", g.getPermitsPerSecond(),</span>
 <span class="source-line-no">260</span><span id="line-260">         "xForwardedForAware", g.isXForwardedForAware(),</span>
 <span class="source-line-no">261</span><span id="line-261">         "exemptPaths", g.getExemptPaths().stream().sorted().toList()</span>
 <span class="source-line-no">262</span><span id="line-262">      );</span>
-<span class="source-line-no">263</span><span id="line-263">      return m;</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   private static void writeJson(RestResponse res, Object payload) throws IOException {</span>
-<span class="source-line-no">267</span><span id="line-267">      try (var w = res.getDirectWriter("application/json")) {</span>
-<span class="source-line-no">268</span><span id="line-268">         JsonSerializer.DEFAULT_READABLE.write(payload, w);</span>
-<span class="source-line-no">269</span><span id="line-269">      }</span>
-<span class="source-line-no">270</span><span id="line-270">   }</span>
-<span class="source-line-no">271</span><span id="line-271"></span>
-<span class="source-line-no">272</span><span id="line-272">   /**</span>
-<span class="source-line-no">273</span><span id="line-273">    * Builder for {@link AdminProvider} instances.</span>
-<span class="source-line-no">274</span><span id="line-274">    */</span>
-<span class="source-line-no">275</span><span id="line-275">   public static class Builder {</span>
-<span class="source-line-no">276</span><span id="line-276"></span>
-<span class="source-line-no">277</span><span id="line-277">      private final Map&lt;String,Runnable&gt; cacheFlushHooks = m();</span>
-<span class="source-line-no">278</span><span id="line-278">      private final List&lt;String&gt; threadNamePrefixExclude = new ArrayList&lt;&gt;(DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">      /** Constructor &amp;mdash; package access for {@link AdminProvider#create()}. */</span>
-<span class="source-line-no">281</span><span id="line-281">      protected Builder() {}</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">      /**</span>
-<span class="source-line-no">284</span><span id="line-284">       * Registers a cache-flush hook under a name.</span>
-<span class="source-line-no">285</span><span id="line-285">       *</span>
-<span class="source-line-no">286</span><span id="line-286">       * &lt;p&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">       * The hook is invoked synchronously when {@code POST /admin/cache/flush} is called (with</span>
-<span class="source-line-no">288</span><span id="line-288">       * no {@code names} parameter, or with a {@code names} parameter that includes this name).</span>
-<span class="source-line-no">289</span><span id="line-289">       *</span>
-<span class="source-line-no">290</span><span id="line-290">       * @param name The hook name. Must not be {@code null} or blank.</span>
-<span class="source-line-no">291</span><span id="line-291">       * @param hook The hook. Must not be {@code null}.</span>
-<span class="source-line-no">292</span><span id="line-292">       * @return This object.</span>
-<span class="source-line-no">293</span><span id="line-293">       */</span>
-<span class="source-line-no">294</span><span id="line-294">      public Builder cacheFlush(String name, Runnable hook) {</span>
-<span class="source-line-no">295</span><span id="line-295">         if (isBlank(name))</span>
-<span class="source-line-no">296</span><span id="line-296">            throw new IllegalArgumentException("Argument 'name' must not be null or blank");</span>
-<span class="source-line-no">297</span><span id="line-297">         if (hook == null)</span>
-<span class="source-line-no">298</span><span id="line-298">            throw new IllegalArgumentException("Argument 'hook' must not be null");</span>
-<span class="source-line-no">299</span><span id="line-299">         cacheFlushHooks.put(name, hook);</span>
-<span class="source-line-no">300</span><span id="line-300">         return this;</span>
-<span class="source-line-no">301</span><span id="line-301">      }</span>
-<span class="source-line-no">302</span><span id="line-302"></span>
-<span class="source-line-no">303</span><span id="line-303">      /**</span>
-<span class="source-line-no">304</span><span id="line-304">       * Registers multiple cache-flush hooks at once.</span>
-<span class="source-line-no">305</span><span id="line-305">       *</span>
-<span class="source-line-no">306</span><span id="line-306">       * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).</span>
-<span class="source-line-no">307</span><span id="line-307">       * @return This object.</span>
-<span class="source-line-no">308</span><span id="line-308">       */</span>
-<span class="source-line-no">309</span><span id="line-309">      public Builder cacheFlushAll(Map&lt;String,Runnable&gt; hooks) {</span>
-<span class="source-line-no">310</span><span id="line-310">         if (hooks != null)</span>
-<span class="source-line-no">311</span><span id="line-311">            hooks.forEach(this::cacheFlush);</span>
-<span class="source-line-no">312</span><span id="line-312">         return this;</span>
-<span class="source-line-no">313</span><span id="line-313">      }</span>
-<span class="source-line-no">314</span><span id="line-314"></span>
-<span class="source-line-no">315</span><span id="line-315">      /**</span>
-<span class="source-line-no">316</span><span id="line-316">       * Replaces the thread-name-prefix exclude list.</span>
-<span class="source-line-no">317</span><span id="line-317">       *</span>
-<span class="source-line-no">318</span><span id="line-318">       * &lt;p&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">       * Threads whose {@link Thread#getName() name} starts with any of the supplied prefixes are</span>
-<span class="source-line-no">320</span><span id="line-320">       * omitted from the {@code /admin/threads} output. Pass an empty array to disable</span>
-<span class="source-line-no">321</span><span id="line-321">       * filtering entirely.</span>
-<span class="source-line-no">322</span><span id="line-322">       *</span>
-<span class="source-line-no">323</span><span id="line-323">       * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty</span>
-<span class="source-line-no">324</span><span id="line-324">       *    array &amp;mdash; disables filtering); {@code null} or empty elements are skipped.</span>
-<span class="source-line-no">325</span><span id="line-325">       * @return This object.</span>
-<span class="source-line-no">326</span><span id="line-326">       */</span>
-<span class="source-line-no">327</span><span id="line-327">      public Builder threadNamePrefixExclude(String...values) {</span>
-<span class="source-line-no">328</span><span id="line-328">         threadNamePrefixExclude.clear();</span>
-<span class="source-line-no">329</span><span id="line-329">         if (values != null)</span>
-<span class="source-line-no">330</span><span id="line-330">            for (var v : values)</span>
-<span class="source-line-no">331</span><span id="line-331">               if (v != null &amp;&amp; ! v.isEmpty())</span>
-<span class="source-line-no">332</span><span id="line-332">                  threadNamePrefixExclude.add(v);</span>
-<span class="source-line-no">333</span><span id="line-333">         return this;</span>
-<span class="source-line-no">334</span><span id="line-334">      }</span>
-<span class="source-line-no">335</span><span id="line-335"></span>
-<span class="source-line-no">336</span><span id="line-336">      /**</span>
-<span class="source-line-no">337</span><span id="line-337">       * Builds an {@link AdminProvider} instance.</span>
-<span class="source-line-no">338</span><span id="line-338">       *</span>
-<span class="source-line-no">339</span><span id="line-339">       * @return A configured instance.</span>
-<span class="source-line-no">340</span><span id="line-340">       */</span>
-<span class="source-line-no">341</span><span id="line-341">      public AdminProvider build() {</span>
-<span class="source-line-no">342</span><span id="line-342">         return new AdminProvider(this);</span>
-<span class="source-line-no">343</span><span id="line-343">      }</span>
-<span class="source-line-no">344</span><span id="line-344">   }</span>
-<span class="source-line-no">345</span><span id="line-345">}</span>
+<span class="source-line-no">263</span><span id="line-263">   }</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   private static void writeJson(RestResponse res, Object payload) throws IOException {</span>
+<span class="source-line-no">266</span><span id="line-266">      try (var w = res.getDirectWriter("application/json")) {</span>
+<span class="source-line-no">267</span><span id="line-267">         JsonSerializer.DEFAULT_READABLE.write(payload, w);</span>
+<span class="source-line-no">268</span><span id="line-268">      }</span>
+<span class="source-line-no">269</span><span id="line-269">   }</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">   /**</span>
+<span class="source-line-no">272</span><span id="line-272">    * Builder for {@link AdminProvider} instances.</span>
+<span class="source-line-no">273</span><span id="line-273">    */</span>
+<span class="source-line-no">274</span><span id="line-274">   public static class Builder {</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">      private final Map&lt;String,Runnable&gt; cacheFlushHooks = m();</span>
+<span class="source-line-no">277</span><span id="line-277">      private final List&lt;String&gt; threadNamePrefixExclude = new ArrayList&lt;&gt;(DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);</span>
+<span class="source-line-no">278</span><span id="line-278"></span>
+<span class="source-line-no">279</span><span id="line-279">      /** Constructor &amp;mdash; package access for {@link AdminProvider#create()}. */</span>
+<span class="source-line-no">280</span><span id="line-280">      protected Builder() {}</span>
+<span class="source-line-no">281</span><span id="line-281"></span>
+<span class="source-line-no">282</span><span id="line-282">      /**</span>
+<span class="source-line-no">283</span><span id="line-283">       * Registers a cache-flush hook under a name.</span>
+<span class="source-line-no">284</span><span id="line-284">       *</span>
+<span class="source-line-no">285</span><span id="line-285">       * &lt;p&gt;</span>
+<span class="source-line-no">286</span><span id="line-286">       * The hook is invoked synchronously when {@code POST /admin/cache/flush} is called (with</span>
+<span class="source-line-no">287</span><span id="line-287">       * no {@code names} parameter, or with a {@code names} parameter that includes this name).</span>
+<span class="source-line-no">288</span><span id="line-288">       *</span>
+<span class="source-line-no">289</span><span id="line-289">       * @param name The hook name. Must not be {@code null} or blank.</span>
+<span class="source-line-no">290</span><span id="line-290">       * @param hook The hook. Must not be {@code null}.</span>
+<span class="source-line-no">291</span><span id="line-291">       * @return This object.</span>
+<span class="source-line-no">292</span><span id="line-292">       */</span>
+<span class="source-line-no">293</span><span id="line-293">      public Builder cacheFlush(String name, Runnable hook) {</span>
+<span class="source-line-no">294</span><span id="line-294">         if (isBlank(name))</span>
+<span class="source-line-no">295</span><span id="line-295">            throw new IllegalArgumentException("Argument 'name' must not be null or blank");</span>
+<span class="source-line-no">296</span><span id="line-296">         if (hook == null)</span>
+<span class="source-line-no">297</span><span id="line-297">            throw new IllegalArgumentException("Argument 'hook' must not be null");</span>
+<span class="source-line-no">298</span><span id="line-298">         cacheFlushHooks.put(name, hook);</span>
+<span class="source-line-no">299</span><span id="line-299">         return this;</span>
+<span class="source-line-no">300</span><span id="line-300">      }</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">      /**</span>
+<span class="source-line-no">303</span><span id="line-303">       * Registers multiple cache-flush hooks at once.</span>
+<span class="source-line-no">304</span><span id="line-304">       *</span>
+<span class="source-line-no">305</span><span id="line-305">       * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).</span>
+<span class="source-line-no">306</span><span id="line-306">       * @return This object.</span>
+<span class="source-line-no">307</span><span id="line-307">       */</span>
+<span class="source-line-no">308</span><span id="line-308">      public Builder cacheFlushAll(Map&lt;String,Runnable&gt; hooks) {</span>
+<span class="source-line-no">309</span><span id="line-309">         if (hooks != null)</span>
+<span class="source-line-no">310</span><span id="line-310">            hooks.forEach(this::cacheFlush);</span>
+<span class="source-line-no">311</span><span id="line-311">         return this;</span>
+<span class="source-line-no">312</span><span id="line-312">      }</span>
+<span class="source-line-no">313</span><span id="line-313"></span>
+<span class="source-line-no">314</span><span id="line-314">      /**</span>
+<span class="source-line-no">315</span><span id="line-315">       * Replaces the thread-name-prefix exclude list.</span>
+<span class="source-line-no">316</span><span id="line-316">       *</span>
+<span class="source-line-no">317</span><span id="line-317">       * &lt;p&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">       * Threads whose {@link Thread#getName() name} starts with any of the supplied prefixes are</span>
+<span class="source-line-no">319</span><span id="line-319">       * omitted from the {@code /admin/threads} output. Pass an empty array to disable</span>
+<span class="source-line-no">320</span><span id="line-320">       * filtering entirely.</span>
+<span class="source-line-no">321</span><span id="line-321">       *</span>
+<span class="source-line-no">322</span><span id="line-322">       * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty</span>
+<span class="source-line-no">323</span><span id="line-323">       *    array &amp;mdash; disables filtering); {@code null} or empty elements are skipped.</span>
+<span class="source-line-no">324</span><span id="line-324">       * @return This object.</span>
+<span class="source-line-no">325</span><span id="line-325">       */</span>
+<span class="source-line-no">326</span><span id="line-326">      public Builder threadNamePrefixExclude(String...values) {</span>
+<span class="source-line-no">327</span><span id="line-327">         threadNamePrefixExclude.clear();</span>
+<span class="source-line-no">328</span><span id="line-328">         if (values != null)</span>
+<span class="source-line-no">329</span><span id="line-329">            for (var v : values)</span>
+<span class="source-line-no">330</span><span id="line-330">               if (v != null &amp;&amp; ! v.isEmpty())</span>
+<span class="source-line-no">331</span><span id="line-331">                  threadNamePrefixExclude.add(v);</span>
+<span class="source-line-no">332</span><span id="line-332">         return this;</span>
+<span class="source-line-no">333</span><span id="line-333">      }</span>
+<span class="source-line-no">334</span><span id="line-334"></span>
+<span class="source-line-no">335</span><span id="line-335">      /**</span>
+<span class="source-line-no">336</span><span id="line-336">       * Builds an {@link AdminProvider} instance.</span>
+<span class="source-line-no">337</span><span id="line-337">       *</span>
+<span class="source-line-no">338</span><span id="line-338">       * @return A configured instance.</span>
+<span class="source-line-no">339</span><span id="line-339">       */</span>
+<span class="source-line-no">340</span><span id="line-340">      public AdminProvider build() {</span>
+<span class="source-line-no">341</span><span id="line-341">         return new AdminProvider(this);</span>
+<span class="source-line-no">342</span><span id="line-342">      }</span>
+<span class="source-line-no">343</span><span id="line-343">   }</span>
+<span class="source-line-no">344</span><span id="line-344">}</span>
 
 
 

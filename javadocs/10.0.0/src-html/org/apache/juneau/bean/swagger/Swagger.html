@@ -114,17 +114,17 @@
 <span class="source-line-no">101</span><span id="line-101">   private String basePath;</span>
 <span class="source-line-no">102</span><span id="line-102">   private Info info;</span>
 <span class="source-line-no">103</span><span id="line-103">   private ExternalDocumentation externalDocs;</span>
-<span class="source-line-no">104</span><span id="line-104">   private Set&lt;String&gt; schemes = st();</span>
-<span class="source-line-no">105</span><span id="line-105">   private Set&lt;MediaType&gt; consumes = st();</span>
-<span class="source-line-no">106</span><span id="line-106">   private Set&lt;MediaType&gt; produces = st();</span>
-<span class="source-line-no">107</span><span id="line-107">   private Set&lt;Tag&gt; tags = st();</span>
-<span class="source-line-no">108</span><span id="line-108">   private List&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; security = list();</span>
-<span class="source-line-no">109</span><span id="line-109">   private Map&lt;String,JsonMap&gt; definitions = map();</span>
-<span class="source-line-no">110</span><span id="line-110">   private Map&lt;String,ParameterInfo&gt; parameters = map();</span>
-<span class="source-line-no">111</span><span id="line-111">   private Map&lt;String,ResponseInfo&gt; responses = map();</span>
-<span class="source-line-no">112</span><span id="line-112">   private Map&lt;String,SecurityScheme&gt; securityDefinitions = map();</span>
+<span class="source-line-no">104</span><span id="line-104">   private final Set&lt;String&gt; schemes = st();</span>
+<span class="source-line-no">105</span><span id="line-105">   private final Set&lt;MediaType&gt; consumes = st();</span>
+<span class="source-line-no">106</span><span id="line-106">   private final Set&lt;MediaType&gt; produces = st();</span>
+<span class="source-line-no">107</span><span id="line-107">   private final Set&lt;Tag&gt; tags = st();</span>
+<span class="source-line-no">108</span><span id="line-108">   private final List&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; security = list();</span>
+<span class="source-line-no">109</span><span id="line-109">   private final Map&lt;String,JsonMap&gt; definitions = map();</span>
+<span class="source-line-no">110</span><span id="line-110">   private final Map&lt;String,ParameterInfo&gt; parameters = map();</span>
+<span class="source-line-no">111</span><span id="line-111">   private final Map&lt;String,ResponseInfo&gt; responses = map();</span>
+<span class="source-line-no">112</span><span id="line-112">   private final Map&lt;String,SecurityScheme&gt; securityDefinitions = map();</span>
 <span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   private Map&lt;String,OperationMap&gt; paths = new TreeMap&lt;&gt;(PATH_COMPARATOR);</span>
+<span class="source-line-no">114</span><span id="line-114">   private final Map&lt;String,OperationMap&gt; paths = new TreeMap&lt;&gt;(PATH_COMPARATOR);</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
 <span class="source-line-no">116</span><span id="line-116">   /**</span>
 <span class="source-line-no">117</span><span id="line-117">    * Default constructor.</span>

@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">    */</span>
 <span class="source-line-no">148</span><span id="line-148">   public static class Builder {</span>
 <span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">      private Class&lt;? extends Annotation&gt; annotationType;</span>
+<span class="source-line-no">150</span><span id="line-150">      private final Class&lt;? extends Annotation&gt; annotationType;</span>
 <span class="source-line-no">151</span><span id="line-151"></span>
 <span class="source-line-no">152</span><span id="line-152">      /**</span>
 <span class="source-line-no">153</span><span id="line-153">       * Constructor.</span>
@@ -184,7 +184,7 @@
 <span class="source-line-no">171</span><span id="line-171">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
 <span class="source-line-no">173</span><span id="line-173">   private final Class&lt;? extends Annotation&gt; annotationType;</span>
-<span class="source-line-no">174</span><span id="line-174">   private Supplier&lt;Integer&gt; hashCode = memoize(() -&gt; AnnotationUtils.hash(this));</span>
+<span class="source-line-no">174</span><span id="line-174">   private final Supplier&lt;Integer&gt; hashCode = memoize(() -&gt; AnnotationUtils.hash(this));</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
 <span class="source-line-no">176</span><span id="line-176">   /**</span>
 <span class="source-line-no">177</span><span id="line-177">    * Constructor.</span>

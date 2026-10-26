@@ -29,188 +29,190 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Proves REST-driven serializer/parser debug &lt;i&gt;behavior&lt;/i&gt; is decoupled from the JUL logger level and is instead</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * controlled by the cascading {@code debugMarshalling} setting.</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Two session-level {@code .debug()} observables are exercised (recursion&amp;rarr;500 is intentionally &lt;b&gt;not&lt;/b&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * treated as a valid session-debug observable, per the Option-A design correction):</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Serializer traversal-stack prefix&lt;/b&gt; &amp;mdash; when marshalling debug is engaged, a getter-invocation failure</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 		message is prefixed with the debug traversal stack (e.g. {@code " &gt; [0] root:..."}) and the session collects it</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 		as a warning ({@code "Warnings occurred in session:"}).  That prefix/warning is absent when debug is off.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Parser buffered-input retention&lt;/b&gt; &amp;mdash; when marshalling debug is engaged, a malformed-parse failure</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 		retains and quotes the buffered request content (e.g. &lt;code&gt;"1: {name:"&lt;/code&gt;).  When debug is off the message</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 		instead reads {@code "Use BEAN_debug setting to display content."}.</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * The decoupling gates {@code b04}/{@code b08} are deliberately &lt;b&gt;red on unmodified {@code main}&lt;/b&gt;: on {@code main}</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * the seven REST marshalling sites keyed {@code req.isDebug()}, so raising the resolved op logger to {@code FINE}</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * engaged the debug observables above.  These tests assert the post-decoupling behavior (logger has no effect), which</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * fails against that old coupled behavior.  Verified red-on-main via the revert-and-probe technique.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * The op logger for a plain op is {@code &lt;resourceClass&gt;.&lt;method&gt;}; raising {@code Logger.getLogger(&lt;resourceClass&gt;)}</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * controls {@code isDebug()} for its ops.  {@code renderResponseStackTraces} is enabled so the failure messages</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * (and thus the observables above) surface in the response body.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">class</strong> <a name="DebugMarshalling_Behavior_Test" href="../../../../../org/apache/juneau/rest/server/DebugMarshalling_Behavior_Test.html#DebugMarshalling_Behavior_Test">DebugMarshalling_Behavior_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/** Bean whose getter throws — drives {@code SerializerSession.onBeanGetterException}. */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Boom {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">public</strong> String getOk() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">public</strong> String getBoom() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"BOOMDETAIL"</span>); }
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/** Simple target bean for malformed-parse cases. */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Bean { <strong class="jxr_keyword">public</strong> String name; }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/** Malformed JSON body (truncated after the key) — parses to a {@link org.apache.juneau.marshall.parser.ParseException}. */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MALFORMED = <span class="jxr_string">"{name:"</span>;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@FunctionalInterface <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">interface</strong> ThrowingRunnable { <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Exception; }
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> withLoggerLevel(Class&lt;?&gt; resourceClass, Level level, ThrowingRunnable action) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> logger = Logger.getLogger(resourceClass.getName());
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> prev = logger.getLevel();
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		logger.setLevel(level);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			action.run();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			logger.setLevel(prev);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_comment">// Fixtures.</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.logging.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Proves REST-driven serializer/parser debug &lt;i&gt;behavior&lt;/i&gt; is decoupled from the JUL logger level and is instead</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * controlled by the cascading {@code debugMarshalling} setting.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * Two session-level {@code .debug()} observables are exercised (recursion&amp;rarr;500 is intentionally &lt;b&gt;not&lt;/b&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * treated as a valid session-debug observable, per the Option-A design correction):</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Serializer traversal-stack prefix&lt;/b&gt; &amp;mdash; when marshalling debug is engaged, a getter-invocation failure</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 		message is prefixed with the debug traversal stack (e.g. {@code " &gt; [0] root:..."}) and the session collects it</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 		as a warning ({@code "Warnings occurred in session:"}).  That prefix/warning is absent when debug is off.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Parser buffered-input retention&lt;/b&gt; &amp;mdash; when marshalling debug is engaged, a malformed-parse failure</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 		retains and quotes the buffered request content (e.g. &lt;code&gt;"1: {name:"&lt;/code&gt;).  When debug is off the message</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 		instead reads {@code "Use BEAN_debug setting to display content."}.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * The decoupling gates {@code b04}/{@code b08} are deliberately &lt;b&gt;red on unmodified {@code main}&lt;/b&gt;: on {@code main}</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * the seven REST marshalling sites keyed {@code req.isDebug()}, so raising the resolved op logger to {@code FINE}</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * engaged the debug observables above.  These tests assert the post-decoupling behavior (logger has no effect), which</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * fails against that old coupled behavior.  Verified red-on-main via the revert-and-probe technique.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * The op logger for a plain op is {@code &lt;resourceClass&gt;.&lt;method&gt;}; raising {@code Logger.getLogger(&lt;resourceClass&gt;)}</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * controls {@code isDebug()} for its ops.  {@code renderResponseStackTraces} is enabled so the failure messages</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * (and thus the observables above) surface in the response body.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">class</strong> <a name="DebugMarshalling_Behavior_Test" href="../../../../../org/apache/juneau/rest/server/DebugMarshalling_Behavior_Test.html#DebugMarshalling_Behavior_Test">DebugMarshalling_Behavior_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_javadoccomment">/** Bean whose getter throws — drives {@code SerializerSession.onBeanGetterException}. */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Boom {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">public</strong> String getOk() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">public</strong> String getBoom() { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"BOOMDETAIL"</span>); }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/** Simple target bean for malformed-parse cases. */</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Bean { <strong class="jxr_keyword">public</strong> String name; }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<em class="jxr_javadoccomment">/** Malformed JSON body (truncated after the key) — parses to a {@link org.apache.juneau.marshall.parser.ParseException}. */</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MALFORMED = <span class="jxr_string">"{name:"</span>;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@FunctionalInterface <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">interface</strong> ThrowingRunnable { <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Exception; }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> withLoggerLevel(Class&lt;?&gt; resourceClass, Level level, ThrowingRunnable action) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> logger = Logger.getLogger(resourceClass.getName());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> prev = logger.getLevel();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		logger.setLevel(level);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">// At FINE the server logs the failed request with its stack trace; keep that off the console.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> quiet = LogRecordCapture.quiet(resourceClass)) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			action.run();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			logger.setLevel(prev);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_javadoccomment">/** No resource-level debugMarshalling; one op opts in, one stays default (for both serialize and parse). */</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Rest(serializers=JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers=JsonParser.<strong class="jxr_keyword">class</strong>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_Default {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		@RestGet(path=<span class="jxr_string">"/serOff"</span>) <strong class="jxr_keyword">public</strong> Boom serOff() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		@RestGet(path=<span class="jxr_string">"/serOn"</span>, debugMarshalling=<span class="jxr_string">"true"</span>) <strong class="jxr_keyword">public</strong> Boom serOn() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		@RestPut(path=<span class="jxr_string">"/parseOff"</span>) <strong class="jxr_keyword">public</strong> String parseOff(@Content Bean b) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		@RestPut(path=<span class="jxr_string">"/parseOn"</span>, debugMarshalling=<span class="jxr_string">"true"</span>) <strong class="jxr_keyword">public</strong> String parseOn(@Content Bean b) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_javadoccomment">/** Resource-level debugMarshalling=true; ops leave the annotation blank (inherit). */</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Rest(debugMarshalling=<span class="jxr_string">"true"</span>, serializers=JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers=JsonParser.<strong class="jxr_keyword">class</strong>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_ResourceTrue {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		@RestGet(path=<span class="jxr_string">"/serInherit"</span>) <strong class="jxr_keyword">public</strong> Boom serInherit() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		@RestPut(path=<span class="jxr_string">"/parseInherit"</span>) <strong class="jxr_keyword">public</strong> String parseInherit(@Content Bean b) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_javadoccomment">/** JSON serializer with {@code Context.debug} enabled directly on the serializer instance. */</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> DebugJson <strong class="jxr_keyword">extends</strong> JsonSerializer {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">public</strong> DebugJson(JsonSerializer.Builder&lt;?&gt; b) { <strong class="jxr_keyword">super</strong>(enableDebug(b)); }
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonSerializer.Builder&lt;?&gt; enableDebug(JsonSerializer.Builder&lt;?&gt; b) { b.debug(); <strong class="jxr_keyword">return</strong> b; }
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<em class="jxr_javadoccomment">/** debugMarshalling OFF, but the registered serializer has Context.debug enabled directly. */</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Rest(serializers=DebugJson.<strong class="jxr_keyword">class</strong>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_DirectContextDebug {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		@RestGet(path=<span class="jxr_string">"/ser"</span>) <strong class="jxr_keyword">public</strong> Boom ser() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient cDefault = MockRestClient.buildLax(R_Default.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient cResourceTrue = MockRestClient.buildLax(R_ResourceTrue.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_comment">// Serializer observable — traversal-stack-prefix on a getter-invocation failure.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">// Fixtures.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_javadoccomment">/** No resource-level debugMarshalling; one op opts in, one stays default (for both serialize and parse). */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Rest(serializers=JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers=JsonParser.<strong class="jxr_keyword">class</strong>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_Default {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		@RestGet(path=<span class="jxr_string">"/serOff"</span>) <strong class="jxr_keyword">public</strong> Boom serOff() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		@RestGet(path=<span class="jxr_string">"/serOn"</span>, debugMarshalling=<span class="jxr_string">"true"</span>) <strong class="jxr_keyword">public</strong> Boom serOn() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		@RestPut(path=<span class="jxr_string">"/parseOff"</span>) <strong class="jxr_keyword">public</strong> String parseOff(@Content Bean b) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		@RestPut(path=<span class="jxr_string">"/parseOn"</span>, debugMarshalling=<span class="jxr_string">"true"</span>) <strong class="jxr_keyword">public</strong> String parseOn(@Content Bean b) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_javadoccomment">/** Resource-level debugMarshalling=true; ops leave the annotation blank (inherit). */</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Rest(debugMarshalling=<span class="jxr_string">"true"</span>, serializers=JsonSerializer.<strong class="jxr_keyword">class</strong>, parsers=JsonParser.<strong class="jxr_keyword">class</strong>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_ResourceTrue {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		@RestGet(path=<span class="jxr_string">"/serInherit"</span>) <strong class="jxr_keyword">public</strong> Boom serInherit() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		@RestPut(path=<span class="jxr_string">"/parseInherit"</span>) <strong class="jxr_keyword">public</strong> String parseInherit(@Content Bean b) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>; }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_javadoccomment">/** JSON serializer with {@code Context.debug} enabled directly on the serializer instance. */</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> DebugJson <strong class="jxr_keyword">extends</strong> JsonSerializer {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">public</strong> DebugJson(JsonSerializer.Builder&lt;?&gt; b) { <strong class="jxr_keyword">super</strong>(enableDebug(b)); }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonSerializer.Builder&lt;?&gt; enableDebug(JsonSerializer.Builder&lt;?&gt; b) { b.debug(); <strong class="jxr_keyword">return</strong> b; }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/** debugMarshalling OFF, but the registered serializer has Context.debug enabled directly. */</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Rest(serializers=DebugJson.<strong class="jxr_keyword">class</strong>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R_DirectContextDebug {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		@RestGet(path=<span class="jxr_string">"/ser"</span>) <strong class="jxr_keyword">public</strong> Boom ser() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Boom(); }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient cDefault = MockRestClient.buildLax(R_Default.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient cResourceTrue = MockRestClient.buildLax(R_ResourceTrue.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@Test <strong class="jxr_keyword">void</strong> b01_serializer_opTrueAddsTraversalStackPrefix() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<em class="jxr_comment">// Op-level debugMarshalling=true → session debug → warning collected with " &gt; [0] ..." traversal-stack prefix.</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		cDefault.get(<span class="jxr_string">"/serOn"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			.assertStatus(500)
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			.assertContent().isContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>, <span class="jxr_string">"Could not call getValue"</span>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> b02_serializer_offOmitsTraversalStackPrefix() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<em class="jxr_comment">// Default (off) → the getter failure still throws (500) but with NO traversal-stack prefix and no session warning.</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		cDefault.get(<span class="jxr_string">"/serOff"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			.assertStatus(500)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.assertContent().isContains(<span class="jxr_string">"Could not call getValue"</span>)
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			.assertContent().isNotContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> b03_serializer_resourceTrueInheritedByBlankOp() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// Resource-level true is inherited by a blank op → traversal-stack prefix engaged.</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		cResourceTrue.get(<span class="jxr_string">"/serInherit"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			.assertStatus(500)
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			.assertContent().isContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test <strong class="jxr_keyword">void</strong> b04_serializer_loggerDoesNotEngageMarshallingDebug() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<em class="jxr_comment">// RED on main: FINE → isDebug()==true → traversal-stack prefix engaged.  Post-decoupling: no prefix.</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		withLoggerLevel(R_Default.<strong class="jxr_keyword">class</strong>, Level.FINE, () -&gt;
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			cDefault.get(<span class="jxr_string">"/serOff"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				.assertStatus(500)
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				.assertContent().isContains(<span class="jxr_string">"Could not call getValue"</span>)
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				.assertContent().isNotContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>));
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<em class="jxr_comment">// Parser observable — buffered-input retention on a malformed-parse failure.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<em class="jxr_comment">// Serializer observable — traversal-stack-prefix on a getter-invocation failure.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> b01_serializer_opTrueAddsTraversalStackPrefix() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<em class="jxr_comment">// Op-level debugMarshalling=true → session debug → warning collected with " &gt; [0] ..." traversal-stack prefix.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		cDefault.get(<span class="jxr_string">"/serOn"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			.assertStatus(500)
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			.assertContent().isContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>, <span class="jxr_string">"Could not call getValue"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> b02_serializer_offOmitsTraversalStackPrefix() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// Default (off) → the getter failure still throws (500) but with NO traversal-stack prefix and no session warning.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		cDefault.get(<span class="jxr_string">"/serOff"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			.assertStatus(500)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			.assertContent().isContains(<span class="jxr_string">"Could not call getValue"</span>)
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			.assertContent().isNotContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> b03_serializer_resourceTrueInheritedByBlankOp() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// Resource-level true is inherited by a blank op → traversal-stack prefix engaged.</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		cResourceTrue.get(<span class="jxr_string">"/serInherit"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			.assertStatus(500)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.assertContent().isContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> b04_serializer_loggerDoesNotEngageMarshallingDebug() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_comment">// RED on main: FINE → isDebug()==true → traversal-stack prefix engaged.  Post-decoupling: no prefix.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		withLoggerLevel(R_Default.<strong class="jxr_keyword">class</strong>, Level.FINE, () -&gt;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			cDefault.get(<span class="jxr_string">"/serOff"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				.assertStatus(500)
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				.assertContent().isContains(<span class="jxr_string">"Could not call getValue"</span>)
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				.assertContent().isNotContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@Test <strong class="jxr_keyword">void</strong> b05_parser_opTrueRetainsBufferedInput() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// Op-level debugMarshalling=true → parser pipe buffers input → malformed-parse failure quotes it.</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		cDefault.put(<span class="jxr_string">"/parseOn"</span>, MALFORMED, APPLICATION_JSON).run()
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			.assertStatus(400)
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			.assertContent().isContains(MALFORMED)
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			.assertContent().isNotContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> b06_parser_offShowsBufferHint() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<em class="jxr_comment">// Default (off) → input not buffered → failure shows the "Use BEAN_debug setting" hint instead of the content.</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		cDefault.put(<span class="jxr_string">"/parseOff"</span>, MALFORMED, APPLICATION_JSON).run()
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			.assertStatus(400)
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			.assertContent().isContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Test <strong class="jxr_keyword">void</strong> b07_parser_resourceTrueInheritedByBlankOp() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<em class="jxr_comment">// Resource-level true is inherited by a blank op → buffered input retained.</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		cResourceTrue.put(<span class="jxr_string">"/parseInherit"</span>, MALFORMED, APPLICATION_JSON).run()
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			.assertStatus(400)
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			.assertContent().isContains(MALFORMED)
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			.assertContent().isNotContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> b08_parser_loggerDoesNotEngageMarshallingDebug() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<em class="jxr_comment">// RED on main: FINE → isDebug()==true → buffered input retained.  Post-decoupling: buffer hint (no content).</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		withLoggerLevel(R_Default.<strong class="jxr_keyword">class</strong>, Level.FINE, () -&gt;
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			cDefault.put(<span class="jxr_string">"/parseOff"</span>, MALFORMED, APPLICATION_JSON).run()
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				.assertStatus(400)
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				.assertContent().isContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>)
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				.assertContent().isNotContains(<span class="jxr_string">"1: "</span> + MALFORMED));
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<em class="jxr_comment">// Context-vs-session distinction (NOT the REST-layer observable) — a directly-set Context.debug on the</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_comment">// serializer is a Context-level setting; the REST site passes .debug(null) when debugMarshalling is off, which</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<em class="jxr_comment">// must NOT clobber that pre-existing Context.debug.  Documents why recursion→500 (a Context-level detectRecursions</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<em class="jxr_comment">// behavior) cannot be used as the session-debug REST observable.</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	@Test <strong class="jxr_keyword">void</strong> b09_directContextDebugPreservedWhenRestMarshallingOff() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<em class="jxr_comment">// debugMarshalling is OFF → REST site passes .debug(null); the serializer's own Context.debug=true survives,</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<em class="jxr_comment">// so the traversal-stack prefix still appears — proving null pass-through does not override Context-level debug.</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		MockRestClient.buildLax(R_DirectContextDebug.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"/ser"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			.assertStatus(500)
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			.assertContent().isContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_comment">// Parser observable — buffered-input retention on a malformed-parse failure.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> b05_parser_opTrueRetainsBufferedInput() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_comment">// Op-level debugMarshalling=true → parser pipe buffers input → malformed-parse failure quotes it.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		cDefault.put(<span class="jxr_string">"/parseOn"</span>, MALFORMED, APPLICATION_JSON).run()
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			.assertStatus(400)
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			.assertContent().isContains(MALFORMED)
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			.assertContent().isNotContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test <strong class="jxr_keyword">void</strong> b06_parser_offShowsBufferHint() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<em class="jxr_comment">// Default (off) → input not buffered → failure shows the "Use BEAN_debug setting" hint instead of the content.</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		cDefault.put(<span class="jxr_string">"/parseOff"</span>, MALFORMED, APPLICATION_JSON).run()
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.assertStatus(400)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			.assertContent().isContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> b07_parser_resourceTrueInheritedByBlankOp() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<em class="jxr_comment">// Resource-level true is inherited by a blank op → buffered input retained.</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		cResourceTrue.put(<span class="jxr_string">"/parseInherit"</span>, MALFORMED, APPLICATION_JSON).run()
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			.assertStatus(400)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			.assertContent().isContains(MALFORMED)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			.assertContent().isNotContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	@Test <strong class="jxr_keyword">void</strong> b08_parser_loggerDoesNotEngageMarshallingDebug() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<em class="jxr_comment">// RED on main: FINE → isDebug()==true → buffered input retained.  Post-decoupling: buffer hint (no content).</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		withLoggerLevel(R_Default.<strong class="jxr_keyword">class</strong>, Level.FINE, () -&gt;
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			cDefault.put(<span class="jxr_string">"/parseOff"</span>, MALFORMED, APPLICATION_JSON).run()
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				.assertStatus(400)
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 				.assertContent().isContains(<span class="jxr_string">"Use BEAN_debug setting to display content."</span>)
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				.assertContent().isNotContains(<span class="jxr_string">"1: "</span> + MALFORMED));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<em class="jxr_comment">// Context-vs-session distinction (NOT the REST-layer observable) — a directly-set Context.debug on the</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<em class="jxr_comment">// serializer is a Context-level setting; the REST site passes .debug(null) when debugMarshalling is off, which</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<em class="jxr_comment">// must NOT clobber that pre-existing Context.debug.  Documents why recursion→500 (a Context-level detectRecursions</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<em class="jxr_comment">// behavior) cannot be used as the session-debug REST observable.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test <strong class="jxr_keyword">void</strong> b09_directContextDebugPreservedWhenRestMarshallingOff() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<em class="jxr_comment">// debugMarshalling is OFF → REST site passes .debug(null); the serializer's own Context.debug=true survives,</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<em class="jxr_comment">// so the traversal-stack prefix still appears — proving null pass-through does not override Context-level debug.</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		MockRestClient.buildLax(R_DirectContextDebug.<strong class="jxr_keyword">class</strong>).get(<span class="jxr_string">"/ser"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			.assertStatus(500)
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			.assertContent().isContains(<span class="jxr_string">"&gt; [0]"</span>, <span class="jxr_string">"Warnings occurred in session"</span>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

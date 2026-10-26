@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.pets;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertTrue;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> ids = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;Long&gt;();
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : r.getList(<span class="jxr_string">"data"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			ids.add(m.getLong(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		java.util.Collections.sort(ids);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		ids.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">return</strong> ids;
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  

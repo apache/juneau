@@ -38,11 +38,11 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.petstore.console.pages.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.petstore.service.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.datatables.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.datatables.adapter.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.datatables.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.datatables.adapter.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.views.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * Pending changes: the staged-edits table.  Persistent selection is limited to {@code PENDING} rows, an aggregate</em>
@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * @return One page of changes, or a 200 {@code error} envelope for a malformed search expression.</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@RestPost(path=<span class="jxr_string">"/query"</span>)
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> DataTablesResults&lt;PendingChange&gt; query(@Content <a name="DataTablesRequest" href="../../../../../../org/apache/juneau/rest/server/datatables/DataTablesRequest.html#DataTablesRequest">DataTablesRequest</a> req) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> DataTablesResults&lt;PendingChange&gt; query(@Content <a name="DataTablesRequest" href="../../../../../../org/apache/juneau/console/datatables/DataTablesRequest.html#DataTablesRequest">DataTablesRequest</a> req) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> s = store().queryPendingChanges()) {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<strong class="jxr_keyword">return</strong> DataTablesQuery.run(req, s);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		} <strong class="jxr_keyword">catch</strong> (<a name="BeanQuerySyntaxException" href="../../../../../../org/apache/juneau/commons/beanquery/BeanQuerySyntaxException.html#BeanQuerySyntaxException">BeanQuerySyntaxException</a> e) {
@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * @throws ServiceUnavailable On {@code ?fail=discard}.</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@RestPost(path=<span class="jxr_string">"/discard"</span>)
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">public</strong> <a name="BulkResult" href="../../../../../../org/apache/juneau/rest/server/views/BulkResult.html#BulkResult">BulkResult</a> discard(RestRequest req, @Content <a name="BulkRequest" href="../../../../../../org/apache/juneau/rest/server/views/BulkRequest.html#BulkRequest">BulkRequest</a> body, @Query(<span class="jxr_string">"fail"</span>) String fail) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">public</strong> <a name="BulkResult" href="../../../../../../org/apache/juneau/console/views/BulkResult.html#BulkResult">BulkResult</a> discard(RestRequest req, @Content <a name="BulkRequest" href="../../../../../../org/apache/juneau/console/views/BulkRequest.html#BulkRequest">BulkRequest</a> body, @Query(<span class="jxr_string">"fail"</span>) String fail) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> actor = ConsoleWrites.actor(req);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"discard"</span>.equals(fail))
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServiceUnavailable(<span class="jxr_string">"Discard is unavailable (demo toggle '%s')"</span>, fail);

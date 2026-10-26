@@ -238,7 +238,7 @@
 <span class="source-line-no">225</span><span id="line-225">   }</span>
 <span class="source-line-no">226</span><span id="line-226"></span>
 <span class="source-line-no">227</span><span id="line-227">   private String normalize(String key) {</span>
-<span class="source-line-no">228</span><span id="line-228">      return caseSensitive ? key : key.toLowerCase(Locale.ROOT);</span>
+<span class="source-line-no">228</span><span id="line-228">      return caseSensitive || key == null ? key : key.toLowerCase(Locale.ROOT);</span>
 <span class="source-line-no">229</span><span id="line-229">   }</span>
 <span class="source-line-no">230</span><span id="line-230"></span>
 <span class="source-line-no">231</span><span id="line-231">   /**</span>

@@ -5687,37 +5687,37 @@
 <a class="jxr_linenumber" name="L5679" href="#L5679">5679</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[0], splita(<strong class="jxr_keyword">new</strong> String[0], ','));
 <a class="jxr_linenumber" name="L5680" href="#L5680">5680</a> 
 <a class="jxr_linenumber" name="L5681" href="#L5681">5681</a> 		<em class="jxr_comment">// Array with no delimiters</em>
-<a class="jxr_linenumber" name="L5682" href="#L5682">5682</a> 		String[] array1 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
+<a class="jxr_linenumber" name="L5682" href="#L5682">5682</a> 		String[] array1 = {<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>};
 <a class="jxr_linenumber" name="L5683" href="#L5683">5683</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}, splita(array1, ','));
 <a class="jxr_linenumber" name="L5684" href="#L5684">5684</a> 
 <a class="jxr_linenumber" name="L5685" href="#L5685">5685</a> 		<em class="jxr_comment">// Array with delimiters</em>
-<a class="jxr_linenumber" name="L5686" href="#L5686">5686</a> 		String[] array2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c"</span>};
+<a class="jxr_linenumber" name="L5686" href="#L5686">5686</a> 		String[] array2 = {<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c"</span>};
 <a class="jxr_linenumber" name="L5687" href="#L5687">5687</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}, splita(array2, ','));
-<a class="jxr_linenumber" name="L5688" href="#L5688">5688</a> 		String[] array3 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c,d"</span>};
+<a class="jxr_linenumber" name="L5688" href="#L5688">5688</a> 		String[] array3 = {<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c,d"</span>};
 <a class="jxr_linenumber" name="L5689" href="#L5689">5689</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>}, splita(array3, ','));
 <a class="jxr_linenumber" name="L5690" href="#L5690">5690</a> 
 <a class="jxr_linenumber" name="L5691" href="#L5691">5691</a> 		<em class="jxr_comment">// Array with null elements</em>
-<a class="jxr_linenumber" name="L5692" href="#L5692">5692</a> 		String[] array4 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>};
+<a class="jxr_linenumber" name="L5692" href="#L5692">5692</a> 		String[] array4 = {<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>};
 <a class="jxr_linenumber" name="L5693" href="#L5693">5693</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>}, splita(array4, ','));
 <a class="jxr_linenumber" name="L5694" href="#L5694">5694</a> 
 <a class="jxr_linenumber" name="L5695" href="#L5695">5695</a> 		<em class="jxr_comment">// Array with elements containing delimiter</em>
-<a class="jxr_linenumber" name="L5696" href="#L5696">5696</a> 		String[] array5 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a,b,c"</span>};
+<a class="jxr_linenumber" name="L5696" href="#L5696">5696</a> 		String[] array5 = {<span class="jxr_string">"a,b,c"</span>};
 <a class="jxr_linenumber" name="L5697" href="#L5697">5697</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}, splita(array5, ','));
-<a class="jxr_linenumber" name="L5698" href="#L5698">5698</a> 		String[] array6 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c,d,e"</span>};
+<a class="jxr_linenumber" name="L5698" href="#L5698">5698</a> 		String[] array6 = {<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c,d,e"</span>};
 <a class="jxr_linenumber" name="L5699" href="#L5699">5699</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>, <span class="jxr_string">"e"</span>}, splita(array6, ','));
 <a class="jxr_linenumber" name="L5700" href="#L5700">5700</a> 
 <a class="jxr_linenumber" name="L5701" href="#L5701">5701</a> 		<em class="jxr_comment">// Different delimiter</em>
-<a class="jxr_linenumber" name="L5702" href="#L5702">5702</a> 		String[] array7 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a|b|c"</span>};
+<a class="jxr_linenumber" name="L5702" href="#L5702">5702</a> 		String[] array7 = {<span class="jxr_string">"a|b|c"</span>};
 <a class="jxr_linenumber" name="L5703" href="#L5703">5703</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}, splita(array7, '|'));
-<a class="jxr_linenumber" name="L5704" href="#L5704">5704</a> 		String[] array8 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a;b;c"</span>};
+<a class="jxr_linenumber" name="L5704" href="#L5704">5704</a> 		String[] array8 = {<span class="jxr_string">"a;b;c"</span>};
 <a class="jxr_linenumber" name="L5705" href="#L5705">5705</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>}, splita(array8, ';'));
 <a class="jxr_linenumber" name="L5706" href="#L5706">5706</a> 
 <a class="jxr_linenumber" name="L5707" href="#L5707">5707</a> 		<em class="jxr_comment">// Mixed: some with delimiter, some without</em>
-<a class="jxr_linenumber" name="L5708" href="#L5708">5708</a> 		String[] array9 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>};
+<a class="jxr_linenumber" name="L5708" href="#L5708">5708</a> 		String[] array9 = {<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>};
 <a class="jxr_linenumber" name="L5709" href="#L5709">5709</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>}, splita(array9, ','));
 <a class="jxr_linenumber" name="L5710" href="#L5710">5710</a> 
 <a class="jxr_linenumber" name="L5711" href="#L5711">5711</a> 		<em class="jxr_comment">// Nested splitting (recursive)</em>
-<a class="jxr_linenumber" name="L5712" href="#L5712">5712</a> 		String[] array10 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c,d"</span>};
+<a class="jxr_linenumber" name="L5712" href="#L5712">5712</a> 		String[] array10 = {<span class="jxr_string">"a,b"</span>, <span class="jxr_string">"c,d"</span>};
 <a class="jxr_linenumber" name="L5713" href="#L5713">5713</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>}, splita(array10, ','));
 <a class="jxr_linenumber" name="L5714" href="#L5714">5714</a> 	}
 <a class="jxr_linenumber" name="L5715" href="#L5715">5715</a> 

@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.BasicTestUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.assertSize;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -279,7 +279,7 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * single page a default-sized write produces.  Every individual page stays far under the (huge</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * default) {@code maxLength} bound; only their aggregate decompressed size is at risk.</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] manyPagesBytes(<strong class="jxr_keyword">int</strong> n) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] manyPagesBytes(<strong class="jxr_keyword">int</strong> n) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">return</strong> ParquetSerializer.create().pageSize(1024).build().write(beans(n));
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 

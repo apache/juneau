@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(Boolean.FALSE, f.getProperty(XMLInputFactory.IS_VALIDATING));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> c01_repeatedParsesShareFactory() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> c01_repeatedParsesShareFactory() {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> p = XmlParser.create().build();
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 3; i++)
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			assertEquals(Map.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;((Map&lt;?,?&gt;)p.read(<span class="jxr_string">"&lt;A&gt;&lt;a&gt;b&lt;/a&gt;&lt;/A&gt;"</span>, Object.<strong class="jxr_keyword">class</strong>)));

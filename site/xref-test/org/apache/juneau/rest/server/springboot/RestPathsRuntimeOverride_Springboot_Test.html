@@ -61,121 +61,148 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  @org.apache.juneau.testing.SpringbootTest
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"unchecked"</span>  <em class="jxr_comment">// ApplicationContext.getBeanProvider(Class) is unchecked-bound in the Spring API.</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  })
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">class</strong> RestPathsRuntimeOverride_Springboot_Test <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> SpringBeanStore emptySpringBeanStore() {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> appContext = mock(ApplicationContext.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// Generic empty provider for any class lookup — keeps the bean store consistent with a Spring Boot</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<em class="jxr_comment">// app that hasn't registered Config, VarResolver, etc. beans.</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		when(appContext.getBeanProvider(any(Class.<strong class="jxr_keyword">class</strong>))).thenAnswer(inv -&gt; {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			ObjectProvider&lt;?&gt; empty = mock(ObjectProvider.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			when(empty.getIfAvailable()).thenReturn(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">return</strong> empty;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		});
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SpringBeanStore(appContext, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_comment">// a — getter rung beats annotation default under SpringBeanStore (parity with microservice path)</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Rest(paths={<span class="jxr_string">"/from-annotation"</span>})
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A_GetterOverride <strong class="jxr_keyword">extends</strong> RestServlet {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		@Override <strong class="jxr_keyword">public</strong> String[] getPaths() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-springboot-getter"</span>}; }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"java:S2093"</span>, <em class="jxr_comment">// Stores are released with clear() (bridge deregistration), not close(); try-with-resources would call the wrong method.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// ApplicationContext.getBeanProvider(Class) is unchecked-bound in the Spring API.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  })
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">class</strong> RestPathsRuntimeOverride_Springboot_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_comment">// Callers must clear() the returned store: it registers a Spring Environment bridge in the Settings singleton.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> SpringBeanStore emptySpringBeanStore() {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> appContext = mock(ApplicationContext.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<em class="jxr_comment">// Generic empty provider for any class lookup — keeps the bean store consistent with a Spring Boot</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<em class="jxr_comment">// app that hasn't registered Config, VarResolver, etc. beans.</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		when(appContext.getBeanProvider(any(Class.<strong class="jxr_keyword">class</strong>))).thenAnswer(inv -&gt; {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			ObjectProvider&lt;?&gt; empty = mock(ObjectProvider.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			when(empty.getIfAvailable()).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">return</strong> empty;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		});
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SpringBeanStore(appContext, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> bridgesBefore;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@BeforeEach
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">void</strong> recordBridges() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		bridgesBefore = SpringEnvironmentBridges.size();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">void</strong> a01_getterBeatsAnnotation_underSpring() {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> store = emptySpringBeanStore();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(A_GetterOverride.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> A_GetterOverride(), store);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@AfterEach
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">void</strong> assertNoLeakedBridge() {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(bridgesBefore, SpringEnvironmentBridges.size(), <span class="jxr_string">"A test left an emptySpringBeanStore() store uncleared"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-springboot-getter"</span>}, paths,
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<span class="jxr_string">"Under SpringBeanStore, the getter override should beat the @Rest(paths) annotation default"</span>);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">// a — getter rung beats annotation default under SpringBeanStore (parity with microservice path)</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_comment">// b — annotation default falls through cleanly when no override is present</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Rest(paths={<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>})
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B_AnnotationOnly <strong class="jxr_keyword">extends</strong> RestServlet {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">void</strong> b01_annotationOnly_fallsThroughCleanly() {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> store = emptySpringBeanStore();
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> B_AnnotationOnly(), store);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>}, paths,
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<span class="jxr_string">"With no override available, resolution should fall through to the @Rest(paths) annotation default"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">void</strong> b02_annotationOnly_nullStore_resolvesViaAnnotation() {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<em class="jxr_comment">// Null store skips the VarResolver lookup; SVL is a no-op (literal elements pass through).</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> B_AnnotationOnly(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>}, paths,
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<span class="jxr_string">"Null bean store should still resolve via the annotation default (SVL skipped, literals pass through)"</span>);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">void</strong> b03_annotationOnly_nullResource_skipsGetterRung() {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<em class="jxr_comment">// Null resource skips the getter rung but the annotation default still resolves.</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>}, paths,
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<span class="jxr_string">"Null resource should be safe — getter is just skipped, annotation default still resolves"</span>);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Rest(paths={<span class="jxr_string">"/from-annotation"</span>})
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A_GetterOverride <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		@Override <strong class="jxr_keyword">public</strong> String[] getPaths() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-springboot-getter"</span>}; }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">void</strong> a01_getterBeatsAnnotation_underSpring() {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> store = emptySpringBeanStore();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(A_GetterOverride.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> A_GetterOverride(), store);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-springboot-getter"</span>}, paths,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				<span class="jxr_string">"Under SpringBeanStore, the getter override should beat the @Rest(paths) annotation default"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			store.clear();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<em class="jxr_comment">// b — annotation default falls through cleanly when no override is present</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Rest(paths={<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>})
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B_AnnotationOnly <strong class="jxr_keyword">extends</strong> RestServlet {
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Test
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">void</strong> b01_annotationOnly_fallsThroughCleanly() {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> store = emptySpringBeanStore();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> B_AnnotationOnly(), store);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_comment">// c — degenerate cases that must not NPE</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C_NoAnnotation {}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">void</strong> c01_noRestAnnotation_returnsEmpty() {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<em class="jxr_comment">// Class without @Rest annotation — none of the rungs resolve, returns empty array.</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(C_NoAnnotation.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> C_NoAnnotation(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertNotNull(paths);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(0, paths.length, <span class="jxr_string">"Class without @Rest annotation should yield an empty paths array"</span>);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Rest
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_GetterReturnsString {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<em class="jxr_comment">// A getPaths() method whose return type is plain String — accepted by the permissive Object contract</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// and flows through the same comma-split pipeline as any other leaf.</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">public</strong> String getPaths() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"/from-string-getter"</span>; }
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">void</strong> d01_getterReturningString_acceptedAsSinglePath() {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(D_GetterReturnsString.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> D_GetterReturnsString(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-string-getter"</span>}, paths,
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<span class="jxr_string">"A getPaths() method returning a single String should mount that String as a single path under the Object-typed contract"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_comment">// e — BeanStore parity: getter override resolves identically through SpringBeanStore as it would</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">//     through a plain BasicBeanStore.</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	@Test
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">void</strong> e01_springBeanStore_parityWith_plainBeanStore() {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> resource = <strong class="jxr_keyword">new</strong> A_GetterOverride();
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> springStore = emptySpringBeanStore();
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> plainStore = <strong class="jxr_keyword">new</strong> BasicBeanStore();
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> underSpring = RestContext.resolveTopLevelPaths(A_GetterOverride.<strong class="jxr_keyword">class</strong>, resource, springStore);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> underPlain = RestContext.resolveTopLevelPaths(A_GetterOverride.<strong class="jxr_keyword">class</strong>, resource, plainStore);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertArrayEquals(underPlain, underSpring,
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<span class="jxr_string">"Mixin/resource override behavior must be identical when registered via Juneau BeanStore (microservice path) and via SpringBeanStore (Spring Boot path)"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>}, paths,
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<span class="jxr_string">"With no override available, resolution should fall through to the @Rest(paths) annotation default"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			store.clear();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		}
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">void</strong> b02_annotationOnly_nullStore_resolvesViaAnnotation() {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// Null store skips the VarResolver lookup; SVL is a no-op (literal elements pass through).</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> B_AnnotationOnly(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>}, paths,
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<span class="jxr_string">"Null bean store should still resolve via the annotation default (SVL skipped, literals pass through)"</span>);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">void</strong> b03_annotationOnly_nullResource_skipsGetterRung() {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// Null resource skips the getter rung but the annotation default still resolves.</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(B_AnnotationOnly.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-annotation-1"</span>, <span class="jxr_string">"/from-annotation-2"</span>}, paths,
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<span class="jxr_string">"Null resource should be safe — getter is just skipped, annotation default still resolves"</span>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_comment">// c — degenerate cases that must not NPE</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C_NoAnnotation {}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@Test
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">void</strong> c01_noRestAnnotation_returnsEmpty() {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<em class="jxr_comment">// Class without @Rest annotation — none of the rungs resolve, returns empty array.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(C_NoAnnotation.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> C_NoAnnotation(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertNotNull(paths);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(0, paths.length, <span class="jxr_string">"Class without @Rest annotation should yield an empty paths array"</span>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Rest
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_GetterReturnsString {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<em class="jxr_comment">// A getPaths() method whose return type is plain String — accepted by the permissive Object contract</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<em class="jxr_comment">// and flows through the same comma-split pipeline as any other leaf.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">public</strong> String getPaths() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"/from-string-getter"</span>; }
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">void</strong> d01_getterReturningString_acceptedAsSinglePath() {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> paths = RestContext.resolveTopLevelPaths(D_GetterReturnsString.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> D_GetterReturnsString(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/from-string-getter"</span>}, paths,
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<span class="jxr_string">"A getPaths() method returning a single String should mount that String as a single path under the Object-typed contract"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<em class="jxr_comment">// e — BeanStore parity: getter override resolves identically through SpringBeanStore as it would</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_comment">//     through a plain BasicBeanStore.</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@Test
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">void</strong> e01_springBeanStore_parityWith_plainBeanStore() {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> resource = <strong class="jxr_keyword">new</strong> A_GetterOverride();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> springStore = emptySpringBeanStore();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">var</strong> plainStore = <strong class="jxr_keyword">new</strong> BasicBeanStore();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">var</strong> underSpring = RestContext.resolveTopLevelPaths(A_GetterOverride.<strong class="jxr_keyword">class</strong>, resource, springStore);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">var</strong> underPlain = RestContext.resolveTopLevelPaths(A_GetterOverride.<strong class="jxr_keyword">class</strong>, resource, plainStore);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			assertArrayEquals(underPlain, underSpring,
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<span class="jxr_string">"Mixin/resource override behavior must be identical when registered via Juneau BeanStore (microservice path) and via SpringBeanStore (Spring Boot path)"</span>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			springStore.clear();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

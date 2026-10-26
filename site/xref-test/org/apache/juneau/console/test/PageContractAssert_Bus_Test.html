@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PageContractAssert_Bus_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/test/PageContractAssert_Bus_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.test;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">class</strong> <a name="PageContractAssert_Bus_Test" href="../../../../../org/apache/juneau/console/test/PageContractAssert_Bus_Test.html#PageContractAssert_Bus_Test">PageContractAssert_Bus_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String page(String contractJson) {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;html&gt;&lt;body&gt;&lt;script type=\&quot;application/json\&quot; id=\&quot;juneau-page\&quot;&gt;"</span> + contractJson + <span class="jxr_string">"&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"</span>;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	}
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String WIRED = page(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"1"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"t"</span>,<span class="jxr_string">"nav"</span>:[],<span class="jxr_string">"activeNav"</span>:[],
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		 <span class="jxr_string">"topics"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"app.region-picked"</span>,<span class="jxr_string">"retain"</span>:<strong class="jxr_keyword">true</strong>,<span class="jxr_string">"publisher"</span>:<span class="jxr_string">"script"</span>},
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		           {<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ops.jobs"</span>,<span class="jxr_string">"retain"</span>:<strong class="jxr_keyword">true</strong>,<span class="jxr_string">"publisher"</span>:<span class="jxr_string">"server"</span>}],
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		 <span class="jxr_string">"bridges"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"ops"</span>,<span class="jxr_string">"transport"</span>:<span class="jxr_string">"sse"</span>,<span class="jxr_string">"session"</span>:<span class="jxr_string">"/s"</span>,<span class="jxr_string">"downstream"</span>:[<span class="jxr_string">"ops.jobs"</span>]}],
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		 <span class="jxr_string">"cards"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"a"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"html"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"a"</span>,<span class="jxr_string">"publishes"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ssc.focus"</span>,<span class="jxr_string">"retain"</span>:<strong class="jxr_keyword">true</strong>}]},
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		          {<span class="jxr_string">"id"</span>:<span class="jxr_string">"b"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"html"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"b"</span>,<span class="jxr_string">"subscribes"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ssc.focus"</span>,<span class="jxr_string">"as"</span>:<span class="jxr_string">"refresh"</span>},{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"app.region-picked"</span>,<span class="jxr_string">"as"</span>:<span class="jxr_string">"refresh"</span>}]}]}
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<span class="jxr_string">""</span><span class="jxr_string">");
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Test <strong class="jxr_keyword">void</strong> a01_positive() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		PageContractAssert.assertPage(WIRED)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			.publishes(<span class="jxr_string">"a"</span>, <span class="jxr_string">"ssc.focus"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"app.region-picked"</span>, <span class="jxr_string">"refresh"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.declaresTopic(<span class="jxr_string">"ops.jobs"</span>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.hasBridge(<span class="jxr_string">"ops"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.hasNoWiringErrors();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> b01_negative_messages() {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> a = PageContractAssert.assertPage(WIRED);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertEquals(<span class="jxr_string">"card 'a' does not subscribe to 'ssc.focus'; subscribes: []"</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.subscribes(<span class="jxr_string">"a"</span>, <span class="jxr_string">"ssc.focus"</span>)).getMessage());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"card 'b' subscribes to 'ssc.focus' as [refresh], not 'filter'"</span>,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>, <span class="jxr_string">"filter"</span>)).getMessage());
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(<span class="jxr_string">"card 'b' does not publish 'ssc.focus'; publishes: []"</span>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.publishes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>)).getMessage());
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"no topics entry 'app.nope'; topics: [app.region-picked, ops.jobs]"</span>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.declaresTopic(<span class="jxr_string">"app.nope"</span>)).getMessage());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(<span class="jxr_string">"no bridge 'nope'; bridges: [ops]"</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.hasBridge(<span class="jxr_string">"nope"</span>)).getMessage());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Test <strong class="jxr_keyword">void</strong> b02_wiringErrors_listEveryProblem() {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> broken = page(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"1"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"t"</span>,<span class="jxr_string">"nav"</span>:[],<span class="jxr_string">"activeNav"</span>:[],
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			 <span class="jxr_string">"cards"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"b"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"html"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"b"</span>,<span class="jxr_string">"subscribes"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ssc.focus"</span>,<span class="jxr_string">"as"</span>:<span class="jxr_string">"refresh"</span>}]}]}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<span class="jxr_string">""</span><span class="jxr_string">");
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> target = PageContractAssert.assertPage(broken);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> e = assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, target::hasNoWiringErrors);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertTrue(e.getMessage().startsWith(<span class="jxr_string">"page wiring has errors:\nE-41 card 'b' subscribes to 'ssc.focus' but nothing publishes it"</span>), e.getMessage());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a02_twoRolesOnOneTopic() {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> two = page(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"1"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"t"</span>,<span class="jxr_string">"nav"</span>:[],<span class="jxr_string">"activeNav"</span>:[],
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			 <span class="jxr_string">"cards"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"a"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"html"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"a"</span>,<span class="jxr_string">"publishes"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ssc.focus"</span>,<span class="jxr_string">"retain"</span>:<strong class="jxr_keyword">true</strong>}]},
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			          {<span class="jxr_string">"id"</span>:<span class="jxr_string">"b"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"html"</span>,<span class="jxr_string">"template"</span>:<span class="jxr_string">"b"</span>,<span class="jxr_string">"subscribes"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ssc.focus"</span>,<span class="jxr_string">"as"</span>:<span class="jxr_string">"refresh"</span>},{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"ssc.focus"</span>,<span class="jxr_string">"as"</span>:<span class="jxr_string">"filter"</span>}]}]}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<span class="jxr_string">""</span><span class="jxr_string">");
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		PageContractAssert.assertPage(two).subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>, <span class="jxr_string">"filter"</span>).subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>, <span class="jxr_string">"refresh"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

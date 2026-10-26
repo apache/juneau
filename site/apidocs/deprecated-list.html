@@ -121,22 +121,22 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Field</div>
 <div class="table-header col-last">Description</div>
+<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/console/views/ViewsMixin.html#CALENDAR_CSS_PATH">org.apache.juneau.console.views.ViewsMixin.CALENDAR_CSS_PATH</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">The calendar stylesheet now ships in the widget module; compose
+   <a href="org/apache/juneau/console/widgets/WidgetsMixin.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin</code></a> and use its constant of the same name.  This one
+   remains only so that an application composing this mixin alone keeps serving the asset at the same URL.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/console/views/ViewsMixin.html#CALENDAR_JS_PATH">org.apache.juneau.console.views.ViewsMixin.CALENDAR_JS_PATH</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">The calendar runtime now ships in the widget module; compose
+   <a href="org/apache/juneau/console/widgets/WidgetsMixin.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin</code></a> and use its constant of the same name.  This one
+   remains only so that an application composing this mixin alone keeps serving the asset at the same URL.</div>
+</div>
 <div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/filter/RequestIdFilter.html#DEFAULT_VALIDATOR_PATTERN">org.apache.juneau.rest.server.filter.RequestIdFilter.DEFAULT_VALIDATOR_PATTERN</a></div>
 <div class="col-last even-row-color">
 <div class="deprecation-comment">The resolver now defaults to sanitize-and-accept (see <a href="org/apache/juneau/rest/server/RequestIdSettings.html" title="class in org.apache.juneau.rest.server"><code>RequestIdSettings</code></a>); this pattern is no
    longer applied.</div>
-</div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#CALENDAR_CSS_PATH">org.apache.juneau.rest.server.views.ViewsMixin.CALENDAR_CSS_PATH</a></div>
-<div class="col-last odd-row-color">
-<div class="deprecation-comment">The calendar stylesheet now ships in the widget module; compose
-   <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> and use its constant of the same name.  This one
-   remains only so that an application composing this mixin alone keeps serving the asset at the same URL.</div>
-</div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#CALENDAR_JS_PATH">org.apache.juneau.rest.server.views.ViewsMixin.CALENDAR_JS_PATH</a></div>
-<div class="col-last even-row-color">
-<div class="deprecation-comment">The calendar runtime now ships in the widget module; compose
-   <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> and use its constant of the same name.  This one
-   remains only so that an application composing this mixin alone keeps serving the asset at the same URL.</div>
 </div>
 </div>
 </div>
@@ -156,6 +156,16 @@ loadScripts(document, 'script');</script>
 <div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/bean/jsonschema/JsonSchema.html#setId(java.lang.Object)">org.apache.juneau.bean.jsonschema.JsonSchema.setId<wbr>(Object)</a></div>
 <div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="org/apache/juneau/bean/jsonschema/JsonSchema.html#setIdUri(java.lang.Object)"><code>JsonSchema.setIdUri(Object)</code></a> instead.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/console/views/ViewsMixin.html#getCalendarScript()">org.apache.juneau.console.views.ViewsMixin.getCalendarScript()</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Compose <a href="org/apache/juneau/console/widgets/WidgetsMixin.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.  This mount stays so that an
+   application composing only this mixin keeps serving the asset at the same URL with the same body.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/console/views/ViewsMixin.html#getCalendarStylesheet()">org.apache.juneau.console.views.ViewsMixin.getCalendarStylesheet()</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">Compose <a href="org/apache/juneau/console/widgets/WidgetsMixin.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.  This mount stays so that an
+   application composing only this mixin keeps serving the asset at the same URL with the same body.</div>
 </div>
 <div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/client/classic/ResponseContent.html#consumeContent()">org.apache.juneau.rest.client.classic.ResponseContent.consumeContent()</a></div>
 <div class="col-last even-row-color">
@@ -193,16 +203,6 @@ loadScripts(document, 'script');</script>
 <div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/client/classic/RestResponse.html#setParams(org.apache.http.params.HttpParams)">org.apache.juneau.rest.client.classic.RestResponse.setParams<wbr>(HttpParams)</a></div>
 <div class="col-last even-row-color">
 <div class="deprecation-comment">Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.</div>
-</div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#getCalendarScript()">org.apache.juneau.rest.server.views.ViewsMixin.getCalendarScript()</a></div>
-<div class="col-last odd-row-color">
-<div class="deprecation-comment">Compose <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.  This mount stays so that an
-   application composing only this mixin keeps serving the asset at the same URL with the same body.</div>
-</div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#getCalendarStylesheet()">org.apache.juneau.rest.server.views.ViewsMixin.getCalendarStylesheet()</a></div>
-<div class="col-last even-row-color">
-<div class="deprecation-comment">Compose <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.  This mount stays so that an
-   application composing only this mixin keeps serving the asset at the same URL with the same body.</div>
 </div>
 </div>
 </div>

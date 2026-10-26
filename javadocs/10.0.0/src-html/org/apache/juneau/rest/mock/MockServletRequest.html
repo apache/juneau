@@ -98,10 +98,10 @@
 <span class="source-line-no">085</span><span id="line-85">   }</span>
 <span class="source-line-no">086</span><span id="line-86"></span>
 <span class="source-line-no">087</span><span id="line-87">   private String method = "GET";</span>
-<span class="source-line-no">088</span><span id="line-88">   private Map&lt;String,String[]&gt; queryDataMap = map();</span>
+<span class="source-line-no">088</span><span id="line-88">   private final Map&lt;String,String[]&gt; queryDataMap = map();</span>
 <span class="source-line-no">089</span><span id="line-89">   private Map&lt;String,String[]&gt; formDataMap;</span>
-<span class="source-line-no">090</span><span id="line-90">   private Map&lt;String,String[]&gt; headerMap = new TreeMap&lt;&gt;(String.CASE_INSENSITIVE_ORDER);</span>
-<span class="source-line-no">091</span><span id="line-91">   private Map&lt;String,Object&gt; attributeMap = map();</span>
+<span class="source-line-no">090</span><span id="line-90">   private final Map&lt;String,String[]&gt; headerMap = new TreeMap&lt;&gt;(String.CASE_INSENSITIVE_ORDER);</span>
+<span class="source-line-no">091</span><span id="line-91">   private final Map&lt;String,Object&gt; attributeMap = map();</span>
 <span class="source-line-no">092</span><span id="line-92">   private String characterEncoding = "UTF-8";</span>
 <span class="source-line-no">093</span><span id="line-93">   private byte[] content = {};</span>
 <span class="source-line-no">094</span><span id="line-94">   private String protocol = "HTTP/1.1";</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   private String localName;</span>
 <span class="source-line-no">103</span><span id="line-103">   private String localAddr;</span>
 <span class="source-line-no">104</span><span id="line-104">   private int localPort;</span>
-<span class="source-line-no">105</span><span id="line-105">   private Map&lt;String,RequestDispatcher&gt; requestDispatcher = map();</span>
+<span class="source-line-no">105</span><span id="line-105">   private final Map&lt;String,RequestDispatcher&gt; requestDispatcher = map();</span>
 <span class="source-line-no">106</span><span id="line-106">   private ServletContext servletContext;</span>
 <span class="source-line-no">107</span><span id="line-107">   private DispatcherType dispatcherType;</span>
 <span class="source-line-no">108</span><span id="line-108">   private String authType;</span>

@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> SortedArrayList(Comparator&lt;? <strong class="jxr_keyword">super</strong> E&gt; comparator, Collection&lt;? <strong class="jxr_keyword">extends</strong> E&gt; c) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">this</strong>.comparator = reqnn(<span class="jxr_string">"comparator"</span>, comparator);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">this</strong>.list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(c);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		Collections.sort(<strong class="jxr_keyword">this</strong>.list, <strong class="jxr_keyword">this</strong>.comparator);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">this</strong>.list.sort(<strong class="jxr_keyword">this</strong>.comparator);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_javadoccomment">/**</em>

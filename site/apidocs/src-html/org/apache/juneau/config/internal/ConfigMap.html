@@ -437,7 +437,7 @@
 <span class="source-line-no">424</span><span id="line-424">      var cs = st.entries().get(section);</span>
 <span class="source-line-no">425</span><span id="line-425">      var ce = cs == null ? null : cs.entries.get(key);</span>
 <span class="source-line-no">426</span><span id="line-426"></span>
-<span class="source-line-no">427</span><span id="line-427">      if (ce == null)</span>
+<span class="source-line-no">427</span><span id="line-427">      if (ce == null &amp;&amp; ! st.imports().isEmpty())</span>
 <span class="source-line-no">428</span><span id="line-428">         ce = st.imports().stream().map(y -&gt; y.getConfigMap().getEntry(section, key)).filter(Shorts::nn).findFirst().orElse(null);</span>
 <span class="source-line-no">429</span><span id="line-429"></span>
 <span class="source-line-no">430</span><span id="line-430">      return ce;</span>

@@ -669,26 +669,34 @@
 <span class="source-line-no">656</span><span id="line-656">      // Servlet-backed resources delegate Servlet.destroy() through to RestContext.destroy() (see RestServlet.destroy),</span>
 <span class="source-line-no">657</span><span id="line-657">      // so we must avoid double-destruction in that case — call Servlet.destroy() and let it transitively call</span>
 <span class="source-line-no">658</span><span id="line-658">      // RestContext.destroy() exactly once.</span>
-<span class="source-line-no">659</span><span id="line-659">      if (child.getResource() instanceof Servlet s)</span>
-<span class="source-line-no">660</span><span id="line-660">         s.destroy();</span>
-<span class="source-line-no">661</span><span id="line-661">      else</span>
-<span class="source-line-no">662</span><span id="line-662">         child.destroy();</span>
-<span class="source-line-no">663</span><span id="line-663">   }</span>
-<span class="source-line-no">664</span><span id="line-664"></span>
-<span class="source-line-no">665</span><span id="line-665">   private static void destroyQuietly(RestContext child) {</span>
-<span class="source-line-no">666</span><span id="line-666">      try {</span>
-<span class="source-line-no">667</span><span id="line-667">         destroyChild(child);</span>
-<span class="source-line-no">668</span><span id="line-668">      } catch (Exception ignored) {</span>
-<span class="source-line-no">669</span><span id="line-669">         // best-effort cleanup of a child we're about to throw away</span>
-<span class="source-line-no">670</span><span id="line-670">      }</span>
+<span class="source-line-no">659</span><span id="line-659">      Object resource;</span>
+<span class="source-line-no">660</span><span id="line-660">      try {</span>
+<span class="source-line-no">661</span><span id="line-661">         resource = child.getResource();</span>
+<span class="source-line-no">662</span><span id="line-662">      } catch (NoSuchElementException e) {</span>
+<span class="source-line-no">663</span><span id="line-663">         // The resource bean was already removed by the owning container (e.g. a closed Spring context),</span>
+<span class="source-line-no">664</span><span id="line-664">         // so there is no instance left to destroy.</span>
+<span class="source-line-no">665</span><span id="line-665">         return;</span>
+<span class="source-line-no">666</span><span id="line-666">      }</span>
+<span class="source-line-no">667</span><span id="line-667">      if (resource instanceof Servlet s)</span>
+<span class="source-line-no">668</span><span id="line-668">         s.destroy();</span>
+<span class="source-line-no">669</span><span id="line-669">      else</span>
+<span class="source-line-no">670</span><span id="line-670">         child.destroy();</span>
 <span class="source-line-no">671</span><span id="line-671">   }</span>
 <span class="source-line-no">672</span><span id="line-672"></span>
-<span class="source-line-no">673</span><span id="line-673">   private static Throwable unwrapThrowable(Throwable t) {</span>
-<span class="source-line-no">674</span><span id="line-674">      if (t instanceof InvocationTargetException t2)</span>
-<span class="source-line-no">675</span><span id="line-675">         return t2.getTargetException();</span>
-<span class="source-line-no">676</span><span id="line-676">      return t;</span>
-<span class="source-line-no">677</span><span id="line-677">   }</span>
-<span class="source-line-no">678</span><span id="line-678">}</span>
+<span class="source-line-no">673</span><span id="line-673">   private static void destroyQuietly(RestContext child) {</span>
+<span class="source-line-no">674</span><span id="line-674">      try {</span>
+<span class="source-line-no">675</span><span id="line-675">         destroyChild(child);</span>
+<span class="source-line-no">676</span><span id="line-676">      } catch (Exception ignored) {</span>
+<span class="source-line-no">677</span><span id="line-677">         // best-effort cleanup of a child we're about to throw away</span>
+<span class="source-line-no">678</span><span id="line-678">      }</span>
+<span class="source-line-no">679</span><span id="line-679">   }</span>
+<span class="source-line-no">680</span><span id="line-680"></span>
+<span class="source-line-no">681</span><span id="line-681">   private static Throwable unwrapThrowable(Throwable t) {</span>
+<span class="source-line-no">682</span><span id="line-682">      if (t instanceof InvocationTargetException t2)</span>
+<span class="source-line-no">683</span><span id="line-683">         return t2.getTargetException();</span>
+<span class="source-line-no">684</span><span id="line-684">      return t;</span>
+<span class="source-line-no">685</span><span id="line-685">   }</span>
+<span class="source-line-no">686</span><span id="line-686">}</span>
 
 
 

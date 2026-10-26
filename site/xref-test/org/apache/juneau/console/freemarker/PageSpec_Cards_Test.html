@@ -1,0 +1,645 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PageSpec_Cards_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/freemarker/PageSpec_Cards_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.freemarker;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bct.BctAssertions.assertSize;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.views.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * {@link PageSpec} cards: {@code table}, {@code html}, {@code card}, {@code csrf}, {@code bodyAttr}, and seeding the</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * built-card pool.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">class</strong> <a name="PageSpec_Cards_Test" href="../../../../../org/apache/juneau/console/freemarker/PageSpec_Cards_Test.html#PageSpec_Cards_Test">PageSpec_Cards_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> CardDirectiveModel MODEL = <strong class="jxr_keyword">new</strong> CardDirectiveModel(
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		CardRequirements.create().build(<strong class="jxr_keyword">new</strong> ToolkitPackRegistry()), org.apache.juneau.console.CardTypeRegistry.standard());
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_javadoccomment">/** A host registry with the adopter type {@code meter} on top of the standard handlers. */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> CardDirectiveModel CUSTOM = <strong class="jxr_keyword">new</strong> CardDirectiveModel(
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		CardRequirements.create().build(<strong class="jxr_keyword">new</strong> ToolkitPackRegistry()),
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		org.apache.juneau.console.CardTypeRegistry.standard().copy().add(<strong class="jxr_keyword">new</strong> <a name="MeterCardType" href="../../../../../org/apache/juneau/console/freemarker/MeterCardType.html#MeterCardType">MeterCardType</a>()).build());
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TableSpec table(String id) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">return</strong> TableSpec.create(id).dataUrl(<span class="jxr_string">"/rest/"</span> + id + <span class="jxr_string">"/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> a01_table_addsDatatablesCard() {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().table(table(<span class="jxr_string">"slo"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertSize(1, spec.cards());
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertEquals(<span class="jxr_string">"datatables"</span>, spec.card(<span class="jxr_string">"slo"</span>).orElseThrow().type());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertNull(spec.card(<span class="jxr_string">"slo"</span>).orElseThrow().toMap().get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	@Test <strong class="jxr_keyword">void</strong> a02_table_withTitle() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().table(table(<span class="jxr_string">"slo"</span>), <span class="jxr_string">"SLO"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertEquals(<span class="jxr_string">"SLO"</span>, spec.card(<span class="jxr_string">"slo"</span>).orElseThrow().toMap().get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Test <strong class="jxr_keyword">void</strong> a03_table_consumerCanOverrideCssClass() {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().table(table(<span class="jxr_string">"slo"</span>).cssClass(<span class="jxr_string">"a b"</span>), c -&gt; c.cssClass(<span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(<span class="jxr_string">"c"</span>, spec.card(<span class="jxr_string">"slo"</span>).orElseThrow().toMap().get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a04_table_carriesTableCssClass() {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().table(table(<span class="jxr_string">"slo"</span>).cssClass(<span class="jxr_string">"a b"</span>));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(<span class="jxr_string">"a b"</span>, spec.card(<span class="jxr_string">"slo"</span>).orElseThrow().toMap().get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test <strong class="jxr_keyword">void</strong> a05_table_validatesImmediately() {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> t = TableSpec.create(<span class="jxr_string">"slo"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> target = PageSpec.create();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; target.table(t));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEquals(<span class="jxr_string">"TableSpec 'slo' requires dataUrl."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> a06_table_snapshotsBodyAtCallTime() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> t = table(<span class="jxr_string">"slo"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().table(t);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> before = Json.of(spec.tableBodies.get(<span class="jxr_string">"slo"</span>));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertTrue(before.contains(<span class="jxr_string">"pod"</span>));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		t.columns(Column.create(<span class="jxr_string">"other"</span>));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(before, Json.of(spec.tableBodies.get(<span class="jxr_string">"slo"</span>)));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertFalse(Json.of(spec.tableBodies.get(<span class="jxr_string">"slo"</span>)).contains(<span class="jxr_string">"other"</span>));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a07_table_duplicateId_rejected() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().table(table(<span class="jxr_string">"slo"</span>));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> arg = table(<span class="jxr_string">"slo"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.table(arg));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(<span class="jxr_string">"PageSpec card id 'slo' is already declared."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a08_html_basic() {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p&gt;hi&lt;/p&gt;"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(<span class="jxr_string">"html"</span>, spec.card(<span class="jxr_string">"intro"</span>).orElseThrow().type());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"&lt;p&gt;hi&lt;/p&gt;"</span>, spec.cardMarkup.get(<span class="jxr_string">"intro"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> a09_html_withTitle() {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"Intro"</span>, <span class="jxr_string">"&lt;p&gt;hi&lt;/p&gt;"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertEquals(<span class="jxr_string">"Intro"</span>, spec.card(<span class="jxr_string">"intro"</span>).orElseThrow().toMap().get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a10_html_consumerSetsCssClass() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p&gt;hi&lt;/p&gt;"</span>, c -&gt; c.cssClass(<span class="jxr_string">"wide"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertEquals(<span class="jxr_string">"wide"</span>, spec.card(<span class="jxr_string">"intro"</span>).orElseThrow().toMap().get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a11_html_nullMarkup_rejected() {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> target2 = PageSpec.create();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target2.html(<span class="jxr_string">"intro"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(<span class="jxr_string">"PageSpec.html id 'intro' requires a non-null markup."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a12_html_consumerSettingSrc_rejected() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> target3 = PageSpec.create();
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target3.html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>, c -&gt; c.src(<span class="jxr_string">"/x"</span>)));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(<span class="jxr_string">"PageSpec.html id 'intro' sets a markup body; its Consumer&lt;CardSpec&gt; must not also set src or template."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test <strong class="jxr_keyword">void</strong> a13_html_consumerSettingTemplate_rejected() {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> target4 = PageSpec.create();
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target4.html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>, c -&gt; c.template(<span class="jxr_string">"t"</span>)));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> a14_card_registeredCustomType_accepted() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"out"</span>).title(<span class="jxr_string">"Output"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(<span class="jxr_string">"terminal"</span>, spec.card(<span class="jxr_string">"out"</span>).orElseThrow().type());
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> a15_card_unregisteredNonReservedType_accepted() {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>), <span class="jxr_string">"&lt;b&gt;x&lt;/b&gt;"</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(<span class="jxr_string">"&lt;b&gt;x&lt;/b&gt;"</span>, spec.cardMarkup.get(<span class="jxr_string">"w"</span>));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> a16_card_removedType_rejected() {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> type : List.of(<span class="jxr_string">"js"</span>, <span class="jxr_string">"json"</span>, <span class="jxr_string">"calendar"</span>)) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">var</strong> target5 = PageSpec.create();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">var</strong> arg2 = CardSpec.of(type, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target5.card(arg2));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			assertEquals(<span class="jxr_string">"PageSpec.card type '"</span> + type + <span class="jxr_string">"' was removed in 10.0.0; use PageSpec.html(...) with a markup/template, or a registered card type."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test <strong class="jxr_keyword">void</strong> a17_card_dedicatedMethodTypes_rejected() {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> target6 = PageSpec.create();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> arg3 = CardSpec.html(<span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> h = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target6.card(arg3));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(<span class="jxr_string">"PageSpec.card type 'html' has a dedicated method; use PageSpec.html(...)."</span>, h.getMessage());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> target7 = PageSpec.create();
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> arg4 = CardSpec.of(<span class="jxr_string">"datatables"</span>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> d = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target7.card(arg4));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(<span class="jxr_string">"PageSpec.card type 'datatables' has a dedicated method; use PageSpec.table(...)."</span>, d.getMessage());
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	@Test <strong class="jxr_keyword">void</strong> a18_card_reservedWithoutHandler_rejected() {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> type : List.of(<span class="jxr_string">"terminal-view"</span>)) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">var</strong> target8 = PageSpec.create();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">var</strong> arg5 = CardSpec.of(type, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target8.card(arg5));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			assertEquals(<span class="jxr_string">"PageSpec.card type '"</span> + type + <span class="jxr_string">"' is reserved and has no card-type handler; it cannot be built with PageSpec."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a19_cards_isSnapshot() {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().html(<span class="jxr_string">"a"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> snap = spec.cards();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		spec.html(<span class="jxr_string">"b"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertSize(1, snap);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertSize(2, spec.cards());
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertTrue(spec.card(<span class="jxr_string">"nope"</span>).isEmpty());
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> a20_csrf_setsBothAttrs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		PageSpec.create().csrf(<span class="jxr_string">"t\&quot;1"</span>, <span class="jxr_string">"X-CSRF"</span>).applyTo(cap, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertEquals(<span class="jxr_string">"data-juneau-csrf=\&quot;t&amp;quot;1\&quot; data-juneau-csrf-header=\&quot;X-CSRF\&quot;"</span>, cap.bodyAttrs);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> a21_csrf_blankHeaderName_omitsHeaderAttr() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		PageSpec.create().csrf(<span class="jxr_string">"tok"</span>, <span class="jxr_string">" "</span>).applyTo(cap, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertEquals(<span class="jxr_string">"data-juneau-csrf=\&quot;tok\&quot;"</span>, cap.bodyAttrs);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test <strong class="jxr_keyword">void</strong> a22_bodyAttr_escapesAndLastWins() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		PageSpec.create().bodyAttr(<span class="jxr_string">"data-a"</span>, <span class="jxr_string">"1"</span>).bodyAttr(<span class="jxr_string">"data-b"</span>, <span class="jxr_string">"&lt;&amp;&gt;"</span>).bodyAttr(<span class="jxr_string">"data-a"</span>, <span class="jxr_string">"2"</span>).applyTo(cap, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(<span class="jxr_string">"data-a=\&quot;2\&quot; data-b=\&quot;&amp;lt;&amp;amp;&amp;gt;\&quot;"</span>, cap.bodyAttrs);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test <strong class="jxr_keyword">void</strong> a23_applyTo_noBodyAttrs_leavesCaptureUntouched() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		PageSpec.create().applyTo(cap, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertNull(cap.bodyAttrs);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test <strong class="jxr_keyword">void</strong> a24_applyTo_seedsBuiltCardsWithMarkup() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p&gt;hi&lt;/p&gt;"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(Map.of(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p&gt;hi&lt;/p&gt;"</span>), cap.templates());
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(List.of(), cap.cards());
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(<span class="jxr_string">"intro"</span>, cap.unplacedCards().get(0).id());
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(<span class="jxr_string">"intro"</span>, cap.unplacedCards().get(0).template());
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> a25_applyTo_duplicateOfAuthoredCard_rejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		cap.addCard(CardSpec.html(<span class="jxr_string">"intro"</span>), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> target18 = PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			() -&gt; target18.applyTo(cap, MODEL));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='intro'&gt; duplicates an existing card id."</span>));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@Test <strong class="jxr_keyword">void</strong> a26_addCard_afterBuiltCardWithSameId_rejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> arg10 = CardSpec.html(<span class="jxr_string">"intro"</span>);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; cap.addCard(arg10, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='intro'&gt; duplicates an existing card id."</span>));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@Test <strong class="jxr_keyword">void</strong> a27_bodyAttr_badName_rejected() {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : <strong class="jxr_keyword">new</strong> String[]{<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, <span class="jxr_string">"1a"</span>, <span class="jxr_string">"a b"</span>, <span class="jxr_string">"a=\&quot;b"</span>, <span class="jxr_string">"a&gt;"</span>}) {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">var</strong> target9 = PageSpec.create();
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target9.bodyAttr(name, <span class="jxr_string">"v"</span>));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			assertEquals(<span class="jxr_string">"PageSpec.bodyAttr name '"</span> + name + <span class="jxr_string">"' must match [A-Za-z_:][-A-Za-z0-9_:.]*."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		}
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Test <strong class="jxr_keyword">void</strong> a28_csrf_nullToken_rejected() {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> target10 = PageSpec.create();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target10.csrf(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"X"</span>));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(<span class="jxr_string">"PageSpec.csrf requires a non-null token."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> a29_card_nullCardOrType_rejected() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> target11 = PageSpec.create();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(<span class="jxr_string">"PageSpec.card requires a non-null card."</span>,
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target11.card((CardSpec)<strong class="jxr_keyword">null</strong>)).getMessage());
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> target12 = PageSpec.create();
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> arg6 = CardSpec.of(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(<span class="jxr_string">"PageSpec.card id 'x' requires a non-blank type."</span>,
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target12.card(arg6)).getMessage());
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Test <strong class="jxr_keyword">void</strong> a30_table_consumerSettingSrcOrTemplate_rejected() {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> target13 = PageSpec.create();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> arg7 = table(<span class="jxr_string">"slo"</span>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target13.table(arg7, c -&gt; c.src(<span class="jxr_string">"/x"</span>)));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertEquals(<span class="jxr_string">"PageSpec.table id 'slo' sets src or template; the table supplies the card's data."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">var</strong> target14 = PageSpec.create();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> arg8 = table(<span class="jxr_string">"slo"</span>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target14.table(arg8, c -&gt; c.template(<span class="jxr_string">"t"</span>)));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@Test <strong class="jxr_keyword">void</strong> a31_copy_isIndependent() {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> a = CardSpec.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"i"</span>).title(<span class="jxr_string">"T"</span>).cssClass(<span class="jxr_string">"c"</span>).body(<span class="jxr_string">"k"</span>, 1);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> b = a.copy().template(<span class="jxr_string">"t"</span>).title(<span class="jxr_string">"U"</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertNull(a.template());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertEquals(<span class="jxr_string">"T"</span>, a.toMap().get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertEquals(<span class="jxr_string">"U"</span>, b.toMap().get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertEquals(1, b.toMap().get(<span class="jxr_string">"k"</span>));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertEquals(<span class="jxr_string">"c"</span>, b.cssClass());
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	@Test <strong class="jxr_keyword">void</strong> a32_applyTo_tableCard_isLiftedThroughRegistry() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		PageSpec.create().table(table(<span class="jxr_string">"slo"</span>).cssClass(<span class="jxr_string">"wide"</span>), <span class="jxr_string">"SLO"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertEquals(<span class="jxr_string">"datatables"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertEquals(<span class="jxr_string">"SLO"</span>, card.get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertEquals(<span class="jxr_string">"wide"</span>, card.get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertTrue(card.containsKey(<span class="jxr_string">"table"</span>), card.toString());
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertTrue(Json.of(card).contains(<span class="jxr_string">"/rest/slo/data"</span>), card.toString());
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test <strong class="jxr_keyword">void</strong> a32b_applyTo_tableCard_liftKeepsBare() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		PageSpec.create().table(table(<span class="jxr_string">"slo"</span>), c -&gt; c.bare(<strong class="jxr_keyword">true</strong>)).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertEquals(<span class="jxr_string">"datatables"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, card.get(<span class="jxr_string">"bare"</span>));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> a33_applyTo_recordsRequiredPacks() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		PageSpec.create().table(table(<span class="jxr_string">"slo"</span>)).html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertTrue(cap.requiredPacks().contains(ToolkitPackRegistry.PACK_DATATABLES_GLUE), cap.requiredPacks().toString());
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> a34_applyTo_doesNotMutateTheSpec_andCanRunTwice() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>).table(table(<span class="jxr_string">"slo"</span>));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		spec.applyTo(<strong class="jxr_keyword">new</strong> PageCapture(), MODEL);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertNull(spec.card(<span class="jxr_string">"intro"</span>).orElseThrow().template());
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertNull(spec.card(<span class="jxr_string">"slo"</span>).orElseThrow().toMap().get(<span class="jxr_string">"table"</span>));
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		spec.applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertSize(2, cap.unplacedCards());
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@Test <strong class="jxr_keyword">void</strong> a35_applyTo_cardsWithoutCardModel_rejected() {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> target19 = PageSpec.create().html(<span class="jxr_string">"intro"</span>, <span class="jxr_string">"&lt;p/&gt;"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> arg11 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			() -&gt; target19.applyTo(arg11, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"PageSpec cards need the console card directive"</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Test <strong class="jxr_keyword">void</strong> a36_applyTo_chartCard_liftKeepsBareAndWiring() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		PageSpec.create().card(ChartDef.line(<span class="jxr_string">"trend"</span>).title(<span class="jxr_string">"Orders"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"day"</span>).series(<span class="jxr_string">"placed"</span>, <span class="jxr_string">"Placed"</span>).toCardSpec()
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			.cssClass(<span class="jxr_string">"wide"</span>).bare(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			.visibleWhen(org.apache.juneau.console.views.VisibilityRule.when(<span class="jxr_string">"a"</span>).present())
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			.subscribes(org.apache.juneau.console.Subscription.to(<span class="jxr_string">"ops.jobs"</span>).as(<span class="jxr_string">"params"</span>).map(<span class="jxr_string">"q"</span>, <span class="jxr_string">"search"</span>))).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertEquals(<span class="jxr_string">"chart"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertEquals(<span class="jxr_string">"Orders"</span>, card.get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertEquals(<span class="jxr_string">"/s"</span>, card.get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertEquals(<span class="jxr_string">"wide"</span>, card.get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertEquals(<span class="jxr_string">"line"</span>, card.get(<span class="jxr_string">"kind"</span>));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, card.get(<span class="jxr_string">"bare"</span>));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		assertNotNull(card.get(<span class="jxr_string">"visibleWhen"</span>));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertNotNull(card.get(<span class="jxr_string">"subscribes"</span>));
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	}
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	@Test <strong class="jxr_keyword">void</strong> a37_applyTo_invalidChartCard_rejectedByHandler() {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"chart"</span>, <span class="jxr_string">"trend"</span>).src(<span class="jxr_string">"/s"</span>).body(<span class="jxr_string">"kind"</span>, <span class="jxr_string">"line"</span>));
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> arg12 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg12, MODEL));
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"type='chart' kind='line' requires x and at least one series."</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	@Test <strong class="jxr_keyword">void</strong> a38_applyTo_chartCardReservedBodyKey_rejected() {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"chart"</span>, <span class="jxr_string">"trend"</span>).src(<span class="jxr_string">"/s"</span>).body(<span class="jxr_string">"kind"</span>, <span class="jxr_string">"line"</span>).body(<span class="jxr_string">"title"</span>, <span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">var</strong> arg13 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg13, MODEL));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"reserved"</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	@Test <strong class="jxr_keyword">void</strong> a39_applyTo_chartCard_pullsChartsPack() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		PageSpec.create().card(ChartDef.line(<span class="jxr_string">"trend"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"day"</span>).series(<span class="jxr_string">"placed"</span>, <span class="jxr_string">"Placed"</span>).toCardSpec()).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertTrue(cap.requiredPacks().contains(ToolkitPackRegistry.PACK_CHARTS), cap.requiredPacks().toString());
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	@Test <strong class="jxr_keyword">void</strong> a40_applyTo_chartCardWithTemplate_rejected() {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(ChartDef.line(<span class="jxr_string">"trend"</span>).src(<span class="jxr_string">"/s"</span>).x(<span class="jxr_string">"day"</span>).series(<span class="jxr_string">"placed"</span>, <span class="jxr_string">"Placed"</span>).toCardSpec().template(<span class="jxr_string">"tpl"</span>));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> arg14 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg14, MODEL));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='trend'&gt; type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed."</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	@Test <strong class="jxr_keyword">void</strong> a41_applyTo_jobLogCard_isLiftedThroughHandler_andPullsJobLogPack() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"job-log"</span>, <span class="jxr_string">"rebuild"</span>).title(<span class="jxr_string">"Rebuild"</span>)
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			.body(<span class="jxr_string">"submit"</span>, Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"/jobs/rebuild"</span>))).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEquals(<span class="jxr_string">"job-log"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertEquals(<span class="jxr_string">"Rebuild"</span>, card.get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertEquals(Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"/jobs/rebuild"</span>), card.get(<span class="jxr_string">"submit"</span>));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertTrue(cap.requiredPacks().contains(ToolkitPackRegistry.PACK_JOBLOG), cap.requiredPacks().toString());
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> a41b_applyTo_jobLogCard_liftKeepsBare() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"job-log"</span>, <span class="jxr_string">"rebuild"</span>)
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			.body(<span class="jxr_string">"submit"</span>, Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"/jobs/rebuild"</span>)).bare(<strong class="jxr_keyword">true</strong>)).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(<span class="jxr_string">"job-log"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, card.get(<span class="jxr_string">"bare"</span>));
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test <strong class="jxr_keyword">void</strong> a41c_applyTo_terminalCard_bareRefused() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"out"</span>).body(<span class="jxr_string">"terminal"</span>, Map.of(<span class="jxr_string">"bytesUrl"</span>, <span class="jxr_string">"/t"</span>)));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> base = CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"out"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; base.bare(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"a terminal card does not support bare"</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertDoesNotThrow(() -&gt; spec.applyTo(<strong class="jxr_keyword">new</strong> PageCapture(), MODEL));
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	@Test <strong class="jxr_keyword">void</strong> a42_applyTo_jobLogCard_crossOriginEndpoint_rejected() {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> arg15 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"job-log"</span>, <span class="jxr_string">"rebuild"</span>).body(<span class="jxr_string">"submit"</span>, Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"//evil.test/x"</span>)));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg15, MODEL));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"type='job-log' submit.endpoint must be a same-origin path; got '//evil.test/x'."</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> a43_applyTo_jobLogCardWithTemplate_rejected() {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"job-log"</span>, <span class="jxr_string">"rebuild"</span>).body(<span class="jxr_string">"submit"</span>, Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"/a"</span>)).template(<span class="jxr_string">"tpl"</span>));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">var</strong> arg16 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg16, MODEL));
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='rebuild'&gt; type='job-log' takes its options as the body; template= is not allowed."</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	@Test <strong class="jxr_keyword">void</strong> a44_applyTo_jobLogCardWithSrc_rejected() {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"job-log"</span>, <span class="jxr_string">"rebuild"</span>).src(<span class="jxr_string">"/a"</span>).body(<span class="jxr_string">"submit"</span>, Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"/a"</span>)));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">var</strong> arg17 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg17, MODEL));
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='rebuild'&gt; type='job-log' takes its options as the body; src= is not allowed."</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	@Test <strong class="jxr_keyword">void</strong> a45_applyTo_unsafeCardSrc_rejectedForNonLiftedType() {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).src(<span class="jxr_string">"&#92;&#92;&#92;&#92;evil.test/x"</span>));
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">var</strong> arg18 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg18, MODEL));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='w'&gt; type='my-widget' src must be a same-origin path"</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	@Test <strong class="jxr_keyword">void</strong> a46_addCard_unsafeSrc_rejected() {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> target20 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> arg19 = CardSpec.html(<span class="jxr_string">"h"</span>).src(<span class="jxr_string">"//evil.test/x"</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			() -&gt; target20.addCard(arg19, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='h'&gt; type='html' src must be a same-origin path"</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertDoesNotThrow(() -&gt; <strong class="jxr_keyword">new</strong> PageCapture().addCard(CardSpec.html(<span class="jxr_string">"h"</span>).src(<span class="jxr_string">"/ok/{id}"</span>), <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@Test <strong class="jxr_keyword">void</strong> a47_htmlSrc_basic() {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().htmlSrc(<span class="jxr_string">"hours"</span>, <span class="jxr_string">"Hours"</span>, <span class="jxr_string">"/console/store/fragments/hours"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> card = spec.card(<span class="jxr_string">"hours"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertEquals(<span class="jxr_string">"html"</span>, card.type());
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertEquals(<span class="jxr_string">"Hours"</span>, card.toMap().get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertEquals(<span class="jxr_string">"/console/store/fragments/hours"</span>, card.toMap().get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertNull(spec.cardMarkup.get(<span class="jxr_string">"hours"</span>));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Test <strong class="jxr_keyword">void</strong> a48_htmlSrc_nullTitle_hasNoTitle() {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> card = PageSpec.create().htmlSrc(<span class="jxr_string">"hours"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"/x"</span>).card(<span class="jxr_string">"hours"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertFalse(card.toMap().containsKey(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertEquals(<span class="jxr_string">"/x"</span>, card.toMap().get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	@Test <strong class="jxr_keyword">void</strong> a49_htmlSrc_applyTo_carriesSrcAndNoTemplate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		PageSpec.create().htmlSrc(<span class="jxr_string">"hours"</span>, <span class="jxr_string">"Hours"</span>, <span class="jxr_string">"/ok/{id}"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		assertEquals(Map.of(), cap.templates());
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		assertEquals(<span class="jxr_string">"hours"</span>, card.id());
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertEquals(<span class="jxr_string">"/ok/{id}"</span>, card.toMap().get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertNull(card.template());
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	@Test <strong class="jxr_keyword">void</strong> a50_htmlSrc_unsafeSrc_refusedAtApplyTo() {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> src : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"//evil.test/x"</span>, <span class="jxr_string">"https://evil.test/x"</span>, <span class="jxr_string">"javascript:alert(1)"</span>, <span class="jxr_string">"/a/../b"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;evil.test/x"</span>}) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">var</strong> spec = PageSpec.create().htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, src);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">var</strong> arg20 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg20, MODEL), src);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='h'&gt; type='html' src must be a same-origin path"</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		}
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	@Test <strong class="jxr_keyword">void</strong> a50b_htmlSrc_sanitizeWithUnsafeSrc_srcRefusalWins() {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> arg21 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, <span class="jxr_string">"//evil.test/x"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg21, MODEL));
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"src must be a same-origin path"</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Test <strong class="jxr_keyword">void</strong> a51_htmlSrc_blankSrc_rejected() {
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> target16 = PageSpec.create();
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">var</strong> nul = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target16.htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		assertEquals(<span class="jxr_string">"PageSpec.htmlSrc id 'h' requires a non-blank src."</span>, nul.getMessage());
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">var</strong> target17 = PageSpec.create();
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target17.htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, <span class="jxr_string">"  "</span>));
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	@Test <strong class="jxr_keyword">void</strong> a52_htmlSrc_sanitize_matchesTemplateTwin() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">var</strong> twin = CardDirective_Test.card(CardDirective_Test.get(<span class="jxr_string">"/card-html-sanitize"</span>), <span class="jxr_string">"on"</span>);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">var</strong> card = PageSpec.create().htmlSrc(<span class="jxr_string">"on"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"/rest/fragment"</span>, <strong class="jxr_keyword">true</strong>).card(<span class="jxr_string">"on"</span>).orElseThrow();
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertEquals(twin, card.toMap());
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, card.toMap().get(<span class="jxr_string">"sanitize"</span>));
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	}
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	@Test <strong class="jxr_keyword">void</strong> a53_htmlSrc_sanitizeFalse_matchesThreeArgForm() {
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">var</strong> off = PageSpec.create().htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, <span class="jxr_string">"/x"</span>, false).card(<span class="jxr_string">"h"</span>).orElseThrow().toMap();
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		assertEquals(PageSpec.create().htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, <span class="jxr_string">"/x"</span>).card(<span class="jxr_string">"h"</span>).orElseThrow().toMap(), off);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		assertFalse(off.containsKey(<span class="jxr_string">"sanitize"</span>));
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	}
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	@Test <strong class="jxr_keyword">void</strong> a54_htmlSrc_sanitize_carriedToApplyTo() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		PageSpec.create().htmlSrc(<span class="jxr_string">"h"</span>, <span class="jxr_string">"H"</span>, <span class="jxr_string">"/ok"</span>, <strong class="jxr_keyword">true</strong>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, cap.unplacedCards().get(0).toMap().get(<span class="jxr_string">"sanitize"</span>));
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	@Test <strong class="jxr_keyword">void</strong> a55_sanitize_onNonHtmlOrSrcless_refusedWithTemplateMessage() {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">var</strong> notHtml = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"t"</span>).src(<span class="jxr_string">"/rest/data"</span>).sanitize(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">var</strong> arg22 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; notHtml.applyTo(arg22, MODEL));
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='t'&gt; sanitize= applies only to an html card with src=."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">var</strong> noSrc = CardSpec.html(<span class="jxr_string">"h"</span>).template(<span class="jxr_string">"tpl"</span>).sanitize(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">var</strong> target21 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> ex2 = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; target21.addCard(noSrc, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		assertTrue(ex2.getMessage().contains(<span class="jxr_string">"&lt;@card id='h'&gt; sanitize= applies only to an html card with src=."</span>), ex2::getMessage);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	}
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	@Test <strong class="jxr_keyword">void</strong> a56_applyTo_customCard_isShapedByItsHandler() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>).title(<span class="jxr_string">"Load"</span>).body(<span class="jxr_string">"value"</span>, 3).body(<span class="jxr_string">"max"</span>, 4)).applyTo(cap, CUSTOM);
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		assertEquals(<span class="jxr_string">"meter"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertEquals(<span class="jxr_string">"Load"</span>, card.get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertEquals(Map.of(<span class="jxr_string">"value"</span>, 3, <span class="jxr_string">"max"</span>, 4), card.get(<span class="jxr_string">"meter"</span>));
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		assertFalse(card.containsKey(<span class="jxr_string">"value"</span>), card::toString);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	}
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	@Test <strong class="jxr_keyword">void</strong> a57_applyTo_invalidCustomCard_refusedByItsHandler() {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>).body(<span class="jxr_string">"max"</span>, 4));
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> arg23 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg23, CUSTOM));
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='load'&gt; type='meter' requires a numeric 'value'."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	}
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	@Test <strong class="jxr_keyword">void</strong> a58_applyTo_customCardWithoutBody_refusedWithTheTemplateMessage() {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>));
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">var</strong> arg24 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg24, CUSTOM));
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='load'&gt; type='meter' requires a JSON5 object body; got ''."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Test <strong class="jxr_keyword">void</strong> a59_applyTo_customCard_liftKeepsClassBareAndWiring() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>).body(<span class="jxr_string">"value"</span>, 1).cssClass(<span class="jxr_string">"wide"</span>).bare(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 			.visibleWhen(org.apache.juneau.console.views.VisibilityRule.when(<span class="jxr_string">"a"</span>).present())
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			.subscribes(org.apache.juneau.console.Subscription.to(<span class="jxr_string">"ops.jobs"</span>).as(<span class="jxr_string">"refresh"</span>))).applyTo(cap, CUSTOM);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		assertEquals(<span class="jxr_string">"wide"</span>, card.get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, card.get(<span class="jxr_string">"bare"</span>));
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertNotNull(card.get(<span class="jxr_string">"visibleWhen"</span>));
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		assertNotNull(card.get(<span class="jxr_string">"subscribes"</span>));
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	}
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	@Test <strong class="jxr_keyword">void</strong> a60_applyTo_unregisteredType_reservedBodyKey_refusedWithTheTemplateMessage() {
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).body(<span class="jxr_string">"template"</span>, <span class="jxr_string">"t"</span>));
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">var</strong> arg25 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg25, MODEL));
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='w'&gt; body key 'template' is reserved; set it as an attribute."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	}
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	@Test <strong class="jxr_keyword">void</strong> a61_applyTo_customCardWithBodyAndSrc_refusedWithTheTemplateMessage() {
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).src(<span class="jxr_string">"/rest/w"</span>).body(<span class="jxr_string">"k"</span>, 1));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">var</strong> arg26 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg26, MODEL));
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='w'&gt; type='my-widget' takes at most one of a body, template= or src=."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	}
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	@Test <strong class="jxr_keyword">void</strong> a62_applyTo_unregisteredTypeWithMarkup_keepsItsTemplate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>), <span class="jxr_string">"&lt;b&gt;x&lt;/b&gt;"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		assertEquals(Map.of(<span class="jxr_string">"w"</span>, <span class="jxr_string">"&lt;b&gt;x&lt;/b&gt;"</span>), cap.templates());
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		assertEquals(<span class="jxr_string">"w"</span>, cap.unplacedCards().get(0).template());
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	@Test <strong class="jxr_keyword">void</strong> a63_applyTo_terminalCard_liftedThroughHandler() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"out"</span>).body(<span class="jxr_string">"terminal"</span>, Map.of(<span class="jxr_string">"bytesUrl"</span>, <span class="jxr_string">"/t"</span>))).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		assertEquals(Map.of(<span class="jxr_string">"bytesUrl"</span>, <span class="jxr_string">"/t"</span>), cap.unplacedCards().get(0).toMap().get(<span class="jxr_string">"terminal"</span>));
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	@Test <strong class="jxr_keyword">void</strong> a64_applyTo_customCardMarkup_isTheHandlersBody() {
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>), <span class="jxr_string">"&lt;b&gt;x&lt;/b&gt;"</span>);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> arg27 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg27, CUSTOM));
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='load'&gt; type='meter' requires a JSON5 object body; got '&lt;b&gt;x&lt;/b&gt;'."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	}
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	@Test <strong class="jxr_keyword">void</strong> a65_applyTo_customCardJsonMarkup_isNotATemplate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>), <span class="jxr_string">"{value: 3, max: 4}"</span>).applyTo(cap, CUSTOM);
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		assertEquals(Map.of(<span class="jxr_string">"value"</span>, 3, <span class="jxr_string">"max"</span>, 4), card.toMap().get(<span class="jxr_string">"meter"</span>));
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		assertNull(card.template());
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		assertEquals(Map.of(), cap.templates());
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	@Test <strong class="jxr_keyword">void</strong> a66_applyTo_customCardWithBodyAndMarkup_refusedWithTheTemplateMessage() {
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).body(<span class="jxr_string">"k"</span>, 1), <span class="jxr_string">"&lt;b&gt;x&lt;/b&gt;"</span>);
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">var</strong> arg28 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg28, MODEL));
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='w'&gt; type='my-widget' takes at most one of a body, template= or src=."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	}
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	@Test <strong class="jxr_keyword">void</strong> a67_applyTo_customCardWithBodyAndBlankMarkup_isBodyOnly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>).body(<span class="jxr_string">"value"</span>, 1), <span class="jxr_string">"  "</span>).applyTo(cap, CUSTOM);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		assertEquals(Map.of(<span class="jxr_string">"value"</span>, 1, <span class="jxr_string">"max"</span>, 100), cap.unplacedCards().get(0).toMap().get(<span class="jxr_string">"meter"</span>));
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		assertEquals(Map.of(), cap.templates());
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	@Test <strong class="jxr_keyword">void</strong> a68_applyTo_customCardWithBodyAndTemplate_refusedWithTheTemplateMessage() {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).template(<span class="jxr_string">"t"</span>).body(<span class="jxr_string">"k"</span>, 1));
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<strong class="jxr_keyword">var</strong> arg29 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg29, MODEL));
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='w'&gt; type='my-widget' takes at most one of a body, template= or src=."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	}
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Test <strong class="jxr_keyword">void</strong> a69_applyTo_customCardSrcOnly_keepsItsSrc() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).title(<span class="jxr_string">"W"</span>).src(<span class="jxr_string">"/rest/w"</span>)).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		assertEquals(<span class="jxr_string">"/rest/w"</span>, card.get(<span class="jxr_string">"src"</span>));
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		assertEquals(<span class="jxr_string">"W"</span>, card.get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		assertFalse(card.containsKey(<span class="jxr_string">"template"</span>), card::toString);
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	}
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	@Test <strong class="jxr_keyword">void</strong> a70_applyTo_customCardJsonMarkupBusKeys_areWired() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>), <span class="jxr_string">"{k: 1, subscribes: [ { topic: 'ssc.focus', as: 'refresh' } ]}"</span>).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		assertEquals(List.of(Map.of(<span class="jxr_string">"topic"</span>, <span class="jxr_string">"ssc.focus"</span>, <span class="jxr_string">"as"</span>, <span class="jxr_string">"refresh"</span>)), card.get(<span class="jxr_string">"subscribes"</span>));
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertEquals(1, card.get(<span class="jxr_string">"k"</span>));
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	@Test <strong class="jxr_keyword">void</strong> a71_applyTo_customCardJsonMarkupBusKeys_withSpecWiring_refusedWithTheTemplateMessage() {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"my-widget"</span>, <span class="jxr_string">"w"</span>).subscribes(org.apache.juneau.console.Subscription.to(<span class="jxr_string">"ops.jobs"</span>).as(<span class="jxr_string">"refresh"</span>)),
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			<span class="jxr_string">"{k: 1, subscribes: [ { topic: 'ssc.focus', as: 'refresh' } ]}"</span>);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> arg30 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg30, MODEL));
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='w'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	@Test <strong class="jxr_keyword">void</strong> a72_applyTo_sanitizeOnCustomCard_refusedBeforeItsHandler() {
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<strong class="jxr_keyword">var</strong> spec = PageSpec.create().card(CardSpec.of(<span class="jxr_string">"meter"</span>, <span class="jxr_string">"load"</span>).body(<span class="jxr_string">"max"</span>, 4).sanitize(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<strong class="jxr_keyword">var</strong> arg31 = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg31, CUSTOM));
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='load'&gt; sanitize= applies only to an html card with src=."</span>), ex::getMessage);
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

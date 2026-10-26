@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">   public SortedLinkedList(Comparator&lt;? super E&gt; comparator, Collection&lt;? extends E&gt; c) {</span>
 <span class="source-line-no">140</span><span id="line-140">      this.comparator = reqnn("comparator", comparator);</span>
 <span class="source-line-no">141</span><span id="line-141">      this.list = new LinkedList&lt;&gt;(c);</span>
-<span class="source-line-no">142</span><span id="line-142">      Collections.sort(this.list, this.comparator);</span>
+<span class="source-line-no">142</span><span id="line-142">      this.list.sort(this.comparator);</span>
 <span class="source-line-no">143</span><span id="line-143">   }</span>
 <span class="source-line-no">144</span><span id="line-144"></span>
 <span class="source-line-no">145</span><span id="line-145">   /**</span>

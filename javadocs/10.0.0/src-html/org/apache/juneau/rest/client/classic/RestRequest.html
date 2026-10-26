@@ -226,18 +226,18 @@
 <span class="source-line-no">213</span><span id="line-213">   private HttpHost target;</span>
 <span class="source-line-no">214</span><span id="line-214">   private HttpPartSchema contentSchema;</span>
 <span class="source-line-no">215</span><span id="line-215">   private HttpPartSerializerSession partSerializerSession;</span>
-<span class="source-line-no">216</span><span id="line-216">   private HeaderList headerData;</span>
+<span class="source-line-no">216</span><span id="line-216">   private final HeaderList headerData;</span>
 <span class="source-line-no">217</span><span id="line-217">   private List&lt;Class&lt;? extends Throwable&gt;&gt; rethrow;</span>
 <span class="source-line-no">218</span><span id="line-218">   List&lt;RestCallInterceptor&gt; interceptors = list();   // Used for intercepting and altering requests.</span>
 <span class="source-line-no">219</span><span id="line-219">   private Object content;</span>
 <span class="source-line-no">220</span><span id="line-220">   private Parser parser;</span>
-<span class="source-line-no">221</span><span id="line-221">   private PartList formData;</span>
-<span class="source-line-no">222</span><span id="line-222">   private PartList pathData;</span>
-<span class="source-line-no">223</span><span id="line-223">   private PartList queryData;</span>
+<span class="source-line-no">221</span><span id="line-221">   private final PartList formData;</span>
+<span class="source-line-no">222</span><span id="line-222">   private final PartList pathData;</span>
+<span class="source-line-no">223</span><span id="line-223">   private final PartList queryData;</span>
 <span class="source-line-no">224</span><span id="line-224">   private Predicate&lt;Integer&gt; errorCodes;</span>
 <span class="source-line-no">225</span><span id="line-225">   private RestResponse response;                         // The response.</span>
 <span class="source-line-no">226</span><span id="line-226">   private Serializer serializer;</span>
-<span class="source-line-no">227</span><span id="line-227">   private URIBuilder uriBuilder;</span>
+<span class="source-line-no">227</span><span id="line-227">   private final URIBuilder uriBuilder;</span>
 <span class="source-line-no">228</span><span id="line-228"></span>
 <span class="source-line-no">229</span><span id="line-229">   private final Map&lt;HttpPartSerializer,HttpPartSerializerSession&gt; partSerializerSessions = new IdentityHashMap&lt;&gt;();</span>
 <span class="source-line-no">230</span><span id="line-230"></span>

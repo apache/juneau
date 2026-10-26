@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../commons/settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-66">SpringEnvironmentPropertySource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-80">SpringEnvironmentPropertySource</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../../commons/settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span></div>
 <div class="block">Bridges a Spring <code>Environment</code> into the Juneau <a href="../../../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>
@@ -97,9 +97,23 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 
  <h5 class='section'>Lifecycle:</h5>
  <p>
- Instances are auto-registered by <a href="SpringBeanStore.html#%3Cinit%3E(org.springframework.context.ApplicationContext,org.apache.juneau.commons.inject.BeanStore)"><code>SpringBeanStore</code></a>'s constructor and removed from
- <a href="../../../commons/settings/Settings.html#removeSource(org.apache.juneau.commons.settings.PropertySource)"><code>Settings</code></a> when <a href="SpringBeanStore.html#clear()"><code>SpringBeanStore.clear()</code></a> is called.  Callers that want explicit lifecycle
- control can construct the source directly and add it via <code>Settings.get().addSource(...)</code>.
+ <a href="SpringBeanStore.html" title="class in org.apache.juneau.rest.server.springboot"><code>SpringBeanStore</code></a> registers one instance per <code>ApplicationContext</code> in
+ <a href="../../../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>, shared by every store on that context.  It is removed
+ when every such store has been <a href="SpringBeanStore.html#clear()"><code>cleared</code></a>, or when the context closes (for a
+ <code>ConfigurableApplicationContext</code>).  Callers that
+ want explicit lifecycle control can construct the source directly and add it via <code>Settings.get().addSource(...)</code>;
+ such instances are not shared.
+
+ <h5 class='section'>Miss cache:</h5>
+ <p>
+ Juneau's builder keys (e.g. <code>MarshallingContext.unsortedProperties</code>) are not valid Spring Boot property names,
+ so Spring walks every raw property source for each of them.  This source remembers up to 4096 such keys that were
+ absent.  Every lookup checks the Environment's property-source list by identity (an added, removed or replaced
+ source drops the cache) and re-checks <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#getProperty(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>System.getProperty(String)</code></a> for a cached key.  Valid Boot names and
+ <code>juneau.profiles.active</code> are never cached, and hits are never cached.  A source whose <em>contents</em> change
+ in place (a mutated map, <code>MockEnvironment.setProperty</code>) is not detected for a key already cached as missing;
+ call <a href="#invalidate()"><code>invalidate()</code></a> after such a change.  Setting <code>juneau.spring.missCache.disable=true</code> in the Spring
+ Environment before the first lookup turns the cache off.
 
  <h5 class='section'>Lazy resolution:</h5>
  <p>
@@ -158,6 +172,11 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a property in this property source.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Clears this bridge's miss cache.</div>
+</div>
 </div>
 </div>
 </div>
@@ -178,7 +197,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <li>
 <section class="detail" id="&lt;init&gt;(org.springframework.core.env.Environment)">
 <h3>SpringEnvironmentPropertySource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-82">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(org.springframework.core.env.Environment&nbsp;env)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-106">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(org.springframework.core.env.Environment&nbsp;env)</span></div>
 <div class="block">Constructor that bridges a pre-built <code>Environment</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -189,7 +208,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>SpringEnvironmentPropertySource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-100">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;org.springframework.core.env.Environment&gt;&nbsp;envSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-123">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;org.springframework.core.env.Environment&gt;&nbsp;envSupplier)</span></div>
 <div class="block">Constructor that lazily resolves the <code>Environment</code> on first lookup.
 
  <p>
@@ -215,7 +234,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/settings/PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-104">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/settings/PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-138">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../commons/settings/PropertySource.html#get(java.lang.String)">PropertySource</a></code></span></div>
 <div class="block">Returns a property in this property source.</div>
 <dl class="notes">
@@ -230,6 +249,24 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
       <li><a href="../../../commons/settings/PropertyLookupResult.html#present(java.util.Optional)"><code>PropertyLookupResult.present(Optional)</code></a> with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if the key exists with a null value.
       <li><a href="../../../commons/settings/PropertyLookupResult.html#present(java.util.Optional)"><code>PropertyLookupResult.present(Optional)</code></a> with a value if the key exists with a non-null value.
    </ul></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invalidate()">
+<h3>invalidate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-188">invalidate</a></span>()</div>
+<div class="block">Clears this bridge's miss cache.
+
+ <p>
+ Needed only after a property source's contents change in place (for example a mutated
+ <code>MapPropertySource</code> map, or <code>MockEnvironment.setProperty</code> in a test) for a key that is not a valid
+ Spring Boot property name and that was already looked up and missed.  Adding, removing or replacing a property
+ source, and setting a system property, are detected without it.  A lookup already in progress on another thread
+ may still answer from the old cache; lookups that start after this method returns do not.</div>
+<dl class="notes">
+<dt>Since:</dt>
+<dd>10.0.0</dd>
 </dl>
 </section>
 </li>

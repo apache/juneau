@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The type this converter handles.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-56">BodyConverter</a>&lt;T&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-55">BodyConverter</a>&lt;T&gt;</span></div>
 <div class="block">Converts a Java object passed to <a href="RestRequest.html#body(java.lang.Object)"><code>RestRequest.body(Object)</code></a> into a <a href="TransportBody.html" title="class in org.apache.juneau.rest.client"><code>TransportBody</code></a>.
 
  <p>
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
  <code>true</code> wins. The default converter list (applied automatically by <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>) handles
  the common cases:
  <ol>
-   <li><a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> — passed through directly (streaming preferred over buffering)
+   <li><code>HttpBody</code> — passed through directly (streaming preferred over buffering)
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> — wrapped in a streaming body
    <li><code>byte[]</code> — wrapped in a byte-array body
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> — wrapped in a file body
@@ -176,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canConvert(java.lang.Object)">
 <h3>canConvert</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-67">canConvert</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-66">canConvert</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Returns <code>true</code> if this converter can handle the given value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="convert(java.lang.Object)">
 <h3>convert</h3>
-<div class="member-signature"><span class="return-type"><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-76">convert</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
+<div class="member-signature"><span class="return-type"><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-75">convert</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Converts the value to a <a href="TransportBody.html" title="class in org.apache.juneau.rest.client"><code>TransportBody</code></a>.</div>
 <dl class="notes">
@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Class,org.apache.juneau.rest.client.BodyConverter.ThrowingConverter)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-89">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BodyConverter.html#line-88">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
  <a href="BodyConverter.ThrowingConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter.ThrowingConverter</a>&lt;T&gt;&nbsp;converter)</span></div>
 <div class="block">Creates a <a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client"><code>BodyConverter</code></a> from a type predicate and a converting lambda.
 

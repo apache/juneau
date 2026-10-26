@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></code>, <code><a href="../../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-58">SpringBeanStore</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-59">SpringBeanStore</a></span>
 <span class="extends-implements">extends <a href="../../../commons/inject/BasicBeanStore.html" title="class in org.apache.juneau.commons.inject">BasicBeanStore</a></span></div>
 <div class="block">A bean store that uses Spring bean resolution to find beans if they're not already in this store.
 
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -190,6 +190,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if this store contains a bean of the specified type and name.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#invalidateEnvironmentCache(org.springframework.context.ApplicationContext)" class="member-name-link">invalidateEnvironmentCache</a><wbr>(org.springframework.context.ApplicationContext&nbsp;appContext)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Clears the miss cache of the Spring <code>Environment</code> bridge registered for the given application context.</div>
+</div>
 </div>
 </div>
 </div>
@@ -219,17 +224,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.springframework.context.ApplicationContext,org.apache.juneau.commons.inject.BeanStore)">
 <h3>SpringBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-80">SpringBeanStore</a></span><wbr><span class="parameters">(org.springframework.context.ApplicationContext&nbsp;appContext,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-85">SpringBeanStore</a></span><wbr><span class="parameters">(org.springframework.context.ApplicationContext&nbsp;appContext,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;parent)</span></div>
 <div class="block">Constructor.
 
  <p>
- If <code>appContext</code> is non-null, this constructor also installs a
- <a href="SpringEnvironmentPropertySource.html" title="class in org.apache.juneau.rest.server.springboot"><code>SpringEnvironmentPropertySource</code></a> on the process-wide <a href="../../../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> singleton so that
- <a href="../../../commons/inject/Value.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Value("&#123;...&#125;")</code></a> placeholders resolve against
- the Spring <code>Environment</code> (i.e. against
- <code>application.yaml</code>, env vars, system properties, etc.).  The source is removed by
- <a href="#clear()"><code>clear()</code></a>.</div>
+ If <code>appContext</code> is non-null, this constructor also makes sure the process-wide <a href="../../../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> singleton
+ holds a <a href="SpringEnvironmentPropertySource.html" title="class in org.apache.juneau.rest.server.springboot"><code>SpringEnvironmentPropertySource</code></a> for it, so that <a href="../../../commons/inject/Value.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Value("&#123;...&#125;")</code></a>
+ placeholders resolve against the Spring <code>Environment</code> (i.e. against
+ <code>application.yaml</code>, env vars, system properties, etc.).  There is one such source per application context,
+ shared by every store built on it and kept at the position of the first registration.  It is removed when every
+ store on the context has been <a href="#clear()"><code>cleared</code></a>, or when the context closes (for a
+ <code>ConfigurableApplicationContext</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>appContext</code> - The Spring application context used to resolve beans. Can be <jk>null</jk> (no Spring environment bridge is installed).</dd>
@@ -248,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SpringBeanStore.html" title="class in org.apache.juneau.rest.server.springboot">SpringBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-95">clear</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SpringBeanStore.html" title="class in org.apache.juneau.rest.server.springboot">SpringBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-93">clear</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#clear()">BasicBeanStore</a></code></span></div>
 <div class="block">Removes all beans from this store.
 
@@ -265,9 +271,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="invalidateEnvironmentCache(org.springframework.context.ApplicationContext)">
+<h3>invalidateEnvironmentCache</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-130">invalidateEnvironmentCache</a></span><wbr><span class="parameters">(org.springframework.context.ApplicationContext&nbsp;appContext)</span></div>
+<div class="block">Clears the miss cache of the Spring <code>Environment</code> bridge registered for the given application context.
+
+ <p>
+ Needed only after a Spring property source's contents change in place for a key that is not a valid Spring Boot
+ property name and that Juneau already looked up and missed; see <a href="SpringEnvironmentPropertySource.html#invalidate()"><code>SpringEnvironmentPropertySource.invalidate()</code></a>.
+ The bridge is shared by every <code>SpringBeanStore</code> on the context, so this affects all of them.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>appContext</code> - The application context.  Can be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the context had a registered bridge.</dd>
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getBean(java.lang.Class)">
 <h3>getBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-106">getBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-134">getBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#getBean(java.lang.Class)">BasicBeanStore</a></code></span></div>
 <div class="block">Returns the unnamed bean of the specified type.
 
@@ -290,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBean(java.lang.Class,java.lang.String)">
 <h3>getBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-122">getBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-150">getBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#getBean(java.lang.Class,java.lang.String)">BasicBeanStore</a></code></span></div>
 <div class="block">Returns the named bean of the specified type.
@@ -315,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeansOfType(java.lang.Class)">
 <h3>getBeansOfType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-138">getBeansOfType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-166">getBeansOfType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#getBeansOfType(java.lang.Class)">BasicBeanStore</a></code></span></div>
 <div class="block">Returns all beans of the specified type, keyed by bean name.
 
@@ -339,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasBean(java.lang.Class)">
 <h3>hasBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-151">hasBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-179">hasBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#hasBean(java.lang.Class)">BasicBeanStore</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this store contains at least one unnamed bean of the specified type.
 
@@ -360,7 +386,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasBean(java.lang.Class,java.lang.String)">
 <h3>hasBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-167">hasBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-195">hasBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#hasBean(java.lang.Class,java.lang.String)">BasicBeanStore</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this store contains a bean of the specified type and name.
@@ -383,7 +409,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanSupplier(java.lang.Class,java.lang.String)">
 <h3>getBeanSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-186">getBeanSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringBeanStore.html#line-214">getBeanSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html#getBeanSupplier(java.lang.Class,java.lang.String)">BasicBeanStore</a></code></span></div>
 <div class="block">Returns the supplier for a named bean of the specified type.

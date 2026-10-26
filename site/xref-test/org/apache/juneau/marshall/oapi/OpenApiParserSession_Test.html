@@ -356,7 +356,49 @@
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">var</strong> r = (Map&lt;?,?&gt;) p(T_OBJECT, <span class="jxr_string">"a=1"</span>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(<span class="jxr_string">"1"</span>, r.get(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> }
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_comment">// ============================================================</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<em class="jxr_comment">// j01-j06: bean properties of Calendar/Date/ZonedDateTime type</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_comment">// ============================================================</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> J01_Bean {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">public</strong> Calendar f1;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">public</strong> Date f2;
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">public</strong> java.time.ZonedDateTime f3;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpPartSchema j01Schema(HttpPartFormat f) {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">return</strong> tObject().p(<span class="jxr_string">"f1"</span>, tString().format(f)).p(<span class="jxr_string">"f2"</span>, tString().format(f)).p(<span class="jxr_string">"f3"</span>, tString().format(f)).build();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@Test
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">void</strong> j01_beanCalendarPropertyDateTimeFormat() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> r = p(j01Schema(HttpPartFormat.DATE_TIME), <span class="jxr_string">"f1=2020-01-02T03:04:05Z,f2=2020-01-02T03:04:05Z,f3=2020-01-02T03:04:05Z"</span>, J01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(2020, r.f1.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertEquals(2020, r.f2.toInstant().atZone(java.time.ZoneOffset.UTC).getYear());
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertEquals(2020, r.f3.getYear());
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">void</strong> j02_beanCalendarPropertyDateFormat() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> r = p(j01Schema(HttpPartFormat.DATE), <span class="jxr_string">"f1=2020-01-02,f2=2020-01-02,f3=2020-01-02"</span>, J01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(2020, r.f1.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertNotNull(r.f2);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(2, r.f3.getDayOfMonth());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Test
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">void</strong> j03_beanCalendarPropertyNoFormat() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> r = p(tObject().p(<span class="jxr_string">"f1"</span>, tString()).build(), <span class="jxr_string">"f1=2020-01-02T03:04:05Z"</span>, J01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertEquals(2020, r.f1.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	@Test
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<strong class="jxr_keyword">void</strong> j04_beanCalendarPropertyViaDefaultSchema() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">var</strong> r = DP.read(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"f1=2020-01-02T03:04:05Z"</span>, DP.getClassMeta(J01_Bean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertEquals(2020, r.f1.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

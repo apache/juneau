@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HEADER_ContentType = <span class="jxr_string">"Content-Type"</span>;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern ENCODING_DISABLED_PATTERN = Pattern.compile(<span class="jxr_string">"(identity|&#92;&#92;*)&#92;&#92;s*;&#92;&#92;s*q&#92;&#92;s*=&#92;&#92;s*(0(?!&#92;&#92;.)|0&#92;&#92;.0)"</span>);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> HttpServletResponse <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpServletResponse <strong class="jxr_keyword">inner</strong>;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestRequest request;
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;Object&gt; content;  <em class="jxr_comment">// The POJO being sent to the output.</em>
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">private</strong> FinishableServletOutputStream os;
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">private</strong> <a name="FinishablePrintWriter" href="../../../../../org/apache/juneau/rest/server/util/FinishablePrintWriter.html#FinishablePrintWriter">FinishablePrintWriter</a> w;
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> <a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> responseBeanMeta;
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> RestOpContext opContext;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestOpContext opContext;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;HttpPartSchema&gt; contentSchema;
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> Serializer serializer;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;SerializerMatch&gt; serializerMatch;
@@ -585,7 +585,7 @@
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 	@Override
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRedirect(String uri) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> c = (!uri.isEmpty() ? uri.charAt(0) : 0);
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> c = (uri.isEmpty() ? 0 : uri.charAt(0));
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">if</strong> (c != '/' &amp;&amp; uri.indexOf(<span class="jxr_string">"://"</span>) == -1)
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 			uri = request.getContextPath() + '/' + uri;
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">inner</strong>.sendRedirect(uri);
