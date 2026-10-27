@@ -1324,29 +1324,59 @@ class LiveTest(unittest.TestCase):
         self.assertEqual(sum(line.count("#") for line in lines), 84)
         indent = len("⠋ " + "Tests".ljust(self.board.width())) + 2
         self.assertTrue(all(line.startswith(" " * indent + "#") for line in lines[1:]), lines)
-        self.assertIn("84/84", lines[0])                                        # count stays on the first line
-        self.assertTrue(all("84/84" not in line for line in lines[1:]))
+        self.assertEqual(len(lines[0]) - indent, 79 - indent)                   # a full row of cells on the first line
+        self.assertIn("84/84", lines[-1])                                       # the count follows the last bar row
+        self.assertTrue(all("84/84" not in line for line in lines[:-1]))
 
     def test_a_bar_that_fits_exactly_does_not_wrap(self):
         cells = ["#"] * 5
         self.assertEqual(jr._fit_row("L", cells, "r", "", len("L  #####  r"), wrap=True), "L  #####  r")
-        self.assertEqual(jr._fit_row("L", cells, "r", "", len("L  #####  r") - 1, wrap=True), "L  ####  r\n   #")
+        self.assertEqual(jr._fit_row("L", cells, "r", "", len("L  #####  r") - 1, wrap=True), "L  #####\n   r")
 
-    def test_continuation_lines_use_the_full_width_after_the_bar_column(self):
-        cols, indent = 40, 3                    # label "L" + 2; the first line holds 34 cells beside "L    r"
-        cells = [str(i % 10) for i in range(34 + 2 * (cols - indent) + 5)]
+    def test_a_wrapped_bar_puts_its_text_after_the_leftover_cells_on_the_last_row(self):
+        cols = 40                               # label "L" + 2 = bar column 3, so every bar row holds 37 cells
+        lines = jr._fit_row("L", ["#"] * 50, "r", "0:05", cols, wrap=True).split("\n")
+        self.assertEqual(lines, ["L  " + "#" * 37, "   " + "#" * 13 + "  r" + " " * (cols - 3 - 13 - 3 - 4) + "0:05"])
+
+    def test_every_bar_row_but_the_last_holds_a_full_width_of_cells(self):
+        cols, indent = 40, 3
+        cells = [str(i % 10) for i in range(2 * (cols - indent) + 5)]
         lines = jr._fit_row("L", cells, "r", "", cols, wrap=True).split("\n")
-        self.assertEqual([len(line) - indent for line in lines[1:-1]], [cols - indent] * (len(lines) - 2))
+        self.assertEqual([len(line) - indent for line in lines[:-1]], [cols - indent] * (len(lines) - 1))
         self.assertTrue(all(len(line) <= cols for line in lines), lines)
-        self.assertEqual("".join(line[indent:] for line in lines[1:]), "".join(cells[34:]))   # nothing lost or repeated
-        self.assertEqual(len(lines[-1]) - indent, 5)                                          # the last line holds the rest
-        self.assertEqual(len(lines), 4)
+        self.assertEqual("".join(line[indent:indent + cols - indent].rstrip() if i < len(lines) - 1 else line[indent:indent + 5]
+                                 for i, line in enumerate(lines)), "".join(cells))      # nothing lost or repeated
+        self.assertEqual(lines[-1], " " * indent + "".join(cells[-5:]) + "  r")
+        self.assertEqual(len(lines), 3)
 
-    def test_a_bar_of_a_first_line_plus_one_full_line_wraps_to_two_lines(self):
-        cols = 40                               # the equal-width layout needed three lines for 34 + 37 cells
-        lines = jr._fit_row("L", ["#"] * (34 + 37), "r", "", cols, wrap=True).split("\n")
-        self.assertEqual([line.count("#") for line in lines], [34, 37])
-        self.assertTrue(all(len(line) <= cols for line in lines), lines)
+    def test_text_goes_on_its_own_line_when_the_last_row_is_full(self):
+        cols = 40
+        lines = jr._fit_row("L", ["#"] * 74, "r", "0:05", cols, wrap=True).split("\n")
+        self.assertEqual(lines, ["L  " + "#" * 37, "   " + "#" * 37, "   r" + " " * (cols - 4 - 4) + "0:05"])
+
+    def test_text_goes_on_its_own_line_when_the_leftover_cells_leave_no_room_for_it(self):
+        cols = 40                               # 30 leftover cells + "  r" + "  0:05" is 41 wide
+        lines = jr._fit_row("L", ["#"] * 67, "r", "0:05", cols, wrap=True).split("\n")
+        self.assertEqual([line.count("#") for line in lines], [37, 30, 0])
+        self.assertEqual(lines[2], "   r" + " " * (cols - 4 - 4) + "0:05")
+
+    def test_the_timer_shortens_on_the_line_that_carries_the_text(self):
+        elapsed = "0:05 / ~0:09"
+        cols = 24                               # bar column 3, 21 cells per row
+        last = jr._fit_row("L", ["#"] * 30, "r", elapsed, cols, wrap=True).split("\n")[-1]
+        self.assertEqual(last, "   " + "#" * 9 + "  r" + " " * (cols - 3 - 9 - 3 - 4) + "0:05")      # 12 wide would not fit
+        wide = jr._fit_row("L", ["#"] * 30, "r", elapsed, 40, wrap=True).split("\n")[-1]
+        self.assertTrue(wide.endswith(elapsed), wide)           # room enough: the full timer stays
+        own = jr._fit_row("L", ["#"] * 14, "r", elapsed, 17, wrap=True).split("\n")       # a full row: the text line
+        self.assertEqual(own, ["L  " + "#" * 14, "   r" + " " * (17 - 4 - 4) + "0:05"])
+
+    def test_no_line_of_a_wrapped_bar_is_wider_than_cols(self):
+        for cols in range(12, 90):
+            for n in (1, 5, 30, 86, 200):
+                for elapsed in ("", "1:23", "1:23 / ~1:30"):
+                    line = jr._fit_row("Compile", ["#"] * n, "86/86  100%", elapsed, cols, wrap=True)
+                    for part in line.split("\n"):
+                        self.assertLessEqual(jr._vlen(part), cols, (cols, n, elapsed, part))
 
     def test_one_unit_is_one_cell(self):
         lines = self.wrapped(1, 79)
@@ -1355,7 +1385,8 @@ class LiveTest(unittest.TestCase):
 
     def test_a_failure_on_a_continuation_line_keeps_its_cell(self):
         lines = self.wrapped(84, 79, fail_at=83)
-        self.assertEqual((len(lines) > 1, lines[-1].rstrip()[-1]), (True, jr.PLAIN_GLYPHS["fail"]))
+        self.assertGreater(len(lines), 1)
+        self.assertEqual(lines[-1].split()[0][-1], jr.PLAIN_GLYPHS["fail"])   # the last bar row ends on it
         self.assertEqual(sum(line.count("F") for line in lines), 1)
 
     def test_a_non_wrapping_bar_still_gives_way_with_an_ellipsis(self):
@@ -1846,13 +1877,13 @@ class LiveTest(unittest.TestCase):
         self.assertTrue(all(len(line) <= 63 for line in lines), lines)
         self.assertNotIn("\u2026", "".join(lines))        # no cell is cut: the bar wraps instead
         self.assertEqual("".join(lines).count("\u2588"), 80)
-        self.assertTrue(lines[0].rstrip().endswith("80/80  7,139 tests, 2 failed  1:21"), lines[0])
+        self.assertTrue(lines[-1].startswith(" " * 14 + "80/80  7,139 tests, 2 failed") and lines[-1].endswith("1:21"), lines[-1])   # on its own line
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 90000, "exit": 1, "summary": None,
                                 "totals": None}))
-        row = self.screen.text().splitlines()[0]
-        self.assertLessEqual(len(row), 63, row)
-        self.assertTrue(row.endswith("80/80  7,139 tests, 2 failed  1:30"), row)
-        self.assertTrue(row.startswith("✗ " + "Tests".ljust(10) + "  ██"), row)
+        rows = self.screen.text().splitlines()
+        self.assertTrue(all(len(row) <= 63 for row in rows), rows)
+        self.assertTrue(rows[-1].lstrip().startswith("80/80  7,139 tests, 2 failed") and rows[-1].endswith("1:30"), rows[-1])
+        self.assertTrue(rows[0].startswith("✗ " + "Tests".ljust(10) + "  ██"), rows[0])
 
     def test_a_row_too_long_even_without_its_bar_is_cut_from_the_right(self):
         line = jr._fit_row("A very long step label", ["█"] * 5, "5/5  7,139 tests, 2 failed", "0:01", 20)
@@ -2468,15 +2499,14 @@ class RobustnessTest(unittest.TestCase):
 class WrapAndExpectedTest(unittest.TestCase):
     """Full-width continuation lines and the expected test total."""
 
-    def test_every_continuation_line_of_a_wrapped_bar_holds_the_same_number_of_cells(self):
-        line = jr._fit_row("Tests", ["#"] * 120, "120/120", "0:05", 40, wrap=True)
+    def test_every_row_of_a_wrapped_bar_but_the_last_holds_the_same_number_of_cells(self):
+        line = jr._fit_row("Tests", ["#"] * 100, "100/100", "0:05", 40, wrap=True)
         lines = line.split("\n")
         counts = [l.count("#") for l in lines]
         self.assertGreater(len(lines), 2)
-        self.assertEqual(len(set(counts[1:-1])), 1, counts)
-        self.assertLessEqual(counts[-1], counts[1])
-        self.assertGreater(counts[1], counts[0])                # the first line shares its width with the text
-        self.assertEqual(sum(counts), 120)
+        self.assertEqual(set(counts[:-1]), {40 - len("Tests") - 2}, counts)
+        self.assertLessEqual(counts[-1], counts[0])
+        self.assertEqual(sum(counts), 100)
 
     def test_expected_total_shows_until_the_count_passes_it(self):
         self.assertEqual(jr.fmt_totals((41200, 0, 0, 0), expected=83000), "41,200 / ~83,000 tests")

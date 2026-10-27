@@ -2075,9 +2075,12 @@ def _fit(left, right, cols):
 def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     """A step row fitted to cols.  When it is too wide the bar gives way first, keeping its newest cells behind an
     ellipsis, so the label, count, totals and elapsed survive; only a row too wide even then is cut from the right.
-    With wrap (a unit bar, one cell per unit) the bar never gives way: the cells that don't fit beside the label and
-    count continue on extra lines indented to the bar's column and filling the width from there, and the result holds
-    several lines joined by "\n"."""
+    With wrap (a unit bar, one cell per unit) the bar never gives way: the cells fill rows of cols minus the bar's
+    column, each row starting at that column, and the count and elapsed follow the leftover cells on the last row.  When
+    they don't fit there, the count and elapsed take a line of their own under the bar, indented to the bar's column.
+    The "M:SS / ~M:SS" timer shortens to "M:SS" on whichever line carries it.  The result holds several lines joined by
+    "\n"."""
+    full = elapsed
     if " / ~" in elapsed:       # the "M:SS / ~M:SS" timer gives way to plain elapsed when even the bare row won't fit
         bare = _vlen(label + ("  " + rest if rest else "")) + len(elapsed) + 2
         if bare > cols:
@@ -2088,11 +2091,18 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
     if wrap and room >= 1:
         indent = _vlen(label) + 2
-        per = cols - indent     # the continuation lines carry no text, so they use the full width
-        first, more = cells[:room], cells[room:]
-        lines = [_fit(label + "  " + "".join(first) + "  " + rest, elapsed, cols)]
-        lines += [" " * indent + "".join(more[i:i + per]) for i in range(0, len(more), per)]
-        return "\n".join(lines)
+        per = cols - indent
+        rows = [cells[i:i + per] for i in range(0, len(cells), per)]
+        lines = [label + "  " + "".join(rows[0])] + [" " * indent + "".join(r) for r in rows[1:]]
+        plain = full.split(" / ~")[0]
+        for timer in (full, plain):
+            tail = lines[-1] + "  " + rest
+            if _vlen(tail) + (len(timer) + 2 if timer else 0) <= cols:
+                lines[-1] = _fit(tail, timer, cols)
+                return "\n".join(lines)
+        text = " " * indent + rest
+        timer = full if _vlen(text) + len(full) + 2 <= cols else plain
+        return "\n".join(lines + [_fit(text, timer, cols)])
     if room < 2:
         return _fit(line, elapsed, cols)
     return _fit(label + "  …" + "".join(cells[len(cells) - (room - 1):]) + "  " + rest, elapsed, cols)
