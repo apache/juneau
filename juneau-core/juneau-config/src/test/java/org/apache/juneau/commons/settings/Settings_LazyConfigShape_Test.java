@@ -121,7 +121,7 @@ class Settings_LazyConfigShape_Test extends TestBase {
 	}
 
 	@Test void f02_missInsideClinit_doesNotPoisonBuilderDefaults() throws Exception {
-		var unused = JsonSerializer.DEFAULT;   // make sure its <clinit> has already run
+		assertNotNull(JsonSerializer.DEFAULT);   // make sure its <clinit> has already run
 		// Config.setSystemDefault runs Settings lookups, so it goes before the lazy source is registered: a lazy source
 		// that resolved before the swap would bind to the old Config.
 		var cfg = Config.create().store(MemoryStore.create().build()).build();

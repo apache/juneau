@@ -1112,14 +1112,14 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	@Test void k08_httpProcessorReplaced_guardedContext_otherThread_newConnection_refused() throws Exception {
-		try (var c = RestClient.create().rootUrl(url).httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+		try (var c = RestClient.create().rootUrl(url).httpProcessor(hostOnlyProcessor()).build()) {
 			var ex = assertThrows(ExecutionException.class, () -> onOtherThread(() -> status(c, guardedContext())));
 			assertContains("request to open a connection of the ordinary pool", messages(ex));
 		}
 	}
 
 	@Test void k09_httpProcessorReplaced_guardedContext_otherThread_reusedConnection_refused() throws Exception {
-		try (var c = RestClient.create().rootUrl(url).pooled().httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+		try (var c = RestClient.create().rootUrl(url).pooled().httpProcessor(hostOnlyProcessor()).build()) {
 			// Leaves an open connection to the route in the ordinary pool.
 			assertEquals(200, status(c, null));
 			var ex = assertThrows(ExecutionException.class, () -> onOtherThread(() -> status(c, guardedContext())));
@@ -1167,7 +1167,7 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	@Test void k18_httpProcessor_guardedCallOnCallingThread_refused() throws Exception {
-		try (var c = RestClient.create().rootUrl(url).httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+		try (var c = RestClient.create().rootUrl(url).httpProcessor(hostOnlyProcessor()).build()) {
 			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
 			assertContains("httpProcessor(...) replaces the client's request interceptors", messages(ex));
 			assertPlainOk(c);
@@ -1413,7 +1413,7 @@ class RestClient_ConnectionManager_Test {
 		})
 		protected CloseableHttpClient createHttpClient() {
 			super.createHttpClient();
-			httpClientBuilder().setHttpProcessor(HttpProcessorBuilder.create().build());
+			httpClientBuilder().setHttpProcessor(hostOnlyProcessor());
 			return httpClientBuilder().build();
 		}
 	}
@@ -1645,6 +1645,13 @@ class RestClient_ConnectionManager_Test {
 	@FunctionalInterface
 	private interface ThrowingRunnable {
 		void run() throws Exception;
+	}
+
+	// A replacement HttpProcessor that keeps only the Host header interceptor.  Any processor set this way trips the
+	// guard, and without RequestTargetHost the plain calls go out with no Host header, which newer JDK HttpServers
+	// (21.0.13 and later) reject with a 400.
+	private static HttpProcessor hostOnlyProcessor() {
+		return HttpProcessorBuilder.create().add(new RequestTargetHost()).build();
 	}
 
 	private static void withSystemProperty(String name, String value, ThrowingRunnable r) throws Exception {

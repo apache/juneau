@@ -2077,7 +2077,8 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     ellipsis, so the label, count, totals and elapsed survive; only a row too wide even then is cut from the right.
     With wrap (a unit bar, one cell per unit) the bar never gives way: the cells fill rows of cols minus the bar's
     column, each row starting at that column, and the count and elapsed follow the leftover cells on the last row.  When
-    they don't fit there, the count and elapsed take a line of their own under the bar, indented to the bar's column.
+    they don't fit there, the count and elapsed take a line of their own under the bar, indented to the bar's column;
+    that line is cut with "…" when it is too wide even alone, so the bar and the elapsed stay whole.
     The "M:SS / ~M:SS" timer shortens to "M:SS" on whichever line carries it.  The result holds several lines joined by
     "\n"."""
     full = elapsed
@@ -2088,8 +2089,7 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     line = label + ("  " + "".join(cells) + "  " + rest if cells is not None else "  " + rest if rest else "")
     if cells is None or _vlen(line) <= cols - (len(elapsed) + 2 if elapsed else 0):
         return _fit(line, elapsed, cols)
-    room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
-    if wrap and room >= 1:
+    if wrap and cols - (_vlen(label) + 2) >= 1:
         indent = _vlen(label) + 2
         per = cols - indent
         rows = [cells[i:i + per] for i in range(0, len(cells), per)]
@@ -2103,6 +2103,7 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
         text = " " * indent + rest
         timer = full if _vlen(text) + len(full) + 2 <= cols else plain
         return "\n".join(lines + [_fit(text, timer, cols)])
+    room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
     if room < 2:
         return _fit(line, elapsed, cols)
     return _fit(label + "  …" + "".join(cells[len(cells) - (room - 1):]) + "  " + rest, elapsed, cols)

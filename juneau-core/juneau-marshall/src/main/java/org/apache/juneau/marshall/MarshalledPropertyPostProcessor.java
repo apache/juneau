@@ -808,8 +808,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				if (o == null)
 					return null;
 				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
-				if (Duration.class.isInstance(o))
-					return (Duration) o;
+				if (o instanceof Duration x)
+					return x;
 				return format.parse(o.toString());
 			}
 		};
@@ -830,8 +830,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				if (o == null)
 					return null;
 				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
-				if (Period.class.isInstance(o))
-					return (Period) o;
+				if (o instanceof Period x)
+					return x;
 				return format.parse(o.toString());
 			}
 		};
@@ -852,8 +852,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				if (o == null)
 					return null;
 				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
-				if (Calendar.class.isInstance(o))
-					return (Calendar) o;
+				if (o instanceof Calendar x)
+					return x;
 				return format.parse(o.toString(), session.getTimeZoneId());
 			}
 		};
@@ -874,8 +874,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				if (o == null)
 					return null;
 				// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.
-				if (Date.class.isInstance(o))
-					return (Date) o;
+				if (o instanceof Date x)
+					return x;
 				if (o instanceof Calendar)
 					return (Date) session.convertToType(o, hint != null ? (ClassMeta<?>) hint : session.getClassMeta(Date.class));
 				return format.parse(o.toString(), session.getTimeZoneId());

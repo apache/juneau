@@ -123,6 +123,9 @@ class Settings_DefaultChain_Test extends TestBase {
 		assertSame(fake, s.get(2));
 	}
 
+	@SuppressWarnings({
+		"java:S1872" // Mirrors Settings.isSpiSystemPropertySource(): exact class by name, any classloader.
+	})
 	@ResourceLock(value = "org.apache.juneau.commons.settings.Settings.singleton", mode = ResourceAccessMode.READ)
 	@Test void d07_singleton_hasExactlyOneSystemPropertySource_andItIsNotTheConstant() {
 		var matches = Settings.get().sources().stream()
@@ -138,9 +141,7 @@ class Settings_DefaultChain_Test extends TestBase {
 		assertSame(Settings.SYSTEM_PROPERTY_SOURCE, sub.sources().get(1), "a subclass is not detected, so the fallback is kept");
 
 		var inner = new SystemPropertyPropertySource();
-		PropertySource decorator = new PropertySource() {
-			@Override public PropertyLookupResult get(String name) { return inner.get(name); }
-		};
+		PropertySource decorator = inner::get;
 		var dec = current(List.of(provider(40, decorator)));
 		assertSame(Settings.SYSTEM_PROPERTY_SOURCE, dec.sources().get(1), "a decorator is not detected, so the fallback is kept");
 	}

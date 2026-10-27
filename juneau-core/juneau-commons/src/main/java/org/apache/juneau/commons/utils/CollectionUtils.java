@@ -1645,10 +1645,11 @@ public class CollectionUtils {
 	 *
 	 * @param <E> The element type.
 	 * @param comparator The comparator to use to sort the list.  Can be <jk>null</jk> (natural ordering is used).
-	 * @param values The values to initialize the list with.  Must not be <jk>null</jk>.
+	 * @param values The values to initialize the list with.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
 	 * @return A new modifiable list.
 	 */
 	public static <E> List<E> sortedList(Comparator<E> comparator, E[] values) {
+		reqnn("values", values);
 		List<E> l = list(values);
 		l.sort(comparator);
 		return l;
@@ -1658,11 +1659,12 @@ public class CollectionUtils {
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
 	 * @param <E> The element type.
-	 * @param values The values to initialize the list with.  Must not be <jk>null</jk>.
+	 * @param values The values to initialize the list with.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
 	public static <E> List<E> sortedList(E...values) {
+		reqnn("values", values);
 		List<E> l = list(values);
 		((List<Comparable>)l).sort(null);
 		return l;

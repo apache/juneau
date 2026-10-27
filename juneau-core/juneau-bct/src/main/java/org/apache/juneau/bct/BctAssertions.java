@@ -183,7 +183,8 @@ import org.opentest4j.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants
+	"java:S5960" // Test-assertion library shipped as main source; JUnit assertions are its intentional purpose
 })
 public class BctAssertions {
 

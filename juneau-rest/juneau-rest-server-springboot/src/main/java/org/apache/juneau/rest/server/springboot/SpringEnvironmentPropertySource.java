@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.springframework.boot.context.properties.source.*;
@@ -96,7 +97,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 	private boolean cacheEnabled;
 
 	// The miss set for the source list it was built from; replaced, never edited, when the list changes.
-	private volatile MissGeneration generation;
+	private final AtomicReference<MissGeneration> generation = new AtomicReference<>();
 
 	/**
 	 * Constructor that bridges a pre-built {@link Environment}.
@@ -135,6 +136,9 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		resolved = true;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Single lookup flow: profile piggyback, miss-cache check and property read share locals, so splitting it would only obscure the order of checks
+	})
 	@Override
 	public org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {
 		if (! resolved)
@@ -186,23 +190,23 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 	 * @since 10.0.0
 	 */
 	public void invalidate() {
-		generation = null;
+		generation.set(null);
 	}
 
 	/** @return The number of cached misses (tests). */
 	int missCount() {
-		var g = generation;
+		var g = generation.get();
 		return g == null ? 0 : g.misses.size();
 	}
 
 	private MissGeneration currentGeneration(ConfigurableEnvironment e) {
 		var live = e.getPropertySources();
-		var g = generation;
+		var g = generation.get();
 		if (nn(g) && g.matches(live))
 			return g;
 		// Racing threads may each build one; the loser's misses go to an unused generation, which only costs a walk.
 		g = new MissGeneration(live);
-		generation = g;
+		generation.set(g);
 		return g;
 	}
 

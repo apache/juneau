@@ -1360,6 +1360,20 @@ class LiveTest(unittest.TestCase):
         self.assertEqual([line.count("#") for line in lines], [37, 30, 0])
         self.assertEqual(lines[2], "   r" + " " * (cols - 4 - 4) + "0:05")
 
+    def test_long_trailing_text_wraps_the_bar_instead_of_cutting_it(self):
+        rest = "60/86  12,345 tests, 0 failed · 4 modules · ~45%"   # 50 wide: the old fit cut the bar
+        lines = jr._fit_row("Java Tests   ", ["#"] * 86, rest, "1:09", 72, wrap=True).split("\n")
+        self.assertEqual(sum(line.count("#") for line in lines), 86)
+        self.assertEqual(len(lines), 3)
+        self.assertEqual(lines[2], " " * 15 + rest + " " * (72 - 15 - len(rest) - 4) + "1:09")
+
+    def test_trailing_text_too_long_for_its_own_line_is_cut_with_an_ellipsis(self):
+        lines = jr._fit_row("L", ["#"] * 50, "r" * 100, "1:09", 40, wrap=True).split("\n")
+        self.assertEqual(sum(line.count("#") for line in lines), 50)
+        self.assertEqual(len(lines), 3)
+        self.assertTrue(lines[2].startswith("   rrr") and "…" in lines[2] and lines[2].endswith("  1:09"), lines[2])
+        self.assertEqual(jr._vlen(lines[2]), 40)
+
     def test_the_timer_shortens_on_the_line_that_carries_the_text(self):
         elapsed = "0:05 / ~0:09"
         cols = 24                               # bar column 3, 21 cells per row
@@ -1831,7 +1845,7 @@ class LiveTest(unittest.TestCase):
         self.push(("prompt", {"step": "tests", "text": "Type the full passphrase for the key: "}))
         self.assertEqual(self.screen.text(), "$ push\nType the full passph\nrase for the key:")
         self.push(("prompt_end", {"step": "tests"}))
-        self.assertTrue(self.screen.text().splitlines()[-1].startswith(self.spin() + "Tests"))
+        self.assertTrue(self.screen.text().splitlines()[-2].startswith(self.spin() + "Tests"))    # the unit bar wraps to 2 lines
 
     def test_closing_at_a_prompt_keeps_the_line_above_the_frame(self):
         self.viewport(60, 10)

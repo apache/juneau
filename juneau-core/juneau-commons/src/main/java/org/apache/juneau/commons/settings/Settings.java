@@ -375,6 +375,9 @@ public class Settings {
 		return b;
 	}
 
+	@SuppressWarnings({
+		"java:S1872" // Exact-class match by name on purpose: any classloader counts, subclasses must not (fail safe).
+	})
 	private static boolean isSpiSystemPropertySource(PropertySource s) {
 		return s.getClass().getName().equals(SystemPropertyPropertySource.class.getName());  // exact class name, any loader
 	}

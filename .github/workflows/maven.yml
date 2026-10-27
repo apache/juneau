@@ -218,6 +218,6 @@ jobs:
       with:
         python-version: '3.12'
     - name: Install pytest and PyYAML
-      run: 'python -m pip install --only-binary :all: pytest pyyaml'
+      run: 'python -m pip install --only-binary :all: pytest==9.1.1 pyyaml==6.0.3'
     - name: Run script tests
       run: python -m pytest -q scripts/tests

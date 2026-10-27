@@ -21,7 +21,7 @@ import java.time.*;
 import java.time.temporal.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.function.*; // NOSONAR java:S1128 - used only by Javadoc {@link} references
 
 
 /**

@@ -299,7 +299,8 @@ class McpSchemaCheck_Test {
 
 	/** A valid schema whose first walk stalls past the {@link JsonValueSafety} deadline, like a loaded host or GC pause. */
 	@SuppressWarnings({
-		"java:S2160" // Test double: equality is irrelevant, only the stalled entrySet() matters.
+		"java:S2160", // Test double: equality is irrelevant, only the stalled entrySet() matters.
+		"java:S2925" // The real sleep is the thing under test: it must outlast the wall-clock traversal deadline.
 	})
 	private static final class StallingSchema extends JsonMap {
 		private static final long serialVersionUID = 1L;

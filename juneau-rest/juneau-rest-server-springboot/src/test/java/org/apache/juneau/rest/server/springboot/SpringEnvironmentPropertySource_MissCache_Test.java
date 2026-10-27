@@ -265,6 +265,7 @@ class SpringEnvironmentPropertySource_MissCache_Test extends TestBase {
 		var added = new AtomicBoolean();
 		var failures = new ConcurrentLinkedQueue<String>();
 		var start = new CountDownLatch(1);
+		var running = new CountDownLatch(8);
 		var pool = Executors.newFixedThreadPool(8);
 		try {
 			var futures = new ArrayList<Future<?>>();
@@ -276,11 +277,13 @@ class SpringEnvironmentPropertySource_MissCache_Test extends TestBase {
 						var r = src.get(keys.get(i % keys.size()));
 						if (after && i % keys.size() == 0 && ! r.isPresent())
 							failures.add("lookup " + i + " started after addFirst returned but missed");
+						if (i == 0)
+							running.countDown();
 					}
 					return null;
 				}));
 			start.countDown();
-			Thread.sleep(5);
+			assertTrue(running.await(60, TimeUnit.SECONDS));
 			env.getPropertySources().addFirst(holding("added"));
 			added.set(true);
 			for (var f : futures)

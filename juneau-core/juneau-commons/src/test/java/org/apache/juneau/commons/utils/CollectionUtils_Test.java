@@ -1152,6 +1152,11 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(list("a", "b", "c"), result);
 	}
 
+	@Test
+	void a068b_sortedList_comparatorArray_null() {
+		assertThrows(IllegalArgumentException.class, () -> sortedList(Comparator.<String>naturalOrder(), (String[])null));
+	}
+
 	//====================================================================================================
 	// sortedList(E...)
 	//====================================================================================================
@@ -1160,6 +1165,11 @@ class CollectionUtils_Test extends TestBase {
 		List<String> result = sortedList("c", "a", "b");
 		assertNotNull(result);
 		assertEquals(list("a", "b", "c"), result);
+	}
+
+	@Test
+	void a069b_sortedList_null() {
+		assertThrows(IllegalArgumentException.class, () -> sortedList((String[])null));
 	}
 
 	//====================================================================================================
