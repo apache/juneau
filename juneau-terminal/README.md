@@ -90,7 +90,7 @@ off a terminal (`TERM=dumb` and `JUNEAU_TERMINAL_LIVE=0` count as off) it prints
 | Variable | Effect |
 |---|---|
 | `JUNEAU_TERMINAL_CONSOLE=full\|board\|none` | Where tool output goes. `board` turns the view on. `board` and `none` also make `bootstrap.load()` load juneau_terminal, so a tool's output goes to the logs and not the terminal; `none` draws nothing and emits no markers unless `TERMINAL_MARKERS=1`. |
-| `JUNEAU_TERMINAL_DETAIL=summary\|actionable\|modules\|all` | How much the view shows (default `actionable`). `--detail` on `push.py`, `test.py` and `release.py` wins. |
+| `JUNEAU_TERMINAL_DETAIL=summary\|actionable\|modules\|all` | How much the view shows (default `actionable`). `--detail` on `push.py` and `test.py` wins. |
 | `JUNEAU_TERMINAL_FULL_LOG`, `JUNEAU_TERMINAL_BOARD_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f` for each on a line of its own, to paste into another terminal: `Output: tail -f <full log>`, then `Board: tail -f <board log>`. With `board` or `none` and no full log, the full log defaults to `~/.cache/juneau-terminal/<script>-<YYYYMMDD-HHMMSS>.log`, and unless a board log is set (by argument or variable) a `.board.log` beside it, so another tool can follow the view's rows as plain text; the newest 20 of each kind are kept, and nested scripts share them. |
 | `JUNEAU_TERMINAL_CANCEL` | A command that cancels the run (for example a pane launcher's own cancel command); the header shows it as a `Cancel: <command>` row after the log rows. Unset, there is no such row. |
 | `JUNEAU_TERMINAL_LOG_DIR` | Where those default logs go (default `~/.cache/juneau-terminal`). The tests point it at a temp dir. |
@@ -264,15 +264,15 @@ The `load_juneau_terminal` snippet above still works for a single-file adopter t
 
 ## In this repository
 
-`scripts/test.py`, `scripts/push.py` and `scripts/release.py` load the script straight from
+`scripts/test.py` and `scripts/push.py` load the script straight from
 `juneau-terminal/src/main/python/` (no Maven involved).
 - With `TERMINAL_MARKERS=1`, `push.py` and `test.py` print terminal-protocol markers: `push.py` owns the run (`run`, `done`,
   its own steps); `test.py` and anything it runs contribute steps only, because `run()` exports
-  `JUNEAU_TERMINAL_ACTIVE=1`. `release.py` emits no markers; it warns and ignores `TERMINAL_MARKERS`.
+  `JUNEAU_TERMINAL_ACTIVE=1`.
 - `test.py --console full|board|none --full-log PATH --board-log PATH` routes Maven output (the same settings
   can come from `JUNEAU_TERMINAL_CONSOLE`, `JUNEAU_TERMINAL_FULL_LOG`, `JUNEAU_TERMINAL_BOARD_LOG`; an argument wins; relative
-  paths resolve under `$TERMINAL_ARTIFACTS`). `push.py` and `release.py` take the console settings from the environment.
-- `--detail summary|actionable|modules|all` on all three scripts sets the console detail (see "Console view").
+  paths resolve under `$TERMINAL_ARTIFACTS`). `push.py` takes the console settings from the environment.
+- `--detail summary|actionable|modules|all` on both scripts sets the console detail (see "Console view").
   `push.py` passes it, and its label width, to the `test.py` it runs, and hands that `test.py` the terminal while it
   runs.
 - `push.py --test-only` runs the build and test gates only (no identity check, commit, push or docs follow-up). It
@@ -285,16 +285,6 @@ The `load_juneau_terminal` snippet above still works for a single-file adopter t
   `JUNEAU_PUSH_TIMING_MIN_SECONDS` (default `5`) slower than its median. The full table goes to `test-timings.txt`
   beside `test.jsonl`. With no records yet the Timing row says "no timing history yet" and no table is written; with
   `JUNEAU_TERMINAL_HISTORY=0` it says the run history is off.
-- `release.py` always writes its full log to `~/.juneau-release-logs/<release>-<YYYYMMDD-HHMMSS>.log`, whatever the
-  console mode. Its Maven commands run with `-B` under a PTY (for gpg), and `run_git_diff` pages the
-  `release:prepare` diff through `$PAGER` before `release:perform`. Quit the pager with `q`; `release:perform`
-  starts straight after. Ctrl-C in the pager belongs to the pager and does not cancel the release.
-- `-B` stops only the release plugin's own prompts (`release.py` passes every version with `-D`). git, svn and
-  gpg still prompt through the PTY, and the row shows the prompt after 20 s of silence. To avoid the prompts, set up
-  before a release: a git credential helper that knows your `gitbox.apache.org` credentials (see
-  `git help credential`), a `<server>` entry for `apache.releases.https` in `~/.m2/settings.xml`, svn's cached
-  credentials (run `svn info https://dist.apache.org/repos/dist/dev/juneau` once), and a primed gpg-agent (the PGP
-  step).
 - With markers off and the default console, `push.py` and `test.py` behave exactly as before.
 
 ## The side-pane scripts

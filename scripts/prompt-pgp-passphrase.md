@@ -4,7 +4,7 @@ Makes a throwaway `gpg --clearsign` call so the PGP passphrase is asked for (and
 
 ## When to use
 
-- You are about to start a long build or release and want the passphrase prompt out of the way first. `push.py` and `release.py` call it for you.
+- You are about to start a long build or release and want the passphrase prompt out of the way first. `push.py` calls it for you.
 - To check that your signing key and passphrase work, run it by hand.
 
 ## Usage
@@ -37,11 +37,11 @@ Status lines on stdout, gpg's remaining stderr on stderr.
 
 ## Gotchas
 
-- It is best-effort. `push.py` and `release.py` treat a non-zero exit as a warning only and carry on.
+- It is best-effort. `push.py` treats a non-zero exit as a warning only and carry on.
 - A missing `gpg` or a timeout still exits 0, so exit 0 does not prove the passphrase was accepted.
 - It needs an interactive terminal for the passphrase prompt.
 
 ## See also
 
-- `push.py`, `release.py`
+- `push.py`
 - Docs site: Developer Info, Script: prompt-pgp-passphrase (`04.02.04.ScriptPromptPgpPassphrase.md` in juneau-docs)

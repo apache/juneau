@@ -43,7 +43,7 @@ import _juneau  # noqa: E402
 
 
 # git commit and git push run under a PTY so ssh, pinentry or a credential helper can prompt.  After this many silent
-# seconds, a partial line is shown on the board as a prompt (as in release.py).
+# seconds, a partial line is shown on the board as a prompt.
 WATCHDOG_SECONDS = 20
 
 

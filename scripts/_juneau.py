@@ -15,7 +15,7 @@
 # limitations under the License.
 
 """
-The one loader push.py, test.py and release.py share: the in-tree juneau_terminal_scripts toolkit and juneau_terminal, from
+The one loader push.py and test.py share: the in-tree juneau_terminal_scripts toolkit and juneau_terminal, from
 juneau-terminal/src/main/python beside this directory.
 
     import _juneau

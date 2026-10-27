@@ -41,5 +41,4 @@ Stdout is the version string only. Warnings and errors go to stderr.
 ## See also
 
 - `maven-version.py`
-- `release.py`
 - Docs site: Developer Info, Script: current-release (`04.02.05.ScriptCurrentRelease.md` in juneau-docs)

@@ -62,14 +62,6 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   relative and the absolute margin, faster modules get the `↓` mark, the env overrides, and the `--report` table
   file. Synthetic run-history records in a temp dir.
 
-- `test_release_run.py` -- `release.py` on juneau-terminal and juneau_terminal_scripts, with a fake juneau_terminal module installed in
-  `sys.modules` (where release.py and the toolkit both look it up): every prompt goes through `prompt.text` (Ctrl-D
-  cancels, never takes the default), Maven gets `-B` and a PTY, the full log is always written, the steps are a
-  `steps.Registry` (its CLI, resume and checkpoint, with a legacy `last_step` file still resuming), each step is a
-  labelled row (dim when skipped or done earlier), `run_git_diff` follows
-  `run_release_prepare` and pages through `show`, and the revert is four rows. `HOME` is a temp dir, so the state
-  file and logs never touch yours. Never runs mvn, svn or gpg.
-
 Shared fixtures in `conftest.py`: `run_history` (F1) turns run history on for one test under `tmp_path/history`,
 with `argv[0]` set so the writer's script name is `test`; `fake_reports` (F2) builds a scratch Surefire tree; and
 `history_record` (F3) builds one run-history record.

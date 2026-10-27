@@ -1112,7 +1112,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
         "docs-smoke", "docs-commit", "docs-push"]  
 
 
-# The one loader push.py, test.py and release.py share (scripts/_juneau.py).
+# The one loader push.py and test.py share (scripts/_juneau.py).
 
 @pytest.fixture
 def juneau_loader():

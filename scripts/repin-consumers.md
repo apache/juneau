@@ -56,4 +56,3 @@ Progress lines, Maven's own output, then a `=== Summary ===` block.
 ## See also
 
 - `push.py`, whose unreviewed-changes gate this guard mirrors
-- `release.py`

@@ -121,7 +121,7 @@ def prompt_pgp_passphrase():
             print(f"⚠ Could not prompt for PGP passphrase: {e}")
     except Exception as e:
         print(f"⚠ Could not set up PGP passphrase prompt: {e}")
-    # Best-effort: the callers (push.py, release.py) treat a non-zero exit as a warning only and never stop the build.
+    # Best-effort: the caller (push.py) treats a non-zero exit as a warning only and never stop the build.
     return gpg_ok
 
 
