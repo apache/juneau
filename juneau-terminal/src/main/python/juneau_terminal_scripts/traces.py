@@ -16,7 +16,8 @@ Stack-trace guard: scan a test gate's output for stack traces and fail on any th
 A trace is a run of two or more stack frames (Java, JavaScript), a `Caused by:` line, or a Python `Traceback`.  scan(text)
 finds them, load_allowlist(path) reads the repo's allowlist (one header regex per line plus a mandatory `# reason`), mark()
 and Mark.read() give the part of the run's full log written since the mark, and gate() ties them together as one console
-row.  A gate with nothing to read ends skipped with a warning, never silently passed.
+row.  A gate with nothing to read ends skipped with a warning, never silently passed, and a full log that cannot be read
+fails the row.
 """
 
 import contextlib
@@ -50,13 +51,20 @@ MAX_HINTS = 5
 @dataclasses.dataclass(frozen=True)
 class Trace:
     """kind is java, python or js.  line is 1-based in the scanned text.  header is the line an allowlist regex matches.
-    context is the log line just above the header (shown, never matched).  test is a best-effort attribution."""
+    headers is every header the trace was joined from (JS runs merged by _merge_js), header first; each one must be
+    allowlisted.  context is the log line just above the header (shown, never matched).  test is a best-effort
+    attribution."""
     kind: str
     line: int
     header: str
     frames: int
     context: str = ""
     test: str = ""
+    headers: tuple = ()
+
+    def __post_init__(self):
+        if not self.headers:
+            object.__setattr__(self, "headers", (self.header,))
 
 
 def _is_frame(line):
@@ -127,8 +135,9 @@ def scan(text):
     while i < len(lines):
         line = lines[i]
         if PY_TRACEBACK.match(line):
+            start = i
             trace, i = _python_trace(lines, i)
-            found.append((i, trace))
+            found.append((start, trace))
         elif _is_frame(line):
             end = _frame_run(lines, i)
             frames = sum(1 for k in range(i, end) if _is_frame(lines[k]))
@@ -148,14 +157,15 @@ def scan(text):
 
 
 def _merge_js(lines, found):
-    """Two JS runs in one console block (an error with a cause prints twice) count once."""
+    """Two JS runs in one console block (an error with a cause prints twice) count once, keeping both headers."""
     merged = []
     for idx, trace in found:
         if merged and trace.kind == "js" and merged[-1][1].kind == "js":
             prev_idx, prev = merged[-1]
             between = lines[prev_idx + prev.frames:idx]
             if idx - prev_idx <= prev.frames + JS_JOIN_LINES and not any(JS_BOUNDARY.match(b) for b in between):
-                merged[-1] = (prev_idx, dataclasses.replace(prev, frames=prev.frames + trace.frames))
+                joined = dataclasses.replace(prev, frames=prev.frames + trace.frames, headers=prev.headers + trace.headers)
+                merged[-1] = (prev_idx, joined)
                 continue
         merged.append((idx, trace))
     return merged
@@ -177,27 +187,26 @@ class Allowlist:
         self.errors = tuple(errors)
 
     def partition(self, found):
-        """(allowed, denied, used): the traces split by whether an entry matches their header, and the entries that matched."""
+        """(allowed, denied, used): the traces split by whether an entry matches every one of their headers, and the entries
+        that matched."""
         allowed, denied, used = [], [], set()
         for trace in found:
-            hit = next((e for e in self.entries if e.pattern.search(trace.header)), None)
-            if hit is None:
-                denied.append(trace)
-            else:
-                allowed.append(trace)
-                used.add(hit.line)
+            hits = [next((e for e in self.entries if e.pattern.search(h)), None) for h in trace.headers]
+            used.update(e.line for e in hits if e is not None)
+            (denied if None in hits else allowed).append(trace)
         return allowed, denied, used
 
     def stale(self, used):
         return [e for e in self.entries if e.line not in used]
 
 
-_ENTRY_LINE = re.compile(r"^(.*\S)\s+#(?:\s+(.*\S))?\s*$")
+_ENTRY_LINE = re.compile(r"^(.*?\S)\s+#(?:\s+(.*\S))?\s*$")
 
 
 def load_allowlist(path):
     """Parse the allowlist at path (a missing file is an empty one).  A line is `<regex>  # <reason>`; blank lines and lines
-    starting with # are ignored.  The reason is everything after the last whitespace-hash-whitespace, and must not be empty."""
+    starting with # are ignored.  The reason is everything after the first whitespace-hash-whitespace (so a reason may
+    itself hold ` # `), and must not be empty."""
     path = Path(path)
     if not path.is_file():
         return Allowlist()
@@ -232,15 +241,16 @@ class Mark:
     offset: int = 0
 
     def read(self):
-        """The text written to the log since the mark ("" when there is no log)."""
+        """The text written to the log since the mark ("" when nothing was), or None when there is no log or it cannot be
+        read."""
         if self.path is None:
-            return ""
+            return None
         try:
             with open(self.path, "rb") as f:
                 f.seek(self.offset)
                 return f.read().decode("utf-8", errors="replace")
         except OSError:
-            return ""
+            return None
 
 
 def mark():
@@ -288,7 +298,7 @@ def _hint(lines, id):
 
 def _describe(trace):
     near = f"  (near {trace.test})" if trace.test else ""
-    return f"{trace.header or '(no header)'}{near}"
+    return f"{' | '.join(h or '(no header)' for h in trace.headers)}{near}"
 
 
 def _report_text(allowed, denied, stale, errors):
@@ -297,6 +307,7 @@ def _report_text(allowed, denied, stale, errors):
         out.append(f"{title}: {len(items)}")
         for t in items:
             out.append(f"  line {t.line} [{t.kind}, {t.frames} frames] {t.header}")
+            out += [f"    joined: {h}" for h in t.headers[1:]]
             if t.context:
                 out.append(f"    context: {t.context}")
             if t.test:
@@ -310,13 +321,22 @@ def gate(id, title, allowlist_path, *, since=None, text="", extra=(), warn_only=
          label=None):
     """The Traces row.  Reads the full log since `since` (a mark()) (else `text`, the captured output of the gates), plus every string
     in `extra` (for example a dev-server log), scans it, and returns 0 (clean, allowlisted, or a failure downgraded by
-    warn_only) or 1 (a trace not on the allowlist, or an allowlist error).  Nothing to read ends the row skipped with a
-    warning and returns 0.  full_run=False (a skip flag was used) suppresses the stale-entry report.  report, when
-    given, is a path that gets every trace, allowed or not."""
+    warn_only) or 1 (a trace not on the allowlist, an allowlist error, or a full log that cannot be read).  With no full
+    log and no `text` the row ends skipped with a warning and returns 0, even when `extra` is given: `extra` is only ever
+    scanned in addition to the gates' own output.  full_run=False (a skip flag was used) suppresses the stale-entry
+    report.  report, when given, is a path that gets every trace, allowed or not."""
     allowlist = load_allowlist(allowlist_path)
     with _row(id, title, label) as row:
-        source = since.read() if since is not None and since.path is not None else text
-        if not source and not extra and (since is None or since.path is None):
+        if since is not None and since.path is not None:
+            source = since.read()
+            if source is None:
+                row.status = "fail"
+                row.summary = "full log unreadable"
+                _say("error", f"Trace guard failed: cannot read the full log {since.path}.", id)
+                return 1
+        elif text:
+            source = text
+        else:
             row.status = "skip"
             row.summary = "no full log to scan"
             _say("warn", "Trace guard skipped: no full log (run with --console board or --full-log).", id)

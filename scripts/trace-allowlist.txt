@@ -14,3 +14,5 @@
 # Stack traces that the test gates may print.  One entry per line: a regex matched (re.search) against the trace's
 # header line, then two spaces, `# `, and the reason.  An entry with no reason fails the Traces row.
 # target/trace-guard.txt lists each header exactly as it is matched, so write the regex against that text.
+# A JavaScript trace joined from two errors in one console block lists the second as `joined:`; every header of a
+# trace must match some entry for it to be allowed.
