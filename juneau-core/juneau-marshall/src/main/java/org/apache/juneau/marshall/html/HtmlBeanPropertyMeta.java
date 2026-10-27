@@ -162,7 +162,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
 	 *
 	 * @return
-	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html(noTableHeaders)} is
+	 * 	<jk>true</jk> if the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html(noTableHeaders)} is
 	 * 	<jk>true</jk>.
 	 */
 	public boolean isNoTableHeaders() { return noTableHeaders; }
@@ -199,7 +199,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Returns whether this bean property should not be serialized as an HTML table.
 	 *
 	 * @return
-	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTables() @Html(noTables)} is
+	 * 	<jk>true</jk> if the {@link Html @Html} annotation is specified, and {@link Html#noTables() @Html(noTables)} is
 	 * 	<jk>true</jk>.
 	 */
 	protected boolean isNoTables() { return noTables; }
