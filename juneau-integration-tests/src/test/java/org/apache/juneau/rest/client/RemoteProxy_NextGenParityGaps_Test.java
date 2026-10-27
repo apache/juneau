@@ -803,7 +803,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 	@Remote(path="/m", timeout="5s")
 	public interface M_TimeoutClient {
 		@RemoteGet("/a") String ifaceTimeout();
-		@RemoteGet(path="/b", timeout="50ms") String methodTimeout();
+		@RemoteGet(path="/b", timeout="2s") String methodTimeout();
 	}
 
 	@Remote(path="/m")
@@ -818,7 +818,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 			try (var c = captureClient(captured)) {
 				c.remote(M_TimeoutClient.class).methodTimeout();
 			}
-			assertEquals(Duration.ofMillis(50), captured.get(0).getTimeout());
+			assertEquals(Duration.ofSeconds(2), captured.get(0).getTimeout());
 		}
 
 		@Test void m02_interfaceTimeout_appliedWhenMethodSilent() throws Exception {
