@@ -175,6 +175,64 @@ class TerminalProcess_Test extends TestBase {
 		assertEquals(0, TerminalProcess.start("generic", List.of("true"), 80, 24, empty, h).waitFor(30, TimeUnit.SECONDS));
 	}
 
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void a08_envReachesTheChildAndNeverArgv() throws Exception {
+		fakePython("env > \"$(dirname \"$0\")/env.txt\"\nexit 0");
+		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null), Map.of("JRM_TEST_SECRET", "s3cr3t"));
+		assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
+		var env = Files.readAllLines(bin.resolve("env.txt"));
+		assertTrue(env.contains("JRM_TEST_SECRET=s3cr3t"));
+		assertTrue(env.stream().anyMatch(l -> l.startsWith("PATH=")), "the inherited environment must be merged, not replaced");
+		assertFalse(String.join("\n", Files.readAllLines(bin.resolve("argv.txt"))).contains("s3cr3t"), "a secret must not be on argv");
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void a09_nullEnvIsRefused() {
+		assertThrows(NullPointerException.class, () -> TerminalProcess.start("generic", List.of("true"), 80, 24, run, (Map<String,String>)null));
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void a10_terminateLetsAProcessThatHonoursSigtermExit() throws Exception {
+		fakePython("trap 'echo got > \"$(dirname \"$0\")/term.txt\"; exit 0' TERM\necho ready > \"$(dirname \"$0\")/ready.txt\"\nsleep 30 &\nwait");
+		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
+		awaitStarted(bin.resolve("ready.txt"));
+		p.terminate(java.time.Duration.ofSeconds(10));
+		assertTrue(p.isDone() || p.waitFor(10, TimeUnit.SECONDS) == 0);
+		assertEquals("got", Files.readString(bin.resolve("term.txt")).trim());
+		p.close();
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void a11_terminateKillsAProcessThatIgnoresSigtermAfterTheGrace() throws Exception {
+		fakePython("trap '' TERM\necho ready > \"$(dirname \"$0\")/ready.txt\"\nwhile true; do sleep 1; done");
+		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
+		awaitStarted(bin.resolve("ready.txt"));
+		var t0 = System.nanoTime();
+		p.terminate(java.time.Duration.ofMillis(500));
+		assertTrue(System.nanoTime() - t0 >= 400_000_000L, "waited for the grace period before killing");
+		p.waitFor(10, TimeUnit.SECONDS);
+		assertTrue(p.isDone());
+		p.close();
+	}
+
+	@DisabledOnOs(OS.WINDOWS)
+	@Test void a12_terminateOnAnExitedProcessIsANoOpAndRepeatable() throws Exception {
+		fakePython("exit 0");
+		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
+		assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
+		p.terminate(java.time.Duration.ofSeconds(1));
+		p.terminate(java.time.Duration.ofSeconds(1));
+		assertThrows(NullPointerException.class, () -> p.terminate(null));
+		p.close();
+	}
+
+	private static void awaitStarted(Path f) throws Exception {
+		var end = System.nanoTime() + TimeUnit.SECONDS.toNanos(20);
+		while (! Files.exists(f) && System.nanoTime() < end)
+			Thread.sleep(20);
+		assertTrue(Files.exists(f), "the fake process never started: " + f);
+	}
+
 	@Test void b04_onlyTheTailIsScannedForDone() throws Exception {
 		Files.createDirectories(run);
 		var f = run.resolve("e.jsonl");

@@ -387,6 +387,37 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, prompts);
 	}
 
+	/**
+	 * Starts a tool under a pseudo-terminal with extra environment variables.
+	 *
+	 * <p>
+	 * Same as {@link #start(String, List, int, int, Path)}, except that {@code env} is added to the child's
+	 * environment (over what it inherits).
+	 * Use it for values that must not appear on the command line, such as secrets.
+	 *
+	 * @param tool The juneau_terminal tool parser.
+	 * @param cmd The command and its arguments; at least one element.
+	 * @param cols The terminal width, 1-9999.
+	 * @param rows The terminal height, 1-9999.
+	 * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.
+	 * @param env Variables to add to the child's environment; not <jk>null</jk>, may be empty.
+	 * @return The running process.
+	 * @throws IOException If the directory could not be prepared or the process could not start.
+	 * @throws IllegalArgumentException If an argument is out of range.
+	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
+	 * 	the run directory already holds a run.
+	 * @throws UnsupportedOperationException On Windows.
+	 */
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Map<String,String> env) throws IOException {
+		Objects.requireNonNull(env, "env");
+		return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, null, env);
+	}
+
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, Map<String,String> env) throws IOException {
+		Objects.requireNonNull(env, "env");
+		return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone, false, null, env);
+	}
+
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host) throws IOException {
 		return start(tool, cmd, cols, rows, dir, host, false);
 	}
@@ -410,6 +441,13 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		"java:S107" // internal entry point; the parameters are the process configuration
 	})
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts) throws IOException {
+		return start(tool, cmd, cols, rows, dir, host, doneWriter, input, prompts, Map.of());
+	}
+
+	@SuppressWarnings({
+		"java:S107" // internal entry point; the parameters are the process configuration
+	})
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, Map<String,String> env) throws IOException {
 		if (input && prompts != null)
 			throw new IllegalArgumentException("input and prompts are mutually exclusive");
 		if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))
@@ -445,6 +483,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		argv.addAll(cmd);
 		var runnerOut = ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile());
 		var pb = new ProcessBuilder(argv).directory(dir.toFile());
+		pb.environment().putAll(env);
 		if (prompts == null)
 			pb.redirectErrorStream(true).redirectOutput(runnerOut);
 		else
@@ -708,6 +747,31 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	/** The thread the exit hook ran on, or <jk>null</jk> before it has run; for tests. */
 	Thread exitThread() {
 		return exitThread.get();
+	}
+
+	/**
+	 * Asks the runner to stop and waits for it, killing it if it does not.
+	 *
+	 * <p>
+	 * Sends SIGTERM to the runner, which passes it to the tool so that the tool can clean up and record that it was
+	 * cancelled.  If the process is still running after {@code grace}, this falls back to {@link #close()}, which kills it.
+	 * It does nothing when the process has already exited, and it is safe to call more than once.
+	 * Call {@link #close()} afterwards as usual to release the process's resources.
+	 *
+	 * @param grace How long to wait for the process to exit after SIGTERM; not <jk>null</jk>, zero or negative kills at once.
+	 */
+	public void terminate(java.time.Duration grace) {
+		Objects.requireNonNull(grace, "grace");
+		if (! process.isAlive())
+			return;
+		process.destroy();
+		try {
+			if (process.waitFor(Math.max(0, grace.toMillis()), TimeUnit.MILLISECONDS))
+				return;
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		close();
 	}
 
 	/**
