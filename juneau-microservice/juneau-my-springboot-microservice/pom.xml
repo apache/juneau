@@ -30,7 +30,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
-		<version>9.2.1</version>
+		<version>9.2.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-my-springboot-microservice</artifactId>
@@ -38,7 +38,7 @@
 	<description>Apache Juneau Spring Boot Microservice Template</description>
 
 	<properties>
-		<juneau.version>9.2.1</juneau.version>
+		<juneau.version>9.2.2-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
