@@ -24,7 +24,7 @@ from ._side import ParserNotBound, SideFile
 
 __all__ = ["REGISTRY", "ParserNotBound", "SideFile", "bind", "detect", "known", "load"]
 
-REGISTRY = {"bazel": "bazel"}
+REGISTRY = {"bazel": "bazel", "git": "git"}
 
 
 def bind(jr):
@@ -44,6 +44,8 @@ _TOOLS = {"mvn": "maven", "mvnw": "maven", "mvnw.cmd": "maven", "gradle": "gradl
           "gradlew.bat": "gradle", "npm": "npm"}
 _BAZEL_TOOLS = ("bazel", "bazelisk")
 _BAZEL_COMMANDS = ("build", "test", "coverage")
+_GIT_COMMANDS = ("clone", "fetch", "pull")
+_GIT_OPTION_VALUES = ("-C", "-c", "--git-dir", "--work-tree", "--namespace", "--super-prefix", "--config-env")   # take a separate value
 _PYTHON = re.compile(r"^(?:python|pypy)[\d.]*(?:\.exe)?$")
 _QUIET = ("-q", "--quiet")
 _LAUNCHERS = ("uv", "poetry", "pipenv", "pdm", "hatch", "rye")   # as in juneau_terminal._RUNNERS
@@ -69,6 +71,20 @@ def _foreign_dash_m(args):
     `git commit -m pytest` is not a pytest run."""
     prog = _program(args[0])
     return "-m" in args and prog not in ("pytest", "py.test", "env", *_LAUNCHERS) and not _PYTHON.match(prog)
+
+
+def _git_command(args):
+    """The git subcommand in args (args[0] is git), past the global options in front of it; None if there is none."""
+    i = 1
+    while i < len(args):
+        a = args[i]
+        if a in _GIT_OPTION_VALUES:
+            i += 2
+        elif a.startswith("-"):
+            i += 1
+        else:
+            return a
+    return None
 
 
 def program_index(args):
@@ -132,6 +148,8 @@ def detect(argv, *, is_pytest=None):
         if _TOOLS[prog] == "maven" and any(a in _QUIET for a in args[1:]):
             return None   # quiet Maven prints nothing the Maven parser reads
         return _TOOLS[prog]
+    if prog in ("git", "git.exe"):
+        return "git" if _git_command(args) in _GIT_COMMANDS else None
     if prog == "playwright":
         return "playwright" if args[1:2] == ["test"] else None
     if prog in _BAZEL_TOOLS:

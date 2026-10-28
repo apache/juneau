@@ -246,9 +246,14 @@ def _plain(cmd, *, cwd, env, capture, input=None):
 
 def _parser_for(jr, cmd, tool):
     """The parser for a routed run: tool if given, else the one detected from cmd; a name juneau_terminal can't resolve
-    (an older juneau_terminal, or no such parser) is the generic one."""
-    if tool is None:
-        tool = parsers.detect(cmd, is_pytest=getattr(jr, "_is_pytest_command", None)) or "generic"
+    (an older juneau_terminal, or no such parser) is the generic one.  A clone, fetch or pull gets the git parser even
+    under the default tool="generic" of a caller that names a tool for every command."""
+    if tool is None or tool == "generic":
+        detected = parsers.detect(cmd, is_pytest=getattr(jr, "_is_pytest_command", None))
+        if tool is None:
+            tool = detected or "generic"
+        elif detected == "git":
+            tool = detected
     if isinstance(tool, str):
         known = getattr(jr, "known_parser", None)
         if not (known(tool) if known is not None else tool in jr.PARSERS):

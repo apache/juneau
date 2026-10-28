@@ -53,13 +53,22 @@ complete. Quiet Maven calls (`-q`) should use the `generic` parser.
 
 When a script calls `run.cmd` (or `run.gate`) without `tool=`, the parser is picked from the command: `mvn`/`mvnw`
 → maven, `gradle`/`gradlew` → gradle, pytest (directly, `python -m pytest` or `uv run pytest`) → pytest, `npm` →
-npm, `playwright test` → playwright, and `bazel`/`bazelisk` `build`/`test`/`coverage` → bazel, looking through
+npm, `playwright test` → playwright, `bazel`/`bazelisk` `build`/`test`/`coverage` → bazel, and `git clone`/`fetch`/`pull`
+→ git (a bar from git's progress output; see below), looking through
 `env`, `npx`, `pnpm`, `yarn` and `npm exec`.  Quiet Maven (`-q`/`--quiet`) and anything else get the generic parser.
 Parsers other than the built-in ones live in `juneau_terminal_scripts.parsers`; if that package can't be found, juneau-terminal
 warns once and uses the generic parser.
 
 Parser notes:
 
+- **Git.** `git clone`, `fetch` and `pull` get the git parser, including when a caller passes `tool="generic"` (the git
+  parser behaves as the generic one when git prints no progress; git prints progress to a pipe only with `--progress`).
+  It reads git's stderr, which is carriage-return separated, through the parser flag `cr_lines` (the runner then hands the
+  parser each CR- or LF-terminated piece as it arrives; other parsers still see the last piece of each line).  One
+  20-cell bar covers the transfer: Receiving (or Unpacking) objects 0-70 %, Resolving deltas 70-85 %, Updating files 85-100 %;
+  the bar only moves forward and the last cell fills when git exits 0.  The server-side `remote:` phases (Enumerating,
+  Counting, Compressing) show as the row's text only.  Test fixture: `src/test/python/fixtures/parsers/git/clone.stderr`
+  (a recorded `git clone --progress --no-local`).
 - **Bazel.** The Bazel parser adds `--build_event_json_file=<temp file>` after the command word.  If a `.bazelrc` also
   sets that flag, the injected one overrides it (Bazel takes the last value), so the `.bazelrc` file is not written
   during that run.  To keep it, pass the flag on the command line yourself: the parser then reads that file and

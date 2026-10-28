@@ -3841,12 +3841,16 @@ class Parser:
     tool prints (no --console=plain), only add side channels such as a report file.  A parser that sets rewrites_log
     gets render() called for every complete output line in piped mode, and the full log holds what it returns.
 
+    cr_lines makes the runner hand on_line every carriage-return-terminated piece of the output as it arrives (a
+    progress meter that rewrites one line), instead of only the last piece of each newline-terminated line.
+
     BARS names the bar units a caller may pick with run_tool(..., bar=); bar is the one picked (None: the parser's
     default), set by the runner before prepare() like step_id."""
 
     name = "base"
     interactive = False
     rewrites_log = False
+    cr_lines = False
     BARS = ()
     bar = None
 
@@ -5416,6 +5420,9 @@ def _no_bytecode_beside_a_directory_toolkit():
         sys.dont_write_bytecode = saved
 
 
+_PIECE_END = re.compile(r"[\r\n]")
+
+
 def _toolkit_parsers():
     """juneau_terminal_scripts.parsers, bound to this module on first use.  The outcome, success or failure, is kept."""
     global _toolkit
@@ -5740,6 +5747,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     except Exception as e:
         warn(f"parser {getattr(parser, 'name', '?')} prepare failed ({e!r}); using the original command")
     rewriting = bool(getattr(parser, "rewrites_log", False)) and not tty   # read once; under a terminal never
+    cr_lines = bool(getattr(parser, "cr_lines", False)) and not rewriting
+    swallow_lf = False      # a CR just ended a piece: a LF right after it is the same terminator
     dispatch = _Dispatcher(step_id, sinks, cwd=cwd, reports=reports)
     try:
         emit("step", id=step_id, n=n if n is not None else 1, title=title, parent=parent)
@@ -5808,9 +5817,31 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             captured.append(text)
         watch.output(text)
 
+    def feed_pieces():
+        """cr_lines: a piece ends at a CR or a LF (CR+LF once); an empty CR piece is dropped, an empty LF line is not."""
+        nonlocal pending, swallow_lf
+        while pending:
+            if swallow_lf:
+                swallow_lf = False
+                if pending[0] == "\n":
+                    pending = pending[1:]
+                    continue
+            end = _PIECE_END.search(pending)
+            if end is None:
+                return
+            piece, pending = pending[:end.start()], pending[end.end():]
+            swallow_lf = end.group() == "\r"
+            if tty:
+                piece = strip_ansi(piece)
+            if piece or not swallow_lf:
+                dispatch.apply(guard.call("on_line", piece))
+
     def feed(text):
         nonlocal pending
         pending += text
+        if cr_lines:
+            feed_pieces()
+            return
         while "\n" in pending:
             raw, pending = pending.split("\n", 1)
             if rewriting:
