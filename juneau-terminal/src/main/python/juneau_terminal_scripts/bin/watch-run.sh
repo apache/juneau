@@ -16,10 +16,11 @@
 # chooses the log and result paths itself (so nothing has to guess them), exports them, and prints the result summary.
 # Requires: bash, tmux, tmux-pane.sh beside it, perl (for the follower filter), python3 (optional, for the result summary).  Tested on macOS.
 #
-# Usage: watch-run.sh [--no-tail] [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap]
+# Usage: watch-run.sh [--no-tail] [--no-close-kept] [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap]
 #                     [--keep-on-cancel] -- CMD [ARGS...]
 #
 #   --no-tail  do not open the lower pane running `tail -F` on the full log
+#   --no-close-kept  leave kept panes from earlier runs open (by default they are closed before the new pane opens)
 #   --print-tail-filter  print the filter the follower pane pipes `tail -F` through, and exit (used by the tests)
 #   other options pass straight through to tmux-pane.sh (see its header); -t defaults to the script's name
 #
@@ -45,12 +46,13 @@ here=$(cd "$(dirname "$0")" && pwd)
 
 usage() { awk '/^# \*+$/ && length($0) > 40 {n++; next} n >= 2 && /^# Edit this file/ {exit} n >= 2' "$0" >&2; exit 2; }
 
-no_tail=0 title=
+no_tail=0 close_kept=1 title=
 passthru=()
 while [ $# -gt 0 ]; do
 	case $1 in
 		--) shift; break ;;
 		--no-tail) no_tail=1 ;;
+		--no-close-kept) close_kept=0 ;;
 		--print-tail-filter) tail_filter; echo; exit 0 ;;
 		--reap|--keep-on-cancel) passthru+=("$1") ;;
 		-[dntkK]) [ $# -ge 2 ] || usage; [ "$1" != -t ] || title=$2; passthru+=("$1" "$2"); shift ;;
@@ -108,8 +110,8 @@ args=(${passthru[@]+"${passthru[@]}"} --pane "$leader")
 [ $no_tail = 1 ] || args+=(--pane "tail -F $(printf '%q' "$full") | $(tail_filter)")
 
 # Clear finished (kept) panes from earlier runs and their followers first; tmux-pane.sh refuses running ones.  A failed
-# cleanup only warns, so it never stops the launch.
-"$here/tmux-pane.sh" close --kept >/dev/null 2>&1 || echo "watch-run.sh: warning: could not close leftover panes" >&2
+# cleanup only warns, so it never stops the launch.  --no-close-kept skips it.
+[ $close_kept = 0 ] || "$here/tmux-pane.sh" close --kept >/dev/null 2>&1 || echo "watch-run.sh: warning: could not close leftover panes" >&2
 
 # Not exec'd, so the summary can follow; INT and TERM are forwarded so the pane runner cleans up.
 "$here/tmux-pane.sh" "${args[@]}" &

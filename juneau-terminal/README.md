@@ -346,7 +346,8 @@ Outside tmux (`$TMUX` unset) both scripts exit 2; run the command directly there
 - When a run ends the script prints the last lines of the pane, a list of processes the command left running (with
   their listening ports), and `exit=N`. Panes are kept per `-k` until Enter in the leader, `-K` minutes, or `close`.
   Read the last `exit=` line.
-- `watch-run.sh` closes kept panes from earlier runs before it opens a new one (running panes are untouched), prints
+- `watch-run.sh` closes kept panes from earlier runs before it opens a new one (running panes are untouched; `--no-close-kept`
+  leaves them all open), prints
   `tail -f <log>` and `board: <board log>` first, and ends with a `result:` summary: status, exit, time, one line per
   row, notes and log paths.
 - Widths: the pane the script was started from (the agent pane) and each run's column share the window equally (50/50,

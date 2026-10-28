@@ -249,6 +249,16 @@ class WatchRunTest(WatchCase):
         self.assertEqual(self.run_watch("-k", "never", "--", "bash", probe)[0], 0)
         self.assertFalse(old & set(seen.read_text().split()))
 
+    def test_no_close_kept_leaves_a_kept_pane_from_an_earlier_run_open(self):
+        self.assertEqual(self.run_watch("-k", "always", "--", "true")[0], 0)
+        old = self.pane_ids() - {"%0"}
+        self.assertEqual(len(old), 2)  # kept leader and its follower
+        seen = self.tmp / "ids.txt"
+        probe = script(self.tmp, "later.sh", 'tmux list-panes -s -t t -F "#{pane_id}" > %s\n' % seen)
+        self.assertEqual(self.run_watch("--no-close-kept", "-k", "never", "--", "bash", probe)[0], 0)
+        self.assertLessEqual(old, set(seen.read_text().split()))
+        self.assertLessEqual(old, self.pane_ids())
+
     @slow_tmux
     def test_a_running_pane_is_left_alone_by_the_cleanup(self):
         slow = script(self.tmp, "slow.sh", "sleep 5\n")
