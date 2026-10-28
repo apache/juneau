@@ -710,6 +710,8 @@ def test_quiet_real_path_merges_env_and_decodes_bytes_output(make_ctx, monkeypat
     (True, "file.zip\n", True),
     (False, "svn: E170000: URL 'https://x/y' doesn't exist\n", False),
     (False, "svn: warning: W160013: '/y' path not found; non-existent in revision 5", False),
+    (False, "svn: warning: W160013: '/repos/dist/!svn/rvr/88862/dev/juneau/source/x' path not found\n"
+            "svn: E200009: Could not list all targets because some targets don't exist\n", False),
     (False, "svn: E170013: Unable to connect to a repository at URL\n", None),
 ])
 def test_svn_exists_tells_absent_from_cannot_list(make_ctx, ok, out, expected):
