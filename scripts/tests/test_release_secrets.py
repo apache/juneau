@@ -34,7 +34,7 @@ def _drive_secret_steps(ctx):
 
 
 def test_no_secret_on_any_argv(make_ctx):
-    ctx = make_ctx(state=PASSED, answers={"confirm.revert-versions": True, "confirm.drop-stale": False})
+    ctx = make_ctx(state=PASSED)
     _drive_secret_steps(ctx)
     assert ctx.fake.calls
     for c in ctx.fake.calls:

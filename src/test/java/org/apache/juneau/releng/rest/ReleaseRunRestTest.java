@@ -21,16 +21,12 @@ import static org.mockito.Mockito.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.juneau.http.response.BadRequest;
 import org.apache.juneau.http.response.Conflict;
 import org.apache.juneau.http.response.InternalServerError;
 import org.apache.juneau.releng.log.EventBroadcaster;
-import org.apache.juneau.releng.run.PromptBroker;
 import org.apache.juneau.releng.run.ReleaseProcessService;
 import org.apache.juneau.releng.run.RunFiles;
-import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.terminal.region.TerminalProcess;
 import org.apache.juneau.console.views.IdempotencyKey;
@@ -56,21 +52,12 @@ class ReleaseRunRestTest {
 		return new ReleaseRunRest(new RunFiles(home, svc::isLiveDir), svc);
 	}
 
-	static final String HELLO = "{\"v\":1,\"type\":\"hello\",\"pid\":4242}";
-	static final String PROMPT = "{\"v\":1,\"type\":\"prompt\",\"id\":\"p1\",\"kind\":\"text\",\"key\":\"release.branch\",\"message\":\"m\"}";
-
 	@SuppressWarnings("resource") // Mocked process and source hold no real resource; ownership passes to the returned Live.
-	static ReleaseProcessService.Live live(String attemptId, boolean hello, boolean prompt) {
-		var broker = new PromptBroker(k -> Optional.empty(), new EventBroadcaster(), java.util.Map.of());
-		broker.attach(line -> true);
-		if (hello)
-			broker.onLine(HELLO);
-		if (prompt)
-			broker.onLine(PROMPT);
+	static ReleaseProcessService.Live live(String attemptId) {
 		var proc = mock(TerminalProcess.class);
 		var source = mock(org.apache.juneau.terminal.region.FileTerminalSource.class);
 		when(proc.terminal()).thenReturn(source);
-		return new ReleaseProcessService.Live(attemptId, java.nio.file.Path.of("x"), "start", true, proc, broker);
+		return new ReleaseProcessService.Live(attemptId, java.nio.file.Path.of("x"), "start", true, proc);
 	}
 
 	@SuppressWarnings("resource") // Mocked process and source hold no real resource.
@@ -88,7 +75,7 @@ class ReleaseRunRestTest {
 		Files.writeString(dir.resolve("full.log"), "older attempt\n");
 		assertTrue(r.terminalSource("attempt-20261020-100000-001", null).isPresent(), "falls back to full.log");
 
-		var l = live("attempt-20261020-100000-009", false, false);
+		var l = live("attempt-20261020-100000-009");
 		when(svc.live()).thenReturn(Optional.of(l));
 		assertSame(l.process().terminal(), r.terminalSource("attempt-20261020-100000-009", null).orElseThrow(), "live branch");
 		assertTrue(r.terminalSource("attempt-20261020-100000-008", null).isEmpty(), "another attempt is not the live one");
@@ -102,11 +89,11 @@ class ReleaseRunRestTest {
 		var r = rest(home, svc);
 		var rc1 = body("RC1", false);
 		assertThrows(BadRequest.class, () -> r.dropRc(rc1));
-		verify(svc, never()).dropRc(anyString(), anyBoolean());
-		when(svc.dropRc("RC2", false)).thenReturn(null);
+		verify(svc, never()).dropRc(anyBoolean());
+		when(svc.dropRc(false)).thenReturn(null);
 		var rc2 = body("RC2", false);
 		assertThrows(NullPointerException.class, () -> r.dropRc(rc2), "reached the service");
-		verify(svc).dropRc("RC2", false);
+		verify(svc).dropRc(false);
 	}
 
 	@Test
@@ -147,11 +134,6 @@ class ReleaseRunRestTest {
 	}
 
 	@Test
-	void a06_answerIsNeverLogged() {
-		assertEquals(Level.OFF, Logger.getLogger(ReleaseRunRest.class.getName() + ".answer").getLevel());
-	}
-
-	@Test
 	void a07_pageCarriesStartKey(@TempDir Path home) {
 		var svc = mock(ReleaseProcessService.class);
 		var view = (FreemarkerView) rest(home, svc).page(mock(HttpServletRequest.class));
@@ -179,7 +161,7 @@ class ReleaseRunRestTest {
 	@Test
 	void a09_startKeyReplayReturnsTheLiveAttempt(@TempDir Path home) {
 		var svc = mock(ReleaseProcessService.class);
-		var l = live("attempt-20261020-100000-001", true, false);
+		var l = live("attempt-20261020-100000-001");
 		when(svc.start(false)).thenReturn(l);
 		when(svc.live()).thenReturn(Optional.of(l));
 		var r = rest(home, svc);
@@ -197,10 +179,10 @@ class ReleaseRunRestTest {
 		assertEquals(java.util.Set.of("history"), idle.keySet());
 
 		runJson(home, "rc", 1, home.resolve("attempts/a").toString(), "failed");
-		var withPrompt = live("attempt-a", true, true);
-		when(svc.live()).thenReturn(Optional.of(withPrompt));
+		var l = live("attempt-a");
+		when(svc.live()).thenReturn(Optional.of(l));
 		var m = rest(home, svc).current();
-		assertEquals(java.util.Set.of("active", "live", "pending", "history"), m.keySet());
+		assertEquals(java.util.Set.of("active", "live", "history"), m.keySet());
 		var activeJson = Json.of(m.get("active"));
 		assertTrue(activeJson.contains("\"phase\":\"rc\""), activeJson);
 		assertFalse(activeJson.contains("\"path\""), activeJson);
@@ -209,12 +191,7 @@ class ReleaseRunRestTest {
 		assertEquals("attempt-a", lv.get("attemptId"));
 		assertEquals("start", lv.get("command"));
 		assertEquals(true, lv.get("dryRun"));
-		assertEquals(4242L, lv.get("pid"));
-
-		var quiet = live("attempt-a", false, false);
-		when(svc.live()).thenReturn(Optional.of(quiet));
-		assertFalse(rest(home, svc).current().containsKey("pending"));
-		assertDoesNotThrow(() -> rest(home, svc).current(), "a live process that has not said hello has no pid yet");
+		assertEquals(java.util.Set.of("attemptId", "command", "dryRun"), lv.keySet());
 	}
 
 	@Test
@@ -229,26 +206,10 @@ class ReleaseRunRestTest {
 		runJson(home, "rc", 2, home.resolve("attempts/a").toString(), "failed");
 		var svc = mock(ReleaseProcessService.class);
 		when(svc.live()).thenReturn(Optional.empty());
-		when(svc.dropRc("RC2", false)).thenThrow(new ReleaseProcessService.BusyException("x"));
+		when(svc.dropRc(false)).thenThrow(new ReleaseProcessService.BusyException("x"));
 		var r = rest(home, svc);
 		var req = body("RC2", false);
 		assertThrows(Conflict.class, () -> r.dropRc(req));
-	}
-
-	@Test
-	void a13_answerMapsErrors(@TempDir Path home) {
-		var svc = mock(ReleaseProcessService.class);
-		var r = rest(home, svc);
-		var value = new JsonMap().append("value", "x");
-		when(svc.live()).thenReturn(Optional.empty());
-		assertThrows(Conflict.class, () -> r.answer("p1", value), "no live process");
-
-		var withPrompt = live("attempt-a", true, true);
-		when(svc.live()).thenReturn(Optional.of(withPrompt));
-		assertThrows(Conflict.class, () -> r.answer("nope", value), "not the pending prompt");
-		assertThrows(BadRequest.class, () -> r.answer("p1", new JsonMap()), "neither value nor cancel");
-		assertThrows(BadRequest.class, () -> r.answer("p1", null), "no body");
-		assertTrue(r.answer("p1", value).isEmpty());
 	}
 
 	@Test
@@ -263,7 +224,7 @@ class ReleaseRunRestTest {
 		var noRc = body(null, false);
 		var e = assertThrows(BadRequest.class, () -> r2.dropRc(noRc));
 		assertFalse(e.getMessage().contains("RCnull"), e.getMessage());
-		verify(svc, never()).dropRc(any(), anyBoolean());
+		verify(svc, never()).dropRc(anyBoolean());
 	}
 
 	@Test
@@ -282,6 +243,8 @@ class ReleaseRunRestTest {
 			assertTrue(body.matches("(?s).*/css/release\\.css\\?v=[0-9a-f]{8}.*"), body);
 			assertFalse(body.contains("slds-"), body);
 			assertFalse(body.contains("ssc-"), body);
+			assertFalse(body.contains("rl-dialog"), "the prompt dialog is gone");
+			assertTrue(body.contains("id=\"rl-pause\""), "the pause banner element exists");
 			assertFalse(body.contains("FreeMarker template error"), body);
 		}
 	}
@@ -300,9 +263,40 @@ class ReleaseRunRestTest {
 					assertTrue(text.contains("<h1>Release</h1>"), text);
 					assertTrue(text.contains("jc-page-sub"), text);
 					assertTrue(text.contains("toolkit=\"terminal\""), text);
+					assertFalse(text.contains("rl-dialog"), text);
+					assertTrue(text.contains("id=\"rl-pause\""), text);
 				}
 			}
 		}
+	}
+
+	@Test
+	void a17_currentCarriesThePauseOfTheActiveRun(@TempDir Path home) throws Exception {
+		var d = Files.createDirectories(home.resolve("runs/9.2.1"));
+		Files.writeString(d.resolve("run.json"), "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":1},\"phase\":\"vote\","
+			+ "\"pause\":{\"step\":\"vote-gate\",\"message\":\"Vote is open\",\"at\":\"20261028-101500\"},\"attempts\":[]}");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var m = rest(home, svc).current();
+		var active = (org.apache.juneau.releng.run.RunFile)m.get("active");
+		assertEquals("Vote is open", active.pause.message);
+		assertFalse(m.containsKey("live"));
+		assertTrue(Json.of(active).contains("\"pause\""), "the page reads the pause from the JSON");
+	}
+
+	@Test
+	void a18_dropRcStillNeedsTheTypedConfirm(@TempDir Path home) throws Exception {
+		runJson(home, "vote", 2, home.resolve("attempts/a").toString(), "ok");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var l = live("attempt-20261020-100000-002");
+		when(svc.dropRc(false)).thenReturn(l);
+		var r = rest(home, svc);
+		var wrong = body("RC1", false);
+		assertThrows(BadRequest.class, () -> r.dropRc(wrong));
+		verify(svc, never()).dropRc(anyBoolean());
+		assertEquals("attempt-20261020-100000-002", r.dropRc(body("RC2", false)).get("attemptId"));
+		verify(svc).dropRc(false);
 	}
 
 	static ReleaseRunRest.DropRcRequest body(String confirm, boolean dryRun) {

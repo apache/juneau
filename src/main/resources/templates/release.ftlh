@@ -32,6 +32,8 @@
         </div>
     </div>
 
+    <div class="jc-card rl-pause" id="rl-pause" role="status" hidden></div>
+
     <div class="jc-card rl-terminal-card">
         <div class="rl-terminal-title" id="rl-terminal-title">No attempt selected</div>
         <div id="rl-terminal"></div>
@@ -45,5 +47,4 @@
         </table>
     </div>
 
-    <dialog id="rl-dialog" class="rl-dialog"><form method="dialog" id="rl-dialog-form"></form></dialog>
 </@page>

@@ -12,6 +12,7 @@
 # ***************************************************************************************************************************
 """RC phase steps (spec 6.3 rows 1-15).  Each step is fn(ctx) -> optional summary str; FUNCS maps name -> fn."""
 import hashlib
+import json
 import os
 from datetime import timedelta
 
@@ -94,8 +95,9 @@ def workspace(ctx):
     return ctx.runner.skipped_note(mark, f"workspace on {d['branch']}")
 
 
-def _mvn(ctx, title, *args, tty=False, env=None):
-    r = ctx.runner.run(["mvn", "-B", *args], title=title, mutating=True, tool="maven", cwd=ctx.ws, tty=tty, env=env)
+def _mvn(ctx, title, *args, tty=False, env=None, capture=None):
+    r = ctx.runner.run(["mvn", "-B", *args], title=title, mutating=True, tool="maven", cwd=ctx.ws, tty=tty, env=env,
+                       capture=capture)
     if not r.ok:
         raise StepError(f"{title} failed (exit {r.code})")
     return r
@@ -111,16 +113,17 @@ def build_verify(ctx):
 @step
 def javadoc_verify(ctx):
     mark = len(ctx.runner.skipped)
-    _mvn(ctx, "Javadoc", "javadoc:aggregate")
-    look_at = f"Open {_javadoc_index(ctx)} in a browser and skim it for broken pages or warnings."
-    if ctx.review("Does the javadoc output look clean?", key="review.javadoc", look_at=look_at) is not True:
-        raise StepError("javadoc not accepted")
-    return _reviewed(ctx, ctx.runner.skipped_note(mark, "javadoc accepted"))
-
-
-def _reviewed(ctx, result):
-    """A review step's result; under --dry-run it says the question was not asked."""
-    return f"{result}; nothing to review" if ctx.dry_run else result
+    r = _mvn(ctx, "Javadoc", "javadoc:aggregate", capture=True)
+    note = ctx.runner.skipped_note(mark, "javadoc built")
+    if ctx.dry_run:
+        return note
+    warnings = [ln for ln in (r.out or "").splitlines() if "warning" in ln.lower()]
+    path = ctx.run_dir / "javadoc-report.txt"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(f"Javadoc index: {_javadoc_index(ctx)}\nWarnings: {len(warnings)}\n\n" + "\n".join(warnings) + "\n",
+                    encoding="utf-8")
+    ctx.say(f"Javadoc report: {path.as_uri()}  (open {_javadoc_index(ctx)} to skim the site)")
+    return f"{note}; report {path.as_uri()}"
 
 
 def _javadoc_index(ctx):
@@ -209,23 +212,24 @@ def release_commits(ctx):
                                   snapshot_poms=snap)
     if not commit:
         res.problems.append(f"[next-iteration commit] none found after {tag} on this branch")
+    res.diffs = f"## {tag}^..{tag}\n{rel.out}\n## {tag}..{commit or '(none)'}\n{nxt}\n"
     return res
 
 
 @step
 def release_diff_review(ctx):
     if ctx.dry_run:   # release:prepare did not run, so there is no RC tag to diff
-        ctx.review("Does the release diff look right?", key="review.diff", look_at="")
-        return "skipped (dry run): no release commit to diff; nothing to review"
+        return "skipped (dry run): no release commit to diff"
     res = release_commits(ctx)
+    path = ctx.run_dir / "release-diff.txt"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(("Problems:\n" + "\n".join(res.problems) + "\n\n" if res.problems else "No problems.\n\n") + res.diffs,
+                    encoding="utf-8")
     if res.clean:
         return f"diff clean: {res.summary}"
     ctx.say("Unexpected in the release commits:\n" + "\n".join(res.problems), "warn")
-    look_at = (f"Read the unexpected changes above ({ctx.rc_tag}^ to {ctx.rc_tag}, and the commit after it, in "
-               f"{ctx.ws}): the release should change only the pom versions (to {ctx.version}) and the SCM tag.")
-    if ctx.review("Does the release diff look right?", key="review.diff", look_at=look_at) is not True:
-        raise StepError("release diff not accepted")
-    return "diff accepted"
+    raise StepError(f"the release commits hold unexpected changes (see {path.as_uri()}).  Fix them, or undo this "
+                    f"candidate with --revert and start a new rc; a plain resume repeats this check")
 
 
 def _listing(ctx):
@@ -238,15 +242,37 @@ def _listing(ctx):
         raise
 
 
+def recorded_repo_ids(ctx):
+    """nexusRepoId of every run under <home>/runs, or None when any run.json cannot be read (nothing may then be dropped)."""
+    ids = set()
+    for f in sorted((ctx.home / "runs").glob("*/run.json")):
+        try:
+            data = json.loads(f.read_text())
+        except (OSError, ValueError) as e:
+            ctx.say(f"cannot read {f} ({e}); not dropping any staging repository", "warn")
+            return None
+        if isinstance(data, dict) and data.get("nexusRepoId"):
+            ids.add(data["nexusRepoId"])
+    return ids
+
+
+def drop_stale(ctx, listing):
+    """Drop every open or closed staging repository that no run records as its nexusRepoId."""
+    recorded = recorded_repo_ids(ctx)
+    if recorded is None:
+        return
+    for repo in listing:
+        rid = repo["repositoryId"]
+        if repo.get("state") in ("open", "closed") and rid not in recorded:
+            ctx.say(f"dropping stale staging repository {rid} (created {repo.get('created', '?')})")
+            ctx.nexus.drop(rid)
+
+
 @step
 def release_perform(ctx):
     mark = len(ctx.runner.skipped)
     listing = _listing(ctx)
-    for repo in listing:
-        if repo.get("state") in ("open", "closed"):
-            q = f"Stale staging repository {repo['repositoryId']} ({repo.get('created', '?')}) is still there.  Drop it?"
-            if ctx.prompt.confirm(q, key="confirm.drop-stale") is True:
-                ctx.nexus.drop(repo["repositoryId"])
+    drop_stale(ctx, listing)
     before = {r["repositoryId"] for r in listing}
     _mvn(ctx, "Release perform", "release:perform", inventory.MVN_CHECKSUMS, env=git_env(ctx))
     if ctx.dry_run:
@@ -364,6 +390,9 @@ def dist_verify(ctx):  # NOSONAR python:S3776 - one check per staged file; split
 
 @step
 def compose_vote_email(ctx):
+    done = emails.acknowledge(ctx, "vote")
+    if done:
+        return done
     v = ctx.version
     out = ctx.run_dir / "dist"
 

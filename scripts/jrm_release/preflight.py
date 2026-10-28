@@ -16,6 +16,7 @@ input another check already failed on).  run_checks never lets one check stop an
 whole table; a new run refuses to start on any non-pass; --resume runs only RESUME_GROUPS.  No reason, argv or log line
 ever holds a secret: secrets reach gpg on stdin and gh in its environment, and are only reported by where they came from."""
 import importlib.util
+import json
 import os
 import re
 import shutil
@@ -23,7 +24,7 @@ import tempfile
 from collections import namedtuple
 from datetime import datetime
 
-from . import details, gpgkeys, inventory, params
+from . import details, gpgkeys, inventory, params, vote
 from .nexus import HttpError
 
 PASS, FAIL, CANT = "pass", "fail", "cant"
@@ -295,6 +296,27 @@ def _release_details(ctx):
         return _fail(ctx.pf["details_error"])
     d = _details(ctx)
     return _ok(f"{d['version']} RC{d['rc']} on {d['branch']}, next {d['developmentVersion']}")
+
+
+@check("params", "vote block")
+def _vote_block(ctx):
+    """The `vote:` block, once the run has passed the vote gate.  Before that (or for a new release) it is not needed."""
+    version = _details(ctx)["version"]
+    run_json = ctx.home / "runs" / version / "run.json"
+    data = {}
+    if run_json.exists():
+        try:
+            data = json.loads(run_json.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as e:
+            raise Cant(f"cannot read {run_json}: {e}")          # never "not needed yet" for a run file that will not parse
+    last = data.get("last")
+    reached = last in inventory.NAMES and inventory.NAMES.index(last) >= inventory.NAMES.index("vote-gate")
+    if data.get("vote") or not reached:
+        return _ok("not needed yet")
+    tally, problems = params.load_vote(vote.params_path_for(data, ctx.home, version))
+    if problems:
+        return _fail("; ".join(problems))
+    return _ok(f"+1 {tally['plus1']}, 0 {tally['zero']}, -1 {tally['minus1']}, {len(tally['binding'])} binding")
 
 
 # ---- Secrets present / valid ---------------------------------------------------------------------------------------------

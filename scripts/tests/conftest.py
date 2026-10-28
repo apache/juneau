@@ -10,7 +10,6 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-import dataclasses
 import os
 import shutil
 import subprocess
@@ -141,55 +140,6 @@ class FakeRunner:
         return [a for a in self.argvs() if tuple(a[:len(prefix)]) == prefix]
 
 
-@dataclasses.dataclass(frozen=True)
-class FakeField:
-    name: str
-    label: str
-    default: object = None
-    required: bool = False
-    secret: bool = False
-    multiline: bool = False
-    type: str = "text"
-
-
-class FakePrompts:
-    """answers: key -> value, or list of values (consumed in order; the last repeats).  An unexpected key raises."""
-    Field = FakeField
-
-    def __init__(self, answers=None):
-        self.answers, self.asked = dict(answers or {}), []
-
-    def _next(self, kind, key, msg, **kw):
-        self.asked.append((kind, key, msg, kw))
-        if key not in self.answers:
-            raise AssertionError(f"unexpected prompt {kind} key={key!r}: {msg}")
-        v = self.answers[key]
-        if isinstance(v, list):
-            return v.pop(0) if len(v) > 1 else v[0]
-        return v
-
-    def text(self, msg, *, default=None, key=None, title=None, error=None):
-        return self._next("text", key, msg, default=default)
-
-    def secret(self, msg, *, key=None, title=None):
-        return self._next("secret", key, msg)
-
-    def confirm(self, msg, *, default=False, key=None, title=None, expect=None, danger=False):
-        return self._next("confirm", key, msg, expect=expect, danger=danger)
-
-    def choice(self, msg, options, *, default=None, key=None, title=None):
-        return self._next("choice", key, msg, options=options)
-
-    def form(self, msg, fields, *, key=None, title=None):
-        got = self._next("form", key, msg, fields=fields)
-        if got is None:
-            return None
-        return {**{f.name: f.default for f in fields}, **got}
-
-    def email(self, *, to, subject, body, cc=(), key=None, title=None):
-        return self._next("email", key, subject, to=to, body=body, cc=cc)
-
-
 class FakeHttp:
     """A urllib opener: opener(request) -> (status, bytes).  routes: (method, url-suffix) -> (status, body)."""
 
@@ -275,7 +225,7 @@ CREDS = {"credential.apache.availid": "jamesbognar", "credential.apache.email": 
 
 @pytest.fixture
 def make_ctx(home):
-    def make(dry_run=False, answers=None, state=None, nexus=None, http_ok=None, with_details=True):
+    def make(dry_run=False, state=None, nexus=None, http_ok=None, with_details=True):
         fake = FakeRunner()
         runner = Runner(fake, dry_run=dry_run)
         rf = RunFile(home / "runs" / "9.2.1" / "run.json", dry_run=dry_run)
@@ -283,8 +233,7 @@ def make_ctx(home):
             rf.set("details", dict(DETAILS))
         for k, v in (state or {}).items():
             rf.set(k, v)
-        prompts = FakePrompts({**CREDS, **(answers or {})})
-        ctx = Ctx(args=Namespace(dry_run=dry_run), home=home, run=fake, prompt=prompts, runner=runner,
+        ctx = Ctx(args=Namespace(dry_run=dry_run), home=home, run=fake, runner=runner,
                   nexus=nexus or FakeNexus(), svn=Svn(runner, lambda: "jamesbognar", lambda: "s3cr3t-pw"), rf=rf,
                   pause=PauseExc, http_ok=http_ok or (lambda url: True))
         ctx.creds.update(CREDS)

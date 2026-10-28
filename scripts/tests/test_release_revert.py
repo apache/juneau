@@ -28,12 +28,16 @@ def test_revert_refused_in_promote(make_ctx):
             revert.revert_check(ctx)
 
 
-def test_revert_typed_rc_confirm(make_ctx):
-    ctx = make_ctx(state=RC, answers={"confirm.revert": False})
-    with pytest.raises(StepError):
-        revert.revert_check(ctx)
-    assert ctx.prompt.asked[-1][3]["expect"] == "RC1"
-    assert ctx.prompt.asked[-1][3]["danger"] is True
+def test_revert_check_keeps_the_phase_guard_and_asks_nothing(make_ctx):
+    ctx = make_ctx(state=RC)
+    assert revert.revert_check(ctx) == "reverting RC1"
+
+
+def test_revert_after_a_pause_needs_no_typed_confirmation(make_ctx):
+    # CLI --revert is the confirmation; a pending mail and its pause do not block it
+    ctx = make_ctx(state={**RC, "emailPending": "propose",
+                          "pause": {"step": "compose-propose-email", "message": "m", "at": "t"}})
+    assert revert.revert_check(ctx) == "reverting RC1"
 
 
 def test_revert_skips_absent_remote_state(make_ctx):
@@ -48,19 +52,15 @@ def test_revert_skips_absent_remote_state(make_ctx):
     assert not [a for a in ctx.fake.argvs() if "push" in a]
 
 
-def test_revert_versions_commit_and_push_after_confirm(make_ctx):
-    ctx = make_ctx(state=RC, answers={"confirm.revert-versions": True})
+def test_version_reset_commits_and_pushes_without_asking(make_ctx):
+    ctx = make_ctx(state=RC)
     ctx.fake.script("git", "-C", str(ctx.ws), "status", out=" M pom.xml\n")
-    revert.revert_versions(ctx)
+    assert revert.revert_versions(ctx) == "versions reset and pushed"
     argvs = ctx.fake.argvs()
     assert any(a[:3] == ["mvn", "-B", "release:update-versions"] and "-DdevelopmentVersion=9.2.1-SNAPSHOT" in a
                for a in argvs)
     assert any("commit" in a for a in argvs)
     assert any(a[-3:] == ["push", "origin", "juneau-9.2.1-branch"] for a in argvs)
-    ctx2 = make_ctx(state=RC, answers={"confirm.revert-versions": False})
-    ctx2.fake.script("git", "-C", str(ctx2.ws), "status", out=" M pom.xml\n")
-    revert.revert_versions(ctx2)
-    assert not [a for a in ctx2.fake.argvs() if "push" in a]
 
 
 def test_revert_record_bumps_rc_and_resets_last(make_ctx):

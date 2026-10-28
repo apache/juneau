@@ -41,18 +41,12 @@ def test_workspace_argv(make_ctx):
 
 
 def test_build_verify_and_javadoc_argv(make_ctx):
-    ctx = make_ctx(answers={"review.javadoc": True})
+    ctx = make_ctx()
     rc.build_verify(ctx)
     rc.javadoc_verify(ctx)
     assert ["mvn", "-B", "clean", "verify"] in ctx.fake.argvs()
     assert ["mvn", "-B", "javadoc:aggregate"] in ctx.fake.argvs()
     assert all(c["cwd"] == ctx.ws for c in ctx.fake.calls if c["argv"][0] == "mvn")
-
-
-def test_javadoc_not_accepted_fails(make_ctx):
-    ctx = make_ctx(answers={"review.javadoc": False})
-    with pytest.raises(StepError, match="javadoc"):
-        rc.javadoc_verify(ctx)
 
 
 def test_gpg_unlock_passphrase_on_stdin_only(make_ctx):
@@ -122,9 +116,8 @@ ROOT_POMS = {"pom.xml": "<module>a</module><version>9.2.1-SNAPSHOT</version>",
              "a/pom.xml": "<version>9.2.1-SNAPSHOT</version>"}
 
 
-def _release_ctx(make_ctx, *, rel=None, nxt=None, rel_subject=REL, nxt_subject=NXT, poms=None, follow="abc123\n",
-                 answers=None):
-    ctx = make_ctx(answers=answers or {})
+def _release_ctx(make_ctx, *, rel=None, nxt=None, rel_subject=REL, nxt_subject=NXT, poms=None, follow="abc123\n"):
+    ctx = make_ctx()
     tag, ws = "juneau-9.2.1-RC1", str(ctx.ws)
     rel = rel if rel is not None else (_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
                                        + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
@@ -143,15 +136,10 @@ def _release_ctx(make_ctx, *, rel=None, nxt=None, rel_subject=REL, nxt_subject=N
     return ctx
 
 
-def _asked_review(ctx):
-    return [a for a in ctx.prompt.asked if a[1] == "review.diff"]
-
-
 def test_release_diff_clean_passes_without_asking(make_ctx):
-    ctx = _release_ctx(make_ctx)   # no review.diff answer: a prompt would raise
+    ctx = _release_ctx(make_ctx)
     out = rc.release_diff_review(ctx)
     assert out == "diff clean: 2 poms 9.2.1-SNAPSHOT -> 9.2.1, tag juneau-9.2.1-RC1; next iteration 9.2.1 -> 9.2.2-SNAPSHOT"
-    assert not _asked_review(ctx)
     assert all(c.get("quiet") for c in ctx.fake.calls if c["argv"][3] in ("diff", "log", "show"))
 
 
@@ -162,22 +150,22 @@ def test_release_diff_tag_change_is_optional(make_ctx):
     assert rc.release_diff_review(ctx).startswith("diff clean")
 
 
-def test_release_diff_non_pom_file_asks_and_shows_it(make_ctx):
+def test_release_diff_non_pom_file_fails_and_shows_it(make_ctx):
     extra = _hunk("README.md", "old", "new")
-    ctx = _release_ctx(make_ctx, answers={"review.diff": True})
+    ctx = _release_ctx(make_ctx)
     ctx.fake.script("git", "-C", str(ctx.ws), "diff", "-U0", "juneau-9.2.1-RC1^", "juneau-9.2.1-RC1",
                     out=_hunk("pom.xml", "<version>9.2.1-SNAPSHOT</version>", "<version>9.2.1</version>")
                     + _hunk("a/pom.xml", "<version>9.2.1-SNAPSHOT</version>", "<version>9.2.1</version>") + extra)
-    assert rc.release_diff_review(ctx) == "diff accepted"
-    assert len(_asked_review(ctx)) == 1
+    with pytest.raises(StepError, match="unexpected changes"):
+        rc.release_diff_review(ctx)
     assert any("not a pom.xml: README.md" in s for s in ctx.fake.said)
 
 
 def test_release_diff_dependency_version_change_is_flagged(make_ctx):
-    ctx = _release_ctx(make_ctx, answers={"review.diff": False},
+    ctx = _release_ctx(make_ctx,
                        rel=_hunk("pom.xml", "<version>9.2.1-SNAPSHOT</version>", "<version>9.2.1</version>")
                        + _hunk("a/pom.xml", "<version>4.12</version>", "<version>4.13</version>"))
-    with pytest.raises(StepError, match="not accepted"):
+    with pytest.raises(StepError, match="unexpected changes"):
         rc.release_diff_review(ctx)
     said = "\n".join(ctx.fake.said)
     assert "-<version>4.12</version>" in said
@@ -187,8 +175,9 @@ def test_release_diff_dependency_version_change_is_flagged(make_ctx):
 
 def test_release_diff_missing_module_is_flagged(make_ctx):
     poms = {**ROOT_POMS, "b/pom.xml": "<version>9.2.1-SNAPSHOT</version>", "pom.xml": "<module>a</module><module>b</module><version>9.2.1-SNAPSHOT</version>"}
-    ctx = _release_ctx(make_ctx, poms=poms, answers={"review.diff": True})
-    rc.release_diff_review(ctx)
+    ctx = _release_ctx(make_ctx, poms=poms)
+    with pytest.raises(StepError):
+        rc.release_diff_review(ctx)
     assert any("skipped by the release commit: b/pom.xml" in s for s in ctx.fake.said)
 
 
@@ -198,44 +187,41 @@ def test_release_diff_pom_outside_reactor_is_ignored(make_ctx):
 
 
 def test_release_diff_wrong_tag_is_flagged(make_ctx):
-    ctx = _release_ctx(make_ctx, answers={"review.diff": True},
+    ctx = _release_ctx(make_ctx,
                        rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
                        + _hunk("pom.xml", "<tag>HEAD</tag>", "<tag>juneau-9.2.1-RC2</tag>", 9))
-    rc.release_diff_review(ctx)
+    with pytest.raises(StepError):
+        rc.release_diff_review(ctx)
     assert any("+<tag>juneau-9.2.1-RC2</tag>" in s for s in ctx.fake.said)
 
 
 def test_release_diff_next_iteration_mismatch_is_flagged(make_ctx):
-    ctx = _release_ctx(make_ctx, answers={"review.diff": True},
+    ctx = _release_ctx(make_ctx,
                        nxt=_hunk("pom.xml", *ver("9.2.1", "9.3.0-SNAPSHOT")) + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")))
-    rc.release_diff_review(ctx)
+    with pytest.raises(StepError):
+        rc.release_diff_review(ctx)
     said = "\n".join(ctx.fake.said)
     assert "[next-iteration commit] unexpected change" in said
     assert "+<version>9.3.0-SNAPSHOT</version>" in said
 
 
 def test_release_diff_next_iteration_wrong_message_or_missing(make_ctx):
-    ctx = _release_ctx(make_ctx, nxt_subject="Fix a bug", answers={"review.diff": True})
-    rc.release_diff_review(ctx)
+    ctx = _release_ctx(make_ctx, nxt_subject="Fix a bug")
+    with pytest.raises(StepError):
+        rc.release_diff_review(ctx)
     assert any("commit message is 'Fix a bug'" in s for s in ctx.fake.said)
-    none = _release_ctx(make_ctx, follow="", answers={"review.diff": True})
-    rc.release_diff_review(none)
+    none = _release_ctx(make_ctx, follow="")
+    with pytest.raises(StepError):
+        rc.release_diff_review(none)
     assert any("none found after juneau-9.2.1-RC1" in s for s in none.fake.said)
 
 
-def test_release_diff_unscripted_git_asks(make_ctx):
-    ctx = make_ctx(answers={"review.diff": False})   # every probe answers empty: nothing to check, so ask
-    with pytest.raises(StepError, match="diff"):
-        rc.release_diff_review(ctx)
-    assert len(_asked_review(ctx)) == 1
-
-
-def test_release_perform_offers_stale_repo_drop(make_ctx):
+def test_release_perform_drops_a_stale_repo_without_asking(make_ctx):
     from conftest import FakeNexus
     nx = FakeNexus()
     nx.repos = [{"repositoryId": "orgapachejuneau-1001", "state": "open", "created": "2026-10-01"}]
     nx.repos_after = [{"repositoryId": "orgapachejuneau-1002", "state": "open", "created": "2026-10-19"}]
-    ctx = make_ctx(nexus=nx, answers={"confirm.drop-stale": True})
+    ctx = make_ctx(nexus=nx)
     rc.release_perform(ctx)
     assert ("drop", "orgapachejuneau-1001") in nx.posts
     assert ctx.rf.get("nexusRepoId") == "orgapachejuneau-1002"
@@ -341,16 +327,18 @@ def test_dist_verify_refuses_listing_gap(make_ctx):
 
 
 def test_compose_vote_email_facts(make_ctx):
-    ctx = make_ctx(state={"nexusRepoId": "orgapachejuneau-1002"}, answers={"email.vote": True})
+    ctx = make_ctx(state={"nexusRepoId": "orgapachejuneau-1002"})
     _local_dist(ctx)
     ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", out="abc123\n")
+    with pytest.raises(ctx.pause):
+        rc.compose_vote_email(ctx)
+    mail = (ctx.run_dir / "emails" / "vote.eml.txt").read_text()
+    assert "Subject: [VOTE] Release Apache Juneau 9.2.1 RC1\n" in mail
+    assert "h=abc123" in mail
+    assert "orgapachejuneau-1002" in mail
+    assert "SHA512_NOT_FOUND" not in mail
+    assert ctx.rf.get("voteDeadline")
     assert rc.compose_vote_email(ctx) == "vote email sent"
-    kind, key, subject, kw = ctx.prompt.asked[-1]
-    assert key == "email.vote"
-    assert subject == "[VOTE] Release Apache Juneau 9.2.1 RC1"
-    assert "h=abc123" in kw["body"]
-    assert "orgapachejuneau-1002" in kw["body"]
-    assert "SHA512_NOT_FOUND" not in kw["body"]
     assert ctx.rf.get("rcCommit") == "abc123"
     assert ctx.rf.get("voteDeadline")
 
@@ -373,35 +361,26 @@ def test_vote_gate_pauses_phase_vote(make_ctx):
 
 def test_vote_tally_early_pause_not_done(make_ctx):
     soon = (datetime.now(timezone.utc) + timedelta(hours=10)).isoformat()
-    ctx = make_ctx(state={"voteDeadline": soon}, answers={"vote.early": False})
+    ctx = make_ctx(state={"voteDeadline": soon})
     ctx.now = lambda: datetime.now(timezone.utc)
     with pytest.raises(ctx.pause) as e:
         vote.vote_tally(ctx)
     assert e.value.done is False
 
 
-def test_vote_tally_validates_passed(make_ctx):
-    past = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
-    for tally, outcome in (({"plus1": 3, "zero": 0, "minus1": 0, "binding": "A, B, C"}, "passed"),
-                           ({"plus1": 2, "zero": 0, "minus1": 0, "binding": "A, B"}, "failed"),
-                           ({"plus1": 4, "zero": 0, "minus1": 4, "binding": "A"}, "failed")):
-        ctx = make_ctx(state={"voteDeadline": past}, answers={"vote.tally": tally})
-        ctx.now = lambda: datetime.now(timezone.utc)
-        vote.vote_tally(ctx)
-        assert ctx.rf.get("vote")["outcome"] == outcome
-
-
 def test_result_failed_sets_vote_failed(make_ctx):
-    ctx = make_ctx(state={"vote": {"outcome": "failed", "plus1": 2, "zero": 0, "minus1": 0, "binding": "A, B"}},
-                   answers={"email.result": True})
+    ctx = make_ctx(state={"vote": {"outcome": "failed", "plus1": 2, "zero": 0, "minus1": 0, "binding": "A, B"}})
     with pytest.raises(ctx.pause):
-        vote.compose_result_email(ctx)
+        vote.compose_result_email(ctx)       # the mail is written and the run pauses for it
+    with pytest.raises(ctx.pause):
+        vote.compose_result_email(ctx)       # the resume records it as sent, then the failed vote pauses
     assert ctx.rf.get("phase") == "vote-failed"
 
 
 def test_result_passed_continues(make_ctx):
-    ctx = make_ctx(state={"vote": {"outcome": "passed", "plus1": 3, "zero": 0, "minus1": 0, "binding": "A, B, C"}},
-                   answers={"email.result": True})
+    ctx = make_ctx(state={"vote": {"outcome": "passed", "plus1": 3, "zero": 0, "minus1": 0, "binding": "A, B, C"}})
+    with pytest.raises(ctx.pause):
+        vote.compose_result_email(ctx)
     assert vote.compose_result_email(ctx) == "result email sent"
     assert ctx.rf.get("phase") != "vote-failed"
 
@@ -411,29 +390,13 @@ def test_result_passed_continues(make_ctx):
 PASSED = {"vote": {"outcome": "passed"}, "nexusRepoId": "r-1", "rcCommit": "abc123", "phase": "vote"}
 
 
-def test_nexus_release_needs_typed_version(make_ctx):
-    from conftest import FakeNexus
-    nx = FakeNexus()
-    ctx = make_ctx(nexus=nx, state=PASSED, answers={"confirm.nexus-release": False})
-    with pytest.raises(StepError):
-        promote.nexus_release(ctx)
-    assert nx.posts == []
-    assert ctx.prompt.asked[-1][3]["expect"] == "9.2.1"
-    assert ctx.prompt.asked[-1][3]["danger"] is True
-    ctx2 = make_ctx(nexus=nx, state=PASSED, answers={"confirm.nexus-release": True})
-    promote.nexus_release(ctx2)
-    assert nx.posts == [("promote", "r-1")]
-    assert ctx2.rf.get("phase") == "promote"
-
-
 def test_nexus_release_refuses_without_passed_vote(make_ctx):
     from conftest import FakeNexus
     nx = FakeNexus()
-    ctx = make_ctx(nexus=nx, state={"nexusRepoId": "r-1"}, answers={"confirm.nexus-release": True})
+    ctx = make_ctx(nexus=nx, state={"nexusRepoId": "r-1"})
     with pytest.raises(StepError, match="vote"):
         promote.nexus_release(ctx)
     assert nx.posts == []
-    assert not ctx.prompt.asked
 
 
 def test_dist_promote_single_svnmucc_with_prior_rm(make_ctx):
@@ -493,18 +456,11 @@ def test_github_release_latest_left_to_gh_when_highest(make_ctx):
 def test_announce_waits_for_downloads(make_ctx):
     seen = []
     results = iter([False, False, True])
-    ctx = make_ctx(state=PASSED, answers={"email.announce": True},
-                   http_ok=lambda u: (seen.append(u), next(results))[1])
-    promote.compose_announce_email(ctx)
+    ctx = make_ctx(state=PASSED, http_ok=lambda u: (seen.append(u), next(results))[1])
+    with pytest.raises(ctx.pause):               # the mirrors are up on the third poll; then the mail pauses
+        promote.compose_announce_email(ctx)
     assert len(seen) == 3
     assert seen[0] == "https://downloads.apache.org/juneau/9.2.1/"
-
-
-def test_followup_pause_on_no(make_ctx):
-    ctx = make_ctx(state=PASSED, answers={"confirm.followup": False})
-    with pytest.raises(ctx.pause) as e:
-        promote.followup_checklist(ctx)
-    assert e.value.done is False
 
 
 def test_finalize_marks_released(make_ctx):
@@ -525,7 +481,7 @@ def test_branch_default_picks_the_release_branch(make_ctx, refs, want):
     assert details.branch_default(ctx, "9.2.1") == want
 
 
-# --- R0047: honest dry-run results, review prompts that say what to look at -------------------------------------
+# --- R0047: honest dry-run results -------------------------------------
 
 def test_dry_run_build_says_it_skipped(make_ctx):
     ctx = make_ctx(dry_run=True)
@@ -541,49 +497,6 @@ def test_dry_run_mixed_step_names_every_skipped_command(make_ctx):
     out = rc.workspace(make_ctx(dry_run=True))
     assert out.startswith("skipped (dry run): would run git clone --branch juneau-9.2.1-branch ")
     assert "; +2 more" in out
-
-
-def test_dry_run_reviews_answer_themselves(make_ctx):
-    ctx = make_ctx(dry_run=True)   # no review.* answers: a prompt would raise
-    assert rc.javadoc_verify(ctx) == "skipped (dry run): would run mvn -B javadoc:aggregate; nothing to review"
-    assert rc.release_diff_review(ctx) == "skipped (dry run): no release commit to diff; nothing to review"
-    assert [a for a in ctx.prompt.asked if a[1].startswith("review.")] == []
-    assert sum("(dry run: nothing to review)" in s for s in ctx.fake.said) == 2
-    assert ctx.fake.ran("git", "-C", str(ctx.ws), "diff") == []
-
-
-def test_dry_run_followups_do_not_prompt(make_ctx):
-    from jrm_release import promote
-    ctx = make_ctx(dry_run=True)
-    assert promote.followup_checklist(ctx) == "skipped (dry run): nothing to review"
-    assert not ctx.prompt.asked
-
-
-def test_irreversible_confirms_still_ask_in_dry_run(make_ctx):
-    from jrm_release import promote, revert
-    answers = {"confirm.nexus-release": True, "confirm.revert": True}
-    ctx = make_ctx(dry_run=True, answers=answers, state={"vote": {"outcome": "passed"}, "nexusRepoId": "r-1"})
-    promote.nexus_release(ctx)
-    other = make_ctx(dry_run=True, answers=answers)
-    revert.revert_check(other)
-    assert [a[1] for a in ctx.prompt.asked] == ["confirm.nexus-release"]
-    assert [a[1] for a in other.prompt.asked] == ["confirm.revert"]
-
-
-def test_javadoc_question_names_the_directory_and_hint(make_ctx):
-    ctx = make_ctx(answers={"review.javadoc": True})
-    rc.javadoc_verify(ctx)
-    msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.javadoc"][0]
-    assert str(ctx.ws / "target" / "site" / "apidocs" / "index.html") in msg
-    assert msg.endswith("(y/n)")
-
-
-def test_diff_question_says_what_to_read(make_ctx):
-    ctx = make_ctx(answers={"review.diff": True})   # nothing scripted, so the check finds problems and asks
-    rc.release_diff_review(ctx)
-    msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.diff"][0]
-    assert "juneau-9.2.1-RC1^ to juneau-9.2.1-RC1" in msg
-    assert msg.endswith("(y/n)")
 
 
 def test_dist_verify_dry_run_does_not_claim_verified(make_ctx):
@@ -630,7 +543,7 @@ def test_registry_runs_both_check_groups_as_labelled_bars():
     import release
     from conftest import FakeRunner
     reg = release.registry(release.Deps(run=FakeRunner(), steps=__import__("juneau_terminal_scripts.steps", fromlist=["x"]),
-                                        prompt=None, lock=None), release.impl_map())
+                                        lock=None), release.impl_map())
     assert reg._labels["prerequisites"] == "Prerequisites"
     assert reg._labels["prechecks"] == "Release checks"
     assert len(reg.names) == 25
@@ -641,7 +554,6 @@ def test_dry_run_emails_answer_themselves(make_ctx):
     from jrm_release import emails
     ctx = make_ctx(dry_run=True)   # no email.* answer: a prompt would raise
     assert emails.send(ctx, "propose", "dev@juneau.apache.org", "Subj", "Body") == "skipped (dry run): propose email not sent"
-    assert not ctx.prompt.asked
     assert any("nothing is sent" in s for s in ctx.fake.said)
     assert ctx.rf.get("emails") is None
 

@@ -18,11 +18,7 @@ from .rc import dev_dir, git_env
 def revert_check(ctx):
     if ctx.rf.get("phase") in ("promote", "released"):
         raise StepError("the release is public (phase promote/released); revert is refused")
-    rc = ctx.d["rc"]
-    if ctx.prompt.confirm(f"Undo RC{rc} of {ctx.version}?  Type RC{rc} to confirm.", key="confirm.revert",
-                          expect=f"RC{rc}", danger=True) is not True:
-        raise StepError("revert not confirmed")
-    return f"confirmed RC{rc}"
+    return f"reverting RC{ctx.d['rc']}"
 
 
 def revert_nexus(ctx):
@@ -66,9 +62,6 @@ def revert_versions(ctx):
     dirty = ctx.runner.run(["git", "-C", ws, "status", "--porcelain"], title="Status", mutating=False).out.strip()
     if not dirty:
         return "versions already reset"
-    if ctx.prompt.confirm(f"Commit and push the reset to {d['version']}-SNAPSHOT on {d['branch']}?",
-                          key="confirm.revert-versions") is not True:
-        return "version reset left uncommitted"
     ctx.runner.run(["git", "-C", ws, "commit", "-a", "-m", f"Reset versions to {d['version']}-SNAPSHOT"],
                    title="Commit", mutating=True)
     ctx.runner.run(["git", "-C", ws, "push", "origin", d["branch"]], title="Push", mutating=True, env=git_env(ctx))
@@ -86,7 +79,7 @@ def revert_record(ctx):
 
 
 # (row name, title, console label); the registry in release.py runs them in this order.
-ROWS = [("revert-check", "Confirm revert", "Revert"), ("revert-nexus", "Drop the Nexus staging repository", "Nexus"),
+ROWS = [("revert-check", "Check the revert is allowed", "Revert"), ("revert-nexus", "Drop the Nexus staging repository", "Nexus"),
         ("revert-dist", "Remove the RC from dist/dev", "SVN"), ("revert-tag", "Delete the RC tag", "Git"),
         ("revert-versions", "Reset the pom versions", "Maven"), ("revert-record", "Record the revert", "Done")]
 FUNCS = {"revert-check": revert_check, "revert-nexus": revert_nexus, "revert-dist": revert_dist,
@@ -94,6 +87,6 @@ FUNCS = {"revert-check": revert_check, "revert-nexus": revert_nexus, "revert-dis
 
 
 def run_all(ctx):
-    """Every row after the confirmation, in order (the Registry runs them one by one in a real revert)."""
+    """Every row after the check, in order (the Registry runs them one by one in a real revert)."""
     for name, _, _ in ROWS[1:]:
         ctx.say(f"{name}: {FUNCS[name](ctx)}")

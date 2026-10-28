@@ -13,7 +13,7 @@
 """Email text and the send flow.  VOTE from Juneau's release.py."""
 import urllib.parse
 
-from . import inventory
+from . import inventory, runfile
 
 MAILTO_LIMIT = 1800
 
@@ -26,23 +26,65 @@ def propose(d):
     return inventory.DEV_LIST, sub, body
 
 
+TAGS = {"propose": "[PROPOSE]", "vote": "[VOTE]", "result": "[RESULT]", "announce": "[ANNOUNCE]"}
+STEP_KIND = {"compose-propose-email": "propose", "compose-vote-email": "vote", "compose-result-email": "result",
+             "compose-announce-email": "announce"}
+STEP_OF = {v: k for k, v in STEP_KIND.items()}
+
+
+def eml_path(ctx, kind):
+    return ctx.run_dir / "emails" / f"{kind}.eml.txt"
+
+
+def write(ctx, kind, to, subject, body, cc=()):
+    """Write the mail (To, Cc, Subject, blank line, body) to <run>/emails/<kind>.eml.txt; the path."""
+    path = eml_path(ctx, kind)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    head = [f"To: {to}"] + ([f"Cc: {', '.join(cc)}"] if cc else []) + [f"Subject: {subject}"]
+    path.write_text("\n".join(head) + "\n\n" + body, encoding="utf-8")
+    return path
+
+
+def acknowledge(ctx, kind):
+    """The resume half of send: when an earlier pause of this step left emailPending == kind, record the mail as sent
+    and return the step result; otherwise None."""
+    if ctx.rf.get("emailPending") != kind:
+        return None
+    sent = dict(ctx.rf.get("emails") or {})
+    sent[kind] = ctx.now().isoformat() if ctx.now else "sent"
+    ctx.rf.update({"emails": sent, "emailPending": None})
+    return f"{kind} email sent"
+
+
+def reset(ctx, kind):
+    """--start-step at an email step: forget that this mail was sent, and that it was pending, so it is written and paused
+    again.  A different mail's pending mark is left alone (starting at compose-vote-email must not drop a pending propose)."""
+    sent = {k: v for k, v in (ctx.rf.get("emails") or {}).items() if k != kind}
+    update = {"emails": sent or None}
+    if ctx.rf.get("emailPending") == kind:
+        update["emailPending"] = None
+    ctx.rf.update(update)
+
+
 def send(ctx, kind, to, subject, body, cc=()):
-    """Ask the prompt channel to open the mail.  Sent: recorded in run.json.  'Not yet': Pause(done=False).  Under
-    --dry-run nothing is sent, so the mail is shown and the question answers itself."""
+    """Write the mail to a file and pause (done=False) so the user can send it; the resume pass records it as sent.
+    Under --dry-run nothing is written: the mail is shown and the step reports it was skipped."""
     if ctx.dry_run:
         ctx.say(f"(dry run: nothing is sent) {kind} email to {to}: {subject}\n\n{body}")
         return f"skipped (dry run): {kind} email not sent"
-    sent = ctx.prompt.email(to=to, subject=subject, body=body, cc=cc, key=f"email.{kind}")
-    if sent is None:
-        raise KeyboardInterrupt
-    if "body=" not in mailto_url(to, subject, body):
-        ctx.say("body too long for a mailto link; copy it from the log")
-    if not sent:
-        raise ctx.pause(f"{kind} email not sent yet.  Re-run with --resume when it has been sent.", done=False)
-    emails = dict(ctx.rf.get("emails") or {})
-    emails[kind] = ctx.now().isoformat() if ctx.now else "sent"
-    ctx.rf.set("emails", emails)
-    return f"{kind} email sent"
+    done = acknowledge(ctx, kind)
+    if done:
+        return done
+    path = write(ctx, kind, to, subject, body, cc)
+    message = f"Send the {TAGS.get(kind, kind)} email ({path.as_uri()}), then run: {ctx.resume_hint}"
+    # emailPending and pause are written together, before the toolkit sees the Pause: a kill between here and the
+    # recorded pause (release.py _execute) still leaves a run.json the page can show as paused.
+    ctx.rf.update({"emailPending": kind, "pause": {"step": STEP_OF[kind], "message": message, "at": runfile.stamp()}})
+    mailto = mailto_url(to, subject, body)
+    if "body=" not in mailto:
+        ctx.say("body too long for a mailto link; copy it from the file")
+    ctx.say(f"{TAGS.get(kind, kind)} email written to {path.as_uri()}\nOpen in your mail client: {mailto}")
+    raise ctx.pause(message, done=False)
 
 
 def mailto_url(to, subject, body):

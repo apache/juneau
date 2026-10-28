@@ -32,6 +32,11 @@ class RunFilesTest {
 		return Files.writeString(dir.resolve("run.json"), json);
 	}
 
+	static Path writeRun(Path home, String json) throws Exception {
+		var dir = Files.createDirectories(home.resolve("runs").resolve("9.2.1"));
+		return Files.writeString(dir.resolve("run.json"), json);
+	}
+
 	static String attempt(Path dir, String status, long pid) {
 		return "{\"n\":1,\"dir\":\"" + dir + "\",\"command\":\"start\",\"origin\":\"ui\",\"pid\":" + pid
 			+ ",\"status\":\"" + status + "\",\"started\":\"20261020-091000\",\"step\":\"nexus-close\"}";
@@ -117,5 +122,35 @@ class RunFilesTest {
 		var h = new RunFiles(home, pid -> false, d -> false).history();
 		assertSize(1, h);
 		assertBean(h.get(0), "command,origin,outcome", "<null>,cli,paused");
+	}
+
+	@Test
+	void a10_pauseIsRead(@TempDir Path home) throws Exception {
+		writeRun(home, "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":1},\"phase\":\"vote\",\"last\":\"vote-gate\","
+			+ "\"pause\":{\"step\":\"vote-gate\",\"message\":\"Vote is open\",\"at\":\"20261028-101500\"},\"attempts\":[]}");
+		var r = new RunFiles(home, pid -> false, d -> false).active().orElseThrow();
+		assertEquals("vote-gate", r.pause.step);
+		assertEquals("Vote is open", r.pause.message);
+		assertEquals("20261028-101500", r.pause.at);
+	}
+
+	@Test
+	void a11_noPauseIsNull(@TempDir Path home) throws Exception {
+		writeRun(home, "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":1},\"phase\":\"rc\",\"attempts\":[]}");
+		assertNull(new RunFiles(home, pid -> false, d -> false).active().orElseThrow().pause);
+	}
+
+	@Test
+	void a12_wrongTypedPauseIsIgnoredNotThrown(@TempDir Path home) throws Exception {
+		writeRun(home, "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":1},\"phase\":\"rc\",\"pause\":\"oops\",\"attempts\":[]}");
+		assertNull(new RunFiles(home, pid -> false, d -> false).active().orElseThrow().pause);
+	}
+
+	@Test
+	void a13_emailPendingIsRead(@TempDir Path home) throws Exception {
+		writeRun(home, "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":1},\"phase\":\"rc\",\"emailPending\":\"propose\",\"attempts\":[]}");
+		var r = new RunFiles(home, pid -> false, d -> false).active().orElseThrow();
+		assertEquals("propose", r.emailPending);
+		assertNull(r.pause);
 	}
 }

@@ -51,7 +51,6 @@ class Ctx:
     args: Any                 # parsed CLI namespace
     home: Path                # <JUNEAU_RELEASE_HOME>
     run: Any                  # juneau_terminal_scripts.run (say, cmd, ...) or a fake
-    prompt: Any               # juneau_terminal_scripts.prompt or FakePrompts
     runner: Any               # jrm_release.runner.Runner
     nexus: Any                # jrm_release.nexus.Nexus or FakeNexus
     svn: Any                  # jrm_release.svn.Svn
@@ -85,6 +84,11 @@ class Ctx:
         return f"juneau-{self.version}-RC{self.d['rc']}"
 
     @property
+    def resume_hint(self) -> str:
+        """The command that continues this run after a pause."""
+        return f"python3 scripts/release.py --resume --version {self.version}"
+
+    @property
     def run_dir(self) -> Path:
         return self.home / "runs" / self.version
 
@@ -94,14 +98,6 @@ class Ctx:
 
     def say(self, text="", level="info"):
         self.run.say(text, level)
-
-    def review(self, question, *, key, look_at):
-        """Ask the user to inspect something: look_at says what and where, and the (y/n) hint is part of the text
-        (the toolkit's confirm shows none inline).  Under --dry-run nothing was produced, so it answers itself."""
-        if self.dry_run:
-            self.say(f"(dry run: nothing to review) {question}")
-            return True
-        return self.prompt.confirm(f"{look_at}\n{question}  (y/n)", key=key)
 
     def fail(self, msg):
         raise StepError(msg)
@@ -164,7 +160,7 @@ class Ctx:
 
     def seed_identity(self):
         """Load creds from run.json 'identity' (a resume): only non-empty strings under the three known keys are used;
-        an absent or malformed identity changes nothing, so the prompts happen as before."""
+        an absent or malformed identity changes nothing."""
         ident = self.rf.get("identity")
         if isinstance(ident, dict):
             for key, name in IDENTITY.items():

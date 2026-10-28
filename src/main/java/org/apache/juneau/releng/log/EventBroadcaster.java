@@ -25,8 +25,8 @@ import java.util.function.Consumer;
 import org.apache.juneau.marshall.marshaller.Json;
 
 /**
- * The Release page's event bus: {@code process}, {@code prompt}, {@code prompt-resolved} and {@code run} events, each
- * a JSON object whose first field is {@code type}. Prompt payloads never hold a secret (the protocol forbids it).
+ * The Release page's event bus: {@code process} and {@code run} events, each a JSON object whose first field is
+ * {@code type}.
  */
 public class EventBroadcaster implements Broadcaster {
 

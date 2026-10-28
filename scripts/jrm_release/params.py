@@ -30,9 +30,10 @@ SECRET_ENV = {"credential.apache.password": "JRM_APACHE_PASSWORD",
               "credential.github.token": "JRM_GITHUB_TOKEN"}
 SECRET_WORDS = ("password", "passphrase", "token", "secret")
 TEXT = ("branch", "developmentVersion", "highlights", "knownIssues", "acknowledgements")
+VOTE_KEYS = ("plus1", "zero", "minus1", "binding")
 ALLOWED = {None: ("apache", "acknowledgements", "branch", "developmentVersion", "gpg", "highlights", "knownIssues", "rc",
-                  "summary", "version"),
-           "apache": ("availid", "email"), "gpg": ("keyid",)}
+                  "summary", "version", "vote"),
+           "apache": ("availid", "email"), "gpg": ("keyid",), "vote": VOTE_KEYS}
 CREDS = {"apache.availid": "credential.apache.availid", "apache.email": "credential.apache.email",
          "gpg.keyid": "credential.gpg.keyid"}
 SECRET_HINTS = {"credential.apache.password": "Apache password (JRM_APACHE_PASSWORD or keychain item jrm.apache.password)",
@@ -110,7 +111,7 @@ def load(path):
     if secret:
         raise ParamsError(f"{path}: '{secret}' is a secret and must not be in the file; set JRM_APACHE_PASSWORD "
                           "(JRM_GPG_PASSPHRASE, JRM_GITHUB_TOKEN) in the environment instead")
-    for group in (None, "apache", "gpg"):
+    for group in (None, "apache", "gpg", "vote"):
         node = doc if group is None else doc.get(group)
         if group and node is not None and not isinstance(node, dict):
             raise ParamsError(f"{path}: '{group}' must be a mapping")
@@ -118,6 +119,7 @@ def load(path):
             if k not in ALLOWED[group]:
                 raise ParamsError(f"{path}: unknown key '{group + '.' if group else ''}{k}' "
                                   f"(allowed: {', '.join(ALLOWED[group])})")
+    _vote_types(doc.get("vote"), path)
     apache, gpg = doc.get("apache") or {}, doc.get("gpg") or {}
     values = {"version": doc.get("version"), "rc": doc.get("rc"), "summary": doc.get("summary"),
               "apache.availid": apache.get("availid"), "gpg.keyid": gpg.get("keyid")}
@@ -143,6 +145,25 @@ def load(path):
         raise ParamsError(f"{path}: {names} still contain{'s' if len(todo) == 1 else ''} a TODO placeholder; "
                           f"replace {'it' if len(todo) == 1 else 'them'} (or clear {'the optional key' if len(todo) == 1 else 'optional keys'})")
     return Params(path=Path(path), version=d["version"], details=d, creds=creds)
+
+
+def _is_todo(v):
+    return isinstance(v, str) and v.strip().startswith(PLACEHOLDER)
+
+
+def _vote_types(node, path):
+    """ParamsError for a present, non-TODO vote value of the wrong type (missing values and TODO placeholders pass, so a
+    half-filled block never stops a release from starting or being checked)."""
+    if not isinstance(node, dict):
+        return                                   # absent/empty is fine; a non-mapping was already rejected by load
+    for key in ("plus1", "zero", "minus1"):
+        v = node.get(key)
+        if v is not None and not _is_todo(v) and (isinstance(v, bool) or not isinstance(v, int) or v < 0):
+            raise ParamsError(f"{path}: vote.{key} must be a whole number >= 0")
+    names = node.get("binding")
+    if names is not None and names != [] and not _is_todo(names):
+        if not isinstance(names, list) or not all(isinstance(n, str) for n in names):
+            raise ParamsError(f"{path}: vote.binding must be a list of names")
 
 
 def resolve(ctx, loaded, cli_version):
@@ -191,6 +212,59 @@ def record(path, run_dir):
         if os.path.exists(tmp):
             os.unlink(tmp)
         raise
+
+
+def vote_block(path):
+    """The `vote:` mapping of a params file, or None when absent or empty.  ParamsError when the file cannot be read or
+    the block is not a mapping."""
+    doc = _read(path)
+    if not isinstance(doc, dict):
+        raise ParamsError(f"{path}: top level must be a mapping of release parameters")
+    node = doc.get("vote")
+    if node is not None and not isinstance(node, dict):
+        raise ParamsError(f"{path}: 'vote' must be a mapping")
+    return node
+
+
+def _count(node, key, required):
+    """(value, problem) for one tally count."""
+    v = node.get(key)
+    if v is None:
+        return (None, f"vote.{key} is required (a whole number)") if required else (0, None)
+    if isinstance(v, bool) or not isinstance(v, int) or v < 0:     # includes a TODO placeholder string
+        return None, f"vote.{key} must be a whole number >= 0"
+    return v, None
+
+
+def check_vote(node):
+    """(tally, problems) for a parsed `vote:` mapping (None or {} counts as empty).  tally is {plus1, zero, minus1,
+    binding} when problems is empty, else None.  problems are "what to fill in" strings."""
+    node = node or {}
+    problems = [f"unknown key 'vote.{k}' (allowed: {', '.join(VOTE_KEYS)})" for k in node if k not in VOTE_KEYS]
+    tally = {}
+    for key in ("plus1", "zero", "minus1"):
+        tally[key], problem = _count(node, key, key == "plus1")
+        if problem:
+            problems.append(problem)
+    names = node.get("binding")
+    if names is None:
+        problems.append("vote.binding is required (a list of the binding voters' names)")
+    elif not isinstance(names, list) or not names or not all(isinstance(n, str) and n.strip() for n in names):
+        problems.append("vote.binding must be a non-empty list of names")
+    elif any(_is_todo(n) for n in names):
+        problems.append("vote.binding still contains a TODO placeholder")
+    else:
+        tally["binding"] = [n.strip() for n in names]
+    return (None, problems) if problems else (tally, [])
+
+
+def load_vote(path):
+    """(tally, problems) from the `vote:` block of a params file; an unreadable or malformed file is one problem."""
+    try:
+        node = vote_block(path)
+    except ParamsError as e:
+        return None, [str(e)]
+    return check_vote(node)
 
 
 # ---- --init-params -------------------------------------------------------------------------------------------------
@@ -249,6 +323,13 @@ highlights: {_todo("highlights, one per line")}
 knownIssues: {_todo("known issues")}
 # Acknowledgements (delete or leave empty if none).
 acknowledgements: {_todo("acknowledgements")}
+# After the vote closes, uncomment and fill in, then run:  release.py --resume --version {version}
+# vote:
+#   plus1: 3          # binding +1 votes (whole number)
+#   zero: 0           # 0 votes
+#   minus1: 0         # -1 votes
+#   binding:          # names of the binding voters, one per entry
+#     - Jane Doe
 """
 
 

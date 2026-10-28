@@ -21,12 +21,14 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -46,6 +48,7 @@ import org.apache.juneau.terminal.region.TerminalProcess;
 public class ReleaseProcessService {
 
 	private static final Logger LOG = Logger.getLogger(ReleaseProcessService.class.getName());
+	private static final int CANCEL_GRACE_SECONDS = 8;
 
 	/**
 	 * The live attempt.
@@ -55,9 +58,8 @@ public class ReleaseProcessService {
 	 * @param command {@code start}, {@code resume} or {@code revert}.
 	 * @param dryRun Whether {@code --dry-run} was passed.
 	 * @param process The process.
-	 * @param broker Its prompt broker.
 	 */
-	public record Live(String attemptId, Path dir, String command, boolean dryRun, TerminalProcess process, PromptBroker broker) {}
+	public record Live(String attemptId, Path dir, String command, boolean dryRun, TerminalProcess process) {}
 
 	/** Thrown when a start, resume or drop is requested while a release process is already running (HTTP 409). */
 	public static class BusyException extends IllegalStateException {
@@ -76,7 +78,7 @@ public class ReleaseProcessService {
 
 	private final Path home;
 	private final Path scriptsDir;
-	private final PromptBroker.Stored stored;
+	private final Supplier<Map<String, String>> environment;
 	private final EventBroadcaster events;
 	private Live live;
 
@@ -85,13 +87,13 @@ public class ReleaseProcessService {
 	 *
 	 * @param home {@code rm.home}.
 	 * @param scriptsDir {@code rm.scripts.dir}, holding {@code release.py}.
-	 * @param stored Stored credential answers.
+	 * @param environment The credential environment added to each child (read per launch; never logged).
 	 * @param events The page's event bus.
 	 */
-	public ReleaseProcessService(Path home, Path scriptsDir, PromptBroker.Stored stored, EventBroadcaster events) {
+	public ReleaseProcessService(Path home, Path scriptsDir, Supplier<Map<String, String>> environment, EventBroadcaster events) {
 		this.home = home.toAbsolutePath();
 		this.scriptsDir = scriptsDir.toAbsolutePath();
-		this.stored = stored;
+		this.environment = environment;
 		this.events = events;
 	}
 
@@ -103,7 +105,7 @@ public class ReleaseProcessService {
 	 * @throws BusyException If a process is already running.
 	 */
 	public synchronized Live start(boolean dryRun) {
-		return launch("start", List.of(), dryRun, Map.of());
+		return launch("start", List.of(), dryRun);
 	}
 
 	/**
@@ -114,30 +116,33 @@ public class ReleaseProcessService {
 	 * @throws BusyException If a process is already running.
 	 */
 	public synchronized Live resume(boolean dryRun) {
-		return launch("resume", List.of("--resume"), dryRun, Map.of());
+		return launch("resume", List.of("--resume"), dryRun);
 	}
 
 	/**
-	 * Drops the active run's RC; the typed {@code RC<n>} answers the script's own {@code confirm.revert}.
+	 * Drops the active run's RC (the caller has already checked the typed {@code RC<n>}).
 	 *
-	 * @param typedRc What the user typed, already checked by the caller.
 	 * @param dryRun {@code --dry-run}.
 	 * @return The live attempt.
 	 * @throws BusyException If a process is already running.
 	 */
-	public synchronized Live dropRc(String typedRc, boolean dryRun) {
-		return launch("revert", List.of("--revert"), dryRun, Map.of("confirm.revert", typedRc));
+	public synchronized Live dropRc(boolean dryRun) {
+		return launch("revert", List.of("--revert"), dryRun);
 	}
 
-	/** Cancels the live process, if any: stdin closes, the runner SIGTERMs, release.py records {@code cancelled}. */
+	/**
+	 * Cancels the live process, if any: release.py gets SIGTERM, records {@code cancelled} and exits; a process that has not
+	 * ended within {@value #CANCEL_GRACE_SECONDS} seconds is killed.
+	 */
 	@SuppressWarnings("resource") // The live process is owned by the Live record and closed by cancel()/shutdown()/awaitExit, not by this method.
 	public void cancel() {
 		Live l;
 		synchronized (this) {
 			l = live;
 		}
-		if (l != null && ! l.process().isDone())
-			l.process().close();
+		if (l == null || l.process().isDone())
+			return;
+		l.process().terminate(Duration.ofSeconds(CANCEL_GRACE_SECONDS));
 	}
 
 	/**
@@ -177,7 +182,7 @@ public class ReleaseProcessService {
 	}
 
 	@SuppressWarnings("resource") // The live process is owned by the Live record and closed by cancel()/shutdown()/awaitExit, not by this method.
-	private Live launch(String command, List<String> extra, boolean dryRun, Map<String, String> autoAnswers) {
+	private Live launch(String command, List<String> extra, boolean dryRun) {
 		if (live != null)
 			throw new BusyException(live.attemptId());
 		try {
@@ -193,13 +198,11 @@ public class ReleaseProcessService {
 			sidecar.put("dryRun", dryRun);
 			sidecar.put("startedAt", AttemptDirs.stamp());
 			writeSidecar(dir, sidecar);
-			var broker = new PromptBroker(stored, events, autoAnswers);
 			var attemptId = "attempt-" + dir.getFileName();
-			// Published before the process starts so the page sees "started" before any prompt the process raises.
+			// Published before the process starts so the page sees "started" first.
 			events.publish("process", Map.of("state", "started", "attempt", attemptId));
-			var proc = startProcess(cmd, dir, broker, attemptId);
-			broker.attach(proc::answer);
-			var l = new Live(attemptId, dir, command, dryRun, proc, broker);
+			var proc = startProcess(cmd, dir, attemptId);
+			var l = new Live(attemptId, dir, command, dryRun, proc);
 			live = l;
 			var waiter = new Thread(() -> awaitExit(l, sidecar), "release-py-" + dir.getFileName());
 			waiter.setDaemon(true);
@@ -211,9 +214,9 @@ public class ReleaseProcessService {
 	}
 
 	@SuppressWarnings("resource") // Ownership of the started process transfers to the caller.
-	private TerminalProcess startProcess(List<String> cmd, Path dir, PromptBroker broker, String attemptId) throws IOException {
+	private TerminalProcess startProcess(List<String> cmd, Path dir, String attemptId) throws IOException {
 		try {
-			return TerminalProcess.start("generic", cmd, 120, 40, dir, broker);
+			return TerminalProcess.start("generic", cmd, 120, 40, dir, environment.get());
 		} catch (RuntimeException e) {
 			// Nothing ran: drop the sidecar (and the dir, if empty) so History shows no phantom attempt.
 			discardAttemptDir(dir);

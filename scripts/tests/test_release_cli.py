@@ -62,13 +62,13 @@ class RunProxy:
         return getattr(self._real, name)
 
 
-def toolkit_deps(tmp_path, fake, prompts, **kw):
+def toolkit_deps(tmp_path, fake, **kw):
     import bootstrap
     from conftest import FakeRunner
     kw.setdefault("http_text", lambda url: "pub   rsa4096 2020-01-01 [SC]\n      " + FakeRunner.KEY_FPR + "\n")
     bootstrap.load(release.REPO_DIR / "pom.xml", terminal=False, cache_dir=tmp_path / "tk")
     from juneau_terminal_scripts import lock, run, steps
-    return release.Deps(RunProxy(run, fake), steps, prompts, lock, **kw)
+    return release.Deps(RunProxy(run, fake), steps, lock, **kw)
 
 
 ENV_SECRETS = {"JRM_APACHE_PASSWORD": "s3cr3t-pw", "JRM_GPG_PASSPHRASE": "s3cr3t-gpg", "JRM_GITHUB_TOKEN": "s3cr3t-gh"}
@@ -83,35 +83,35 @@ def params_file(home, version="9.2.1"):
     return p
 
 
-def new_run_setup(tmp_path, monkeypatch, answers):
-    from conftest import CREDS, FakePrompts, FakeNexus, FakeRunner
+def new_run_setup(tmp_path, monkeypatch):
+    from conftest import FakeNexus, FakeRunner
     from jrm_release import preflight
     monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n)
     for k, v in ENV_SECRETS.items():
         monkeypatch.setenv(k, v)
-    fake, prompts = FakeRunner(), FakePrompts({**CREDS, **answers})
+    fake = FakeRunner()
     fake.script("git", "ls-remote", release.inventory.GIT_URL, "refs/heads/juneau-9.2.1-branch", out="abc\trefs/heads/x\n")
-    return fake, prompts, toolkit_deps(tmp_path, fake, prompts, nexus=FakeNexus(), http_ok=lambda u: True,
-                                       sleep=lambda s: None)
+    return fake, toolkit_deps(tmp_path, fake, nexus=FakeNexus(), http_ok=lambda u: True, sleep=lambda s: None)
 
 
 def test_new_run_with_a_params_file_prechecks_without_any_prompt(home, capsys, tmp_path, monkeypatch):
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": None})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
-    assert code == 130, out                     # cancelling the propose email ends the run
-    assert [a[1] for a in prompts.asked] == ["email.propose"]
+    assert code == 0, out                       # the propose email is written and the run pauses
+    assert "Send the [PROPOSE] email" in out and "--resume --version 9.2.1" in out
+    data = read_run(home)
+    assert data["emailPending"] == "propose" and data["attempts"][-1]["status"] == "paused"
     assert "RC tag absent" in out
 
 
 def test_new_run_with_a_missing_tool_lists_it_and_asks_nothing(home, capsys, tmp_path, monkeypatch):
     from jrm_release import preflight
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     monkeypatch.setattr(preflight.shutil, "which", lambda n: None if n in ("svn", "svnmucc") else "/usr/bin/" + n)
     code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 2
-    assert prompts.asked == []
     assert "svn: not on PATH" in out
     assert "svnmucc: not on PATH" in out
     assert "brew install subversion" in out
@@ -122,11 +122,10 @@ def test_resume_checks_prerequisites_before_any_prompt(home, capsys, tmp_path, m
     from jrm_release import preflight
     seed(home, {"phase": "rc", "last": "workspace", "identity": IDENTITY,
                 "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     monkeypatch.setattr(preflight.shutil, "which", lambda n: None if n == "gh" else "/usr/bin/" + n)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
     assert code == 2
-    assert prompts.asked == []
     assert "gh: not on PATH" in out
     assert "brew install gh" in out
 
@@ -189,7 +188,7 @@ def test_lock_busy_message(home):
 
 def test_second_process_is_refused_while_lock_held(home, capsys, tmp_path, monkeypatch):
     import fcntl
-    from conftest import FakeNexus, FakePrompts, FakeRunner
+    from conftest import FakeNexus, FakeRunner
     seed(home, {"phase": "rc", "last": "workspace", "identity": IDENTITY, "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
     lock_path = home / "runs" / "9.2.1" / ".lock"
     lock_path.write_text("4242 3")
@@ -200,7 +199,7 @@ def test_second_process_is_refused_while_lock_held(home, capsys, tmp_path, monke
     fd = os.open(lock_path, os.O_RDWR)
     fcntl.flock(fd, fcntl.LOCK_EX)
     try:
-        deps = toolkit_deps(tmp_path, FakeRunner(), FakePrompts(), nexus=FakeNexus())
+        deps = toolkit_deps(tmp_path, FakeRunner(), nexus=FakeNexus())
         code, out = run_main(["--resume"], home, capsys, deps=deps)
     finally:
         os.close(fd)
@@ -208,17 +207,17 @@ def test_second_process_is_refused_while_lock_held(home, capsys, tmp_path, monke
     assert "Another release.py is running this release (pid 4242, attempt #3)." in out
 
 
-def setup_deps(tmp_path, monkeypatch, answers, opener=None):
-    """(fake runner, prompts, nexus fake, deps).  With an opener the real Nexus client is used over it."""
-    from conftest import CREDS, FakeNexus, FakePrompts, FakeRunner
+def setup_deps(tmp_path, monkeypatch, opener=None):
+    """(fake runner, nexus fake, deps).  With an opener the real Nexus client is used over it."""
+    from conftest import FakeNexus, FakeRunner
     from jrm_release import preflight
     monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n)
     for k, v in ENV_SECRETS.items():
         monkeypatch.setenv(k, v)
-    fake, prompts, nexus = FakeRunner(), FakePrompts({**CREDS, **answers}), FakeNexus()
-    deps = toolkit_deps(tmp_path, fake, prompts, nexus=None if opener else nexus, nexus_opener=opener,
+    fake, nexus = FakeRunner(), FakeNexus()
+    deps = toolkit_deps(tmp_path, fake, nexus=None if opener else nexus, nexus_opener=opener,
                         http_ok=lambda u: True, sleep=lambda s: None)
-    return fake, prompts, nexus, deps
+    return fake, nexus, deps
 
 
 def read_run(home):
@@ -232,8 +231,7 @@ ACTIVE = {"phase": "rc", "last": "nexus-close", "nexusRepoId": "r-1", "rcCommit"
 
 def test_revert_end_to_end(home, capsys, tmp_path, monkeypatch):
     seed(home, ACTIVE)
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {"confirm.revert": True,
-                                                                    "confirm.revert-versions": False})
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
     code, out = run_main(["--revert"], home, capsys, deps=deps)
     assert code == 0, out
     assert ("drop", "r-1") in nexus.posts
@@ -247,31 +245,26 @@ def test_revert_end_to_end(home, capsys, tmp_path, monkeypatch):
 
 def test_revert_refused_in_promote_exits_1(home, capsys, tmp_path, monkeypatch):
     seed(home, {**ACTIVE, "phase": "promote"})
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {})
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
     code, out = run_main(["--revert"], home, capsys, deps=deps)
     assert code == 1
     assert "public" in out
     assert nexus.posts == []
 
 
-def test_cancel_exits_130(home, capsys, tmp_path, monkeypatch):
-    seed(home, ACTIVE)
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {"confirm.revert": None})
-    prompts.confirm = lambda *a, **k: (_ for _ in ()).throw(KeyboardInterrupt())
-    code, out = run_main(["--revert"], home, capsys, deps=deps)
-    assert code == 130
-    assert read_run(home)["attempts"][-1]["status"] == "cancelled"
-
-
 def test_resume_runs_to_vote_gate_and_pauses_with_exit_0(home, capsys, tmp_path, monkeypatch):
     seed(home, {**ACTIVE, "last": "dist-verify"})
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {"email.vote": True})
-    code, out = run_main(["--resume"], home, capsys, deps=deps)
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
+    code, out = run_main(["--resume"], home, capsys, deps=deps)       # the vote mail is written and the run pauses
+    assert code == 0, out
+    assert read_run(home)["emailPending"] == "vote" and read_run(home)["attempts"][-1]["status"] == "paused"
+    code, out = run_main(["--resume"], home, capsys, deps=deps)       # the mail counts as sent; the vote gate pauses
     assert code == 0, out
     data = read_run(home)
     assert data["last"] == "vote-gate"
     assert data["phase"] == "vote"
     assert data["voteDeadline"]
+    assert "emailPending" not in data
     assert data["attempts"][-1]["status"] == "paused"
     assert "release.py --resume" in out
     # the lock file exists but is no longer held: a second run is not refused
@@ -281,7 +274,7 @@ def test_resume_runs_to_vote_gate_and_pauses_with_exit_0(home, capsys, tmp_path,
 
 def test_attempt_record_has_origin_pid_step_exit(home, capsys, tmp_path, monkeypatch):
     seed(home, {**ACTIVE, "last": "dist-verify"})
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {"email.vote": True})
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
     att = read_run(home)["attempts"][-1]
     assert att["origin"] == "cli"            # no prompt channel in the test env
@@ -292,7 +285,7 @@ def test_attempt_record_has_origin_pid_step_exit(home, capsys, tmp_path, monkeyp
 
 def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatch):
     seed(home, {**ACTIVE, "last": "workspace", "nexusRepoId": None})
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {})
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
     fake.script("mvn", "-B", ok=False)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
     assert code == 1
@@ -304,10 +297,9 @@ def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatc
 
 def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, monkeypatch):
     params_file(home)
-    answers = {"email.propose": True, "review.javadoc": True, "review.diff": True, "email.vote": True}
     from conftest import FakeHttp
     http = FakeHttp({("GET", "/profile_repositories/1a24bc7f954a70"): (401, b"")})   # no password in a dry run
-    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, answers, opener=http)
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch, opener=http)
     fake.script("git", "ls-remote", release.inventory.GIT_URL, "refs/heads/juneau-9.2.1-branch",
                 out="abc\trefs/heads/x\n")
     code, out = run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
@@ -322,15 +314,12 @@ def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, mo
         assert word in out
     assert "s3cr3t-pw" not in out
     assert "s3cr3t-gpg" not in out
-    asked = [a[1] for a in prompts.asked]
-    assert "credential.apache.password" not in asked
-    assert "credential.gpg.passphrase" not in asked
-    assert "Vote is open" in out
+    assert "The vote is open" in out
 
 
 def test_dry_run_creates_attempt_full_log_but_no_runs(home, capsys, tmp_path, monkeypatch):
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": True})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
     assert (home / "attempts" / "dry-run" / "full.log").exists()
     assert not (home / "runs").exists()
@@ -338,7 +327,7 @@ def test_dry_run_creates_attempt_full_log_but_no_runs(home, capsys, tmp_path, mo
 
 def test_dry_run_honors_a_caller_supplied_full_log(home, capsys, tmp_path, monkeypatch):
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": True})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     log = tmp_path / "watch" / "full.log"
     monkeypatch.setenv("JUNEAU_TERMINAL_FULL_LOG", str(log))
     seen = []
@@ -355,7 +344,7 @@ def test_dry_run_honors_a_caller_supplied_full_log(home, capsys, tmp_path, monke
 
 def test_dry_run_without_a_caller_log_writes_attempt_full_log(home, capsys, tmp_path, monkeypatch):
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": True})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     monkeypatch.delenv("JUNEAU_TERMINAL_FULL_LOG", raising=False)
     seen = []
     orig = deps.run.session
@@ -373,3 +362,86 @@ def test_version_flag_must_look_like_x_y_z(home, capsys):
     code, out = run_main(["--dry-run", "--version", "9.2"], home, capsys)
     assert code == 2
     assert "x.y.z" in out
+
+
+# ---- pauses are recorded in run.json ---------------------------------------------------------------------------------
+
+
+def test_a_pause_is_recorded_in_run_json_and_exits_0(home, capsys, tmp_path, monkeypatch):
+    params_file(home)
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
+    code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
+    assert code == 0, out
+    data = read_run(home)
+    assert data["pause"]["step"] == "compose-propose-email"
+    assert "emails/propose.eml.txt" in data["pause"]["message"] and "--resume --version 9.2.1" in data["pause"]["message"]
+    assert data["attempts"][-1]["status"] == "paused"
+    assert "--resume --version 9.2.1" in out
+
+
+def test_resume_clears_the_pause_and_counts_the_mail_as_sent(home, capsys, tmp_path, monkeypatch):
+    params_file(home)
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
+    run_main(["--version", "9.2.1"], home, capsys, deps=deps)
+    first = read_run(home)
+    assert first["emailPending"] == "propose" and first["pause"]["step"] == "compose-propose-email"
+    run_main(["--resume"], home, capsys, deps=deps)
+    data = read_run(home)
+    assert "propose" in data["emails"] and "emailPending" not in data
+    assert (data.get("pause") or {}).get("step") != "compose-propose-email"
+
+
+def test_a_kill_after_send_leaves_pause_and_email_pending(home, capsys, tmp_path, monkeypatch):
+    from jrm_release import emails
+
+    def killed(*a, **k):
+        raise KeyboardInterrupt
+    monkeypatch.setattr(emails, "mailto_url", killed)      # runs right after the pause record is written
+    params_file(home)
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
+    code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
+    assert code == 130
+    data = read_run(home)
+    assert data["emailPending"] == "propose" and data["pause"]["step"] == "compose-propose-email"
+    monkeypatch.undo()
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
+    run_main(["--resume"], home, capsys, deps=deps)
+    after = read_run(home)
+    assert "propose" in after["emails"] and "emailPending" not in after
+    assert (after.get("pause") or {}).get("step") != "compose-propose-email"
+
+
+def test_origin_is_ui_when_the_sidecar_says_so(tmp_path):
+    attempt = tmp_path / "attempt"
+    attempt.mkdir()
+    (attempt / "jrm-attempt.json").write_text('{"origin": "ui"}')
+    assert release._origin(attempt) == "ui"
+    assert release._origin(tmp_path / "none") == "cli"
+    (attempt / "jrm-attempt.json").write_text("{bad")
+    assert release._origin(attempt) == "cli"
+    (attempt / "jrm-attempt.json").write_text('["ui"]')
+    assert release._origin(attempt) == "cli"
+
+
+def test_start_step_at_an_email_step_resets_its_marks(home, capsys, tmp_path, monkeypatch):
+    seed(home, {**ACTIVE, "last": "dist-verify", "emailPending": "vote",
+                "emails": {"vote": "t", "propose": "t"}})
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
+    code, out = run_main(["--start-step", "compose-vote-email"], home, capsys, deps=deps)
+    assert code == 0, out
+    data = read_run(home)
+    assert data["emailPending"] == "vote" and data["pause"]["step"] == "compose-vote-email"   # written and paused again
+    assert "vote" not in (data.get("emails") or {}) and "propose" in data["emails"]
+    assert (home / "runs" / "9.2.1" / "emails" / "vote.eml.txt").exists()
+
+
+def test_start_step_resets_marks_only_at_an_email_step(home, capsys, tmp_path, monkeypatch):
+    from jrm_release import emails
+    seen = []
+    monkeypatch.setattr(emails, "reset", lambda ctx, kind: seen.append(kind))
+    seed(home, {**ACTIVE, "last": "dist-verify", "emailPending": "propose"})
+    fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
+    run_main(["--start-step", "vote-gate"], home, capsys, deps=deps)
+    assert seen == []                                # a non-email step resets nothing
+    run_main(["--start-step", "compose-vote-email"], home, capsys, deps=deps)
+    assert seen == ["vote"]                          # and only its own mail

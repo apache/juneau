@@ -41,6 +41,12 @@ public class RunFile {
 	/** The vote deadline, or {@code null}. */
 	public String voteDeadline;
 
+	/** Why the run is paused, or {@code null}. */
+	public RunPause pause;
+
+	/** The kind of mail written and awaiting sending ({@code propose}, {@code vote}, {@code result}, {@code announce}), or {@code null}. The page treats it as paused. */
+	public String emailPending;
+
 	/** The file (kept out of the JSON state, which must not expose local paths). */
 	@BeanIgnore
 	public Path path;

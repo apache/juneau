@@ -80,7 +80,6 @@ def test_resolve_has_the_details_ask_shape_and_asks_nothing(tmp_path, make_ctx):
     assert d == {"branch": "juneau-9.2.1-branch", "version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1,
                  "summary": "Security and maintenance release.", "highlights": "- DirectoryResource hardened.",
                  "knownIssues": "", "acknowledgements": ""}
-    assert ctx.prompt.asked == []
 
 
 def test_absent_optional_text_fields_default_to_empty(tmp_path, make_ctx):
@@ -316,7 +315,7 @@ def test_scaffold_header_lists_the_store_commands_and_no_secrets(scripted):
 def test_scaffold_every_key_present_with_a_one_line_comment_and_parses(scripted):
     text = params.scaffold(scripted(), "9.2.1")
     doc = doc_of(text)
-    assert set(doc) == set(params.ALLOWED[None])
+    assert set(doc) == set(params.ALLOWED[None]) - {"vote"}        # the vote block ships commented out
     assert set(doc["apache"]) == {"availid", "email"} and set(doc["gpg"]) == {"keyid"}
     lines = text.splitlines()
     for key in ("branch", "version", "developmentVersion", "rc", "summary", "highlights", "knownIssues", "acknowledgements",
@@ -491,3 +490,100 @@ def test_require_without_version_names_the_placeholder(tmp_path):
     with pytest.raises(params.ParamsError) as e:
         params.require(args)
     assert "no params file; run --init-params --version <version>" in str(e.value)
+
+
+# ---- the vote: block -----------------------------------------------------------------------------------------------
+
+VOTE_BASE = "version: '9.2.1'\nrc: 1\nsummary: s\napache:\n  availid: jb\ngpg:\n  keyid: ABCD1234ABCD1234\n"
+
+
+def _vote_file(tmp_path, body):
+    p = tmp_path / "p.yml"
+    p.write_text(VOTE_BASE + body)
+    return p
+
+
+def test_load_accepts_a_good_vote_block(tmp_path):
+    assert params.load(_vote_file(tmp_path, "vote:\n  plus1: 3\n  binding: [A]\n")).version == "9.2.1"
+
+
+@pytest.mark.parametrize("body", [
+    "vote:\n",
+    "vote:\n  plus1:\n  binding:\n",
+    "vote:\n  plus1: 3\n",
+    "vote:\n  plus1: TODO\n  binding: ['TODO: names']\n",
+    "vote:\n  binding: []\n",
+])
+def test_load_allows_missing_and_todo_vote_values(tmp_path, body):
+    assert params.load(_vote_file(tmp_path, body)).version == "9.2.1"
+
+
+@pytest.mark.parametrize("body,needle", [
+    ("vote:\n  plus1: three\n", "vote.plus1 must be a whole number"),
+    ("vote:\n  plus1: true\n", "vote.plus1 must be a whole number"),
+    ("vote:\n  minus1: -1\n", "vote.minus1 must be a whole number"),
+    ("vote:\n  zero: 1.5\n", "vote.zero must be a whole number"),
+    ("vote:\n  binding: Jane\n", "vote.binding must be a list of names"),
+    ("vote:\n  binding: [3]\n", "vote.binding must be a list of names"),
+    ("vote: [1]\n", "'vote' must be a mapping"),
+])
+def test_load_rejects_present_wrong_typed_vote_values(tmp_path, body, needle):
+    with pytest.raises(params.ParamsError, match=needle):
+        params.load(_vote_file(tmp_path, body))
+
+
+def test_load_rejects_an_unknown_vote_key(tmp_path):
+    with pytest.raises(params.ParamsError, match="unknown key 'vote.nay'"):
+        params.load(_vote_file(tmp_path, "vote:\n  nay: 1\n"))
+
+
+def test_good_vote_block(tmp_path):
+    p = _vote_file(tmp_path, "vote:\n  plus1: 3\n  zero: 1\n  minus1: 0\n  binding:\n    - Jane\n    - John\n    - Pat\n")
+    tally, problems = params.load_vote(p)
+    assert problems == []
+    assert tally == {"plus1": 3, "zero": 1, "minus1": 0, "binding": ["Jane", "John", "Pat"]}
+
+
+def test_zero_and_minus1_default_to_0(tmp_path):
+    tally, problems = params.load_vote(_vote_file(tmp_path, "vote:\n  plus1: 3\n  binding: [A]\n"))
+    assert problems == [] and tally["zero"] == 0 and tally["minus1"] == 0
+
+
+@pytest.mark.parametrize("body,needle", [
+    ("", "vote.plus1 is required"),
+    ("vote:\n", "vote.plus1 is required"),
+    ("vote:\n  plus1: 3\n", "vote.binding is required"),
+    ("vote:\n  plus1: three\n  binding: [A]\n", "vote.plus1 must be a whole number"),
+    ("vote:\n  plus1: true\n  binding: [A]\n", "vote.plus1 must be a whole number"),
+    ("vote:\n  plus1: -1\n  binding: [A]\n", "vote.plus1 must be a whole number"),
+    ("vote:\n  plus1: TODO\n  binding: [A]\n", "vote.plus1 must be a whole number"),
+    ("vote:\n  plus1: 3\n  minus1: 1.5\n  binding: [A]\n", "vote.minus1 must be a whole number"),
+    ("vote:\n  plus1: 3\n  binding: []\n", "vote.binding must be a non-empty list"),
+    ("vote:\n  plus1: 3\n  binding: Jane\n", "vote.binding must be a non-empty list"),
+    ("vote:\n  plus1: 3\n  binding: ['  ']\n", "vote.binding must be a non-empty list"),
+    ("vote:\n  plus1: 3\n  binding: ['TODO: names']\n", "TODO"),
+    ("vote:\n  plus1: 3\n  binding: [A]\n  nay: 1\n", "unknown key 'vote.nay'"),
+])
+def test_bad_vote_blocks_say_what_to_fill_in(tmp_path, body, needle):
+    tally, problems = params.load_vote(_vote_file(tmp_path, body))
+    assert tally is None and any(needle in p for p in problems), problems
+
+
+def test_unreadable_file_is_a_problem_not_a_crash(tmp_path):
+    tally, problems = params.load_vote(tmp_path / "missing.yml")
+    assert tally is None and problems and "cannot read" in problems[0]
+
+
+def test_scaffold_has_the_commented_vote_block():
+    text = params.render_scaffold("9.2.1", "b", "9.2.2-SNAPSHOT", 1, "j@apache.org", "j", "ABCD1234ABCD1234")
+    for key in ("# vote:", "#   plus1:", "#   zero:", "#   minus1:", "#   binding:"):
+        assert key in text
+
+
+def test_scaffold_stays_loadable(tmp_path):
+    p = tmp_path / "s.yml"
+    p.write_text(params.render_scaffold("9.2.1", "b", "9.2.2-SNAPSHOT", 1, "j@apache.org", "j", "ABCD1234ABCD1234")
+                 .replace('"TODO: one or two sentences describing the release"', '"s"')
+                 .replace('"TODO: highlights, one per line"', '""').replace('"TODO: known issues"', '""')
+                 .replace('"TODO: acknowledgements"', '""'))
+    assert params.load(p).version == "9.2.1"

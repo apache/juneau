@@ -29,36 +29,35 @@ SENTINELS = {"JRM_APACHE_PASSWORD": "SENTINEL-apache-pw-7731", "JRM_GPG_PASSPHRA
 
 
 def check_setup(tmp_path, monkeypatch, home, env=True):
-    """(fake, prompts, deps) for a --check or a new run; the params file is in place and the secrets are in the
+    """(fake, deps) for a --check or a new run; the params file is in place and the secrets are in the
     environment unless env is False."""
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     if not env:
         for k in ENV_SECRETS:
             monkeypatch.delenv(k)
-    return fake, prompts, deps
+    return fake, deps
 
 
 def test_check_all_pass_exits_0_and_changes_nothing(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = check_setup(tmp_path, monkeypatch, home)
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
     code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 0, out
     assert "PASS" in out and "FAIL" not in out
     assert "0 failed, 0 could not be checked" in out
-    assert prompts.asked == []
     assert not (home / "runs").exists() and not (home / "attempts").exists()
 
 
 def test_check_failed_check_exits_2_and_lists_it(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = check_setup(tmp_path, monkeypatch, home, env=False)
+    fake, deps = check_setup(tmp_path, monkeypatch, home, env=False)
     code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 2, out
     assert "FAIL  Apache password present" in out
-    assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 def test_check_that_could_not_run_exits_1(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = check_setup(tmp_path, monkeypatch, home)
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
     fake.script("git", "-C", ok=False, code=128)         # the lazy branch-tip fetch fails: both content checks are cant
     code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 1, out
@@ -66,7 +65,7 @@ def test_check_that_could_not_run_exits_1(home, capsys, tmp_path, monkeypatch):
 
 
 def test_check_with_a_failure_and_a_cant_exits_2(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = check_setup(tmp_path, monkeypatch, home, env=False)
+    fake, deps = check_setup(tmp_path, monkeypatch, home, env=False)
     fake.script("git", "-C", ok=False, code=128)
     code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 2, out
@@ -82,17 +81,16 @@ def test_check_cannot_be_combined_with_run_control_flags(home, capsys, flags):
 
 
 def test_check_without_a_params_file_exits_2_with_the_init_hint(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     for argv in (["--check"], ["--check", "--version", "9.2.1"]):
         code, out = run_main(argv, home, capsys, deps=deps)
         assert code == 2
         assert "--init-params" in out
-    assert prompts.asked == []
 
 
 def test_a_new_run_whose_preflight_fails_lists_everything_and_creates_nothing(home, capsys, tmp_path, monkeypatch):
     from jrm_release import preflight
-    fake, prompts, deps = check_setup(tmp_path, monkeypatch, home, env=False)
+    fake, deps = check_setup(tmp_path, monkeypatch, home, env=False)
     monkeypatch.setattr(preflight.shutil, "which", lambda n: None if n == "svnmucc" else "/usr/bin/" + n)
     code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 2
@@ -100,13 +98,13 @@ def test_a_new_run_whose_preflight_fails_lists_everything_and_creates_nothing(ho
     for name in ("Apache password present", "GPG passphrase present", "GitHub token present"):
         assert name in out
     assert "nothing was asked or changed" in out
-    assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 def test_resume_runs_only_the_tools_and_secret_groups(home, capsys, tmp_path, monkeypatch):
     from test_release_cli import ACTIVE
     seed(home, {**ACTIVE, "last": "dist-verify"})
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.vote": True})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
     assert code == 0, out
     assert not fake.ran("git", "ls-remote")              # the repo group did not run
@@ -116,7 +114,7 @@ def test_resume_runs_only_the_tools_and_secret_groups(home, capsys, tmp_path, mo
 
 def test_no_secret_reaches_output_argv_or_run_state(home, capsys, tmp_path, monkeypatch):
     params_file(home)
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": None})
+    fake, deps = new_run_setup(tmp_path, monkeypatch)
     for k, v in SENTINELS.items():
         monkeypatch.setenv(k, v)
     outs = []
@@ -129,3 +127,49 @@ def test_no_secret_reaches_output_argv_or_run_state(home, capsys, tmp_path, monk
             blob += (open(os.path.join(root, f), errors="replace").read())
     for secret in SENTINELS.values():
         assert secret not in blob
+
+
+def vote_row(out):
+    return next(ln for ln in out.splitlines() if "vote block" in ln)
+
+
+def test_vote_row_is_not_needed_for_a_new_release(tmp_path, monkeypatch, capsys, home):
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
+    code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
+    assert "not needed yet" in vote_row(out)
+
+
+@pytest.mark.parametrize("block,expect", [("", "vote.plus1 is required"),
+                                          ("vote:\n  plus1: 3\n  binding: [A, B, C]\n", "+1 3")])
+def test_vote_row_after_the_gate(tmp_path, monkeypatch, capsys, home, block, expect):
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
+    seed(home, {"details": {"version": "9.2.1", "rc": 1}, "phase": "vote", "last": "vote-gate"})
+    pf = home / "params" / "9.2.1.yml"
+    pf.write_text(pf.read_text() + block)
+    code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
+    assert expect in vote_row(out)
+    assert (code == 0) == ("+1 3" in expect)
+
+
+def test_vote_row_stays_quiet_before_the_gate(tmp_path, monkeypatch, capsys, home):
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
+    seed(home, {"details": {"version": "9.2.1", "rc": 1}, "phase": "rc", "last": "build-verify"})
+    code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
+    assert "not needed yet" in vote_row(out)
+
+
+def test_vote_row_reads_the_recorded_params_path(tmp_path, monkeypatch, capsys, home):
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
+    custom = tmp_path / "custom.yml"
+    custom.write_text((home / "params" / "9.2.1.yml").read_text() + "vote:\n  plus1: 4\n  binding: [A]\n")
+    seed(home, {"details": {"version": "9.2.1", "rc": 1}, "last": "vote-gate", "paramsPath": str(custom)})
+    code, out = run_main(["--check", "--params", str(custom), "--version", "9.2.1"], home, capsys, deps=deps)
+    assert "+1 4" in vote_row(out)
+
+
+def test_vote_row_is_cant_for_an_unparseable_run_json(tmp_path, monkeypatch, capsys, home):
+    fake, deps = check_setup(tmp_path, monkeypatch, home)
+    seed(home, {})
+    (home / "runs" / "9.2.1" / "run.json").write_text("{not json")
+    code, out = run_main(["--check", "--version", "9.2.1"], home, capsys, deps=deps)
+    assert "???" in vote_row(out) and "not needed yet" not in vote_row(out)

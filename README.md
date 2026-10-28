@@ -110,29 +110,30 @@ python3 -B ~/.m2/repository/org/apache/juneau/juneau-terminal/10.0.0-SNAPSHOT/ju
 
 ### 6. Where it stops
 
-The 25 steps run unattended except at these points:
+The 25 steps run unattended. The run never asks a question: where it needs you it pauses (exit 0), prints what to do and
+records the pause in `run.json`. Continue with `--resume` (or the **Resume** button on the Release page).
 
 | When | What you do | Then |
 |---|---|---|
-| Propose email | Send the `[PROPOSE]` mail to dev@ (it opens in your mail client) and confirm | "Not yet" pauses; `--resume` after sending |
-| Javadoc verify | Skim the generated javadoc and confirm (`--skip-step javadoc-verify` skips it) | A "no" fails the step |
-| Release diff review | Only when the release commits hold more than the pom version bumps: read the printed hunks and answer | A clean diff passes silently; "no" fails |
-| Vote email | Send the `[VOTE]` mail to dev@ | The run then pauses at the vote gate and exits 0 |
+| Propose, vote, result and announce emails | Send the mail from `~/.juneau-release-manager/runs/<version>/emails/<kind>.eml.txt` | `--resume` records it as sent, so send it first |
 | Vote gate | Wait for the vote to close | `--resume` |
-| Tally form | Enter the +1, 0 and -1 counts and the binding voters (three binding +1 and more +1 than -1 passes) | Asked to confirm if the vote is still open |
-| Result email | Send the `[RESULT]` mail | A failed vote pauses here: `--revert` |
-| Maven Central confirmation | Type the version to confirm. **Irreversible** | Anything else stops the run |
-| Announce email | Send it to announce@; the run first waits for downloads.apache.org to carry the release and offers to stop and resume later if the mirrors are slow | |
-| Follow-up checklist | Do the listed chores and confirm | "No" pauses; `--resume` |
+| Vote tally, vote still open | Wait for the deadline | `--resume` after it |
+| Vote tally | Uncomment and fill in `vote:` in the params file: `plus1`, `zero`, `minus1` and the `binding` voters (three binding +1 and more +1 than -1 passes) | `--resume`; a failed vote pauses at the result email: `--revert` |
+| Announce email, mirrors slow | The run waits 30 minutes for downloads.apache.org to carry the release | `--resume` later waits a fresh 30 minutes |
+
+The Javadoc check and the follow-up checklist are files in the run directory (`javadoc-report.txt`, `followup.md`), not
+questions. A release diff that holds more than the pom version bumps fails the step (`release-diff.txt` lists it): run
+`--revert`, bump `rc` and start again. Nothing asks for a confirmation before Maven Central; the passed vote is the gate.
 
 ### 7. Picking up
 
-- `--resume` continues after any pause, and once the vote closes. It needs no params file; the identity is saved in
-  the run.
+- `--resume` continues after any pause, and once the vote closes. It needs no params file to continue; the identity
+  is saved in the run. Only `vote-tally` reads one, the `vote:` block of the file recorded in `run.json` as `paramsPath`
+  (else `~/.juneau-release-manager/params/<version>.yml`).
 - `--list-steps` shows the steps by phase with finished ones marked; `--start-step NAME` restarts at a step (refused
   when it would repeat an irreversible one, or skip the vote).
-- `--revert` drops a release candidate (Nexus staging repository, dist/dev files, RC tag, pom versions): use it after a
-  failed vote, or before an RC2. Bump `rc` in the params file, then start again.
+- `--revert` drops a release candidate (Nexus staging repository, dist/dev files, RC tag, pom versions) with no typed
+  confirmation: use it after a failed vote, or before an RC2. Bump `rc` in the params file, then start again.
 - Ctrl-C stops cleanly (exit 130); `--resume` continues. A second `release.py` on the same release is refused while the
   first holds the lock.
 
@@ -151,20 +152,24 @@ bottom pane tails).
 **Release diff review** is automatic: it checks the release commit (`<rc tag>^..<rc tag>`) and the plugin's following
 "prepare for next development iteration" commit. Clean means every changed file is a reactor `pom.xml` with only the
 X-SNAPSHOT -> X version (and `juneau.version`/SCM tag) changes, no reactor pom was skipped, and the follow-up commit
-reverses them to the next SNAPSHOT. Anything else prints just the offending hunks and asks.
+reverses them to the next SNAPSHOT. Anything else fails the step and writes just the offending hunks to
+`release-diff.txt`.
 
 ## Release page
 
 The **Release** page (`/rest/runs`) runs `scripts/release.py` for you and streams its terminal. It starts
-`python3 scripts/release.py --console board --home <rm.home> --attempt-dir ...`, answers the script's prompts
-through dialogs, and lists past attempts (real runs and dry runs) under **History**, where each can be replayed.
+`python3 scripts/release.py --console board --home <rm.home> --attempt-dir ...` and lists past attempts (real runs and
+dry runs) under **History**, where each can be replayed. When a run is paused the page shows the pause message and a
+**Resume** button.
 
 - **Properties.** `rm.home` (default `~/.juneau-release-manager`) is where `runs/` and attempt directories live.
   `rm.scripts.dir` (default `<working dir>/scripts`) holds `release.py`. `rm.juneau.terminal.script` is the
   `juneau_terminal.py` the script runs under; it defaults to the `juneau-terminal` script in `~/.m2`, and the `JUNEAU_TERMINAL_PY`
   environment variable overrides it.
-- **Credentials.** Stored credentials answer the script's `credential.*` prompts automatically; anything not stored is
-  asked in a dialog.
+- **Credentials.** Stored credentials reach the run as `JRM_*` environment variables (`JRM_APACHE_PASSWORD`,
+  `JRM_GPG_PASSPHRASE`, `JRM_GITHUB_TOKEN`), never on a command line. The Apache password is looked up by the Apache id
+  Setup stored; if the params file names a different `apache.availid`, no password is passed and the run fails closed at
+  its credential step.
 - **Stopping JRM.** Stopping JRM stops a live run. It then shows as "interrupted (JRM stopped)" and can be resumed.
 
 ## License

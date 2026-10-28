@@ -15,6 +15,7 @@ from . import emails, inventory
 from .ctx import StepError
 from .rc import dev_dir, git_env, wanted_files
 
+MIRROR_POLLS = 72   # 25 s each: 30 minutes
 FUNCS = {}
 
 
@@ -25,13 +26,9 @@ def step(fn):
 
 @step
 def nexus_release(ctx):
-    v, rid = ctx.version, ctx.rf.get("nexusRepoId")
+    rid = ctx.rf.get("nexusRepoId")
     if (ctx.rf.get("vote") or {}).get("outcome") != "passed":
         raise StepError("the vote has not passed")
-    ok = ctx.prompt.confirm(f"Release Apache Juneau {v} to Maven Central?  This cannot be undone.  Type {v} to confirm.",
-                            key="confirm.nexus-release", expect=v, danger=True)
-    if ok is not True:
-        raise StepError("nexus-release not confirmed")
     ctx.nexus.promote(rid)
     ctx.rf.set("phase", "promote")
     return f"{rid} released"
@@ -106,11 +103,9 @@ def compose_announce_email(ctx):
         if ctx.dry_run:
             ctx.say(f"dry run: {url} is not published; the real run waits for it")
             break
+        if polls == MIRROR_POLLS:
+            raise ctx.pause(f"The release is not on the mirrors yet ({url}).  Run: {ctx.resume_hint} later.", done=False)
         polls += 1
-        if polls % 12 == 0 and ctx.prompt.confirm(
-                "The release is not on downloads.apache.org yet.  Wait another 5 minutes?",
-                key="announce.wait") is not True:
-            raise ctx.pause("Announce later: re-run with --resume once downloads.apache.org has it.", done=False)
         ctx.sleep(25)
     to, sub, body = emails.announce(ctx.d, ctx.rf.get("githubReleaseUrl"))
     return emails.send(ctx, "announce", to, sub, body, cc=(inventory.DEV_LIST,))
@@ -121,10 +116,14 @@ def followup_checklist(ctx):
     items = ["Update the release notes / website (juneau-docs).", "Update the Docker/Maven badges if any.",
              "Close the release milestone / issues.", "Remove old releases from dist/release if policy requires."]
     ctx.say("Follow-up checklist:\n- " + "\n- ".join(items))
-    if ctx.review("Have you done these follow-ups?", key="confirm.followup", look_at="The checklist above:") is not True:
-        raise ctx.pause("Finish the follow-ups, then re-run with --resume.", done=False)
-    ctx.rf.set("followup", {"done": True})
-    return "skipped (dry run): nothing to review" if ctx.dry_run else "follow-ups done"
+    if ctx.dry_run:
+        return "skipped (dry run): checklist not written"
+    path = ctx.run_dir / "followup.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(f"# Follow-ups for Apache Juneau {ctx.version}\n\n" + "\n".join(f"- [ ] {i}" for i in items) + "\n",
+                    encoding="utf-8")
+    ctx.rf.set("followup", {"written": True})
+    return f"follow-up checklist written to {path.as_uri()}"
 
 
 @step

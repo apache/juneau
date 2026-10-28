@@ -53,7 +53,7 @@ class EventBroadcasterTest {
 		var bc = new EventBroadcaster();
 		var got = new ArrayList<String>();
 		bc.subscribe(got::add);
-		bc.publish("prompt", Map.of("type", "prompt", "id", "p1"));
-		assertTrue(got.get(0).startsWith("{\"type\":\"prompt\""), got.get(0));
+		bc.publish("process", Map.of("type", "process", "state", "started"));
+		assertTrue(got.get(0).startsWith("{\"type\":\"process\""), got.get(0));
 	}
 }

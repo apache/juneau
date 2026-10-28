@@ -44,7 +44,7 @@ import org.apache.juneau.releng.rest.SetupRest;
 import org.apache.juneau.releng.setup.SetupProbeService;
 import org.apache.juneau.releng.rest.ReleaseRest;
 import org.apache.juneau.releng.rest.ReleaseRunRest;
-import org.apache.juneau.releng.run.CredentialAnswers;
+import org.apache.juneau.releng.run.CredentialEnv;
 import org.apache.juneau.releng.run.ReleaseProcessService;
 import org.apache.juneau.releng.run.RunFileWatcher;
 import org.apache.juneau.releng.run.RunFiles;
@@ -290,16 +290,15 @@ public class AppConfiguration {
 	}
 
 	/**
-	 * Stored answers for release.py's {@code credential.*} prompts.
+	 * The stored secrets as the environment variables release.py reads.
 	 */
 	@Bean
-	public CredentialAnswers credentialAnswers(Map<CredentialSpec, SecretStore> stores, AccountStore accounts,
-			@Value("${rm.git.committer.email}") String committerEmail) {
-		return new CredentialAnswers(stores, accounts, committerEmail);
+	public CredentialEnv credentialEnv(Map<CredentialSpec, SecretStore> stores, AccountStore accounts) {
+		return new CredentialEnv(stores, accounts);
 	}
 
 	/**
-	 * The Release page's event bus: run-file changes, process start/end, and prompts.
+	 * The Release page's event bus: run-file changes and process start/end.
 	 */
 	@Bean
 	public EventBroadcaster runEvents() {
@@ -313,9 +312,9 @@ public class AppConfiguration {
 	@Bean(destroyMethod = "shutdown")
 	public ReleaseProcessService releaseProcessService(@Value("${rm.home}") String home,
 			@Value("${rm.scripts.dir}") String scriptsDir, @Value("${rm.juneau.terminal.script}") String runScript,
-			CredentialAnswers credentials, EventBroadcaster runEvents) {
+			CredentialEnv credentials, EventBroadcaster runEvents) {
 		System.setProperty(TerminalProcess.SCRIPT_PROPERTY, runScript);
-		return new ReleaseProcessService(Path.of(home), Path.of(scriptsDir), credentials::lookup, runEvents);
+		return new ReleaseProcessService(Path.of(home), Path.of(scriptsDir), credentials::environment, runEvents);
 	}
 
 	/**

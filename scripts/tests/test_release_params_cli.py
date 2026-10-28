@@ -30,37 +30,26 @@ pytestmark = [pytest.mark.usefixtures("clean_env"),
 SECRET_ENV = {"JRM_APACHE_PASSWORD": "env-pw-9", "JRM_GPG_PASSPHRASE": "env-gpg-9", "JRM_GITHUB_TOKEN": "env-gh-9"}
 
 
-def setup(tmp_path, monkeypatch, answers=None, env=SECRET_ENV, platform="linux"):
-    """(fake runner, prompts, deps) for a new release.  No answers by default, so any prompt raises: that is how 'nothing
-    was asked' is asserted.  The keychain is off (platform) unless a test turns it on."""
-    from conftest import FakeNexus, FakePrompts, FakeRunner
+def setup(tmp_path, monkeypatch, env=SECRET_ENV, platform="linux"):
+    """(fake runner, deps) for a new release.  The keychain is off (platform) unless a test turns it on."""
+    from conftest import FakeNexus, FakeRunner
     from jrm_release import keychain, preflight
     monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n)
     monkeypatch.setattr(keychain.sys, "platform", platform)
     for k, v in env.items():
         monkeypatch.setenv(k, v)
-    fake, prompts = FakeRunner(), FakePrompts(answers or {})
+    fake = FakeRunner()
     fake.script("git", "ls-remote", release.inventory.GIT_URL, "refs/heads/juneau-9.2.1-branch", out="abc\trefs/heads/x\n")
     fake.script("gh", "auth", "token", ok=False, code=1)
-    return fake, prompts, toolkit_deps(tmp_path, fake, prompts, nexus=FakeNexus(), http_ok=lambda u: True,
-                                       sleep=lambda s: None)
+    return fake, toolkit_deps(tmp_path, fake, nexus=FakeNexus(), http_ok=lambda u: True, sleep=lambda s: None)
 
 
 def run_json(home, version="9.2.1"):
     return json.loads((home / "runs" / version / "run.json").read_text())
 
 
-STOP = {"email.propose": None}     # cancelling the propose email ends the run cleanly, right after the prechecks
 IDENT = {"apacheId": "jbognar", "apacheEmail": "jamesbognar@apache.org", "gpgKeyId": "ABCD1234ABCD1234"}
 GH_AUTH = ("gh", "auth", "token")
-FORM = {"release.branch": "juneau-9.2.1-branch", "email.propose": None,
-        "release.details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1, "summary": "x"}}
-
-
-def asked(prompts):
-    return [a[1] for a in prompts.asked]
-
-
 def convention(home, text=GOOD, version="9.2.1"):
     p = home / "params" / f"{version}.yml"
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -78,11 +67,12 @@ def finish(home):
 # 1, 25, 20 -----------------------------------------------------------------------------------------------------------
 
 def test_params_flag_starts_without_any_prompt_and_says_so_first(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP)
+    fake, deps = setup(tmp_path, monkeypatch)
     p = write(tmp_path, GOOD)
     code, out = run_main(["--params", str(p)], home, capsys, deps=deps)
-    assert code == 130, out
-    assert asked(prompts) == ["email.propose"]          # no form, no availid/email/keyid, no secret
+    assert code == 0, out
+    assert "Send the [PROPOSE] email" in out and "--resume --version 9.2.1" in out
+    assert run_json(home)["emailPending"] == "propose" and run_json(home)["attempts"][-1]["status"] == "paused"
     assert out.splitlines()[0] == f"Using params file {p}"
     assert out.index("Using params file") < out.index("✔ git")
     data = run_json(home)
@@ -91,10 +81,11 @@ def test_params_flag_starts_without_any_prompt_and_says_so_first(home, capsys, t
                                "highlights": "- DirectoryResource hardened.", "knownIssues": "", "acknowledgements": ""}
     assert data["identity"] == IDENT
     assert (home / "runs" / "9.2.1" / "params.yml").read_bytes() == p.read_bytes()
+    assert data["paramsPath"] == str(p.resolve())            # the live file the vote tally is read from
 
 
 def test_secrets_from_env_reach_neither_run_json_nor_the_record_nor_logs_nor_argv(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP)
+    fake, deps = setup(tmp_path, monkeypatch)
     code, out = run_main(["--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
     run_dir = home / "runs" / "9.2.1"
     blob = (out + "".join(f.read_text() for f in run_dir.iterdir() if f.is_file())
@@ -105,28 +96,28 @@ def test_secrets_from_env_reach_neither_run_json_nor_the_record_nor_logs_nor_arg
 
 
 def test_convention_file_is_picked_up_by_version(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP)
+    fake, deps = setup(tmp_path, monkeypatch)
     conv = convention(home)
     code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
-    assert code == 130, out
-    assert asked(prompts) == ["email.propose"]
+    assert code == 0, out
+    assert run_json(home)["emailPending"] == "propose"
     assert out.splitlines()[0] == f"Using params file {conv}"
     assert run_json(home)["identity"] == IDENT
 
 
 def test_without_a_file_there_is_no_form_and_no_prompt(home, capsys, tmp_path, monkeypatch):
     for argv in ([], ["--version", "9.2.1"]):
-        fake, prompts, deps = setup(tmp_path, monkeypatch)
+        fake, deps = setup(tmp_path, monkeypatch)
         code, out = run_main(argv, home, capsys, deps=deps)
         assert code == 2
         assert "--init-params" in out
-        assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 # 26, 27 --------------------------------------------------------------------------------------------------------------
 
 def test_explicit_params_beat_the_convention_file(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP)
+    fake, deps = setup(tmp_path, monkeypatch)
     convention(home, GOOD.replace("Security and maintenance release.", "from the convention file"))
     flag = write(tmp_path, GOOD.replace("Security and maintenance release.", "from the flag file"))
     code, out = run_main(["--params", str(flag), "--version", "9.2.1"], home, capsys, deps=deps)
@@ -135,12 +126,12 @@ def test_explicit_params_beat_the_convention_file(home, capsys, tmp_path, monkey
 
 
 def test_version_that_disagrees_with_the_file_exits_2(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     flag = write(tmp_path, GOOD)
     code, out = run_main(["--params", str(flag), "--version", "9.2.2"], home, capsys, deps=deps)
     assert code == 2
     assert f"--version 9.2.2 does not match version 9.2.1 in {flag}" in out
-    assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 @pytest.mark.parametrize("text, fragment", [
@@ -149,23 +140,23 @@ def test_version_that_disagrees_with_the_file_exits_2(home, capsys, tmp_path, mo
     (GOOD.replace("apache: {", "apache: {password: hunter2, "), "'apache.password' is a secret"),
 ])
 def test_invalid_convention_file_is_an_error_never_a_fallback(home, capsys, tmp_path, monkeypatch, text, fragment):
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     conv = convention(home, text)
     code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 2, out
     assert fragment in out and str(conv) in out
     assert "hunter2" not in out
-    assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 def test_missing_params_file_is_exit_2(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     code, out = run_main(["--params", str(tmp_path / "nope.yml")], home, capsys, deps=deps)
-    assert code == 2 and "cannot read" in out and prompts.asked == []
+    assert code == 2 and "cannot read" in out
 
 
 def test_todo_placeholder_exits_2(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     code, out = run_main(["--params", str(write(tmp_path, GOOD.replace("jbognar", "TODO"))), ], home, capsys, deps=deps)
     assert code == 2 and "'apache.availid' still contains a TODO placeholder" in out
 
@@ -244,18 +235,18 @@ def test_init_params_needs_no_toolkit_session_or_idle_state(home, capsys):
 # 7, 17 secrets at startup --------------------------------------------------------------------------------------------
 
 def test_no_secrets_found_lists_all_three_and_changes_nothing(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, env={})
+    fake, deps = setup(tmp_path, monkeypatch, env={})
     code, out = run_main(["--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
     assert code == 2
     assert "nothing was asked or changed" in out
     for name in ("Apache password present", "GPG passphrase present", "GitHub token present"):
         assert name in out
     assert "JRM_APACHE_PASSWORD" in out and "JRM_GPG_PASSPHRASE" in out and "JRM_GITHUB_TOKEN" in out
-    assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 def test_empty_env_string_counts_as_unset_and_found_ones_are_not_listed(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, env={"JRM_APACHE_PASSWORD": "pw", "JRM_GPG_PASSPHRASE": ""})
+    fake, deps = setup(tmp_path, monkeypatch, env={"JRM_APACHE_PASSWORD": "pw", "JRM_GPG_PASSPHRASE": ""})
     code, out = run_main(["--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
     assert code == 2
     assert "GPG passphrase present: not found" in out and "GitHub token present: not found" in out
@@ -263,7 +254,7 @@ def test_empty_env_string_counts_as_unset_and_found_ones_are_not_listed(home, ca
 
 
 def test_partially_populated_keychain_lists_exactly_the_missing_two(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, env={}, platform="darwin")
+    fake, deps = setup(tmp_path, monkeypatch, env={}, platform="darwin")
     fake.script("security", "find-generic-password", ok=False, code=44)
     fake.script("security", "find-generic-password", "-s", "jrm.apache.password", "-a", "jbognar", "-w", out="kc-pw\n")
     code, out = run_main(["--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
@@ -274,16 +265,16 @@ def test_partially_populated_keychain_lists_exactly_the_missing_two(home, capsys
 
 
 def test_token_found_only_via_gh_counts_and_everything_found_proceeds(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP, env={"JRM_APACHE_PASSWORD": "pw", "JRM_GPG_PASSPHRASE": "gp"})
+    fake, deps = setup(tmp_path, monkeypatch, env={"JRM_APACHE_PASSWORD": "pw", "JRM_GPG_PASSPHRASE": "gp"})
     fake.script(*GH_AUTH, out="gh-found-token\n")
     code, out = run_main(["--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
-    assert code == 130, out
-    assert asked(prompts) == ["email.propose"]
+    assert code == 0, out
+    assert run_json(home)["emailPending"] == "propose"
     assert "gh-found-token" not in out + json.dumps([c["argv"] for c in fake.calls])
 
 
 def test_missing_availid_is_the_missing_required_key_error(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     code, out = run_main(["--params", str(write(tmp_path, GOOD.replace("jbognar", "TODO").replace("availid: TODO,", "")))],
                          home, capsys, deps=deps)
     assert code == 2 and "missing required key(s): apache.availid" in out
@@ -292,9 +283,8 @@ def test_missing_availid_is_the_missing_required_key_error(home, capsys, tmp_pat
 # 11, 30 dry run ------------------------------------------------------------------------------------------------------
 
 def test_dry_run_with_params_validates_but_touches_no_secret_and_writes_nothing(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP, platform="darwin")
+    fake, deps = setup(tmp_path, monkeypatch, platform="darwin")
     code, out = run_main(["--dry-run", "--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
-    assert asked(prompts) == []                      # a dry run never prompts, and never reads a secret store
     assert fake.ran("security") == [] and fake.ran(*GH_AUTH) == []
     assert not (home / "runs").exists() and not (home / "runs" / "9.2.1" / "params.yml").exists()
     for secret in SECRET_ENV.values():
@@ -302,7 +292,7 @@ def test_dry_run_with_params_validates_but_touches_no_secret_and_writes_nothing(
 
 
 def test_dry_run_still_rejects_an_invalid_file(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     code, out = run_main(["--dry-run", "--params", str(write(tmp_path, GOOD + "bogus: 1\n"))], home, capsys, deps=deps)
     assert code == 2 and "unknown key 'bogus'" in out
 
@@ -311,18 +301,17 @@ def test_resume_never_reads_a_params_file(home, capsys, tmp_path, monkeypatch):
     from test_release_cli import ACTIVE
     seed(home, {**ACTIVE, "last": "dist-verify", "identity": IDENT})
     convention(home, "this is not even yaml: [\n")
-    fake, prompts, deps = setup(tmp_path, monkeypatch, {"email.vote": True})
+    fake, deps = setup(tmp_path, monkeypatch)
     code, out = run_main(["--resume", "--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 0, out                                    # no startup secret failure on resume
     assert "Using params file" not in out
-    assert not [k for k in asked(prompts) if k.startswith("credential.")]    # identity persisted: nothing re-asked
 
 
 # 12 PyYAML -----------------------------------------------------------------------------------------------------------
 
 def test_missing_pyyaml_is_a_preflight_failure_exit_2(home, capsys, tmp_path, monkeypatch):
     from jrm_release import preflight
-    fake, prompts, deps = setup(tmp_path, monkeypatch)
+    fake, deps = setup(tmp_path, monkeypatch)
     real = preflight.importlib.util.find_spec
     monkeypatch.setattr(preflight.importlib.util, "find_spec", lambda name, *a: None if name == "yaml" else real(name, *a))
     monkeypatch.setattr(preflight.shutil, "which", lambda n: None if n == "gh" else "/usr/bin/" + n)
@@ -331,7 +320,7 @@ def test_missing_pyyaml_is_a_preflight_failure_exit_2(home, capsys, tmp_path, mo
     assert "2 check(s) did not pass" in out
     assert "PyYAML: not installed; params files need it (python3 -m pip install pyyaml)" in out
     assert "gh: not on PATH" in out
-    assert prompts.asked == [] and not (home / "runs").exists()
+    assert not (home / "runs").exists()
 
 
 # 29 record copy ------------------------------------------------------------------------------------------------------
@@ -340,7 +329,7 @@ def test_a_second_release_overwrites_the_record_and_the_record_can_be_reused(hom
     first = write(tmp_path, GOOD, "one.yml")
     second = write(tmp_path, GOOD.replace("rc: 1", "rc: 2"), "two.yml")
     record = home / "runs" / "9.2.1" / "params.yml"
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP)
+    fake, deps = setup(tmp_path, monkeypatch)
     run_main(["--params", str(first)], home, capsys, deps=deps)
     assert record.read_bytes() == first.read_bytes()
     finish(home)
@@ -361,11 +350,11 @@ def test_a_record_copy_failure_warns_and_the_release_continues(home, capsys, tmp
             raise PermissionError(13, "Permission denied")
         return real(src, dst, *a, **k)
 
-    fake, prompts, deps = setup(tmp_path, monkeypatch, STOP)
+    fake, deps = setup(tmp_path, monkeypatch)
     monkeypatch.setattr(params_mod.os, "replace", failing)
     code, out = run_main(["--params", str(write(tmp_path, GOOD))], home, capsys, deps=deps)
     assert "could not record params file: " in out
-    assert code == 130 and asked(prompts) == ["email.propose"]
+    assert code == 0 and run_json(home)["emailPending"] == "propose"
     assert not (home / "runs" / "9.2.1" / "params.yml").exists()
     assert [p.name for p in (home / "runs" / "9.2.1").iterdir() if p.name.startswith("params")] == []   # no temp left
 

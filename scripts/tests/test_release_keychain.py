@@ -39,8 +39,8 @@ def mac(monkeypatch):
 @pytest.fixture
 def bare(make_ctx):
     """A ctx with no cached credentials but the Apache id (the keychain account)."""
-    def make(params=False, dry_run=False, answers=None):
-        ctx = make_ctx(dry_run=dry_run, answers=answers)
+    def make(params=False, dry_run=False):
+        ctx = make_ctx(dry_run=dry_run)
         ctx.creds.clear()
         ctx.creds[AVAILID] = "jamesbognar"
         ctx.runner.secrets = ctx.secrets          # as release.build_ctx wires it
@@ -60,7 +60,6 @@ def test_keychain_hit_is_trimmed_cached_masked_and_off_argv(mac, bare):
     assert call["argv"] == PW_ITEM and call["argv"][-1] == "-w"      # -w last, no value
     assert call.get("quiet") is True and call["timeout"] == keychain.TIMEOUT
     assert not any("kc-pw-value" in " ".join(c["argv"]) for c in ctx.fake.calls)
-    assert ctx.prompt.asked == []
     ctx.cred(PW, secret=True)
     assert len(ctx.fake.calls) == 1                                  # cached: nothing is looked up twice
     assert ctx.runner.mask("x kc-pw-value y") == "x ******** y"
@@ -72,7 +71,6 @@ def test_keychain_miss_is_a_step_error_and_never_prompts(mac, bare):
     with pytest.raises(StepError) as e:
         ctx.cred(PW, secret=True)
     assert "JRM_APACHE_PASSWORD" in str(e.value)
-    assert ctx.prompt.asked == []
     assert ctx.fake.said == ["keychain: jrm.apache.password not available (not found)"]
 
 
@@ -128,7 +126,6 @@ def test_keychain_beats_prompt(mac, bare):
     ctx = bare()
     ctx.fake.script(*GPG_ITEM, out="kc-gpg\n")
     assert ctx.cred(GPG, secret=True) == "kc-gpg"
-    assert ctx.prompt.asked == []
 
 
 def test_env_is_found_and_nothing_found_is_a_step_error_never_a_prompt(bare, monkeypatch):
@@ -138,7 +135,6 @@ def test_env_is_found_and_nothing_found_is_a_step_error_never_a_prompt(bare, mon
     assert ctx.cred(GPG, secret=True) == "env-gpg"
     with pytest.raises(StepError):
         ctx.cred(PW, secret=True)
-    assert ctx.prompt.asked == []
 
 
 def test_github_token_chain_env_then_keychain_then_gh(mac, bare, monkeypatch):
@@ -167,7 +163,6 @@ def test_github_token_gh_failure_or_empty_is_a_step_error(mac, bare):
         ctx.fake.script(*GH_AUTH, **scripted)
         with pytest.raises(StepError):
             ctx.cred(GH, secret=True)
-        assert ctx.prompt.asked == []
 
 
 def test_dry_run_touches_nothing(mac, bare, monkeypatch):
@@ -239,7 +234,7 @@ def test_cred_never_prompts_for_missing_identity(bare):
     ctx.creds.clear()
     with pytest.raises(StepError) as e:
         ctx.cred("credential.gpg.keyid")
-    assert "GPG key id" in str(e.value) and ctx.prompt.asked == []
+    assert "GPG key id" in str(e.value)
 
 
 def test_email_defaults_from_availid(bare):

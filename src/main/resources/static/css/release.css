@@ -24,15 +24,5 @@
 #rl-terminal { min-height: 24rem; }
 .rl-history tr.selected { background: var(--jc-accent-wash); }
 .rl-dry-tag { margin-left: 0.25rem; }
-.rl-dialog { max-width: 56rem; width: 90vw; border: 1px solid var(--jc-border); border-radius: var(--jc-radius); background: var(--jc-card-bg); color: var(--jc-text); padding: 1rem 1.25rem; }
-.rl-dialog::backdrop { background: rgba(0, 0, 0, 0.35); }
-.rl-dialog h2 { margin-top: 0; }
-.rl-error { color: var(--jc-danger); }
-.rl-input, .rl-field textarea, .rl-field input { width: 100%; box-sizing: border-box; }
-.rl-field { display: block; margin: 0.5rem 0; }
-.rl-field > span { display: block; font-weight: 600; margin-bottom: 0.25rem; }
-.rl-choices label { display: block; margin: 0.25rem 0; }
-.rl-email-row { display: grid; grid-template-columns: 5rem 1fr auto; gap: 0.5rem; align-items: start; margin: 0.4rem 0; }
-.rl-email-label { font-weight: 600; padding-top: 0.25rem; }
-.rl-email-field { width: 100%; box-sizing: border-box; font-family: monospace; }
-.rl-dialog-buttons { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
+.rl-pause { border-left: 4px solid var(--jc-accent); }
+.rl-pause[hidden] { display: none; }

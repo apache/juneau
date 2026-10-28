@@ -45,20 +45,14 @@ def test_dry_run_masks_secrets(make_ctx):
     ctx.runner.run(["svnmucc", "--password", "real-pw"], title="x", mutating=True)
     assert all("real-pw" not in s for s in ctx.fake.said)
     assert any("********" in s for s in ctx.fake.said)
-    asked = [a[1] for a in ctx.prompt.asked]
-    assert "credential.apache.password" not in asked
-    assert "credential.gpg.passphrase" not in asked
 
 
 def test_dry_run_does_not_ask_for_secrets(make_ctx):
-    from conftest import FakePrompts
     ctx = make_ctx(dry_run=True)
     ctx.creds.clear()
-    ctx.prompt = FakePrompts({})                                         # any prompt would raise
     ctx.creds["credential.apache.availid"] = "jb"
     assert ctx.cred("credential.apache.password", secret=True) == "********"
     assert ctx.cred("credential.apache.availid") == "jb"
-    assert ctx.prompt.asked == []
 
 
 def test_dry_run_stops_at_vote_gate(make_ctx):

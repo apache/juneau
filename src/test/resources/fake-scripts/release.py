@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""Test fixture standing in for scripts/release.py under JRM: speaks prompt protocol v1 and writes a run.json."""
+"""Test fixture standing in for scripts/release.py under JRM: writes a run.json and exits."""
 import argparse
 import json
 import os
@@ -38,11 +38,15 @@ def main():
     cfg = json.loads(cfg_path.read_text()) if cfg_path.exists() else {}
     (a.attempt_dir / "fake-argv.json").write_text(json.dumps(sys.argv[1:]))
     command = "revert" if a.revert else "resume" if a.resume else "start"
-    out_fd, in_fd = os.environ.pop("JUNEAU_PROMPT_FD_OUT", None), os.environ.pop("JUNEAU_PROMPT_FD_IN", None)
-    origin = "ui" if out_fd else "cli"
+    side = a.attempt_dir / "jrm-attempt.json"
+    try:                                                   # same tolerance as the real release.py _origin
+        side_data = json.loads(side.read_text())
+    except (OSError, ValueError):
+        side_data = {}
+    origin = "ui" if isinstance(side_data, dict) and side_data.get("origin") == "ui" else "cli"
     run_json = a.home / "runs" / cfg.get("version", "9.2.1") / "run.json"
 
-    def record(status, exit_code=None):
+    def record(status, exit_code=None, pause=None):
         if a.dry_run:
             return
         run_json.parent.mkdir(parents=True, exist_ok=True)
@@ -56,6 +60,11 @@ def main():
         att[-1].update({"status": status, "step": "fake-step"})
         if exit_code is not None:
             att[-1]["exit"] = exit_code
+        if pause:
+            data["pause"] = {"step": pause.get("step", "fake-step"), "message": pause.get("message", "paused"),
+                             "at": time.strftime("%Y%m%d-%H%M%S")}
+        else:
+            data.pop("pause", None)
         run_json.write_text(json.dumps(data))
 
     print(f"fake release.py {command}{' (dry run)' if a.dry_run else ''}", flush=True)
@@ -63,18 +72,12 @@ def main():
         print(cfg["say"], flush=True)
     record("running")
     try:
-        if cfg.get("prompts"):
-            w = os.fdopen(int(out_fd), "w", buffering=1)
-            r = os.fdopen(int(in_fd), "r")
-            w.write(json.dumps({"v": 1, "type": "hello", "pid": os.getpid(), "script": "release.py"}) + "\n")
-            for n, pr in enumerate(cfg["prompts"], 1):
-                w.write(json.dumps({"v": 1, "type": "prompt", "id": f"p{n}", **pr}) + "\n")
-                ans = json.loads(r.readline() or "{}")
-                with open(a.home / "fake-answers.jsonl", "a") as f:
-                    f.write(json.dumps(ans) + "\n")
-                shown = "********" if pr.get("kind") == "secret" else ans.get("value")
-                print(f"? {pr.get('message')}: {shown}", flush=True)
+        if isinstance(cfg.get("env"), list):
+            (a.attempt_dir / "fake-env.txt").write_text("\n".join(os.environ.get(n, "") for n in cfg["env"]))
         time.sleep(cfg.get("sleep", 0))
+        if cfg.get("pause"):
+            record("ok", 0, pause=cfg["pause"])
+            return 0
     except KeyboardInterrupt:
         record("cancelled", 130)
         return 130

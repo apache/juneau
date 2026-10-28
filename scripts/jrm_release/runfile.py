@@ -108,7 +108,7 @@ class RunFile:
         a = list(self.data.get("attempts", []))
         a.append({"n": len(a) + 1, "dir": str(d), "command": command, "origin": origin,
                   "pid": os.getpid() if pid is None else pid, "status": "running", "started": stamp()})
-        self.update({"attempts": a})
+        self.update({"attempts": a, "pause": None})
 
     def attempt_end(self, status, step=None, exit=None):  # NOSONAR python:S5806 - "exit" mirrors the record field
         a = list(self.data.get("attempts", []))

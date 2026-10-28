@@ -31,7 +31,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class CredentialAnswersTest {
+class CredentialEnvTest {
 
 	private static final class MapStore implements SecretStore {
 		final Map<String, char[]> data = new HashMap<>();
@@ -63,7 +63,7 @@ class CredentialAnswersTest {
 		System.clearProperty("rm.gpg.keyid");
 	}
 
-	private CredentialAnswers answers(Path dir) {
+	private CredentialEnv env(Path dir) {
 		var stores = new EnumMap<CredentialSpec, SecretStore>(CredentialSpec.class);
 		for (var s : CredentialSpec.values())
 			stores.put(s, new MapStore());
@@ -73,31 +73,34 @@ class CredentialAnswersTest {
 		stores.get(CredentialSpec.APACHE_LDAP).store("jamesbognar", "pw".toCharArray());
 		stores.get(CredentialSpec.GPG).store("ABCD1234", "pp".toCharArray());
 		stores.get(CredentialSpec.GITHUB).store("token", "gh".toCharArray());
-		return new CredentialAnswers(stores, accounts, "jamesbognar@apache.org");
+		return new CredentialEnv(stores, accounts);
 	}
 
 	@Test
-	void a01_eachKeyMapsToItsStore(@TempDir Path dir) {
-		var a = answers(dir);
-		assertEquals(Optional.of("jamesbognar"), a.lookup("credential.apache.availid"));
-		assertEquals(Optional.of("pw"), a.lookup("credential.apache.password"));
-		assertEquals(Optional.of("jamesbognar@apache.org"), a.lookup("credential.apache.email"));
-		assertEquals(Optional.of("ABCD1234"), a.lookup("credential.gpg.keyid"));
-		assertEquals(Optional.of("pp"), a.lookup("credential.gpg.passphrase"));
-		assertEquals(Optional.of("gh"), a.lookup("credential.github.token"));
+	void a01_storedSecretsMapToTheScriptsEnvironmentNames(@TempDir Path dir) {
+		assertEquals(Map.of("JRM_APACHE_PASSWORD", "pw", "JRM_GPG_PASSPHRASE", "pp", "JRM_GITHUB_TOKEN", "gh"),
+			env(dir).environment());
 	}
 
 	@Test
-	void a02_systemPropertyOverridesAccount(@TempDir Path dir) {
+	void a02_onlyStoredSecretsAreIncluded(@TempDir Path dir) {
+		var stores = new EnumMap<CredentialSpec, SecretStore>(CredentialSpec.class);
+		for (var s : CredentialSpec.values())
+			stores.put(s, new MapStore());
+		var accounts = new AccountStore(dir);
+		accounts.put(CredentialSpec.APACHE_LDAP, "jamesbognar");
+		stores.get(CredentialSpec.APACHE_LDAP).store("jamesbognar", "pw".toCharArray());
+		assertEquals(Map.of("JRM_APACHE_PASSWORD", "pw"), new CredentialEnv(stores, accounts).environment());
+	}
+
+	@Test
+	void a03_systemPropertyAccountIsHonoured(@TempDir Path dir) {
 		System.setProperty("rm.availid", "other");
-		assertEquals(Optional.of("other"), answers(dir).lookup("credential.apache.availid"));
-		assertEquals(Optional.empty(), answers(dir).lookup("credential.apache.password"), "no secret stored for 'other'");
+		assertFalse(env(dir).environment().containsKey("JRM_APACHE_PASSWORD"), "no secret is stored for 'other'");
 	}
 
 	@Test
-	void a03_unknownOrEmptyIsAbsent(@TempDir Path dir) {
-		assertEquals(Optional.empty(), answers(dir).lookup("credential.nope"));
-		assertEquals(Optional.empty(), new CredentialAnswers(new EnumMap<>(CredentialSpec.class), new AccountStore(dir), "")
-			.lookup("credential.apache.email"));
+	void a04_nothingStoredIsAnEmptyMap(@TempDir Path dir) {
+		assertEquals(Map.of(), new CredentialEnv(new EnumMap<>(CredentialSpec.class), new AccountStore(dir)).environment());
 	}
 }

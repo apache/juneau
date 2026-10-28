@@ -34,7 +34,6 @@ def test_all_present_passes_and_runs_no_prompt(make_ctx, monkeypatch):
     ctx.fake.script("svn", "--version", out="1.14.3\n")
     ctx.fake.script("svn", "ls", out="juneau-9.2.0/\n")
     assert prereqs.check(ctx) == []
-    assert ctx.prompt.asked == []
     assert ctx.fake.ran("svn", "ls", "--non-interactive", "--no-auth-cache", inventory.DIST_DEV + "/")
 
 

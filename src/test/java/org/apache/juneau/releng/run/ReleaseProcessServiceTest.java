@@ -20,7 +20,7 @@ import static org.apache.juneau.releng.run.RunnerFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.util.Map;
 import org.apache.juneau.releng.log.EventBroadcaster;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class ReleaseProcessServiceTest {
 	ReleaseProcessService service(Path home, String fakeScript) throws Exception {
 		Files.createDirectories(home);
 		Files.writeString(home.resolve("fake-script.json"), fakeScript);
-		svc = new ReleaseProcessService(home, scriptsDir(), k -> Optional.empty(), new EventBroadcaster());
+		svc = new ReleaseProcessService(home, scriptsDir(), Map::of, new EventBroadcaster());
 		return svc;
 	}
 
@@ -97,14 +97,32 @@ class ReleaseProcessServiceTest {
 
 	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
 	@Test
-	void a05_dropRcAnswersTheTypedConfirm(@TempDir Path home) throws Exception {
-		var s = service(home, "{\"prompts\":[{\"kind\":\"confirm\",\"key\":\"confirm.revert\",\"message\":\"Type RC2\",\"expect\":\"RC2\"}]}");
-		var live = s.dropRc("RC2", false);
+	void a05_dropRcSpawnsRevertWithoutAnswers(@TempDir Path home) throws Exception {
+		var live = service(home, "{\"sleep\":0}").dropRc(false);
 		await(() -> live.process().isDone(), 20);
-		await(() -> read(live.dir()).contains("\"exit\":"), 10);
-		var answers = Files.readString(home.resolve("fake-answers.jsonl"));
-		assertTrue(answers.contains("\"value\": \"RC2\""), answers);
 		assertTrue(Files.readString(live.dir().resolve("fake-argv.json")).contains("--revert"));
+		assertFalse(Files.exists(home.resolve("fake-answers.jsonl")));
+	}
+
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
+	@Test
+	void a07_credentialsReachTheChildOnlyThroughItsEnvironment(@TempDir Path home) throws Exception {
+		Files.createDirectories(home);
+		Files.writeString(home.resolve("fake-script.json"), "{\"sleep\":0,\"env\":[\"JRM_APACHE_PASSWORD\"]}");
+		svc = new ReleaseProcessService(home, scriptsDir(), () -> Map.of("JRM_APACHE_PASSWORD", "s3cr3t"), new EventBroadcaster());
+		var live = svc.start(false);
+		await(() -> live.process().isDone(), 20);
+		assertEquals("s3cr3t", Files.readString(live.dir().resolve("fake-env.txt")).trim());
+		assertFalse(Files.readString(live.dir().resolve("fake-argv.json")).contains("s3cr3t"));
+	}
+
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
+	@Test
+	void a08_aPauseIsRecordedByTheScriptAndTheAttemptEndsOk(@TempDir Path home) throws Exception {
+		var live = service(home, "{\"sleep\":0,\"pause\":{\"step\":\"vote-gate\",\"message\":\"Vote is open\"}}").start(false);
+		await(() -> live.process().isDone(), 20);
+		await(() -> readRun(home.resolve("runs/9.2.1/run.json")).contains("\"Vote is open\""), 10);
+		assertEquals("ui", new RunFiles(home, d -> false).history().get(0).origin);
 	}
 
 	@Test

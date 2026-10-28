@@ -28,6 +28,7 @@ NEXT_SUBJECT = "prepare for next development iteration"
 class Result:
     problems: list = field(default_factory=list)   # each a printable block: what is wrong, then the offending hunk
     summary: str = ""
+    diffs: str = ""            # the diffs that were checked, for the review file
 
     @property
     def clean(self):

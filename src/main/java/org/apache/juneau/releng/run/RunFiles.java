@@ -191,6 +191,14 @@ public class RunFiles {
 			r.phase = m.getString("phase");
 			r.last = m.getString("last");
 			r.voteDeadline = m.getString("voteDeadline");
+			if (m.get("pause") instanceof Map<?, ?> pm) {
+				var p = new RunPause();
+				p.step = pm.get("step") instanceof String s ? s : null;
+				p.message = pm.get("message") instanceof String s ? s : null;
+				p.at = pm.get("at") instanceof String s ? s : null;
+				r.pause = p;
+			}
+			r.emailPending = m.get("emailPending") instanceof String s ? s : null;
 			var list = m.getList("attempts");
 			if (list != null)
 				for (var o : list)

@@ -28,7 +28,7 @@ The step implementations behind `scripts/release.py`: one module per concern, im
 
 - Every external command goes through `Runner`, so `--dry-run` and secret masking apply uniformly.
 - A step that fails raises `StepError`; its message is the row's failure text.
-- A secret is resolved by `Ctx.cred`: cache, environment, keychain, `gh auth token` (GitHub token), then a prompt (or `StepError` under `--params`). Secrets are never written to `run.json`, the params record or a log; only the `identity` allow-list (Apache id, email, GPG key id) is persisted.
+- A secret is resolved by `Ctx.cred`: cache, environment, keychain, `gh auth token` (GitHub token), else a `StepError` naming where to set it. Secrets are never written to `run.json`, the params record or a log; only the `identity` allow-list (Apache id, email, GPG key id) is persisted.
 - Tests use fakes only (see `../tests/README.md`).
 
 ## See also

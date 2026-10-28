@@ -69,3 +69,10 @@ def test_attempt_defaults_to_cli_and_this_pid(home):
     a = rf.get("attempts")[-1]
     assert a["origin"] == "cli"
     assert a["pid"] == os.getpid()
+
+
+def test_attempt_start_clears_the_pause(tmp_path):
+    rf = RunFile(tmp_path / "run.json")
+    rf.update({"pause": {"step": "vote-gate", "message": "m", "at": "t"}})
+    rf.attempt_start(tmp_path / "a", "resume")
+    assert rf.get("pause") is None

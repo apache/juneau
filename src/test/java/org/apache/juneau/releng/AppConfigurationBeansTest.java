@@ -148,7 +148,7 @@ class AppConfigurationBeansTest {
 
 	@Test
 	void e01_releaseTabWiring(@TempDir Path dir) throws Exception {
-		var answers = cfg.credentialAnswers(mapStores(), cfg.accountStore(dir.toString()), "x@apache.org");
+		var answers = cfg.credentialEnv(mapStores(), cfg.accountStore(dir.toString()));
 		var events = cfg.runEvents();
 		var previousScript = System.getProperty("juneau.terminal.script");
 		var processes = cfg.releaseProcessService(dir.toString(), dir.toString(), "/nonexistent/juneau_terminal.py", answers, events);

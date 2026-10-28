@@ -22,16 +22,12 @@ import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.http.Content;
-import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.BadRequest;
 import org.apache.juneau.http.response.Conflict;
 import org.apache.juneau.http.response.InternalServerError;
-import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
@@ -54,11 +50,11 @@ import org.apache.juneau.releng.run.RunFiles;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * Release tab: runs {@code scripts/release.py} under a terminal, brokers its prompts, and replays past attempts.
+ * Release tab: runs {@code scripts/release.py} under a terminal, shows where it paused, and replays past attempts.
  *
  * <p>{@code disableContentParam} is set for the reason given on {@code CredentialRest}: Juneau's default lets a
  * {@code POST} body arrive in a {@code &content=} query parameter, which puts every action payload into browser
- * history and access logs. That matters most here, where a prompt answer can be a secret.
+ * history and access logs. That matters for any action payload.
  */
 @SuppressWarnings({
 	"java:S1192" // JSON response keys read more clearly inline than as constants.
@@ -78,16 +74,6 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	private static final int MAX_START_KEYS = 100;
 
 	private static final Pattern ATTEMPT_ID = Pattern.compile("attempt-(\\d{8}-\\d{6}-\\d{3})");
-
-	/**
-	 * The per-call logger of {@link #answer}, held so its level stays pinned: a prompt answer can be a secret, and
-	 * Juneau logs a call's body on {@code <resource logger>.<java method>} at {@code FINEST}.
-	 */
-	private static final Logger ANSWER_CALL_LOG = Logger.getLogger(ReleaseRunRest.class.getName() + ".answer");
-
-	static {
-		ANSWER_CALL_LOG.setLevel(Level.OFF);
-	}
 
 	private final RunFiles runFiles;
 	private final ReleaseProcessService processes;
@@ -134,16 +120,14 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	}
 
 	/**
-	 * The page's state: the active run, the live process, the pending prompt, and the attempt history.
+	 * The page's state: the active run (with its pause), the live process, and the attempt history.
 	 */
 	@RestGet("/current")
 	public Map<String, Object> current() {
 		Map<String, Object> m = new LinkedHashMap<>();
 		runFiles.active().ifPresent(r -> m.put("active", r));
-		processes.live().ifPresent(l -> {
-			m.put("live", m("attemptId", l.attemptId(), "command", l.command(), "dryRun", l.dryRun(), "pid", l.broker().pid()));
-			l.broker().pending().ifPresent(p -> m.put("pending", p));
-		});
+		processes.live().ifPresent(l ->
+			m.put("live", m("attemptId", l.attemptId(), "command", l.command(), "dryRun", l.dryRun())));
 		m.put("history", runFiles.history());
 		return m;
 	}
@@ -187,8 +171,8 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	}
 
 	/**
-	 * Drops the active run's RC. The typed {@code RC<n>} is checked here and is the answer to the script's own
-	 * confirm.
+	 * Drops the active run's RC. The typed {@code RC<n>} is checked here, and is the only confirmation (release.py
+	 * itself no longer asks).
 	 */
 	@Mutating("spawns scripts/release.py --revert, which drops the RC from Nexus and dist SVN")
 	@RestPost("/drop-rc")
@@ -202,7 +186,7 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 			throw new BadRequest("The active run records no RC number, so there is nothing to confirm against");
 		if (neq(body.confirm, "RC" + active.rc))
 			throw new BadRequest("Type RC%s to confirm", active.rc);
-		return m("attemptId", launch(() -> processes.dropRc(body.confirm, body.dryRun)));
+		return m("attemptId", launch(() -> processes.dropRc(body.dryRun)));
 	}
 
 	/**
@@ -212,23 +196,6 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	@RestPost("/cancel")
 	public Map<String, Object> cancel() {
 		processes.cancel();
-		return m();
-	}
-
-	/**
-	 * Answers the pending prompt. The body is never logged (see {@link #ANSWER_CALL_LOG}).
-	 */
-	@Mutating("answers a release.py prompt")
-	@RestPost("/prompts/{id}")
-	public Map<String, Object> answer(@Path("id") String id, @Content JsonMap body) {
-		var live = processes.live().orElseThrow(() -> new Conflict("No release process is running"));
-		try {
-			live.broker().answer(id, body == null ? new JsonMap() : body);
-		} catch (IllegalStateException e) {
-			throw new Conflict(e.getMessage());
-		} catch (IllegalArgumentException e) {
-			throw new BadRequest(e.getMessage());
-		}
 		return m();
 	}
 

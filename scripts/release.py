@@ -13,6 +13,7 @@
 # ***************************************************************************************************************************
 """Apache Juneau release, from a terminal: release candidate, vote, promote.  Full docs: release.md"""
 import argparse
+import json
 import os
 import sys
 import time
@@ -24,9 +25,9 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_DIR / "scripts"))
 
 import bootstrap  # noqa: E402
-from jrm_release import inventory, params  # noqa: E402
+from jrm_release import emails, inventory, params  # noqa: E402
 from jrm_release.ctx import Ctx  # noqa: E402
-from jrm_release.runfile import RunFile, RunFileError, new_attempt_dir  # noqa: E402
+from jrm_release.runfile import RunFile, RunFileError, new_attempt_dir, stamp  # noqa: E402
 
 TITLE = "Release"
 FINISHED = ("released",)
@@ -184,7 +185,6 @@ class Deps:
     """The toolkit and collaborators main() uses; tests swap in fakes."""
     run: object
     steps: object
-    prompt: object
     lock: object
     nexus: object = None        # a jrm_release.nexus.Nexus stand-in; None = the real client
     nexus_opener: object = None # the real client's urllib opener (tests); None = urlopen
@@ -196,10 +196,10 @@ class Deps:
     def real(cls, args):
         cache = REPO_DIR / "target" / "juneau-terminal"
         bootstrap.load(REPO_DIR / "pom.xml", terminal=False, cache_dir=cache)
-        from juneau_terminal_scripts import lock, prompt, run, steps
+        from juneau_terminal_scripts import lock, run, steps
         run.export_console(args.console)   # before juneau_terminal loads: the flag beats JUNEAU_TERMINAL_CONSOLE
         bootstrap.load(REPO_DIR / "pom.xml", terminal=True, cache_dir=cache)
-        return cls(run, steps, prompt, lock)
+        return cls(run, steps, lock)
 
 
 def _http_ok(url):
@@ -222,7 +222,7 @@ def build_ctx(args, deps, rf):
     from jrm_release.nexus import Nexus
     from jrm_release.runner import Runner
     from jrm_release.svn import Svn
-    ctx = Ctx(args=args, home=args.home, run=deps.run, prompt=deps.prompt, runner=None, nexus=None, svn=None, rf=rf,
+    ctx = Ctx(args=args, home=args.home, run=deps.run, runner=None, nexus=None, svn=None, rf=rf,
               pause=getattr(deps.steps, "Pause", None), http_ok=deps.http_ok or _http_ok, http_text=deps.http_text or _http_text, sleep=deps.sleep or time.sleep)
     ctx.runner = Runner(deps.run, dry_run=args.dry_run, secrets=ctx.secrets)
     user = lambda: ctx.cred("credential.apache.availid")  # noqa: E731
@@ -281,21 +281,41 @@ def _command(args):
     return "start"
 
 
+def _origin(attempt):
+    """"ui" when JRM's sidecar in the attempt dir says it launched this run, else "cli"."""
+    try:
+        side = json.loads((Path(attempt) / "jrm-attempt.json").read_text())
+    except (OSError, ValueError):
+        return "cli"
+    return "ui" if isinstance(side, dict) and side.get("origin") == "ui" else "cli"
+
+
+def _noting_pause(name, fn, paused):
+    """fn, remembering in paused the name of the step that raised the toolkit's Pause (the registry does not say)."""
+    def wrapped(ctx):
+        try:
+            return fn(ctx)
+        except ctx.pause:
+            paused.append(name)
+            raise
+    return wrapped
+
+
 def _execute(args, deps, ctx, attempt):
     """Run the registry (or the revert rows) under the open session; the exit code (0 or 1).  Ctrl-C propagates."""
     rf = ctx.rf
+    paused = []
     if args.revert:
         reg, checkpoint = revert_registry(deps), None
         run_args = argparse.Namespace(list_steps=False, start_step=None, resume=False, skip_step=[])
     else:
-        reg, checkpoint, run_args = registry(deps, impl_map()), rf, args
-    from juneau_terminal_scripts import prompt
-    origin = "ui" if prompt.channel() else "cli"
-    rf.attempt_start(attempt, _command(args), origin=origin, pid=os.getpid())
+        funcs = {n: _noting_pause(n, f, paused) for n, f in impl_map().items()}
+        reg, checkpoint, run_args = registry(deps, funcs), rf, args
+    rf.attempt_start(attempt, _command(args), origin=_origin(attempt), pid=os.getpid())
 
     def stopped_at():
         cur = getattr(reg, "_current", None)
-        return getattr(cur, "id", None) or rf.last()
+        return getattr(cur, "id", None) or (paused[-1] if paused else rf.last())
 
     try:
         result = reg.run(run_args, ctx, checkpoint, show_unselected=not args.revert)
@@ -308,6 +328,7 @@ def _execute(args, deps, ctx, attempt):
     code = 0 if result.ok else (result.code or 1)
     if result.status == "paused":
         status = "paused"
+        rf.set("pause", {"step": stopped_at(), "message": result.out, "at": stamp()})
     else:
         status = "ok" if result.ok else "failed"
     rf.attempt_end(status, step=stopped_at(), exit=code)
@@ -357,7 +378,7 @@ class _NoRun:
 def _check_command(args, deps=None):
     """--check: every preflight group, one table on stdout, nothing created or changed.  The exit code."""
     from jrm_release import preflight
-    deps = deps or Deps(_NoRun(), None, None, None)
+    deps = deps or Deps(_NoRun(), None, None)
     ctx = build_ctx(args, deps, RunFile(args.home / "runs" / "_check" / "run.json", dry_run=True))
     preflight.prepare(ctx, args)
     results = preflight.run_checks(ctx)
@@ -385,6 +406,7 @@ def _drive(args, deps, ctx, attempt, new):
         rf = RunFile(args.home / "runs" / d["version"] / "run.json", dry_run=args.dry_run)
         rf.reset()
         rf.update({"details": d, "phase": "rc"})
+        rf.update({"paramsPath": str(Path(args.params).resolve())})
         if ctx.identity():
             rf.update({"identity": ctx.identity()})
         ctx.rf = rf
@@ -392,6 +414,9 @@ def _drive(args, deps, ctx, attempt, new):
             _record_params(args, ctx, rf)
     else:
         ctx.seed_identity()
+        kind = emails.STEP_KIND.get(args.start_step or "")
+        if kind:
+            emails.reset(ctx, kind)
         if not args.revert:   # a resume re-checks tools and secrets only: the rest was true at the start
             code = _preflight(args, ctx, preflight.RESUME_GROUPS)
             if code:

@@ -16,53 +16,50 @@
  */
 package org.apache.juneau.releng.run;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.juneau.commons.secret.SecretStore;
 import org.apache.juneau.releng.credential.AccountStore;
 import org.apache.juneau.releng.credential.CredentialSpec;
 
 /**
- * Stored answers for release.py's {@code credential.*} prompt keys. Values are read per lookup and never cached or
- * logged.
+ * The secrets JRM has stored, as the environment variables {@code release.py} reads ({@code JRM_APACHE_PASSWORD},
+ * {@code JRM_GPG_PASSPHRASE}, {@code JRM_GITHUB_TOKEN}). Values are read per call and never cached or logged. Only
+ * stored secrets are included; the Apache id, email and GPG key id come from the run's params file.
  */
-public class CredentialAnswers {
+public class CredentialEnv {
 
 	private final Map<CredentialSpec, SecretStore> stores;
 	private final AccountStore accounts;
-	private final String committerEmail;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param stores One store per credential (keychain in production).
 	 * @param accounts The persisted availid and GPG key id.
-	 * @param committerEmail {@code rm.git.committer.email}.
 	 */
-	public CredentialAnswers(Map<CredentialSpec, SecretStore> stores, AccountStore accounts, String committerEmail) {
+	public CredentialEnv(Map<CredentialSpec, SecretStore> stores, AccountStore accounts) {
 		this.stores = stores;
 		this.accounts = accounts;
-		this.committerEmail = committerEmail;
 	}
 
 	/**
-	 * The stored value for a prompt key.
+	 * The environment to add to a release.py child.
 	 *
-	 * @param key A {@code credential.*} key.
-	 * @return The value, or empty when none is stored (the page then asks).
+	 * @return {@code SECRET_ENV name -> value} for each stored secret; empty when none is stored.
 	 */
-	public Optional<String> lookup(String key) {
-		var v = switch (key) {
-			case "credential.apache.availid" -> availid();
-			case "credential.apache.password" -> secret(CredentialSpec.APACHE_LDAP, availid());
-			case "credential.apache.email" -> committerEmail;
-			case "credential.gpg.keyid" -> gpgKeyId();
-			case "credential.gpg.passphrase" -> secret(CredentialSpec.GPG, gpgKeyId());
-			case "credential.github.token" -> secret(CredentialSpec.GITHUB, "token");
-			default -> null;
-		};
-		return v == null || v.isBlank() ? Optional.empty() : Optional.of(v);
+	public Map<String, String> environment() {
+		var m = new LinkedHashMap<String, String>();
+		put(m, "JRM_APACHE_PASSWORD", secret(CredentialSpec.APACHE_LDAP, availid()));
+		put(m, "JRM_GPG_PASSPHRASE", secret(CredentialSpec.GPG, gpgKeyId()));
+		put(m, "JRM_GITHUB_TOKEN", secret(CredentialSpec.GITHUB, "token"));
+		return m;
+	}
+
+	private static void put(Map<String, String> m, String name, String value) {
+		if (value != null && ! value.isBlank())
+			m.put(name, value);
 	}
 
 	// Precedence as the old secretResolver had it: the system property (headless/testing override), else the
