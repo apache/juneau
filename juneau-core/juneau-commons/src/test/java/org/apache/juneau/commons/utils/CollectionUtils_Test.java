@@ -1154,7 +1154,8 @@ class CollectionUtils_Test extends TestBase {
 
 	@Test
 	void a068b_sortedList_comparatorArray_null() {
-		assertThrows(IllegalArgumentException.class, () -> sortedList(Comparator.<String>naturalOrder(), (String[])null));
+		var comparator = Comparator.<String>naturalOrder();
+		assertThrows(IllegalArgumentException.class, () -> sortedList(comparator, (String[])null));
 	}
 
 	//====================================================================================================

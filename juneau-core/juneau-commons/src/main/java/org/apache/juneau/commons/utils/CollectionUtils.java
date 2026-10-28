@@ -1650,7 +1650,7 @@ public class CollectionUtils {
 	 */
 	public static <E> List<E> sortedList(Comparator<E> comparator, E[] values) {
 		reqnn("values", values);
-		List<E> l = list(values);
+		List<E> l = new ArrayList<>(Arrays.asList(values));
 		l.sort(comparator);
 		return l;
 	}
@@ -1665,7 +1665,7 @@ public class CollectionUtils {
 	@SafeVarargs
 	public static <E> List<E> sortedList(E...values) {
 		reqnn("values", values);
-		List<E> l = list(values);
+		List<E> l = new ArrayList<>(Arrays.asList(values));
 		((List<Comparable>)l).sort(null);
 		return l;
 	}
