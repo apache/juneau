@@ -11,6 +11,50 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 9.2.1
+
+** Security
+
+    * DirectoryResource (juneau-microservice-core) now resolves requested paths against the canonical form of its root directory.
+        Requests that resolve outside the root (via "..", absolute paths, or symlinks) are rejected with 403 Forbidden.
+        Paths that do not exist inside the root still return 404 Not Found.
+    * RestClient no longer replays credential headers (Authorization, Cookie, Set-Cookie, Proxy-Authorization, X-API-Key) when following a redirect
+        to a different origin (scheme, host, or port) or from https to http.
+        The headers are removed from the redirected request.
+        New class org.apache.juneau.rest.client.RedirectSecurity exposes the same origin/downgrade checks.
+    * Added org.apache.juneau.http.RedactedHeaders, the default list of sensitive header names (Authorization, Cookie, Set-Cookie, Proxy-Authorization, X-API-Key).
+        CallLogger now writes "[REDACTED]" instead of the value for these headers in logged requests and responses.
+        The list can be changed on the CallLogger builder using redactedHeaders(String...) and redactHeader(String).
+    * Server error responses no longer expose internal exception detail by default.
+        When stack-trace rendering is off (the default), the "Thrown" response header is no longer set,
+        and the plain-text error body contains only the message of exceptions your code threw as a BasicHttpException (with <, >, and & replaced by spaces).
+        The body is empty for all other exceptions.
+        Setting @Rest(renderResponseStackTraces="true") restores the detail.
+        RRPC (remote proxy) endpoints are unchanged because their client proxy depends on that detail.
+    * The default maximum request input size (RestContext maxInput) is now 1M, down from 100M.
+        Applications that accept larger request bodies must raise it, using the @Rest(maxInput) setting or the "RestContext.maxInput" environment/system property.
+    * The maxInput limit is now also enforced on multipart/form-data requests.
+        A request whose declared Content-Length exceeds it, or whose parsed parts exceed it in total, is rejected with 413 Payload Too Large.
+        The request content reader buffer is also capped at maxInput instead of the declared Content-Length.
+    * The "content" URL parameter override (allowed unless disableContentParam is set) now applies only to PUT and POST requests.
+    * RestResponse now strips invalid characters (such as control characters) from header values by default.
+        This was previously opt-in through setSafeHeaders().
+        Use the new setUnsafeHeaders() to turn it off.
+    * New RestResponse.sendSafeRedirect(String,String...) redirects only to a relative path or to one of the host names you pass in; otherwise it throws BadRequest.
+        Use it instead of sendRedirect() when the target comes from request input.
+        sendRedirect() itself is unchanged.
+    * Parsers now limit lengths declared in the input.
+        MessagePack binary and string lengths above 16M (16 MiB) are rejected with an IOException instead of allocating a buffer of that size.
+        Lengths that are negative, or larger than the maximum int value, are also rejected.
+        A parser that runs out of memory now throws a ParseException instead of an OutOfMemoryError.
+    * ClassSwap no longer runs static initializers when resolving a class name during parsing.
+    * XmlReader now always disables DTD processing and external DTD/schema access, including when validating is turned on.
+        XML input that contains a DOCTYPE declaration is no longer processed as a DTD.
+    * HTML document templates (BasicHtmlDocTemplate) now XML-escape SVL variable substitutions in the aside, header, footer, nav, head, and no-results sections.
+        Literal template text is unchanged, and the $W, $C, and $RS variables are still inserted as raw HTML.
+        Request-data variables ($RQ, $RH, $RF, $RP, $RA, $SA, $R) are no longer resolved inside script and style sections.
+        Templates that relied on request values containing HTML markup will now see them escaped.
+
 Release Notes - Juneau - Version 9.2.0
 
 ** Changes
