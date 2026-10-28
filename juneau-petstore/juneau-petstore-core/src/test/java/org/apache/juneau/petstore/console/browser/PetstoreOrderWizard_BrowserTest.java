@@ -57,8 +57,12 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 
 	private static final String ROWS = "document.querySelectorAll('table tbody tr').length";
 
-	/** The table's total row count, read from its "1-25 of 2,001" summary. */
-	private static final String TOTAL = "Number(/of (\\d+(?:,\\d{3})*)/.exec(document.body.textContent)[1].replace(/,/g, ''))";
+	/**
+	 * The table's total row count, read from its "1-25 of 2,001" summary element (0 until a summary is drawn).  Scoping to
+	 * the summary matters: the page text runs it straight into the page-size menu ("0-0 of 0" + "25 rows"), so a regex
+	 * over the whole body reads that placeholder as "of 025".
+	 */
+	private static final String TOTAL = "Number((/of (\\d+(?:,\\d{3})*)/.exec(document.querySelector('.juneau-view-pagingpill-info')?.textContent ?? '')?.[1] ?? '0').replace(/,/g, ''))";
 
 	private static Map<String,Map<String,Object>> report;
 
@@ -66,7 +70,8 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 	private static Map<String,Object> wizard(String name, List<Integer> viewport, String shipDate) {
 		return Map.of("name", name, "path", "/console/orders", "capture", "/console/orders", "viewport", viewport,
 			"actions", List.of(
-				wait(NEW_ORDER + " && " + ROWS + " > 0"),
+				// The empty "0-0 of 0" placeholder already has a row, so wait for the loaded total, not just a row.
+				wait(NEW_ORDER + " && " + ROWS + " > 0 && " + TOTAL + " > 0"),
 				eval("window.__totalBefore = " + TOTAL),
 				eval(NEW_ORDER + ".click()"),
 				wait("document.querySelector('[data-juneau-form-field=review]')"),
