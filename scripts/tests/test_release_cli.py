@@ -336,6 +336,39 @@ def test_dry_run_creates_attempt_full_log_but_no_runs(home, capsys, tmp_path, mo
     assert not (home / "runs").exists()
 
 
+def test_dry_run_honors_a_caller_supplied_full_log(home, capsys, tmp_path, monkeypatch):
+    params_file(home)
+    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": True})
+    log = tmp_path / "watch" / "full.log"
+    monkeypatch.setenv("JUNEAU_TERMINAL_FULL_LOG", str(log))
+    seen = []
+    orig = deps.run.session
+    monkeypatch.setattr(deps.run, "session",
+                        lambda *a, **kw: (seen.append(os.environ.get("JUNEAU_TERMINAL_FULL_LOG")), orig(*a, **kw))[1],
+                        raising=False)
+    run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
+    assert seen == [str(log)]                                           # the session is told to write the caller's file
+    link = home / "attempts" / "dry-run" / "full.log"
+    assert link.is_symlink() and link.resolve() == log.resolve()
+    assert os.environ["JUNEAU_TERMINAL_FULL_LOG"] == str(log)           # restored on exit
+
+
+def test_dry_run_without_a_caller_log_writes_attempt_full_log(home, capsys, tmp_path, monkeypatch):
+    params_file(home)
+    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": True})
+    monkeypatch.delenv("JUNEAU_TERMINAL_FULL_LOG", raising=False)
+    seen = []
+    orig = deps.run.session
+    monkeypatch.setattr(deps.run, "session",
+                        lambda *a, **kw: (seen.append(os.environ.get("JUNEAU_TERMINAL_FULL_LOG")), orig(*a, **kw))[1],
+                        raising=False)
+    run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
+    full = home / "attempts" / "dry-run" / "full.log"
+    assert full.exists() and not full.is_symlink()
+    assert seen == [str(full)]
+    assert "JUNEAU_TERMINAL_FULL_LOG" not in os.environ
+
+
 def test_version_flag_must_look_like_x_y_z(home, capsys):
     code, out = run_main(["--dry-run", "--version", "9.2"], home, capsys)
     assert code == 2

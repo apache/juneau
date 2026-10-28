@@ -399,6 +399,27 @@ def _drive(args, deps, ctx, attempt, new):
     return _locked(args, deps, ctx, attempt)
 
 
+def _external_full_log(attempt, *, scratch=False):
+    """The log a caller (watch-run.sh) asked for in JUNEAU_TERMINAL_FULL_LOG, with `attempt/full.log` now a symlink to
+    it; None when the variable is unset or empty, or the link cannot be made (a warning, never a failure), so the
+    session then writes `attempt/full.log` itself.  scratch (the reused dry-run attempt dir) replaces an earlier log."""
+    given = os.environ.get("JUNEAU_TERMINAL_FULL_LOG")
+    if not given:
+        return None
+    link = attempt / "full.log"
+    try:
+        target = Path(given).expanduser().absolute()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.touch()
+        if link.is_symlink() or (link.exists() and (scratch or link.stat().st_size == 0)):
+            link.unlink()
+        link.symlink_to(target)
+    except OSError as e:
+        print(f"⚠️  could not link {link} to {given}: {e}; logging to {link} instead", file=sys.stderr)
+        return None
+    return target
+
+
 def run_release(args, deps, path, active):
     """Attempt dir, ctx, session; returns the exit code."""
     new = not (args.resume or args.revert or (args.start_step and active))
@@ -413,14 +434,17 @@ def run_release(args, deps, path, active):
     ctx = build_ctx(args, deps, rf)
     attempt = args.attempt_dir or (args.home / "attempts" / "dry-run" if args.dry_run else new_attempt_dir(args.home))
     attempt.mkdir(parents=True, exist_ok=True)
-    (attempt / "full.log").touch()   # the banner's `tail -f` target; a dry run writes logs but never runs/
+    external = _external_full_log(attempt, scratch=args.dry_run and not args.attempt_dir)   # set by watch-run.sh etc.: the session writes there, full.log links to it
+    if external is None:
+        (attempt / "full.log").touch()   # the banner's `tail -f` target; a dry run writes logs but never runs/
     version = (active.get("details") or {}).get("version")
     header = ("JRM", f"drop RC{(active.get('details') or {}).get('rc')} of {version}" if args.revert
               else version or "new release")
     plan = ([(n, t) for n, t, _ in __import__("jrm_release.revert", fromlist=["ROWS"]).ROWS] if args.revert
             else [(s.name, s.title) for s in inventory.STEPS])
     saved = os.environ.get("JUNEAU_TERMINAL_FULL_LOG")
-    os.environ["JUNEAU_TERMINAL_FULL_LOG"] = str(attempt / "full.log")
+    if external is None:
+        os.environ["JUNEAU_TERMINAL_FULL_LOG"] = str(attempt / "full.log")
     try:
         with deps.run.session(TITLE, header=header, bell=True, silence_env="JRM_RELEASE_NO_BELL", mode="release",
                               project="juneau-release-manager", repo=REPO_DIR, exit=False, plan=plan) as s:

@@ -68,6 +68,7 @@ real release is touched.
 | `test_release_emails.py` | vote, result and announce emails, `mailto:` length handling |
 | `test_release_revert.py` | `--revert` checks and actions |
 | `test_release_cli.py` | arguments, guards, lock, resume, exit codes (needs `JUNEAU_TERMINAL_PY`) |
+| `test_release_full_log.py` | a caller-supplied `JUNEAU_TERMINAL_FULL_LOG` is honored; `attempts/.../full.log` links to it |
 | `test_release_dryrun.py` | `--dry-run` runs read-only commands only and never writes `run.json` |
 | `test_release_preflight.py` | each preflight check, the exit-code rule, the secret-leak guard |
 | `test_release_check_cli.py` | `--check` through `release.main`: exit codes, flag conflicts, no prompt, no `run.json`, resume groups |

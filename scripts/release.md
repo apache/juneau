@@ -49,7 +49,7 @@ python3 scripts/release.py --params ~/.juneau-release-manager/params/9.2.1.yml
 
 A params file holds the release details and your non-secret identity; it never holds a secret. Keys: `branch`, `version`, `developmentVersion`, `rc`, `summary`, `highlights`, `knownIssues`, `acknowledgements`, `apache.availid`, `apache.email`, `gpg.keyid`. Unknown keys, a key whose name looks like a secret (`password`, `passphrase`, `token`, `secret`, at any depth) and a leftover `TODO` placeholder are errors (exit 2); an invalid file never falls back to the form.
 
-Secrets come from the environment (`JRM_APACHE_PASSWORD`, `JRM_GPG_PASSPHRASE`, `JRM_GITHUB_TOKEN`; an empty value counts as unset), then on macOS from the keychain (`security find-generic-password -s jrm.apache.password -a <availid> -w`, likewise `jrm.gpg.passphrase` and `jrm.github.token`), then for the GitHub token from `gh auth token`. Nothing is ever prompted for: a new release runs the preflight first, and any secret that is missing or rejected is listed together with every other problem before anything is created (exit 2). The Apache email defaults to `<availid>@apache.org`. A dry run skips the secret checks and reads no secret store.
+Secrets come from the environment (`JRM_APACHE_PASSWORD`, `JRM_GPG_PASSPHRASE`, `JRM_GITHUB_TOKEN`; an empty value counts as unset), then on macOS from the keychain (`security find-generic-password -s jrm.apache.password -a <availid> -w`, likewise `jrm.gpg.passphrase`; the GitHub token is `-s jrm.github.token -a default`), then for the GitHub token from `gh auth token`. Nothing is ever prompted for: a new release runs the preflight first, and any secret that is missing or rejected is listed together with every other problem before anything is created (exit 2). The Apache email defaults to `<availid>@apache.org`. A dry run skips the secret checks and reads no secret store.
 
 The file is copied to `<home>/runs/<version>/params.yml` as a record (a copy failure is only a warning), and the Apache id, email and GPG key id are saved in `run.json` as `identity`, so `--resume` does not need the file. `--resume` never reads a params file.
 
@@ -83,7 +83,7 @@ Under `--dry-run` the secret checks report `skipped (dry run)`. The branch tip i
 
 ## Output and exit codes
 
-A board view with one row per step. State lives under the home directory: `runs/<version>/run.json` (the checkpoint) and `attempts/<stamp>-<NNN>/full.log` (the full log, whose `tail -f` line the banner prints). Secrets are masked in output and never put on a command line or in `run.json`.
+A board view with one row per step. State lives under the home directory: `runs/<version>/run.json` (the checkpoint) and `attempts/<stamp>-<NNN>/full.log` (the full log, whose `tail -f` line the banner prints). When `JUNEAU_TERMINAL_FULL_LOG` is already set on entry (as `watch-run.sh` does, tailing that file in its lower pane), the session writes there instead and `attempts/<stamp>-<NNN>/full.log` becomes a symlink to it; if the link cannot be made, a warning is printed and the run logs to `full.log` as usual. Secrets are masked in output and never put on a command line or in `run.json`.
 
 | Code | Meaning |
 |---|---|
@@ -97,6 +97,7 @@ A board view with one row per step. State lives under the home directory: `runs/
 - Everything from `nexus-release` on is irreversible (the release is public). After that, `--start-step` before it is refused; continue from `dist-promote`.
 - A corrupt `run.json` is never guessed at: the script stops and asks you to inspect or delete it.
 - `JUNEAU_RELEASE_HOME` moves the state directory; `--home` overrides it. `JRM_RELEASE_NO_BELL` silences the completion bell.
+- Under `watch-run.sh` the banner's `tail -f` line names the file the wrapper passed in `JUNEAU_TERMINAL_FULL_LOG`, not an attempt-directory path; `attempts/.../full.log` is a symlink to it. The web Release page does not set that variable, so it is unaffected.
 - The Juneau checkout is expected at `~/git/apache/juneau`.
 - The Apache id, email and GPG key id come from the params file (or `run.json` on a resume); the password, passphrase and GitHub token from the environment, the keychain or `gh`. Nothing is asked for. The password reaches `svn` over stdin, and git gets credentials through the `askpass.py` helper reading `JRM_ASKPASS_USER` and `JRM_ASKPASS_PASS`.
 

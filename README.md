@@ -47,32 +47,111 @@ mvn clean verify        # build + run tests + apache-rat license check
 
 ## Release CLI
 
-`scripts/release.py` drives a release (RC, vote, promote) from the terminal. Smoke-test it with a dry run, which
-runs read-only commands, prints every mutation and writes no `runs/`:
+`scripts/release.py` drives a release (release candidate, vote, promote) from the terminal. It asks nothing at the
+start: a params file holds the release details, and secrets come from the keychain or the environment. The full option
+table, exit codes and step list are in [`scripts/release.md`](scripts/release.md).
+
+### 1. Prerequisites
+
+- The tools (git, mvn, java, svn, svnmucc, gpg, gh, unzip) and PyYAML (`python3 -m pip install pyyaml`). The `tools`
+  group of `--check` (step 4) lists each one with its minimum version and an install hint.
+- `juneau-terminal` 10.0.0-SNAPSHOT in `~/.m2`: build Juneau first (`mvn install` in `~/git/apache/juneau`, which is
+  also where the release is cut).
+
+### 2. One-time secret setup
+
+Secrets never go in the params file. Store each once; the first two use your Apache id as the account, the token uses
+`default`. Each command prompts for the value (`-w` with no argument), so it never reaches a command line or your
+shell history:
 
 ```bash
-JUNEAU_TERMINAL_PY=~/git/apache/juneau/juneau-terminal/src/main/python/juneau_terminal.py \
-  uv run --native-tls python scripts/release.py --dry-run --version 9.2.1
+security add-generic-password -a <apache id> -s jrm.apache.password -w
+security add-generic-password -a <apache id> -s jrm.gpg.passphrase -w
+security add-generic-password -a default -s jrm.github.token -w
 ```
 
-- **Prerequisites run first**, before any prompt (branch, details, credentials), on a new run and on `--resume` alike,
-  dry run included. They check git, mvn (3.6+), java (17+), svn and svnmucc (1.10+), gpg (2.1+), gh and unzip on PATH,
-  plus credential-free reachability: Nexus, and an anonymous `svn ls` of dist/dev. Every failure is listed at once with
-  an install hint (for example `brew install subversion`), then release.py exits before asking anything. The
-  `prechecks` step that follows keeps only what depends on your answers (branch exists, RC tag absent).
-- The GPG key id prompt is prefilled from `gpg --list-secret-keys --with-colons` (read-only): the unexpired,
-  signing-capable key whose uid matches your Apache email (or `<availid>@apache.org`). Several matches become a
-  choice; none leaves the plain prompt. Outside a dry run it warns if the key is missing from the published KEYS file.
-- The release branch is asked first. With `--version`, its default is an existing `origin/juneau-X-branch` or
-  `origin/X.Y.x`, else `master`.
-- `--version` prefills the Version in the details form and derives the next development version from it.
-- Leave the development version blank to get the next patch; a bare `x.y.z` gets `-SNAPSHOT` appended.
-- **Release diff review** is automatic: it checks the release commit (`<rc tag>^..<rc tag>`) and the plugin's following
-  "prepare for next development iteration" commit (the tag's first descendant on the branch). Clean means every changed
-  file is a reactor `pom.xml` with only the X-SNAPSHOT -> X version (and `juneau.version`/SCM tag) changes, no reactor
-  pom was skipped, and the follow-up commit reverses them to the next SNAPSHOT; the step then passes with a one-line
-  summary and no prompt. Anything else prints just the offending hunks and asks the usual question (`no` fails).
-- A dry run logs to `~/.juneau-release-manager/attempts/dry-run/full.log` (the banner's `tail -f` target).
+Or export `JRM_APACHE_PASSWORD`, `JRM_GPG_PASSPHRASE` and `JRM_GITHUB_TOKEN` (they win over the keychain), or run
+`gh auth login` instead of storing a token (needs the `repo` scope).
+
+### 3. Write the params file
+
+```bash
+python3 scripts/release.py --init-params --version x.y.z
+```
+
+This writes `~/.juneau-release-manager/params/x.y.z.yml`, prefilled from `git config user.email` and your GPG keys.
+Edit it: replace every `TODO`. `summary` is required; `highlights`, `knownIssues` and `acknowledgements` can be filled
+in or deleted. Check `branch`, `developmentVersion`, `rc`, the Apache id and email, and the GPG key id. A leftover
+`TODO` blocks the run (exit 2).
+
+### 4. Check everything first
+
+```bash
+python3 scripts/release.py --check --version x.y.z
+```
+
+Read-only: it tests the tools, the params, that each secret exists and is accepted, the branch, RC tag, pom version
+and release notes, and that no Nexus staging repository or dist/dev RC directory is left over. Each line is `PASS`,
+`FAIL` or `???` (could not be checked); the exit code is 0 (all pass), 2 (a check failed) or 1 (none failed, but one
+could not run). A real run does the same checks first and refuses to start unless they all pass.
+
+### 5. Start the release
+
+```bash
+python3 scripts/release.py --version x.y.z
+```
+
+To watch it in a tmux pane (the board on top, the raw log below), extract the launcher once and run through it:
+
+```bash
+python3 -B ~/.m2/repository/org/apache/juneau/juneau-terminal/10.0.0-SNAPSHOT/juneau-terminal-10.0.0-SNAPSHOT.zip --bin watch-run.sh
+~/.cache/juneau-terminal/bin/10.0.0-SNAPSHOT/watch-run.sh -d <this repo> -t "release x.y.z" -- python3 scripts/release.py --version x.y.z
+```
+
+### 6. Where it stops
+
+The 25 steps run unattended except at these points:
+
+| When | What you do | Then |
+|---|---|---|
+| Propose email | Send the `[PROPOSE]` mail to dev@ (it opens in your mail client) and confirm | "Not yet" pauses; `--resume` after sending |
+| Javadoc verify | Skim the generated javadoc and confirm (`--skip-step javadoc-verify` skips it) | A "no" fails the step |
+| Release diff review | Only when the release commits hold more than the pom version bumps: read the printed hunks and answer | A clean diff passes silently; "no" fails |
+| Vote email | Send the `[VOTE]` mail to dev@ | The run then pauses at the vote gate and exits 0 |
+| Vote gate | Wait for the vote to close | `--resume` |
+| Tally form | Enter the +1, 0 and -1 counts and the binding voters (three binding +1 and more +1 than -1 passes) | Asked to confirm if the vote is still open |
+| Result email | Send the `[RESULT]` mail | A failed vote pauses here: `--revert` |
+| Maven Central confirmation | Type the version to confirm. **Irreversible** | Anything else stops the run |
+| Announce email | Send it to announce@; the run first waits for downloads.apache.org to carry the release and offers to stop and resume later if the mirrors are slow | |
+| Follow-up checklist | Do the listed chores and confirm | "No" pauses; `--resume` |
+
+### 7. Picking up
+
+- `--resume` continues after any pause, and once the vote closes. It needs no params file; the identity is saved in
+  the run.
+- `--list-steps` shows the steps by phase with finished ones marked; `--start-step NAME` restarts at a step (refused
+  when it would repeat an irreversible one, or skip the vote).
+- `--revert` drops a release candidate (Nexus staging repository, dist/dev files, RC tag, pom versions): use it after a
+  failed vote, or before an RC2. Bump `rc` in the params file, then start again.
+- Ctrl-C stops cleanly (exit 130); `--resume` continues. A second `release.py` on the same release is refused while the
+  first holds the lock.
+
+### Smoke test and diff review
+
+A dry run runs read-only commands, prints every mutation and writes no `runs/`; it needs the params file but no secrets:
+
+```bash
+python3 scripts/release.py --dry-run --version 9.2.1
+```
+
+Its log is `~/.juneau-release-manager/attempts/dry-run/full.log`. Real runs log to
+`~/.juneau-release-manager/attempts/<stamp>-<n>/full.log` (under `watch-run.sh`, that link points at the file the
+bottom pane tails).
+
+**Release diff review** is automatic: it checks the release commit (`<rc tag>^..<rc tag>`) and the plugin's following
+"prepare for next development iteration" commit. Clean means every changed file is a reactor `pom.xml` with only the
+X-SNAPSHOT -> X version (and `juneau.version`/SCM tag) changes, no reactor pom was skipped, and the follow-up commit
+reverses them to the next SNAPSHOT. Anything else prints just the offending hunks and asks.
 
 ## Release page
 
