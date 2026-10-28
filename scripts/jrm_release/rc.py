@@ -16,8 +16,8 @@ import os
 from datetime import timedelta
 
 from . import details as details_mod
-from . import diffcheck, emails, gpgkeys, inventory, prereqs
-from .ctx import LABELS, StepError
+from . import diffcheck, emails, inventory, prereqs
+from .ctx import StepError
 
 FUNCS = {}
 
@@ -34,62 +34,18 @@ def prerequisites(ctx):
     return prereqs.step(ctx)
 
 
-def ensure_keyid(ctx):
-    """The GPG key id: offered from the keyring (read-only listing) when exactly one or several usable keys match
-    the Apache address, else the plain prompt."""
-    key = "credential.gpg.keyid"
-    if key in ctx.creds:
-        return ctx.creds[key]
-    email = ctx.creds.get("credential.apache.email") or (  # NOSONAR python:S1192 - credential keys read more clearly inline
-        f"{ctx.creds['credential.apache.availid']}@apache.org" if ctx.creds.get("credential.apache.availid") else None)  # NOSONAR python:S1192 - credential keys read more clearly inline
-    keys = []
-    if email:
-        r = ctx.runner.quiet(["gpg", "--list-secret-keys", "--with-colons", "--keyid-format", "long"],
-                             title="List GPG keys")
-        keys = gpgkeys.candidates(gpgkeys.parse(r.out), email, ctx.now().timestamp()) if r.ok else []
-    label = LABELS[key]
-    if len(keys) > 1:
-        options = [(k.keyid, f"{k.keyid}  {k.uids[0]}") for k in keys]
-        value = ctx.prompt.choice(label, options, default=keys[0].keyid, key=key)
-    else:
-        value = ctx.prompt.text(label, default=keys[0].keyid if keys else None, key=key)
-    if value is None:
-        raise KeyboardInterrupt
-    ctx.creds[key] = value
-    _warn_unpublished(ctx, next((k for k in keys if k.keyid == value), None))
-    return value
-
-
-def _warn_unpublished(ctx, chosen):
-    """Warn (never fail) when the chosen key is not in the published KEYS file.  Network, so never in a dry run."""
-    if chosen is None or ctx.dry_run:
-        return
-    text = ctx.http_text(inventory.DOWNLOADS + "/KEYS")
-    if text is not None and not gpgkeys.in_keys_file(text, chosen):
-        ctx.say(f"⚠ key {chosen.keyid} is not in {inventory.DOWNLOADS}/KEYS; add it before the vote", "warn")
-
-
 def release_checks(ctx):
-    """The Release checks row's checks, after the credential questions: the branch exists and the RC tag does not.
-    The ls-remote probes run quietly, so they are bar cells rather than rows of their own."""
+    """The Release checks row's checks: a replay of the preflight's repo group (branch, RC tag, pom, published key), one
+    bar cell each.  A run that did not run the preflight itself (a restart at this step) runs that group now."""
+    from . import preflight
     from juneau_terminal_scripts import checks as ck
-    cur = ctx.d
-    ctx.cred("credential.apache.availid")
-    ctx.cred("credential.apache.email")
-    ensure_keyid(ctx)
-    tag = ctx.rc_tag
-
-    def remote(ref):
-        return ctx.runner.quiet(["git", "ls-remote", inventory.GIT_URL, ref], title=f"ls-remote {ref}").out.strip()
-
-    def branch():
-        return ck.PASS if remote(f"refs/heads/{cur['branch']}") else ck.Verdict(
-            "fail", f"branch {cur['branch']} not on gitbox", ("check the branch name",))
-
-    def rc_tag():
-        return ck.Verdict("fail", f"tag {tag} already exists", ("bump rc, or run --revert",)) \
-            if remote(f"refs/tags/{tag}") else ck.PASS
-    return [ck.Check("branch exists", branch), ck.Check("rc tag absent", rc_tag)]
+    results = [r for r in ctx.preflight_results or [] if r[0] == "repo"] or preflight.run_checks(ctx, ("repo",))
+    cells = []
+    for _, name, res in results:
+        verdict = ck.PASS if res.status == preflight.PASS else ck.Verdict(
+            "fail", res.reason, ("run release.py --check for the whole table",))
+        cells.append(ck.Check(name, lambda v=verdict: v))
+    return cells
 
 
 @step

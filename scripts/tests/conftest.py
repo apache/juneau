@@ -13,8 +13,10 @@
 import dataclasses
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
+import types
 from argparse import Namespace
 from pathlib import Path
 
@@ -25,6 +27,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.append(str(SCRIPTS))
 
 from jrm_release.ctx import Ctx  # noqa: E402
+from jrm_release import runner as runner_module  # noqa: E402
 from jrm_release.runfile import RunFile  # noqa: E402
 from jrm_release.runner import Outcome, Runner  # noqa: E402
 from jrm_release.svn import Svn  # noqa: E402
@@ -50,6 +53,24 @@ def _no_real_run_history():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+@pytest.fixture(autouse=True)
+def _pyyaml_presence_stub(monkeypatch):
+    """Make the PyYAML preflight check (`importlib.util.find_spec("yaml")`) pass whether or not PyYAML is installed, so
+    "every check passes" tests do not depend on the environment (push.py runs the suite in an env without it).  Only
+    a missing "yaml" is faked; tests that parse YAML use pytest.importorskip("yaml"), and tests about the check itself
+    re-patch find_spec to control presence explicitly."""
+    from jrm_release import preflight
+    real = preflight.importlib.util.find_spec
+
+    def find_spec(name, *args, **kwargs):
+        found = real(name, *args, **kwargs)
+        if found is None and name == "yaml":
+            return types.SimpleNamespace(name="yaml")
+        return found
+
+    monkeypatch.setattr(preflight.importlib.util, "find_spec", find_spec)
+
+
 class PauseExc(Exception):
     def __init__(self, message, *, done=True):
         super().__init__(message)
@@ -62,27 +83,52 @@ class FakeRunner:
     def __init__(self):
         self.calls, self.rules, self.said = [], [], []
 
-    def script(self, *prefix, out="", ok=True):
-        self.rules.append((prefix, out, ok))
+    def script(self, *prefix, out="", ok=True, code=None):
+        """Answer argvs starting with prefix; code is the exit code when ok is False (default 1)."""
+        self.rules.append((prefix, out, ok, code))
 
     def cmd(self, cmd, *, title="", id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,
             summarize=None, input=None):
         rec = dict(argv=[str(c) for c in cmd], title=title, tool=tool, cwd=cwd, env=dict(env or {}), input=input,
                    tty=tty, capture=capture)
         self.calls.append(rec)
-        for prefix, out, ok in reversed(self.rules):
+        for prefix, out, ok, code in reversed(self.rules):
             if tuple(rec["argv"][:len(prefix)]) == prefix:
-                return Outcome(ok, 0 if ok else 1, out)
+                return Outcome(ok, 0 if ok else (code or 1), out)
+        known = self.preflight_default(rec["argv"])
+        if known is not None:
+            return known
         return Outcome(True, 0, self.DEFAULT_VERSIONS.get(rec["argv"][-1], "") if len(rec["argv"]) <= 3 else "")
+
+    # What an unscripted preflight probe answers, so a new run's preflight passes by default: the branch tip's pom and
+    # release notes (through the scratch repo), the secret keyring, the GitHub token check, and no RC dir on dist/dev.
+    TIP_FILES = {"FETCH_HEAD:pom.xml": "<project><version>9.2.1-SNAPSHOT</version></project>",
+                 "FETCH_HEAD:RELEASE-NOTES.txt": "Release Notes - Juneau - Version 9.2.1 - 2026-10-28\n"}
+    KEY_FPR = "F" * 24 + "ABCD1234ABCD1234"
+    KEYRING = f"sec:u:4096:1:ABCD1234ABCD1234:1500000000:::u:::scESC:::+:::23::0:\nfpr:::::::::{KEY_FPR}:\n"
+
+    def preflight_default(self, argv):
+        if argv[:1] == ["git"] and "show" in argv and argv[-1].startswith("FETCH_HEAD:"):
+            text = self.TIP_FILES.get(argv[-1])
+            return Outcome(text is not None, 0 if text is not None else 128, text or "")
+        if argv[:2] == ["gpg", "--list-secret-keys"]:
+            return Outcome(True, 0, self.KEYRING)
+        if argv[:3] == ["gh", "api", "user"]:
+            return Outcome(True, 0, "HTTP/2.0 200 OK\nX-Oauth-Scopes: repo, gist\n\n{}")
+        if argv[:2] == ["svn", "ls"] and any("/dev/juneau/source/juneau-" in a or "/dev/juneau/binaries/juneau-" in a
+                                              for a in argv[2:]):
+            return Outcome(False, 1, "svn: E170000: URL doesn't exist\n")
+        return None
 
     # What an unscripted `<tool> --version` prints, so prerequisites (which fail on unreadable output) pass by default.
     DEFAULT_VERSIONS = {"-version": 'openjdk version "17.0.9" 2023-10-17\n', "--version": "9.9.9\n",
                         "--quiet": "1.14.3\n"}
 
-    def quiet_cmd(self, cmd, *, title="", cwd=None):
+    def quiet_cmd(self, cmd, *, title="", cwd=None, timeout=None, env=None, input=None):
         """Runner.quiet's hook: answered like cmd, but flagged as kept out of the log."""
-        out = self.cmd(cmd, title=title, cwd=cwd, capture=True)
+        out = self.cmd(cmd, title=title, cwd=cwd, capture=True, env=env, input=input)
         self.calls[-1]["quiet"] = True
+        self.calls[-1]["timeout"] = timeout
         return out
 
     def say(self, text="", level="info"):
@@ -198,6 +244,21 @@ def clean_env(monkeypatch):
     monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "full")
     monkeypatch.delenv("JUNEAU_RELEASE_HOME", raising=False)
     sys.modules.pop("juneau_terminal", None)
+
+
+@pytest.fixture(autouse=True)
+def _no_real_credentials(monkeypatch):
+    """No test may read a secret from the developer's environment, or reach a real command through the Runner (which
+    would mean the real keychain, gpg keyring or gh login): the Runner's subprocess is a stub that fails loudly.
+    A test that exercises the real subprocess path replaces its `run` again."""
+    for name in ("JRM_APACHE_PASSWORD", "JRM_GPG_PASSPHRASE", "JRM_GITHUB_TOKEN"):
+        monkeypatch.delenv(name, raising=False)
+
+    def refuse(*a, **k):
+        raise AssertionError(f"a test reached a real subprocess through Runner: {a!r}")
+
+    monkeypatch.setattr(runner_module, "subprocess", types.SimpleNamespace(
+        run=refuse, TimeoutExpired=subprocess.TimeoutExpired))
 
 
 @pytest.fixture

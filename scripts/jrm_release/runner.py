@@ -85,21 +85,31 @@ class Runner:
             out += getattr(r, "err", "") or ""
         return Outcome(r.ok, r.code, out)
 
-    def quiet(self, cmd, *, title, cwd=None, merge_err=False):
+    def quiet(self, cmd, *, title, cwd=None, merge_err=False, timeout=None, env=None, input=None):
         """Run a read-only argv whose output the caller wants but the log does not (a ~1,000-line pom).  Never
         echoed, so it is not a row and never reaches full.log; honors the same dry-run rule (reads always run).
-        merge_err appends stderr to the answer, as run() does."""
+        merge_err appends stderr to the answer, as run() does.  timeout (seconds) ends a command that waits for a
+        human (a keychain dialog): Outcome(False, 124, "timed out").  env adds variables to the child's environment
+        and input (bytes) is written to its stdin: how a secret reaches a command without ever being on argv."""
         argv = [str(c) for c in cmd]
         if self._no_dir(argv, cwd):
             return Outcome(True, 0, "")
         hook = getattr(self.run_mod, "quiet_cmd", None)
         if hook is not None:   # tests' fake
-            r = hook(argv, title=title, cwd=cwd)
+            r = hook(argv, title=title, cwd=cwd, timeout=timeout, env=env, input=input)
             return Outcome(r.ok, r.code, (getattr(r, "out", "") or "") + (getattr(r, "err", "") or "" if merge_err else ""))
         child_env = getattr(self.run_mod, "child_env", None)
+        base = child_env() if child_env else None
+        if env:
+            base = {**(base if base is not None else os.environ), **env}
         try:
-            r = subprocess.run(argv, cwd=cwd, env=child_env() if child_env else None, capture_output=True, text=True,
-                               check=False)
+            r = subprocess.run(argv, cwd=cwd, env=base, input=input, capture_output=True, text=input is None,
+                               check=False, timeout=timeout)
+        except subprocess.TimeoutExpired:
+            return Outcome(False, 124, "timed out")
         except OSError as e:
             return Outcome(False, 127, str(e))
-        return Outcome(r.returncode == 0, r.returncode, r.stdout + (r.stderr if merge_err else ""))
+        out, err = r.stdout, r.stderr
+        if isinstance(out, bytes):
+            out, err = out.decode("utf-8", "replace"), err.decode("utf-8", "replace")
+        return Outcome(r.returncode == 0, r.returncode, out + (err if merge_err else ""))

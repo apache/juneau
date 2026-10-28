@@ -12,7 +12,7 @@
 # ***************************************************************************************************************************
 import pytest
 
-from jrm_release import gpgkeys, inventory, prereqs, rc
+from jrm_release import gpgkeys, inventory, preflight, prereqs, rc
 from jrm_release.ctx import StepError
 
 pytestmark = pytest.mark.usefixtures("clean_env")
@@ -21,7 +21,7 @@ ALL = set(prereqs.TOOL_NAMES)
 
 
 def have(monkeypatch, *names):
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: "/usr/bin/" + n if n in names else None)
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n if n in names else None)
 
 
 def test_tool_names_cover_what_the_code_runs():
@@ -214,21 +214,6 @@ def test_step_reuses_the_early_result(make_ctx, monkeypatch):
     assert len(ctx.fake.calls) == n               # nothing ran twice
 
 
-def test_prechecks_keeps_only_answer_dependent_checks(make_ctx, monkeypatch):
-    have(monkeypatch)                              # no tools at all: prechecks must not care
-    ctx = make_ctx(http_ok=lambda url: False)
-    ctx.fake.script("git", "ls-remote", inventory.GIT_URL, "refs/heads/juneau-9.2.1-branch", out="abc\tx\n")
-    out = rc.FUNCS["prechecks"](ctx)
-    assert out == "2 checks passed"
-    assert ctx.fake.ran("svn") == []
-    said = "\n".join(ctx.fake.said)
-    assert "branch exists" in said
-    assert "rc tag absent" in said
-    assert "svn" not in said
-
-
-# ---- GPG key id prefill -------------------------------------------------------------------------------------
-
 def sec(keyid, fpr, uids, expires="", caps="scESC", validity="u"):
     rows = [f"sec:{validity}:4096:1:{keyid}:1500000000:{expires}::u:::{caps}:::+:::23::0:",
             f"fpr:::::::::{fpr}:"]
@@ -279,86 +264,6 @@ def test_several_matches():
     assert [k.keyid for k in candidates(MINE + two)] == ["36292BD2BA7D3A86", "3333333333333333"]
 
 
-def gpg_ctx(make_ctx, out, answers=None, **kw):
-    ctx = make_ctx(answers=answers, **kw)
-    del ctx.creds["credential.gpg.keyid"]
-    ctx.fake.script("gpg", "--list-secret-keys", out=out)
-    return ctx
-
-
-def test_keyid_prompt_defaults_to_the_match(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"})
-    assert rc.ensure_keyid(ctx) == "36292BD2BA7D3A86"
-    kind, key, _, kw = ctx.prompt.asked[0]
-    assert (kind, key, kw["default"]) == ("text", "credential.gpg.keyid", "36292BD2BA7D3A86")
-    assert ctx.fake.ran("gpg", "--list-secret-keys", "--with-colons")
-
-
-def test_keyid_choice_with_several(make_ctx):
-    two = sec("3333333333333333", "D" * 40, ["J <jamesbognar@apache.org>"])
-    ctx = gpg_ctx(make_ctx, MINE + two, {"credential.gpg.keyid": "3333333333333333"})
-    assert rc.ensure_keyid(ctx) == "3333333333333333"
-    kind, _, _, kw = ctx.prompt.asked[0]
-    assert kind == "choice"
-    assert [o[0] for o in kw["options"]] == ["36292BD2BA7D3A86", "3333333333333333"]
-
-
-def test_keyid_plain_prompt_with_none(make_ctx):
-    ctx = gpg_ctx(make_ctx, OTHER, {"credential.gpg.keyid": "TYPED"})
-    assert rc.ensure_keyid(ctx) == "TYPED"
-    assert ctx.prompt.asked[0][0] == "text"
-    assert ctx.prompt.asked[0][3]["default"] is None
-
-
-def test_keyid_not_asked_twice(make_ctx):
-    ctx = make_ctx()
-    assert rc.ensure_keyid(ctx) == "ABCD1234"
-    assert ctx.prompt.asked == []
-
-
-def test_keyid_uses_availid_when_no_email_credential(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"})
-    del ctx.creds["credential.apache.email"]
-    ctx.creds["credential.apache.availid"] = "jamesbognar"
-    ctx.prompt.answers["credential.apache.email"] = "nobody@example.org"
-    rc.ensure_keyid(ctx)
-    assert ctx.prompt.asked[0][3]["default"] == "36292BD2BA7D3A86"
-
-
-def test_keyid_works_in_a_dry_run(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"}, dry_run=True)
-    rc.ensure_keyid(ctx)
-    assert ctx.fake.ran("gpg", "--list-secret-keys")
-
-
-def test_keys_file_warning_when_fingerprint_absent(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"})
-    ctx.http_text = lambda url: "pub 4096R/DEADBEEFDEADBEEF"
-    rc.ensure_keyid(ctx)
-    assert any("KEYS" in s and "36292BD2BA7D3A86" in s for s in ctx.fake.said)
-
-
-def test_keys_file_silent_when_listed_with_spaced_fingerprint(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"})
-    fpr = "A" * 24 + "36292BD2BA7D3A86"
-    ctx.http_text = lambda url: "Key fingerprint = " + " ".join(fpr[i:i + 4] for i in range(0, 40, 4))
-    rc.ensure_keyid(ctx)
-    assert not any("KEYS" in s for s in ctx.fake.said)
-
-
-def test_keys_file_skipped_in_a_dry_run(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"}, dry_run=True)
-    ctx.http_text = lambda url: pytest.fail("no network in a dry run")
-    rc.ensure_keyid(ctx)
-
-
-def test_keys_file_unreachable_is_silent(make_ctx):
-    ctx = gpg_ctx(make_ctx, MINE, {"credential.gpg.keyid": "36292BD2BA7D3A86"})
-    ctx.http_text = lambda url: None
-    rc.ensure_keyid(ctx)
-    assert not any("KEYS" in s for s in ctx.fake.said)
-
-
 # ---- quiet capture ------------------------------------------------------------------------------------------
 
 def test_branch_pom_is_read_quietly(make_ctx):
@@ -384,3 +289,38 @@ def test_svnmucc_version_uses_no_quiet_flag_and_parses_its_banner(make_ctx, monk
     ctx.fake.script("svn", "ls", out="x/\n")
     assert prereqs.check(ctx) == []
     assert ctx.fake.ran("svnmucc", "--version") == [["svnmucc", "--version"]]
+
+
+# ---- PyYAML ------------------------------------------------------------------------------
+
+PYYAML_MISSING = "PyYAML: not installed; params files need it (python3 -m pip install pyyaml)"
+
+
+def no_yaml(monkeypatch):
+    real = preflight.importlib.util.find_spec
+    monkeypatch.setattr(preflight.importlib.util, "find_spec", lambda name, *a: None if name == "yaml" else real(name, *a))
+
+
+def test_missing_pyyaml_is_listed_with_the_other_failures(make_ctx, monkeypatch):
+    have(monkeypatch, *(ALL - {"gh"}))
+    no_yaml(monkeypatch)
+    ctx = make_ctx(with_details=False)
+    failed = prereqs.check(ctx)
+    assert PYYAML_MISSING in failed
+    assert any(f.startswith("gh:") for f in failed)
+
+
+def test_pyyaml_is_always_checked(make_ctx, monkeypatch):
+    have(monkeypatch, *ALL)
+    no_yaml(monkeypatch)
+    ctx = make_ctx(with_details=False)
+    ctx.fake.script("svn", "ls", out="x/\n")
+    assert prereqs.check(ctx) == [PYYAML_MISSING]
+    assert "PyYAML" in ctx.prereq_verdicts
+
+
+def test_pyyaml_present_passes(make_ctx, monkeypatch):
+    have(monkeypatch, *ALL)
+    ctx = make_ctx(with_details=False)
+    ctx.fake.script("svn", "ls", out="x/\n")
+    assert PYYAML_MISSING not in prereqs.check(ctx)

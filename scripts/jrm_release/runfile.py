@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""<home>/runs/<version>/run.json (schema 1) and the per-attempt log directories."""
+"""<home>/runs/<version>/run.json (schema 1; an additive `identity` key holds the non-secret apacheId, apacheEmail and gpgKeyId) and the per-attempt log directories."""
 import copy
 import json
 import os

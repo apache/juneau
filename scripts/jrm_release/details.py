@@ -11,7 +11,6 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """The release details: branch first (so the pom default is read from that branch), then one form."""
-import dataclasses
 import os
 import re
 
@@ -62,8 +61,8 @@ def branch_default(ctx, version):
     if not t:
         return "master"
     wanted = [f"juneau-{version}-branch", f"{t[0]}.{t[1]}.x"]
-    r = ctx.runner.run(["git", "-C", checkout(), "for-each-ref", "--format=%(refname:short)", "refs/remotes/origin"],
-                       title="List release branches", mutating=False)
+    r = ctx.runner.quiet(["git", "-C", checkout(), "for-each-ref", "--format=%(refname:short)", "refs/remotes/origin"],
+                         title="List release branches")
     have = {ln.strip().removeprefix("origin/") for ln in (r.out.splitlines() if r.ok else [])}
     return next((b for b in wanted if b in have), "master")
 
@@ -74,40 +73,3 @@ def normalize_dev(version, dev):
     if not dev:
         return inventory.next_dev_version(version)
     return dev + "-SNAPSHOT" if inventory.parse_version(dev) and not dev.endswith("-SNAPSHOT") else dev
-
-
-def ask(ctx, version=None):
-    """Prompt for the branch, then the details; validate, record in run.json 'details', return the details dict.
-    version (from --version) prefills the Version default, derives the dev default and picks the branch default."""
-    P = ctx.prompt
-    default_branch = ctx.d.get("branch") or (branch_default(ctx, version) if version else "master")
-    branch = P.text("Release branch", default=default_branch, key="release.branch")
-    if branch is None:
-        raise KeyboardInterrupt
-    pom_v, pom_dev = pom_defaults(ctx, branch)
-    if version:
-        pom_v, pom_dev = version, inventory.next_dev_version(version)
-    F = P.Field
-    fields = [F("version", "Version", default=pom_v, required=True),
-              F("developmentVersion", "Next development version (blank = next patch, x.y.z-SNAPSHOT)", default=pom_dev),
-              F("rc", "Release candidate number", default="1", required=True, type="int"),
-              F("summary", "Summary", multiline=True, required=True),
-              F("highlights", "Highlights", multiline=True),
-              F("knownIssues", "Known issues", multiline=True),
-              F("acknowledgements", "Acknowledgements", multiline=True)]
-    while True:
-        got = P.form("Release details", fields, key="release.details")
-        if got is None:
-            raise KeyboardInterrupt
-        if got.get("developmentVersion") == pom_dev and got.get("version") != pom_v:
-            got["developmentVersion"] = None   # the prefilled dev version belongs to the old Version; re-derive
-        got["developmentVersion"] = normalize_dev(got.get("version"), got.get("developmentVersion"))
-        err = validate(got)
-        if not err:
-            break
-        ctx.say(f"❌ {err}", "error")
-        fields = [dataclasses.replace(f, default=str(got[f.name]) if got.get(f.name) not in (None, "") else f.default)
-                  for f in fields]
-    d = {"branch": branch, **{k: got.get(k) for k in FIELDS}}
-    ctx.rf.set("details", d)
-    return d

@@ -9,7 +9,7 @@ release-manager`) in the shared tracker scripts, which live outside this repo, w
 This repo's `scripts/push.py` (moved here from the repo root, matching `apache/juneau` and
 `sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Compile (`mvn clean test-compile`), Java Tests (`mvn verify`), Python Tests
 (this suite), Browser Tests (`npx playwright test` in `e2e/`), Commit, Push. The suite never writes the real run history:
-`conftest.py` points `JUNEAU_TERMINAL_HISTORY_DIR` at a temp dir and sets `JUNEAU_TERMINAL_HISTORY=0`. Its review gate refuses to commit or push **anything** when the working tree has
+`conftest.py` points `JUNEAU_TERMINAL_HISTORY_DIR` at a temp dir and sets `JUNEAU_TERMINAL_HISTORY=0`. An autouse fixture stubs the PyYAML presence check (`importlib.util.find_spec("yaml")` in `preflight.py`) so the suite passes with or without PyYAML installed (push.py runs it without); tests of the check re-patch `find_spec`, and tests that parse YAML use `pytest.importorskip("yaml")`. Its review gate refuses to commit or push **anything** when the working tree has
 any unstaged modification to a tracked file, or any untracked file that isn't gitignored (`_prechecks()` /
 `commit_and_push()`, built on the `juneau_terminal_scripts` toolkit's `git`, `run` and `tools` modules, loaded through
 the vendored `scripts/bootstrap.py`, which needs juneau-terminal 10.0.0-SNAPSHOT in `~/.m2` -- build Juneau first;
@@ -69,11 +69,16 @@ real release is touched.
 | `test_release_revert.py` | `--revert` checks and actions |
 | `test_release_cli.py` | arguments, guards, lock, resume, exit codes (needs `JUNEAU_TERMINAL_PY`) |
 | `test_release_dryrun.py` | `--dry-run` runs read-only commands only and never writes `run.json` |
+| `test_release_preflight.py` | each preflight check, the exit-code rule, the secret-leak guard |
+| `test_release_check_cli.py` | `--check` through `release.main`: exit codes, flag conflicts, no prompt, no `run.json`, resume groups |
+| `test_release_params.py` | params loading, validation, scaffold, `--init-params`, record copy (needs PyYAML) |
+| `test_release_params_cli.py` | `--params` / `--init-params` through `release.main`: flag conflicts, preflight listing of missing secrets, identity, convention file, dry run, `--resume` |
+| `test_release_keychain.py` | keychain and `gh auth token` lookups, `Ctx.cred` resolution order, no secret in logs or argv |
 | `test_release_secrets.py` | no secret on argv, in `run.json` or in logs; `askpass.py` |
 
 `test_release_cli.py` loads the shared toolkit through `scripts/bootstrap.py`, so point it at the Juneau checkout:
 
 ```bash
 export JUNEAU_TERMINAL_PY=$HOME/git/apache/juneau/juneau-terminal/src/main/python/juneau_terminal.py
-uv run --offline --with pytest pytest -q -p no:cacheprovider scripts/tests/
+uv run --offline --with pytest --with pyyaml pytest -q -p no:cacheprovider scripts/tests/
 ```

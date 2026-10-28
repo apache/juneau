@@ -30,6 +30,16 @@ class Svn:
             r = self.runner.run(["svn", "ls", *BASE, url], title=title, mutating=False, tool="svn")
         return [line for line in r.out.splitlines() if line.strip()] if r.ok else None
 
+    def exists(self, url):
+        """True when url lists, False when svn says it is not there (E170000 or "non-existent"), None when it cannot be
+        told (any other failure, such as a network error).  Anonymous, quiet."""
+        r = self.runner.quiet(["svn", "ls", *BASE, url], title=f"svn exists {url.rstrip('/').rsplit('/', 1)[-1]}",
+                              merge_err=True)
+        if r.ok:
+            return True
+        low = r.out.lower()
+        return False if ("e170000" in low or "non-existent" in low) else None
+
     def mucc(self, message, ops, *, title="svnmucc commit"):
         """One svnmucc commit.  ops are argv fragments such as ['rm', url] or ['put', local, url]."""
         pw = self.password()

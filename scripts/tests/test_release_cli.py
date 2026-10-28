@@ -12,8 +12,6 @@
 # ***************************************************************************************************************************
 import json
 import os
-import sys
-from pathlib import Path
 
 import pytest
 
@@ -66,52 +64,68 @@ class RunProxy:
 
 def toolkit_deps(tmp_path, fake, prompts, **kw):
     import bootstrap
+    from conftest import FakeRunner
+    kw.setdefault("http_text", lambda url: "pub   rsa4096 2020-01-01 [SC]\n      " + FakeRunner.KEY_FPR + "\n")
     bootstrap.load(release.REPO_DIR / "pom.xml", terminal=False, cache_dir=tmp_path / "tk")
     from juneau_terminal_scripts import lock, run, steps
     return release.Deps(RunProxy(run, fake), steps, prompts, lock, **kw)
 
 
+ENV_SECRETS = {"JRM_APACHE_PASSWORD": "s3cr3t-pw", "JRM_GPG_PASSPHRASE": "s3cr3t-gpg", "JRM_GITHUB_TOKEN": "s3cr3t-gh"}
+IDENTITY = {"apacheId": "jamesbognar", "apacheEmail": "jamesbognar@apache.org", "gpgKeyId": "ABCD1234ABCD1234"}
+
+
+def params_file(home, version="9.2.1"):
+    from test_release_params import GOOD
+    p = home / "params" / f"{version}.yml"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(GOOD)
+    return p
+
+
 def new_run_setup(tmp_path, monkeypatch, answers):
     from conftest import CREDS, FakePrompts, FakeNexus, FakeRunner
-    from jrm_release import prereqs
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: "/usr/bin/" + n)
+    from jrm_release import preflight
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n)
+    for k, v in ENV_SECRETS.items():
+        monkeypatch.setenv(k, v)
     fake, prompts = FakeRunner(), FakePrompts({**CREDS, **answers})
     fake.script("git", "ls-remote", release.inventory.GIT_URL, "refs/heads/juneau-9.2.1-branch", out="abc\trefs/heads/x\n")
     return fake, prompts, toolkit_deps(tmp_path, fake, prompts, nexus=FakeNexus(), http_ok=lambda u: True,
                                        sleep=lambda s: None)
 
 
-def test_new_run_asks_details_then_prechecks(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {
-        "release.branch": "juneau-9.2.1-branch", "email.propose": True,
-        "release.details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1, "summary": "x"}})
-    code, out = run_main(["--dry-run"], home, capsys, deps=deps)
-    keys = [a[1] for a in prompts.asked]
-    assert keys[:2] == ["release.branch", "release.details"]
-    assert code in (0, 1)                       # what follows depends on the steps implemented so far
-    assert "✔ rc tag absent" in out
-    assert not (home / "runs").exists()         # a dry run writes no run.json
+def test_new_run_with_a_params_file_prechecks_without_any_prompt(home, capsys, tmp_path, monkeypatch):
+    params_file(home)
+    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": None})
+    code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
+    assert code == 130, out                     # cancelling the propose email ends the run
+    assert [a[1] for a in prompts.asked] == ["email.propose"]
+    assert "RC tag absent" in out
 
 
-def test_new_run_checks_prerequisites_before_any_prompt(home, capsys, tmp_path, monkeypatch):
-    from jrm_release import prereqs
+def test_new_run_with_a_missing_tool_lists_it_and_asks_nothing(home, capsys, tmp_path, monkeypatch):
+    from jrm_release import preflight
+    params_file(home)
     fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: None if n in ("svn", "svnmucc") else "/usr/bin/" + n)
-    code, out = run_main(["--dry-run"], home, capsys, deps=deps)
-    assert code == 1
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: None if n in ("svn", "svnmucc") else "/usr/bin/" + n)
+    code, out = run_main(["--version", "9.2.1"], home, capsys, deps=deps)
+    assert code == 2
     assert prompts.asked == []
     assert "svn: not on PATH" in out
     assert "svnmucc: not on PATH" in out
     assert "brew install subversion" in out
+    assert not (home / "runs").exists()
 
 
 def test_resume_checks_prerequisites_before_any_prompt(home, capsys, tmp_path, monkeypatch):
-    from jrm_release import prereqs
-    seed(home, {"phase": "rc", "last": "workspace", "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
+    from jrm_release import preflight
+    seed(home, {"phase": "rc", "last": "workspace", "identity": IDENTITY,
+                "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
     fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: None if n == "gh" else "/usr/bin/" + n)
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: None if n == "gh" else "/usr/bin/" + n)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
-    assert code == 1
+    assert code == 2
     assert prompts.asked == []
     assert "gh: not on PATH" in out
     assert "brew install gh" in out
@@ -175,28 +189,32 @@ def test_lock_busy_message(home):
 
 def test_second_process_is_refused_while_lock_held(home, capsys, tmp_path, monkeypatch):
     import fcntl
-    from conftest import FakePrompts, FakeRunner
-    seed(home, {"phase": "rc", "last": "workspace", "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
+    from conftest import FakeNexus, FakePrompts, FakeRunner
+    seed(home, {"phase": "rc", "last": "workspace", "identity": IDENTITY, "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
     lock_path = home / "runs" / "9.2.1" / ".lock"
     lock_path.write_text("4242 3")
-    from jrm_release import prereqs
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: "/usr/bin/" + n)
+    from jrm_release import preflight
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n)
+    for k, v in ENV_SECRETS.items():
+        monkeypatch.setenv(k, v)
     fd = os.open(lock_path, os.O_RDWR)
     fcntl.flock(fd, fcntl.LOCK_EX)
     try:
-        deps = toolkit_deps(tmp_path, FakeRunner(), FakePrompts())
+        deps = toolkit_deps(tmp_path, FakeRunner(), FakePrompts(), nexus=FakeNexus())
         code, out = run_main(["--resume"], home, capsys, deps=deps)
     finally:
         os.close(fd)
-    assert code == 1
+    assert code == 1, out
     assert "Another release.py is running this release (pid 4242, attempt #3)." in out
 
 
 def setup_deps(tmp_path, monkeypatch, answers, opener=None):
     """(fake runner, prompts, nexus fake, deps).  With an opener the real Nexus client is used over it."""
     from conftest import CREDS, FakeNexus, FakePrompts, FakeRunner
-    from jrm_release import prereqs
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: "/usr/bin/" + n)
+    from jrm_release import preflight
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n)
+    for k, v in ENV_SECRETS.items():
+        monkeypatch.setenv(k, v)
     fake, prompts, nexus = FakeRunner(), FakePrompts({**CREDS, **answers}), FakeNexus()
     deps = toolkit_deps(tmp_path, fake, prompts, nexus=None if opener else nexus, nexus_opener=opener,
                         http_ok=lambda u: True, sleep=lambda s: None)
@@ -207,7 +225,7 @@ def read_run(home):
     return json.loads((home / "runs" / "9.2.1" / "run.json").read_text())
 
 
-ACTIVE = {"phase": "rc", "last": "nexus-close", "nexusRepoId": "r-1", "rcCommit": "abc123",
+ACTIVE = {"phase": "rc", "last": "nexus-close", "nexusRepoId": "r-1", "rcCommit": "abc123", "identity": IDENTITY,
           "details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1,
                       "branch": "juneau-9.2.1-branch", "summary": "x"}}
 
@@ -285,16 +303,14 @@ def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatc
 
 
 def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, monkeypatch):
-    answers = {"release.branch": "juneau-9.2.1-branch", "email.propose": True, "review.javadoc": True,
-               "review.diff": True, "email.vote": True,
-               "release.details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1,
-                                   "summary": "Fixes."}}
+    params_file(home)
+    answers = {"email.propose": True, "review.javadoc": True, "review.diff": True, "email.vote": True}
     from conftest import FakeHttp
     http = FakeHttp({("GET", "/profile_repositories/1a24bc7f954a70"): (401, b"")})   # no password in a dry run
     fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, answers, opener=http)
     fake.script("git", "ls-remote", release.inventory.GIT_URL, "refs/heads/juneau-9.2.1-branch",
                 out="abc\trefs/heads/x\n")
-    code, out = run_main(["--dry-run"], home, capsys, deps=deps)
+    code, out = run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
     assert code == 0, out
     assert not (home / "runs").exists()                       # nothing persisted
     assert http.requests
@@ -312,23 +328,10 @@ def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, mo
     assert "Vote is open" in out
 
 
-def test_version_flag_prefills_new_run(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {
-        "release.branch": "juneau-9.2.1-branch", "email.propose": True, "release.details": {"rc": 1, "summary": "x"}})
-    fake.script("git", "-C", os.path.expanduser(release.inventory.JUNEAU_CHECKOUT), "for-each-ref",
-                out="origin/master\norigin/juneau-9.2.1-branch\n")
-    run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
-    assert prompts.asked[0][3]["default"] == "juneau-9.2.1-branch"
-    f = {x.name: x.default for x in prompts.asked[1][3]["fields"]}
-    assert f["version"] == "9.2.1"
-    assert f["developmentVersion"] == "9.2.2-SNAPSHOT"
-
-
 def test_dry_run_creates_attempt_full_log_but_no_runs(home, capsys, tmp_path, monkeypatch):
-    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {
-        "release.branch": "b", "email.propose": True,
-        "release.details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1, "summary": "x"}})
-    run_main(["--dry-run"], home, capsys, deps=deps)
+    params_file(home)
+    fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {"email.propose": True})
+    run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
     assert (home / "attempts" / "dry-run" / "full.log").exists()
     assert not (home / "runs").exists()
 

@@ -24,7 +24,7 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_DIR / "scripts"))
 
 import bootstrap  # noqa: E402
-from jrm_release import inventory  # noqa: E402
+from jrm_release import inventory, params  # noqa: E402
 from jrm_release.ctx import Ctx  # noqa: E402
 from jrm_release.runfile import RunFile, RunFileError, new_attempt_dir  # noqa: E402
 
@@ -45,8 +45,19 @@ def build_parser():
     p.add_argument("--skip-step", action="append", default=[], metavar="NAME",
                    help="skip a step; only: " + ", ".join(inventory.SKIPPABLE))
     p.add_argument("--list-steps", action="store_true", help="print the steps by phase, with finished ones marked")
-    p.add_argument("--version", help="x.y.z: with --list-steps, which run's marks to show; on a new release, prefill the details")
+    p.add_argument("--version", help="x.y.z: with --list-steps, which run's marks to show; on a new release or --check, "
+                                      "selects <home>/params/<version>.yml and must match the file")
     p.add_argument("--revert", action="store_true", help="undo the current release candidate")
+    p.add_argument("--params", type=Path, metavar="FILE",
+                   help="the YAML parameter file a new release (or --check) reads (default: "
+                        "<home>/params/<version>.yml when --version is given)")
+    p.add_argument("--check", action="store_true",
+                   help="check every precondition of a new release (tools, params, secrets, repo, release notes, "
+                        "remote state), print one table and exit 0 (all pass), 2 (a check failed) or 1 (a check "
+                        "could not run); changes nothing")
+    p.add_argument("--init-params", action="store_true",
+                   help="write a commented params template to <home>/params/<version>.yml (or --params FILE) and exit; "
+                        "needs --version")
     p.add_argument("--dry-run", action="store_true", help="run read-only commands; print every mutation")
     p.add_argument("--console", choices=("full", "board", "none"))
     p.add_argument("--home", type=Path, default=None, help="state directory (default: $JUNEAU_RELEASE_HOME)")
@@ -64,6 +75,17 @@ def parse(argv):
         p.error("--revert cannot be combined with --resume, --start-step or --skip-step")
     if args.version and not inventory.parse_version(args.version):
         p.error(f"--version {args.version} must look like x.y.z")
+    if args.init_params:
+        if not args.version:
+            p.error("--init-params needs --version")
+        if args.resume or args.revert or args.start_step or args.list_steps or args.dry_run:
+            p.error("--init-params cannot be combined with --resume, --revert, --start-step, --list-steps or --dry-run")
+    if args.params and (args.resume or args.revert or args.start_step or args.list_steps):
+        p.error("--params cannot be combined with --resume, --revert, --start-step or --list-steps")
+    if args.check and (args.resume or args.revert or args.start_step or args.init_params or args.dry_run
+                       or args.list_steps or args.skip_step):
+        p.error("--check cannot be combined with --resume, --revert, --start-step, --init-params, --dry-run, "
+                "--list-steps or --skip-step")
     args.home = args.home or default_home()
     return args
 
@@ -201,7 +223,7 @@ def build_ctx(args, deps, rf):
     from jrm_release.runner import Runner
     from jrm_release.svn import Svn
     ctx = Ctx(args=args, home=args.home, run=deps.run, prompt=deps.prompt, runner=None, nexus=None, svn=None, rf=rf,
-              pause=deps.steps.Pause, http_ok=deps.http_ok or _http_ok, http_text=deps.http_text or _http_text, sleep=deps.sleep or time.sleep)
+              pause=getattr(deps.steps, "Pause", None), http_ok=deps.http_ok or _http_ok, http_text=deps.http_text or _http_text, sleep=deps.sleep or time.sleep)
     ctx.runner = Runner(deps.run, dry_run=args.dry_run, secrets=ctx.secrets)
     user = lambda: ctx.cred("credential.apache.availid")  # noqa: E731
     password = lambda: ctx.cred("credential.apache.password", secret=True)  # noqa: E731
@@ -306,36 +328,86 @@ def _locked(args, deps, ctx, attempt):
         return 1
 
 
-def _prerequisites(ctx):
-    """Run the answer-independent checks before any prompt; the exit code (1 with the whole list) or 0."""
-    from jrm_release import prereqs
-    failed = prereqs.check(ctx)
-    if not failed:
-        return 0
-    ctx.say(f"❌ {len(failed)} prerequisite(s) not met; fix them and re-run (nothing was asked or changed):", "error")
-    for f in failed:
-        ctx.say(f"   - {f}", "error")
-    return 1
+def _preflight(args, ctx, groups):
+    """Run the preflight groups before anything is created or asked; 0 when every check passed, else 2 (a check failed)
+    or 1 (none failed, one could not run), after printing every problem.  The results are kept on ctx for the
+    Prerequisites and Release checks rows to replay."""
+    from jrm_release import preflight, prereqs
+    if "params" in groups:
+        preflight.prepare(ctx, args)
+    results = preflight.run_checks(ctx, groups)
+    ctx.preflight_results = results
+    prereqs.check(ctx)
+    code = preflight.exit_code(results)
+    if code:
+        bad = preflight.problems(results)
+        ctx.say(f"❌ {len(bad)} check(s) did not pass; fix them and re-run (nothing was asked or changed):", "error")
+        for line in bad:
+            ctx.say(f"   - {line}", "error")
+    return code
+
+
+class _NoRun:
+    """The `run` of a --check context: nothing is drawn, no board session exists."""
+    @staticmethod
+    def say(text="", level="info"):
+        return None
+
+
+def _check_command(args, deps=None):
+    """--check: every preflight group, one table on stdout, nothing created or changed.  The exit code."""
+    from jrm_release import preflight
+    deps = deps or Deps(_NoRun(), None, None, None)
+    ctx = build_ctx(args, deps, RunFile(args.home / "runs" / "_check" / "run.json", dry_run=True))
+    preflight.prepare(ctx, args)
+    results = preflight.run_checks(ctx)
+    print("\n".join(preflight.format_table(results)))
+    return preflight.exit_code(results)
+
+
+def _record_params(args, ctx, rf):
+    """Keep a copy of the params file beside run.json; a failure is a warning, not a failed release."""
+    try:
+        params.record(args.params, rf.path.parent)
+    except OSError as e:
+        ctx.say(f"could not record params file: {e}", "warn")
 
 
 def _drive(args, deps, ctx, attempt, new):
-    from jrm_release import details
-    if not args.revert:   # before the branch, details and credential prompts, on a new run and on a resume alike
-        code = _prerequisites(ctx)
+    from jrm_release import preflight
+    if args.params:
+        ctx.say(f"Using params file {args.params}")
+    if new:   # everything a release depends on is checked before run.json exists
+        code = _preflight(args, ctx, preflight.GROUPS)
         if code:
             return code
-    if new:
-        d = details.ask(ctx, version=args.version)
+        d = ctx.pf["details"]
         rf = RunFile(args.home / "runs" / d["version"] / "run.json", dry_run=args.dry_run)
         rf.reset()
         rf.update({"details": d, "phase": "rc"})
+        if ctx.identity():
+            rf.update({"identity": ctx.identity()})
         ctx.rf = rf
+        if not args.dry_run:
+            _record_params(args, ctx, rf)
+    else:
+        ctx.seed_identity()
+        if not args.revert:   # a resume re-checks tools and secrets only: the rest was true at the start
+            code = _preflight(args, ctx, preflight.RESUME_GROUPS)
+            if code:
+                return code
     return _locked(args, deps, ctx, attempt)
 
 
 def run_release(args, deps, path, active):
     """Attempt dir, ctx, session; returns the exit code."""
     new = not (args.resume or args.revert or (args.start_step and active))
+    if new:   # a new release is always params-driven
+        try:
+            args.params = params.require(args)
+        except params.ParamsError as e:
+            print(f"❌ {e}", file=sys.stderr)
+            return 2
     rf = RunFile(path, dry_run=args.dry_run) if not new else RunFile(args.home / "runs" / "_new" / "run.json",
                                                                        dry_run=True)
     ctx = build_ctx(args, deps, rf)
@@ -372,6 +444,26 @@ def main(argv=None, deps=None):
         if args.list_steps:
             list_steps(active_run_data(args.home, args.version))
             return 0
+        if args.init_params:
+            from jrm_release.runner import Runner
+            try:
+                return params.init(args, Runner(deps.run if deps else None))
+            except params.ParamsError as e:
+                print(f"❌ {e}", file=sys.stderr)
+                return 2
+            except OSError as e:
+                print(f"❌ cannot write the params file: {e}", file=sys.stderr)
+                return 1
+        if args.check:
+            try:
+                args.params = params.require(args)
+            except params.ParamsError as e:
+                print(f"❌ {e}", file=sys.stderr)
+                return 2
+            try:
+                return _check_command(args, deps)
+            except KeyboardInterrupt:
+                return 130
         path, active = find_run(args.home, active_only=True)
         refusal = precondition(args, active)
         if refusal:

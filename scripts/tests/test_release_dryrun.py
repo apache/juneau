@@ -54,9 +54,11 @@ def test_dry_run_does_not_ask_for_secrets(make_ctx):
     from conftest import FakePrompts
     ctx = make_ctx(dry_run=True)
     ctx.creds.clear()
-    ctx.prompt = FakePrompts({"credential.apache.availid": "jb"})        # a secret prompt would raise
+    ctx.prompt = FakePrompts({})                                         # any prompt would raise
+    ctx.creds["credential.apache.availid"] = "jb"
     assert ctx.cred("credential.apache.password", secret=True) == "********"
     assert ctx.cred("credential.apache.availid") == "jb"
+    assert ctx.prompt.asked == []
 
 
 def test_dry_run_stops_at_vote_gate(make_ctx):

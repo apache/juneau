@@ -10,7 +10,6 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-import os
 
 import pytest
 
@@ -22,21 +21,6 @@ pytestmark = pytest.mark.usefixtures("clean_env")
 POM = "<project><parent><version>1</version></parent><version>9.2.1-SNAPSHOT</version></project>"
 
 
-def test_details_branch_first_then_pom_defaults(make_ctx):
-    ctx = make_ctx(with_details=False, answers={
-        "release.branch": "juneau-9.2.1-branch",
-        "release.details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1, "summary": "Fixes."}})
-    ctx.fake.script("git", "-C", details.checkout(), "show", out=POM)
-    d = details.ask(ctx)
-    assert [a[0] for a in ctx.prompt.asked] == ["text", "form"]
-    form = {f.name: f.default for f in ctx.prompt.asked[1][3]["fields"]}
-    assert form["version"] == "9.2.1"
-    assert form["developmentVersion"] == "9.2.2-SNAPSHOT"
-    assert ["git", "-C", details.checkout(), "show", "origin/juneau-9.2.1-branch:pom.xml"] in ctx.fake.argvs()
-    assert d["branch"] == "juneau-9.2.1-branch"
-    assert ctx.rf.get("details")["rc"] == 1
-
-
 def test_details_validation_rejects_bad_versions():
     ok = dict(version="9.2.1", developmentVersion="9.2.2-SNAPSHOT", rc=1)
     assert details.validate(ok) is None
@@ -44,14 +28,6 @@ def test_details_validation_rejects_bad_versions():
     assert "SNAPSHOT" in details.validate({**ok, "developmentVersion": "9.2.2"})
     assert "greater" in details.validate({**ok, "developmentVersion": "9.2.0-SNAPSHOT"})
     assert "rc" in details.validate({**ok, "rc": 0})
-
-
-def test_details_reasks_after_invalid(make_ctx):
-    bad = {"version": "9.2", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1, "summary": "s"}
-    good = {**bad, "version": "9.2.1"}
-    ctx = make_ctx(with_details=False, answers={"release.branch": "b", "release.details": [bad, good]})
-    assert details.ask(ctx)["version"] == "9.2.1"
-    assert sum(1 for a in ctx.prompt.asked if a[0] == "form") == 2
 
 
 def test_workspace_argv(make_ctx):
@@ -538,60 +514,15 @@ def test_finalize_marks_released(make_ctx):
     assert ctx.rf.get("last") == "finalize"
 
 
-REFS = "origin/master\norigin/juneau-9.2.1-branch\norigin/9.3.x\n"
-FORM = {"rc": 1, "summary": "Fixes."}
-
-
-def _fields(ctx):
-    return {f.name: f for f in ctx.prompt.asked[1][3]["fields"]}
-
-
-def test_details_version_prefills_form_and_derives_dev(make_ctx):
-    ctx = make_ctx(with_details=False, answers={"release.branch": "master", "release.details": dict(FORM)})
-    ctx.fake.script("git", "-C", details.checkout(), "show", out="<version>10.0.0-SNAPSHOT</version>")
-    d = details.ask(ctx, version="9.2.1")
-    f = _fields(ctx)
-    assert f["version"].default == "9.2.1"
-    assert f["developmentVersion"].default == "9.2.2-SNAPSHOT"
-    assert d["version"] == "9.2.1"
-    assert d["developmentVersion"] == "9.2.2-SNAPSHOT"
-
-
 @pytest.mark.parametrize("refs,want", [
     ("origin/master\norigin/juneau-9.2.1-branch\n", "juneau-9.2.1-branch"),
     ("origin/master\norigin/9.2.x\n", "9.2.x"),
     ("origin/master\norigin/9.3.x\n", "master"),
     ("", "master")])
-def test_details_version_picks_branch_default(make_ctx, refs, want):
-    ctx = make_ctx(with_details=False, answers={"release.branch": want, "release.details": dict(FORM)})
+def test_branch_default_picks_the_release_branch(make_ctx, refs, want):
+    ctx = make_ctx(with_details=False)
     ctx.fake.script("git", "-C", details.checkout(), "for-each-ref", out=refs)
-    details.ask(ctx, version="9.2.1")
-    assert ctx.prompt.asked[0][0] == "text"
-    assert ctx.prompt.asked[0][3]["default"] == want
-
-
-def test_details_blank_dev_derives_from_entered_version(make_ctx):
-    # the master pom is 10.0.0-SNAPSHOT: next_dev_version(10.0.0) is None, so no form default; user enters 9.2.1
-    ctx = make_ctx(with_details=False, answers={"release.branch": "master",
-                                                "release.details": {**FORM, "version": "9.2.1"}})
-    ctx.fake.script("git", "-C", details.checkout(), "show", out="<version>10.0.0-SNAPSHOT</version>")
-    d = details.ask(ctx)
-    assert _fields(ctx)["developmentVersion"].default is None
-    assert d["developmentVersion"] == "9.2.2-SNAPSHOT"
-
-
-def test_details_stale_dev_default_follows_edited_version(make_ctx):
-    ctx = make_ctx(with_details=False, answers={"release.branch": "b", "release.details": {
-        **FORM, "version": "9.4.1", "developmentVersion": "9.2.2-SNAPSHOT"}})
-    ctx.fake.script("git", "-C", details.checkout(), "show", out="<version>9.2.1-SNAPSHOT</version>")
-    assert details.ask(ctx)["developmentVersion"] == "9.4.2-SNAPSHOT"
-
-
-def test_details_bare_dev_version_gets_snapshot_suffix(make_ctx):
-    ctx = make_ctx(with_details=False, answers={"release.branch": "b", "release.details": {
-        **FORM, "version": "9.2.1", "developmentVersion": "9.2.2"}})
-    ctx.fake.script("git", "-C", details.checkout(), "show", out=POM)
-    assert details.ask(ctx)["developmentVersion"] == "9.2.2-SNAPSHOT"
+    assert details.branch_default(ctx, "9.2.1") == want
 
 
 # --- R0047: honest dry-run results, review prompts that say what to look at -------------------------------------
@@ -660,8 +591,8 @@ def test_dist_verify_dry_run_does_not_claim_verified(make_ctx):
 
 
 def test_prerequisites_row_replays_the_early_verdicts_as_bar_cells(make_ctx, monkeypatch):
-    from jrm_release import prereqs
-    monkeypatch.setattr(prereqs.shutil, "which", lambda n: "/usr/bin/" + n if n != "gh" else None)
+    from jrm_release import prereqs, preflight
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n if n != "gh" else None)
     ctx = make_ctx(with_details=False)
     failed = prereqs.check(ctx)
     n = len(ctx.fake.calls)
@@ -672,17 +603,27 @@ def test_prerequisites_row_replays_the_early_verdicts_as_bar_cells(make_ctx, mon
     assert len(failed) == 1
 
 
-def test_release_checks_are_two_quiet_cells(make_ctx):
+def test_release_checks_replay_the_preflight_repo_group(make_ctx):
+    from jrm_release import preflight
+    ctx = make_ctx()
+    ctx.preflight_results = [("tools", "tool git", preflight.Result("pass", "found")),
+                             ("repo", "branch on origin", preflight.Result("pass", "b")),
+                             ("repo", "RC tag absent", preflight.Result("fail", "tag exists")),
+                             ("notes", "RELEASE-NOTES has 9.2.1", preflight.Result("pass", "ok"))]
+    cells = rc.release_checks(ctx)
+    assert [c.name for c in cells] == ["branch on origin", "RC tag absent"]
+    assert [c.fn().status for c in cells] == ["pass", "fail"]
+    assert cells[1].fn().reason == "tag exists"
+    assert ctx.fake.calls == []                 # a replay runs nothing
+
+
+def test_release_checks_run_the_repo_group_when_no_preflight_ran(make_ctx):
     ctx = make_ctx()
     ctx.fake.script("git", "ls-remote", "https://gitbox.apache.org/repos/asf/juneau.git", "refs/heads/juneau-9.2.1-branch",
                     out="abc\trefs/heads/juneau-9.2.1-branch\n")
-    cells = rc.release_checks(ctx)
-    assert [c.name for c in cells] == ["branch exists", "rc tag absent"]
-    assert [c.fn().status for c in cells] == ["pass", "pass"]
-    assert all(c.get("quiet") for c in ctx.fake.calls if c["argv"][:2] == ["git", "ls-remote"])
-    ctx.fake.script("git", "ls-remote", "https://gitbox.apache.org/repos/asf/juneau.git", "refs/tags/juneau-9.2.1-RC1",
-                    out="abc\trefs/tags/x\n")
-    assert [c.fn().status for c in rc.release_checks(ctx)] == ["pass", "fail"]
+    names = [c.name for c in rc.release_checks(ctx)]
+    assert names[:2] == ["branch on origin", "RC tag absent"]
+    assert ctx.fake.ran("git", "ls-remote")
 
 
 def test_registry_runs_both_check_groups_as_labelled_bars():
@@ -740,3 +681,38 @@ def test_retired_step_in_a_saved_run_resumes_after_the_previous_one(home):
     assert rf.last() == "javadoc-verify"
     import release
     assert release.plan_for(home, resume=True)[0] == "gpg-unlock"
+
+
+def test_quiet_passes_env_and_input_to_the_command(make_ctx):
+    ctx = make_ctx()
+    ctx.runner.quiet(["gh", "api", "user"], title="gh user", env={"GH_TOKEN": "tok"}, input=b"pw\n")
+    call = ctx.fake.calls[-1]
+    assert call["env"] == {"GH_TOKEN": "tok"} and call["input"] == b"pw\n" and call["quiet"] is True
+    assert "tok" not in " ".join(call["argv"]) and "pw" not in " ".join(call["argv"])
+
+
+def test_quiet_real_path_merges_env_and_decodes_bytes_output(make_ctx, monkeypatch):
+    from types import SimpleNamespace
+    from jrm_release import runner as runner_module
+    seen = {}
+
+    def fake_run(argv, **kw):
+        seen.update(kw)
+        return SimpleNamespace(returncode=0, stdout=b"out", stderr=b"err")
+    monkeypatch.setattr(runner_module, "subprocess", SimpleNamespace(run=fake_run, TimeoutExpired=TimeoutError))
+    out = runner_module.Runner(SimpleNamespace()).quiet(["x"], title="t", env={"GH_TOKEN": "tok"}, input=b"pw\n",
+                                                        merge_err=True)
+    assert seen["env"]["GH_TOKEN"] == "tok" and seen["input"] == b"pw\n" and seen["text"] is False
+    assert out.out == "outerr"
+
+
+@pytest.mark.parametrize("ok, out, expected", [
+    (True, "file.zip\n", True),
+    (False, "svn: E170000: URL 'https://x/y' doesn't exist\n", False),
+    (False, "svn: warning: W160013: '/y' path not found; non-existent in revision 5", False),
+    (False, "svn: E170013: Unable to connect to a repository at URL\n", None),
+])
+def test_svn_exists_tells_absent_from_cannot_list(make_ctx, ok, out, expected):
+    ctx = make_ctx()
+    ctx.fake.script("svn", "ls", out=out, ok=ok)
+    assert ctx.svn.exists("https://dist.apache.org/repos/dist/dev/juneau/source/x") is expected
