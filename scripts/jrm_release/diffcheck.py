@@ -15,7 +15,8 @@
 maven-release-plugin makes two commits on the branch: "[maven-release-plugin] prepare release <tag>" (the tagged
 commit: X-SNAPSHOT -> X in every reactor pom, plus the SCM <tag> and the juneau.version property of the example
 microservices) and, as its child, "[maven-release-plugin] prepare for next development iteration" (X ->
-next-SNAPSHOT, the tag back).  Juneau's pom already names the RC tag in <scm><tag> on the branch, so a tag change is
+next-SNAPSHOT, the tag back).  The tag the plugin swaps out and restores is whatever <scm><tag> the branch pom
+held before the release (HEAD, or the tag of the last release, which the plugin left there); a tag change is
 allowed but not required."""
 import re
 from dataclasses import dataclass, field
@@ -122,18 +123,25 @@ def reactor_snapshot_poms(read, version):
     return sorted(out)
 
 
+def scm_tag(pom):
+    """The <scm><tag> of a pom's text, else HEAD (the plugin's default)."""
+    m = re.search(r"<scm>.*?<tag>\s*([^<\s]+)\s*</tag>.*?</scm>", pom or "", re.S)
+    return m.group(1) if m else "HEAD"
+
+
 def check_release(*, version, dev_version, rc_tag, release_diff, release_subject, next_diff, next_subject,
-                  snapshot_poms):
+                  snapshot_poms, old_tag="HEAD"):
     """Both commits against what the plugin should have done.  snapshot_poms: the poms that carry
-    <version>X-SNAPSHOT</version> before the release commit (each must appear in its diff)."""
+    <version>X-SNAPSHOT</version> before the release commit (each must appear in its diff).  old_tag: the root pom's
+    <scm><tag> before the release commit, which the release commit replaces and the next one restores."""
     snap = f"{version}-SNAPSHOT"
-    r_poms, _, problems = check_commit(release_diff, release_subject, RELEASE_SUBJECT, snap, version, "HEAD",
+    r_poms, _, problems = check_commit(release_diff, release_subject, RELEASE_SUBJECT, snap, version, old_tag,
                                             rc_tag)
     missing = sorted(set(snapshot_poms) - r_poms)
     if missing:
         problems.append("poms still at the snapshot version, skipped by the release commit: " + ", ".join(missing))
     n_poms, _, n_problems = check_commit(next_diff, next_subject, NEXT_SUBJECT, version, dev_version, rc_tag,
-                                              "HEAD")
+                                              old_tag)
     problems += [f"[next-iteration commit] {p}" for p in n_problems]
     if n_poms != r_poms:
         problems.append("[next-iteration commit] changes different poms than the release commit: "

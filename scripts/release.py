@@ -25,7 +25,7 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_DIR / "scripts"))
 
 import bootstrap  # noqa: E402
-from jrm_release import emails, inventory, params  # noqa: E402
+from jrm_release import board, emails, inventory, params  # noqa: E402
 from jrm_release.ctx import Ctx  # noqa: E402
 from jrm_release.runfile import RunFile, RunFileError, new_attempt_dir, stamp  # noqa: E402
 
@@ -224,6 +224,7 @@ def build_ctx(args, deps, rf):
     from jrm_release.svn import Svn
     ctx = Ctx(args=args, home=args.home, run=deps.run, runner=None, nexus=None, svn=None, rf=rf,
               pause=getattr(deps.steps, "Pause", None), http_ok=deps.http_ok or _http_ok, http_text=deps.http_text or _http_text, sleep=deps.sleep or time.sleep)
+    ctx.features = board.board_features(deps)
     ctx.runner = Runner(deps.run, dry_run=args.dry_run, secrets=ctx.secrets)
     user = lambda: ctx.cred("credential.apache.availid")  # noqa: E731
     password = lambda: ctx.cred("credential.apache.password", secret=True)  # noqa: E731
@@ -257,9 +258,9 @@ def registry(deps, funcs):
     from jrm_release import rc
     for s in inventory.STEPS:
         if s.name in rc.CHECKS and hasattr(reg, "checks"):   # a bar of checks, which stays when they are all green
-            reg.checks(s.name, s.title, rc.CHECKS[s.name], label=s.label)
+            reg.checks(s.name, s.title, rc.CHECKS[s.name], label=inventory.row_label(s))
         else:
-            reg.step(s.name, s.title, label=s.label)(funcs.get(s.name) or not_implemented(s.name))
+            reg.step(s.name, s.title, label=inventory.row_label(s))(funcs.get(s.name) or not_implemented(s.name))
     return reg
 
 
@@ -293,11 +294,14 @@ def _origin(attempt):
 def _noting_pause(name, fn, paused):
     """fn, remembering in paused the name of the step that raised the toolkit's Pause (the registry does not say)."""
     def wrapped(ctx):
+        ctx.runner.step_id = name
         try:
             return fn(ctx)
         except ctx.pause:
             paused.append(name)
             raise
+        finally:
+            ctx.runner.step_id = None
     return wrapped
 
 
@@ -465,14 +469,25 @@ def run_release(args, deps, path, active):
     version = (active.get("details") or {}).get("version")
     header = ("JRM", f"drop RC{(active.get('details') or {}).get('rc')} of {version}" if args.revert
               else version or "new release")
-    plan = ([(n, t) for n, t, _ in __import__("jrm_release.revert", fromlist=["ROWS"]).ROWS] if args.revert
-            else [(s.name, s.title) for s in inventory.STEPS])
+    feats = board.board_features(deps)
+    extra = {}   # session keywords only a newer toolkit knows; each is sent only when its feature is listed
+    if args.revert:
+        plan = [(n, t) for n, t, _ in __import__("jrm_release.revert", fromlist=["ROWS"]).ROWS]
+    else:
+        plan = [(s.name, inventory.row_label(s)) for s in inventory.STEPS]
+        if "dividers" in feats:
+            run_n, dividers = board.divider_plan(args, rf)
+            extra.update(run=run_n, dividers=dividers)
+        if "history-alias" in feats:
+            alias = board.history_alias(deps)
+            if alias:
+                extra["history_alias"] = alias
     saved = os.environ.get("JUNEAU_TERMINAL_FULL_LOG")
     if external is None:
         os.environ["JUNEAU_TERMINAL_FULL_LOG"] = str(attempt / "full.log")
     try:
         with deps.run.session(TITLE, header=header, bell=True, silence_env="JRM_RELEASE_NO_BELL", mode="release",
-                              project="juneau-release-manager", repo=REPO_DIR, exit=False, plan=plan) as s:
+                              project="juneau-release-manager", repo=REPO_DIR, exit=False, plan=plan, **extra) as s:
             code = _drive(args, deps, ctx, attempt, new)
             if code:
                 raise SystemExit(code)

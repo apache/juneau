@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""RC phase steps (spec 6.3 rows 1-15).  Each step is fn(ctx) -> optional summary str; FUNCS maps name -> fn."""
+"""RC phase steps (inventory.STEPS 1-16).  Each step is fn(ctx) -> optional summary str; FUNCS maps name -> fn."""
 import hashlib
 import json
 import os
@@ -82,22 +82,30 @@ def workspace(ctx):
     d, ws = ctx.d, str(ctx.ws)
     R = ctx.runner.run
     if os.path.isdir(os.path.join(ws, ".git")):
-        R(["git", "-C", ws, "fetch", "--tags", "origin"], title="Fetch", mutating=True)
+        # --progress: git reports progress only to a terminal otherwise.
+        R(["git", "-C", ws, "fetch", "--progress", "--tags", "origin"], title="Fetch", mutating=True, tool="git")
         R(["git", "-C", ws, "checkout", d["branch"]], title="Checkout", mutating=True)
-        R(["git", "-C", ws, "pull", "--ff-only", "origin", d["branch"]], title="Pull", mutating=True)
+        R(["git", "-C", ws, "pull", "--progress", "--ff-only", "origin", d["branch"]], title="Pull", mutating=True, tool="git")
     else:
-        R(["git", "clone", "--branch", d["branch"], inventory.GIT_URL, ws], title="Clone", mutating=True)
-        R(["git", "-C", ws, "fetch", "--tags", "origin"], title="Fetch tags", mutating=True)
-    R(["git", "-C", ws, "config", "user.name", ctx.cred("credential.apache.availid")], title="user.name",
-      mutating=True)
-    R(["git", "-C", ws, "config", "user.email", ctx.cred("credential.apache.email")], title="user.email",
-      mutating=True)
+        # A fresh clone already has every tag.
+        R(["git", "clone", "--progress", "--branch", d["branch"], inventory.GIT_URL, ws], title="Clone", mutating=True,
+          tool="git")
+    # The Apache identity that release:prepare commits and tags with.  Bookkeeping, so no board row.
+    for key, cred in (("user.name", "credential.apache.availid"), ("user.email", "credential.apache.email")):
+        argv = ["git", "-C", ws, "config", key, ctx.cred(cred)]
+        if ctx.runner.gate(" ".join(argv)) and not ctx.runner.quiet(argv, title=key).ok:
+            ctx.fail(f"could not set {key} in {ws}")
     return ctx.runner.skipped_note(mark, f"workspace on {d['branch']}")
 
 
-def _mvn(ctx, title, *args, tty=False, env=None, capture=None):
+def _bar(ctx):
+    """bar="reactor" for a Maven step that runs tests, when the toolkit has the reactor bar (otherwise today's default)."""
+    return "reactor" if "reactor-bar" in getattr(ctx, "features", ()) else None
+
+
+def _mvn(ctx, title, *args, tty=False, env=None, capture=None, bar=None):
     r = ctx.runner.run(["mvn", "-B", *args], title=title, mutating=True, tool="maven", cwd=ctx.ws, tty=tty, env=env,
-                       capture=capture)
+                       capture=capture, bar=bar)
     if not r.ok:
         raise StepError(f"{title} failed (exit {r.code})")
     return r
@@ -106,7 +114,7 @@ def _mvn(ctx, title, *args, tty=False, env=None, capture=None):
 @step
 def build_verify(ctx):
     mark = len(ctx.runner.skipped)
-    _mvn(ctx, "Build verify", "clean", "verify")
+    _mvn(ctx, "Build verify", "clean", "verify", bar=_bar(ctx))
     return ctx.runner.skipped_note(mark, "build verified")
 
 
@@ -144,10 +152,10 @@ def gpg_unlock(ctx):
     if not ctx.dry_run:
         tmp.parent.mkdir(parents=True, exist_ok=True)
         tmp.write_text("prime")
-    r = ctx.runner.run(["gpg", "--batch", "--yes", "--pinentry-mode", "loopback", "--passphrase-fd", "0",
-                        "--local-user", key, "--armor", "--detach-sign", "--output", str(tmp) + ".asc", str(tmp)],
-                       title="Prime gpg-agent", mutating=True, tool="gpg", input=(pw + "\n").encode())
-    if not r.ok:
+    argv = ["gpg", "--batch", "--yes", "--pinentry-mode", "loopback", "--passphrase-fd", "0", "--local-user", key,
+            "--armor", "--detach-sign", "--output", str(tmp) + ".asc", str(tmp)]
+    if ctx.runner.gate("prime gpg-agent") and not ctx.runner.quiet(argv, title="Prime gpg-agent",
+                                                                   input=(pw + "\n").encode()).ok:
         raise StepError("gpg could not sign with that key and passphrase")
     return ctx.runner.skipped_note(mark, "gpg agent primed")
 
@@ -155,7 +163,7 @@ def gpg_unlock(ctx):
 @step
 def deploy_snapshot(ctx):
     mark = len(ctx.runner.skipped)
-    _mvn(ctx, "Deploy snapshot", "deploy", inventory.MVN_CHECKSUMS)
+    _mvn(ctx, "Deploy snapshot", "deploy", inventory.MVN_CHECKSUMS, bar=_bar(ctx))
     return ctx.runner.skipped_note(mark, "snapshot deployed")
 
 
@@ -175,7 +183,7 @@ def release_prepare(ctx):
         cur = details_mod.pom_version(pom.read_text())
         if not (cur or "").endswith("-SNAPSHOT"):
             raise StepError(f"pom version is {cur}; release:prepare needs a -SNAPSHOT version")
-    tags = ctx.runner.run(["git", "-C", str(ctx.ws), "tag", "--list", ctx.rc_tag], title="Tag check", mutating=False)
+    tags = ctx.runner.quiet(["git", "-C", str(ctx.ws), "tag", "--list", ctx.rc_tag], title="Tag check")
     if ctx.rc_tag in tags.out.split():
         raise StepError(f"tag {ctx.rc_tag} already exists; bump rc or run --revert")
     d = ctx.d
@@ -209,7 +217,7 @@ def release_commits(ctx):
     snap = diffcheck.reactor_snapshot_poms(read, ctx.version)
     res = diffcheck.check_release(version=ctx.version, dev_version=ctx.d["developmentVersion"], rc_tag=tag,
                                   release_diff=rel.out, release_subject=subj, next_diff=nxt, next_subject=nsubj,
-                                  snapshot_poms=snap)
+                                  snapshot_poms=snap, old_tag=diffcheck.scm_tag(read("pom.xml")))
     if not commit:
         res.problems.append(f"[next-iteration commit] none found after {tag} on this branch")
     res.diffs = f"## {tag}^..{tag}\n{rel.out}\n## {tag}..{commit or '(none)'}\n{nxt}\n"
@@ -274,7 +282,7 @@ def release_perform(ctx):
     listing = _listing(ctx)
     drop_stale(ctx, listing)
     before = {r["repositoryId"] for r in listing}
-    _mvn(ctx, "Release perform", "release:perform", inventory.MVN_CHECKSUMS, env=git_env(ctx))
+    _mvn(ctx, "Release perform", "release:perform", inventory.MVN_CHECKSUMS, env=git_env(ctx), bar=_bar(ctx))
     if ctx.dry_run:
         ctx.rf.set("nexusRepoId", DRY_REPO)   # a stand-in, so the later rows can print what they would do
         return ctx.runner.skipped_note(mark, "performed (dry run)")
@@ -340,8 +348,10 @@ def dist_stage(ctx):  # NOSONAR python:S3776 - one linear staging sequence; spli
         if missing:
             raise StepError("staging repository lacks: " + ", ".join(missing))
         out.mkdir(parents=True, exist_ok=True)
-        for old, new in want.items():
+        for done, (old, new) in enumerate(want.items(), 1):
             ctx.nexus.download(available[old], out / new)       # explicit names; sha1/md5 never fetched
+            if "count" in getattr(ctx, "features", ()):
+                ctx.run.count(done, len(want))
     line = ".".join(v.split(".")[:2]) + "."
     ops = []
     for kind in ("source", "binaries"):

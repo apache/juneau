@@ -34,6 +34,7 @@ class Runner:
     def __init__(self, run_mod, dry_run=False, secrets=lambda: ()):
         self.run_mod, self.dry_run, self.secrets = run_mod, dry_run, secrets
         self.skipped = []   # what a dry run declined to run, in order; steps report their slice of it
+        self.step_id = None   # the id of the step that is running; commands become its children on the board
 
     def mask(self, text):
         for s in self.secrets():
@@ -68,18 +69,20 @@ class Runner:
         return bool(missing)
 
     def run(self, cmd, *, title, mutating, tool="generic", cwd=None, env=None, input=None, tty=False, capture=None,
-            merge_err=False):
+            merge_err=False, bar=None):
         """Run argv.  capture defaults to read-only commands (their stdout is the answer); pass capture=True for a
         mutating command whose output the caller needs.  merge_err appends stderr to the answer, for tools like
-        `java -version` that print there (the toolkit's plain mode keeps the two apart)."""
+        `java -version` that print there (the toolkit's plain mode keeps the two apart).  bar names the module bar the
+        toolkit draws; None leaves the parser's default."""
         argv = [str(c) for c in cmd]
         if not self.gate(" ".join(argv), mutating) or self._no_dir(argv, cwd):
             return Outcome(True, 0, "")
         child_env = getattr(self.run_mod, "child_env", None)
         if child_env is not None:   # the toolkit's: this process's environment minus juneau-terminal's own variables
             env = {**child_env(), **(env or {})}
+        extra = {"bar": bar} if bar is not None else {}
         r = self.run_mod.cmd(argv, title=title, tool=tool, cwd=cwd, env=env, input=input, tty=tty,
-                             capture=(not mutating) if capture is None else capture)
+                             capture=(not mutating) if capture is None else capture, parent=self.step_id, **extra)
         out = getattr(r, "out", "") or ""
         if merge_err:
             out += getattr(r, "err", "") or ""

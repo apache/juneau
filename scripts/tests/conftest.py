@@ -80,16 +80,16 @@ class FakeRunner:
     """Stands in for juneau_terminal_scripts.run: records run.cmd calls, answers them from scripted rules."""
 
     def __init__(self):
-        self.calls, self.rules, self.said = [], [], []
+        self.calls, self.rules, self.said, self.counts = [], [], [], []
 
     def script(self, *prefix, out="", ok=True, code=None):
         """Answer argvs starting with prefix; code is the exit code when ok is False (default 1)."""
         self.rules.append((prefix, out, ok, code))
 
     def cmd(self, cmd, *, title="", id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,
-            summarize=None, input=None):
+            summarize=None, input=None, parent=None, bar=None, quiet=False):
         rec = dict(argv=[str(c) for c in cmd], title=title, tool=tool, cwd=cwd, env=dict(env or {}), input=input,
-                   tty=tty, capture=capture)
+                   tty=tty, capture=capture, parent=parent, bar=bar, quiet=quiet)
         self.calls.append(rec)
         for prefix, out, ok, code in reversed(self.rules):
             if tuple(rec["argv"][:len(prefix)]) == prefix:
@@ -132,6 +132,9 @@ class FakeRunner:
 
     def say(self, text="", level="info"):
         self.said.append(str(text))
+
+    def count(self, done, total, kind="files"):
+        self.counts.append((done, total))
 
     def argvs(self):
         return [c["argv"] for c in self.calls]
@@ -225,7 +228,7 @@ CREDS = {"credential.apache.availid": "jamesbognar", "credential.apache.email": 
 
 @pytest.fixture
 def make_ctx(home):
-    def make(dry_run=False, state=None, nexus=None, http_ok=None, with_details=True):
+    def make(dry_run=False, state=None, nexus=None, http_ok=None, with_details=True, features=frozenset()):
         fake = FakeRunner()
         runner = Runner(fake, dry_run=dry_run)
         rf = RunFile(home / "runs" / "9.2.1" / "run.json", dry_run=dry_run)
@@ -235,7 +238,7 @@ def make_ctx(home):
             rf.set(k, v)
         ctx = Ctx(args=Namespace(dry_run=dry_run), home=home, run=fake, runner=runner,
                   nexus=nexus or FakeNexus(), svn=Svn(runner, lambda: "jamesbognar", lambda: "s3cr3t-pw"), rf=rf,
-                  pause=PauseExc, http_ok=http_ok or (lambda url: True))
+                  pause=PauseExc, http_ok=http_ok or (lambda url: True), features=frozenset(features))
         ctx.creds.update(CREDS)
         ctx.fake = fake
         return ctx

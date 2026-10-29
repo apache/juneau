@@ -66,6 +66,7 @@ class Ctx:
     secret_source: dict = field(default_factory=dict)   # {secret key: "env" | "keychain" | "gh" | "cache"}; never a value
     pf: dict = field(default_factory=dict)              # preflight scratch: loaded params, details, scratch repo
     preflight_results: Any = None                       # [(group, name, Result)] from the pre-run preflight
+    features: frozenset = frozenset()                   # the toolkit's BOARD_FEATURES; a step uses a feature only when listed
 
     @property
     def dry_run(self) -> bool:

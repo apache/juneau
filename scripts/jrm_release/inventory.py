@@ -32,32 +32,57 @@ Step = namedtuple("Step", "num phase name title label skippable")
 STEPS = [
     Step(1, "rc", "prerequisites", "Prerequisites", "Prerequisites", False),
     Step(2, "rc", "prechecks", "Release checks", "Release checks", False),
-    Step(3, "rc", "compose-propose-email", "Propose email", "Email", False),
-    Step(4, "rc", "workspace", "Workspace", "Git", False),
+    Step(3, "rc", "compose-propose-email", "Propose email", "Proposal email", False),
+    Step(4, "rc", "workspace", "Workspace", "Workspace", False),
     Step(5, "rc", "build-verify", "Build verify", "Maven", False),
     Step(6, "rc", "javadoc-verify", "Javadoc verify", "Maven", True),
     Step(7, "rc", "gpg-unlock", "Unlock GPG", "GPG", False),
     Step(8, "rc", "deploy-snapshot", "Deploy snapshot", "Maven", False),
     Step(9, "rc", "release-prepare", "Release prepare", "Maven", False),
-    Step(10, "rc", "release-diff-review", "Release diff review", "Git", False),
+    Step(10, "rc", "release-diff-review", "Release diff review", "Diff review", False),
     Step(11, "rc", "release-perform", "Release perform", "Maven", False),
     Step(12, "rc", "nexus-close", "Close Nexus repository", "Nexus", False),
     Step(13, "rc", "dist-stage", "Stage on dist/dev", "SVN", False),
     Step(14, "rc", "dist-verify", "Verify dist/dev", "SVN", False),
-    Step(15, "rc", "compose-vote-email", "Vote email", "Email", False),
+    Step(15, "rc", "compose-vote-email", "Vote email", "Vote email", False),
     Step(16, "rc", "vote-gate", "Vote gate", "Vote", False),
     Step(17, "vote", "vote-tally", "Tally vote", "Vote", False),
-    Step(18, "vote", "compose-result-email", "Result email", "Email", False),
+    Step(18, "vote", "compose-result-email", "Result email", "Result email", False),
     Step(19, "promote", "nexus-release", "Release Nexus repository", "Nexus", False),
     Step(20, "promote", "dist-promote", "Promote on dist/release", "SVN", False),
-    Step(21, "promote", "final-tag", "Final tag", "Git", False),
+    Step(21, "promote", "final-tag", "Final tag", "Final tag", False),
     Step(22, "promote", "github-release", "GitHub release", "GitHub", False),
-    Step(23, "promote", "compose-announce-email", "Announce email", "Email", False),
+    Step(23, "promote", "compose-announce-email", "Announce email", "Announce email", False),
     Step(24, "promote", "followup-checklist", "Follow-up checklist", "Manual", False),
     Step(25, "promote", "finalize", "Finalize", "Done", False),
 ]
 # Steps removed from the table, and the step an old run.json's "last" now means (the one before the removed step).
 RETIRED = {"test-workspace-verify": "javadoc-verify"}
+# What each step is called on the board (James-approved); `NN Name` with NN the --start-step number, zero-padded.
+ROW_NAMES = {1: "Prerequisites", 2: "Release checks", 3: "Proposal email", 4: "Workspace", 5: "Build verify",
+             6: "Javadoc", 7: "GPG unlock", 8: "Deploy snapshot", 9: "Release prepare", 10: "Diff review",
+             11: "Release perform", 12: "Nexus close", 13: "Stage dist/dev", 14: "Verify dist/dev", 15: "Vote email",
+             16: "Vote wait (72h)", 17: "Vote tally", 18: "Result email", 19: "Nexus release", 20: "Promote dist",
+             21: "Final tag", 22: "GitHub release", 23: "Announce email", 24: "Follow-up list", 25: "Finalize"}
+
+# Steps where the run exits for the operator (spec 1.3) -> the divider's text.  17 (vote tally), the 23 mirror wait and a
+# failed vote at 18 pause conditionally and appear only when raised.
+PAUSE_DIVIDERS = {"compose-propose-email": "send proposal email", "compose-vote-email": "send vote email",
+                  "vote-gate": "vote closes", "compose-result-email": "send result email",
+                  "compose-announce-email": "send announce email"}
+
+
+def row_label(step):
+    """The one string a step is called on the board, pending and running alike."""
+    return f"{step.num:02d} {ROW_NAMES[step.num]}"
+
+
+def num_of(name):
+    """A step name's number (a retired name maps to the step it was folded into), or None."""
+    name = RETIRED.get(name, name)
+    return next((s.num for s in STEPS if s.name == name), None)
+
+
 NAMES = [s.name for s in STEPS]
 SKIPPABLE = [s.name for s in STEPS if s.skippable]
 PHASES = (("rc", "Release candidate"), ("vote", "Vote"), ("promote", "Promote"))

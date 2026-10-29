@@ -34,10 +34,12 @@ def test_workspace_argv(make_ctx):
     ctx = make_ctx()
     rc.workspace(ctx)
     ws = str(ctx.ws)
-    assert ctx.fake.argvs()[0] == ["git", "clone", "--branch", "juneau-9.2.1-branch",
+    assert ctx.fake.argvs()[0] == ["git", "clone", "--progress", "--branch", "juneau-9.2.1-branch",
                                    "https://gitbox.apache.org/repos/asf/juneau.git", ws]
-    assert ["git", "-C", ws, "fetch", "--tags", "origin"] in ctx.fake.argvs()
-    assert ["git", "-C", ws, "config", "user.email", "jamesbognar@apache.org"] in ctx.fake.argvs()
+    assert ["git", "-C", ws, "fetch", "--progress", "--tags", "origin"] not in ctx.fake.argvs()   # a fresh clone has the tags
+    identity = [c for c in ctx.fake.calls if c["argv"][3:4] == ["config"]]
+    assert [c["argv"][4:] for c in identity] == [["user.name", "jamesbognar"], ["user.email", "jamesbognar@apache.org"]]
+    assert all(c.get("quiet") for c in identity)   # bookkeeping: kept off the board
 
 
 def test_build_verify_and_javadoc_argv(make_ctx):
@@ -148,6 +150,28 @@ def test_release_diff_tag_change_is_optional(make_ctx):
     ctx = _release_ctx(make_ctx, rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")),
                        nxt=_hunk("pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")) + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")))
     assert rc.release_diff_review(ctx).startswith("diff clean")
+
+
+def test_release_diff_restores_the_last_releases_tag(make_ctx):
+    # the plugin left the previous RC's tag in <scm><tag>; the release commit swaps it out and the next one restores it
+    old = "juneau-9.2.0-RC3"
+    poms = {**ROOT_POMS, "pom.xml": f"<module>a</module><version>9.2.1-SNAPSHOT</version><scm><tag>{old}</tag></scm>"}
+    ctx = _release_ctx(make_ctx, poms=poms,
+                       rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+                       + _hunk("pom.xml", f"<tag>{old}</tag>", "<tag>juneau-9.2.1-RC1</tag>", 9),
+                       nxt=_hunk("pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")) + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT"))
+                       + _hunk("pom.xml", "<tag>juneau-9.2.1-RC1</tag>", f"<tag>{old}</tag>", 9))
+    assert rc.release_diff_review(ctx).startswith("diff clean")
+
+
+def test_release_diff_tag_not_restored_is_flagged(make_ctx):
+    poms = {**ROOT_POMS, "pom.xml": "<module>a</module><version>9.2.1-SNAPSHOT</version><scm><tag>juneau-9.2.0-RC3</tag></scm>"}
+    ctx = _release_ctx(make_ctx, poms=poms,
+                       rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+                       + _hunk("pom.xml", "<tag>juneau-9.2.0-RC3</tag>", "<tag>juneau-9.2.1-RC1</tag>", 9))
+    with pytest.raises(StepError):
+        rc.release_diff_review(ctx)
+    assert any("+<tag>HEAD</tag>" in s for s in ctx.fake.said)
 
 
 def test_release_diff_non_pom_file_fails_and_shows_it(make_ctx):
@@ -495,8 +519,8 @@ def test_real_run_build_keeps_its_result(make_ctx):
 
 def test_dry_run_mixed_step_names_every_skipped_command(make_ctx):
     out = rc.workspace(make_ctx(dry_run=True))
-    assert out.startswith("skipped (dry run): would run git clone --branch juneau-9.2.1-branch ")
-    assert "; +2 more" in out
+    assert out.startswith("skipped (dry run): would run git clone --progress --branch juneau-9.2.1-branch ")
+    assert "; +1 more" in out
 
 
 def test_dist_verify_dry_run_does_not_claim_verified(make_ctx):
@@ -544,8 +568,8 @@ def test_registry_runs_both_check_groups_as_labelled_bars():
     from conftest import FakeRunner
     reg = release.registry(release.Deps(run=FakeRunner(), steps=__import__("juneau_terminal_scripts.steps", fromlist=["x"]),
                                         lock=None), release.impl_map())
-    assert reg._labels["prerequisites"] == "Prerequisites"
-    assert reg._labels["prechecks"] == "Release checks"
+    assert reg._labels["prerequisites"] == "01 Prerequisites"
+    assert reg._labels["prechecks"] == "02 Release checks"
     assert len(reg.names) == 25
     assert "test-workspace-verify" not in reg.names
 

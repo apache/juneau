@@ -111,6 +111,16 @@ A board view with one row per step. State lives under the home directory: `runs/
 | 2 | Usage error, no params file or an invalid one, any failed preflight check (including a missing or rejected secret), or the requested action does not fit the active run. |
 | 130 | Cancelled with Ctrl-C. |
 
+## Board
+
+Each step is a row named `NN Name`, with NN the `--start-step` number zero-padded (`05 Build verify`, `16 Vote wait (72h)`); the Setup row is unnumbered. A command a step runs is a child of that step's row, not a row of its own: a step with one command shows that command as the step row.
+
+The steps that pause the run (the four emails, the vote gate, the tally) have a divider after them, such as `send proposal email`. Each divider that is still ahead reads `run N stops here`, counted in plan order: the first is this run's stop (N is the attempt number), the next is run N+1, and so on. The run ends at its divider with exit 0, and `--resume` starts the next run after it. Dividers are drawn passed (`run ended`, no number) once crossed and dim while they are still ahead.
+
+On a toolkit that offers them, the board also uses a count bar on steps that count files or artifacts, a reactor bar on the Maven rows (a module with no tests counts as pass or skip), and Juneau's push history to estimate unit-test progress. JRM reads `run.BOARD_FEATURES` (`dividers`, `history-alias`, `reactor-bar`, `count`) and skips any it lacks, so an older toolkit still runs the release with the plain board.
+
+Push order: Juneau first (the toolkit), then JRM.
+
 ## Gotchas
 
 - Everything from `nexus-release` on is irreversible (the release is public). After that, `--start-step` before it is refused; continue from `dist-promote`.
