@@ -581,11 +581,16 @@ HEARTBEAT_SECONDS = 15.0
 # "run" is a unit that has started but not ended (distinct from PENDING, which has not started)
 # "warn" is a checks unit that would refuse or only warns; "run" is cyan, the board's colour for active work, so it never
 # reads as a warning
-PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": ".", "run": "~", "warn": "!"}
-NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·", "run": "▒", "warn": "!"}
-COLOR_GLYPHS = {"pass": "\x1b[32m█\x1b[0m", "fail": "\x1b[31m█\x1b[0m", "skip": "\x1b[2m█\x1b[0m",
-                "run": "\x1b[36m█\x1b[0m", "warn": "\x1b[33m█\x1b[0m"}
-PENDING = "░"
+PENDING = "□"   # a unit not started yet; the colour table dims it to the gray of the time bar's track
+PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": ".", "run": "~", "warn": "!", "pending": PENDING,
+                "time": ("=", "-"), "time_ok": ("=", "-"), "time_fail": ("=", "-")}
+NO_COLOR_GLYPHS = {"pass": "■", "fail": "F", "skip": "·", "run": "▣", "warn": "!", "pending": PENDING,
+                   "time": ("▬", "─"), "time_ok": ("▬", "─"), "time_fail": ("▬", "─")}
+COLOR_GLYPHS = {"pass": "\x1b[32m■\x1b[0m", "fail": "\x1b[31m■\x1b[0m", "skip": "\x1b[2m■\x1b[0m",
+                "run": "\x1b[36m■\x1b[0m", "warn": "\x1b[33m■\x1b[0m", "pending": f"\x1b[2m{PENDING}\x1b[0m",
+                "time": ("\x1b[36m▬\x1b[0m", "\x1b[2m─\x1b[0m"),
+                "time_ok": ("\x1b[32m▬\x1b[0m", "\x1b[32m─\x1b[0m"),
+                "time_fail": ("\x1b[31m▬\x1b[0m", "\x1b[31m─\x1b[0m")}
 DOT_GLYPHS = {"pass": "•", "fail": "F", "skip": "·"}
 COLOR_DOT_GLYPHS = {"pass": "\x1b[32m•\x1b[0m", "fail": "\x1b[31m✗\x1b[0m", "skip": "\x1b[2m•\x1b[0m"}
 _MARK_COLORS = {"✓": "\x1b[32m✓\x1b[0m", "✗": "\x1b[31m✗\x1b[0m"}
@@ -837,7 +842,7 @@ def unit_bar(cells, total, glyphs):
         v = cells[i] if i < len(cells) else 0
         out.append(glyphs["fail"] if v == UNIT_FAIL else glyphs["run"] if v == UNIT_RUN
                    else glyphs["warn"] if v == UNIT_WARN
-                   else glyphs["pass"] if v == UNIT_PASS else glyphs["skip"] if v == UNIT_SKIP else PENDING)
+                   else glyphs["pass"] if v == UNIT_PASS else glyphs["skip"] if v == UNIT_SKIP else glyphs["pending"])
     return out
 
 
@@ -944,7 +949,7 @@ def setup_text(setup):
 
 
 def setup_cells(setup, glyphs):
-    return [PENDING if setup.boxes[i] is None else glyphs[setup.boxes[i]] for i in setup.ids]
+    return [glyphs["pending"] if setup.boxes[i] is None else glyphs[setup.boxes[i]] for i in setup.ids]
 
 
 class _Row:
@@ -985,6 +990,7 @@ class _Row:
         self.units_dropped = 0  # tests-mode modules that ran no tests, taken out of units_total (see _drop_unit)
         self.progress = None    # live progress text from the tool's own output; shown on the running row only
         self.estimate = None    # the Estimate from history, when there is one (spec 5.1)
+        self.timed = False      # a time bar was drawn while it ran: the finished row keeps it, green or red
         self.shown_total = None # the estimated total last displayed, held steady by damp_total
         self.hidden = set()     # command children that are the step's own row (see Board._demote_row_child)
 
@@ -1887,9 +1893,22 @@ TIME_BAR_CELLS = 20
 
 
 def time_bar(elapsed_s, wall_s, glyphs):
-    """A dim bar of elapsed against history's median wall time (spec 2.3): filled cells use the skip glyph, the rest pending."""
-    filled = min(TIME_BAR_CELLS - 1, int(TIME_BAR_CELLS * elapsed_s / wall_s)) if wall_s else 0
-    return [glyphs["skip"]] * filled + [PENDING] * (TIME_BAR_CELLS - filled)
+    """A line bar of elapsed against history's median wall time (spec 2.3): heavy line up to and including the head cell,
+    light line for the rest.  A line, not blocks, so it never reads as a per-unit bar; it never shows full while running."""
+    fill, rest = glyphs["time"]
+    filled = min(TIME_BAR_CELLS - 1, int(TIME_BAR_CELLS * elapsed_s / wall_s) + 1) if wall_s else 1
+    return [fill] * filled + [rest] * (TIME_BAR_CELLS - filled)
+
+
+def finished_time_bar(row, glyphs):
+    """The line a time-barred row keeps once it ends: full width, green when it succeeded; red when it failed, with the
+    heavy part reaching where it stopped."""
+    if row.status == "fail":
+        fill, rest = glyphs["time_fail"]
+        wall = row.estimate.wall_s if row.estimate is not None else None
+        filled = min(TIME_BAR_CELLS, int(TIME_BAR_CELLS * (row.ms or 0) / 1000 / wall)) if wall else 0
+        return [fill] * filled + [rest] * (TIME_BAR_CELLS - filled)
+    return [glyphs["time_ok"][0]] * TIME_BAR_CELLS
 
 
 def row_text(row, glyphs, now, pending=False):
@@ -1916,14 +1935,17 @@ def row_text(row, glyphs, now, pending=False):
         else:
             cells = [glyphs[b] for b in row.boxes()]
             if pending and row.size:
-                cells += [PENDING] * max(0, row.size - len(row.order))
+                cells += [glyphs["pending"]] * max(0, row.size - len(row.order))
             parts.append(f"{len(row.order)}/{row.size}" if row.size else str(len(row.order)))
     ms = row.ms if row.ms is not None else int((now - row.t0) * 1000)
     elapsed = fmt_elapsed(ms) if ms >= 1000 else ""
     time_based = cells is None and row.running and row.estimate is not None and bool(row.estimate.wall_s) \
         and not row.bar_units and not row.unit_kind
     if time_based:
+        row.timed = True
         cells = time_bar(ms / 1000, row.estimate.wall_s, glyphs)
+    if cells is None and row.timed and not row.running and row.status in ("ok", "warn", "fail"):
+        cells = finished_time_bar(row, glyphs)
     if row.running and row.estimate is not None:
         run, hist = (row.totals[0] if row.totals else 0), row.estimate.tests
         if row.unit_kind == "files" and hist and 0 < run < hist:

@@ -265,8 +265,8 @@ class SetupRowTest(unittest.TestCase):
         for m in ("a", "b"):
             b.apply("unit_start", dict(step="mvn", id=f"mvn/{m}", title=m))
         self.assertEqual(self.bar(r), "~~" + jr.PENDING * 3)
-        self.assertEqual(self.bar(r, jr.NO_COLOR_GLYPHS), "▒▒" + jr.PENDING * 3)
-        self.assertEqual(self.bar(r, jr.COLOR_GLYPHS), "\x1b[36m█\x1b[0m" * 2 + jr.PENDING * 3)
+        self.assertEqual(self.bar(r, jr.NO_COLOR_GLYPHS), "▣▣" + jr.PENDING * 3)
+        self.assertEqual(self.bar(r, jr.COLOR_GLYPHS), "\x1b[36m■\x1b[0m" * 2 + "\x1b[2m□\x1b[0m" * 3)   # unstarted cells are dim
         self.assertNotEqual(jr.COLOR_GLYPHS["run"], jr.COLOR_GLYPHS["warn"])
         b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))

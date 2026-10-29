@@ -132,7 +132,7 @@ class TimeBarTest(unittest.TestCase):
         cells, count, text, elapsed, cut = jr.row_text(b.rows["nx"], jr.PLAIN_GLYPHS, 130.0)
         self.assertIsNotNone(cells)
         self.assertEqual(len(cells), jr.TIME_BAR_CELLS)
-        self.assertEqual(sum(1 for c in cells if c != jr.PENDING), 10)      # 30 s of ~60 s = half of 20 cells
+        self.assertEqual(cells.count("="), 11)      # 30 s of ~60 s = half of 20 cells, plus the head cell
         self.assertIn("/ ~", elapsed)
 
     def test_no_history_means_no_bar(self):
@@ -150,7 +150,38 @@ class TimeBarTest(unittest.TestCase):
         self.assertEqual(len(jr.row_text(b.rows["nx"], jr.PLAIN_GLYPHS, 130.0)[0]), jr.TIME_BAR_CELLS)
 
     def test_the_bar_never_fills_completely_while_running(self):
-        self.assertEqual(jr.time_bar(500, 60, jr.PLAIN_GLYPHS).count(jr.PENDING), 1)
+        self.assertEqual(jr.time_bar(500, 60, jr.PLAIN_GLYPHS).count("-"), 1)
+
+    def _finished(self, status, ms, glyphs=None):
+        b = self._running(60.0)
+        jr.row_text(b.rows["nx"], jr.PLAIN_GLYPHS, 130.0)       # drawn while running: it showed a time bar
+        b.apply("step_end", dict(id="nx", status=status, ms=ms, exit=0, summary=None, totals=None))
+        return jr.row_text(b.rows["nx"], glyphs or jr.PLAIN_GLYPHS, 200.0)[0]
+
+    def test_a_finished_ok_row_keeps_a_full_bar(self):
+        self.assertEqual("".join(self._finished("ok", 30000)), "=" * 20)
+        self.assertEqual(self._finished("ok", 30000, jr.COLOR_GLYPHS), ["\x1b[32m▬\x1b[0m"] * 20)
+
+    def test_a_finished_failed_row_shows_where_it_stopped(self):
+        self.assertEqual("".join(self._finished("fail", 30000)), "=" * 10 + "-" * 10)
+        cells = self._finished("fail", 30000, jr.COLOR_GLYPHS)
+        self.assertEqual(cells[:10], ["\x1b[31m▬\x1b[0m"] * 10)
+        self.assertEqual(cells[10:], ["\x1b[31m─\x1b[0m"] * 10)
+
+    def test_a_row_that_never_showed_a_time_bar_gets_none_when_finished(self):
+        b = self._running(60.0)
+        b.apply("step_end", dict(id="nx", status="ok", ms=30000, exit=0, summary=None, totals=None))
+        self.assertIsNone(jr.row_text(b.rows["nx"], jr.PLAIN_GLYPHS, 200.0)[0])
+
+    def test_line_glyphs_per_palette(self):
+        self.assertEqual("".join(jr.time_bar(24, 60, jr.PLAIN_GLYPHS)), "=========-----------")
+        self.assertEqual("".join(jr.time_bar(24, 60, jr.NO_COLOR_GLYPHS)), "▬▬▬▬▬▬▬▬▬───────────")
+        colored = jr.time_bar(24, 60, jr.COLOR_GLYPHS)
+        self.assertEqual(colored[0], "\x1b[36m▬\x1b[0m")
+        self.assertEqual(colored[8], "\x1b[36m▬\x1b[0m")
+        self.assertEqual(colored[9], "\x1b[2m─\x1b[0m")
+        self.assertEqual(len(colored), jr.TIME_BAR_CELLS)
+        self.assertEqual(jr._vlen("".join(colored)), jr.TIME_BAR_CELLS)
 
 
 if __name__ == "__main__":

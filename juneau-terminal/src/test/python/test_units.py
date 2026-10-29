@@ -19,7 +19,7 @@ from test_parsers import feed
 
 
 class UnitBarTest(unittest.TestCase):
-    GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R"}
+    GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R", "pending": jr.PENDING}
 
     def cells(self, outcomes, total):
         return "".join(jr.unit_bar(bytearray(outcomes), total, self.GL))
@@ -46,7 +46,7 @@ class UnitBarTest(unittest.TestCase):
 
 
 class BoardUnitsTest(unittest.TestCase):
-    GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R"}
+    GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R", "pending": jr.PENDING}
 
     def setUp(self):
         reset_run_state()

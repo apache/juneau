@@ -1256,7 +1256,7 @@ class LiveTest(unittest.TestCase):
         self.push(*start(), mod_start("a"))
         self.push(cls("a"), cls("a", "fail"))
         self.assertEqual(self.screen.text(), "\n".join([
-            (self.spin() + "Tests".ljust(10) + "  ▒░░  0/3").ljust(59 - 4) + "0:01",     # Mod A is in flight
+            (self.spin() + "Tests".ljust(10) + "  ▣□□  0/3").ljust(59 - 4) + "0:01",     # Mod A is in flight
             "    Mod A  •F".ljust(59 - 4) + "0:01",
         ]))
         self.push(("unit_end", {"step": "tests", "id": "tests/a", "status": "fail", "ms": 1000,
@@ -1265,7 +1265,7 @@ class LiveTest(unittest.TestCase):
                                 "totals": None}))
         self.assertEqual(self.screen.text(), "\n".join([
             # no module line at actionable: the row names the failed module; a unit bar keeps its pending cells
-            ("✗ " + "Tests".ljust(10) + "  F░░  1/3  1 failed: Mod A").ljust(59 - 4) + "0:04",
+            ("✗ " + "Tests".ljust(10) + "  F□□  1/3  1 failed: Mod A").ljust(59 - 4) + "0:04",
         ]))
         self.assertFalse(self.screen.clamped)
 
@@ -1419,17 +1419,17 @@ class LiveTest(unittest.TestCase):
         for i in range(84):
             self.push(("unit", {"step": "s", "done": i + 1, "outcome": "pass"}))
         self.assertEqual(len(self.screen.text().splitlines()), 2)             # no stale fragment from earlier draws
-        self.assertEqual(self.screen.text().count("\u2588"), 84)
+        self.assertEqual(self.screen.text().count("\u25a0"), 84)
         self.assertFalse(self.screen.clamped)
         self.push(("step_end", {"id": "s", "status": "ok", "ms": 5000, "exit": None, "summary": None,
                                 "totals": None}))
         lines = self.screen.text().splitlines()                               # the finished row stays in the frame, wrapped
         self.assertEqual((len(lines), self.live.height), (2, 2))
-        self.assertEqual(self.screen.text().count("\u2588"), 84)
+        self.assertEqual(self.screen.text().count("\u25a0"), 84)
         self.live.close()                                                     # close prints it into scrollback
         self.assertEqual(self.live.height, 0)
         self.assertEqual(len(self.screen.text().splitlines()), 2)
-        self.assertEqual(self.screen.text().count("\u2588"), 84)
+        self.assertEqual(self.screen.text().count("\u25a0"), 84)
 
     def test_the_height_cap_holds_with_a_wrapped_bar(self):
         self.push(("step_start", {"id": "s", "n": 1, "title": "Tests", "parent": None}),
@@ -1892,17 +1892,17 @@ class LiveTest(unittest.TestCase):
         lines = self.screen.text().splitlines()
         self.assertTrue(all(len(line) <= 63 for line in lines), lines)
         self.assertNotIn("\u2026", "".join(lines))        # no cell is cut: the bar wraps instead
-        self.assertEqual("".join(lines).count("\u2588"), 80)
+        self.assertEqual("".join(lines).count("\u25a0"), 80)
         self.assertTrue(lines[-1].startswith(" " * 14 + "80/80  7,139 tests, 2 failed") and lines[-1].endswith("1:21"), lines[-1])   # on its own line
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 90000, "exit": 1, "summary": None,
                                 "totals": None}))
         rows = self.screen.text().splitlines()
         self.assertTrue(all(len(row) <= 63 for row in rows), rows)
         self.assertTrue(rows[-1].lstrip().startswith("80/80  7,139 tests, 2 failed") and rows[-1].endswith("1:30"), rows[-1])
-        self.assertTrue(rows[0].startswith("✗ " + "Tests".ljust(10) + "  ██"), rows[0])
+        self.assertTrue(rows[0].startswith("✗ " + "Tests".ljust(10) + "  ■■"), rows[0])
 
     def test_a_row_too_long_even_without_its_bar_is_cut_from_the_right(self):
-        line = jr._fit_row("A very long step label", ["█"] * 5, "5/5  7,139 tests, 2 failed", "0:01", 20)
+        line = jr._fit_row("A very long step label", ["■"] * 5, "5/5  7,139 tests, 2 failed", "0:01", 20)
         self.assertEqual(jr._vlen(line), 20)
         self.assertTrue(line.endswith("…  0:01"), line)
 
@@ -2697,7 +2697,7 @@ class RowStatusTest(RowCase):
         line = live._row(b, b.rows["a"], 59, pending=True)
         self.assertNotIn("\n", line)
         self.assertLessEqual(jr._vlen(line), 59)
-        self.assertIn("█████  5/5  a reason", line)                       # every cell kept
+        self.assertIn("■■■■■  5/5  a reason", line)                       # every cell kept
         self.assertIn("…", line)
 
     def test_failed_modules_reason_first_plus_n(self):
