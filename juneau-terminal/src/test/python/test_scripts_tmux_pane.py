@@ -194,6 +194,32 @@ class TmuxPaneTest(PaneCase):
         self.assertEqual(self.border(self.agent).split("|")[0], "off")
         self.assertEqual(self.tmux("show-options", "-pq", "-t", self.agent, "pane-border-format").strip(), "")
 
+    def test_toolkit_panes_get_a_framed_border_title_and_the_agent_pane_stays_blank(self):
+        proc = self.start("-k", "never", "--pane", "sleep 30", "--pane-title", "x.log", "--pane", "sleep 31")
+        leader = pane_id(proc)
+        self.assertEqual(self.wait_panes(3), 3)
+        time.sleep(1)
+        for p in self.tmux("list-panes", "-s", "-t", "t", "-F", "#{pane_id}").split():
+            fmt = self.tmux("show-options", "-pqv", "-t", p, "pane-border-format").strip()
+            if p == self.agent:
+                self.assertEqual(fmt, "")
+                self.assertEqual(self.tmux("show-options", "-pqv", "-t", p, "@tmux_border_blank").strip(), "1")
+            else:
+                self.assertIn("─┤", fmt)
+                self.assertIn("#{pane_title}", fmt)
+                self.assertIn("├─", fmt)
+                self.assertIn("range=control|8", fmt)
+                self.assertIn("range=control|9", fmt)
+                self.assertNotIn("pane_index", fmt)
+                self.assertEqual(self.tmux("show-options", "-pqv", "-t", p, "@tmux_border_blank").strip(), "")
+        self.sub("cancel", leader)
+        proc.communicate(timeout=30)
+
+    def test_a_pane_format_of_its_own_is_not_overwritten(self):
+        self.tmux("set-option", "-p", "-t", self.agent, "pane-border-format", "mine")
+        code, out = self.run_cmd("true")
+        self.assertEqual(self.tmux("show-options", "-pqv", "-t", self.agent, "pane-border-format").strip(), "mine")
+
     def test_border_line_already_on_is_left_alone(self):
         self.tmux("set-option", "-w", "-t", "t", "pane-border-status", "bottom")
         code, out = self.run_cmd("true")

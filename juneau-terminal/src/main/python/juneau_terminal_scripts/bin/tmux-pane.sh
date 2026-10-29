@@ -52,7 +52,9 @@
 #
 # Border titles: when a leader opens in a window whose `pane-border-status` is off, this turns it on (`top`), saving the
 # window's own prior value in the window option @tmux_border_prev, and gives every non-toolkit pane there (the agent pane) an
-# empty pane-border-format so its border line stays blank.  When the window's last toolkit pane closes (Enter, click, close,
+# empty pane-border-format so its border line stays blank.  Toolkit panes get a per-pane
+# pane-border-format framing the title as `─┤ title ├─` (with the default [z]/[x] mouse controls on the right) unless they set
+# one already; it goes away with the pane.  When the window's last toolkit pane closes (Enter, click, close,
 # cancel, -K) the saved value and the blanks are put back.  Best effort: a failure only warns.  A window whose border line is
 # already on is left alone.  Killing a leader (say from the border's [x]) closes its followers: the run notices within about
 # 2 s, and each follower also closes itself once its leader pane is gone.
@@ -277,6 +279,14 @@ border_setup() {
 		[ -z "$(tmux show-options -pq -t "$p" pane-border-format 2>/dev/null)" ] || continue
 		tmux set-option -p -t "$p" pane-border-format "" \; set-option -p -t "$p" @tmux_border_blank 1 2>/dev/null
 	done < <(tmux list-panes -t "$win" -F '#{pane_id}|#{@tmux_pane}' 2>/dev/null)
+}
+
+# Frames a toolkit pane's border title as `─┤ title ├─` (the title reverse-highlighted while the pane is active), keeping tmux's
+# default right-hand [z]/[x] mouse controls.  A per-pane option, so it goes away with the pane; a pane that already has a
+# pane-border-format of its own keeps it.
+border_frame() {
+	[ -z "$(tmux show-options -pq -t "$1" pane-border-format 2>/dev/null)" ] || return 0
+	tmux set-option -p -t "$1" pane-border-format '─┤#{?pane_active,#[reverse],} #{pane_title} #[default]├─#{?#{mouse},#[align=right]#[range=control|8][#{?window_zoomed_flag,u,z}]#[norange]#[range=control|9][x]#[norange],}' 2>/dev/null
 }
 
 # When no toolkit pane is left in the window ($2 is a pane about to close, left out of the count), puts back the border line
@@ -593,6 +603,7 @@ tmux set-option -p -t "$pane" @tmux_pane 1 \; set-option -p -t "$pane" @tmux_tit
 	set-option -p -t "$pane" @tmux_state running \; set-option -p -t "$pane" @tmux_start "$started" \; \
 	set-option -p -t "$pane" @tmux_reg "$regdir" \; set-option -p -t "$pane" @tmux_agent "$agent" 2>/dev/null
 tmux select-pane -T "$title" -t "$pane" 2>/dev/null
+border_frame "$pane"
 [ -z "$win" ] || { border_setup "$win"; equalize "$win" "$agent"; }
 pgid= cpid= cpidstart=
 write_reg() {
@@ -646,6 +657,7 @@ FSCRIPT
 	fp=$(tmux split-window -v -d -l "$want" -t "$target" -P -F '#{pane_id}' "bash -c $(printf '%q' "$fscript")" 2>/dev/null) || return
 	followers+=("$fp")
 	tmux select-pane -T "${ftitle:-${str:0:40}}" -t "$fp" 2>/dev/null
+	border_frame "$fp"
 	tmux set-option -p -t "$fp" @tmux_pane 1 \; set-option -p -t "$fp" @tmux_state follower \; \
 		set-option -p -t "$fp" @tmux_parent "$pane" \; set-option -p -t "$fp" @tmux_start "$(date +%s)" \; \
 		set-option -p -t "$fp" @tmux_reg "$regdir" 2>/dev/null
