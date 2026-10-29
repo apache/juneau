@@ -128,6 +128,17 @@ class BoardPlanTest(unittest.TestCase):
         self.assertEqual(o.remaining, 195)       # 200 on the 15s step
         self.assertEqual(o.percent, 20)               # 50 / (50 + 200)
 
+    def test_running_step_with_an_estimate_but_no_wall_time_does_not_raise(self):
+        # an aliased estimate (release:perform borrowing a test count) has tests but wall_s None
+        b = jr.Board("actionable", nested=False, clock=self.clock,
+                     estimator=lambda step, tool, sig=None: jr.Estimate(None, None, None, 1, 158577))
+        b.apply("session", dict(title="T", header=[], nested=False))
+        b.apply("plan", dict(ids=["a", "b"]))
+        b.apply(*start("a")); self.clock.advance(5)
+        o = b.overall()
+        self.assertIsNotNone(o)
+        self.assertEqual(o.done, 0)
+
     def test_missing_history_is_a_lower_bound(self):
         o = self.board(hist={"a": 60.0}).overall()
         self.assertTrue(o.lower_bound)

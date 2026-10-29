@@ -1309,7 +1309,7 @@ class Board:
                 _, total, _ = eta_figures(e, r.units_done, r.units_total, r.estimate, **r.eta_inputs())
                 total = r.shown_total = damp_total(r.shown_total, total, e)
                 if total is None and r.estimate is not None:
-                    total = max(r.estimate.wall_s, e)      # overran its history: nothing left to add
+                    total = max(r.estimate.wall_s or 0, e)      # overran its history (or has none, an alias's test count only): nothing left to add
                 steps.append((sid, "running", r.estimate.wall_s if r.estimate else None,
                               (total, e) if total is not None else None))
             elif r.status != "skip":
