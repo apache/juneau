@@ -494,3 +494,45 @@ def test_repo_checks_are_cant_without_details(make_ctx):
     ctx = make_ctx(with_details=False)
     got = run_group(ctx, "repo")
     assert all(r.status == CANT for n, r in got.items() if n != "GPG key in KEYS"), got
+
+
+# ---- gpg-agent cache TTL -------------------------------------------------------------------------------------------------
+
+def agent_options(default=("600", ""), max_=("7200", "")):
+    return (f"default-cache-ttl:24:0:expire cached PINs after N seconds:3:3:N:{default[0]}::{default[1]}\n"
+            f"max-cache-ttl:24:2:set maximum PIN cache lifetime to N seconds:3:3:N:{max_[0]}::{max_[1]}\n")
+
+
+def ttl(make_ctx, monkeypatch, out, which=("gpgconf",)):
+    have(monkeypatch, *which)
+    ctx = make_ctx()
+    ctx.fake.script("gpgconf", "--list-options", out=out)
+    return one(ctx, "gpg-agent cache TTL")
+
+
+def test_agent_ttl_passes_for_configured_large_values(make_ctx, monkeypatch):
+    got = ttl(make_ctx, monkeypatch, agent_options(("600", "7200"), ("7200", "14400")))
+    assert got.status == PASS and "7200" in got.reason and "14400" in got.reason
+
+
+def test_agent_ttl_fails_for_the_defaults(make_ctx, monkeypatch):
+    got = ttl(make_ctx, monkeypatch, agent_options())
+    assert got.status == FAIL
+    assert "default-cache-ttl is 600s (needs >= 1800)" in got.reason and "max-cache-ttl" not in got.reason.split(":")[0]
+    assert "python3 scripts/gpg-agent-ttl.py" in got.reason
+
+
+def test_agent_ttl_fails_for_a_low_max(make_ctx, monkeypatch):
+    got = ttl(make_ctx, monkeypatch, agent_options(("600", "3600"), ("7200", "3600")))
+    assert got.status == FAIL and "max-cache-ttl is 3600s (needs >= 7200)" in got.reason
+    assert "default-cache-ttl is" not in got.reason
+
+
+def test_agent_ttl_is_cant_without_gpgconf_or_with_garbage(make_ctx, monkeypatch):
+    assert ttl(make_ctx, monkeypatch, "", which=()).status == CANT
+    assert ttl(make_ctx, monkeypatch, "nonsense\nmore:garbage\n").status == CANT
+    assert ttl(make_ctx, monkeypatch, agent_options(("x", ""), ("7200", ""))).status == CANT
+
+
+def test_agent_ttl_runs_on_resume():
+    assert "tools" in preflight.RESUME_GROUPS

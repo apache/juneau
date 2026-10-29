@@ -106,12 +106,17 @@ class FakeRunner:
     KEY_FPR = "F" * 24 + "ABCD1234ABCD1234"
     KEYRING = f"sec:u:4096:1:ABCD1234ABCD1234:1500000000:::u:::scESC:::+:::23::0:\nfpr:::::::::{KEY_FPR}:\n"
 
+    AGENT_OPTIONS = ("default-cache-ttl:24:0:expire cached PINs after N seconds:3:3:N:600::7200\n"
+                     "max-cache-ttl:24:2:set maximum PIN cache lifetime to N seconds:3:3:N:7200::14400\n")
+
     def preflight_default(self, argv):
         if argv[:1] == ["git"] and "show" in argv and argv[-1].startswith("FETCH_HEAD:"):
             text = self.TIP_FILES.get(argv[-1])
             return Outcome(text is not None, 0 if text is not None else 128, text or "")
         if argv[:2] == ["gpg", "--list-secret-keys"]:
             return Outcome(True, 0, self.KEYRING)
+        if argv[:2] == ["gpgconf", "--list-options"]:
+            return Outcome(True, 0, self.AGENT_OPTIONS)
         if argv[:3] == ["gh", "api", "user"]:
             return Outcome(True, 0, "HTTP/2.0 200 OK\nX-Oauth-Scopes: repo, gist\n\n{}")
         if argv[:2] == ["svn", "ls"] and any("/dev/juneau/source/juneau-" in a or "/dev/juneau/binaries/juneau-" in a

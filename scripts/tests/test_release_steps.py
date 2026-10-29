@@ -61,6 +61,52 @@ def test_gpg_unlock_passphrase_on_stdin_only(make_ctx):
     assert "s3cr3t-gpg" not in " ".join(call["argv"])
 
 
+def _primes(ctx):
+    return [i for i, c in enumerate(ctx.fake.calls) if c["argv"][:1] == ["gpg"] and "--detach-sign" in c["argv"]]
+
+
+def test_release_perform_reprimes_gpg_before_mvn_with_passphrase_on_stdin(make_ctx):
+    from conftest import FakeNexus
+    nx = FakeNexus()
+    nx.repos_after = [{"repositoryId": "orgapachejuneau-1002", "state": "open", "created": "2026-10-19"}]
+    ctx = make_ctx(nexus=nx)
+    rc.release_perform(ctx)
+    prime, = _primes(ctx)
+    mvn = [i for i, c in enumerate(ctx.fake.calls) if c["argv"][:3] == ["mvn", "-B", "release:perform"]]
+    assert mvn and prime < mvn[0]
+    call = ctx.fake.calls[prime]
+    assert call["input"] == b"s3cr3t-gpg\n" and call["quiet"] is True
+    assert "s3cr3t-gpg" not in " ".join(call["argv"])
+
+
+def test_signing_steps_reprime_gpg(make_ctx):
+    for fn in (rc.deploy_snapshot,):
+        ctx = make_ctx()
+        fn(ctx)
+        assert len(_primes(ctx)) == 1
+
+
+def test_release_prepare_reprimes_gpg(make_ctx):
+    ctx = make_ctx()
+    _write_pom(ctx, "9.2.1-SNAPSHOT")
+    rc.release_prepare(ctx)
+    assert len(_primes(ctx)) == 1
+
+
+def test_reprime_is_skipped_under_dry_run(make_ctx):
+    ctx = make_ctx(dry_run=True)
+    rc.release_perform(ctx)
+    assert _primes(ctx) == []
+
+
+def test_bad_reprime_raises_before_mvn(make_ctx):
+    ctx = make_ctx()
+    ctx.fake.script("gpg", "--batch", ok=False)
+    with pytest.raises(StepError, match="gpg could not sign"):
+        rc.release_perform(ctx)
+    assert not ctx.fake.ran("mvn")
+
+
 def test_deploy_snapshot_argv(make_ctx):
     ctx = make_ctx()
     rc.deploy_snapshot(ctx)
@@ -600,7 +646,7 @@ def test_dry_run_read_only_command_in_a_missing_workspace_is_not_run(make_ctx):
 def test_dry_run_steps_touching_the_workspace_skip_cleanly(make_ctx):
     from jrm_release import promote
     ctx = make_ctx(dry_run=True, state={"rcCommit": "abc"})
-    assert rc.release_prepare(ctx).startswith("skipped (dry run): would run mvn")
+    assert rc.release_prepare(ctx).startswith("skipped (dry run): would run prime gpg-agent; would run mvn")
     promote.final_tag(ctx)
     promote._release_tags(ctx)
     assert not [a for a in ctx.fake.argvs() if "-C" in a and str(ctx.ws) in a]

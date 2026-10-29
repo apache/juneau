@@ -59,7 +59,7 @@ The file is copied to `<home>/runs/<version>/params.yml` as a record (a copy fai
 
 | Group | Checks |
 |---|---|
-| `tools` | each tool and its minimum version (`git`, `mvn`, `java`, `svn`, `svnmucc`, `gpg`, `gh`, `unzip`), PyYAML, Nexus reachable, dist/dev reachable |
+| `tools` | each tool and its minimum version (`git`, `mvn`, `java`, `svn`, `svnmucc`, `gpg`, `gh`, `unzip`), PyYAML, Nexus reachable, dist/dev reachable, gpg-agent cache TTL (`default-cache-ttl` >= 1800 and `max-cache-ttl` >= 7200 from `gpgconf --list-options gpg-agent`, so the passphrase survives from `gpg-unlock` to `release-perform`; `python3 scripts/gpg-agent-ttl.py` fixes a failure) |
 | `params` | the params file loads and validates, `--version` matches it, the details resolve, the `vote:` block (if any) has the right types |
 | `secrets-present` | each secret has a source (env, keychain, `gh`); only the source is reported, never a value |
 | `secrets-valid` | the Apache password is accepted by Nexus (HTTP 401/403 is a failure), the GPG passphrase signs a throwaway blob (passphrase on stdin), the GPG key has not expired, the GitHub token works and has the `repo` scope |

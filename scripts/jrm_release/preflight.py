@@ -56,6 +56,10 @@ TOOLS = {
     "unzip": (None, None, "", "brew install unzip"),
 }
 TOOL_NAMES = tuple(TOOLS)
+# gpg-agent must keep the passphrase from gpg-unlock until release-perform signs, well over the 10 minutes it keeps it by
+# default: default-cache-ttl counts from last use, max-cache-ttl is absolute.
+MIN_DEFAULT_CACHE_TTL = 1800
+MIN_MAX_CACHE_TTL = 7200
 
 
 def parse_version(text):
@@ -277,6 +281,34 @@ def _dist_reachable(ctx):
     if ctx.svn.ls(inventory.DIST_DEV + "/", quiet=True) is None:   # anonymous: no username, no password
         return Result(CANT, f"cannot list {inventory.DIST_DEV} anonymously (check your network or proxy)")
     return _ok(inventory.DIST_DEV)
+
+
+def _agent_ttl(ctx, option):
+    """The effective seconds of a gpg-agent option from `gpgconf --list-options gpg-agent`: the configured value (index 9)
+    if set, else the default (index 7).  Cant when gpgconf is missing or the option cannot be parsed."""
+    if shutil.which("gpgconf") is None:
+        raise Cant("gpgconf is missing")
+    r = ctx.runner.quiet(["gpgconf", "--list-options", "gpg-agent"], title="gpg-agent options")
+    if not r.ok:
+        raise Cant("gpgconf --list-options gpg-agent failed")
+    for line in r.out.splitlines():
+        f = line.split(":")
+        if f[0] == option and len(f) > 9:   # 0-based: f[7] default, f[9] value
+            value = (f[9] or f[7]).strip().lstrip('"')
+            if value.isdigit():
+                return int(value)
+    raise Cant(f"cannot read {option} from gpgconf --list-options gpg-agent")
+
+
+@check("tools", "gpg-agent cache TTL")
+def _gpg_agent_ttl(ctx):
+    default_ttl, max_ttl = _agent_ttl(ctx, "default-cache-ttl"), _agent_ttl(ctx, "max-cache-ttl")
+    low = [f"{n} is {v}s (needs >= {m})" for n, v, m in (("default-cache-ttl", default_ttl, MIN_DEFAULT_CACHE_TTL),
+                                                         ("max-cache-ttl", max_ttl, MIN_MAX_CACHE_TTL)) if v < m]
+    if low:
+        return _fail("; ".join(low) + ": run python3 scripts/gpg-agent-ttl.py (it sets default-cache-ttl "
+                     "and max-cache-ttl in ~/.gnupg/gpg-agent.conf and reloads gpg-agent)")
+    return _ok(f"default-cache-ttl {default_ttl}s, max-cache-ttl {max_ttl}s")
 
 
 # ---- Params --------------------------------------------------------------------------------------------------------------

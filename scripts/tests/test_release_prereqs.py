@@ -21,7 +21,7 @@ ALL = set(prereqs.TOOL_NAMES)
 
 
 def have(monkeypatch, *names):
-    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n if n in names else None)
+    monkeypatch.setattr(preflight.shutil, "which", lambda n: "/usr/bin/" + n if n in (*names, "gpgconf") else None)
 
 
 def test_tool_names_cover_what_the_code_runs():

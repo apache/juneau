@@ -143,9 +143,10 @@ def _javadoc_index(ctx):
     return ctx.ws / "target" / "site" / "apidocs" / "index.html"
 
 
-@step
-def gpg_unlock(ctx):
-    mark = len(ctx.runner.skipped)
+def prime_gpg(ctx):
+    """Cache the passphrase in gpg-agent by signing a throwaway file with loopback pinentry (passphrase on stdin only).
+    Quiet, and a no-op under dry-run.  gpg-agent forgets it after default-cache-ttl (600s idle by default), so every
+    step that signs through the agent without a pinentry (maven-gpg-plugin) calls this first."""
     pw = ctx.cred("credential.gpg.passphrase", secret=True)
     key = ctx.cred("credential.gpg.keyid")
     tmp = ctx.run_dir / "gpg-prime.txt"
@@ -157,12 +158,19 @@ def gpg_unlock(ctx):
     if ctx.runner.gate("prime gpg-agent") and not ctx.runner.quiet(argv, title="Prime gpg-agent",
                                                                    input=(pw + "\n").encode()).ok:
         raise StepError("gpg could not sign with that key and passphrase")
+
+
+@step
+def gpg_unlock(ctx):
+    mark = len(ctx.runner.skipped)
+    prime_gpg(ctx)
     return ctx.runner.skipped_note(mark, "gpg agent primed")
 
 
 @step
 def deploy_snapshot(ctx):
     mark = len(ctx.runner.skipped)
+    prime_gpg(ctx)
     _mvn(ctx, "Deploy snapshot", "deploy", inventory.MVN_CHECKSUMS, bar=_bar(ctx))
     return ctx.runner.skipped_note(mark, "snapshot deployed")
 
@@ -178,6 +186,7 @@ def git_env(ctx):
 @step
 def release_prepare(ctx):
     mark = len(ctx.runner.skipped)
+    prime_gpg(ctx)
     pom = ctx.ws / "pom.xml"
     if pom.exists():
         cur = details_mod.pom_version(pom.read_text())
@@ -282,6 +291,7 @@ def release_perform(ctx):
     listing = _listing(ctx)
     drop_stale(ctx, listing)
     before = {r["repositoryId"] for r in listing}
+    prime_gpg(ctx)   # the cache from gpg-unlock has expired by now; perform signs with no pinentry
     _mvn(ctx, "Release perform", "release:perform", inventory.MVN_CHECKSUMS, env=git_env(ctx), bar=_bar(ctx))
     if ctx.dry_run:
         ctx.rf.set("nexusRepoId", DRY_REPO)   # a stand-in, so the later rows can print what they would do
