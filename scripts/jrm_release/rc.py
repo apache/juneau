@@ -344,6 +344,19 @@ def wanted_files(v):
     return out
 
 
+def _write_sha512(ctx, archive, staged_url):
+    """Write archive.sha512 as `<hex>  <name>` from the downloaded archive.  When Nexus staged one too, it must agree."""
+    digest = hashlib.sha512(archive.read_bytes()).hexdigest()
+    if staged_url:
+        tmp = archive.with_name(archive.name + ".sha512.staged")
+        ctx.nexus.download(staged_url, tmp)
+        staged = _digest_recorded(tmp.read_text())
+        tmp.unlink()
+        if staged != digest:
+            raise StepError(f"{archive.name}: staged .sha512 does not match the archive")
+    archive.with_name(archive.name + ".sha512").write_text(f"{digest}  {archive.name}\n")
+
+
 @step
 def dist_stage(ctx):  # NOSONAR python:S3776 - one linear staging sequence; splitting it would scatter the steps
     mark = len(ctx.runner.skipped)
@@ -354,12 +367,17 @@ def dist_stage(ctx):  # NOSONAR python:S3776 - one linear staging sequence; spli
         ctx.say("dry run: skipping the staging-repository listing and download")
     else:
         available = ctx.nexus.walk(rid)
-        missing = [n for n in want if n not in available]
+        # Each .sha512 is computed here from the downloaded archive, as the old release script did with gpg --print-md:
+        # the Apache parent pom attaches one only for the source-release zip, never for the distrib bin zip.
+        missing = [n for n in want if n not in available and not n.endswith(".sha512")]
         if missing:
             raise StepError("staging repository lacks: " + ", ".join(missing))
         out.mkdir(parents=True, exist_ok=True)
         for done, (old, new) in enumerate(want.items(), 1):
-            ctx.nexus.download(available[old], out / new)       # explicit names; sha1/md5 never fetched
+            if new.endswith(".sha512"):
+                _write_sha512(ctx, out / new[:-len(".sha512")], available.get(old))
+            else:
+                ctx.nexus.download(available[old], out / new)       # explicit names; sha1/md5 never fetched
             if "count" in getattr(ctx, "features", ()):
                 ctx.run.count(done, len(want))
     line = ".".join(v.split(".")[:2]) + "."

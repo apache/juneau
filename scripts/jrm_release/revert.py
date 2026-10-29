@@ -82,10 +82,10 @@ def _plugin_poms(ctx, ws, tag):
             mutating=False).out.split()
     nxt = nxt[0] if nxt else ""
     poms = set()
-    for c in (rel, nxt):
+    for c, which in ((rel, "release commit"), (nxt, "next-iteration commit")):
         if c:
             poms.update(R(["git", "-C", ws, "diff-tree", "--no-commit-id", "--name-only", "-r", "--diff-filter=M", c],
-                          title="Poms changed", mutating=False).out.split())
+                          title=f"Poms changed ({which})", mutating=False).out.split())
     return rel, sorted(poms)
 
 

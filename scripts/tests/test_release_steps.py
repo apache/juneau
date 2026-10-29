@@ -365,6 +365,28 @@ def test_dist_stage_refuses_missing_file(make_ctx):
     assert not ctx.fake.ran("svnmucc")
 
 
+def test_dist_stage_computes_every_sha512_from_its_archive(make_ctx):
+    import hashlib
+    ctx = make_ctx(state={"nexusRepoId": "r-1"})
+    _staged(ctx, missing=["juneau-distrib-9.2.1-bin.zip.sha512"])
+    rc.dist_stage(ctx)
+    out = ctx.run_dir / "dist"
+    for kind in ("src", "bin"):
+        name = f"apache-juneau-9.2.1-{kind}.zip"
+        assert (out / (name + ".sha512")).read_text() == hashlib.sha512(b"data").hexdigest() + f"  {name}\n"
+    assert not list(out.glob("*.staged"))
+    assert ctx.fake.ran("svnmucc")[0].count("put") == 6
+
+
+def test_dist_stage_refuses_a_staged_sha512_that_disagrees(make_ctx):
+    ctx = make_ctx(state={"nexusRepoId": "r-1"})
+    ctx.nexus.download = lambda url, dest: dest.write_bytes(b"0" * 128 if url.endswith(".sha512") else b"data")
+    _staged(ctx)
+    with pytest.raises(StepError, match="staged .sha512 does not match"):
+        rc.dist_stage(ctx)
+    assert not ctx.fake.ran("svnmucc")
+
+
 def _local_dist(ctx, digest_ok=True):
     import hashlib
     out = ctx.run_dir / "dist"

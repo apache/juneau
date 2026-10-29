@@ -10,6 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
+import hashlib
 import os
 import shutil
 import subprocess
@@ -189,7 +190,9 @@ class FakeNexus:
         return dict(self.files)
 
     def download(self, url, dest):
-        Path(dest).write_bytes(b"data")
+        """Every archive is b"data"; a .sha512 holds its digest, as Nexus stages it."""
+        body = b"data"
+        Path(dest).write_bytes(hashlib.sha512(body).hexdigest().encode() if str(url).endswith(".sha512") else body)
 
 
 @pytest.fixture
