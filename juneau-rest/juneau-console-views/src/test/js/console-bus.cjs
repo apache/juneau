@@ -208,6 +208,7 @@ const SCENARIOS = {
 		await P.waitFor(() => P.hasRow('changes', 'c-17'));
 		P.selectRow('changes', 'c-17');
 		await P.waitFor(() => P.fetches(P.isTasksFetch).length > 0);
+		await P.waitFor(() => bus.history().some(h => h.topic === 'redraw:tasks'));
 		await P.settle();
 		out.history = bus.history();
 		return out;
