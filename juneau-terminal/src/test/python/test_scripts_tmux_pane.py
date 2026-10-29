@@ -103,6 +103,114 @@ class TmuxPaneTest(PaneCase):
         self.assertEqual(self.sub("cancel", pid)[0], 0)
         proc.communicate(timeout=30)
 
+    # --- the kept pane's click-to-close button ---
+
+    def click_hit(self, report, *box):
+        """Exit status of the script's click_hit on the bytes after ESC, run under /bin/bash (3.2 on macOS)."""
+        src = subprocess.run(["sed", "-n", "/^# --- kept-pane prompt/,/^# --- end kept-pane prompt/p", str(SCRIPT)],
+                             capture_output=True, text=True, check=True).stdout
+        r = subprocess.run(["/bin/bash", "-c", src + '\nclick_hit "$@"', "x", report, *map(str, box)], capture_output=True, text=True)
+        return r.returncode
+
+    def test_click_hit_accepts_a_left_press_on_the_button_only(self):
+        box = (5, 3, 26)
+        self.assertEqual(self.click_hit("[<0;3;5M", *box), 0)
+        self.assertEqual(self.click_hit("[<0;26;5M", *box), 0)
+        self.assertEqual(self.click_hit("[<0;2;5M", *box), 1)         # left of the button
+        self.assertEqual(self.click_hit("[<0;27;5M", *box), 1)        # right of it
+        self.assertEqual(self.click_hit("[<0;10;4M", *box), 1)        # another row
+        self.assertEqual(self.click_hit("[<0;10;5m", *box), 1)        # release, not press
+        self.assertEqual(self.click_hit("[<2;10;5M", *box), 1)        # right button
+        self.assertEqual(self.click_hit("[<64;10;5M", *box), 1)       # wheel up
+        self.assertEqual(self.click_hit("[<65;10;5M", *box), 1)       # wheel down
+        self.assertEqual(self.click_hit("[A", *box), 1)               # an arrow key
+        self.assertEqual(self.click_hit("[<0;x;5M", *box), 1)
+
+    def test_click_hit_without_a_located_button_accepts_any_left_press(self):
+        self.assertEqual(self.click_hit("[<0;80;40M"), 0)
+        self.assertEqual(self.click_hit("[<0;80;40m"), 1)
+        self.assertEqual(self.click_hit("[<64;80;40M"), 1)
+
+    def test_kept_pane_shows_the_button_and_enables_mouse_reporting(self):
+        code, out = self.sub("-k", "always", "--", "true")
+        self.assertEqual(code, 0)
+        pane = out.split()[1].rstrip(":")
+        time.sleep(1)
+        shown = self.tmux("capture-pane", "-p", "-t", pane)
+        self.assertIn("[exit 0]  [ click here to close ]  (or press Enter)", shown)
+        self.assertEqual(self.tmux("show-options", "-pqv", "-t", pane, "@tmux_state").strip(), "kept (exit 0)")
+        self.assertEqual(self.tmux("display", "-p", "-t", pane, "#{mouse_any_flag}#{mouse_sgr_flag}").strip(), "11")
+        self.sub("close", pane)
+
+    def test_clicking_the_button_closes_the_pane_and_other_clicks_do_not(self):
+        code, out = self.sub("-k", "always", "--", "true")
+        pane = out.split()[1].rstrip(":")
+        time.sleep(1)
+        lines = self.tmux("capture-pane", "-p", "-t", pane).splitlines()
+        row = next(i for i, l in enumerate(lines) if "click here" in l) + 1
+        col = lines[row - 1].index("click here") + 1
+        for report in ("\033[<0;%d;%dM" % (col, row + 1), "\033[<64;%d;%dM" % (col, row), "\033[<0;%d;%dm" % (col, row)):
+            self.tmux("send-keys", "-l", "-t", pane, report)
+        time.sleep(0.5)
+        self.assertEqual(self.panes(), 2)
+        self.tmux("send-keys", "-l", "-t", pane, "\033[<0;%d;%dM" % (col, row))
+        self.assertEqual(self.wait_panes(1), 1)
+
+    def test_read_only_kept_pane_has_no_button(self):
+        code, out = self.sub("-k", "always", "--read-only", "--", "true")
+        pane = out.split()[1].rstrip(":")
+        time.sleep(1)
+        shown = self.tmux("capture-pane", "-p", "-t", pane)
+        self.assertIn("[exit 0] press Enter to close this pane", shown)
+        self.assertNotIn("click here", shown)
+        self.sub("close", pane)
+
+    def test_script_emits_matching_mouse_enable_and_disable_sequences(self):
+        text = SCRIPT.read_text()
+        self.assertIn(r"\033[?1000h\033[?1006h", text)
+        self.assertIn(r"\033[?1006l\033[?1000l", text)
+
+    # --- pane border titles ---
+
+    def border(self, target):
+        return self.tmux("display", "-p", "-t", target, "#{pane-border-status}|#{pane-border-format}").strip()
+
+    def test_border_line_is_titled_while_a_run_is_open_and_restored_after(self):
+        self.assertEqual(self.border(self.agent).split("|")[0], "off")
+        proc = self.start("-k", "never", "-t", "my title", "--pane", "sleep 30", "--pane-title", "x.log", "--pane", "sleep 31")
+        leader = pane_id(proc)
+        self.assertEqual(self.wait_panes(3), 3)
+        time.sleep(1)
+        self.assertEqual(self.border(leader).split("|")[0], "top")
+        titles = self.tmux("list-panes", "-s", "-t", "t", "-F", "#{pane_id}=#{pane_title}")
+        self.assertIn("%s=my title" % leader, titles)
+        self.assertIn("=x.log", titles)
+        self.assertEqual(self.tmux("show-options", "-pqv", "-t", self.agent, "pane-border-format").strip(), "")
+        self.assertEqual(self.tmux("show-options", "-pq", "-t", self.agent, "pane-border-format").strip(), "pane-border-format ''")
+        self.sub("cancel", leader)
+        proc.communicate(timeout=30)
+        self.assertEqual(self.wait_panes(1), 1)
+        time.sleep(1)
+        self.assertEqual(self.border(self.agent).split("|")[0], "off")
+        self.assertEqual(self.tmux("show-options", "-pq", "-t", self.agent, "pane-border-format").strip(), "")
+
+    def test_border_line_already_on_is_left_alone(self):
+        self.tmux("set-option", "-w", "-t", "t", "pane-border-status", "bottom")
+        code, out = self.run_cmd("true")
+        self.assertEqual(code, 0)
+        self.assertEqual(self.border(self.agent).split("|")[0], "bottom")
+        self.assertEqual(self.tmux("show-options", "-wqv", "-t", "t", "@tmux_border_prev").strip(), "")
+
+    def test_killing_the_leader_externally_closes_its_follower(self):
+        proc = self.start("-k", "never", "--pane", "sleep 30", "--pane", "sleep 31")
+        leader = pane_id(proc)
+        self.assertEqual(self.wait_panes(3), 3)
+        time.sleep(1)
+        self.tmux("kill-pane", "-t", leader)
+        self.assertEqual(self.wait_panes(1, timeout=15), 1)
+        proc.communicate(timeout=30)
+        self.assertEqual(self.border(self.agent).split("|")[0], "off")
+
     # --- argument parsing ---
 
     def test_usage_errors_exit_2(self):

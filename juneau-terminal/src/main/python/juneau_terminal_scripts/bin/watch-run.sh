@@ -107,7 +107,7 @@ echo "board: $(printf '%q' "$board")"
 cmdq=$(printf '%q ' "$@")
 leader="JUNEAU_TERMINAL_FULL_LOG=$(printf '%q' "$full") JUNEAU_TERMINAL_BOARD_LOG=$(printf '%q' "$board") JUNEAU_TERMINAL_RESULT=$(printf '%q' "$result") JUNEAU_TERMINAL_CANCEL=\"\$TMUX_PANE_RUN_CANCEL\" ${cmdq% }"
 args=(${passthru[@]+"${passthru[@]}"} --pane "$leader")
-[ $no_tail = 1 ] || args+=(--pane "tail -F $(printf '%q' "$full") | $(tail_filter)")
+[ $no_tail = 1 ] || args+=(--pane-title "$(basename "$full")" --pane "tail -F $(printf '%q' "$full") | $(tail_filter)")
 
 # Clear finished (kept) panes from earlier runs and their followers first; tmux-pane.sh refuses running ones.  A failed
 # cleanup only warns, so it never stops the launch.  --no-close-kept skips it.

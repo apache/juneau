@@ -371,11 +371,12 @@ Outside tmux (`$TMUX` unset) both scripts exit 2; run the command directly there
   `cancel [PANE|TITLE|--all]`, `list`, `close [--kept|PANE]`, `equalize PANE [--closing]`, `copy PANE|TITLE [-n LINES]`
   (the pane's text to the clipboard via `pbcopy`, or to stdout without it) and `zoom PANE|TITLE`; a command named like
   one of them goes after `--`.
+- While a run is open, the window's pane border line is switched on (restored when the last toolkit pane closes) and titles the leader with its `-t` title and each `--pane-title T` follower (watch-run.sh uses the log file's name); other panes in the window get a blank border.
 - The leader's exit code is the script's exit code; 129 means the pane was closed under it, and 2 is a usage error or
   not being inside tmux. `cancel` sends INT, TERM, then KILL, each after `TMUX_PANE_GRACE` seconds (default 10), and
   reaps stragglers by recorded PID and start time. Without `--keep-on-cancel` a cancelled run closes its panes.
 - When a run ends the script prints the last lines of the pane, a list of processes the command left running (with
-  their listening ports), and `exit=N`. Panes are kept per `-k` until Enter in the leader, `-K` minutes, or `close`.
+  their listening ports), and `exit=N`. Panes are kept per `-k` until Enter in the leader, a click on its `[ click here to close ]` button (needs tmux `mouse on`; not shown with `--read-only`), `-K` minutes, or `close`.
   Read the last `exit=` line.
 - `watch-run.sh` closes kept panes from earlier runs before it opens a new one (running panes are untouched; `--no-close-kept`
   leaves them all open), prints

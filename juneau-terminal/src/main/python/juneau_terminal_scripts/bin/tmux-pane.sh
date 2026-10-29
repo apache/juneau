@@ -17,7 +17,7 @@
 # Requires: bash, tmux, ps, pgrep (lsof optional).  Tested on macOS.
 #
 # Usage: tmux-pane.sh [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap] [--keep-on-cancel] [--read-only]
-#                     [--size N%] --pane STRING [[--size N%] --pane STRING ...]
+#                     [--size N%] [--pane-title T] --pane STRING [[--size N%] [--pane-title T] --pane STRING ...]
 #        tmux-pane.sh [opts] -- CMD [ARGS...]          (one leader pane running the command)
 #        tmux-pane.sh cancel [PANE|TITLE|--all]
 #        tmux-pane.sh list
@@ -29,21 +29,33 @@
 #   -d DIR    working directory for the commands (default: the current one)
 #   -n LINES  how many trailing leader-pane lines to print when it ends (default 60)
 #   -t TITLE  leader pane title (default: the command name, or `bash` with --pane)
-#   -k KEEP   when to keep the panes open after the leader ends, until Enter is pressed in the leader:
+#   -k KEEP   when to keep the panes open after the leader ends, until Enter is pressed in the leader
+#             or its `[ click here to close ]` button is clicked (SGR mouse reporting, so tmux `mouse on`):
 #             fail (default) only when it exits non-zero, always, or never
 #   -K MIN    kept panes close themselves after MIN minutes (default: they stay until Enter or `close`)
 #   --reap    when the leader ends (or its pane vanishes), also TERM then KILL any process it left running
 #   --keep-on-cancel
 #             a run stopped by `cancel` is handled per -k like any other (default: the panes close, whatever -k says)
 #   --read-only
-#             ignore keystrokes typed into the panes (`select-pane -d`); `cancel` and `close` still work, but Enter no longer
-#             closes a kept leader, so use `close`
+#             ignore keystrokes typed into the panes (`select-pane -d`); `cancel` and `close` still work, but Enter and the button no
+#             longer close a kept leader (no button is shown), so use `close`
 #   --pane STRING
 #             repeatable; STRING runs via `bash -c` in its own pane.  The first --pane is the leader (the caller blocks
 #             on it and exits with its code); the rest are followers, stacked below it in argument order.  Followers
 #             are not tracked or waited on; they close with the leader.  -- CMD is shorthand for one leader pane.
 #   --size N% applies to the next --pane (a follower only): its height as a percentage of the leader's column when it is
 #             created.  The first follower defaults to 40%; later ones without --size split the follower area evenly.
+#
+#   --pane-title T
+#             applies to the next --pane: the title shown on that pane's border line (default: the leader's -t title, and the
+#             first 40 characters of a follower's command)
+#
+# Border titles: when a leader opens in a window whose `pane-border-status` is off, this turns it on (`top`), saving the
+# window's own prior value in the window option @tmux_border_prev, and gives every non-toolkit pane there (the agent pane) an
+# empty pane-border-format so its border line stays blank.  When the window's last toolkit pane closes (Enter, click, close,
+# cancel, -K) the saved value and the blanks are put back.  Best effort: a failure only warns.  A window whose border line is
+# already on is left alone.  Killing a leader (say from the border's [x]) closes its followers: the run notices within about
+# 2 s, and each follower also closes itself once its leader pane is gone.
 #
 # The panes open to the right without taking focus.  Every pane gets TMUX_PANE_RUN_ID (the leader's pane id) and
 # TMUX_PANE_RUN_CANCEL (the shell command that cancels the run).  When the leader finishes this prints the pane id, the
@@ -247,13 +259,55 @@ equalize() {
 	return 0
 }
 
+# --- pane borders: a titled border line while the window holds toolkit panes ---
+
+# Turns the window's border line on (top) when it is off, remembering the window's own prior setting in @tmux_border_prev, and
+# blanks the border of every pane that is not a toolkit pane (the agent pane, say) with a per-pane empty pane-border-format,
+# tagged @tmux_border_blank.  A window whose border line is already on is left alone.  Best effort.
+border_setup() {
+	local win=$1 cur p
+	if [ -z "$(tmux show-options -wqv -t "$win" @tmux_border_prev 2>/dev/null)" ]; then
+		[ "$(tmux display-message -p -t "$win" '#{pane-border-status}' 2>/dev/null)" = off ] || return 0
+		cur=$(tmux show-options -wqv -t "$win" pane-border-status 2>/dev/null)
+		tmux set-option -w -t "$win" @tmux_border_prev "${cur:-unset}" \; set-option -w -t "$win" pane-border-status top 2>/dev/null ||
+			{ echo "tmux-pane.sh: warning: could not turn on the border line of $win" >&2; return 0; }
+	fi
+	while IFS='|' read -r p cur; do
+		[ -n "$p" ] && [ "$cur" != 1 ] || continue
+		[ -z "$(tmux show-options -pq -t "$p" pane-border-format 2>/dev/null)" ] || continue
+		tmux set-option -p -t "$p" pane-border-format "" \; set-option -p -t "$p" @tmux_border_blank 1 2>/dev/null
+	done < <(tmux list-panes -t "$win" -F '#{pane_id}|#{@tmux_pane}' 2>/dev/null)
+}
+
+# When no toolkit pane is left in the window ($2 is a pane about to close, left out of the count), puts back the border line
+# setting border_setup replaced and drops the per-pane blanks it added.  Best effort: a failure warns and changes nothing else.
+border_restore() {
+	local win=$1 excl=${2:-} prev p left
+	prev=$(tmux show-options -wqv -t "$win" @tmux_border_prev 2>/dev/null)
+	[ -n "$prev" ] || return 0
+	left=$(tmux list-panes -t "$win" -F '#{pane_id}|#{@tmux_pane}' 2>/dev/null | awk -F'|' -v x="$excl" '$2 == "1" && $1 != x' | wc -l | tr -d ' ')
+	[ "$left" = 0 ] || return 0
+	while read -r p; do
+		tmux set-option -pu -t "$p" pane-border-format \; set-option -pu -t "$p" @tmux_border_blank 2>/dev/null
+	done < <(tmux list-panes -t "$win" -F '#{pane_id}|#{@tmux_border_blank}' 2>/dev/null | awk -F'|' '$2 == "1" {print $1}')
+	if [ "$prev" = unset ]; then tmux set-option -wu -t "$win" pane-border-status 2>/dev/null; else tmux set-option -w -t "$win" pane-border-status "$prev" 2>/dev/null; fi ||
+		echo "tmux-pane.sh: warning: could not restore the border line of $win" >&2
+	tmux set-option -wu -t "$win" @tmux_border_prev 2>/dev/null
+	return 0
+}
+
 cmd_equalize() {
 	local target=${1:-} info
 	[ -n "$target" ] || usage
 	info=$(tmux display-message -p -t "$target" '#{window_id}|#{@tmux_agent}' 2>/dev/null) ||
 		{ echo "equalize: $target is not a tmux pane" >&2; return 1; }
 	[ "${info%%|*}" != "" ] || { echo "equalize: $target is not a tmux pane" >&2; return 1; }
-	if [ "${2:-}" = --closing ]; then equalize "${info%%|*}" "${info#*|}" "$target"; else equalize "${info%%|*}" "${info#*|}"; fi
+	if [ "${2:-}" = --closing ]; then
+		equalize "${info%%|*}" "${info#*|}" "$target"
+		border_restore "${info%%|*}" "$target"
+	else
+		equalize "${info%%|*}" "${info#*|}"
+	fi
 }
 
 cmd_close() {
@@ -280,7 +334,9 @@ cmd_close() {
 		tmux kill-pane -t "$p" 2>/dev/null && { closed=$((closed + 1)); echo "closed $p"; }
 	done <<< "$rows"
 	while IFS= read -r w; do
-		[ -n "$w" ] && equalize "${w%%|*}" "${w#*|}"
+		[ -n "$w" ] || continue
+		equalize "${w%%|*}" "${w#*|}"
+		border_restore "${w%%|*}"
 	done < <(printf '%s\n' ${wins[@]+"${wins[@]}"} | sort -u)
 	[ $closed -gt 0 ] || echo "nothing to close"
 }
@@ -336,10 +392,82 @@ case ${1:-} in
 	equalize) shift; cmd_equalize "$@"; exit $? ;;
 esac
 
+# --- kept-pane prompt: a clickable close button (bash 3.2 compatible; copied into the leader script via declare -f) ---
+
+# Turns mouse reporting off and puts the terminal settings back; safe to call more than once.
+kept_restore() {
+	printf '\033[?1006l\033[?1000l'
+	[ -z "${kept_stty:-}" ] || stty "$kept_stty" 2>/dev/null
+	kept_stty=
+}
+
+# Succeeds when $1, the bytes after the ESC of an SGR mouse report (`[<b;x;yM` press, `m` release), is a left-button press.
+# With ROW, C1 and C2 ($2-$4; 1-based, pane-relative) it must also fall on that row, between those columns; without them
+# (the button was not located) a left press anywhere counts.
+click_hit() {
+	local body final b x y
+	case $1 in '[<'*[Mm]) ;; *) return 1 ;; esac
+	body=${1#'[<'}
+	final=${body#"${body%?}"}
+	body=${body%?}
+	[ "$final" = M ] || return 1
+	IFS=';' read -r b x y <<< "$body"
+	[ "$b" = 0 ] || return 1
+	case $x$y in ''|*[!0-9]*) return 1 ;; esac
+	[ -n "${2:-}" ] || return 0
+	[ "$y" -eq "$2" ] && [ "$x" -ge "$3" ] && [ "$x" -le "$4" ]
+}
+
+# Prints PREFIX followed by the close button, then waits for a click on the button, Enter, or (when MINUTES is set) the
+# timeout.  The button's row comes from a cursor-position report taken right after printing it (its columns are known from
+# PREFIX's length); when that fails, or the line would wrap, any left click closes.
+kept_wait() {
+	local prefix=$1 mins=${2:-} btn='[ click here to close ]' hint='  (or press Enter)' row= c1= c2= cols resp ch seq c left deadline=
+	kept_stty=$(stty -g 2>/dev/null)
+	stty -echo -icanon min 1 time 0 2>/dev/null
+	trap kept_restore EXIT
+	trap 'exit 130' HUP INT TERM
+	printf '\033[?1000h\033[?1006h'
+	printf '\n%s%s%s' "$prefix" "$btn" "$hint"
+	cols=$(tput cols 2>/dev/null)
+	if [ "${cols:-0}" -gt $((${#prefix} + ${#btn} + ${#hint})) ] 2>/dev/null; then
+		printf '\033[6n'
+		resp=
+		IFS= read -rs -t 1 -d R resp
+		resp=${resp##*$'\033['}
+		case $resp in
+			[0-9]*\;[0-9]*) row=${resp%%;*}; c1=$((${#prefix} + 1)); c2=$((c1 + ${#btn} - 1)) ;;
+		esac
+	fi
+	printf '\n'
+	[ -z "$mins" ] || deadline=$((SECONDS + mins * 60))
+	while :; do
+		if [ -n "$deadline" ]; then
+			left=$((deadline - SECONDS))
+			[ $left -gt 0 ] || break
+			IFS= read -rsn1 -t $left ch || break
+		else
+			IFS= read -rsn1 ch || break
+		fi
+		if [ -z "$ch" ] || [ "$ch" = $'\r' ]; then break; fi
+		[ "$ch" = $'\033' ] || continue
+		seq=
+		while IFS= read -rsn1 -t 1 c; do
+			seq=$seq$c
+			case $c in M|m) break ;; esac
+			[ ${#seq} -lt 24 ] || break
+		done
+		if click_hit "$seq" "$row" "$c1" "$c2"; then break; fi
+	done
+	kept_restore
+	trap - EXIT
+}
+# --- end kept-pane prompt ---
+
 # --- arguments (getopts has no long options, so the words are parsed by hand) ---
 
 dir=$PWD lines=60 title= keep=fail keepmin= reap=0 keeponcancel=0 readonly=0 pending= cmdmode=0
-panes=() sizes=()
+panes=() sizes=() ptitles=() ptitle=
 
 set_opt() {
 	case $1 in
@@ -357,7 +485,8 @@ while [ $# -gt 0 ]; do
 		--reap) reap=1 ;;
 		--keep-on-cancel) keeponcancel=1 ;;
 		--read-only) readonly=1 ;;
-		--pane) [ $# -ge 2 ] || usage; panes+=("$2"); sizes+=("$pending"); pending=; shift ;;
+		--pane) [ $# -ge 2 ] || usage; panes+=("$2"); sizes+=("$pending"); ptitles+=("$ptitle"); pending= ptitle=; shift ;;
+		--pane-title) [ $# -ge 2 ] || usage; ptitle=$2; shift ;;
 		--size)
 			[ $# -ge 2 ] || usage
 			n=${2%\%}
@@ -378,8 +507,8 @@ if [ $cmdmode = 1 ]; then
 else
 	[ ${#panes[@]} -gt 0 ] && [ $# -eq 0 ] || usage
 fi
-[ -z "$pending" ] || usage
-[ -z "${sizes[0]:-}" ] || usage
+[ -z "$pending" ] && [ -z "$ptitle" ] || usage
+[ -z "${sizes[0]:-}" ] && [ -z "${ptitles[0]:-}" ] || usage
 case $keep in fail|always|never) ;; *) usage ;; esac
 case $keepmin in ''|*[!0-9]*) [ -z "$keepmin" ] || usage ;; esac
 [ -n "${TMUX:-}" ] || { echo "tmux-pane.sh: not inside tmux" >&2; exit 2; }
@@ -405,8 +534,31 @@ env -0 > "$state/env"
 # foreground job under `set -m`, so it is its own process group (and keeps Ctrl-C), and the sh wrapper records its PID
 # before exec'ing it, so the PID is the group id.  `mypane` is read first because the env import overwrites TMUX_PANE.
 # A cancel sets @tmux_cancelled on this pane first, so the message below can say why the pane is there.
-readcmd='read -r'
-[ -z "$keepmin" ] || readcmd="read -r -t $((keepmin * 60))"
+kept_fns=$(declare -f kept_restore click_hit kept_wait)
+if [ $readonly = 1 ]; then
+	# Input is ignored in a read-only pane, so no button and no mouse mode: just print the prompt and wait.
+	readcmd='read -r'
+	[ -z "$keepmin" ] || readcmd="read -r -t $((keepmin * 60))"
+	waitpart=$(cat <<WAIT
+if [ -n "\$cancelled" ]; then
+	printf '\\n[cancelled, exit %s] stopped by tmux-pane.sh cancel; press Enter to close this pane\\n' "\$rc"
+else
+	printf '\\n[exit %s] press Enter to close this pane\\n' "\$rc"
+fi
+$readcmd
+WAIT
+)
+else
+	waitpart=$(cat <<WAIT
+$kept_fns
+if [ -n "\$cancelled" ]; then
+	kept_wait "[cancelled, exit \$rc] stopped by tmux-pane.sh cancel;  " "$keepmin"
+else
+	kept_wait "[exit \$rc]  " "$keepmin"
+fi
+WAIT
+)
+fi
 script=$(cat <<SCRIPT
 mypane=\$TMUX_PANE
 cd $(printf '%q' "$dir") || exit 1
@@ -421,12 +573,7 @@ echo \$rc > $(printf '%q' "$state/exit")
 tmux set-option -p -t "\$mypane" @tmux_state "exit \$rc" 2>/dev/null
 cancelled=\$(tmux show-options -pqv -t "\$mypane" @tmux_cancelled 2>/dev/null)
 tmux wait-for -S $chan
-if [ -n "\$cancelled" ]; then
-	printf '\\n[cancelled, exit %s] stopped by tmux-pane.sh cancel; press Enter to close this pane\\n' "\$rc"
-else
-	printf '\\n[exit %s] press Enter to close this pane\\n' "\$rc"
-fi
-$readcmd
+$waitpart
 for t in \$(tmux list-panes -a -F '#{pane_id} #{@tmux_parent}' | awk -v p="\$mypane" '\$2 == p {print \$1}'); do tmux kill-pane -t \$t; done
 $(printf '%q' "$self") equalize \$mypane --closing
 SCRIPT
@@ -445,7 +592,8 @@ started=$(date +%s)
 tmux set-option -p -t "$pane" @tmux_pane 1 \; set-option -p -t "$pane" @tmux_title "$title" \; \
 	set-option -p -t "$pane" @tmux_state running \; set-option -p -t "$pane" @tmux_start "$started" \; \
 	set-option -p -t "$pane" @tmux_reg "$regdir" \; set-option -p -t "$pane" @tmux_agent "$agent" 2>/dev/null
-[ -z "$win" ] || equalize "$win" "$agent"
+tmux select-pane -T "$title" -t "$pane" 2>/dev/null
+[ -z "$win" ] || { border_setup "$win"; equalize "$win" "$agent"; }
 pgid= cpid= cpidstart=
 write_reg() {
 	{
@@ -465,7 +613,7 @@ allunsized=1
 pane_h() { local h; h=$(tmux display-message -p -t "$1" '#{pane_height}' 2>/dev/null); echo "${h:-0}"; }
 
 add_follower() {
-	local str=$1 size=$2 target=$pane f k lh colh region want th fp fscript i each
+	local str=$1 size=$2 ftitle=$3 target=$pane f k lh colh region want th fp fscript i each
 	local -a live=()
 	lh=$(pane_h "$pane")
 	colh=$lh
@@ -491,11 +639,13 @@ cd $(printf '%q' "$dir") || exit 1
 while IFS= read -r -d '' kv; do export "\$kv" 2>/dev/null; done < $(printf '%q' "$state/env")
 export TMUX_PANE=\$mypane TMUX_PANE_RUN_ID=$(printf '%q' "$pane")
 export TMUX_PANE_RUN_CANCEL=$(printf '%q' "$(printf '%q' "$self") cancel $pane")
+( while tmux display-message -p -t $(printf '%q' "$pane") '#{pane_id}' >/dev/null 2>&1; do sleep 1; done; tmux kill-pane -t "\$mypane" ) &
 exec bash -c $(printf '%q' "$str")
 FSCRIPT
 )
 	fp=$(tmux split-window -v -d -l "$want" -t "$target" -P -F '#{pane_id}' "bash -c $(printf '%q' "$fscript")" 2>/dev/null) || return
 	followers+=("$fp")
+	tmux select-pane -T "${ftitle:-${str:0:40}}" -t "$fp" 2>/dev/null
 	tmux set-option -p -t "$fp" @tmux_pane 1 \; set-option -p -t "$fp" @tmux_state follower \; \
 		set-option -p -t "$fp" @tmux_parent "$pane" \; set-option -p -t "$fp" @tmux_start "$(date +%s)" \; \
 		set-option -p -t "$fp" @tmux_reg "$regdir" 2>/dev/null
@@ -506,7 +656,7 @@ FSCRIPT
 	fi
 }
 
-for ((i = 1; i < ${#panes[@]}; i++)); do add_follower "${panes[i]}" "${sizes[i]}"; done
+for ((i = 1; i < ${#panes[@]}; i++)); do add_follower "${panes[i]}" "${sizes[i]}" "${ptitles[i]}"; done
 
 if [ $readonly = 1 ]; then
 	for p in "$pane" ${followers[@]+"${followers[@]}"}; do tmux select-pane -d -t "$p" 2>/dev/null; done
@@ -516,7 +666,7 @@ fi
 kill_all() {
 	local p
 	for p in "$pane" ${followers[@]+"${followers[@]}"}; do tmux kill-pane -t "$p" 2>/dev/null; done
-	[ -z "$win" ] || equalize "$win" "$agent"
+	[ -z "$win" ] || { equalize "$win" "$agent"; border_restore "$win"; }
 }
 
 # Wait for the pane's signal, but notice the pane disappearing (it would never signal) and sample the process tree.
