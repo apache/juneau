@@ -232,7 +232,10 @@ def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=F
     _base.remember(title)
     if routed() or (summarize is not None and _base.jr() is not None):
         num = (n if n is not None else 1) if parent is not None else _next_n(n)
-        return _routed(cmd, title=title, id=id or _slug(title), n=num, parent=parent, tool=tool, cwd=cwd,
+        id = id or _slug(title)
+        if id == parent:    # a command titled like its step: the same id would end (and draw) the step's own row twice
+            id = f"{id[:60]}-run"
+        return _routed(cmd, title=title, id=id, n=num, parent=parent, tool=tool, cwd=cwd,
                        env=env, capture=capture, tty=tty, summarize=summarize, input=input, label=label,
                        reports=reports, bar=bar, grace=grace)
     if parent is None:

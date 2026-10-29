@@ -896,6 +896,7 @@ class Unit:
         self.box = None         # pass, fail or skip once granted
         self.unit_index = None  # its cell in the row's module bar once counted
         self.started = False    # a unit_start arrived for it (the in-flight signal for the module bar)
+        self.goal = None        # the plugin goal Maven is running for it after its tests (gpg:sign, deploy, ...)
         self.dropped = False    # a tests-mode module that ran no tests: left out of the bar and of its total
 
     @property
@@ -914,6 +915,7 @@ class _Setup:
         self.boxes = {i: None for i in self.ids}    # None while pending, else pass or fail
         self.t0 = t0
         self.ended = False          # every box set, or its owner row ended: the row is permanent (spec 5.4)
+        self.held = False           # nested under its owner step: settled, but printed (and drawn live) only until that row ends
 
     @property
     def total(self):
@@ -1141,8 +1143,18 @@ class Board:
         self.setup.ended = True
         return [("setup",)]
 
+    def setup_nested(self):
+        """True when the Setup row hangs under its owner step: a board of several steps (a plan), where a top-level Setup
+        row would read as a step of its own.  A single-command board has no owner row to nest under."""
+        return len(self.plan or ()) > 1
+
     def _setup_settled(self):
         if self.setup is not None and self.setup.total and self.setup.done == self.setup.total:
+            owner = self.rows.get(self.setup.row)
+            if self.setup_nested() and owner is not None and owner.running:
+                if not self.setup.ended:
+                    self.setup.ended = self.setup.held = True    # the line stays under its row until the row ends
+                return []
             return self._end_setup()
         return []
 
@@ -1535,6 +1547,12 @@ class Board:
                 self._count_unit(r, m, self._tests_outcome(m))
         return []
 
+    def _on_unit_goal(self, f):
+        _, m = self._unit(f)
+        if m is not None:
+            m.goal = f["goal"]
+        return []
+
     @staticmethod
     def _tests_outcome(m):
         """A tests-mode module's outcome so far: fail if any class failed, skip if it had tests and all were skipped
@@ -1611,7 +1629,7 @@ class Board:
             m.box = "fail" if failed else "pass"
             was_failed = self.setup is not None and self.setup.failed
             self._setup_box(r, m, m.box)
-            if self.setup is not None and self.setup.ended and self.setup.failed and not was_failed:
+            if self.setup is not None and self.setup.ended and not self.setup.held and self.setup.failed and not was_failed:
                 blocks = [("setup",)]     # it went permanent green at the pom's start: print it again, red
             else:
                 blocks = self._setup_settled()
@@ -1710,8 +1728,17 @@ class Board:
                     self._fail_file(r, m)   # only a file with a failed test: an interrupted run doesn't name them all
         if r.status == "fail" and self.failed_title is None:
             self.failed_title = r.label
-        blocks = self._end_setup() if self.setup is not None and self.setup.row == r.id else []
-        blocks.append(("row", r))
+        blocks = []
+        if self.setup is not None and self.setup.row == r.id:
+            if self.setup_nested():     # under its row, as the live frame draws it
+                held, self.setup.held = self.setup.held, False
+                blocks = [("row", r)] + ([("setup",)] if held else self._end_setup())
+            else:
+                blocks = self._end_setup()
+        if not blocks:
+            blocks.append(("row", r))
+        elif blocks[0] != ("row", r):
+            blocks.append(("row", r))
         hints = r.status not in ("ok", "skip") or r.held_failure or (r.unit_kind == "checks" and r.warned)
         shown = {line.strip() for line in r.hints} if hints else set()
         for level, text in r.notes:
@@ -1929,8 +1956,11 @@ def row_text(row, glyphs, now, pending=False):
         text = row.reason
     else:
         cut = False
-        text = row.summary if row.summary is not None else fmt_totals(row.totals, row.tests_mode and not row.running,
-                                                                       expected)
+        totals = fmt_totals(row.totals, row.tests_mode and not row.running, expected)
+        # a step's own summary ("staged in repo") goes after the totals its command row reported, not in place of them
+        text = (f"{totals} · {row.summary}" if row.totals and row.totals[0] and row.summary and row.summary != totals
+                else row.summary) \
+            if row.summary is not None else totals
         if row.status == "skip" and text and text.startswith("(") and text.endswith(")"):
             text = text[1:-1]       # "⊘ Install    done by Tests"
         if row.detail:
@@ -2048,7 +2078,7 @@ def setup_parts(board, glyphs, now=0.0, color=False):
     """The Setup row's label column, boxes and text, as setup_line lays them out."""
     setup = board.setup
     state = "running" if not setup.ended else "fail" if setup.failed else "ok"
-    label = f"{icon(state, now, color)} {'Setup'.ljust(board.width())}"
+    label = ("    " if board.setup_nested() else "") + f"{icon(state, now, color)} {'Setup'.ljust(board.width())}"
     failed = board.setup_failed()
     text = (f"{len(failed)} failed: {failed[0]}" + (f" +{len(failed) - 1}" if len(failed) > 1 else "")
             if failed else setup_text(setup))
@@ -2473,13 +2503,16 @@ class LiveRenderer:
         now = self.clock()
         current = {r.id: "    " + _vcut(r.progress, max(1, cols - 4)) for r in running
                    if r.progress and r.unit_kind in ("tests", "files") and not r.units_running}   # no unit line to show
-        setup_running = (board.setup is not None and not board.setup.ended
+        setup_running = (board.setup is not None and (not board.setup.ended or board.setup.held)
                          and any(r.id == board.setup.row for r in running))
         out = []
         for r in running:
-            if setup_running and board.setup.row == r.id:
+            nested = setup_running and board.setup.row == r.id and board.setup_nested()
+            if setup_running and board.setup.row == r.id and not nested:
                 out.append(setup_line(board, self.glyphs, cols, now, self.color))
             out += self._row(board, r, cols, pending=True).split("\n")     # a wrapped unit bar spans several lines
+            if nested:
+                out.append(setup_line(board, self.glyphs, cols, now, self.color))
             if r.id in current:
                 out.append(current[r.id])
             mine = [m for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
@@ -2522,6 +2555,8 @@ class LiveRenderer:
             count = f"\x1b[{31 if 'fail' in m.outcomes[:hidden] else 32}m{text}\x1b[0m" if self.color else text
             cells = cells[hidden:] + [count] if per > len(text) else [count]
         strip = "".join(cells)
+        if m.goal:      # tests are over: what Maven does with the module now, in place of dots that no longer change
+            strip = _vcut(m.goal, per)
         line = prefix + strip + " " * max(2, cols - _vlen(prefix) - _vlen(strip) - len(elapsed)) + elapsed
         return [line if _vlen(line) <= cols else _vcut(line, cols)]     # a terminal too narrow for even one dot
 
@@ -3961,6 +3996,7 @@ class Sinks:
 #   ("units", id, total, kind)           ("unit", id, done, outcome)   bus only (units / unit), never a marker
 #   ("unit_fix", id, index, outcome)     ("series", id, name, sub, value)   bus only (unit_fix / series)
 #   ("unit_start", unit, title, src)     ("unit_dot", unit, outcome)   ("unit_end", unit, status, src)
+#   ("unit_goal", unit, "gpg:sign")      bus only: the plugin goal a module runs after its tests
 #                                        bus only, under the parser's own step: a unit line, never a child step
 #   poll() and finish() return the same tuples; render(line) returns text, not events (see Parser.render)
 # ---------------------------------------------------------------------------------------------------------------------
@@ -4535,6 +4571,8 @@ class MavenParser(Parser):
         if m:
             plugin = re.sub(r"^maven-(.+)-plugin$", r"\1", m.group(1))
             events += self._plugin_header(plugin, m.group(3), m.group(4))
+            if self.phase.get(m.group(4)) in ("tested", "done") and self.packaging.get(m.group(4)) != "pom":
+                events.append(("unit_goal", f"{self.step_id}/{m.group(4)}", f"{plugin}:{m.group(3)}"))
             if plugin in ("surefire", "failsafe"):
                 self.surefire_sub = f"{self.step_id}/{m.group(4)}"
             if plugin in self.EXEC_GOALS and m.group(3) == "exec":
@@ -5534,6 +5572,8 @@ class _Dispatcher:
                 publish("unit_start", step=self.step_id, id=ev[1], title=ev[2], src=ev[3])
             elif kind == "unit_dot":
                 publish("unit_dot", step=self.step_id, id=ev[1], outcome=ev[2])
+            elif kind == "unit_goal":
+                publish("unit_goal", step=self.step_id, id=ev[1], goal=ev[2])
             elif kind == "unit_end":
                 publish("unit_end", step=self.step_id, id=ev[1], status=ev[2], src=ev[3])    # no ms: the board times it
             elif kind == "series":

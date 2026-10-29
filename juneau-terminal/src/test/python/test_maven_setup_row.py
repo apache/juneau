@@ -144,6 +144,30 @@ class SetupRowTest(unittest.TestCase):
         self.assertIn("16 pom modules", lines[0])
         self.assertLessEqual(len(lines), 22)                   # max_lines = rows - 2 still honoured
 
+    def test_setup_nests_under_its_step_on_a_multi_step_board(self):
+        b, _ = self.board()
+        b.apply("plan", dict(ids=["pre", "mvn", "post"], labels={"pre": "Pre", "mvn": "Mvn", "post": "Post"}))
+        lines = live_region_lines(b, rows=24, cols=100)
+        i = next(n for n, l in enumerate(lines) if "Setup" in l)
+        self.assertIn("0/", lines[i - 1])                   # the step's row first
+        self.assertTrue(lines[i].startswith("    "))        # the Setup row indented under it
+        self.assertIn("16 pom modules", lines[i])
+
+    def test_nested_setup_stays_under_its_row_when_poms_finish(self):
+        b, ids = self.board(poms=2, total=5)
+        b.apply("plan", dict(ids=["pre", "mvn"], labels={"pre": "Pre", "mvn": "Mvn"}))
+        for pid in ids:
+            b.apply("unit_start", dict(step="mvn", id=pid, title=pid))
+            b.apply("unit_end", dict(step="mvn", id=pid, status="ok", ms=1))
+        lines = live_region_lines(b, rows=24, cols=100)
+        i = next(n for n, l in enumerate(lines) if "Setup" in l)
+        self.assertIn("0/", lines[i - 1])
+
+    def test_single_command_board_keeps_setup_on_top(self):
+        b, _ = self.board()
+        lines = live_region_lines(b, rows=24, cols=100)
+        self.assertFalse(lines[0].startswith("    "))
+
     def test_region_budget_takes_the_setup_line_off_the_sub_lines(self):
         b, _ = self.board(poms=2, total=40)
         for i in range(30):
@@ -576,3 +600,36 @@ class MavenBoardGoldenTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class UnitGoalTest(unittest.TestCase):
+    def test_sub_row_shows_the_goal_after_tests_finish(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="a"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass", src="sub"))
+        b.apply("unit_goal", dict(step="mvn", id="mvn/a", goal="gpg:sign"))
+        lines = live_region_lines(b)
+        self.assertTrue(any(l.strip().startswith("a") and "gpg:sign" in l for l in lines), lines)
+
+
+class StepSummaryAfterCommandTest(unittest.TestCase):
+    def test_step_summary_follows_the_command_totals_in_one_row(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        out = []
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        r = jr.PlainRenderer(out.append, clock=lambda: 100.0)
+        totals = dict(total=5, fail=0, err=0, skip=0)
+        for kind, f in [("step_start", dict(id="rp", n=11, title="Release perform", parent=None)),
+                        ("step_start", dict(id="rp-run", n=1, title="Release perform", parent="rp")),
+                        ("reactor", dict(step="rp-run", size=2, poms=[], tests=True)),
+                        ("step_end", dict(id="rp-run", status="ok", ms=1000, exit=0, summary=None, totals=totals)),
+                        ("step_end", dict(id="rp", status="ok", ms=1100, exit=0, summary="staged in x", totals=None))]:
+            r.render(b, b.apply(kind, f))
+        rows = [l for l in "".join(out).splitlines() if "Release perform" in l]
+        self.assertEqual(len(rows), 1, rows)
+        self.assertIn("5 tests", rows[0])
+        self.assertIn("staged in x", rows[0])

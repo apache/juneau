@@ -603,6 +603,17 @@ class CmdParentAndLabelTest(MarkerCase):
         got = markers(out.getvalue())
         self.assertEqual(got[1], {"ev": "step", "id": "inner", "n": 1, "title": "Inner", "parent": "outer"})
 
+    def test_cmd_id_defaults_to_a_child_id_distinct_from_its_parent(self):
+        """A title that slugs to the parent's own id (JRM's "Release perform" under step release-perform) must not
+        reuse it: the Board would end the parent's row at the command's end and draw the step twice."""
+        events = []
+        jr.subscribe(lambda kind, f: events.append((kind, f)))
+        with redirect_stdout(io.StringIO()):
+            with run.step("release-perform", "Release perform"):
+                run.cmd([PY, "-c", "pass"], title="Release perform", parent="release-perform")
+        starts = [f["id"] for kind, f in events if kind == "step_start"]
+        self.assertEqual(starts, ["release-perform", "release-perform-run"])
+
     def test_cmd_passes_label_to_the_row(self):
         events = []
         jr.subscribe(lambda kind, f: events.append((kind, f)))

@@ -275,6 +275,18 @@ class MavenParserTest(unittest.TestCase):
         events = parser.on_line("[INFO] Tests run: 13, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.006 s <<< FAILURE! -- in R - Phase 4 API")
         self.assertIn(("class_done", "mvn/mod-a", "fail"), events)
 
+    def test_goal_after_tests_is_reported_for_the_module(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        parser.on_line("[INFO] --- compiler:3.11.0:compile (default-compile) @ mod-a ---")
+        parser.on_line("[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ mod-a ---")
+        ev = parser.on_line("[INFO] --- surefire:3.2.5:test (default-test) @ mod-a ---")
+        self.assertEqual(kinds(ev, "unit_goal"), [])
+        parser.on_line("[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.01 s -- in x.CalcTest")
+        ev = parser.on_line("[INFO] --- gpg:3.1.0:sign (sign-artifacts) @ mod-a ---")
+        self.assertEqual(kinds(ev, "unit_goal"), [("unit_goal", "mvn/mod-a", "gpg:sign")])
+
     def test_a_plain_class_line_still_attributes_to_its_module(self):
         parser = jr.MavenParser()
         parser.step_id = "mvn"

@@ -126,6 +126,8 @@ the rows.
 | `modules` | Plus a sub-row per module that ran tests | `warn`, `error` |
 | `all` | Plus a sub-row for every module | everything |
 
+Two live-view details for Maven. On a board of several steps, the Setup row (pom-only modules) is drawn indented under the step that owns it, below that step's row, and stays there until the step ends; a single-command board keeps it as the top row. Once a module's tests finish, its live sub-row replaces the dots with the plugin goal Maven is running for it (`gpg:sign`, `deploy`, `javadoc:jar`), taken from the `[INFO] --- plugin:version:goal (id) @ module ---` lines, so a module that is packaging or uploading does not look hung.
+
 Failures, prompts, `show` text, `passthrough` output, watchdog prompts and the final `✅`/`❌`/`⚠` line show at
 every level, except under `none`, where nothing is drawn: in a session a watchdog prompt (a tool waiting for input)
 appears only in the full log, and a `run_tool` call with no session still echoes it to stdout. Don't use `none` for

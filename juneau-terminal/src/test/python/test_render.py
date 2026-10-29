@@ -500,7 +500,9 @@ class OverallDisplayTest(unittest.TestCase):
         b.apply("reactor", dict(step="a", size=5, poms=["p0", "p1"], tests=False))
         lines = self.live().region(b, 79, 18)
         self.assertTrue(lines[-1].startswith("▶ Overall"))
-        self.assertEqual(lines[0].split()[1], "Setup")
+        setup = next(i for i, l in enumerate(lines) if "Setup" in l)
+        self.assertGreater(setup, 0)                    # nested under its step's row on a multi-step board
+        self.assertTrue(lines[setup].startswith("    "))
 
     def test_plain_heartbeat_gains_percent_and_remaining(self):
         out = []
