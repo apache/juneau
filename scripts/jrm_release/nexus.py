@@ -93,7 +93,8 @@ class Nexus:
 
     def walk(self, rid, path="org/apache/juneau/"):
         """{file name: url} of every leaf under path in the staging repo (Nexus JSON directory listing)."""
-        base = f"{inventory.NEXUS_URL}/content/repositories/{rid}/{path}"
+        # The REST content path; /content/repositories/... ignores Accept and returns an HTML index.
+        base = f"{inventory.NEXUS_URL}/service/local/repositories/{rid}/content/{path}"
         found = {}
         for e in self._get(base).get("data", []):
             if e.get("leaf"):

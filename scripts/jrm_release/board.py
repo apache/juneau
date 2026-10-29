@@ -54,9 +54,13 @@ def divider_plan(args, rf):
     return run_n, out
 
 
-def history_alias(deps):
-    """Juneau's test history, for the expected test count of the Maven steps that run tests (spec 2.5.3).  Empty when the
+def history_alias(deps, branch):
+    """Juneau's test history, for the expected test count of the Maven steps that run tests (spec 2.5.3).  Only for a
+    release built from `master`: that history records master runs, whose test count differs from a release branch's, so
+    any other branch (or an unknown one) gets {} and the steps use their own release history.  Empty too when the
     toolkit cannot name the key.  The key is Juneau's history directory name for the expanded checkout path."""
+    if branch != "master":
+        return {}
     key = getattr(deps.run, "repo_key", lambda p: None)(details.checkout())
     if not key:
         return {}

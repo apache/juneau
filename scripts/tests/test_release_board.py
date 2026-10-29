@@ -303,7 +303,7 @@ def test_dist_stage_dry_run_downloads_and_counts_nothing(make_ctx):
 
 def test_history_alias_covers_steps_5_8_11_and_uses_the_expanded_checkout():
     deps = SimpleNamespace(run=SimpleNamespace(repo_key=lambda p: "key-of-" + p))
-    alias = board.history_alias(deps)
+    alias = board.history_alias(deps, "master")
     assert set(alias) == {"build-verify", "deploy-snapshot", "release-perform"}
     key, script, step, tool = alias["build-verify"]
     assert (script, step, tool) == ("test", "tests", "maven")
@@ -311,16 +311,31 @@ def test_history_alias_covers_steps_5_8_11_and_uses_the_expanded_checkout():
 
 
 def test_history_alias_is_empty_when_the_toolkit_has_no_key():
-    assert board.history_alias(SimpleNamespace(run=SimpleNamespace(repo_key=lambda p: None))) == {}
-    assert board.history_alias(SimpleNamespace(run=SimpleNamespace())) == {}
+    assert board.history_alias(SimpleNamespace(run=SimpleNamespace(repo_key=lambda p: None)), "master") == {}
+    assert board.history_alias(SimpleNamespace(run=SimpleNamespace()), "master") == {}
+
+
+def test_history_alias_is_empty_off_master():
+    deps = SimpleNamespace(run=SimpleNamespace(repo_key=lambda p: "key"))
+    assert board.history_alias(deps, "juneau-9.2.1-branch") == {}
+    assert board.history_alias(deps, None) == {}
 
 
 def test_history_alias_reaches_the_session_only_with_the_feature(home, monkeypatch):
     stub_key = lambda p: "key"   # noqa: E731
     monkeypatch.setattr(StubRun, "repo_key", staticmethod(stub_key), raising=False)
+    monkeypatch.setattr(release.params, "load", lambda p: SimpleNamespace(version="10.0.0", details={"branch": "master"}))
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers", "history-alias"})
     assert set(kw["history_alias"]) == {"build-verify", "deploy-snapshot", "release-perform"}
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"})
+    assert "history_alias" not in kw
+
+
+def test_history_alias_is_not_sent_for_a_release_branch(home, monkeypatch):
+    monkeypatch.setattr(StubRun, "repo_key", staticmethod(lambda p: "key"), raising=False)
+    monkeypatch.setattr(release.params, "load",
+                        lambda p: SimpleNamespace(version="9.2.1", details={"branch": "juneau-9.2.1-branch"}))
+    kw = recorded_session_kwargs(home, monkeypatch, features={"dividers", "history-alias"})
     assert "history_alias" not in kw
 
 

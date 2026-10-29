@@ -117,7 +117,7 @@ Each step is a row named `NN Name`, with NN the `--start-step` number zero-padde
 
 The steps that pause the run (the four emails, the vote gate, the tally) have a divider after them, such as `send proposal email`. Each divider that is still ahead reads `run N stops here`, counted in plan order: the first is this run's stop (N is the attempt number), the next is run N+1, and so on. The run ends at its divider with exit 0, and `--resume` starts the next run after it. Dividers are drawn passed (`run ended`, no number) once crossed and dim while they are still ahead.
 
-On a toolkit that offers them, the board also uses a count bar on steps that count files or artifacts, a reactor bar on the Maven rows (a module with no tests counts as pass or skip), and Juneau's push history to estimate unit-test progress. JRM reads `run.BOARD_FEATURES` (`dividers`, `history-alias`, `reactor-bar`, `count`) and skips any it lacks, so an older toolkit still runs the release with the plain board.
+On a toolkit that offers them, the board also uses a count bar on steps that count files or artifacts, a reactor bar on the Maven rows (a module with no tests counts as pass or skip), and, for a release built from `master`, Juneau's push history to estimate unit-test progress (a release branch uses its own history). JRM reads `run.BOARD_FEATURES` (`dividers`, `history-alias`, `reactor-bar`, `count`) and skips any it lacks, so an older toolkit still runs the release with the plain board.
 
 Push order: Juneau first (the toolkit), then JRM.
 

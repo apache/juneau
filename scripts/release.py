@@ -25,7 +25,7 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_DIR / "scripts"))
 
 import bootstrap  # noqa: E402
-from jrm_release import board, emails, inventory, params  # noqa: E402
+from jrm_release import board, details, emails, inventory, params  # noqa: E402
 from jrm_release.ctx import Ctx  # noqa: E402
 from jrm_release.runfile import RunFile, RunFileError, new_attempt_dir, stamp  # noqa: E402
 
@@ -449,6 +449,18 @@ def _external_full_log(attempt, *, scratch=False):
     return target
 
 
+def _release_branch(args, ctx, active, new):
+    """The branch the release is built from: the active run's, else the params file's (defaulted like preflight does);
+    None when it cannot be read (the board then skips the master-only history alias)."""
+    if not new:
+        return (active.get("details") or {}).get("branch")
+    try:
+        loaded = params.load(args.params)
+        return loaded.details["branch"] or details.branch_default(ctx, loaded.version)
+    except Exception:   # noqa: BLE001 - preflight reports a bad params file; the board just goes without the alias
+        return None
+
+
 def run_release(args, deps, path, active):
     """Attempt dir, ctx, session; returns the exit code."""
     new = not (args.resume or args.revert or (args.start_step and active))
@@ -479,7 +491,7 @@ def run_release(args, deps, path, active):
             run_n, dividers = board.divider_plan(args, rf)
             extra.update(run=run_n, dividers=dividers)
         if "history-alias" in feats:
-            alias = board.history_alias(deps)
+            alias = board.history_alias(deps, _release_branch(args, ctx, active, new))
             if alias:
                 extra["history_alias"] = alias
     saved = os.environ.get("JUNEAU_TERMINAL_FULL_LOG")

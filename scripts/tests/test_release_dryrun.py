@@ -78,3 +78,15 @@ def test_nexus_post_is_gated_by_dry_run(make_ctx):
     Nexus(live.runner, lambda: ("u", "p"), opener=http).promote("r-1")
     assert [r[0] for r in http.requests] == ["POST"]
     assert http.requests[0][3]["Authorization"].startswith("Basic ")
+
+
+def test_nexus_walk_lists_through_the_rest_content_path(make_ctx):
+    from conftest import FakeHttp
+    from jrm_release.nexus import Nexus
+    root = "/service/local/repositories/r-1/content/org/apache/juneau/"
+    http = FakeHttp({
+        ("GET", root): (200, b'{"data": [{"text": "juneau", "leaf": false}]}'),
+        ("GET", root + "juneau/"): (200, b'{"data": [{"text": "a.zip", "leaf": true, "resourceURI": "u/a.zip"}]}'),
+    })
+    assert Nexus(make_ctx().runner, lambda: ("u", "p"), opener=http).walk("r-1") == {"a.zip": "u/a.zip"}
+    assert all("/service/local/repositories/r-1/content/" in r[1] for r in http.requests)
