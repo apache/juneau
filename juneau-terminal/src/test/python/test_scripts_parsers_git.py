@@ -163,12 +163,13 @@ class DetectGitTest(unittest.TestCase):
         self.assertTrue(parsers.known("git"))
         self.assertEqual(parsers.load("git").name, "git")   # a re-bind reloads the module, so not the same class object
 
-    def test_an_explicit_generic_tool_is_upgraded_for_git_only(self):
+    def test_an_explicit_tool_is_used_as_given(self):
         self.assertEqual(run._parser_for(jr, ["git", "clone", "u", "w"], None), "git")
-        self.assertEqual(run._parser_for(jr, ["git", "clone", "u", "w"], "generic"), "git")
+        self.assertEqual(run._parser_for(jr, ["git", "clone", "u", "w"], "generic"), "generic")
         self.assertEqual(run._parser_for(jr, ["git", "push"], "generic"), "generic")
         self.assertEqual(run._parser_for(jr, ["mvn", "verify"], "generic"), "generic")
         self.assertEqual(run._parser_for(jr, ["git", "clone", "u", "w"], "npm"), "npm")
+        self.assertEqual(run._parser_for(jr, ["git", "clone", "u", "w"], "git"), "git")
 
 
 class CarriageReturnRunTest(unittest.TestCase):

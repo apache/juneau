@@ -314,7 +314,7 @@ class BoardTest(unittest.TestCase):
              ("step_start", {"id": "verify.1", "n": 1, "title": "git status", "parent": "verify"}),
              ("step_end", {"id": "verify.1", "status": "ok", "ms": 10, "exit": None, "summary": None,
                            "totals": None}))
-        self.assertEqual(b.rows["verify"].boxes(), ["pass"])        # a generic command is one box
+        self.assertEqual(b.rows["verify"].boxes(), [])        # a step's only command is the step itself: no box until a second one starts
         events = maven_events("verify.2")
         events[0] = ("step_start", {"id": "verify.2", "n": 2, "title": "mvn -B clean verify", "parent": "verify"})
         blocks += feed(b, *events, ("quiet", {"step": "verify.2", "seconds": 20}))
@@ -2822,12 +2822,24 @@ class OverflowTest(PendingCase):
         feed(b, *start(size=4), *[mod_start(n) for n in "abcd"], *[cls(n) for n in "abcd"])
         return b
 
-    def test_a_short_pane_keeps_the_last_rows_of_the_region_and_merges_none(self):
+    def test_a_short_pane_keeps_the_running_rows_and_elides_the_pending_tail(self):
         full = self.live().region(self.busy(), 79)
         self.assertEqual(len(full), 11)                     # the row, four module lines, six pending rows
+        running, pending = full[:5], full[5:]
         for rows in range(1, 12):
             with self.subTest(rows=rows):
-                self.assertEqual(self.live().region(self.busy(), 79, rows), full[-rows:])
+                got = self.live().region(self.busy(), 79, rows)
+                self.assertLessEqual(len(got), rows)
+                if rows <= len(running):                    # not even the running rows fit: the last of them
+                    self.assertEqual(got, running[-rows:])
+                    continue
+                room = rows - len(running)
+                self.assertEqual(got[:len(running)], running)
+                if room >= len(pending):
+                    self.assertEqual(got, full)
+                else:                                       # the pending tail gives way to "... N more steps"
+                    self.assertEqual(got[len(running):-1], pending[:room - 1])
+                    self.assertEqual(got[-1], f"... {len(pending) - room + 1} more steps")
 
     def test_rows_run_on_two_running_rows_stay_under_their_own_row(self):
         b = self.planned([("one", "One"), ("two", "Two")])

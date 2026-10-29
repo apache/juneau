@@ -543,7 +543,12 @@ class MavenParserTest(unittest.TestCase):
                                (["-D", "a=b", "-f", "mod-b/pom.xml", "test-compile"], False),
                                (["test"], True), (["install"], True), (["surefire:test"], True),
                                (["clean", "install"], True), (["compile", "test"], True), ([], True), (["-pl", "foo"], True),
-                               (["-DskipTests", "install"], False)):
+                               (["-DskipTests", "install"], False),
+                               (["javadoc:aggregate"], False), (["clean", "javadoc:aggregate"], False),
+                               (["release:prepare"], True), (["release:perform"], True),
+                               (["failsafe:integration-test"], True),
+                               (["org.apache.maven.plugins:maven-javadoc-plugin:3.5.0:aggregate"], False),
+                               (["org.apache.maven.plugins:maven-surefire-plugin:test"], True)):
             with self.subTest(args=args):
                 parser = jr.MavenParser()
                 parser.prepare(["mvn", *args], None, "/nonexistent")
@@ -1587,6 +1592,25 @@ class ParserContractDefaultsTest(unittest.TestCase):
                 self.assertIs(p.rewrites_log, False)
                 self.assertEqual(p.poll(), [])
                 self.assertEqual(p.render("x"), "x")
+
+
+class ReactorBarParserTest(unittest.TestCase):
+    def test_reactor_mode_sets_keep_and_excludes_pom_packaging_from_the_first_size(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "pom.xml").write_text("<project><artifactId>root</artifactId><packaging>pom</packaging>"
+                                          "<modules><module>a</module></modules></project>")
+            (root / "a").mkdir()
+            (root / "a" / "pom.xml").write_text("<project><artifactId>a</artifactId><packaging>jar</packaging></project>")
+            parser = jr.MavenParser()
+            parser.bar = "reactor"
+            parser.prepare(["mvn", "verify"], None, str(root))
+            first = parser._reactor(parser._first_size())
+            self.assertEqual(first[1], 1)                 # the jar only, not the pom
+            self.assertEqual(first[-1], True)             # keep
+            plain = jr.MavenParser()
+            plain.prepare(["mvn", "verify"], None, str(root))
+            self.assertEqual(len(plain._reactor(plain._first_size())), 4)     # no keep field
 
 
 if __name__ == "__main__":

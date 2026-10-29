@@ -538,6 +538,87 @@ class TmuxPaneTest(PaneCase):
         self.assertEqual(r.returncode, 5)
         self.assertIn("warning: could not resize", r.stderr)
 
+    # --- copy / zoom / --read-only ---
+
+    def _shim(self, body):
+        """Puts a PATH shim directory in front; returns it."""
+        shim = Path(self.env["TMPDIR"]) / "shim"
+        shim.mkdir(exist_ok=True)
+        (shim / body[0]).write_text(body[1])
+        (shim / body[0]).chmod(0o755)
+        self.env["PATH"] = "%s:%s" % (shim, self.env["PATH"])
+        return shim
+
+    def _kept_pane(self, title="cp"):
+        proc = self.start("-k", "always", "-t", title, "--", "bash", "-c", "echo l1; echo l2; echo l3")
+        pid = pane_id(proc)
+        deadline = time.time() + 10
+        while "l3" not in self.tmux("capture-pane", "-p", "-t", pid) and time.time() < deadline:
+            time.sleep(0.1)
+        return proc, pid
+
+    def test_copy_pipes_the_scrollback_to_pbcopy_and_n_limits_it(self):
+        out = self.tmp / "clip.txt"
+        self._shim(("pbcopy", "#!/bin/bash\ncat > %s\n" % out))
+        proc, pid = self._kept_pane()
+        code, msg = self.sub("copy", "cp")
+        self.assertEqual(code, 0)
+        self.assertIn("l1", out.read_text())
+        self.assertIn("lines copied", msg)
+        code, msg = self.sub("copy", pid, "-n", "4")
+        self.assertEqual(code, 0)
+        self.assertNotIn("l1", out.read_text())
+        self.assertIn("l3", out.read_text())
+        self.sub("close", pid)
+        proc.communicate(timeout=30)
+
+    def test_copy_without_pbcopy_prints_the_text(self):
+        proc, pid = self._kept_pane()
+        shim = Path(self.env["TMPDIR"]) / "nopb"
+        shim.mkdir()
+        for tool in ("tmux", "bash", "env", "wc", "tr", "awk", "sort", "grep", "sed", "ps", "pgrep", "cat", "date", "mkdir", "rm", "mktemp", "basename", "dirname"):
+            found = shutil.which(tool)
+            if found:
+                (shim / tool).symlink_to(found)
+        self.env["PATH"] = str(shim)
+        code, msg = self.sub("copy", pid)
+        self.assertEqual(code, 0)
+        self.assertIn("l2", msg)
+        self.assertIn("no pbcopy", msg)
+        self.sub("close", pid)
+        proc.communicate(timeout=30)
+
+    def test_copy_and_zoom_on_an_unknown_pane_fail(self):
+        self.assertEqual(self.sub("copy", "nope")[0], 1)
+        self.assertEqual(self.sub("zoom", "nope")[0], 1)
+
+    def test_zoom_toggles_the_pane_zoom(self):
+        proc, pid = self._kept_pane()
+        flag = lambda: self.tmux("display-message", "-p", "-t", pid, "#{window_zoomed_flag}").strip()
+        self.assertEqual(flag(), "0")
+        self.assertEqual(self.sub("zoom", "cp")[0], 0)
+        self.assertEqual(flag(), "1")
+        self.assertEqual(self.sub("zoom", pid)[0], 0)
+        self.assertEqual(flag(), "0")
+        self.sub("close", pid)
+        proc.communicate(timeout=30)
+
+    def test_read_only_disables_input_on_the_leader_and_cancel_still_works(self):
+        proc = self.start("-k", "never", "--read-only", "-t", "ro", "--", "sleep", "60")
+        pid = pane_id(proc)
+        time.sleep(1.5)
+        self.assertEqual(self.tmux("display-message", "-p", "-t", pid, "#{pane_input_off}").strip(), "1")
+        self.assertEqual(self.sub("cancel", "ro")[0], 0)
+        proc.communicate(timeout=30)
+
+    def test_input_is_enabled_by_default(self):
+        proc = self.start("-k", "never", "-t", "rw", "--", "sleep", "60")
+        pid = pane_id(proc)
+        time.sleep(1.5)
+        self.assertEqual(self.tmux("display-message", "-p", "-t", pid, "#{pane_input_off}").strip(), "0")
+        self.assertEqual(self.sub("cancel", "rw")[0], 0)
+        proc.communicate(timeout=30)
+
     # --- list ---
 
     @slow_tmux

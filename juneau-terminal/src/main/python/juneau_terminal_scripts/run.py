@@ -40,8 +40,12 @@ PROTOCOL_ENV = ("TERMINAL_MARKERS", "TERMINAL_ARTIFACTS")
 GATE_CODES = MappingProxyType({0: "pass", 2: "fail", 3: "skip"})
 _ROW_STATUS = {"pass": "ok", "skip": "skip"}   # a gate status as a row status; anything else is "fail"
 
+# What this toolkit's board supports; callers (JRM's release.py) pass a newer keyword, bar value or call only when its name is here.
+BOARD_FEATURES = frozenset({"count", "dividers", "history-alias", "reactor-bar"})
+
 _n = 0              # the session's step counter: the last step number handed out
 _session = None     # the open Session, if any
+_open_steps = []    # ids of the open top-level steps, innermost last (what count() draws on)
 
 
 def _next_n(n=None, count=1):
@@ -184,7 +188,21 @@ def step(id, title, *, n=None, parent=None, label=None):  # NOSONAR python:S5806
         return
     num = (n if n is not None else 1) if parent is not None else _next_n(n)
     with jr.step(id, num, title, parent=parent, label=label) as s:
-        yield s
+        _open_steps.append(id)
+        try:
+            yield s
+        finally:
+            _open_steps.pop()
+
+
+def count(done, total, kind="files"):
+    """Show done/total as a count bar on the open step's row (bus only: no marker, nothing in a plain run).  Reuses the
+    units/unit events the Maven and pytest parsers send."""
+    jr = _base.jr()
+    if jr is None or not _open_steps:
+        return
+    jr.publish("units", step=_open_steps[-1], total=total, kind=kind)
+    jr.publish("unit", step=_open_steps[-1], done=done, outcome="pass")
 
 
 def _slug(title):
@@ -245,15 +263,10 @@ def _plain(cmd, *, cwd, env, capture, input=None):
 
 
 def _parser_for(jr, cmd, tool):
-    """The parser for a routed run: tool if given, else the one detected from cmd; a name juneau_terminal can't resolve
-    (an older juneau_terminal, or no such parser) is the generic one.  A clone, fetch or pull gets the git parser even
-    under the default tool="generic" of a caller that names a tool for every command."""
-    if tool is None or tool == "generic":
-        detected = parsers.detect(cmd, is_pytest=getattr(jr, "_is_pytest_command", None))
-        if tool is None:
-            tool = detected or "generic"
-        elif detected == "git":
-            tool = detected
+    """The parser for a routed run: tool if given (used as is), else the one detected from cmd; a name juneau_terminal
+    can't resolve (an older juneau_terminal, or no such parser) is the generic one."""
+    if tool is None:
+        tool = parsers.detect(cmd, is_pytest=getattr(jr, "_is_pytest_command", None)) or "generic"
     if isinstance(tool, str):
         known = getattr(jr, "known_parser", None)
         if not (known(tool) if known is not None else tool in jr.PARSERS):
@@ -428,18 +441,34 @@ class Session:
         self.commit = None
         self.code = None
 
-    def plan(self, ids):
+    def plan(self, ids, run=None, dividers=()):
         """Declare (or replace) the planned top-level steps, in order, for the Overall figure.  Each entry is a step
-        id, or (id, label): a labelled step draws as a dim pending row until it starts.  Does nothing in a plain
-        run."""
+        id, or (id, label): a labelled step draws as a dim pending row until it starts.  run is this run's number and
+        dividers are (after, text, state) entries, state one of passed / stops / later, drawn after step `after`
+        (a run that pauses there).  Does nothing in a plain run."""
         entries = [e if isinstance(e, str) else tuple(e) for e in ids]
         ids = [e if isinstance(e, str) else e[0] for e in entries]
         # validated here even in a plain run (where jr is None) so a bad plan fails the same way everywhere
         if len(set(ids)) != len(ids):
             raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
+        for d in dividers:
+            if d[0] not in ids:
+                raise ValueError(f"divider after an unknown step: {d[0]}")
+            if d[2] not in ("passed", "stops", "later"):
+                raise ValueError(f"divider state must be passed, stops or later: {d[2]}")
         jr = _base.jr()
         if jr is not None:
-            jr.plan(entries)
+            jr.plan(entries, run=run, dividers=dividers)
+
+    def divider_state(self, after, state):
+        """Change the divider after step `after` to passed / stops / later.  Does nothing in a plain run."""
+        jr = _base.jr()
+        if jr is not None:
+            jr.divider(after, state)
+
+    def count(self, done, total, kind="files"):
+        """run.count(done, total, kind): a count bar on the open step's row."""
+        count(done, total, kind)
 
     def fail(self, msg, *, hint=None):
         """Print msg verbatim (level error), then the hint lines, and end the session as failed.  msg is required
@@ -520,17 +549,25 @@ def _n_base():
         return 0
 
 
+def repo_key(repo="."):
+    """The history directory name juneau_terminal uses for repo (basename-sha1), or None in a plain run.  JRM aliases
+    Juneau's push history through it."""
+    jr = _base.jr()
+    return jr.repo_key(repo) if jr is not None else None
+
+
 @contextlib.contextmanager
 def session(title, *, header=(), lines=(), bell=False, sound=False, silence_env=(), mode=None, project=None, repo=".",
-            exit=True, plan=None, history_key=None):
+            exit=True, plan=None, history_key=None, run=None, dividers=(), history_alias=None):
     """
     One script run: the run marker, the console view when requested, a SIGTERM handler, and on every path the summary,
     exactly one done marker, the bell and the sound.  ok exits 0, s.fail(msg)/s.require() 1, Ctrl-C or SIGTERM 130, any
     other exception 1 (reported as "❌ ERROR: <Type>: <msg>").  With exit=True it raises SystemExit(code) at the end;
     with exit=False the code is left in s.code.  plan is the list of top-level step ids for the Overall figure; the run's
     history is recorded for repo (JUNEAU_TERMINAL_HISTORY=0 turns it off).  history_key names that history instead of
-    the repo's, so separate clones can share one; JUNEAU_TERMINAL_HISTORY_KEY is the fallback.  lines are header lines under
-    the title (juneau_terminal.session).
+    the repo's, so separate clones can share one; JUNEAU_TERMINAL_HISTORY_KEY is the fallback.  run is this run's number
+    and dividers are (after, text, state) pause entries for the plan (Session.plan); history_alias is {step: (key, script, step, tool)},
+    another history to read the expected test count from (read-only; juneau_terminal.make_estimator).  lines are header lines under the title (juneau_terminal.session).
     """
     global _session, _n
     if _session is not None:
@@ -538,6 +575,7 @@ def session(title, *, header=(), lines=(), bell=False, sound=False, silence_env=
     import juneau_terminal_scripts
     juneau_terminal_scripts.check_bootstrap()
     keyed = {} if history_key is None else {"history_key": history_key}
+    alias = {} if history_alias is None else {"history_alias": dict(history_alias)}
     started = time.monotonic()
     nested = _nested_env()
     saved = {k: os.environ.get(k) for k in (ACTIVE_ENV, SESSION_ENV)}
@@ -556,9 +594,9 @@ def session(title, *, header=(), lines=(), bell=False, sound=False, silence_env=
                 jr.run(mode, project, git.current_branch(repo) or "HEAD", git.short_head(repo))
             if console_requested():
                 opened_view = not jr.session_open() if hasattr(jr, "session_open") else False
-                jr.session(title, header, lines=tuple(lines), repo=repo, **keyed)
+                jr.session(title, header, lines=tuple(lines), repo=repo, **keyed, **alias)
             if plan is not None:
-                s.plan(plan)
+                s.plan(plan, run=run, dividers=dividers)
             yield s
         except _SessionFailed:
             status, code = "fail", 1

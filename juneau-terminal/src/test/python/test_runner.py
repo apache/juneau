@@ -1483,7 +1483,7 @@ class BarOptionTest(unittest.TestCase):
     def test_the_built_in_parsers_name_their_bar_units(self):
         self.assertEqual(jr.Parser.BARS, ())
         self.assertIsNone(jr.Parser.bar)
-        self.assertEqual(jr.MavenParser.BARS, ("modules",))
+        self.assertEqual(jr.MavenParser.BARS, ("modules", "reactor"))
         self.assertEqual((jr.PytestParser.BARS, jr.PlaywrightParser.BARS), (("files", "tests"), ("files", "tests")))
         for name in ("gradle", "npm", "generic"):
             self.assertEqual(jr.PARSERS[name].BARS, (), name)
@@ -1503,7 +1503,7 @@ class BarOptionTest(unittest.TestCase):
     def test_the_message_names_the_parser_and_what_it_allows(self):
         with self.assertRaises(ValueError) as caught:
             self.go("maven", "files")
-        self.assertEqual(str(caught.exception), "bar='files' is not supported by the maven parser (allowed: modules)")
+        self.assertEqual(str(caught.exception), "bar='files' is not supported by the maven parser (allowed: modules, reactor)")
         with self.assertRaises(ValueError) as caught:
             self.go("generic", "tests")
         self.assertEqual(str(caught.exception), "bar='tests' is not supported by the generic parser (allowed: none)")

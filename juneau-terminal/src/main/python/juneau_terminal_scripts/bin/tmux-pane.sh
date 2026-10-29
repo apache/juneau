@@ -16,13 +16,15 @@
 # log tail, use watch-run.sh, which wraps this.
 # Requires: bash, tmux, ps, pgrep (lsof optional).  Tested on macOS.
 #
-# Usage: tmux-pane.sh [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap] [--keep-on-cancel]
+# Usage: tmux-pane.sh [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap] [--keep-on-cancel] [--read-only]
 #                     [--size N%] --pane STRING [[--size N%] --pane STRING ...]
 #        tmux-pane.sh [opts] -- CMD [ARGS...]          (one leader pane running the command)
 #        tmux-pane.sh cancel [PANE|TITLE|--all]
 #        tmux-pane.sh list
 #        tmux-pane.sh close [--kept|PANE]
 #        tmux-pane.sh equalize PANE [--closing]
+#        tmux-pane.sh copy PANE|TITLE [-n LINES]
+#        tmux-pane.sh zoom PANE|TITLE
 #
 #   -d DIR    working directory for the commands (default: the current one)
 #   -n LINES  how many trailing leader-pane lines to print when it ends (default 60)
@@ -33,6 +35,9 @@
 #   --reap    when the leader ends (or its pane vanishes), also TERM then KILL any process it left running
 #   --keep-on-cancel
 #             a run stopped by `cancel` is handled per -k like any other (default: the panes close, whatever -k says)
+#   --read-only
+#             ignore keystrokes typed into the panes (`select-pane -d`); `cancel` and `close` still work, but Enter no longer
+#             closes a kept leader, so use `close`
 #   --pane STRING
 #             repeatable; STRING runs via `bash -c` in its own pane.  The first --pane is the leader (the caller blocks
 #             on it and exits with its code); the rest are followers, stacked below it in argument order.  Followers
@@ -55,8 +60,10 @@
 # `list` shows this script's panes (id, title, state running|kept|exit N|follower, age); `close` closes finished ones,
 # with their followers.  The window's columns (the pane the script was started from, plus each leader with its followers
 # stacked below) are kept at equal widths: re-sized when a leader opens and when its panes close (best effort, a failed
-# resize only warns).  `equalize PANE` does that by hand for PANE's window; `--closing` leaves PANE itself out.  `cancel`,
-# `list`, `close` and `equalize` are reserved first words, so give a command that is named that after `--`.
+# resize only warns).  `equalize PANE` does that by hand for PANE's window; `--closing` leaves PANE itself out.  `copy PANE|TITLE [-n LINES]`
+# puts the pane's text (all its scrollback, or the last LINES lines) on the macOS clipboard via pbcopy, or on stdout when
+# there is no pbcopy; `zoom PANE|TITLE` toggles the pane's zoom.  `cancel`, `list`, `close`, `equalize`, `copy` and `zoom`
+# are reserved first words, so give a command that is named that after `--`.
 #
 # Edit this file atomically (write a temp file, then mv it over): a running bash reads the script as it goes.
 set -uo pipefail
@@ -278,7 +285,51 @@ cmd_close() {
 	[ $closed -gt 0 ] || echo "nothing to close"
 }
 
+# Resolves a pane id or title ($1) to a pane id on stdout through the registered runs and the @tmux_title option; fails if none.
+resolve_pane() {
+	local t=$1 p one ttl
+	if [ "${t#%}" != "$t" ] && tmux display-message -p -t "$t" '#{pane_id}' 2>/dev/null; then return 0; fi
+	while IFS='|' read -r one p _ _ _ ttl; do
+		[ "$p" = "$t" ] || [ "$ttl" = "$t" ] && { echo "$p"; return 0; }
+	done < <(pane_rows)
+	return 1
+}
+
+cmd_copy() {
+	local target= n= p text count
+	while [ $# -gt 0 ]; do
+		case $1 in
+			-n) [ $# -ge 2 ] || usage; n=$2; shift ;;
+			-n?*) n=${1:2} ;;
+			*) [ -z "$target" ] || usage; target=$1 ;;
+		esac
+		shift
+	done
+	[ -n "$target" ] || usage
+	case $n in ''|*[!0-9]*) [ -z "$n" ] || usage ;; esac
+	p=$(resolve_pane "$target") || { echo "copy: no pane matches '$target'" >&2; return 1; }
+	text=$(tmux capture-pane -p -J -t "$p" -S - 2>/dev/null) || { echo "copy: could not capture $p" >&2; return 1; }
+	[ -z "$n" ] || text=$(printf '%s\n' "$text" | tail -n "$n")
+	count=$(printf '%s\n' "$text" | wc -l | tr -d ' ')
+	if command -v pbcopy >/dev/null 2>&1; then
+		printf '%s\n' "$text" | pbcopy
+		echo "copy: $count lines copied from $p" >&2
+	else
+		printf '%s\n' "$text"
+		echo "copy: no pbcopy; $count lines from $p printed above" >&2
+	fi
+}
+
+cmd_zoom() {
+	local p
+	[ $# -eq 1 ] || usage
+	p=$(resolve_pane "$1") || { echo "zoom: no pane matches '$1'" >&2; return 1; }
+	tmux resize-pane -Z -t "$p"
+}
+
 case ${1:-} in
+	copy) shift; cmd_copy "$@"; exit $? ;;
+	zoom) shift; cmd_zoom "$@"; exit $? ;;
 	cancel) shift; cmd_cancel "$@"; exit $? ;;
 	list) cmd_list; exit $? ;;
 	close) shift; cmd_close "$@"; exit $? ;;
@@ -287,7 +338,7 @@ esac
 
 # --- arguments (getopts has no long options, so the words are parsed by hand) ---
 
-dir=$PWD lines=60 title= keep=fail keepmin= reap=0 keeponcancel=0 pending= cmdmode=0
+dir=$PWD lines=60 title= keep=fail keepmin= reap=0 keeponcancel=0 readonly=0 pending= cmdmode=0
 panes=() sizes=()
 
 set_opt() {
@@ -305,6 +356,7 @@ while [ $# -gt 0 ]; do
 		--) shift; cmdmode=1; break ;;
 		--reap) reap=1 ;;
 		--keep-on-cancel) keeponcancel=1 ;;
+		--read-only) readonly=1 ;;
 		--pane) [ $# -ge 2 ] || usage; panes+=("$2"); sizes+=("$pending"); pending=; shift ;;
 		--size)
 			[ $# -ge 2 ] || usage
@@ -455,6 +507,10 @@ FSCRIPT
 }
 
 for ((i = 1; i < ${#panes[@]}; i++)); do add_follower "${panes[i]}" "${sizes[i]}"; done
+
+if [ $readonly = 1 ]; then
+	for p in "$pane" ${followers[@]+"${followers[@]}"}; do tmux select-pane -d -t "$p" 2>/dev/null; done
+fi
 
 # Closes the leader and every follower (a missing pane is fine).
 kill_all() {

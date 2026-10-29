@@ -628,6 +628,10 @@ def fmt_elapsed(ms):
 Estimate = collections.namedtuple("Estimate", "wall_s units rate runs tests kinds subs", defaults=(None, None, None))
 
 
+DIVIDER_STATES = ("passed", "stops", "later")
+Divider = collections.namedtuple("Divider", "after text state", defaults=("later",))
+
+
 def _median(xs):
     xs = sorted(xs)
     mid = len(xs) // 2
@@ -970,6 +974,7 @@ class _Row:
         self.poms = set()       # the Setup poms: built before the reactor's first real module
         self.tail = set()       # poms built after a real module: on neither the Setup row nor the bar
         self.tests_mode = False
+        self.keep_units = False  # reactor bar mode: a tests-mode module with no tests keeps its cell
         self.quiet = 0          # seconds the tool has been silent, from the watchdog
         self.units_total = 0    # announced unit count (tests, files...) for the unit bar
         self.units_done = 0
@@ -979,6 +984,7 @@ class _Row:
         self.progress = None    # live progress text from the tool's own output; shown on the running row only
         self.estimate = None    # the Estimate from history, when there is one (spec 5.1)
         self.shown_total = None # the estimated total last displayed, held steady by damp_total
+        self.hidden = set()     # command children that are the step's own row (see Board._demote_row_child)
 
     @property
     def running(self):
@@ -986,13 +992,14 @@ class _Row:
 
     @property
     def unbarred(self):
-        """Modules that never get a cell in the module bar: the Setup poms and the trailing ones."""
-        return self.poms | self.tail
+        """Modules that never get a cell in the module bar: the Setup poms and the trailing ones, and a step's only
+        command (it is the step's own row)."""
+        return self.poms | self.tail | self.hidden
 
     @property
     def bar_units(self):
         """Whether any unit takes part in the module bar (file and script units never do)."""
-        return any(m.src in BAR_SRCS for m in self.units.values())
+        return any(m.src in BAR_SRCS and m.id not in self.hidden for m in self.units.values())
 
     @property
     def units_running(self):
@@ -1090,6 +1097,8 @@ class Board:
         self.setup = None           # the run's one Setup row (pom modules), owned by the first Maven row that has poms
         self.plan = None            # the planned top-level step ids, in order (spec 6), or None
         self.plan_labels = {}       # planned step id -> label, for the ones that draw a pending row
+        self.run_n = None           # this run's number, from the plan event (JRM's release.py), or None
+        self.dividers = []          # Divider entries: a pause (the run ends) drawn after its step
         self.handed_back = {}       # a handoff child's step id -> its status (JUNEAU_TERMINAL_HANDBACK): counted, never drawn
         self.parent_pending = _parent_pending() if nested else []     # a parent session's pending rows, (id, label)
         self.parent_overall = _parent_overall() if nested else None   # a parent session's Overall inputs (OVERALL_ENV)
@@ -1224,8 +1233,43 @@ class Board:
     def _on_plan(self, f):
         self.plan = list(f["ids"])
         self.plan_labels = dict(f.get("labels") or {})
+        self.run_n = f.get("run")
+        self.dividers = [Divider(*d) for d in f.get("dividers") or ()]
         self.plan_estimates = {}
         return []
+
+    def _on_divider(self, f):
+        self.dividers = [d._replace(state=f["state"]) if d.after == f["after"] else d for d in self.dividers]
+        return []
+
+    def _move_stops(self, step_id, text):
+        """A step paused at run time: the one `stops` divider moves to it, taking its text from the pause message; any
+        other `stops` divider (a wrong prediction) becomes `later`.  A step with no declared divider gets one."""
+        why = _first_line(str(text))[:80] or "paused"
+        out, found = [], False
+        for d in self.dividers:
+            if d.after == step_id:
+                out.append(d._replace(state="stops", text=why))
+                found = True
+            else:
+                out.append(d._replace(state="later") if d.state == "stops" else d)
+        if not found:
+            out.append(Divider(step_id, why, "stops"))
+        self.dividers = out
+
+    def pending_items(self):
+        """The pending region in plan order: ("row", id, label) and ("divider", Divider).  A divider shows until its
+        step has ended, so one after a running step draws right under the running rows."""
+        pend = dict(self.pending())
+        out = []
+        for sid in self.plan or ():
+            r = self.rows.get(sid)
+            if sid in pend:
+                out.append(("row", sid, pend[sid]))
+            if sid in pend or (r is not None and r.running):
+                out += [("divider", d) for d in self.dividers if d.after == sid]
+        planned = set(self.plan or ())
+        return out + [("row", i, l) for i, l in pend.items() if i not in planned]
 
     def _hist_wall(self, step_id):
         """History's median wall seconds for a planned step (tool left open), or None."""
@@ -1342,6 +1386,8 @@ class Board:
             m = r.units.get(f["id"])
             if m is None or (src not in BAR_SRCS and m.status is not None):
                 m = r.units[f["id"]] = Unit(f["id"], f["title"], self.clock(), src)    # new, or a closed file/script unit again
+                if src == "row":
+                    self._demote_row_child(r, m)
             elif src in BAR_SRCS:
                 # a pom module, created by the reactor event, or a unit an orphan dot or end opened as a script unit
                 m.title, m.t0, m.src = f["title"], self.clock(), src
@@ -1357,6 +1403,19 @@ class Board:
                 return self._setup_settled()
         return []
 
+    def _demote_row_child(self, r, m):
+        """A step's command children: the first is the step itself (no box, no line); a second makes the step a
+        multi-command one, and both show (spec 2.1)."""
+        kids = [u for u in r.units.values() if u.src == "row"]
+        if len(kids) == 1:
+            r.hidden.add(m.id)
+            return
+        for u in kids:
+            if u.id in r.hidden:
+                r.hidden.discard(u.id)
+                if u.box is not None and u.id not in r.order:
+                    r.order.append(u.id)
+
     def _on_reactor(self, f):
         """Sent at the first line (pom-tree size), again at the Reactor Build Order block and at the first Building
         line.  The module bar counts the non-pom modules; the pom modules built before the first real module go to the
@@ -1367,6 +1426,7 @@ class Board:
             r.poms = set(f["poms"])
             r.tail = set(f.get("tail") or ())     # absent from an older publisher: no trailing pom
             r.tests_mode = f["tests"]
+            r.keep_units = bool(f.get("keep"))
             if r.size > 0:        # a reactor of no size says nothing: the row keeps the box bar
                 r.unit_kind = "modules"
                 r.units_total = max(0, r.size - len(r.poms) - len(r.tail) - r.units_dropped, r.units_done)    # set, not grown: the block shrinks the tree's size
@@ -1419,7 +1479,7 @@ class Board:
         The count of modules that will run tests is only known as modules end (--also-make pulls in many upstream
         modules with none), so the live bar starts at the reactor's size and N shrinks as those drop out.  The n/N
         and the bar therefore only ever lose cells that were never going to say anything."""
-        if r.unit_kind != "modules" or m.id in r.unbarred or m.dropped or m.unit_index is not None:
+        if r.keep_units or r.unit_kind != "modules" or m.id in r.unbarred or m.dropped or m.unit_index is not None:
             return
         m.dropped = True
         r.units_dropped += 1
@@ -1555,6 +1615,10 @@ class Board:
                 blocks = [("setup",)]     # it went permanent green at the pom's start: print it again, red
             else:
                 blocks = self._setup_settled()
+        elif m.id in r.hidden:  # the step's only command: no cell of its own, but a failure still fails the row
+            m.box = "fail" if failed else "pass"
+            if failed and m.title not in r.failed_units:
+                r.failed_units.append(m.title)
         elif m.id in r.tail:    # a trailing pom: no Setup box, no bar cell; its failure still fails the row and is named
             m.box = "fail" if failed else "pass"
             if failed and m.title not in r.failed_units:
@@ -1570,7 +1634,8 @@ class Board:
             failed = failed or m.box == "fail"
             if failed and m.title not in r.failed_units:
                 r.failed_units.append(m.title)
-            if r.tests_mode and not failed and m.unit_index is None and not (m.outcomes or (m.totals and m.totals[0])):
+            if r.tests_mode and not r.keep_units and not failed and m.unit_index is None \
+                    and not (m.outcomes or (m.totals and m.totals[0])):     # reactor bar mode counts it below instead
                 self._drop_unit(r, m)       # ended without ever running a test (no module_tested, or a skipped module)
             else:
                 tested = r.tests_mode and (m.outcomes or (m.totals and m.totals[0]))
@@ -1589,6 +1654,25 @@ class Board:
         return []
 
     def _on_step_end(self, f):
+        blocks = list(self._end_row(f))
+        row = self.rows.get(f["id"])
+        for i, d in enumerate(self.dividers):
+            if d.after != f["id"] or row is None or row.status == "fail":
+                continue
+            if not row.paused:      # the step did not pause after all: the run did not end here
+                d = self.dividers[i] = d._replace(state="passed")
+            blocks.append(("divider", d, self.divider_run(d)))
+        return blocks
+
+    def divider_run(self, d):
+        """The run number a not-yet-passed divider ends: run_n for the first such divider in plan order, run_n + 1 for the
+        next, and so on; None when there is no run number or the divider is passed."""
+        if not self.run_n or d.state == "passed":
+            return None
+        open_ = [x for x in self.dividers if x.state != "passed"]
+        return self.run_n + open_.index(d) if d in open_ else self.run_n
+
+    def _end_row(self, f):
         if f["id"] not in self.rows and f["id"] in self.unit_rows:
             if f["id"] in self.aliases:
                 self.unit_rows[f["id"]].quiet = 0     # a sub-row's tool exited: its parent row is not silent
@@ -1652,6 +1736,7 @@ class Board:
         if level == "pause":
             if r is not None:
                 r.paused = True
+                self._move_stops(r.id, f["text"])
             return []
         if level == "detail":
             line = next((x.strip() for x in f["text"].splitlines() if x.strip()), None)
@@ -1771,6 +1856,15 @@ def _failed_text(row, expected):
     return f"{totals}: {names}" if totals else f"{len(row.failed_units)} failed: {names}"
 
 
+TIME_BAR_CELLS = 20
+
+
+def time_bar(elapsed_s, wall_s, glyphs):
+    """A dim bar of elapsed against history's median wall time (spec 2.3): filled cells use the skip glyph, the rest pending."""
+    filled = min(TIME_BAR_CELLS - 1, int(TIME_BAR_CELLS * elapsed_s / wall_s)) if wall_s else 0
+    return [glyphs["skip"]] * filled + [PENDING] * (TIME_BAR_CELLS - filled)
+
+
 def row_text(row, glyphs, now, pending=False):
     """A step row as (cells, count, text, elapsed, cut): its bar's cells (None when it has no bar), the count and
     percent after the bar, one text (the failed modules, else the reason, else the summary or totals), the elapsed
@@ -1799,6 +1893,10 @@ def row_text(row, glyphs, now, pending=False):
             parts.append(f"{len(row.order)}/{row.size}" if row.size else str(len(row.order)))
     ms = row.ms if row.ms is not None else int((now - row.t0) * 1000)
     elapsed = fmt_elapsed(ms) if ms >= 1000 else ""
+    time_based = cells is None and row.running and row.estimate is not None and bool(row.estimate.wall_s) \
+        and not row.bar_units and not row.unit_kind
+    if time_based:
+        cells = time_bar(ms / 1000, row.estimate.wall_s, glyphs)
     if row.running and row.estimate is not None:
         run, hist = (row.totals[0] if row.totals else 0), row.estimate.tests
         if row.unit_kind == "files" and hist and 0 < run < hist:
@@ -1896,6 +1994,35 @@ def pending_line(label, color=False):
     return f"\x1b[2m○ {label}\x1b[0m" if color else f"○ {label}"
 
 
+def divider_lines(d, run_n, color=False, cols=60, rule="═"):
+    """A pause divider's lines: passed `✔ run ended: why` (green), this run's stop `▶ run N stops here: why` between
+    double rules (cyan), a later one dim `run M stops here: why` (numbered in plan order after this run's stop).  A passed
+    one carries no run number (spec 2.2); run_n None drops the numbers."""
+    if d.state == "passed":
+        lines, code = [f"{ICONS['ok']} run ended: {d.text}"], "32"
+    elif d.state == "stops":
+        head = f"{HEAD_MARK} run {run_n} stops here: {d.text}" if run_n else f"{HEAD_MARK} run stops here: {d.text}"
+        bar = rule * max(1, min(cols, 60))
+        lines, code = [bar, head, bar], "36"
+    else:
+        lines, code = [f"run {run_n} stops here: {d.text}" if run_n else f"run ends: {d.text}"], "2"
+    return [f"\x1b[{code}m{ln}\x1b[0m" for ln in lines] if color else lines
+
+
+def elide_pending(pend, room, color=False):
+    """The pending lines that fit in room; when some do not, the last of room is a dim `... N more steps` (dividers cut
+    are not counted).  Running rows are never dropped for them."""
+    if len(pend) <= room:
+        return [ln for ln, _ in pend]
+    if room < 1:
+        return []
+    hidden = sum(1 for _, is_step in pend[room - 1:] if is_step)
+    if not hidden:
+        return [ln for ln, _ in pend[:room]]
+    tail = f"... {hidden} more step{'s' if hidden != 1 else ''}"
+    return [ln for ln, _ in pend[:room - 1]] + [f"\x1b[2m{tail}\x1b[0m" if color else tail]
+
+
 def module_line(mod, glyphs, now):
     ms = mod.ms if mod.ms is not None else int((now - mod.t0) * 1000)
     tests = fmt_totals(mod.totals)
@@ -1964,6 +2091,8 @@ class PlainRenderer:
                 text, elapsed = row_parts(block[1], self.glyphs, self.clock())
                 label = row_label(block[1], board.width(), self.clock())
                 self._write("  ".join(p for p in (label, text, elapsed) if p) + "\n")
+            elif kind == "divider":
+                self._write("".join(ln + "\n" for ln in divider_lines(block[1], block[2], rule="=")))
             elif kind == "setup":
                 self._write(setup_line(board, self.glyphs) + "\n")
             elif kind == "hint":
@@ -2196,6 +2325,8 @@ class LiveRenderer:
         kind = block[0]
         if kind == "header":
             return header_lines(block, cols, self.color, live=live)
+        if kind == "divider":
+            return divider_lines(block[1], block[2], self.color, cols)
         if kind == "text":
             return block[1].split("\n")
         if kind == "row":
@@ -2355,8 +2486,15 @@ class LiveRenderer:
             width = max((_vlen(m.title) for m in mine), default=1)        # _sub_lines caps it
             for m in mine:
                 out += self._sub_lines(m, cols, width, now)
-        out += [_vcut(pending_line(label, self.color), cols) for _, label in board.pending()]
+        pend = []       # (line, is_step)
+        for item in board.pending_items():
+            if item[0] == "row":
+                pend.append((_vcut(pending_line(item[2], self.color), cols), True))
+            else:
+                pend += [(_vcut(ln, cols), False) for ln in divider_lines(item[1], board.divider_run(item[1]), self.color, cols)]
         overall = board.overall()
+        room = None if max_lines is None else max(0, max_lines - len(out) - (1 if overall else 0))
+        out += [ln for ln, _ in pend] if room is None else elide_pending(pend, room, self.color)
         if overall:
             out.append(_vcut(f"{head_mark(HEAD_MARK, self.color)} {overall_text(overall)}", cols))
         return out if max_lines is None else fit_view([(line, False) for line in out], max_lines, cols + 1)
@@ -2531,14 +2669,15 @@ class Console:
     """The bus subscriber for a session: one Board, a screen renderer (live, plain or none) and the board log."""
 
     def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=terminal_size,
-                 nested=False, repo=".", history_key=None):
+                 nested=False, repo=".", history_key=None, history_alias=None):
         self.sinks = sinks or Sinks()
         self._stdout = sys.stdout       # bound once: a caller that swaps sys.stdout later must not capture the view
         self._stream = stream if stream is not None else self._stdout
         self.clock = clock
         self.size = size
         self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock,
-                           estimator=make_estimator(repo, script_name(), history_key=history_key))
+                           estimator=make_estimator(repo, script_name(), history_key=history_key,
+                                                    alias=history_alias))
         self.handback = os.environ.pop(HANDBACK_ENV, None) if self.board.nested else None   # a grandchild must not write it
         self.record = os.environ.pop(RECORD_ENV, None) if self.board.nested else None     # nor this one
         self.above = _record(self.record, "above")
@@ -2829,17 +2968,20 @@ def _sigterm(signum, frame):
     raise KeyboardInterrupt
 
 
-def session(title, header=(), *, lines=(), detail=None, sinks=None, repo=".", history_key=None):
+def session(title, header=(), *, lines=(), detail=None, sinks=None, repo=".", history_key=None, history_alias=None):
     """Start this process's console view and return its Console.  Inside another session (JUNEAU_TERMINAL_SESSION set)
     it is nested: no header and no final line, so a child script's rows join its parent's view.  `lines` are header
-    lines under the title, one each, cut to the width on the live screen (a commit message, a path)."""
+    lines under the title, one each, cut to the width on the live screen (a commit message, a path).  `history_alias`
+    is {step: (key, script, step, tool)}: another history to read the expected test count from (make_estimator).  It is
+    never written to."""
     global _console
     if _console is not None:
         return _console
     history_start(repo, history_key=history_key)
     nested = os.environ.get(SESSION_ENV) == "1"
     sinks = sinks or Sinks()
-    _console = subscribe(Console(sinks, detail, nested=nested, repo=repo, history_key=history_key))
+    _console = subscribe(Console(sinks, detail, nested=nested, repo=repo, history_key=history_key,
+                                    history_alias=history_alias))
     os.environ[SESSION_ENV] = "1"   # only once the console is up, so a failed start leaves children un-nested
     atexit.register(_end_session)
     if not nested and sinks.full_path is not None and sinks.full_path.parent == full_log_dir():
@@ -2861,16 +3003,33 @@ def session(title, header=(), *, lines=(), detail=None, sinks=None, repo=".", hi
     return _console
 
 
-def plan(ids):
+def plan(ids, run=None, dividers=()):
     """Declare the planned top-level steps, in order, for the Overall figure (spec 6.1).  Each entry is a step id, or
     (id, label): a labelled step draws as a dim pending row (○) until it starts; an unlabelled one only counts toward
-    Overall.  Replaces any earlier plan; a duplicate id raises ValueError."""
+    Overall.  Replaces any earlier plan; a duplicate id raises ValueError.  run is this run's number and dividers are
+    Divider(after, text, state) entries drawn after step `after` (a run that ends there); both are sent only when set."""
     entries = [e if isinstance(e, str) else tuple(e) for e in ids]
     ids = [e if isinstance(e, str) else e[0] for e in entries]
     # validated here as well as in Session.plan so a bad plan fails in a plain run, not only under a view
     if len(set(ids)) != len(ids):
         raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
-    publish("plan", ids=ids, labels={e[0]: e[1] for e in entries if not isinstance(e, str) and e[1]})
+    extra = {}
+    if run is not None:
+        extra["run"] = run
+    if dividers:
+        checked = [Divider(*d) for d in dividers]
+        for d in checked:
+            if d.after not in ids:
+                raise ValueError(f"divider after an unknown step: {d.after}")
+            if d.state not in DIVIDER_STATES:
+                raise ValueError(f"divider state must be one of {DIVIDER_STATES}: {d.state}")
+        extra["dividers"] = [list(d) for d in checked]
+    publish("plan", ids=ids, labels={e[0]: e[1] for e in entries if not isinstance(e, str) and e[1]}, **extra)
+
+
+def divider(after, state):
+    """Change the state of the divider after step `after` while running (a pause acknowledged)."""
+    publish("divider", after=after, state=state)
 
 
 def session_open():
@@ -3618,13 +3777,15 @@ def history_series(name, values):
         pass
 
 
-def make_estimator(repo, script, store=None, history_key=None):
+def make_estimator(repo, script, store=None, history_key=None, alias=None):
     """The Board's estimator: fn(step, tool, sig) -> Estimate or None, from this script's history in `repo` (spec 5.3).
     The store is read afresh for each lookup.  A `tool` of None takes the tool of the newest record for the step that
     matches `sig` (else the newest record's).  Like-for-like records are those with the same `sig` (spec 5.1).  When
     this script's records give no estimate for the step, the other scripts' histories in the same directory are asked
     (push.py's pending rows for the steps test.py records): the one whose newest record for the step is the latest
-    wins.  Step ids are assumed unique across one repo's scripts.  Off when history is disabled."""
+    wins.  Step ids are assumed unique across one repo's scripts.  `alias` is {step: (key, script, step, tool)}: when the
+    step's own history gives no estimate or none with a test count, the count (only) is read from that other history.
+    Off when history is disabled."""
     if not history_enabled():
         return lambda step, tool, sig=None: None
     store = store or HistoryStore(repo, script, history_key)
@@ -3667,12 +3828,24 @@ def make_estimator(repo, script, store=None, history_key=None):
                 best = records
         return best
 
-    def estimator(step, tool, sig=None):
+    def base(step, tool, sig=None):
         own = lookup([r for r in store.read() if r["step"] == step], tool, sig)
         if own is not None:
             return own
         records = sibling_records(step)
         return lookup(records, tool, sig) if records else None
+
+    def estimator(step, tool, sig=None):
+        own = base(step, tool, sig)
+        if not alias or step not in alias or (own is not None and own.tests):
+            return own
+        key, a_script, a_step, a_tool = alias[step]     # estimator-only: never a write path
+        found = lookup([r for r in HistoryStore(repo, a_script, key).read() if r["step"] == a_step], a_tool, None)
+        if found is None or not found.tests:
+            return own
+        if own is not None:
+            return own._replace(tests=found.tests)
+        return found._replace(wall_s=None, units=None, rate=None, kinds=None, subs=None)
 
     return estimator
 
@@ -3783,7 +3956,7 @@ class Sinks:
 #   ("tests", id, total, fail, err, skip) ("report", id, kind, path)
 #   ("note", level, text, id)            ("cond", text)
 #   ("class_done", id, outcome)          ("compiled", id, ok)          ("tested", id)
-#   ("reactor", size, [pom sub ids], tests_mode[, [trailing pom sub ids]])    ("failure", text, id)
+#   ("reactor", size, [pom sub ids], tests_mode[, [trailing pom sub ids][, keep]])    ("failure", text, id)
 #   ("progress", id, text)               bus only (step_progress), never a marker
 #   ("units", id, total, kind)           ("unit", id, done, outcome)   bus only (units / unit), never a marker
 #   ("unit_fix", id, index, outcome)     ("series", id, name, sub, value)   bus only (unit_fix / series)
@@ -3973,7 +4146,7 @@ class MavenParser(Parser):
     """Reactor-aware Maven output: module sub-steps, Surefire counts, reports and failure notes."""
 
     name = "maven"
-    BARS = ("modules",)
+    BARS = ("modules", "reactor")
     BUILDING = re.compile(r"^\[INFO\] Building (.+?) (\S+)\s+\[(\d+)/(\d+)\]\s*$")
     LONE_BUILDING = re.compile(r"^\[INFO\] Building \S")     # only right under a header: the jar plugin has its own
     SUMMARY_HEAD = re.compile(r"^\[INFO\] Reactor Summary")
@@ -3991,6 +4164,9 @@ class MavenParser(Parser):
         "clean", "validate", "initialize", "generate-sources", "process-sources", "generate-resources",
         "process-resources", "compile", "process-classes", "generate-test-sources", "process-test-sources",
         "generate-test-resources", "process-test-resources", "test-compile", "process-test-classes"))
+    # A plugin goal (prefix:goal, or groupId:artifactId[:version]:goal) runs no tests unless it is one of these plugins.
+    # release:perform deploys (and so tests); release:prepare forks the plugin's preparation goals (clean verify by default).
+    PLUGIN_TEST_PREFIXES = ("surefire", "failsafe", "release")
     VALUE_OPTIONS = frozenset((   # options whose value can follow as the next word
         "-pl", "--projects", "-f", "--file", "-T", "--threads", "-P", "--activate-profiles", "-D", "--define",
         "-s", "--settings", "-gs", "--global-settings", "-t", "--toolchains", "-rf", "--resume-from",
@@ -4073,7 +4249,8 @@ class MavenParser(Parser):
         return cmd, env
 
     def _pre_test_goals(self, args):
-        """True when every goal in args is a lifecycle phase before test (or clean); no goals at all is False."""
+        """True when every goal in args runs no tests (a lifecycle phase before test, clean, or a non-test plugin goal);
+        no goals at all is False."""
         words = args.split()
         prog = next((i for i, w in enumerate(words) if os.path.basename(w) in self.MAVEN_PROGRAMS), None)
         if prog is not None:     # a "sh -c" string: the goals follow the mvn word, not the launchers before it
@@ -4086,9 +4263,23 @@ class MavenParser(Parser):
                 skip = w in self.VALUE_OPTIONS
             else:
                 goals.append(w)
-        return bool(goals) and all(g in self.PRE_TEST_GOALS for g in goals)
+        return bool(goals) and all(self._runs_no_tests(g) for g in goals)
+
+    def _runs_no_tests(self, goal):
+        """A lifecycle phase before test, or a plugin goal whose plugin is not Surefire, Failsafe or Release."""
+        if goal in self.PRE_TEST_GOALS:
+            return True
+        return ":" in goal and not any(p in goal for p in self.PLUGIN_TEST_PREFIXES)
+
+    def _first_size(self):
+        """The first reactor estimate: the pom-tree size, minus pom-packaged modules in reactor mode (spec 3.1)."""
+        if self.bar == "reactor":
+            return sum(1 for a in self.dirs if self.packaging.get(a) != "pom")
+        return len(self.dirs)
 
     def _reactor(self, size):
+        if self.bar == "reactor":    # the sixth field: absent from every event but a reactor-mode one
+            return ("reactor", size, list(self.order_poms), self.tests_mode, list(self.order_tail or ()), True)
         if self.order_tail:     # the optional fifth field: absent when there is no trailing pom
             return ("reactor", size, list(self.order_poms), self.tests_mode, list(self.order_tail))
         return ("reactor", size, list(self.order_poms), self.tests_mode)
@@ -4262,7 +4453,7 @@ class MavenParser(Parser):
         if not self.reactor_sent:
             self.reactor_sent = True
             if self.dirs:
-                events.append(self._reactor(len(self.dirs)))
+                events.append(self._reactor(self._first_size()))
         if self.ORDER_HEAD.match(line):
             self.in_order, self.order_members = True, []
             return events
@@ -5327,7 +5518,8 @@ class _Dispatcher:
                 publish("module_tested", step=self.step_id, module=ev[1])
             elif kind == "reactor":
                 publish("reactor", step=self.step_id, size=ev[1], poms=list(ev[2]), tests=ev[3],
-                        **({"tail": list(ev[4])} if len(ev) > 4 else {}))   # `tail` only when there is one
+                        **({"tail": list(ev[4])} if len(ev) > 4 and ev[4] else {}),     # `tail` only when there is one
+                        **({"keep": True} if len(ev) > 5 and ev[5] else {}))            # `keep` only in reactor mode
             elif kind == "failure":
                 publish("failure", text=ev[1], step=ev[2])
             elif kind == "progress":
@@ -5712,7 +5904,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     A parser's report events go through report() (copied under $TERMINAL_ARTIFACTS when it is set, relative paths taken
     from cwd); reports=False drops them.
     bar picks the unit a block of the row's bar stands for: "files" or "tests" for pytest and Playwright (files by
-    default), "modules" for Maven (its only one); None is the parser's default.  A value the parser does not offer
+    default), "modules" or "reactor" for Maven (modules by default; reactor keeps a tests-mode module's cell even when it ran
+    no tests, and leaves pom-packaged modules out of the first size); None is the parser's default.  A value the parser does not offer
     raises ValueError before the command starts, in pass-through mode too.
     grace is the seconds a cancelled child's process group gets between SIGTERM and SIGKILL; None is
     $JUNEAU_TERMINAL_TERM_GRACE when set, else GRACE_SECONDS (5).

@@ -227,8 +227,14 @@ class UnitModelTest(unittest.TestCase):
 
     def test_sub_and_row_units_still_box(self):
         self.apply("unit_start", id="r", title="R", src="row")
+        self.apply("unit_start", id="r2", title="R2", src="row")    # a step's only command is its own row (no box)
         self.apply("unit_end", id="r", status="ok", ms=5, src="row")
         self.assertEqual((self.row.order, self.row.units["r"].box), (["r"], "pass"))
+
+    def test_a_steps_only_row_unit_gets_no_box(self):
+        self.apply("unit_start", id="r", title="R", src="row")
+        self.apply("unit_end", id="r", status="ok", ms=5, src="row")
+        self.assertEqual((self.row.order, self.row.units["r"].box), ([], "pass"))
 
     def test_step_end_grants_only_bar_units(self):
         for src in ("sub", "file", "script"):
@@ -321,13 +327,13 @@ class HeartbeatTest(unittest.TestCase):
         clock = Clock()
         board = jr.Board(clock=clock)
         board.apply("step_start", {"id": "s", "n": 1, "title": "Tests", "parent": None})
-        for src in ("sub", "row", "file", "script"):
-            board.apply("unit_start", {"step": "s", "id": src, "title": src, "src": src})
+        for uid, src in (("sub", "sub"), ("row", "row"), ("row2", "row"), ("file", "file"), ("script", "script")):
+            board.apply("unit_start", {"step": "s", "id": uid, "title": uid, "src": src})   # two rows: the only one is the step itself
         out = []
         plain = jr.PlainRenderer(out.append, heartbeat=True, clock=clock)
         clock.t += jr.HEARTBEAT_SECONDS
         plain.tick(board)
-        self.assertIn("· 2 modules running", "".join(out))
+        self.assertIn("· 3 modules running", "".join(out))
 
     def test_the_heartbeat_uses_the_singular_for_one_module(self):
         clock = Clock()

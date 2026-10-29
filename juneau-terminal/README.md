@@ -243,6 +243,26 @@ file bar the percent and the `~M:SS` total follow the tests run against the hist
 move with every test while the count reads files (`7/32  ~25%`). `bar="tests"` gives one block per test. Without the
 pytest plugin's counts or the Playwright reporter, both bars count tests.
 
+### Board features
+
+A script that drives a release board checks `run.BOARD_FEATURES` before using these, so an older toolkit still works. The
+set is `dividers`, `count`, `reactor-bar` and `history-alias`.
+
+- `Session.plan(ids, run=, dividers=)` takes `run`, this run's number, and `dividers`, a list of `juneau_terminal.Divider(after, text,
+  state)` entries (plain `(after, text, state)` tuples work too). A divider is drawn after step `after`; `state` is
+  `passed`, `stops` (the run pauses there) or `later`. A divider after an unknown step, or with another state, raises
+  `ValueError`. Every divider that has not passed says `run N stops here`, counted in plan order from `run` (the
+  `stops` one is run `run`, the next is `run + 1`, and so on); a passed one says `run ended` with no number.
+- `Session.divider_state(after, state)` changes a declared divider, for example to `stops` when the run pauses at runtime.
+- `run.count(done, total, kind="files")` (also `Session.count`) shows a count bar on the open step's row, for work that has
+  no parser to size it. It does nothing in a plain run.
+- `run.cmd(..., bar="reactor")` gives a Maven row the reactor bar: a module with no tests keeps its cell as a pass or skip
+  instead of vanishing from the bar.
+- `run.session(..., history_alias={step: (key, script, step, tool)})` reads another history's expected test count for that
+  step, read-only. `run.repo_key(repo=".")` returns the history key a repository uses (`None` in a plain run), which is
+  how one script aliases another repository's history.
+- An explicit `tool=` on `run.cmd` is used as given; the parser is detected from the command only when `tool` is `None`.
+
 ### Prompts, pauses and stdin
 
 `prompt` has six kinds: `text`, `secret`, `confirm` (with `expect=` for a type-to-confirm), `choice`, `form` (a list of
@@ -346,9 +366,11 @@ name, so a new build replaces the files under it.
 Outside tmux (`$TMUX` unset) both scripts exit 2; run the command directly there and `tail -f` its log.
 
 - `tmux-pane.sh` options: `-d DIR`, `-n LINES`, `-t TITLE`, `-k fail|always|never`, `-K MIN`, `--reap`,
-  `--keep-on-cancel`, and `--pane STRING` (repeatable, with `--size N%`) for several panes. The subcommands are
-  `cancel [PANE|TITLE|--all]`, `list`, `close [--kept|PANE]` and `equalize PANE [--closing]`; a command named like one of
-  them goes after `--`.
+  `--keep-on-cancel`, `--read-only` (ignore keystrokes typed into the panes; use `close` rather than Enter to dismiss a
+  kept one), and `--pane STRING` (repeatable, with `--size N%`) for several panes. The subcommands are
+  `cancel [PANE|TITLE|--all]`, `list`, `close [--kept|PANE]`, `equalize PANE [--closing]`, `copy PANE|TITLE [-n LINES]`
+  (the pane's text to the clipboard via `pbcopy`, or to stdout without it) and `zoom PANE|TITLE`; a command named like
+  one of them goes after `--`.
 - The leader's exit code is the script's exit code; 129 means the pane was closed under it, and 2 is a usage error or
   not being inside tmux. `cancel` sends INT, TERM, then KILL, each after `TMUX_PANE_GRACE` seconds (default 10), and
   reaps stragglers by recorded PID and start time. Without `--keep-on-cancel` a cancelled run closes its panes.

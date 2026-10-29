@@ -17,7 +17,7 @@
 # Requires: bash, tmux, tmux-pane.sh beside it, perl (for the follower filter), python3 (optional, for the result summary).  Tested on macOS.
 #
 # Usage: watch-run.sh [--no-tail] [--no-close-kept] [-d DIR] [-n LINES] [-t TITLE] [-k fail|always|never] [-K MIN] [--reap]
-#                     [--keep-on-cancel] -- CMD [ARGS...]
+#                     [--keep-on-cancel] [--read-only] -- CMD [ARGS...]
 #
 #   --no-tail  do not open the lower pane running `tail -F` on the full log
 #   --no-close-kept  leave kept panes from earlier runs open (by default they are closed before the new pane opens)
@@ -54,7 +54,7 @@ while [ $# -gt 0 ]; do
 		--no-tail) no_tail=1 ;;
 		--no-close-kept) close_kept=0 ;;
 		--print-tail-filter) tail_filter; echo; exit 0 ;;
-		--reap|--keep-on-cancel) passthru+=("$1") ;;
+		--reap|--keep-on-cancel|--read-only) passthru+=("$1") ;;
 		-[dntkK]) [ $# -ge 2 ] || usage; [ "$1" != -t ] || title=$2; passthru+=("$1" "$2"); shift ;;
 		-[dntkK]?*) [ "${1:0:2}" != -t ] || title=${1:2}; passthru+=("$1") ;;
 		*) usage ;;

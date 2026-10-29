@@ -243,6 +243,25 @@ class PlanApiTest(unittest.TestCase):
         jr.plan(["a", ("b", "Build")])
         self.assertEqual(seen, [("plan", {"ids": ["a", "b"], "labels": {"b": "Build"}})])
 
+    def test_plan_publishes_run_and_dividers_only_when_set(self):
+        seen = []
+        jr.subscribe(lambda kind, f: seen.append((kind, f)))
+        jr.plan(["a", ("b", "B")], run=2, dividers=[("a", "send mail", "stops")])
+        self.assertEqual(seen, [("plan", {"ids": ["a", "b"], "labels": {"b": "B"}, "run": 2,
+                                          "dividers": [["a", "send mail", "stops"]]})])
+
+    def test_divider_for_an_unknown_step_or_state_raises(self):
+        with self.assertRaises(ValueError):
+            jr.plan(["a"], dividers=[("zzz", "x", "later")])
+        with self.assertRaises(ValueError):
+            jr.plan(["a"], dividers=[("a", "x", "bogus")])
+
+    def test_divider_event(self):
+        seen = []
+        jr.subscribe(lambda kind, f: seen.append((kind, f)))
+        jr.divider("a", "passed")
+        self.assertEqual(seen, [("divider", {"after": "a", "state": "passed"})])
+
     def test_session_plan_duplicate_raises_in_plain_mode(self):
         import sys
         from unittest import mock
