@@ -33,7 +33,12 @@ def revert_nexus(ctx):
 
 
 def revert_dist(ctx):
-    ops = [("rm", dev_dir(ctx, k)) for k in ("source", "binaries") if ctx.svn.ls(dev_dir(ctx, k) + "/") is not None]
+    # exists() is quiet, so an absent dir (the usual case) draws no failed row; None means svn could not tell
+    found = {k: ctx.svn.exists(dev_dir(ctx, k) + "/") for k in ("source", "binaries")}
+    unknown = [k for k, v in found.items() if v is None]
+    if unknown:
+        raise StepError(f"could not check dist/dev ({', '.join(unknown)}); rerun --revert")
+    ops = [("rm", dev_dir(ctx, k)) for k, v in found.items() if v]
     if not ops:
         return "nothing on dist/dev"
     ctx.svn.mucc(f"Remove {ctx.rc_tag}", ops, title="Remove RC from dist/dev")

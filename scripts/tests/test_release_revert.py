@@ -43,7 +43,7 @@ def test_revert_after_a_pause_needs_no_typed_confirmation(make_ctx):
 def test_revert_skips_absent_remote_state(make_ctx):
     nx = FakeNexus()                    # no staging repo
     ctx = make_ctx(nexus=nx, state={**RC, "nexusRepoId": None})
-    ctx.fake.script("svn", "ls", ok=False)                              # dist/dev dirs absent
+    ctx.fake.script("svn", "ls", ok=False, out="svn: E170000: URL doesn't exist\n")                              # dist/dev dirs absent
     ctx.fake.script("git", "-C", str(ctx.ws), "ls-remote", out="")      # tag absent
     ctx.fake.script("git", "-C", str(ctx.ws), "status", out="")
     revert.run_all(ctx)
@@ -77,7 +77,7 @@ def test_revert_rerun_idempotent(make_ctx):
     ctx = make_ctx(state=RC)
     nx = ctx.nexus
     nx.repos = [{"repositoryId": "r-1", "state": "open"}]
-    ctx.fake.script("svn", "ls", ok=False)
+    ctx.fake.script("svn", "ls", ok=False, out="svn: E170000: URL doesn't exist\n")
     ctx.fake.script("git", "-C", str(ctx.ws), "ls-remote", out="")
     ctx.fake.script("git", "-C", str(ctx.ws), "status", out="")
     revert.run_all(ctx)
@@ -96,3 +96,13 @@ def test_revert_removes_dev_dirs_and_remote_tag_when_present(make_ctx):
     argvs = ctx.fake.argvs()
     assert ["git", "-C", str(ctx.ws), "tag", "-d", "juneau-9.2.1-RC1"] in argvs
     assert ["git", "-C", str(ctx.ws), "push", "origin", ":refs/tags/juneau-9.2.1-RC1"] in argvs
+
+
+def test_revert_dist_probes_quietly_and_fails_when_svn_cannot_tell(make_ctx):
+    ctx = make_ctx(state=RC)
+    ctx.fake.script("svn", "ls", ok=False, out="svn: warning: W160013: path not found\n")
+    assert revert.revert_dist(ctx) == "nothing on dist/dev"
+    assert all(c["quiet"] for c in ctx.fake.calls if c["argv"][:2] == ["svn", "ls"])
+    ctx.fake.script("svn", "ls", ok=False, out="svn: E175002: Connection refused\n")
+    with pytest.raises(StepError, match="could not check dist/dev"):
+        revert.revert_dist(ctx)
