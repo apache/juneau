@@ -79,7 +79,7 @@ Under `--dry-run` the secret checks report `skipped (dry run)`. The branch tip i
 6. Starts a fresh `run.json` from the resolved details and records the params file.
 7. Takes a non-blocking lock (`.lock` in the run directory) and runs the steps in order, checkpointing `run.json` after each. A second `release.py` on the same release exits 1 with the holder's pid.
 8. The 25 steps fall in three phases: release candidate (prerequisites through `vote-gate`), vote (`vote-tally`, result email) and promote (`nexus-release` through `finalize`). The run never asks a question. Where it needs you it pauses (exit 0), prints what to do and the command to continue, and records the pause in `run.json`; see Pauses.
-9. `--revert` runs five rows instead: drop the Nexus staging repository, remove the RC from dist/dev, delete the RC tag, reset the pom versions, record the revert. The command is the confirmation: there is no typed confirmation on the CLI (the Release page still types `RC<n>` before it drops an RC). Each row checks remote state first, so a rerun is harmless.
+9. `--revert` runs five rows instead: drop the Nexus staging repository, remove the RC from dist/dev, delete the RC tag, restore the poms the release plugin changed (then verify the root version), record the revert. The command is the confirmation: there is no typed confirmation on the CLI (the Release page still types `RC<n>` before it drops an RC). Each row checks remote state first, so a rerun is harmless.
 
 ## Pauses
 

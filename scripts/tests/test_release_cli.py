@@ -231,6 +231,9 @@ ACTIVE = {"phase": "rc", "last": "nexus-close", "nexusRepoId": "r-1", "rcCommit"
 
 def test_revert_end_to_end(home, capsys, tmp_path, monkeypatch):
     seed(home, ACTIVE)
+    ws = home / "runs" / "9.2.1" / "workspace"   # the post-revert verification reads the root pom
+    ws.mkdir()
+    (ws / "pom.xml").write_text("<project><version>9.2.1-SNAPSHOT</version></project>")
     fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
     code, out = run_main(["--revert"], home, capsys, deps=deps)
     assert code == 0, out

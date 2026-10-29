@@ -11,8 +11,12 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """--revert: undo the current release candidate.  Each row checks remote state first, so a rerun is harmless."""
+from . import details as details_mod
 from .ctx import StepError
+from .diffcheck import NEXT_SUBJECT, RELEASE_SUBJECT
 from .rc import dev_dir, git_env
+
+PLUGIN = "[maven-release-plugin]"
 
 
 def revert_check(ctx):
@@ -59,18 +63,66 @@ def revert_tag(ctx):
     return "tag removed" if (local or remote) else "tag already absent"
 
 
+def _clean_release_state(ws):
+    """release:clean's job, done by hand: a leftover release.properties makes release:prepare resume a stale run."""
+    gone = [f for f in [ws / "release.properties", *ws.rglob("*.releaseBackup")] if f.is_file()]
+    for f in gone:
+        f.unlink()
+    return len(gone)
+
+
+def _plugin_poms(ctx, ws, tag):
+    """(release commit, poms the two plugin commits changed), or (None, []) when prepare never ran."""
+    R = ctx.runner.run
+    log = ["git", "-C", ws, "log", "--fixed-strings", "--format=%H"]
+    rel = R(log + ["-n1", f"--grep={PLUGIN} {RELEASE_SUBJECT} {tag}"], title="Release commit", mutating=False).out.strip()
+    if not rel:
+        return None, []
+    nxt = R(log + ["--reverse", f"--grep={PLUGIN} {NEXT_SUBJECT}", f"{rel}..HEAD"], title="Next-iteration commit",
+            mutating=False).out.split()
+    nxt = nxt[0] if nxt else ""
+    poms = set()
+    for c in (rel, nxt):
+        if c:
+            poms.update(R(["git", "-C", ws, "diff-tree", "--no-commit-id", "--name-only", "-r", "--diff-filter=M", c],
+                          title="Poms changed", mutating=False).out.split())
+    return rel, sorted(poms)
+
+
+def _verify_versions(ctx):
+    """The check that matters: the root pom is back at <v>-SNAPSHOT and no pom still names the next dev version."""
+    want, nxt = f"{ctx.d['version']}-SNAPSHOT", ctx.d.get("developmentVersion")
+    root = ctx.ws / "pom.xml"
+    got = details_mod.pom_version(root.read_text(encoding="utf-8")) if root.is_file() else None
+    if got != want:
+        raise StepError(f"root pom is at {got}, expected {want}")
+    stale = [str(p.relative_to(ctx.ws)) for p in sorted(ctx.ws.rglob("pom.xml"))
+             if ".git" not in p.parts and "target" not in p.parts and nxt and nxt in p.read_text(encoding="utf-8")]
+    if stale:
+        raise StepError(f"{nxt} is still in {', '.join(stale[:5])}{' ...' if len(stale) > 5 else ''}")
+
+
 def revert_versions(ctx):
+    """Undo the release plugin's own pom changes (versions, <juneau.version>-style properties, <scm><tag>) by restoring
+    the poms its two commits touched to their content before the release commit; then verify."""
     ws, d = str(ctx.ws), ctx.d
-    ctx.runner.run(["mvn", "-B", "release:update-versions", "-DautoVersionSubmodules=true",
-                    f"-DdevelopmentVersion={d['version']}-SNAPSHOT"], title="Reset versions", mutating=True,
-                   tool="maven", cwd=ctx.ws)
-    dirty = ctx.runner.run(["git", "-C", ws, "status", "--porcelain"], title="Status", mutating=False).out.strip()
-    if not dirty:
-        return "versions already reset"
-    ctx.runner.run(["git", "-C", ws, "commit", "-a", "-m", f"Reset versions to {d['version']}-SNAPSHOT"],
-                   title="Commit", mutating=True)
-    ctx.runner.run(["git", "-C", ws, "push", "origin", d["branch"]], title="Push", mutating=True, env=git_env(ctx))
-    return "versions reset and pushed"
+    R = ctx.runner.run
+    cleaned = 0 if ctx.dry_run else _clean_release_state(ctx.ws)
+    rel, poms = _plugin_poms(ctx, ws, ctx.rc_tag)
+    if rel and poms:
+        R(["git", "-C", ws, "checkout", f"{rel}^", "--", *poms], title="Restore poms", mutating=True)
+    dirty = R(["git", "-C", ws, "status", "--porcelain", "--untracked-files=no"], title="Status",
+              mutating=False).out.strip()
+    if dirty:
+        R(["git", "-C", ws, "commit", "-a", "-m", f"Reset versions to {d['version']}-SNAPSHOT"], title="Commit",
+          mutating=True)
+        R(["git", "-C", ws, "push", "origin", d["branch"]], title="Push", mutating=True, env=git_env(ctx))
+    if not ctx.dry_run:
+        _verify_versions(ctx)
+    if dirty:
+        return f"versions reset and pushed ({len(poms)} poms restored)"
+    note = f"; removed {cleaned} release-plugin files" if cleaned else ""
+    return ("versions already reset" if rel else "no release commit found; cleanup only") + note
 
 
 def revert_record(ctx):
