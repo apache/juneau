@@ -66,6 +66,8 @@ class Ctx:
     secret_source: dict = field(default_factory=dict)   # {secret key: "env" | "keychain" | "gh" | "cache"}; never a value
     pf: dict = field(default_factory=dict)              # preflight scratch: loaded params, details, scratch repo
     preflight_results: Any = None                       # [(group, name, Result)] from the pre-run preflight
+    opener: Callable[[Path], None] = lambda path: None   # opens a file for the user; release.py installs the real one
+    current_step: Callable[[], Any] = lambda: None        # the open board step's handle (release.py installs it)
     features: frozenset = frozenset()                   # the toolkit's BOARD_FEATURES; a step uses a feature only when listed
 
     @property
@@ -99,6 +101,14 @@ class Ctx:
 
     def say(self, text="", level="info"):
         self.run.say(text, level)
+
+    def note(self, text):
+        """Live detail text on this step's board row; a log line when there is no board row to put it on."""
+        detail = getattr(self.current_step(), "detail", None)
+        if detail:
+            detail(text)
+        else:
+            self.say(text)
 
     def fail(self, msg):
         raise StepError(msg)

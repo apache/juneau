@@ -357,8 +357,24 @@ def _write_sha512(ctx, archive, staged_url):
     archive.with_name(archive.name + ".sha512").write_text(f"{digest}  {archive.name}\n")
 
 
+def _fetch_all(ctx, want, available, out):
+    """Download every wanted file (or compute its .sha512) into out, with a count bar and a live note per file."""
+    counting = "count" in getattr(ctx, "features", ())
+    if counting:
+        ctx.run.count(0, len(want))
+    for done, (old, new) in enumerate(want.items(), 1):
+        if new.endswith(".sha512"):
+            ctx.note(f"sha512 {new[:-len('.sha512')]}")
+            _write_sha512(ctx, out / new[:-len(".sha512")], available.get(old))
+        else:
+            ctx.note(f"downloading {new}")
+            ctx.nexus.download(available[old], out / new)       # explicit names; sha1/md5 never fetched
+        if counting:
+            ctx.run.count(done, len(want))
+
+
 @step
-def dist_stage(ctx):  # NOSONAR python:S3776 - one linear staging sequence; splitting it would scatter the steps
+def dist_stage(ctx):
     mark = len(ctx.runner.skipped)
     v, rid = ctx.version, ctx.rf.get("nexusRepoId")
     want = wanted_files(v)
@@ -373,13 +389,7 @@ def dist_stage(ctx):  # NOSONAR python:S3776 - one linear staging sequence; spli
         if missing:
             raise StepError("staging repository lacks: " + ", ".join(missing))
         out.mkdir(parents=True, exist_ok=True)
-        for done, (old, new) in enumerate(want.items(), 1):
-            if new.endswith(".sha512"):
-                _write_sha512(ctx, out / new[:-len(".sha512")], available.get(old))
-            else:
-                ctx.nexus.download(available[old], out / new)       # explicit names; sha1/md5 never fetched
-            if "count" in getattr(ctx, "features", ()):
-                ctx.run.count(done, len(want))
+        _fetch_all(ctx, want, available, out)
     line = ".".join(v.split(".")[:2]) + "."
     ops = []
     for kind in ("source", "binaries"):

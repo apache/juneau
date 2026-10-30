@@ -11,6 +11,10 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """Email text and the send flow.  VOTE from Juneau's release.py."""
+import os
+import shutil
+import subprocess
+import sys
 import urllib.parse
 
 from . import inventory, runfile
@@ -53,7 +57,7 @@ def acknowledge(ctx, kind):
     sent = dict(ctx.rf.get("emails") or {})
     sent[kind] = ctx.now().isoformat() if ctx.now else "sent"
     ctx.rf.update({"emails": sent, "emailPending": None})
-    return f"{kind} email sent"
+    return f"{kind} email ready"
 
 
 def reset(ctx, kind):
@@ -84,7 +88,30 @@ def send(ctx, kind, to, subject, body, cc=()):
     if "body=" not in mailto:
         ctx.say("body too long for a mailto link; copy it from the file")
     ctx.say(f"{TAGS.get(kind, kind)} email written to {path.as_uri()}\nOpen in your mail client: {mailto}")
+    _open_best_effort(ctx, path)
     raise ctx.pause(message, done=False)
+
+
+def open_file(path):
+    """Best-effort: open path in the user's default app (macOS open, else xdg-open).  JRM_NO_OPEN=1 turns it off.
+    The default Ctx.opener is a no-op; release.py installs this one, so tests never launch anything.  Failure is a warning."""
+    if os.environ.get("JRM_NO_OPEN"):
+        return
+    tool = shutil.which("open" if sys.platform == "darwin" else "xdg-open")
+    if not tool:
+        return
+    try:
+        subprocess.Popen([tool, str(path)], stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL, start_new_session=True)
+    except OSError as e:
+        raise RuntimeError(f"could not open {path}: {e}") from e
+
+
+def _open_best_effort(ctx, path):
+    try:
+        ctx.opener(path)
+    except Exception as e:   # noqa: BLE001 - opening is a convenience; it must never change the step
+        ctx.say(f"could not open {path}: {e}", "warn")
 
 
 def mailto_url(to, subject, body):

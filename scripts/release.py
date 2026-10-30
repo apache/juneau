@@ -191,6 +191,7 @@ class Deps:
     http_ok: object = None      # fn(url) -> bool; None = a real GET
     http_text: object = None    # fn(url) -> str | None (None = unreachable); None = a real GET
     sleep: object = None
+    opener: object = None       # fn(path) opening an email file for the user; None = emails.open_file
 
     @classmethod
     def real(cls, args):
@@ -223,8 +224,10 @@ def build_ctx(args, deps, rf):
     from jrm_release.runner import Runner
     from jrm_release.svn import Svn
     ctx = Ctx(args=args, home=args.home, run=deps.run, runner=None, nexus=None, svn=None, rf=rf,
-              pause=getattr(deps.steps, "Pause", None), http_ok=deps.http_ok or _http_ok, http_text=deps.http_text or _http_text, sleep=deps.sleep or time.sleep)
+              pause=getattr(deps.steps, "Pause", None), http_ok=deps.http_ok or _http_ok,
+              http_text=deps.http_text or _http_text, sleep=deps.sleep or time.sleep)
     ctx.features = board.board_features(deps)
+    ctx.opener = deps.opener or emails.open_file
     ctx.runner = Runner(deps.run, dry_run=args.dry_run, secrets=ctx.secrets)
     user = lambda: ctx.cred("credential.apache.availid")  # noqa: E731
     password = lambda: ctx.cred("credential.apache.password", secret=True)  # noqa: E731
@@ -315,6 +318,7 @@ def _execute(args, deps, ctx, attempt):
     else:
         funcs = {n: _noting_pause(n, f, paused) for n, f in impl_map().items()}
         reg, checkpoint, run_args = registry(deps, funcs), rf, args
+    ctx.current_step = lambda: getattr(reg, "_current", None)
     rf.attempt_start(attempt, _command(args), origin=_origin(attempt), pid=os.getpid())
 
     def stopped_at():

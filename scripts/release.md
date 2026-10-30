@@ -83,7 +83,7 @@ Under `--dry-run` the secret checks report `skipped (dry run)`. The branch tip i
 
 ## Pauses
 
-A pause ends the attempt with exit 0 and status `paused`. `run.json` records `pause` (`step`, `message`, `at`); `--resume` clears it and continues. An email step writes the mail to `<home>/runs/<version>/emails/<kind>.eml.txt`, prints the same text, records `emailPending: "<kind>"` and pauses.
+A pause ends the attempt with exit 0 and status `paused`. `run.json` records `pause` (`step`, `message`, `at`); `--resume` clears it and continues. An email step writes the mail to `<home>/runs/<version>/emails/<kind>.eml.txt`, prints the same text, records `emailPending: "<kind>"` and pauses. It also opens the file with `open` (macOS) or `xdg-open`, best effort: a failure is a one-line warning and never changes the pause. Never under `--dry-run`; set `JRM_NO_OPEN=1` to turn it off.
 
 | Pause | What you do | How you continue |
 |---|---|---|

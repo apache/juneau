@@ -430,7 +430,7 @@ def test_compose_vote_email_facts(make_ctx):
     assert "orgapachejuneau-1002" in mail
     assert "SHA512_NOT_FOUND" not in mail
     assert ctx.rf.get("voteDeadline")
-    assert rc.compose_vote_email(ctx) == "vote email sent"
+    assert rc.compose_vote_email(ctx) == "vote email ready"
     assert ctx.rf.get("rcCommit") == "abc123"
     assert ctx.rf.get("voteDeadline")
 
@@ -473,7 +473,7 @@ def test_result_passed_continues(make_ctx):
     ctx = make_ctx(state={"vote": {"outcome": "passed", "plus1": 3, "zero": 0, "minus1": 0, "binding": "A, B, C"}})
     with pytest.raises(ctx.pause):
         vote.compose_result_email(ctx)
-    assert vote.compose_result_email(ctx) == "result email sent"
+    assert vote.compose_result_email(ctx) == "result email ready"
     assert ctx.rf.get("phase") != "vote-failed"
 
 
@@ -722,3 +722,23 @@ def test_svn_exists_tells_absent_from_cannot_list(make_ctx, ok, out, expected):
     ctx = make_ctx()
     ctx.fake.script("svn", "ls", out=out, ok=ok)
     assert ctx.svn.exists("https://dist.apache.org/repos/dist/dev/juneau/source/x") is expected
+
+
+def test_dist_stage_shows_progress_notes(make_ctx):
+    ctx = make_ctx(state={"nexusRepoId": "r-1"}, features={"count"})
+    _staged(ctx)
+    rc.dist_stage(ctx)
+    assert ctx.fake.counts[0] == (0, len(rc.wanted_files("9.2.1")))
+    assert ctx.fake.counts[-1][0] == ctx.fake.counts[-1][1]
+    assert any(s.startswith("downloading ") for s in ctx.fake.said)
+    assert any(s.startswith("sha512 ") for s in ctx.fake.said)
+
+
+def test_dist_stage_notes_go_to_the_step_row_when_there_is_one(make_ctx):
+    ctx = make_ctx(state={"nexusRepoId": "r-1"})
+    _staged(ctx)
+    details = []
+    ctx.current_step = lambda: type("S", (), {"detail": staticmethod(details.append)})()
+    rc.dist_stage(ctx)
+    assert any(d.startswith("downloading ") for d in details) and any(d.startswith("sha512 ") for d in details)
+    assert not any(s.startswith("downloading ") for s in ctx.fake.said)

@@ -234,6 +234,12 @@ CREDS = {"credential.apache.availid": "jamesbognar", "credential.apache.email": 
          "credential.gpg.passphrase": "s3cr3t-gpg", "credential.github.token": "s3cr3t-gh"}
 
 
+@pytest.fixture(autouse=True)
+def _no_open_files(monkeypatch):
+    """Nothing in the suite may launch the desktop opener for an email file."""
+    monkeypatch.setenv("JRM_NO_OPEN", "1")
+
+
 @pytest.fixture
 def make_ctx(home):
     def make(dry_run=False, state=None, nexus=None, http_ok=None, with_details=True, features=frozenset()):

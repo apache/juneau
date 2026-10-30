@@ -76,7 +76,7 @@ def test_resume_pass_records_the_mail_as_sent(make_ctx):
     ctx = make_ctx()
     with pytest.raises(PauseExc):
         rc.compose_propose_email(ctx)
-    assert rc.compose_propose_email(ctx) == "propose email sent"
+    assert rc.compose_propose_email(ctx) == "propose email ready"
     assert "propose" in ctx.rf.get("emails")
     assert ctx.rf.get("emailPending") is None
 
@@ -102,7 +102,7 @@ def test_vote_resume_keeps_the_emailed_deadline(make_ctx):
     emailed = ctx.rf.get("voteDeadline")
     first_now = ctx.now
     ctx.now = lambda: first_now() + timedelta(hours=5)       # the resume comes hours later
-    assert rc.compose_vote_email(ctx) == "vote email sent"
+    assert rc.compose_vote_email(ctx) == "vote email ready"
     assert ctx.rf.get("voteDeadline") == emailed
 
 
@@ -114,7 +114,7 @@ def test_attempt_start_after_a_kill_keeps_the_mail_visibly_pending(make_ctx):
     persisted = ctx.rf.get("pause")
     assert persisted and ctx.rf.get("emailPending") == "propose"
     # a --resume then acknowledges the mail as sent and the pause is cleared by the next attempt_start (Task 8)
-    assert rc.compose_propose_email(ctx) == "propose email sent"
+    assert rc.compose_propose_email(ctx) == "propose email ready"
 
 
 def test_reset_leaves_another_mails_pending_mark(make_ctx):
@@ -139,3 +139,42 @@ def test_result_and_announce_text():
     assert "https://downloads.apache.org/juneau/9.2.1/" in body or "dist/release/juneau/9.2.1/" in body
     assert "https://github.com/x/y" in body
     assert "Thanks all." in body
+
+
+def test_pause_opens_the_mail_file(make_ctx):
+    ctx = make_ctx()
+    opened = []
+    ctx.opener = opened.append
+    with pytest.raises(PauseExc):
+        rc.compose_propose_email(ctx)
+    assert opened == [ctx.run_dir / "emails" / "propose.eml.txt"]
+
+
+def test_open_failure_only_warns(make_ctx):
+    ctx = make_ctx()
+    ctx.opener = lambda path: (_ for _ in ()).throw(OSError("no display"))
+    with pytest.raises(PauseExc):
+        rc.compose_propose_email(ctx)
+    assert ctx.rf.get("emailPending") == "propose"
+    assert any("could not open" in s and "no display" in s for s in ctx.fake.said)
+
+
+def test_dry_run_never_opens(make_ctx):
+    ctx = make_ctx(dry_run=True)
+    ctx.opener = lambda path: pytest.fail("opened under --dry-run")
+    emails.send(ctx, "propose", "a@b", "S", "B")
+
+
+def test_open_file_honors_opt_out_and_tool(monkeypatch, tmp_path):
+    launched = []
+    monkeypatch.setattr(emails.subprocess, "Popen", lambda argv, **kw: launched.append(argv))
+    monkeypatch.setattr(emails.shutil, "which", lambda name: "/usr/bin/" + name)
+    emails.open_file(tmp_path / "x")                  # JRM_NO_OPEN=1 from conftest
+    assert launched == []
+    monkeypatch.delenv("JRM_NO_OPEN")
+    emails.open_file(tmp_path / "x")
+    assert launched and launched[0][-1] == str(tmp_path / "x")
+    monkeypatch.setattr(emails.shutil, "which", lambda name: None)
+    launched.clear()
+    emails.open_file(tmp_path / "x")
+    assert launched == []

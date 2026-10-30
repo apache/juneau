@@ -288,7 +288,7 @@ def test_dist_stage_counts_downloads_only_with_the_feature(make_ctx):
     ctx = make_ctx(state={"nexusRepoId": "r-1"}, features=frozenset({"count"}))
     _staged(ctx)
     rc.dist_stage(ctx)
-    assert ctx.fake.counts == [(i, 6) for i in range(1, 7)]
+    assert ctx.fake.counts == [(i, 6) for i in range(0, 7)]
     old = make_ctx(state={"nexusRepoId": "r-1"})
     _staged(old)
     rc.dist_stage(old)
