@@ -287,6 +287,31 @@ class MavenParserTest(unittest.TestCase):
         ev = parser.on_line("[INFO] --- gpg:3.1.0:sign (sign-artifacts) @ mod-a ---")
         self.assertEqual(kinds(ev, "unit_goal"), [("unit_goal", "mvn/mod-a", "gpg:sign")])
 
+    def test_upload_lines_name_the_artifact_under_the_modules_goal(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "deploy"], None, "/nonexistent")
+        parser.on_line("[INFO] --- compiler:3.11.0:compile (default-compile) @ mod-a ---")
+        parser.on_line("[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ mod-a ---")
+        parser.on_line("[INFO] --- surefire:3.2.5:test (default-test) @ mod-a ---")
+        parser.on_line("[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.01 s -- in x.CalcTest")
+        self.assertEqual(kinds(parser.on_line("[INFO] --- deploy:3.1.1:deploy (default-deploy) @ mod-a ---"),
+                               "unit_goal"), [("unit_goal", "mvn/mod-a", "deploy:deploy")])
+        ev = parser.on_line("[INFO] Uploading to snap: https://repo/x/mod-a-1.0-bin.zip")
+        self.assertEqual(kinds(ev, "unit_goal"), [("unit_goal", "mvn/mod-a", "deploy:deploy · uploading mod-a-1.0-bin.zip")])
+
+    def test_a_nested_build_logged_behind_a_second_tag_drives_the_bar(self):
+        # release:perform re-logs the nested build's lines as "[INFO] [INFO] ..."
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "release:perform"], None, "/nonexistent")
+        ev = parser.on_line("[INFO] 2/3 perform:checkout-project-from-scm")
+        self.assertEqual(kinds(ev, "progress"), [("progress", "mvn", "perform 2/3 checkout-project-from-scm")])
+        ev = parser.on_line("[INFO] [INFO] Building Apache Juneau Core 9.2.1   [2/42]")
+        self.assertTrue(kinds(ev, "sub_start"), ev)
+        self.assertTrue(any(e[0] == "reactor" and e[1] == 42 for e in ev), ev)
+        self.assertEqual(parser.on_line("[INFO] [WARNING] [INFO] noise"), [])
+
     def test_a_plain_class_line_still_attributes_to_its_module(self):
         parser = jr.MavenParser()
         parser.step_id = "mvn"

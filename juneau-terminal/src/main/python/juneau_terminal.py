@@ -903,6 +903,7 @@ class Unit:
         self.started = False    # a unit_start arrived for it (the in-flight signal for the module bar)
         self.goal = None        # the plugin goal Maven is running for it after its tests (gpg:sign, deploy, ...)
         self.dropped = False    # a tests-mode module that ran no tests: left out of the bar and of its total
+        self.t_end = None       # when it ended, so a line kept on screen after its end stops counting
 
     @property
     def in_progress(self):
@@ -987,6 +988,7 @@ class _Row:
         self.units_done = 0
         self.unit_kind = None
         self.unit_cells = bytearray()   # one byte per unit: 0 pending, 1 pass, 2 fail, 3 skip
+        self.lingering = None   # the newest module to start: its line stays, past its tests and its end, until the next starts
         self.units_dropped = 0  # tests-mode modules that ran no tests, taken out of units_total (see _drop_unit)
         self.progress = None    # live progress text from the tool's own output; shown on the running row only
         self.estimate = None    # the Estimate from history, when there is one (spec 5.1)
@@ -1416,6 +1418,11 @@ class Board:
             m.started = True
             if src in BAR_SRCS:
                 self.unit_rows[f["id"]] = r     # file and script ids are only unique within their row
+                r.progress = None       # a module is running: the pre-build phase text (perform 2/3 ...) is over
+                if src == "sub" and f["id"] not in r.unbarred:
+                    # A module is boxed when its tests end but keeps running its later goals (gpg:sign, deploy), and
+                    # under -T its end only comes with the summary: only the newest one stays drawn past its box.
+                    r.lingering = m
             if f["id"] in r.poms:     # a pom has no work to wait for; under -T its end only comes with the summary
                 self._setup_box(r, m, "pass")
                 return self._setup_settled()
@@ -1492,12 +1499,13 @@ class Board:
         del r.unit_cells[r.units_total:]
         r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
 
-    def _drop_unit(self, r, m):
+    def _drop_unit(self, r, m, force=False):
         """A tests-mode module ended having run no tests: it leaves the bar and the total instead of drawing a skip cell.
         The count of modules that will run tests is only known as modules end (--also-make pulls in many upstream
         modules with none), so the live bar starts at the reactor's size and N shrinks as those drop out.  The n/N
         and the bar therefore only ever lose cells that were never going to say anything."""
-        if r.keep_units or r.unit_kind != "modules" or m.id in r.unbarred or m.dropped or m.unit_index is not None:
+        if (r.keep_units and not force) or r.unit_kind != "modules" or m.id in r.unbarred or m.dropped \
+                or m.unit_index is not None:
             return
         m.dropped = True
         r.units_dropped += 1
@@ -1624,7 +1632,7 @@ class Board:
             if m.src == "file" and (m.status == "fail" or "fail" in m.outcomes):
                 self._fail_file(r, m)
             return []
-        m.status, m.ms = f["status"], ms
+        m.status, m.ms, m.t_end = f["status"], ms, self.clock()
         if f.get("totals"):
             m.totals = _totals(f["totals"])
         failed = m.status == "fail" or bool(m.totals and m.totals[1] + m.totals[2])
@@ -1649,6 +1657,12 @@ class Board:
                 r.failed_units.append(m.title)
             if failed:
                 self._count_extra_unit(r, m, "fail")
+        elif m.status == "skip" and not failed and m.box is None and not m.outcomes and not (m.totals and m.totals[0]) \
+                and UNIT_FAIL not in r.unit_cells and not r.failed_units:
+            # the Reactor Summary's SKIPPED rows of a build that has not failed: modules the command never built (an
+            # aggregate goal like javadoc:aggregate runs in the root alone), not units that were skipped, so they leave
+            # the bar and its total rather than draw a wall of skip cells.  After a failure they stay: not run because of it.
+            self._drop_unit(r, m, force=True)
         else:
             if failed:
                 self._grant(r, m, "fail")
@@ -2467,7 +2481,7 @@ class LiveRenderer:
         label = row_label(r, board.width(), now, self.color)
         quiet = f" · quiet {r.quiet}s" if pending and r.quiet else ""
         progress = (r.progress if r.running and r.progress
-                    and (not r.unit_kind or (r.unit_kind == "checks" and not r.units_running)) else None)
+                    and (not r.unit_kind or (r.unit_kind in ("checks", "modules") and not r.units_running)) else None)
         return label, cells, count, text, elapsed, cut, quiet, progress, bool(r.unit_kind)
 
     @staticmethod
@@ -2538,6 +2552,8 @@ class LiveRenderer:
             if r.id in current:
                 out.append(current[r.id])
             mine = [m for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
+            if r.lingering is not None and r.lingering not in mine and r.lingering.box != "fail":
+                mine.append(r.lingering)     # the newest module, past its tests or its end, until the next starts
             width = max((_vlen(m.title) for m in mine), default=1)        # _sub_lines caps it
             for m in mine:
                 out += self._sub_lines(m, cols, width, now)
@@ -2559,7 +2575,7 @@ class LiveRenderer:
         a dot), the newest dots that fit, then its elapsed time ending at column cols.  When the dots do not all fit,
         the last cells hold "+N", N being the older results dropped (red if any of them failed, else green), so the
         strip keeps its full width and elapsed never moves.  The line is never wider than cols."""
-        elapsed = fmt_elapsed(((self.clock() if now is None else now) - m.t0) * 1000)
+        elapsed = fmt_elapsed(((m.t_end if m.t_end is not None else self.clock() if now is None else now) - m.t0) * 1000)
         # 9: the indent, the gap after the title, one dot and the gap before elapsed
         width = max(1, min(cols // 2, cols - 9 - len(elapsed), _vlen(m.title) if width is None else width))
         title = _vcut(m.title, width)
@@ -4213,6 +4229,7 @@ class MavenParser(Parser):
     HEADER = re.compile(r"^\[INFO\] -+< (\S+):(\S+) >-+\s*$")
     ORDER_HEAD = re.compile(r"^\[INFO\] Reactor Build Order:\s*$")
     ORDER_ROW = re.compile(r"^\[INFO\] (.+?)\s+\[(\w[\w-]*)\]\s*$")
+    UPLOADING = re.compile(r"^\[INFO\] Uploading to \S+: (\S+)")
     ANY_PLUGIN = re.compile(r"^\[INFO\] --- (\S+?):(\S+):(\S+) \(.*\) @ (\S+) ---")
     COMPILE_PATH = re.compile(r"^\[ERROR\] (\S+\.java):\[")
     SKIP_TESTS = re.compile(r"(?:^|\s)-D(?:skipTests|maven\.test\.skip)(?:=true)?(?=\s|$)")
@@ -4275,6 +4292,7 @@ class MavenParser(Parser):
         self.last_compiler = None        # artifactId of the last compiler:* header
         self.tests_mode = True
         self.reactor_sent = False
+        self.goal_of = None              # (module sub id, goal) of the last unit_goal sent, for the upload lines under it
         self.building_seen = False
         self.in_summary = False
         self.summary_index = 0
@@ -4504,9 +4522,18 @@ class MavenParser(Parser):
         self.open.pop(sub, None)
         return events
 
+    NESTED = re.compile(r"^(\[(?:INFO|WARNING|ERROR)\]) \[(INFO|WARNING|ERROR)\] ")
+    PERFORM_PHASE = re.compile(r"^\[INFO\] (\d+/\d+) perform:(\S+)\s*$")
+
     def handle(self, line):
         self.generic.handle(line)
+        # release:perform runs a nested Maven whose lines the outer build logs again behind a second level tag
+        # ("[INFO] [INFO] Building ..."): read them as the plain lines they carry.
+        line = self.NESTED.sub(r"[\2] ", line)
         events = []
+        m = self.PERFORM_PHASE.match(line)
+        if m:       # the pre-build phases (checkout-project-from-scm clones the project for minutes) have no module yet
+            events.append(("progress", self.step_id, f"perform {m.group(1)} {m.group(2)}"))
         after_header, self.after_header = self.after_header, False
         if not self.reactor_sent:
             self.reactor_sent = True
@@ -4594,7 +4621,8 @@ class MavenParser(Parser):
             plugin = re.sub(r"^maven-(.+)-plugin$", r"\1", m.group(1))
             events += self._plugin_header(plugin, m.group(3), m.group(4))
             if self.phase.get(m.group(4)) in ("tested", "done") and self.packaging.get(m.group(4)) != "pom":
-                events.append(("unit_goal", f"{self.step_id}/{m.group(4)}", f"{plugin}:{m.group(3)}"))
+                self.goal_of = (f"{self.step_id}/{m.group(4)}", f"{plugin}:{m.group(3)}")
+                events.append(("unit_goal", *self.goal_of))
             if plugin in ("surefire", "failsafe"):
                 self.surefire_sub = f"{self.step_id}/{m.group(4)}"
             if plugin in self.EXEC_GOALS and m.group(3) == "exec":
@@ -4607,6 +4635,10 @@ class MavenParser(Parser):
             events += self._unittest_line(line)
             if events:
                 return events
+        m = self.UPLOADING.match(line)
+        if m and self.goal_of:
+            # the deploy goal's transfers can take minutes: say which artifact is going up
+            return [("unit_goal", self.goal_of[0], f"{self.goal_of[1]} · uploading {m.group(1).rsplit('/', 1)[-1]}")]
         m = self.CLASS_LINE.search(line)
         if m:
             t, f, e, s = (int(m.group(i)) for i in range(1, 5))

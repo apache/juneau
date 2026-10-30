@@ -107,12 +107,25 @@ class SetupRowTest(unittest.TestCase):
         b, _ = self.board(poms=5, total=2)
         self.assertEqual(b.rows["mvn"].units_total, 0)
 
-    def test_gray_cell_for_real_module_without_tests_stays(self):
-        b, _ = self.board(poms=0, total=2)
+    def test_gray_cell_for_real_module_skipped_after_a_failure_stays(self):
+        b, _ = self.board(poms=0, total=3)
+        b.apply("unit_start", dict(step="mvn", id="bad", title="B"))
+        b.apply("unit_end", dict(step="mvn", id="bad", status="fail", ms=1))
         b.apply("unit_start", dict(step="mvn", id="jar1", title="J"))
         b.apply("unit_end", dict(step="mvn", id="jar1", status="skip", ms=1))
-        self.assertEqual(b.rows["mvn"].units_done, 1)
-        self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_SKIP)
+        self.assertEqual(b.rows["mvn"].units_done, 2)
+        self.assertEqual(b.rows["mvn"].unit_cells[1], jr.UNIT_SKIP)
+
+    def test_modules_a_clean_build_never_built_leave_the_bar(self):
+        # javadoc:aggregate builds the root alone; the summary lists the other modules as SKIPPED
+        b, _ = self.board(poms=0, total=4)
+        b.apply("unit_start", dict(step="mvn", id="root", title="Root"))
+        b.apply("unit_end", dict(step="mvn", id="root", status="ok", ms=1))
+        for m in ("a", "b", "c"):
+            b.apply("unit_start", dict(step="mvn", id=m, title=m))
+            b.apply("unit_end", dict(step="mvn", id=m, status="skip", ms=0))
+        r = b.rows["mvn"]
+        self.assertEqual((r.units_done, r.units_total, list(r.unit_cells)), (1, 1, [jr.UNIT_PASS]))
 
     def test_all_pom_reactor_has_an_empty_bar_and_a_setup_row(self):
         b, _ = self.board(poms=3, total=3)
@@ -613,6 +626,21 @@ class UnitGoalTest(unittest.TestCase):
         b.apply("unit_goal", dict(step="mvn", id="mvn/a", goal="gpg:sign"))
         lines = live_region_lines(b)
         self.assertTrue(any(l.strip().startswith("a") and "gpg:sign" in l for l in lines), lines)
+
+    def test_only_the_newest_module_stays_once_its_tests_end(self):
+        # under -T a module's unit_end only comes with the Reactor Summary: modules whose tests ended must not pile up
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("reactor", dict(step="mvn", size=3, poms=[], tests=True))
+        for m in ("alpha", "bravo", "charlie"):
+            b.apply("unit_start", dict(step="mvn", id=f"mvn/{m}", title=m))
+            b.apply("unit_dot", dict(step="mvn", id=f"mvn/{m}", outcome="pass", src="sub"))
+            b.apply("module_tested", dict(step="mvn", module=f"mvn/{m}"))
+            b.apply("unit_goal", dict(step="mvn", id=f"mvn/{m}", goal="jacoco:report"))
+        subs = [l.strip().split()[0] for l in live_region_lines(b) if "jacoco:report" in l]
+        self.assertEqual(subs, ["charlie"])
 
 
 class StepSummaryAfterCommandTest(unittest.TestCase):

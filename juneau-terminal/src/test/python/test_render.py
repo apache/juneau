@@ -1557,7 +1557,16 @@ class LiveTest(unittest.TestCase):
         self.push(*start(), mod_start("a"), mod_start("b"))
         self.push(("unit_end", {"step": "tests", "id": "tests/a", "status": "ok", "ms": 1, "totals": None}),
                   ("unit_end", {"step": "tests", "id": "tests/b", "status": "ok", "ms": 1, "totals": None}))
-        self.assertEqual(len(self.screen.text().splitlines()), 1)
+        self.assertEqual(len(self.screen.text().splitlines()), 2)   # the row, and the last module's line until the next starts
+
+    def test_a_module_line_stays_until_the_next_module_starts(self):
+        self.push(*start(), mod_start("a"))
+        self.push(("unit_end", {"step": "tests", "id": "tests/a", "status": "ok", "ms": 1, "totals": None}))
+        self.assertIn("Mod A", self.screen.text())
+        self.push(mod_start("b"))
+        text = self.screen.text()
+        self.assertIn("Mod B", text)
+        self.assertNotIn("Mod A", text)
 
     def test_colour_and_no_colour_glyphs(self):
         for color in (True, False):
@@ -1893,7 +1902,8 @@ class LiveTest(unittest.TestCase):
         self.assertTrue(all(len(line) <= 63 for line in lines), lines)
         self.assertNotIn("\u2026", "".join(lines))        # no cell is cut: the bar wraps instead
         self.assertEqual("".join(lines).count("\u25a0"), 80)
-        self.assertTrue(lines[-1].startswith(" " * 14 + "80/80  7,139 tests, 2 failed") and lines[-1].endswith("1:21"), lines[-1])   # on its own line
+        self.assertTrue(lines[-2].startswith(" " * 14 + "80/80  7,139 tests, 2 failed") and lines[-2].endswith("1:21"), lines[-2])   # on its own line
+        self.assertIn("Mod M79", lines[-1])        # the last module's line stays until the next one starts
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 90000, "exit": 1, "summary": None,
                                 "totals": None}))
         rows = self.screen.text().splitlines()
