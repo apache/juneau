@@ -429,7 +429,8 @@ click_hit() {
 }
 
 # Prints PREFIX followed by the close button, then waits for a click on the button, Enter, or (when MINUTES is set) the
-# timeout.  The button's row comes from a cursor-position report taken right after printing it (its columns are known from
+# timeout.  The button's row comes from a cursor-position report taken on the line below it, after the newline that ends
+# the button's line (so a button on the pane's last row has already scrolled into place; its columns are known from
 # PREFIX's length); when that fails, or the line would wrap, any left click closes.
 kept_wait() {
 	local prefix=$1 mins=${2:-} btn='[ click here to close ]' hint='  (or press Enter)' row= c1= c2= cols resp ch seq c left deadline=
@@ -438,7 +439,7 @@ kept_wait() {
 	trap kept_restore EXIT
 	trap 'exit 130' HUP INT TERM
 	printf '\033[?1000h\033[?1006h'
-	printf '\n%s%s%s' "$prefix" "$btn" "$hint"
+	printf '\n%s%s%s\n' "$prefix" "$btn" "$hint"
 	cols=$(tput cols 2>/dev/null)
 	if [ "${cols:-0}" -gt $((${#prefix} + ${#btn} + ${#hint})) ] 2>/dev/null; then
 		printf '\033[6n'
@@ -446,10 +447,9 @@ kept_wait() {
 		IFS= read -rs -t 1 -d R resp
 		resp=${resp##*$'\033['}
 		case $resp in
-			[0-9]*\;[0-9]*) row=${resp%%;*}; c1=$((${#prefix} + 1)); c2=$((c1 + ${#btn} - 1)) ;;
+			[0-9]*\;[0-9]*) row=$((${resp%%;*} - 1)); c1=$((${#prefix} + 1)); c2=$((c1 + ${#btn} - 1)) ;;
 		esac
 	fi
-	printf '\n'
 	[ -z "$mins" ] || deadline=$((SECONDS + mins * 60))
 	while :; do
 		if [ -n "$deadline" ]; then

@@ -156,6 +156,16 @@ class TmuxPaneTest(PaneCase):
         self.tmux("send-keys", "-l", "-t", pane, "\033[<0;%d;%dM" % (col, row))
         self.assertEqual(self.wait_panes(1), 1)
 
+    def test_clicking_the_button_closes_the_pane_when_the_cursor_started_on_the_last_row(self):
+        code, out = self.sub("-k", "always", "--", "sh", "-c", "sleep 1; seq 1 300")
+        pane = out.split()[1].rstrip(":")
+        time.sleep(1.5)
+        lines = self.tmux("capture-pane", "-p", "-t", pane).splitlines()
+        row = next(i for i, l in enumerate(lines) if "click here" in l) + 1
+        col = lines[row - 1].index("click here") + 1
+        self.tmux("send-keys", "-l", "-t", pane, "\033[<0;%d;%dM" % (col, row))
+        self.assertEqual(self.wait_panes(1), 1)
+
     def test_read_only_kept_pane_has_no_button(self):
         code, out = self.sub("-k", "always", "--read-only", "--", "true")
         pane = out.split()[1].rstrip(":")
