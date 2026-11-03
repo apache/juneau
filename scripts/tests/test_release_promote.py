@@ -28,6 +28,28 @@ def test_mirror_wait_pauses_after_30_minutes(make_ctx):
     assert e.value.done is False and ctx.resume_hint in e.value.message and "mirrors" in e.value.message
 
 
+def test_mirror_wait_notes_progress_on_the_row(make_ctx):
+    notes = []
+    ctx = make_ctx(http_ok=lambda url: False)
+    ctx.sleep = lambda s: None
+    ctx.current_step = lambda: type("Row", (), {"detail": staticmethod(notes.append)})()
+    with pytest.raises(PauseExc):
+        promote.compose_announce_email(ctx)
+    assert len(notes) == promote.MIRROR_POLLS
+    assert notes[0] == "waiting for downloads.apache.org (1/72, ~30:00 left)"
+    assert notes[-1] == "waiting for downloads.apache.org (72/72, ~00:25 left)"
+
+
+def test_github_release_url_falls_back_to_the_tag_page(make_ctx):
+    ctx = make_ctx(state={"vote": {"outcome": "passed"}})
+    ctx.fake.script("gh", "release", "create", out="")
+    out = promote.github_release(ctx)
+    url = "https://github.com/apache/juneau/releases/tag/juneau-9.2.1"
+    assert out == url and ctx.rf.get("githubReleaseUrl") == url
+    gh = next(c for c in ctx.fake.calls if c["argv"][0] == "gh")
+    assert gh.get("capture") is True
+
+
 def test_mirror_wait_proceeds_when_the_release_appears(make_ctx):
     sleeps, calls = [], []
 

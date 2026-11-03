@@ -194,7 +194,7 @@ def announce(d, github_url):
         parts.append(f"Highlights:\n{d['highlights']}")
     if d.get("knownIssues"):
         parts.append(f"Known issues:\n{d['knownIssues']}")
-    parts.append(f"Downloads: {inventory.DIST_RELEASE}/{v}/\nGitHub Release: {github_url or 'n/a'}\n"
+    parts.append(f"Downloads: {inventory.DOWNLOADS}/{v}/\nGitHub Release: {github_url or 'n/a'}\n"
                  "Release notes: https://juneau.apache.org/#release-notes")
     if d.get("acknowledgements"):
         parts.append(d["acknowledgements"])

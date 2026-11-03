@@ -16,6 +16,7 @@ from .ctx import StepError
 from .rc import dev_dir, git_env, wanted_files
 
 MIRROR_POLLS = 72   # 25 s each: 30 minutes
+MIRROR_POLL_SECONDS = 25
 FUNCS = {}
 
 
@@ -86,13 +87,15 @@ def github_release(ctx):
             f"Apache Juneau {v}", "--notes", ctx.d["summary"]]
     if any(t > inventory.parse_version(v) for t in _release_tags(ctx)):
         argv.append("--latest=false")    # a patch on an older line must not become "Latest"
-    r = ctx.runner.run(argv, title="GitHub release", mutating=True, tool="github",
+    r = ctx.runner.run(argv, title="GitHub release", mutating=True, tool="github", capture=True,
                        env={"GH_TOKEN": ctx.cred("credential.github.token", secret=True)})
     if not r.ok:
         raise StepError("gh release create failed")
-    url = (r.out or "").strip().splitlines()[-1] if (r.out or "").strip() else None
+    lines = (r.out or "").strip().splitlines()
+    url = lines[-1].strip() if lines and lines[-1].strip().startswith("http") else None
+    url = url or f"https://github.com/{inventory.GH_SLUG}/releases/tag/{tag}"
     ctx.rf.set("githubReleaseUrl", url)
-    return url or "release created"
+    return url
 
 
 @step
@@ -106,7 +109,9 @@ def compose_announce_email(ctx):
         if polls == MIRROR_POLLS:
             raise ctx.pause(f"The release is not on the mirrors yet ({url}).  Run: {ctx.resume_hint} later.", done=False)
         polls += 1
-        ctx.sleep(25)
+        left = (MIRROR_POLLS - polls + 1) * MIRROR_POLL_SECONDS
+        ctx.note(f"waiting for downloads.apache.org ({polls}/{MIRROR_POLLS}, ~{left // 60:02d}:{left % 60:02d} left)")
+        ctx.sleep(MIRROR_POLL_SECONDS)
     to, sub, body = emails.announce(ctx.d, ctx.rf.get("githubReleaseUrl"))
     return emails.send(ctx, "announce", to, sub, body, cc=(inventory.DEV_LIST,))
 

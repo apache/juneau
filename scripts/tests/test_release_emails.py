@@ -136,7 +136,8 @@ def test_result_and_announce_text():
     to, sub, body = emails.announce({**D, "acknowledgements": "Thanks all."}, "https://github.com/x/y")
     assert to == "announce@apache.org"
     assert sub == "[ANNOUNCE] Apache Juneau 9.2.1 released"
-    assert "https://downloads.apache.org/juneau/9.2.1/" in body or "dist/release/juneau/9.2.1/" in body
+    assert "Downloads: https://downloads.apache.org/juneau/9.2.1/\n" in body
+    assert "dist.apache.org" not in body
     assert "https://github.com/x/y" in body
     assert "Thanks all." in body
 

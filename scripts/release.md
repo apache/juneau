@@ -91,7 +91,7 @@ A pause ends the attempt with exit 0 and status `paused`. `run.json` records `pa
 | `vote-gate` | Wait for the vote to close | `release.py --resume` |
 | `vote-tally`, vote still open | Wait for the deadline in `voteDeadline` | `release.py --resume` after it |
 | `vote-tally`, no valid `vote:` block | Fill in `vote:` in the params file | `release.py --resume` |
-| `compose-announce-email`, release not on the mirrors | Wait | `release.py --resume` later; each resume waits a fresh 30 minutes |
+| `compose-announce-email`, release not on the mirrors | Wait | `release.py --resume` later; each resume waits a fresh 30 minutes; the step row shows `waiting for downloads.apache.org (n/72, ~mm:ss left)` while it polls |
 
 Details:
 
