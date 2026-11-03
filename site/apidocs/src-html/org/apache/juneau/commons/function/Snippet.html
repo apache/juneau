@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24"> * but your code may throw checked exceptions. Unlike {@link Runnable}, the {@link #run()} method can throw any</span>
 <span class="source-line-no">025</span><span id="line-25"> * {@link Throwable}, making it suitable for exception testing and fluent API patterns.</span>
 <span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> *    &lt;li&gt;Functional interface - can be used with lambda expressions and method references</span>
 <span class="source-line-no">030</span><span id="line-30"> *    &lt;li&gt;Exception support - allows checked exceptions to be thrown</span>
@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;Testing support - useful for exception testing scenarios</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;/ul&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;Exception testing - verifying that code throws expected exceptions</span>
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;Fluent interfaces - passing code snippets to builder methods</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Error handling - passing error-prone code to handlers</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Exception testing&lt;/jc&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    Snippet &lt;jv&gt;code&lt;/jv&gt; = () -&amp;gt; {</span>
@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64"> *    }</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Comparison with Runnable:&lt;/h5&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;Comparison with Runnable:&lt;/h2&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;&lt;b&gt;Runnable:&lt;/b&gt; Cannot throw checked exceptions (must catch and wrap)</span>
 <span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;&lt;b&gt;Snippet:&lt;/b&gt; Can throw any {@link Throwable} (checked or unchecked)</span>
@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;&lt;b&gt;Snippet:&lt;/b&gt; Used for exception testing and fluent APIs</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview"&gt;Juneau Ecosystem&lt;/a&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;/ul&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> */</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line-88">    * This method is the functional method of this interface. It can throw any {@link Throwable},</span>
 <span class="source-line-no">089</span><span id="line-89">    * including checked exceptions, which distinguishes it from {@link Runnable#run()}.</span>
 <span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">091</span><span id="line-91">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">092</span><span id="line-92">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">093</span><span id="line-93">    *    Snippet &lt;jv&gt;snippet&lt;/jv&gt; = () -&amp;gt; {</span>
 <span class="source-line-no">094</span><span id="line-94">    *       &lt;jc&gt;// Code that may throw exceptions&lt;/jc&gt;</span>

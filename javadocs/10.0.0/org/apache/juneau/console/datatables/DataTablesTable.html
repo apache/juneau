@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,13 +98,13 @@ loadScripts(document, 'script');</script>
  helper is intentionally scoped to the <code>juneau-console-datatables</code> module so the marshall core and
  <code>HtmlDocSerializer</code> stay decoupled from any DataTables-specific rendering.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Server-render the rows; the browser calls $('#releases').DataTable() to upgrade it.</jc>
    Table <jv>t</jv> = DataTablesTable.<jsm>of</jsm>(<js>"releases"</js>, <jv>releases</jv>, Release.<jk>class</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="DataTablesColumns.html" title="class in org.apache.juneau.console.datatables"><code>DataTablesColumns</code></a>
    <li class='jc'><a href="DataTablesMixin.html" title="class in org.apache.juneau.console.datatables"><code>DataTablesMixin</code></a>
    <li class='link'><a class="doclink" href="https://datatables.net/examples/data_sources/dom">DataTables from a pre-rendered DOM table</a>

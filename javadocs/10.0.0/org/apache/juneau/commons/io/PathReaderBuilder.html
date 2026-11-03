@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
  character encodings and optional handling for missing files. It's similar to <a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io"><code>FileReaderBuilder</code></a>
  but works with the modern NIO Path API instead of the legacy File API.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Fluent API - all methods return <c>this</c> for method chaining
    <li>NIO Path support - works with modern <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a> API
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
    <li>Multiple path specification methods - accept Path or String path
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Reading files with specific character encodings using NIO Path API
    <li>Handling optional configuration files that may not exist
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    <li>Working with NIO-based file operations
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Basic usage</jc>
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
@@ -125,13 +124,13 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>Character Encoding:</h5>
+ <h2 class='section'>Character Encoding:</h2>
  <p>
  By default, the builder uses the system's default charset (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html#defaultCharset()" title="class or interface in java.nio.charset" class="external-link"><code>Charset.defaultCharset()</code></a>).
  You can specify a custom charset using <a href="#charset(java.nio.charset.Charset)"><code>charset(Charset)</code></a> or <a href="#charset(java.lang.String)"><code>charset(String)</code></a>.
  This is important when reading files that were written with a specific encoding.
 
- <h5 class='section'>Comparison with FileReaderBuilder:</h5>
+ <h2 class='section'>Comparison with FileReaderBuilder:</h2>
  <ul class='spaced-list'>
    <li><b>FileReaderBuilder:</b> Works with legacy <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> API
    <li><b>PathReaderBuilder:</b> Works with modern NIO <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a> API
@@ -139,7 +138,7 @@ loadScripts(document, 'script');</script>
    <li><b>PathReaderBuilder:</b> Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Files.html#newBufferedReader(java.nio.file.Path,java.nio.charset.Charset)" title="class or interface in java.nio.file" class="external-link"><code>Files.newBufferedReader(Path, Charset)</code></a>
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io"><code>FileReaderBuilder</code></a> - Builder for File-based readers
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  </ul></div>
@@ -256,7 +255,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.commons.io">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/PathReaderBuilder.html#line-109">create</a></span>()</div>
 <div class="block">Creates a new builder.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
       .path(Paths.get(<js>"data.txt"</js>))
@@ -274,7 +273,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.commons.io">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/PathReaderBuilder.html#line-127">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
 <div class="block">Creates a new builder initialized with the specified path.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Path <jv>path</jv> = Paths.get(<js>"config.properties"</js>);
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>(<jv>path</jv>)
@@ -300,7 +299,7 @@ loadScripts(document, 'script');</script>
  method will return a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/StringReader.html" title="class or interface in java.io" class="external-link"><code>StringReader</code></a> with empty content instead of throwing an
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>. This is useful for optional configuration files.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Without allowNoFile - throws exception if file doesn't exist</jc>
    Reader <jv>reader1</jv> = PathReaderBuilder.<jsm>create</jsm>()
@@ -328,7 +327,7 @@ loadScripts(document, 'script');</script>
  <p>
  Boolean-arg form of <a href="#allowNoFile()"><code>allowNoFile()</code></a>, useful when the setting is conditional.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
       .path(Paths.get(<js>"optional.txt"</js>))
@@ -355,7 +354,7 @@ loadScripts(document, 'script');</script>
  this method returns an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/StringReader.html" title="class or interface in java.io" class="external-link"><code>StringReader</code></a>. Otherwise, it creates a buffered reader
  using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Files.html#newBufferedReader(java.nio.file.Path,java.nio.charset.Charset)" title="class or interface in java.nio.file" class="external-link"><code>Files.newBufferedReader(Path, Charset)</code></a> with the specified character encoding.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> (Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
       .path(Paths.get(<js>"data.txt"</js>))
@@ -385,7 +384,7 @@ loadScripts(document, 'script');</script>
  Specifying the encoding is important when reading files that were written with a specific
  character encoding. Passing <jk>null</jk> resets to the default charset.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
       .path(Paths.get(<js>"data.txt"</js>))
@@ -412,7 +411,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link"><code>Charset</code></a> using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html#forName(java.lang.String)" title="class or interface in java.nio.charset" class="external-link"><code>Charset.forName(String)</code></a>. Passing <jk>null</jk> resets to
  the default charset.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
       .path(Paths.get(<js>"data.txt"</js>))
@@ -435,7 +434,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PathReaderBuilder.html" title="class in org.apache.juneau.commons.io">PathReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/PathReaderBuilder.html#line-288">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
 <div class="block">Sets the path to read from.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Path <jv>p</jv> = Paths.get(<js>"config.properties"</js>);
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
@@ -460,7 +459,7 @@ loadScripts(document, 'script');</script>
  This is a convenience method that converts a string path to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a> using
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Paths.html#get(java.lang.String,java.lang.String...)" title="class or interface in java.nio.file" class="external-link"><code>Paths.get(String, String...)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
       .path(<js>"/path/to/file.txt"</js>)

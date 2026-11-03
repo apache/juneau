@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Bean-only ({@code juneau-console-widgets}): the emitter and runtime live in {@code juneau-console-views}.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Titles, tooltips, and labels are painted with {@code textContent} by the runtime, never as markup.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;{@code end} is layout-significant, with split inclusivity:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;{@code end} is layout-significant, with split inclusivity:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;All-day (date-only {@code end}):&lt;/b&gt; &lt;b&gt;inclusive&lt;/b&gt;.  {@code start=2026-03-02}, {@code end=2026-03-04}</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 		occupies &lt;b&gt;three&lt;/b&gt; day cells.</em>
@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * 		{@code start} is zero-duration and is rejected, as is any {@code end} before {@code start}.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;All-day agreement and the malformed set:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;All-day agreement and the malformed set:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * Agreement between {@code allDay} and the shape of {@code end} is decided by {@link #effectiveAllDay()}, never by</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * the raw {@link #allDay} field, so a &lt;jk&gt;null&lt;/jk&gt; {@code allDay} paired with matching {@code start}/{@code end}</em>
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * through {@link #retainWellFormed(Collection)} &amp;mdash; the same rule on both paths.  Neither fails the whole</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * definition nor the whole month payload.  An omitted {@code end} is &lt;b&gt;not&lt;/b&gt; malformed.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Timezone contract:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Timezone contract:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * {@code start}/{@code end} are interpreted as an ISO-8601 local date ({@code yyyy-MM-dd}) or local date-time</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * ({@code yyyy-MM-ddTHH:mm}).  A trailing offset or {@code Z} is &lt;b&gt;fail-soft ignored, never rejected&lt;/b&gt; &amp;mdash; a</em>

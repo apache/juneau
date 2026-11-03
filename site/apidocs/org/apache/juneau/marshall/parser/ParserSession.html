@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,11 +93,11 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe and is typically discarded after one use.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  </ul></div>
@@ -826,7 +825,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  This is the preferred parse method for simple types since you don't need to cast the results.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 
@@ -900,7 +899,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 
@@ -929,7 +928,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  The array can be arbitrarily long to indicate arbitrarily complex data structures.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Use the <a href="#read(java.lang.Object,java.lang.Class)"><code>read(Object, Class)</code></a> method instead if you don't need a parameterized map/collection.
  </ul></div>
@@ -984,7 +983,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  This is the preferred parse method for simple types since you don't need to cast the results.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  Only entries that pass the filter (i.e., the predicate returns <jk>true</jk>) are actually stored in
  the underlying map.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li><b>Flexible Filtering:</b> Use any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiPredicate.html" title="class or interface in java.util.function" class="external-link"><code>BiPredicate</code></a> to filter entries based on key, value, or both
    <li><b>Optional Filter:</b> Filter is optional when using the builder - defaults to accepting all entries
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    <li><b>Filter on Add:</b> Filtering happens when entries are added via <a href="#put(K,V)"><code>put(Object, Object)</code></a>, <a href="#putAll(java.util.Map)"><code>putAll(Map)</code></a>, etc.
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create a filtered map that only accepts non-null values</jc>
    FilteredMap&lt;String, String&gt; <jv>map</jv> = FilteredMap
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
    <jc>// map now contains: {"key1"="value1", "key3"="value3"}</jc>
  </p>
 
- <h5 class='section'>Example - Custom Map Type:</h5>
+ <h2 class='section'>Example - Custom Map Type:</h2>
  <p class='bjava'>
    <jc>// Create a filtered TreeMap that only accepts positive values</jc>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
@@ -139,7 +138,7 @@ loadScripts(document, 'script');</script>
    <jv>map</jv>.put(<js>"c"</js>, 10);  <jc>// Added</jc>
  </p>
 
- <h5 class='section'>Behavior Notes:</h5>
+ <h2 class='section'>Behavior Notes:</h2>
  <ul class='spaced-list'>
    <li>Filtering is applied to all entry addition methods: <a href="#put(K,V)"><code>put(Object, Object)</code></a>, <a href="#putAll(java.util.Map)"><code>putAll(Map)</code></a>, etc.
    <li>If the filter returns <jk>false</jk>, the entry is silently ignored (not added)
@@ -151,12 +150,12 @@ loadScripts(document, 'script');</script>
    <li>The underlying map type is determined by the <c>inner</c> method (defaults to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a>)
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is not thread-safe unless the underlying map is thread-safe. If thread safety is required,
  use a thread-safe map type (e.g., <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a>) via the <c>inner</c> method.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  </ul></div>
@@ -399,7 +398,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  allowing any key and value types to be added. However, the generic type parameters should still be
  specified for type safety.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Explicitly specify generic types using diamond operator</jc>
    <jk>var</jk> <jv>map</jv> = FilteredMap
@@ -469,7 +468,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  adding it to the map. This is useful for validation, debugging, or pre-checking entries before
  attempting to add them.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
       .<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -500,7 +499,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  The returned predicate is the combined filter used internally by this map. If multiple filters
  were set via the builder, they are combined using AND logic.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
       .<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -648,27 +647,27 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  the types (if key/value types were specified when creating the map). After conversion and validation,
  the entry is added using the standard <a href="#put(K,V)"><code>put(Object, Object)</code></a> method, which applies the filter.
 
- <h5 class='section'>Type Conversion:</h5>
+ <h4 class='section'>Type Conversion:</h4>
  <ul>
    <li>If a key function is configured, the key is converted by applying the function
    <li>If a value function is configured, the value is converted by applying the function
    <li>If no function is configured, the object is used as-is (but may be validated if types were specified)
  </ul>
 
- <h5 class='section'>Type Validation:</h5>
+ <h4 class='section'>Type Validation:</h4>
  <ul>
    <li>If key type was specified (via <a href="#create(java.lang.Class,java.lang.Class)"><code>create(Class, Class)</code></a>), the converted key must be an instance of that type
    <li>If value type was specified (via <a href="#create(java.lang.Class,java.lang.Class)"><code>create(Class, Class)</code></a>), the converted value must be an instance of that type
    <li>If <a href="#create()"><code>create()</code></a> was used (no types specified), <c>Object.class</c> is used, which accepts any type
  </ul>
 
- <h5 class='section'>Return Value:</h5>
+ <h4 class='section'>Return Value:</h4>
  <ul>
    <li>If the entry is added successfully, returns the previous value associated with the key (or <jk>null</jk> if there was no mapping)
    <li>If the entry is filtered out, returns <jk>null</jk> (even if there was a previous value)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
       .<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -699,7 +698,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  This method iterates over all entries in the source map and adds each one using <a href="#add(java.lang.Object,java.lang.Object)"><code>add(Object, Object)</code></a>,
  which applies conversion and validation before adding.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
       .<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -734,7 +733,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  Each entry from the maps will be added using <a href="#add(java.lang.Object,java.lang.Object)"><code>add(Object, Object)</code></a>, which applies
  conversion and filtering.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
       .<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -764,7 +763,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="FilteredMap.Builder.html" t
  in the array. Each pair is added using <a href="#add(java.lang.Object,java.lang.Object)"><code>add(Object, Object)</code></a>, which applies
  conversion and filtering.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
       .<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)

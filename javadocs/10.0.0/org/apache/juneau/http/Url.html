@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  Identifies a method parameter on a REST proxy interface whose value supplies the entire request URL (or a
  root-relative URL) for that single call &mdash; the Retrofit <c>@Url</c> pattern.
 
- <h5 class='topic'>Arguments of client-side @Remote-annotated interfaces</h5>
+ <h2 class='topic'>Arguments of client-side @Remote-annotated interfaces</h2>
  <p>
  When the bound argument is non-<jk>null</jk> and non-blank, its string value becomes the effective URL for that
  invocation, overriding the interface/method-declared path resolution:
@@ -100,7 +99,7 @@ loadScripts(document, 'script');</script>
  <a href="remote/Remote.html#path()"><code>Remote.path()</code></a> + <code>@RemoteOp(path=...)</code> and over any declarative
  <code>baseUrl</code> override.
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <ja>@Remote</ja>(path=<js>"/api"</js>)
    <jk>public interface</jk> MyProxy {
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       At most one <ja>@Url</ja> parameter is allowed per method (validated at proxy-build time).
    <li class='note'>
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
       (<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  </ul></div>
 <dl class="notes">

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  configured instance as a bean, or return one from a <code>@Bean</code> factory method on the resource; the resolver picks it
  up via <a href="RestContext.html#getRequestIdSettings()"><code>RestContext.getRequestIdSettings()</code></a>.
 
- <h5 class='topic'>Resolution behavior</h5>
+ <h2 class='topic'>Resolution behavior</h2>
  <ol>
    <li>If the request already carries a non-empty id under <a href="#getAttributeKey()"><code>attributeKey</code></a> (idempotent re-entry
       or a parent filter), that value is honored unchanged.
@@ -99,14 +98,14 @@ loadScripts(document, 'script');</script>
    <li>Otherwise a fresh id is minted via <a href="#getIdSupplier()"><code>idSupplier</code></a>.
  </ol>
 
- <h5 class='topic'>Default validator &mdash; sanitize-and-accept</h5>
+ <h2 class='topic'>Default validator &mdash; sanitize-and-accept</h2>
  <p>
  Unlike a reject-and-remint regex, the default validator <a href="RequestIdSettings.Builder.html#validator(java.util.function.Predicate)">accepts</a> any candidate
  that survives sanitization within the length cap.  The sanitizer already neutralizes CR/LF/control-character
  header-injection payloads (escaping them to inert, ASCII-safe <code>\\uXXXX</code>), so the default honors a cleaned form
  rather than discarding a slightly-dirty id.  Supply a stricter validator (e.g. UUID-only) to opt into reject-and-remint.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  </ul></div>
 <dl class="notes">

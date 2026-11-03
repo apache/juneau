@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  the <code>/favicon.ico</code> URL becomes available alongside the host's own endpoints with no further
  wiring.
 
- <h5 class='section'>Hardcoded mount path:</h5>
+ <h2 class='section'>Hardcoded mount path:</h2>
 
  <p>
  Unlike the sibling api-docs and ops mixins (see <a href="../docs/SwaggerMixin.html" title="class in org.apache.juneau.rest.server.docs"><code>SwaggerMixin</code></a>,
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
  Browsers fetch <code>/favicon.ico</code> from the site root regardless of any application-level
  routing rewrites, so a runtime mount-path override here would have no practical effect.
 
- <h5 class='section'>Mixin-only deployment:</h5>
+ <h2 class='section'>Mixin-only deployment:</h2>
 
  <p>
  This resource is designed for composition via <code>@Rest(mixins=...)</code>. The mount path is
@@ -113,7 +112,7 @@ loadScripts(document, 'script');</script>
  a class-level <code>@Rest(paths=...)</code> declaration would be silently ignored under the mixin
  pattern (see <a href="../Rest.html#paths()"><code>@Rest(paths)</code></a> Javadoc).
 
- <h5 class='figure'>Composition example:</h5>
+ <h2 class='figure'>Composition example:</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/api"</js>, mixins=FaviconMixin.<jk>class</jk>)
@@ -127,7 +126,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Behavior:</h5>
+ <h2 class='section'>Behavior:</h2>
 
  <ul class='spaced-list'>
    <li><code>GET /favicon.ico</code> returns the configured icon bytes with
@@ -141,7 +140,7 @@ loadScripts(document, 'script');</script>
       API-meaningful.
  </ul>
 
- <h5 class='section'>Builder API:</h5>
+ <h2 class='section'>Builder API:</h2>
 
  <ul class='spaced-list'>
    <li><a href="#create()"><code>create()</code></a> &mdash; entry point for configuring an instance.
@@ -152,7 +151,7 @@ loadScripts(document, 'script');</script>
       30-day <code>Cache-Control</code> header.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="SeoMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>SeoMixin</code></a>
    <li class='jc'><a href="VersionMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>VersionMixin</code></a>
    <li class='jc'><a href="WellKnownMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>WellKnownMixin</code></a>
@@ -328,7 +327,7 @@ loadScripts(document, 'script');</script>
  programmatic <a href="../RestBuilder.html" title="interface in org.apache.juneau.rest.server"><code>RestBuilder</code></a>(carrying any <code>@Rest</code>-level overrides such as <code>path</code>) so those
  values take precedence over the mixin class's own <a href="../Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a> annotation.
 
- <h5 class='section'>Why worker + builder, not the flavor Builder:</h5>
+ <h4 class='section'>Why worker + builder, not the flavor Builder:</h4>
  <ul class='spaced-list'>
    <li>Takes the already-built <b>worker bean</b> (not the flavor <a href="FaviconMixin.Builder.html" title="class in org.apache.juneau.rest.server.convention"><code>FaviconMixin.Builder</code></a>) so the flavor can be
       constructed from ANY independently-supplied worker &mdash; e.g. a user's own <code>@Bean FaviconProvider</code>

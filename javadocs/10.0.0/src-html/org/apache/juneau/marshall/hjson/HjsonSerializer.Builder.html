@@ -44,13 +44,13 @@
 <span class="source-line-no">031</span><span id="line-31">/**</span>
 <span class="source-line-no">032</span><span id="line-32"> * Serializes POJO models to Hjson (Human JSON).</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='topic'&gt;Media types&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;application/hjson, application/hjson+json&lt;/bc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * Produces &lt;c&gt;Content-Type&lt;/c&gt; types:  &lt;bc&gt;application/hjson&lt;/bc&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='topic'&gt;Description&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * Hjson is a syntax extension of JSON designed for human-friendly configuration files and hand-edited data.</span>
 <span class="source-line-no">043</span><span id="line-43"> * This serializer produces output that is valid Hjson and can be parsed back by {@link HjsonParser}.</span>
@@ -83,7 +83,7 @@
 <span class="source-line-no">070</span><span id="line-70"> * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.</span>
 <span class="source-line-no">071</span><span id="line-71"> * Several default transforms are provided for transforming Dates, Enums, Iterators, etc.</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
-<span class="source-line-no">073</span><span id="line-73"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;jc&gt;// Use one of the default serializers to serialize a POJO&lt;/jc&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *    String &lt;jv&gt;hjson&lt;/jv&gt; = HjsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;jv&gt;compact&lt;/jv&gt; = HjsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.copy().useMultilineStrings(&lt;jk&gt;true&lt;/jk&gt;).build();</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/p&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='figure'&gt;Example output - readable mode (Map of name/age):&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='figure'&gt;Example output - readable mode (Map of name/age):&lt;/h2&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> * &lt;p class='bjson'&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> *    {</span>
 <span class="source-line-no">088</span><span id="line-88"> *      name: Alice</span>
@@ -103,12 +103,12 @@
 <span class="source-line-no">090</span><span id="line-90"> *    }</span>
 <span class="source-line-no">091</span><span id="line-91"> * &lt;/p&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> *</span>
-<span class="source-line-no">093</span><span id="line-93"> * &lt;h5 class='figure'&gt;Example output - compact mode:&lt;/h5&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;h2 class='figure'&gt;Example output - compact mode:&lt;/h2&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> * &lt;p class='bjson'&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *    {name:Alice,age:30}</span>
 <span class="source-line-no">096</span><span id="line-96"> * &lt;/p&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> *</span>
-<span class="source-line-no">098</span><span id="line-98"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">098</span><span id="line-98"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> *    &lt;li class='note'&gt;String values equal to &lt;c&gt;true&lt;/c&gt;, &lt;c&gt;false&lt;/c&gt;, &lt;c&gt;null&lt;/c&gt;, or parseable as numbers</span>
 <span class="source-line-no">100</span><span id="line-100"> *       are automatically serialized in double quotes to prevent parse ambiguity.</span>
 <span class="source-line-no">101</span><span id="line-101"> *    &lt;li class='note'&gt;Empty strings are always serialized as &lt;c&gt;""&lt;/c&gt;.</span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
 <span class="source-line-no">109</span><span id="line-109"> * &lt;/ul&gt;</span>
 <span class="source-line-no">110</span><span id="line-110"> *</span>
-<span class="source-line-no">111</span><span id="line-111"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">111</span><span id="line-111"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">112</span><span id="line-112"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Hjson"&gt;Hjson&lt;/a&gt;</span>
 <span class="source-line-no">113</span><span id="line-113"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://hjson.github.io/syntax.html"&gt;Hjson Specification&lt;/a&gt;</span>
 <span class="source-line-no">114</span><span id="line-114"> * &lt;/ul&gt;</span>

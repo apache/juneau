@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * and a {@link #reset()} method to clear the cache, forcing recomputation on the next call to {@link #get()}.</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * It also inherits all Optional-like convenience methods from {@link NullableSupplier}.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create a memoizer&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	Memoizer&amp;lt;String&amp;gt; &lt;jv&gt;supplier&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Memoizer&amp;lt;&amp;gt;(() -&amp;gt; expensiveComputation());</em>
@@ -59,13 +59,13 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;result3&lt;/jv&gt; = &lt;jv&gt;supplier&lt;/jv&gt;.get();  &lt;jc&gt;// Recomputes&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * This class is thread-safe for both {@link #get()} and {@link #reset()} operations.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * If multiple threads call get() simultaneously after a reset, the supplier may be invoked</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * multiple times, but only one result will be cached.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The supplier may be called multiple times if threads race, but only one result is cached.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The cached value can be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</em>
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Inherits all Optional-like methods from {@link NullableSupplier} (isPresent(), isEmpty(), map(), orElse(), etc.).</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jm'&gt;{@link Suppliers#memoizer(Supplier)}</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link NullableSupplier} - Base interface providing Optional-like methods</em>
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * This method is thread-safe and is particularly useful for testing when you need to</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * inject a specific value without invoking the supplier.</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Create a memoizer&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * 	Memoizer&amp;lt;String&amp;gt; &lt;jv&gt;supplier&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Memoizer&amp;lt;&amp;gt;(() -&amp;gt; &lt;js&gt;"computed"&lt;/js&gt;);</em>

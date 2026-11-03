@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> * them in place &amp;mdash; callers never {@code new} a replacement nested config, so the "must return a stable</span>
 <span class="source-line-no">046</span><span id="line-46"> * instance" footgun the pre-consolidation hooks warned about cannot recur.</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;The subscription broker default:&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h2 class='section'&gt;The subscription broker default:&lt;/h2&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * {@link #getSubscriptionBroker()} defaults to &lt;jk&gt;null&lt;/jk&gt;, meaning "framework-derived": the binding lazily</span>
 <span class="source-line-no">051</span><span id="line-51"> * derives a {@link BasicMcpSubscriptionBroker} sized from {@link #getSubscriptions()}'s</span>
@@ -67,14 +67,14 @@
 <span class="source-line-no">054</span><span id="line-54"> * subscribers and publishers across unrelated registries). Call {@link #setSubscriptionBroker(McpSubscriptionBroker)}</span>
 <span class="source-line-no">055</span><span id="line-55"> * to supply a custom broker instead (for example one shared across multiple bindings on purpose).</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;h5 class='section'&gt;The idleTimeoutMs / heartbeatIntervalMs caveat:&lt;/h5&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;h2 class='section'&gt;The idleTimeoutMs / heartbeatIntervalMs caveat:&lt;/h2&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * When configuring {@link #subscriptions(Consumer)}, keep</span>
 <span class="source-line-no">060</span><span id="line-60"> * {@link McpSubscriptionsConfig#getHeartbeatIntervalMs() heartbeatIntervalMs} below</span>
 <span class="source-line-no">061</span><span id="line-61"> * {@link McpSubscriptionsConfig#getIdleTimeoutMs() idleTimeoutMs} (see that method's Javadoc) &amp;mdash; otherwise</span>
 <span class="source-line-no">062</span><span id="line-62"> * the idle-timeout watchdog can reap a perfectly healthy connection between two heartbeats.</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;pre&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * McpOptions &lt;jv&gt;options&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; McpOptions()</span>
 <span class="source-line-no">067</span><span id="line-67"> *     .setInstructions(&lt;js&gt;"Use tool 'echo' to test."&lt;/js&gt;)</span>

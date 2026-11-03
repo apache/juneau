@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  (<c>0-499</c>) via <a href="#range(long,long)"><code>range(long, long)</code></a>, an open-ended range (<c>500-</c>) via <a href="#from(long)"><code>from(long)</code></a>, and a
  suffix range (<c>-500</c>) via <a href="#suffix(long)"><code>suffix(long)</code></a> — and <a href="#spec(java.lang.String)"><code>spec(String)</code></a> is a generic escape hatch.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    String <jv>value</jv> = Range.<jsm>create</jsm>()
       .range(0, 499)
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
    <jc>// =&gt; "bytes=0-499,9500-"</jc>
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="Range.html" title="class in org.apache.juneau.http.header"><code>Range</code></a>
    <li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7233'>RFC 7233 - HTTP/1.1 Range Requests</a>
  </ul></div>

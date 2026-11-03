@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 		below); otherwise a suppression placeholder + byte count.</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Secure-by-default body handling&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Secure-by-default body handling&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Bodies are &lt;b&gt;never dumped by default&lt;/b&gt;. Dumping is a deliberate operator opt-in behind a single environment-variable</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * master gate, {@code JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES}:</em>
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * No bytes appear in any placeholder in any representation.</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Header redaction and sanitization&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Header redaction and sanitization&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * Values for a widened, formatter-local credential-bearing header set are masked with {@link RedactedHeaders#REDACTED}.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * The set starts from {@link RedactedHeaders#DEFAULT} plus {@code X-Auth-Token}, {@code X-Authorization},</em>
@@ -84,14 +84,14 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * text, placeholders) is sanitized against CR/LF/control-char log forging via {@link DebugTextSanitizer}, in</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;mask &amp;rarr; escape &amp;rarr; cap&lt;/b&gt; order.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Bounds&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Bounds&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * Bodies are bounded by {@link #bodyCap()} bytes (default &lt;b&gt;8&amp;nbsp;KB&lt;/b&gt;) at capture time; headers by</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * {@link #maxHeaders(int)}/{@link #maxHeaderScan(int)}/{@link #maxFieldLength(int)}; the URI by {@link #maxUriLength(int)}.</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * The 8&amp;nbsp;KB body cap is deliberately smaller than {@code EchoMixin}'s 1&amp;nbsp;MB body cap &amp;mdash; debug logging is</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * intended for low-volume operator diagnostics; the two caps are independent by design.</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging</a>"&gt;Logging / Debugging&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> *</em>

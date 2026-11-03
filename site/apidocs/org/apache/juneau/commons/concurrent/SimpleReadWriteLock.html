@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  The returned <a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> instances automatically acquire the lock when created and release
  it when <a href="SimpleLock.html#close()"><code>SimpleLock.close()</code></a> is called (either explicitly or automatically via try-with-resources).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Using read lock with try-with-resources</jc>
    <jk>var</jk> <jv>lock</jv> = <jk>new</jk> SimpleReadWriteLock();
@@ -117,13 +116,13 @@ loadScripts(document, 'script');</script>
    <jc>// Lock is automatically released when exiting try block</jc>
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class inherits all thread-safety guarantees from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/ReentrantReadWriteLock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>ReentrantReadWriteLock</code></a>.
  Multiple threads can hold read locks simultaneously, but write locks are exclusive.
  Read and write locks cannot be held simultaneously by different threads.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>The returned <a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> instances are not thread-safe themselves and should
       not be shared between threads. Each thread should call <a href="#read()"><code>read()</code></a> or <a href="#write()"><code>write()</code></a> separately.
    <li class='note'>Each call to <a href="#read()"><code>read()</code></a> or <a href="#write()"><code>write()</code></a> returns a new <a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> instance.
@@ -134,7 +133,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>For fair ordering, use <a href="#%3Cinit%3E(boolean)"><code>SimpleReadWriteLock(boolean)</code></a> with <jk>true</jk>.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> - The auto-closeable lock wrapper
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/ReentrantReadWriteLock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>ReentrantReadWriteLock</code></a> - The underlying lock implementation
  </ul></div>
@@ -246,7 +245,7 @@ loadScripts(document, 'script');</script>
  <a href="SimpleReadWriteLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleReadWriteLock</code></a> instance but don't want any actual synchronization overhead.
  All lock operations on this instance are no-ops and return <a href="SimpleLock.html#NO_OP"><code>SimpleLock.NO_OP</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Use NO_OP when locking is disabled</jc>
    <jk>var</jk> <jv>lock</jv> = isLockingEnabled() ? <jk>new</jk> SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
@@ -256,7 +255,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Calling <a href="#read()"><code>read()</code></a> or <a href="#write()"><code>write()</code></a> on this instance returns <a href="SimpleLock.html#NO_OP"><code>SimpleLock.NO_OP</code></a>.
    <li class='note'>Closing the returned <a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> has no effect.
    <li class='note'>This instance is thread-safe and can be shared across threads.
@@ -291,7 +290,7 @@ loadScripts(document, 'script');</script>
  <p>
  Creates a new read-write lock with the specified fairness policy.
 
- <h5 class='section'>Fair vs Unfair:</h5><ul>
+ <h4 class='section'>Fair vs Unfair:</h4><ul>
    <li class='note'><b>Fair locks</b> (<jk>true</jk>): Threads acquire locks in approximately
       FIFO order. Provides fairness but may have lower throughput under high contention.
    <li class='note'><b>Unfair locks</b> (<jk>false</jk>): No ordering guarantee. Generally provides
@@ -322,7 +321,7 @@ loadScripts(document, 'script');</script>
  it when <a href="SimpleLock.html#close()"><code>SimpleLock.close()</code></a> is called. Multiple threads can hold read locks simultaneously,
  but a write lock cannot be acquired while any read locks are held.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>var</jk> <jv>lock</jv> = <jk>new</jk> SimpleReadWriteLock();
    <jk>try</jk> (<jk>var</jk> <jv>readLock</jv> = <jv>lock</jv>.read()) {
@@ -332,7 +331,7 @@ loadScripts(document, 'script');</script>
    <jc>// Lock is automatically released</jc>
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method blocks until the read lock can be acquired.
    <li class='note'>Multiple threads can hold read locks concurrently.
    <li class='note'>Read locks cannot be acquired while a write lock is held by another thread.
@@ -356,7 +355,7 @@ loadScripts(document, 'script');</script>
  it when <a href="SimpleLock.html#close()"><code>SimpleLock.close()</code></a> is called. Write locks are exclusive - only one thread can
  hold a write lock at a time, and no read locks can be held while a write lock is active.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>var</jk> <jv>lock</jv> = <jk>new</jk> SimpleReadWriteLock();
    <jk>try</jk> (<jk>var</jk> <jv>writeLock</jv> = <jv>lock</jv>.write()) {
@@ -366,7 +365,7 @@ loadScripts(document, 'script');</script>
    <jc>// Lock is automatically released</jc>
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method blocks until the write lock can be acquired.
    <li class='note'>Write locks are exclusive - only one thread can hold a write lock at a time.
    <li class='note'>Write locks cannot be acquired while any read locks are held by other threads.

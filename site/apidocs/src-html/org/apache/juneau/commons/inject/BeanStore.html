@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Other dependency injection frameworks</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    BeanStore &lt;jv&gt;beanStore&lt;/jv&gt; = ...;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
@@ -70,7 +70,7 @@
 <span class="source-line-no">057</span><span id="line-57"> *    Map&amp;lt;String, MyService&amp;gt; &lt;jv&gt;allServices&lt;/jv&gt; = &lt;jv&gt;beanStore&lt;/jv&gt;.getBeansOfType(MyService.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://docs.spring.io/spring-framework/reference/core/beans.html"&gt;Spring Framework - The IoC Container&lt;/a&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;/ul&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> */</span>
@@ -143,7 +143,7 @@
 <span class="source-line-no">130</span><span id="line-130">    * (subtype, factory-method names, builder hooks, etc.).  For more control over instantiation,</span>
 <span class="source-line-no">131</span><span id="line-131">    * use {@link BeanInstantiator#of(Class, BeanStore)} directly.</span>
 <span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">134</span><span id="line-134">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">135</span><span id="line-135">    *    &lt;jc&gt;// Instantiate a bean using this store for parameter resolution&lt;/jc&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    *    MyService &lt;jv&gt;service&lt;/jv&gt; = &lt;jv&gt;beanStore&lt;/jv&gt;.instantiate(MyService.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -214,7 +214,7 @@
 <span class="source-line-no">201</span><span id="line-201">    * The default implementation returns {@link Optional#empty()}.</span>
 <span class="source-line-no">202</span><span id="line-202">    * Override in concrete stores (see {@link BasicBeanStore}) to enable factory-method scanning.</span>
 <span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">205</span><span id="line-205">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">206</span><span id="line-206">    *    &lt;jc&gt;// Filter only&lt;/jc&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(RichLogger.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;,</span>
@@ -264,7 +264,7 @@
 <span class="source-line-no">251</span><span id="line-251">    * synthetic method, it is an instance method and &lt;c&gt;onClassOrObject&lt;/c&gt; is a {@link Class}, or one of its parameters</span>
 <span class="source-line-no">252</span><span id="line-252">    * cannot be resolved from this store plus &lt;c&gt;extraBeans&lt;/c&gt;.</span>
 <span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">254</span><span id="line-254">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">255</span><span id="line-255">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">256</span><span id="line-256">    *    &lt;jc&gt;// Invoke one specific @Bean factory method, instead of searching by return type.&lt;/jc&gt;</span>
 <span class="source-line-no">257</span><span id="line-257">    *    MethodInfo &lt;jv&gt;m&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;).getDeclaredMethod(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; &lt;jv&gt;x&lt;/jv&gt;.hasName(&lt;js&gt;"cacheIndicator"&lt;/js&gt;)).get();</span>

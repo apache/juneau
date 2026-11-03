@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  <code>#juneau-page</code> contract and the same toolkit asset tags as an FTL page.  Chrome (brand, nav tree, footer, theme tokens) stays in the app's
  chrome template.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>var</jk> <jv>spec</jv> = PageSpec.<jsm>create</jsm>()
       .title(<js>"SLO"</js>)
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
       .table(<jv>sloTable</jv>);
  </p>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>return</jk> PageSpec.<jsm>create</jsm>()
       .tab(<js>"changes"</js>)
@@ -715,7 +714,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, optionally rebuilt through the
  views attribute-allowlist sanitizer.  The equivalent of <code>&lt;@card type="html" src="..." sanitize=true&gt;</code>.
 
- <h5 class='section'>Trust boundary:</h5>
+ <h4 class='section'>Trust boundary:</h4>
  <p>
  With <code>sanitize</code> <jk>false</jk> the shell fetches <code>src</code> and inserts the returned HTML as-is through a
  raw HTML-sink assignment, <b>unsanitized</b>, the same trust level as <code>footer.text</code> (see

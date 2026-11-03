@@ -48,14 +48,14 @@
 <span class="source-line-no">035</span><span id="line-35"> * {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} (printf-style &lt;js&gt;"%s"&lt;/js&gt;/&lt;js&gt;"%d"&lt;/js&gt;) for</span>
 <span class="source-line-no">036</span><span id="line-36"> * lazy formatting. The message is only formatted when {@link #getMessage()} is actually called.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * This class is used internally by {@link RichLogger} when logging formatted messages.</span>
 <span class="source-line-no">041</span><span id="line-41"> * The formatted message is only computed when the LogRecord's message is actually</span>
 <span class="source-line-no">042</span><span id="line-42"> * accessed (e.g., by a Handler or Formatter).</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Formatting contract:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Formatting contract:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * Juneau {@link RichLogger} patterns are &lt;b&gt;printf-style&lt;/b&gt; (rendered here via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}).</span>
 <span class="source-line-no">048</span><span id="line-48"> * Because this override returns the already-substituted message, downstream {@link java.util.logging.Handler Handlers} and</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> * &lt;c&gt;{0}&lt;/c&gt; pattern, so printf patterns are not intended for that scenario.</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='jc'&gt;{@link RichLogger}</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;li class='jc'&gt;{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='jc'&gt;{@link java.util.logging.LogRecord}</span>
@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142">    *    &lt;li&gt;&lt;c&gt;thrown&lt;/c&gt; - The throwable object (if any)</span>
 <span class="source-line-no">143</span><span id="line-143">    * &lt;/ol&gt;</span>
 <span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;h5 class='section'&gt;Named Placeholders:&lt;/h5&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    * &lt;h4 class='section'&gt;Named Placeholders:&lt;/h4&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    * &lt;ul&gt;</span>
 <span class="source-line-no">147</span><span id="line-147">    *    &lt;li&gt;&lt;js&gt;"{date}"&lt;/js&gt; - The date/time formatted using {@link SimpleFormatter SimpleFormatter}'s default date format</span>
 <span class="source-line-no">148</span><span id="line-148">    *    &lt;li&gt;&lt;js&gt;"{timestamp}"&lt;/js&gt; - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)</span>
@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line-155">    *    &lt;li&gt;&lt;js&gt;"{thrown}"&lt;/js&gt; - The throwable object (if thrown)</span>
 <span class="source-line-no">156</span><span id="line-156">    * &lt;/ul&gt;</span>
 <span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * &lt;h5 class='section'&gt;Formatter-Style Format Specifiers:&lt;/h5&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;h4 class='section'&gt;Formatter-Style Format Specifiers:&lt;/h4&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    * &lt;p&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    * You can use {@link java.util.Formatter Formatter}-style format specifiers directly in the format string.</span>
 <span class="source-line-no">161</span><span id="line-161">    * The arguments are passed in the same order as {@link java.util.logging.SimpleFormatter SimpleFormatter}:</span>
@@ -201,7 +201,7 @@
 <span class="source-line-no">188</span><span id="line-188">    * &lt;p&gt;</span>
 <span class="source-line-no">189</span><span id="line-189">    * The format string can also contain &lt;js&gt;"%n"&lt;/js&gt; for newlines.</span>
 <span class="source-line-no">190</span><span id="line-190">    *</span>
-<span class="source-line-no">191</span><span id="line-191">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">191</span><span id="line-191">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">192</span><span id="line-192">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">    *    LogRecord &lt;jv&gt;record&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LogRecord(Level.INFO, &lt;js&gt;"User {0} logged in"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;);</span>
 <span class="source-line-no">194</span><span id="line-194">    *</span>

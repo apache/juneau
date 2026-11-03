@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  (e.g., JSON maps, XML elements). A common use case is when parsing a map where the map key should be stored
  as a property on the bean.
 
- <h5 class='section'>Requirements:</h5>
+ <h2 class='section'>Requirements:</h2>
  <ul class='spaced-list'>
    <li>Must be an <strong>instance</strong> method or field (not static)
    <li>For methods: Must accept exactly one parameter (any type)
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
    <li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with <a href="NamePropertyApply.html" title="annotation interface in org.apache.juneau.marshall"><code>@NamePropertyApply</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// JSON being parsed:</jc>
    <jc>// {</jc>
@@ -125,13 +124,13 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>When It's Called:</h5>
+ <h2 class='section'>When It's Called:</h2>
  <ul class='spaced-list'>
    <li>During parsing when an object is created as a value in a map/collection
    <li>The parser automatically calls the setter or sets the field with the key/name from the parent structure
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NamePropertyAnnotation">@NameProperty Annotation</a>
 
  </ul></div>

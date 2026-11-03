@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
    <li><a href="#getError()"><code>error</code></a> &mdash; optional error message (omitted from the response when <jk>null</jk>).
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// A normal page of results.</jc>
    DataTablesResults&lt;Person&gt; <jv>results</jv> = DataTablesResults.&lt;Person&gt;<jsm>create</jsm>()
@@ -268,7 +267,7 @@ loadScripts(document, 'script');</script>
  <code>BeanQuerySyntaxException</code> (unknown column, too many search clauses, ...): since 2026-10-05 that propagates
  and is mapped centrally to HTTP 400 with an <code>X-BeanQuery-Error</code> header.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>return</jk> DataTablesResults.<jsm>error</jsm>(<jv>request</jv>.getDraw(), <js>"Unknown column 'x'."</js>);
  </p></div>

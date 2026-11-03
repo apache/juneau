@@ -35,14 +35,14 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * two-argument consumers. It's useful when you need to pass operations with two parameters to methods</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * that expect functional interfaces, such as in iteration, builders, or callback patterns.</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Functional interface - can be used with lambda expressions and method references</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Composition support - provides {@link #andThen(Consumer2)} for operation chaining</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Side-effect operations - designed for operations that perform side effects rather than return values</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Two-argument operations in iteration patterns</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Builder methods that accept two-parameter operations</em>
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Event handlers that process two values</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Lambda expression&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	Consumer2&amp;lt;String,Integer&amp;gt; &lt;jv&gt;printer&lt;/jv&gt; = (&lt;jv&gt;name&lt;/jv&gt;, &lt;jv&gt;age&lt;/jv&gt;) -&amp;gt;</em>
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;logAndStore&lt;/jv&gt;.apply(&lt;js&gt;"data"&lt;/js&gt;, 100);  &lt;jc&gt;// Logs and stores&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Consumer3} - Three-argument consumer</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Consumer4} - Four-argument consumer</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Consumer5} - Five-argument consumer</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * If performing either operation throws an exception, it is relayed to the caller of the composed operation.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * If performing this operation throws an exception, the {@code after} operation will not be performed.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 	Consumer2&amp;lt;String,Integer&amp;gt; &lt;jv&gt;validate&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;i&lt;/jv&gt;) -&amp;gt; {</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;i&lt;/jv&gt; &amp;lt; 0) &lt;jk&gt;throw new&lt;/jk&gt; IllegalArgumentException();</em>
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * Performs this operation on the given arguments.</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * 	Consumer2&amp;lt;String,Integer&amp;gt; &lt;jv&gt;handler&lt;/jv&gt; = (&lt;jv&gt;key&lt;/jv&gt;, &lt;jv&gt;value&lt;/jv&gt;) -&amp;gt; {</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * 		&lt;jv&gt;map&lt;/jv&gt;.put(&lt;jv&gt;key&lt;/jv&gt;, &lt;jv&gt;value&lt;/jv&gt;);</em>

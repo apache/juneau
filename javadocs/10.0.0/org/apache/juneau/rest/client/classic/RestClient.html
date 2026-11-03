@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
  REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a basic REST client with JSON support and download a bean.</jc>
    MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
@@ -131,7 +130,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Define a Remote proxy for interacting with a REST interface.</jc>
    <ja>@Remote</ja>(path=<js>"/petstore"</js>)
@@ -172,7 +171,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  Clients are typically created with a root URI so that relative URIs can be used when making requests.
  This is done using the <a href="RestClient.Builder.html#rootUrl(java.lang.Object)"><code>RestClient.Builder.rootUrl(Object)</code></a> method.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a client where all URIs are relative to localhost.</jc>
    RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:5000"</js>).build();
@@ -229,7 +228,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </p>
 
 
- <h4 class='topic'>POJO Marshalling</h4>
+ <h2 class='topic'>POJO Marshalling</h2>
 
  <p>
  By default, JSON support is provided for HTTP request and response bodies.
@@ -250,7 +249,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
    </ul>
  </ul>
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a basic REST client with JSON 5 support.</jc>
    <jc>// Typically easier to use when performing unit tests.</jc>
@@ -260,7 +259,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Clients can also support multiple languages:
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a REST client with support for multiple languages.</jc>
    RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
@@ -304,7 +303,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  The <a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient.Builder</code></a> class provides convenience methods for setting common serializer and parser
  settings.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a basic REST client with JSON support.</jc>
    <jc>// Use single-quotes and whitespace.</jc>
@@ -335,7 +334,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </ul>
 
 
- <h4 class='topic'>Request Headers</h4>
+ <h2 class='topic'>Request Headers</h2>
  <p>
  Per-client or per-request headers can be specified using the following methods:
  <ul class='javatree'>
@@ -361,7 +360,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  which may need to change every few minutes).
  </p>
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
    RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
@@ -371,7 +370,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  The <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart"><code>HttpPartSchema</code></a> API allows you to define OpenAPI schemas to POJO data structures on both requests
  and responses.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
    RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>()
@@ -383,13 +382,13 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  The methods with <a href="../../../marshall/ListOperation.html" title="enum class in org.apache.juneau.marshall"><code>ListOperation</code></a> parameters allow you to control whether new headers get appended, prepended, or
  replace existing headers with the same name.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h3 class='section'>Notes:</h3><ul>
    <li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
       <c>NameValuePair</c> objects use the values returned by that bean directly.
  </ul>
 
 
- <h4 class='topic'>Request Query Parameters</h4>
+ <h2 class='topic'>Request Query Parameters</h2>
  <p>
  Per-client or per-request query parameters can be specified using the following methods:
  <ul class='javatree'>
@@ -411,7 +410,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
    </ul>
  </ul>
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
    RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
@@ -420,14 +419,14 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
    String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getContent().asString();
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h3 class='section'>Notes:</h3><ul>
    <li class='note'>Like header values, dynamic values and OpenAPI schemas are supported.
    <li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
       objects use the values returned by that bean directly.
  </ul>
 
 
- <h4 class='topic'>Request Form Data</h4>
+ <h2 class='topic'>Request Form Data</h2>
 
  <p>
  Per-client or per-request form-data parameters can be specified using the following methods:
@@ -450,14 +449,14 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
    </ul>
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h3 class='section'>Notes:</h3><ul>
    <li class='note'>Like header values, dynamic values and OpenAPI schemas are supported.
    <li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
       objects use the values returned by that bean directly.
  </ul>
 
 
- <h4 class='topic'>Request Body</h4>
+ <h2 class='topic'>Request Body</h2>
 
  <p>
  The request body can either be passed in with the client creator method (e.g. <a href="#post(java.lang.Object,java.lang.Object)"><code>post(uri,body)</code></a>),
@@ -490,14 +489,14 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
          <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> - A supplier of anything on this list.
    </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h3 class='section'>Notes:</h3><ul>
    <li class='note'>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
       using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
       POJOs will be converted to strings using <a href="../../../marshall/ClassMeta.html#toString(java.lang.Object)"><code>ClassMeta.toString(Object)</code></a> which typically just calls <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.
  </ul>
 
 
- <h4 class='topic'>Response Status</h4>
+ <h2 class='topic'>Response Status</h2>
 
  <p>
  After execution using <a href="RestRequest.html#run()"><code>RestRequest.run()</code></a> or <a href="RestRequest.html#complete()"><code>RestRequest.complete()</code></a>, the following methods can be used
@@ -513,7 +512,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
    </ul>
  </ul>
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Only interested in status code.</jc>
    <jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
@@ -522,7 +521,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Interested in multiple values.</jc>
    Holder&lt;Integer&gt; <jv>statusCode</jv> = Holder.<jsm>create</jsm>();
@@ -532,7 +531,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
    System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h3 class='section'>Notes:</h3><ul>
    <li class='note'>If you are only interested in the response status and not the response body, be sure to use <a href="RestRequest.html#complete()"><code>RestRequest.complete()</code></a> instead
       of <a href="RestRequest.html#run()"><code>RestRequest.run()</code></a> to make sure the response body gets automatically cleaned up.  Otherwise you must
       consume the response yourself.
@@ -541,7 +540,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  The assertion method is provided for quickly asserting status codes in fluent calls.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Status assertion using a static value.</jc>
    String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
@@ -557,7 +556,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </p>
 
 
- <h4 class='topic'>Response Headers</h4>
+ <h2 class='topic'>Response Headers</h2>
 
  <p>
  Response headers are accessed through the following methods:
@@ -578,7 +577,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  The <a href="RestResponse.html#getFirstHeader(java.lang.String)"><code>RestResponse.getFirstHeader(String)</code></a> and <a href="RestResponse.html#getLastHeader(java.lang.String)"><code>RestResponse.getLastHeader(String)</code></a> methods return an empty <a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client.classic"><code>ResponseHeader</code></a> object instead of<jk>null</jk>.
  This allows it to be used more easily in fluent calls.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// See if response contains Location header.</jc>
    <jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
@@ -613,7 +612,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  The <a href="ResponseHeader.html#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)"><code>ResponseHeader.schema(HttpPartSchema)</code></a> method allows you to perform parsing of OpenAPI formats for
  header parts.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Parse the header "Foo: bar|baz".</jc>
    List&lt;String&gt; <jv>fooHeader</jv> = <jv>client</jv>
@@ -636,7 +635,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  Note how in the following example, the fluent assertion returns control to the <a href="RestResponse.html" title="class in org.apache.juneau.rest.client.classic"><code>RestResponse</code></a> object after
  the assertion has been completed:
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Assert the response content type is any sort of JSON.</jc>
    String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
@@ -646,7 +645,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </p>
 
 
- <h4 class='topic'>Response Body</h4>
+ <h2 class='topic'>Response Body</h2>
 
  <p>
  The response body is accessed through the following method:
@@ -684,7 +683,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 
  <br>
 
- <h5 class='figure'>Examples:</h5>
+ <h3 class='figure'>Examples:</h3>
  <p class='bjava'>
    <jc>// Parse into a linked-list of strings.</jc>
    List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
@@ -746,7 +745,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 
  <br>
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Assert that the body contains the string "Success".</jc>
    String <jv>body</jv> = <jv>client</jv>
@@ -760,7 +759,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  Object assertions allow you to parse the response body into a POJO and then perform various tests on that resulting
  POJO.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
    MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
@@ -770,7 +769,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </p>
 
 
- <h4 class='topic'>Custom Call Handlers</h4>
+ <h2 class='topic'>Custom Call Handlers</h2>
 
  <p>
  The <a href="RestCallHandler.html" title="interface in org.apache.juneau.rest.client.classic"><code>RestCallHandler</code></a> interface provides the ability to provide custom handling of requests.
@@ -792,7 +791,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  or by defining your own <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/protocol/HttpRequestExecutor.html" title="class or interface in org.apache.http.protocol" class="external-link"><code>HttpRequestExecutor</code></a>.  Using this interface is often simpler though.
 
 
- <h4 class='topic'>Interceptors</h4>
+ <h2 class='topic'>Interceptors</h2>
 
  <p>
  The <a href="RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client.classic"><code>RestCallInterceptor</code></a> API provides a quick way of intercepting and manipulating requests and responses beyond
@@ -816,7 +815,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </ul>
 
 
- <h4 class='topic'>Logging / Debugging</h4>
+ <h2 class='topic'>Logging / Debugging</h2>
 
  <p>
  The following methods provide logging of requests and responses:
@@ -833,7 +832,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  The following example shows the results of logging all requests that end with <c>/bean</c>.
 
- <h5 class='figure'>Examples:</h5>
+ <h3 class='figure'>Examples:</h3>
  <p class='bjava'>
    MyBean <jv>bean</jv> = RestClient
       .<jsm>create</jsm>()
@@ -892,13 +891,13 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  </ul>
 
 
- <h4 class='topic'>REST Proxies</h4>
+ <h2 class='topic'>REST Proxies</h2>
 
  <p>
  One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
  arbitrary remote REST resources.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Define a Remote proxy for interacting with a REST interface.</jc>
    <ja>@Remote</ja>(path=<js>"/petstore"</js>)
@@ -953,7 +952,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 
  <br>
  <hr>
- <h4 class='topic'>Customizing Apache HttpClient</h4>
+ <h2 class='topic'>Customizing Apache HttpClient</h2>
 
  <p>
  Several methods are provided for customizing the underlying HTTP client and client builder classes:
@@ -970,7 +969,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jc>// Create a client with customized HttpClient settings.</jc>
    MyBean <jv>bean</jv> = RestClient
@@ -985,13 +984,13 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  Refer to the <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/HttpClientBuilder.html" title="class or interface in org.apache.http.impl.client" class="external-link"><code>HTTP Client Builder API</code></a> for more information.
 
 
- <h4 class='topic'>Extending RestClient</h4>
+ <h2 class='topic'>Extending RestClient</h2>
 
  <p>
  The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
  The following example that overrides the primary run method shows how this can be done.
 
- <h5 class='figure'>Example:</h5>
+ <h3 class='figure'>Example:</h3>
  <p class='bjava'>
    <jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
 
@@ -1037,11 +1036,11 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  The <a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic"><code>RestRequest</code></a> and <a href="RestResponse.html" title="class in org.apache.juneau.rest.client.classic"><code>RestResponse</code></a> objects can also be extended and integrated by overriding the
  <a href="#createRequest(java.net.URI,java.lang.String,boolean)"><code>createRequest(URI,String,boolean)</code></a> and <a href="#createResponse(org.apache.juneau.rest.client.classic.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.marshall.parser.Parser)"><code>createResponse(RestRequest,HttpResponse,Parser)</code></a> methods.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h3 class='section'>Notes:</h3><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h3 class='section'>See Also:</h3><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  </ul></div>
 </section>
@@ -1981,7 +1980,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Executes HTTP request using the default context.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2012,7 +2011,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Executes HTTP request using the given context.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
    <li class='note'>The <a href="#run(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.protocol.HttpContext)"><code>run(HttpHost,HttpRequest,HttpContext)</code></a> method has been provided as a wrapper around this method.
       Subclasses can override these methods for handling requests with and without bodies separately.
@@ -2052,7 +2051,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  to the connection manager automatically in all cases relieving individual <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/ResponseHandler.html" title="class or interface in org.apache.http.client" class="external-link"><code>ResponseHandlers</code></a>
  from having to manage resource deallocation internally.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2086,7 +2085,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  to the connection manager automatically in all cases relieving individual <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/ResponseHandler.html" title="class or interface in org.apache.http.client" class="external-link"><code>ResponseHandlers</code></a>
  from having to manage resource deallocation internally.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2113,7 +2112,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Executes HTTP request using the default context.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2140,7 +2139,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Executes HTTP request using the given context.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2173,7 +2172,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  to the connection manager automatically in all cases relieving individual <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/ResponseHandler.html" title="class or interface in org.apache.http.client" class="external-link"><code>ResponseHandlers</code></a>
  from having to manage resource deallocation internally.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2204,7 +2203,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  to the connection manager automatically in all cases relieving individual <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/ResponseHandler.html" title="class or interface in org.apache.http.client" class="external-link"><code>ResponseHandlers</code></a>
  from having to manage resource deallocation internally.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method gets passed on directly to the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/HttpClient.html" title="class or interface in org.apache.http.client" class="external-link"><code>HttpClient</code></a> class.
  </ul></div>
 <dl class="notes">
@@ -2429,7 +2428,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  If the information is not available to resolve to an absolute URI, a <a href="remote/RemoteMetadataException.html" title="class in org.apache.juneau.rest.client.classic.remote"><code>RemoteMetadataException</code></a> is thrown.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jk>package</jk> org.apache.foo;
 
@@ -2462,13 +2461,13 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
       .getRemote(MyInterface3.<jk>class</jk>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
       pooling client connection manager.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  </ul></div>
 <dl class="notes">
@@ -2491,7 +2490,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;rootUrl)</span></div>
 <div class="block">Same as <a href="#getRemote(java.lang.Class)"><code>getRemote(Class)</code></a> except explicitly specifies the URI of the REST interface.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  </ul></div>
 <dl class="notes">
@@ -2516,7 +2515,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span></div>
 <div class="block">Same as <a href="#getRemote(java.lang.Class,java.lang.Object)"><code>getRemote(Class, Object)</code></a> but allows you to override the serializer and parser used.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  </ul></div>
 <dl class="notes">
@@ -2565,13 +2564,13 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  If the information is not available to resolve to an absolute URI, a <a href="remote/RemoteMetadataException.html" title="class in org.apache.juneau.rest.client.classic.remote"><code>RemoteMetadataException</code></a> is thrown.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
       pooling client connection manager.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  </ul></div>
 <dl class="notes">
@@ -2594,7 +2593,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Same as <a href="#getRrpcInterface(java.lang.Class)"><code>getRrpcInterface(Class)</code></a> except explicitly specifies the URI of the REST interface.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  </ul></div>
 <dl class="notes">
@@ -2619,7 +2618,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span></div>
 <div class="block">Same as <a href="#getRrpcInterface(java.lang.Class,java.lang.Object)"><code>getRrpcInterface(Class, Object)</code></a> but allows you to override the serializer and parser used.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  </ul></div>
 <dl class="notes">
@@ -2802,7 +2801,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  You must call either <a href="RestRequest.html#content(java.lang.Object)"><code>RestRequest.content(Object)</code></a> or <a href="RestRequest.html#formData(java.lang.String,java.lang.Object)"><code>RestRequest.formData(String, Object)</code></a> to set the
  contents on the result object.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Use <a href="#formPost(java.lang.Object,java.lang.Object)"><code>formPost(Object, Object)</code></a> for <c>application/x-www-form-urlencoded</c> form posts.
  </ul></div>
 <dl class="notes">
@@ -2832,7 +2831,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
                  throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Perform a <c>POST</c> request against the specified URI.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Use <a href="#formPost(java.lang.Object,java.lang.Object)"><code>formPost(Object, Object)</code></a> for <c>application/x-www-form-urlencoded</c> form posts.
  </ul></div>
 <dl class="notes">
@@ -3127,7 +3126,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Subclasses can override this method to provide their own specialized <a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic"><code>RestRequest</code></a> objects.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='warn'>The SSRF guard of <code>@Remote</code> calls travels on the request's <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/protocol/HttpContext.html" title="class or interface in org.apache.http.protocol" class="external-link"><code>HttpContext</code></a>, which an
       override of <a href="RestRequest.html#run()"><code>RestRequest.run()</code></a> in the returned request's class may drop (by copying the request, or
       sending it with another context), and depends on this client's connection manager, which a request bound to a different client does not use.  So an SSRF-guard-active
@@ -3320,7 +3319,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Subclasses can override this method to handle any cleanup operations.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestClient.Builder.html#interceptors(java.lang.Object...)"><code>RestClient.Builder.interceptors(Object...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -3343,7 +3342,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Subclasses can override this method to intercept the response and perform special modifications.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestClient.Builder.html#interceptors(java.lang.Object...)"><code>RestClient.Builder.interceptors(Object...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -3365,7 +3364,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  Subclasses can override this method to intercept the request and perform special modifications.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestClient.Builder.html#interceptors(java.lang.Object...)"><code>RestClient.Builder.interceptors(Object...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -3426,7 +3425,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
  <p>
  The behavior of this method can also be modified by specifying a different <a href="RestCallHandler.html" title="interface in org.apache.juneau.rest.client.classic"><code>RestCallHandler</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='warn'>The SSRF guard of <code>@Remote</code> calls travels on the request's <code>HttpContext</code>, which this
       client cannot guarantee an override passes on unchanged.  So a client whose class overrides this method,
       <a href="#execute(org.apache.http.HttpHost,org.apache.http.HttpRequest,org.apache.http.protocol.HttpContext)"><code>execute(HttpHost, HttpRequest, HttpContext)</code></a> or <a href="#execute(org.apache.http.client.methods.HttpUriRequest,org.apache.http.protocol.HttpContext)"><code>execute(HttpUriRequest, HttpContext)</code></a> refuses every
@@ -3434,7 +3433,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
       opt-in).  Ordinary requests are unaffected.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestClient.Builder.html#callHandler()"><code>RestClient.Builder.callHandler()</code></a>
  </ul></div>
 <dl class="notes">

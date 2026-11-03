@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * Used primarily for specifying bean configuration properties on REST classes and methods.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='link'&gt;{doc jmr.RdfDetails}</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> */</span>
@@ -67,12 +67,12 @@
 <span class="source-line-no">054</span><span id="line-54">    * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()} setting and is</span>
 <span class="source-line-no">055</span><span id="line-55">    * provided to customize the behavior of specific serializers in a {@link SerializerSet}.</span>
 <span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">057</span><span id="line-57">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">058</span><span id="line-58">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">059</span><span id="line-59">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">060</span><span id="line-60">    * &lt;/ul&gt;</span>
 <span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">062</span><span id="line-62">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">063</span><span id="line-63">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#addBeanTypes()}</span>
 <span class="source-line-no">064</span><span id="line-64">    * &lt;/ul&gt;</span>
 <span class="source-line-no">065</span><span id="line-65">    *</span>
@@ -83,12 +83,12 @@
 <span class="source-line-no">070</span><span id="line-70">   /**</span>
 <span class="source-line-no">071</span><span id="line-71">    * Add XSI data types to non-&lt;c&gt;String&lt;/c&gt; literals.</span>
 <span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">073</span><span id="line-73">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">074</span><span id="line-74">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">075</span><span id="line-75">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">076</span><span id="line-76">    * &lt;/ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">078</span><span id="line-78">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">079</span><span id="line-79">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#addLiteralTypes()}</span>
 <span class="source-line-no">080</span><span id="line-80">    * &lt;/ul&gt;</span>
 <span class="source-line-no">081</span><span id="line-81">    *</span>
@@ -108,12 +108,12 @@
 <span class="source-line-no">095</span><span id="line-95">    * If disabled, the parser has to search through the model to find any resources without incoming predicates to</span>
 <span class="source-line-no">096</span><span id="line-96">    * identify root notes, which can introduce a considerable performance degradation.</span>
 <span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">098</span><span id="line-98">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">099</span><span id="line-99">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">100</span><span id="line-100">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">101</span><span id="line-101">    * &lt;/ul&gt;</span>
 <span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">104</span><span id="line-104">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#addRootProperty()}</span>
 <span class="source-line-no">105</span><span id="line-105">    * &lt;/ul&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    *</span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124">    *       &lt;js&gt;"MULTI_VALUED"&lt;/js&gt; - Multi-valued properties.</span>
 <span class="source-line-no">125</span><span id="line-125">    * &lt;/ul&gt;</span>
 <span class="source-line-no">126</span><span id="line-126">    *</span>
-<span class="source-line-no">127</span><span id="line-127">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">128</span><span id="line-128">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">129</span><span id="line-129">    *       If you use &lt;js&gt;"BAG"&lt;/js&gt; or &lt;js&gt;"MULTI_VALUED"&lt;/js&gt;, the order of the elements in the collection will get</span>
 <span class="source-line-no">130</span><span id="line-130">    *       lost.</span>
@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">133</span><span id="line-133">    * &lt;/ul&gt;</span>
 <span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">135</span><span id="line-135">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)}</span>
 <span class="source-line-no">137</span><span id="line-137">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#collectionFormat(RdfCollectionFormat)}</span>
 <span class="source-line-no">138</span><span id="line-138">    * &lt;/ul&gt;</span>
@@ -164,12 +164,12 @@
 <span class="source-line-no">151</span><span id="line-151">    * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before</span>
 <span class="source-line-no">152</span><span id="line-152">    * the root element is serialized.</span>
 <span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">155</span><span id="line-155">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">156</span><span id="line-156">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">157</span><span id="line-157">    * &lt;/ul&gt;</span>
 <span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#disableAutoDetectNamespaces()}</span>
 <span class="source-line-no">161</span><span id="line-161">    * &lt;/ul&gt;</span>
 <span class="source-line-no">162</span><span id="line-162">    *</span>
@@ -189,12 +189,12 @@
 <span class="source-line-no">176</span><span id="line-176">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; (default)</span>
 <span class="source-line-no">177</span><span id="line-177">    * &lt;/ul&gt;</span>
 <span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">180</span><span id="line-180">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">181</span><span id="line-181">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">182</span><span id="line-182">    * &lt;/ul&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    *</span>
-<span class="source-line-no">184</span><span id="line-184">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#disableUseXmlNamespaces()}</span>
 <span class="source-line-no">186</span><span id="line-186">    * &lt;/ul&gt;</span>
 <span class="source-line-no">187</span><span id="line-187">    *</span>
@@ -205,12 +205,12 @@
 <span class="source-line-no">192</span><span id="line-192">   /**</span>
 <span class="source-line-no">193</span><span id="line-193">    * Default XML namespace for bean properties.</span>
 <span class="source-line-no">194</span><span id="line-194">    *</span>
-<span class="source-line-no">195</span><span id="line-195">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">196</span><span id="line-196">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">197</span><span id="line-197">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">198</span><span id="line-198">    * &lt;/ul&gt;</span>
 <span class="source-line-no">199</span><span id="line-199">    *</span>
-<span class="source-line-no">200</span><span id="line-200">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">200</span><span id="line-200">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">201</span><span id="line-201">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#juneauBpNs(Namespace)}</span>
 <span class="source-line-no">202</span><span id="line-202">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#juneauBpNs(Namespace)}</span>
 <span class="source-line-no">203</span><span id="line-203">    * &lt;/ul&gt;</span>
@@ -222,12 +222,12 @@
 <span class="source-line-no">209</span><span id="line-209">   /**</span>
 <span class="source-line-no">210</span><span id="line-210">    * XML namespace for Juneau properties.</span>
 <span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">212</span><span id="line-212">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">213</span><span id="line-213">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">214</span><span id="line-214">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">215</span><span id="line-215">    * &lt;/ul&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">217</span><span id="line-217">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">218</span><span id="line-218">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#juneauNs(Namespace)}</span>
 <span class="source-line-no">219</span><span id="line-219">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#juneauNs(Namespace)}</span>
 <span class="source-line-no">220</span><span id="line-220">    * &lt;/ul&gt;</span>
@@ -270,12 +270,12 @@
 <span class="source-line-no">257</span><span id="line-257">    *       http://www.dajobe.org/2004/01/turtle/</span>
 <span class="source-line-no">258</span><span id="line-258">    * &lt;/ul&gt;</span>
 <span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">260</span><span id="line-260">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">261</span><span id="line-261">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">263</span><span id="line-263">    * &lt;/ul&gt;</span>
 <span class="source-line-no">264</span><span id="line-264">    *</span>
-<span class="source-line-no">265</span><span id="line-265">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">265</span><span id="line-265">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">266</span><span id="line-266">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#language(String)}</span>
 <span class="source-line-no">267</span><span id="line-267">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#language(String)}</span>
 <span class="source-line-no">268</span><span id="line-268">    * &lt;/ul&gt;</span>
@@ -300,12 +300,12 @@
 <span class="source-line-no">287</span><span id="line-287">    * This setting is typically only useful if the beans being parsed into do not have a bean property</span>
 <span class="source-line-no">288</span><span id="line-288">    * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.</span>
 <span class="source-line-no">289</span><span id="line-289">    *</span>
-<span class="source-line-no">290</span><span id="line-290">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">291</span><span id="line-291">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">292</span><span id="line-292">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">293</span><span id="line-293">    * &lt;/ul&gt;</span>
 <span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">295</span><span id="line-295">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">296</span><span id="line-296">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#looseCollections()}</span>
 <span class="source-line-no">297</span><span id="line-297">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#looseCollections()}</span>
 <span class="source-line-no">298</span><span id="line-298">    * &lt;/ul&gt;</span>
@@ -320,12 +320,12 @@
 <span class="source-line-no">307</span><span id="line-307">    * &lt;p&gt;</span>
 <span class="source-line-no">308</span><span id="line-308">    * Controls whether to use abbreviations &lt;c&gt;&amp;lt;&amp;gt;&lt;/c&gt; or &lt;c&gt;&amp;lt;#&amp;gt;&lt;/c&gt;.</span>
 <span class="source-line-no">309</span><span id="line-309">    *</span>
-<span class="source-line-no">310</span><span id="line-310">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">310</span><span id="line-310">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">311</span><span id="line-311">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">312</span><span id="line-312">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">313</span><span id="line-313">    * &lt;/ul&gt;</span>
 <span class="source-line-no">314</span><span id="line-314">    *</span>
-<span class="source-line-no">315</span><span id="line-315">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">316</span><span id="line-316">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_disableAbbrevBaseUri()}</span>
 <span class="source-line-no">317</span><span id="line-317">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_disableAbbrevBaseUri()}</span>
 <span class="source-line-no">318</span><span id="line-318">    * &lt;/ul&gt;</span>
@@ -340,12 +340,12 @@
 <span class="source-line-no">327</span><span id="line-327">    * &lt;p&gt;</span>
 <span class="source-line-no">328</span><span id="line-328">    * Don't print object lists as comma separated lists.</span>
 <span class="source-line-no">329</span><span id="line-329">    *</span>
-<span class="source-line-no">330</span><span id="line-330">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">330</span><span id="line-330">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">331</span><span id="line-331">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">332</span><span id="line-332">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">333</span><span id="line-333">    * &lt;/ul&gt;</span>
 <span class="source-line-no">334</span><span id="line-334">    *</span>
-<span class="source-line-no">335</span><span id="line-335">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">336</span><span id="line-336">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_disableObjectLists()}</span>
 <span class="source-line-no">337</span><span id="line-337">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_disableObjectLists()}</span>
 <span class="source-line-no">338</span><span id="line-338">    * &lt;/ul&gt;</span>
@@ -360,12 +360,12 @@
 <span class="source-line-no">347</span><span id="line-347">    * &lt;p&gt;</span>
 <span class="source-line-no">348</span><span id="line-348">    * Disallow the use doubles as &lt;c&gt;123.456&lt;/c&gt;.</span>
 <span class="source-line-no">349</span><span id="line-349">    *</span>
-<span class="source-line-no">350</span><span id="line-350">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">350</span><span id="line-350">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">351</span><span id="line-351">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">352</span><span id="line-352">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">353</span><span id="line-353">    * &lt;/ul&gt;</span>
 <span class="source-line-no">354</span><span id="line-354">    *</span>
-<span class="source-line-no">355</span><span id="line-355">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">355</span><span id="line-355">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">356</span><span id="line-356">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_disableUseDoubles()}</span>
 <span class="source-line-no">357</span><span id="line-357">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_disableUseDoubles()}</span>
 <span class="source-line-no">358</span><span id="line-358">    * &lt;/ul&gt;</span>
@@ -380,12 +380,12 @@
 <span class="source-line-no">367</span><span id="line-367">    * &lt;p&gt;</span>
 <span class="source-line-no">368</span><span id="line-368">    * Controls whether to use &lt;c&gt;a&lt;/c&gt;, &lt;c&gt;=&lt;/c&gt; and &lt;c&gt;=&amp;gt;&lt;/c&gt; in output</span>
 <span class="source-line-no">369</span><span id="line-369">    *</span>
-<span class="source-line-no">370</span><span id="line-370">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">370</span><span id="line-370">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">371</span><span id="line-371">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">372</span><span id="line-372">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">373</span><span id="line-373">    * &lt;/ul&gt;</span>
 <span class="source-line-no">374</span><span id="line-374">    *</span>
-<span class="source-line-no">375</span><span id="line-375">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">375</span><span id="line-375">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">376</span><span id="line-376">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_disableUsePropertySymbols()}</span>
 <span class="source-line-no">377</span><span id="line-377">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_disableUsePropertySymbols()}</span>
 <span class="source-line-no">378</span><span id="line-378">    * &lt;/ul&gt;</span>
@@ -400,12 +400,12 @@
 <span class="source-line-no">387</span><span id="line-387">    * &lt;p&gt;</span>
 <span class="source-line-no">388</span><span id="line-388">    * Disallow the use of &lt;c&gt;"""&lt;/c&gt; to delimit long strings.</span>
 <span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">390</span><span id="line-390">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">391</span><span id="line-391">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">392</span><span id="line-392">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">393</span><span id="line-393">    * &lt;/ul&gt;</span>
 <span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">395</span><span id="line-395">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">396</span><span id="line-396">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_disableUseTripleQuotedStrings()}</span>
 <span class="source-line-no">397</span><span id="line-397">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_disableUseTripleQuotedStrings()}</span>
 <span class="source-line-no">398</span><span id="line-398">    * &lt;/ul&gt;</span>
@@ -420,12 +420,12 @@
 <span class="source-line-no">407</span><span id="line-407">    * &lt;p&gt;</span>
 <span class="source-line-no">408</span><span id="line-408">    * Width to indent properties.</span>
 <span class="source-line-no">409</span><span id="line-409">    *</span>
-<span class="source-line-no">410</span><span id="line-410">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">410</span><span id="line-410">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">411</span><span id="line-411">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">412</span><span id="line-412">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">413</span><span id="line-413">    * &lt;/ul&gt;</span>
 <span class="source-line-no">414</span><span id="line-414">    *</span>
-<span class="source-line-no">415</span><span id="line-415">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">415</span><span id="line-415">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">416</span><span id="line-416">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_indentProperty(int)}</span>
 <span class="source-line-no">417</span><span id="line-417">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_indentProperty(int)}</span>
 <span class="source-line-no">418</span><span id="line-418">    * &lt;/ul&gt;</span>
@@ -440,12 +440,12 @@
 <span class="source-line-no">427</span><span id="line-427">    * &lt;p&gt;</span>
 <span class="source-line-no">428</span><span id="line-428">    * Minimum gap between items on a line.</span>
 <span class="source-line-no">429</span><span id="line-429">    *</span>
-<span class="source-line-no">430</span><span id="line-430">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">430</span><span id="line-430">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">431</span><span id="line-431">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">432</span><span id="line-432">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">433</span><span id="line-433">    * &lt;/ul&gt;</span>
 <span class="source-line-no">434</span><span id="line-434">    *</span>
-<span class="source-line-no">435</span><span id="line-435">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">435</span><span id="line-435">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">436</span><span id="line-436">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_minGap(int)}</span>
 <span class="source-line-no">437</span><span id="line-437">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_minGap(int)}</span>
 <span class="source-line-no">438</span><span id="line-438">    * &lt;/ul&gt;</span>
@@ -460,12 +460,12 @@
 <span class="source-line-no">447</span><span id="line-447">    * &lt;p&gt;</span>
 <span class="source-line-no">448</span><span id="line-448">    * Width of the property column.</span>
 <span class="source-line-no">449</span><span id="line-449">    *</span>
-<span class="source-line-no">450</span><span id="line-450">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">450</span><span id="line-450">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">451</span><span id="line-451">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">452</span><span id="line-452">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">453</span><span id="line-453">    * &lt;/ul&gt;</span>
 <span class="source-line-no">454</span><span id="line-454">    *</span>
-<span class="source-line-no">455</span><span id="line-455">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">455</span><span id="line-455">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">456</span><span id="line-456">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_propertyColumn(int)}</span>
 <span class="source-line-no">457</span><span id="line-457">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_propertyColumn(int)}</span>
 <span class="source-line-no">458</span><span id="line-458">    * &lt;/ul&gt;</span>
@@ -480,12 +480,12 @@
 <span class="source-line-no">467</span><span id="line-467">    * &lt;p&gt;</span>
 <span class="source-line-no">468</span><span id="line-468">    * If the subject is shorter than this value, the first property may go on the same line.</span>
 <span class="source-line-no">469</span><span id="line-469">    *</span>
-<span class="source-line-no">470</span><span id="line-470">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">470</span><span id="line-470">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">471</span><span id="line-471">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">472</span><span id="line-472">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">473</span><span id="line-473">    * &lt;/ul&gt;</span>
 <span class="source-line-no">474</span><span id="line-474">    *</span>
-<span class="source-line-no">475</span><span id="line-475">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">475</span><span id="line-475">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">476</span><span id="line-476">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_subjectColumn(int)}</span>
 <span class="source-line-no">477</span><span id="line-477">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_subjectColumn(int)}</span>
 <span class="source-line-no">478</span><span id="line-478">    * &lt;/ul&gt;</span>
@@ -501,12 +501,12 @@
 <span class="source-line-no">488</span><span id="line-488">    * Width of the property column.</span>
 <span class="source-line-no">489</span><span id="line-489">    * &lt;br&gt;Must be longer than &lt;c&gt;propertyColumn&lt;/c&gt;.</span>
 <span class="source-line-no">490</span><span id="line-490">    *</span>
-<span class="source-line-no">491</span><span id="line-491">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">491</span><span id="line-491">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">492</span><span id="line-492">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">493</span><span id="line-493">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">494</span><span id="line-494">    * &lt;/ul&gt;</span>
 <span class="source-line-no">495</span><span id="line-495">    *</span>
-<span class="source-line-no">496</span><span id="line-496">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">496</span><span id="line-496">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">497</span><span id="line-497">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#n3_widePropertyLen(int)}</span>
 <span class="source-line-no">498</span><span id="line-498">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#n3_widePropertyLen(int)}</span>
 <span class="source-line-no">499</span><span id="line-499">    * &lt;/ul&gt;</span>
@@ -521,12 +521,12 @@
 <span class="source-line-no">508</span><span id="line-508">    * &lt;p&gt;</span>
 <span class="source-line-no">509</span><span id="line-509">    * The default list of namespaces associated with this serializer.</span>
 <span class="source-line-no">510</span><span id="line-510">    *</span>
-<span class="source-line-no">511</span><span id="line-511">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">511</span><span id="line-511">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">512</span><span id="line-512">    *    &lt;li&gt;</span>
 <span class="source-line-no">513</span><span id="line-513">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">514</span><span id="line-514">    * &lt;/ul&gt;</span>
 <span class="source-line-no">515</span><span id="line-515">    *</span>
-<span class="source-line-no">516</span><span id="line-516">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">516</span><span id="line-516">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">517</span><span id="line-517">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#namespaces(Namespace...)}</span>
 <span class="source-line-no">518</span><span id="line-518">    * &lt;/ul&gt;</span>
 <span class="source-line-no">519</span><span id="line-519">    *</span>
@@ -550,12 +550,12 @@
 <span class="source-line-no">537</span><span id="line-537">    * &lt;p&gt;</span>
 <span class="source-line-no">538</span><span id="line-538">    * URIs in the graph are, by default, checked prior to serialization.</span>
 <span class="source-line-no">539</span><span id="line-539">    *</span>
-<span class="source-line-no">540</span><span id="line-540">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">540</span><span id="line-540">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">541</span><span id="line-541">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">542</span><span id="line-542">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">543</span><span id="line-543">    * &lt;/ul&gt;</span>
 <span class="source-line-no">544</span><span id="line-544">    *</span>
-<span class="source-line-no">545</span><span id="line-545">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">545</span><span id="line-545">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">546</span><span id="line-546">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_allowBadUris()}</span>
 <span class="source-line-no">547</span><span id="line-547">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_allowBadUris()}</span>
 <span class="source-line-no">548</span><span id="line-548">    * &lt;/ul&gt;</span>
@@ -570,12 +570,12 @@
 <span class="source-line-no">557</span><span id="line-557">    * &lt;p&gt;</span>
 <span class="source-line-no">558</span><span id="line-558">    * The XML attribute quote character.</span>
 <span class="source-line-no">559</span><span id="line-559">    *</span>
-<span class="source-line-no">560</span><span id="line-560">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">560</span><span id="line-560">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">561</span><span id="line-561">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">562</span><span id="line-562">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">563</span><span id="line-563">    * &lt;/ul&gt;</span>
 <span class="source-line-no">564</span><span id="line-564">    *</span>
-<span class="source-line-no">565</span><span id="line-565">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">565</span><span id="line-565">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">566</span><span id="line-566">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_attributeQuoteChar(char)}</span>
 <span class="source-line-no">567</span><span id="line-567">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_attributeQuoteChar(char)}</span>
 <span class="source-line-no">568</span><span id="line-568">    * &lt;/ul&gt;</span>
@@ -592,12 +592,12 @@
 <span class="source-line-no">579</span><span id="line-579">    * {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar</span>
 <span class="source-line-no">580</span><span id="line-580">    * rules that will not be used.</span>
 <span class="source-line-no">581</span><span id="line-581">    *</span>
-<span class="source-line-no">582</span><span id="line-582">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">582</span><span id="line-582">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">583</span><span id="line-583">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">584</span><span id="line-584">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">585</span><span id="line-585">    * &lt;/ul&gt;</span>
 <span class="source-line-no">586</span><span id="line-586">    *</span>
-<span class="source-line-no">587</span><span id="line-587">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">587</span><span id="line-587">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">588</span><span id="line-588">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_blockRules(String)}</span>
 <span class="source-line-no">589</span><span id="line-589">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_blockRules(String)}</span>
 <span class="source-line-no">590</span><span id="line-590">    * &lt;/ul&gt;</span>
@@ -615,12 +615,12 @@
 <span class="source-line-no">602</span><span id="line-602">    * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity</span>
 <span class="source-line-no">603</span><span id="line-603">    * invocation.</span>
 <span class="source-line-no">604</span><span id="line-604">    *</span>
-<span class="source-line-no">605</span><span id="line-605">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">605</span><span id="line-605">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">606</span><span id="line-606">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">607</span><span id="line-607">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">608</span><span id="line-608">    * &lt;/ul&gt;</span>
 <span class="source-line-no">609</span><span id="line-609">    *</span>
-<span class="source-line-no">610</span><span id="line-610">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">610</span><span id="line-610">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">611</span><span id="line-611">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_disableShowDoctypeDeclaration()}</span>
 <span class="source-line-no">612</span><span id="line-612">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_disableShowDoctypeDeclaration()}</span>
 <span class="source-line-no">613</span><span id="line-613">    * &lt;/ul&gt;</span>
@@ -635,12 +635,12 @@
 <span class="source-line-no">622</span><span id="line-622">    * &lt;p&gt;</span>
 <span class="source-line-no">623</span><span id="line-623">    * Sets ARP to look for RDF embedded within an enclosing XML document.</span>
 <span class="source-line-no">624</span><span id="line-624">    *</span>
-<span class="source-line-no">625</span><span id="line-625">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">625</span><span id="line-625">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">626</span><span id="line-626">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">627</span><span id="line-627">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">628</span><span id="line-628">    * &lt;/ul&gt;</span>
 <span class="source-line-no">629</span><span id="line-629">    *</span>
-<span class="source-line-no">630</span><span id="line-630">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">630</span><span id="line-630">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">631</span><span id="line-631">    *    &lt;li&gt;</span>
 <span class="source-line-no">632</span><span id="line-632">    *       {doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}</span>
 <span class="source-line-no">633</span><span id="line-633">    * &lt;/ul&gt;</span>
@@ -665,12 +665,12 @@
 <span class="source-line-no">652</span><span id="line-652">    *    &lt;li&gt;&lt;js&gt;"strict-fatal"&lt;/js&gt;</span>
 <span class="source-line-no">653</span><span id="line-653">    * &lt;/ul&gt;</span>
 <span class="source-line-no">654</span><span id="line-654">    *</span>
-<span class="source-line-no">655</span><span id="line-655">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">655</span><span id="line-655">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">656</span><span id="line-656">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">657</span><span id="line-657">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">658</span><span id="line-658">    * &lt;/ul&gt;</span>
 <span class="source-line-no">659</span><span id="line-659">    *</span>
-<span class="source-line-no">660</span><span id="line-660">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">660</span><span id="line-660">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">661</span><span id="line-661">    *    &lt;li&gt;</span>
 <span class="source-line-no">662</span><span id="line-662">    *       {doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}</span>
 <span class="source-line-no">663</span><span id="line-663">    *    &lt;li&gt;</span>
@@ -704,7 +704,7 @@
 <span class="source-line-no">691</span><span id="line-691">    *       {doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).</span>
 <span class="source-line-no">692</span><span id="line-692">    * &lt;/ul&gt;</span>
 <span class="source-line-no">693</span><span id="line-693">    *</span>
-<span class="source-line-no">694</span><span id="line-694">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">694</span><span id="line-694">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">695</span><span id="line-695">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">696</span><span id="line-696">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">697</span><span id="line-697">    * &lt;/ul&gt;</span>
@@ -720,12 +720,12 @@
 <span class="source-line-no">707</span><span id="line-707">    * Whether to use long ID's for anon resources.</span>
 <span class="source-line-no">708</span><span id="line-708">    * &lt;br&gt;Short ID's are easier to read, but can run out of memory on very large models.</span>
 <span class="source-line-no">709</span><span id="line-709">    *</span>
-<span class="source-line-no">710</span><span id="line-710">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">710</span><span id="line-710">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">711</span><span id="line-711">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">712</span><span id="line-712">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">713</span><span id="line-713">    * &lt;/ul&gt;</span>
 <span class="source-line-no">714</span><span id="line-714">    *</span>
-<span class="source-line-no">715</span><span id="line-715">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">715</span><span id="line-715">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">716</span><span id="line-716">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_longId()}</span>
 <span class="source-line-no">717</span><span id="line-717">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_longId()}</span>
 <span class="source-line-no">718</span><span id="line-718">    * &lt;/ul&gt;</span>
@@ -762,12 +762,12 @@
 <span class="source-line-no">749</span><span id="line-749">    * To switch off relative URIs use the value &lt;js&gt;""&lt;/js&gt;.</span>
 <span class="source-line-no">750</span><span id="line-750">    * Relative URIs of any of these types are output where possible if and only if the option has been specified.</span>
 <span class="source-line-no">751</span><span id="line-751">    *</span>
-<span class="source-line-no">752</span><span id="line-752">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">752</span><span id="line-752">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">753</span><span id="line-753">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">754</span><span id="line-754">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">755</span><span id="line-755">    * &lt;/ul&gt;</span>
 <span class="source-line-no">756</span><span id="line-756">    *</span>
-<span class="source-line-no">757</span><span id="line-757">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">757</span><span id="line-757">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">758</span><span id="line-758">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_relativeUris(String)}</span>
 <span class="source-line-no">759</span><span id="line-759">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_relativeUris(String)}</span>
 <span class="source-line-no">760</span><span id="line-760">    * &lt;/ul&gt;</span>
@@ -790,12 +790,12 @@
 <span class="source-line-no">777</span><span id="line-777">    *       In this case the encoding is shown in the XML declaration.</span>
 <span class="source-line-no">778</span><span id="line-778">    * &lt;/ul&gt;</span>
 <span class="source-line-no">779</span><span id="line-779">    *</span>
-<span class="source-line-no">780</span><span id="line-780">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">780</span><span id="line-780">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">781</span><span id="line-781">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">782</span><span id="line-782">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">783</span><span id="line-783">    * &lt;/ul&gt;</span>
 <span class="source-line-no">784</span><span id="line-784">    *</span>
-<span class="source-line-no">785</span><span id="line-785">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">785</span><span id="line-785">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">786</span><span id="line-786">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_showXmlDeclaration(String)}</span>
 <span class="source-line-no">787</span><span id="line-787">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_showXmlDeclaration(String)}</span>
 <span class="source-line-no">788</span><span id="line-788">    * &lt;/ul&gt;</span>
@@ -810,12 +810,12 @@
 <span class="source-line-no">797</span><span id="line-797">    * &lt;p&gt;</span>
 <span class="source-line-no">798</span><span id="line-798">    * The number of spaces with which to indent XML child elements.</span>
 <span class="source-line-no">799</span><span id="line-799">    *</span>
-<span class="source-line-no">800</span><span id="line-800">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">800</span><span id="line-800">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">801</span><span id="line-801">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">802</span><span id="line-802">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">803</span><span id="line-803">    * &lt;/ul&gt;</span>
 <span class="source-line-no">804</span><span id="line-804">    *</span>
-<span class="source-line-no">805</span><span id="line-805">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">805</span><span id="line-805">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">806</span><span id="line-806">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_tab(int)}</span>
 <span class="source-line-no">807</span><span id="line-807">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_tab(int)}</span>
 <span class="source-line-no">808</span><span id="line-808">    * &lt;/ul&gt;</span>
@@ -830,12 +830,12 @@
 <span class="source-line-no">817</span><span id="line-817">    * &lt;p&gt;</span>
 <span class="source-line-no">818</span><span id="line-818">    * The value to be included for an &lt;xa&gt;xml:base&lt;/xa&gt; attribute on the root element in the file.</span>
 <span class="source-line-no">819</span><span id="line-819">    *</span>
-<span class="source-line-no">820</span><span id="line-820">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">820</span><span id="line-820">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">821</span><span id="line-821">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">822</span><span id="line-822">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">823</span><span id="line-823">    * &lt;/ul&gt;</span>
 <span class="source-line-no">824</span><span id="line-824">    *</span>
-<span class="source-line-no">825</span><span id="line-825">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">825</span><span id="line-825">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">826</span><span id="line-826">    *    &lt;li class='jm'&gt;{@link RdfSerializer.Builder#rdfxml_xmlbase(String)}</span>
 <span class="source-line-no">827</span><span id="line-827">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#rdfxml_xmlbase(String)}</span>
 <span class="source-line-no">828</span><span id="line-828">    * &lt;/ul&gt;</span>
@@ -850,12 +850,12 @@
 <span class="source-line-no">837</span><span id="line-837">    * &lt;p&gt;</span>
 <span class="source-line-no">838</span><span id="line-838">    * If &lt;js&gt;"true"&lt;/js&gt;, whitespace in text elements will be automatically trimmed.</span>
 <span class="source-line-no">839</span><span id="line-839">    *</span>
-<span class="source-line-no">840</span><span id="line-840">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">840</span><span id="line-840">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">841</span><span id="line-841">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">842</span><span id="line-842">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">843</span><span id="line-843">    * &lt;/ul&gt;</span>
 <span class="source-line-no">844</span><span id="line-844">    *</span>
-<span class="source-line-no">845</span><span id="line-845">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">845</span><span id="line-845">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">846</span><span id="line-846">    *    &lt;li class='jm'&gt;{@link RdfParser.Builder#trimWhitespace()}</span>
 <span class="source-line-no">847</span><span id="line-847">    * &lt;/ul&gt;</span>
 <span class="source-line-no">848</span><span id="line-848">    *</span>

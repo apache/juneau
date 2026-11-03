@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  boolean references to lambdas, inner classes, or methods. Unlike <a href="Flag.html" title="class in org.apache.juneau.commons.lang"><code>Flag</code></a>, this class supports three
  states: <c>true</c>, <c>false</c>, and <c>null</c>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       This class is <b>not thread-safe</b>. For concurrent access, use <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicBoolean.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicBoolean</code></a> instead.
    <li class='note'>
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
       two states (<c>true</c>/<c>false</c>), consider using <a href="Flag.html" title="class in org.apache.juneau.commons.lang"><code>Flag</code></a> instead.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a boolean value to track if a condition was met</jc>
    BooleanHolder <jv>found</jv> = BooleanHolder.<jsm>create</jsm>();
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
    <li class='jc'><a href="Flag.html" title="class in org.apache.juneau.commons.lang"><code>Flag</code></a>
  </ul></div>
@@ -222,7 +221,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-79">create</a></span>()</div>
 <div class="block">Creates a new boolean value initialized to <c>false</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>create</jsm>();
    <jsm>assertEquals</jsm>(<jk>false</jk>, <jv>value</jv>.get());
@@ -239,7 +238,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-95">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Creates a new boolean value with the specified initial value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
    <jsm>assertEquals</jsm>(<jk>true</jk>, <jv>value</jv>.get());
@@ -261,7 +260,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison, which handles nulls safely.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
    <jsm>assertTrue</jsm>(<jv>value</jv>.is(<jk>true</jk>));
@@ -290,7 +289,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison of each value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
    <jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<jk>true</jk>, <jk>null</jk>));
@@ -310,7 +309,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-171">isNotTrue</a></span>()</div>
 <div class="block">Returns <c>true</c> if the value is not set to <c>true</c> (i.e., it's <c>false</c> or <c>null</c>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>false</jk>);
    <jk>if</jk> (<jv>value</jv>.isNotTrue()) {
@@ -329,7 +328,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-186">isTrue</a></span>()</div>
 <div class="block">Returns <c>true</c> if the value is set to <c>true</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
    <jk>if</jk> (<jv>value</jv>.isTrue()) {

@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * to the embedded content, such as Flash applications or other plugins. The name attribute</span>
 <span class="source-line-no">028</span><span id="line-28"> * specifies the parameter name, and the value attribute provides the parameter value.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
@@ -76,68 +76,67 @@
 <span class="source-line-no">063</span><span id="line-63"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#param() param()}</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;/ul&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> */</span>
-<span class="source-line-no">072</span><span id="line-72">@Marshalled(typeName = "param")</span>
-<span class="source-line-no">073</span><span id="line-73">public class Param extends HtmlElementVoid&lt;Param&gt; {</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Creates an empty {@link Param} element.</span>
-<span class="source-line-no">077</span><span id="line-77">    */</span>
-<span class="source-line-no">078</span><span id="line-78">   public Param() {}</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /**</span>
-<span class="source-line-no">081</span><span id="line-81">    * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(Object)}</span>
-<span class="source-line-no">082</span><span id="line-82">    * attributes.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param name The {@link Param#name(String)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param value The {@link Param#value(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public Param(String name, Object value) {</span>
-<span class="source-line-no">088</span><span id="line-88">      name(name).value(value);</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   /**</span>
-<span class="source-line-no">092</span><span id="line-92">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name"&gt;name&lt;/a&gt; attribute.</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * &lt;p&gt;</span>
-<span class="source-line-no">095</span><span id="line-95">    * Specifies the name of the parameter. This name is used by the parent object element</span>
-<span class="source-line-no">096</span><span id="line-96">    * to identify the parameter and its associated value.</span>
-<span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * &lt;p&gt;</span>
-<span class="source-line-no">099</span><span id="line-99">    * The name should be meaningful and correspond to the expected parameter name</span>
-<span class="source-line-no">100</span><span id="line-100">    * for the embedded content.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param value The name of the parameter. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @return This object.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   public Param name(String value) {</span>
-<span class="source-line-no">106</span><span id="line-106">      attr("name", value);</span>
-<span class="source-line-no">107</span><span id="line-107">      return this;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value"&gt;value&lt;/a&gt;</span>
-<span class="source-line-no">112</span><span id="line-112">    * attribute.</span>
-<span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    * Value of parameter.</span>
-<span class="source-line-no">116</span><span id="line-116">    *</span>
-<span class="source-line-no">117</span><span id="line-117">    * @param value</span>
-<span class="source-line-no">118</span><span id="line-118">    *    The new value for this attribute.</span>
-<span class="source-line-no">119</span><span id="line-119">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">120</span><span id="line-120">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">121</span><span id="line-121">    * @return This object.</span>
-<span class="source-line-no">122</span><span id="line-122">    */</span>
-<span class="source-line-no">123</span><span id="line-123">   public Param value(Object value) {</span>
-<span class="source-line-no">124</span><span id="line-124">      attr("value", value);</span>
-<span class="source-line-no">125</span><span id="line-125">      return this;</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127">}</span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> */</span>
+<span class="source-line-no">071</span><span id="line-71">@Marshalled(typeName = "param")</span>
+<span class="source-line-no">072</span><span id="line-72">public class Param extends HtmlElementVoid&lt;Param&gt; {</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   /**</span>
+<span class="source-line-no">075</span><span id="line-75">    * Creates an empty {@link Param} element.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public Param() {}</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(Object)}</span>
+<span class="source-line-no">081</span><span id="line-81">    * attributes.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param name The {@link Param#name(String)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param value The {@link Param#value(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public Param(String name, Object value) {</span>
+<span class="source-line-no">087</span><span id="line-87">      name(name).value(value);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name"&gt;name&lt;/a&gt; attribute.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * &lt;p&gt;</span>
+<span class="source-line-no">094</span><span id="line-94">    * Specifies the name of the parameter. This name is used by the parent object element</span>
+<span class="source-line-no">095</span><span id="line-95">    * to identify the parameter and its associated value.</span>
+<span class="source-line-no">096</span><span id="line-96">    *</span>
+<span class="source-line-no">097</span><span id="line-97">    * &lt;p&gt;</span>
+<span class="source-line-no">098</span><span id="line-98">    * The name should be meaningful and correspond to the expected parameter name</span>
+<span class="source-line-no">099</span><span id="line-99">    * for the embedded content.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param value The name of the parameter. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">102</span><span id="line-102">    * @return This object.</span>
+<span class="source-line-no">103</span><span id="line-103">    */</span>
+<span class="source-line-no">104</span><span id="line-104">   public Param name(String value) {</span>
+<span class="source-line-no">105</span><span id="line-105">      attr("name", value);</span>
+<span class="source-line-no">106</span><span id="line-106">      return this;</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value"&gt;value&lt;/a&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * attribute.</span>
+<span class="source-line-no">112</span><span id="line-112">    *</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;p&gt;</span>
+<span class="source-line-no">114</span><span id="line-114">    * Value of parameter.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * @param value</span>
+<span class="source-line-no">117</span><span id="line-117">    *    The new value for this attribute.</span>
+<span class="source-line-no">118</span><span id="line-118">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">119</span><span id="line-119">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">120</span><span id="line-120">    * @return This object.</span>
+<span class="source-line-no">121</span><span id="line-121">    */</span>
+<span class="source-line-no">122</span><span id="line-122">   public Param value(Object value) {</span>
+<span class="source-line-no">123</span><span id="line-123">      attr("value", value);</span>
+<span class="source-line-no">124</span><span id="line-124">      return this;</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126">}</span>
 
 
 

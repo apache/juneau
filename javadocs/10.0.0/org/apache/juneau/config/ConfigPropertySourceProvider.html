@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -106,14 +105,14 @@ implements <a href="../commons/settings/PropertySourceProvider.html" title="inte
  Lazy resolution makes the cycle a non-issue: by the time <code>@Value("${...}")</code> fires its first
  lookup, all participating classes are fully initialized.
 
- <h5 class='section'>Silence on missing config:</h5>
+ <h2 class='section'>Silence on missing config:</h2>
  <p>
  If no system-default <a href="Config.html" title="class in org.apache.juneau.config"><code>Config</code></a> is discoverable (no <code>juneau.cfg</code> / <code>default.cfg</code>
  / <code>application.cfg</code> / etc. on the classpath or working directory), <code>get(name)</code>
  returns <a href="../commons/settings/PropertyLookupResult.html#missing()"><code>PropertyLookupResult.missing()</code></a> for every key.  No logging, no exception — many
  deployments have no classpath config and shouldn't see noise.
 
- <h5 class='section'>Ordering:</h5>
+ <h2 class='section'>Ordering:</h2>
  <p>
  <a href="#order()"><code>order()</code></a> returns <code>100</code>, which is "low" in the <a href="../commons/settings/PropertySourceProvider.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySourceProvider</code></a>
  scheme — provider-discovered classpath defaults register near the bottom of the source list so

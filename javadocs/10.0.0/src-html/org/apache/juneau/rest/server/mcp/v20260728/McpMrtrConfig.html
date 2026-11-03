@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> * expiry (see {@link #setClock(Clock)}). Operators inject a shared/rotating-key {@link RequestStateCodec} here</span>
 <span class="source-line-no">043</span><span id="line-43"> * for multi-instance or restart-durable resumption.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Trust model:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Trust model:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;&lt;b&gt;{@code requestState} is a bearer token.&lt;/b&gt; Anyone holding a sealed {@code requestState} can resume</span>
 <span class="source-line-no">048</span><span id="line-48"> *       the paused operation until it expires; the token is not bound to a caller identity. It must be</span>

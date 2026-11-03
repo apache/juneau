@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
  formats (json, xml, bson, yaml, ...) degenerate to a one-record stream; multi-rooted formats
  (jsonl, csv, sse) expose each line / row / event as a separate record.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jk>try</jk> (RecordReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readRecords(<jv>input</jv>)) {
       <jk>while</jk> (<jv>r</jv>.canRead()) {
@@ -106,7 +105,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
    }
  </p>
 
- <h5 class='section'>Streaming quality:</h5>
+ <h2 class='section'>Streaming quality:</h2>
  <ul>
    <li><a href="#isStreaming()"><code>isStreaming()</code></a> == <jk>true</jk> &mdash; O(1)-memory streaming.  FULL-token formats
       return a cursor that is also a <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> (the structural surface).
@@ -115,7 +114,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
       the structural surface is not available.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> &mdash; the push-side counterpart.
    <li><a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> &mdash; structural extension for FULL-capability formats.
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

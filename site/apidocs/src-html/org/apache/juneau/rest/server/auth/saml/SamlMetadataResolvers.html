@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> * Both factories return resolvers that are &lt;b&gt;already initialized&lt;/b&gt; &amp;mdash; ready to hand to</span>
 <span class="source-line-no">061</span><span id="line-61"> * {@link SamlAssertionValidator.Builder#metadataResolver(MetadataResolver)} immediately.</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * The URL factory uses the JDK {@link HttpClient} (Java 17) to fetch the metadata blob once at construction</span>
 <span class="source-line-no">066</span><span id="line-66"> * time and wraps the parsed DOM in a {@link DOMMetadataResolver}.  No background refresh is performed; applications</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">    * periodic refresh should construct an OpenSAML {@code HTTPMetadataResolver} directly with an Apache</span>
 <span class="source-line-no">116</span><span id="line-116">    * HttpClient.</span>
 <span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * &lt;h5 class='section'&gt;Transport:&lt;/h5&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * &lt;h4 class='section'&gt;Transport:&lt;/h4&gt;</span>
 <span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
 <span class="source-line-no">120</span><span id="line-120">    * The metadata blob supplies the trust-anchor signing certificate, so the transport must not be</span>
 <span class="source-line-no">121</span><span id="line-121">    * downgradeable by a network intermediary.  The URL must therefore use &lt;js&gt;"https"&lt;/js&gt; or target a</span>

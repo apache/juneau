@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -74,7 +73,7 @@ loadScripts(document, 'script');</script>
  map to bean property sets, independent of any marshalling concerns. The marshalling layer (in
  <code>juneau-marshall</code>) layers serializer / parser / swap behavior on top of these primitives.
 
- <h5 class='topic'>Annotations</h5>
+ <h2 class='topic'>Annotations</h2>
  <ul>
    <li><a href="BeanType.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanType</code></a> — marks a class as a bean and configures
        bean-level options (interface class, stop class, property order, etc.).
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
    <li><a href="Name.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@Name</code></a> — alternative property name on a parameter.
  </ul>
 
- <h5 class='topic'>Runtime types</h5>
+ <h2 class='topic'>Runtime types</h2>
  <ul>
    <li><a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> — metadata describing a bean class
        (properties, constructor, type info).
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
        property reads / writes.
  </ul>
 
- <h5 class='topic'>SPI seams</h5>
+ <h2 class='topic'>SPI seams</h2>
  <ul>
    <li><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a> — immutable POJO carrying all
        bean-modeling configuration knobs plus SPI hooks. <code>MarshallingContext</code> (in
@@ -135,7 +134,7 @@ loadScripts(document, 'script');</script>
        transformer.
  </ul>
 
- <h5 class='topic'>Thread safety</h5>
+ <h2 class='topic'>Thread safety</h2>
  <p>
  Practical thread-safety semantics for primary runtime types and SPI seams in this package:
  </p>

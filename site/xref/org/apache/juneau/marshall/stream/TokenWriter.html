@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * format.  This is a format-neutral surface; the same writer methods work across every Juneau</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * format that implements {@link TokenWritable} (the structural-token role).</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	StringBuilder &lt;jv&gt;sb&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringBuilder();</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;try&lt;/jk&gt; (TokenWriter &lt;jv&gt;w&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.writeTokens(&lt;jv&gt;sb&lt;/jv&gt;)) {</em>
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// sb is now: {"a":1,"b":[true,null]}&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Contract:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Contract:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The writer is &lt;b&gt;purely structural&lt;/b&gt;.  It bypasses object swaps and {@code @Schema}</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 		annotations &amp;mdash; that is the role of the POJO databind path on</em>
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Concrete implementations are not required to be thread-safe.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link TokenReader} &amp;mdash; the pull-side counterpart.</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link TokenType} &amp;mdash; the format-neutral token vocabulary.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/SerializersAndParsers" target="alexandria_uri">https://juneau.apache.org/docs/topics/SerializersAndParsers</a>"&gt;Serializers and Parsers&lt;/a&gt;</em>

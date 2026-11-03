@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ implements <a href="CardTypeHandler.html" title="interface in org.apache.juneau.
  as a <code>&lt;template data-card="{id}"&gt;</code>. A bare <code>html</code> card (no body) emits an empty fragment — the
  shell paints an empty <code>.jc-card</code> and nothing more.
 
- <h5 class='section'>Trust boundary for <code>src</code>:</h5>
+ <h2 class='section'>Trust boundary for <code>src</code>:</h2>
  <p>
  An <code>html</code> card in a page contract may instead name a <code>src</code> endpoint. The <code>src</code> must be a
  same-origin path (checked at page build, by <code>PageCapture.addCard</code> for FreeMarker and <code>PageSpec</code> cards
@@ -106,7 +105,7 @@ implements <a href="CardTypeHandler.html" title="interface in org.apache.juneau.
  card fails closed with E-JS-8 and paints nothing. The flag only affects <code>src</code> cards, and the default is
  unchanged (unsanitized).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    CardSource <jv>s</jv> = CardSource.<jsm>create</jsm>(<js>"html"</js>, <js>"welcome"</js>)
      .title(<js>"Welcome"</js>)

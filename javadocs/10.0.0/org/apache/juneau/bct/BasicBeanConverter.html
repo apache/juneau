@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
  assertions, handling complex object introspection and value extraction with high performance through
  intelligent caching and optimized lookup strategies.</p>
 
- <h5 class='section'>Key Features:</h5>
+ <h2 class='section'>Key Features:</h2>
  <ul>
     <li><b>Extensible Type Handlers:</b> Pluggable stringifiers, listifiers, and swappers for custom types</li>
     <li><b>Performance Optimization:</b> ConcurrentHashMap caching for type-to-handler mappings</li>
@@ -101,7 +100,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <li><b>Thread Safety:</b> Fully thread-safe implementation suitable for concurrent testing</li>
  </ul>
 
- <h5 class='section'>Architecture Overview:</h5>
+ <h2 class='section'>Architecture Overview:</h2>
  <p>The converter uses four types of pluggable handlers:</p>
  <dl>
     <dt><b>Stringifiers:</b></dt>
@@ -125,7 +124,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <li><b>Map access:</b> Key-based property retrieval and size property</li>
  </ul>
 
- <h5 class='section'>Default Type Support:</h5>
+ <h2 class='section'>Default Type Support:</h2>
  <p>Out-of-the-box stringification support includes:</p>
  <ul>
     <li><b>Collections:</b> List, Set, Queue → <js>"[item1,item2,item3]"</js> format</li>
@@ -155,7 +154,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <li><b>Future:</b> Extracts completed result or returns <js>"&lt;pending&gt;"</js> for incomplete futures (via <a href="Swappers.html#futureSwapper()"><code>Swappers.futureSwapper()</code></a>)</li>
  </ul>
 
- <h5 class='section'>Configuration Settings:</h5>
+ <h2 class='section'>Configuration Settings:</h2>
  <p>The converter supports extensive customization via settings:</p>
  <dl>
     <dt><code>nullValue</code></dt>
@@ -186,7 +185,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <dd>Format for class names: <js>"simple"</js>, <js>"canonical"</js>, or <js>"full"</js> (default: <js>"simple"</js>)</dd>
  </dl>
 
- <h5 class='section'>Usage Examples:</h5>
+ <h2 class='section'>Usage Examples:</h2>
 
  <p><b>Basic Usage with Defaults:</b></p>
  <p class='bjava'>
@@ -231,7 +230,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <jk>var</jk> <jv>selfRef</jv> = <jv>customConverter</jv>.getEntry(<jv>user</jv>, <js>"this"</js>); <jc>// Returns user object</jc>
  </p>
 
- <h5 class='section'>Performance Characteristics:</h5>
+ <h2 class='section'>Performance Characteristics:</h2>
  <ul>
     <li><b>Handler Lookup:</b> O(1) average case via ConcurrentHashMap caching</li>
     <li><b>Type Registration:</b> Handlers checked in reverse registration order (last wins)</li>
@@ -240,7 +239,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <li><b>Memory Efficiency:</b> Minimal object allocation during normal operation</li>
  </ul>
 
- <h5 class='section'>Extension Patterns:</h5>
+ <h2 class='section'>Extension Patterns:</h2>
 
  <p><b>Custom Type Stringification:</b></p>
  <p class='bjava'>
@@ -260,7 +259,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
        <jp>lazy</jp>.isEvaluated() ? <jp>lazy</jp>.getValue() : "&lt;unevaluated&gt;");
  </p>
 
- <h5 class='section'>Integration with BCT:</h5>
+ <h2 class='section'>Integration with BCT:</h2>
  <p>This class is used internally by all BCT assertion methods in <a href="BctAssertions.html" title="class in org.apache.juneau.bct"><code>BctAssertions</code></a>:</p>
  <ul>
     <li><a href="BctAssertions.html#assertBean(java.lang.Object,java.lang.String,java.lang.String)"><code>BctAssertions.assertBean(Object, String, String)</code></a> - Uses getEntry() for property access</li>
@@ -463,7 +462,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
  with sensible default settings. It's suitable for most BCT testing scenarios and can be
  used directly without building a custom converter.</p>
 
- <h5 class='section'>Included Support:</h5>
+ <h4 class='section'>Included Support:</h4>
  <ul>
     <li><b>Collections:</b> List, Set, Queue with bracket formatting</li>
     <li><b>Maps:</b> Map, Properties with brace formatting</li>
@@ -475,14 +474,14 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <li><b>Wrappers:</b> Optional, Supplier, Future unwrapping</li>
  </ul>
 
- <h5 class='section'>Default Settings:</h5>
+ <h4 class='section'>Default Settings:</h4>
  <ul>
     <li><code>nullValue</code> = <js>"&lt;null&gt;"</js></li>
     <li><code>selfValue</code> = <js>"&lt;self&gt;"</js></li>
     <li><code>classNameFormat</code> = <js>"simple"</js></li>
  </ul>
 
- <h5 class='section'>Usage Example:</h5>
+ <h4 class='section'>Usage Example:</h4>
  <p class='bjava'>
     <jc>// Use default converter for assertions</jc>
     <jk>var</jk> <jv>result</jv> = BasicBeanConverter.<jsf>DEFAULT</jsf>.stringify(<jv>myObject</jv>);
@@ -891,18 +890,18 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
  and configuring conversion settings. All registration methods support method chaining
  for convenient configuration.</p>
 
- <h5 class='section'>Handler Registration:</h5>
+ <h4 class='section'>Handler Registration:</h4>
  <ul>
     <li><b>Stringifiers:</b> Custom string conversion logic for specific types</li>
     <li><b>Listifiers:</b> Custom list conversion logic for collection-like types</li>
     <li><b>Swappers:</b> Pre-processing transformation logic for wrapper types</li>
  </ul>
 
- <h5 class='section'>Registration Order:</h5>
+ <h4 class='section'>Registration Order:</h4>
  <p>Handlers are checked in reverse registration order (last registered wins).
  This allows overriding default handlers by registering more specific ones later.</p>
 
- <h5 class='section'>Inheritance Support:</h5>
+ <h4 class='section'>Inheritance Support:</h4>
  <p>All handlers support class inheritance and interface implementation.
  When looking up a handler, the system checks:</p>
  <ol>
@@ -911,7 +910,7 @@ implements <a href="BeanConverter.html" title="interface in org.apache.juneau.bc
     <li>Superclass matches (walking up the inheritance hierarchy)</li>
  </ol>
 
- <h5 class='section'>Usage Example:</h5>
+ <h4 class='section'>Usage Example:</h4>
  <p class='bjava'>
     <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
        .defaultSettings()

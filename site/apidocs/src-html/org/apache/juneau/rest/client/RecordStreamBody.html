@@ -54,14 +54,14 @@
 <span class="source-line-no">041</span><span id="line-41"> * that backs the cursor is supplied directly (defaulting to {@link JsonSerializer#DEFAULT}).  The body's</span>
 <span class="source-line-no">042</span><span id="line-42"> * {@link #getContentType()} reflects that serializer's media type.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Repeatability:&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;Repeatability:&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * Streaming bodies are &lt;b&gt;non-repeatable&lt;/b&gt; by default ({@link #isRepeatable()} returns {@code false}) because the</span>
 <span class="source-line-no">047</span><span id="line-47"> * caller's consumer may be backed by a one-shot source.  A non-repeatable body fails fast (throws {@link IOException})</span>
 <span class="source-line-no">048</span><span id="line-48"> * if a resend is required (i.e. {@link #writeTo(OutputStream)} is invoked more than once).  Callers whose consumer can</span>
 <span class="source-line-no">049</span><span id="line-49"> * be replayed safely may opt in via {@link #repeatable()}.</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;ja&gt;@Remote&lt;/ja&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;jk&gt;public interface&lt;/jk&gt; MyApi {</span>
@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64"> *    }));</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;Next-Generation REST Client&lt;/a&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>

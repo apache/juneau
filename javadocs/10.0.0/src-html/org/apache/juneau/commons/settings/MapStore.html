@@ -43,19 +43,19 @@
 <span class="source-line-no">030</span><span id="line-30"> * for creating custom property stores (e.g., Spring properties, configuration files) that can be added to</span>
 <span class="source-line-no">031</span><span id="line-31"> * {@link Settings} as sources.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * This class is thread-safe. The internal map is lazily initialized using {@link AtomicReference} and</span>
 <span class="source-line-no">036</span><span id="line-36"> * {@link ConcurrentHashMap} for thread-safe operations.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Null Value Handling:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Null Value Handling:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * Setting a value to &lt;c&gt;null&lt;/c&gt; stores &lt;c&gt;Optional.empty()&lt;/c&gt; in the map, which means {@link #get(String)}</span>
 <span class="source-line-no">041</span><span id="line-41"> * will return a {@link PropertyLookupResult#present(Optional)} result with an empty optional.</span>
 <span class="source-line-no">042</span><span id="line-42"> * This allows you to explicitly override system properties with null values.</span>
 <span class="source-line-no">043</span><span id="line-43"> * Use {@link #unset(String)} if you want to remove a key entirely (so {@link #get(String)} returns {@link PropertyLookupResult#missing()}).</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Create a store and add properties&lt;/jc&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    MapStore &lt;jv&gt;store&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MapStore();</span>

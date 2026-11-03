@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,19 +91,19 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
  for creating custom property stores (e.g., Spring properties, configuration files) that can be added to
  <a href="Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> as sources.
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe. The internal map is lazily initialized using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference</code></a> and
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a> for thread-safe operations.
 
- <h5 class='section'>Null Value Handling:</h5>
+ <h2 class='section'>Null Value Handling:</h2>
  <p>
  Setting a value to <c>null</c> stores <c>Optional.empty()</c> in the map, which means <a href="#get(java.lang.String)"><code>get(String)</code></a>
  will return a <a href="PropertyLookupResult.html#present(java.util.Optional)"><code>PropertyLookupResult.present(Optional)</code></a> result with an empty optional.
  This allows you to explicitly override system properties with null values.
  Use <a href="#unset(java.lang.String)"><code>unset(String)</code></a> if you want to remove a key entirely (so <a href="#get(java.lang.String)"><code>get(String)</code></a> returns <a href="PropertyLookupResult.html#missing()"><code>PropertyLookupResult.missing()</code></a>).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a store and add properties</jc>
    MapStore <jv>store</jv> = <jk>new</jk> MapStore();

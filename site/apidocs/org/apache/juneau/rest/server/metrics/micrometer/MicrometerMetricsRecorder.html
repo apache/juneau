@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ implements <a href="../MetricsRecorder.html" title="interface in org.apache.june
 <div class="block"><a href="../MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a> bridge that records every <code>@RestOp</code> call as a Micrometer
  <code>Timer</code> sample on the configured <code>MeterRegistry</code>.
 
- <h5 class='topic'>Metric shape</h5>
+ <h2 class='topic'>Metric shape</h2>
 
  <p>
  Each call records to one Timer named (by default) <a href="#DEFAULT_TIMER_NAME">"http.server.requests"</a> with four tags:
@@ -110,7 +109,7 @@ implements <a href="../MetricsRecorder.html" title="interface in org.apache.june
  convention so existing dashboards / alerts that scrape <code>http.server.requests</code> from Spring
  Boot services keep working when those services are reimplemented on Juneau.
 
- <h5 class='topic'>Wiring</h5>
+ <h2 class='topic'>Wiring</h2>
 
  <p class='bjava'>
    <ja>@Configuration</ja>
@@ -132,7 +131,7 @@ implements <a href="../MetricsRecorder.html" title="interface in org.apache.june
  The <code>MetricsRecorder</code> bean is picked up by <code>juneau-rest-server</code> through the
  <code>RestContext</code>'s bean store and invoked once per <code>@RestOp</code> call.
 
- <h5 class='topic'>Customizing the metric name</h5>
+ <h2 class='topic'>Customizing the metric name</h2>
 
  <p>
  Pass a non-default name to the two-arg constructor when the default
@@ -148,7 +147,7 @@ implements <a href="../MetricsRecorder.html" title="interface in org.apache.june
  recorder-level timer name. Per-op tags added via <a href="../../RestOp.html#metricTags()"><code>RestOp.metricTags()</code></a>
  are merged into the standard tag set as additional <code>key=value</code> pairs.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
    <li class='link'><a class="doclink" href="https://micrometer.io/docs/concepts">Micrometer Concepts</a>

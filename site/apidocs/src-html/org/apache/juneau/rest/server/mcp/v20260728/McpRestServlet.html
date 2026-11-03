@@ -59,15 +59,15 @@
 <span class="source-line-no">046</span><span id="line-46"> * notification) renders as a genuinely empty HTTP body instead of the framework's default four-byte</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@code null} JSON literal.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;pre&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> * @Rest(path="/mcp")</span>
+<span class="source-line-no">051</span><span id="line-51"> * &amp;#64;Rest(path="/mcp")</span>
 <span class="source-line-no">052</span><span id="line-52"> * public class MyMcpServlet extends McpRestServlet {</span>
-<span class="source-line-no">053</span><span id="line-53"> *     @Override</span>
+<span class="source-line-no">053</span><span id="line-53"> *     &amp;#64;Override</span>
 <span class="source-line-no">054</span><span id="line-54"> *     protected McpServerConfig createMcpConfig() {</span>
 <span class="source-line-no">055</span><span id="line-55"> *         return new McpServerConfig().setName("my-server").setVersion("1.0.0").addTool(new MyEchoTool());</span>
 <span class="source-line-no">056</span><span id="line-56"> *     }</span>
-<span class="source-line-no">057</span><span id="line-57"> *     @Override                                            // optional</span>
+<span class="source-line-no">057</span><span id="line-57"> *     &amp;#64;Override                                            // optional</span>
 <span class="source-line-no">058</span><span id="line-58"> *     protected McpOptions createMcpOptions() {</span>
 <span class="source-line-no">059</span><span id="line-59"> *         return new McpOptions()</span>
 <span class="source-line-no">060</span><span id="line-60"> *             .setInstructions("Use tool 'echo' to test.")</span>

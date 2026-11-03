@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * listification. They enable unwrapping, preprocessing, and value extraction from</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * wrapper objects, containers, and lazy evaluation constructs.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Key Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Key Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Pre-processing:&lt;/b&gt; Transform objects before string/list conversion&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Wrapper unwrapping:&lt;/b&gt; Extract values from Optional, Supplier, Future, etc.&lt;/li&gt;</em>
@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Type transformation:&lt;/b&gt; Convert between related types for better testing&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Common Use Cases:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Common Use Cases:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Optional unwrapping:&lt;/b&gt; Extract values from Optional containers&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Supplier evaluation:&lt;/b&gt; Call get() on Supplier objects&lt;/li&gt;</em>
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Value extraction:&lt;/b&gt; Pull relevant data from complex wrapper objects&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage Examples:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *    &lt;jc&gt;// Future value extraction&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *    Swapper&amp;lt;CompletableFuture&amp;gt; &lt;jv&gt;futureSwapper&lt;/jv&gt; = (&lt;jp&gt;conv&lt;/jp&gt;, &lt;jp&gt;future&lt;/jp&gt;) -&amp;gt; {</em>
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *       &lt;jk&gt;new&lt;/jk&gt; UserDTO(&lt;jp&gt;entity&lt;/jp&gt;.getId(), &lt;jp&gt;entity&lt;/jp&gt;.getName(), &lt;jp&gt;entity&lt;/jp&gt;.getEmail());</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Registration:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Registration:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *       .defaultSettings()</em>
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> *       .build();</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Execution Flow:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Execution Flow:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Swappers are applied early in the conversion process:&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Object received&lt;/b&gt; for conversion&lt;/li&gt;</em>
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Chain continues&lt;/b&gt; recursively for nested objects&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Best Practices:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Best Practices:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Handle exceptions&lt;/b&gt; gracefully, returning error indicators rather than throwing&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Preserve semantics&lt;/b&gt; - the swapped object should represent the same logical value&lt;/li&gt;</em>

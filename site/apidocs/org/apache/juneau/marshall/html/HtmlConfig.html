@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used primarily for specifying bean configuration properties on REST classes and methods.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
  </ul></div>
 </section>
@@ -160,12 +159,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlSerializer.Builder.html#addBeanTypesHtml()"><code>HtmlSerializer.Builder.addBeanTypesHtml()</code></a>
  </ul></div>
 <dl class="notes">
@@ -181,7 +180,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addKeyValueTableHeaders()">
 <h3>addKeyValueTableHeaders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-119">addKeyValueTableHeaders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-122">addKeyValueTableHeaders</a></span></div>
 <div class="block">Add key/value headers on bean/map tables.
 
  <p>
@@ -191,6 +190,7 @@ loadScripts(document, 'script');</script>
  The following shows the difference between the two generated outputs:
 
  <table class='styled'>
+   <caption>Serialized output without headers</caption>
    <tr>
       <th><c>withoutHeaders</c></th>
       <th><c>withHeaders</c></th>
@@ -198,12 +198,14 @@ loadScripts(document, 'script');</script>
    <tr>
       <td>
          <table class='unstyled'>
+            <caption>Nested table without headers (1)</caption>
             <tr><td>f1</td><td>foo</td></tr>
             <tr><td>f2</td><td>bar</td></tr>
          </table>
       </td>
       <td>
          <table class='unstyled'>
+            <caption>Nested table without headers (2)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td>foo</td></tr>
             <tr><td>f2</td><td>bar</td></tr>
@@ -217,12 +219,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlSerializer.Builder.html#addKeyValueTableHeaders()"><code>HtmlSerializer.Builder.addKeyValueTableHeaders()</code></a>
  </ul></div>
 <dl class="notes">
@@ -238,7 +240,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableDetectLabelParameters()">
 <h3>disableDetectLabelParameters</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-171">disableDetectLabelParameters</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-177">disableDetectLabelParameters</a></span></div>
 <div class="block">Don't look for link labels in URIs.
 
  <p>
@@ -252,6 +254,7 @@ loadScripts(document, 'script');</script>
  <br>Note that they're both hyperlinks, but the anchor text differs:
 
  <table class='styled'>
+   <caption>Serialized output with labels</caption>
    <tr>
       <th><c>withLabels</c></th>
       <th><c>withoutLabels</c></th>
@@ -259,12 +262,14 @@ loadScripts(document, 'script');</script>
    <tr>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with labels (1)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
          </table>
       </td>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with labels (2)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
          </table>
@@ -277,12 +282,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlSerializer.Builder.html#disableDetectLabelParameters()"><code>HtmlSerializer.Builder.disableDetectLabelParameters()</code></a>
  </ul></div>
 <dl class="notes">
@@ -298,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableDetectLinksInStrings()">
 <h3>disableDetectLinksInStrings</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-220">disableDetectLinksInStrings</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-229">disableDetectLinksInStrings</a></span></div>
 <div class="block">Don't look for URLs in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>Strings</code></a>.
 
  <p>
@@ -309,6 +314,7 @@ loadScripts(document, 'script');</script>
  The following shows the difference between the two generated outputs:
 
  <table class='styled'>
+   <caption>Serialized output with links</caption>
    <tr>
       <th><c>withLinks</c></th>
       <th><c>withoutLinks</c></th>
@@ -316,12 +322,14 @@ loadScripts(document, 'script');</script>
    <tr>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with links (1)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
          </table>
       </td>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with links (2)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td>http://www.apache.org</td></tr>
          </table>
@@ -334,12 +342,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlSerializer.Builder.html#disableDetectLinksInStrings()"><code>HtmlSerializer.Builder.disableDetectLinksInStrings()</code></a>
  </ul></div>
 <dl class="notes">
@@ -355,20 +363,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="labelParameter()">
 <h3>labelParameter</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-241">labelParameter</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-250">labelParameter</a></span></div>
 <div class="block">Link label parameter name.
 
  <p>
  The parameter name to look for when resolving link labels.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Default value: <js>"label"</js>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlSerializer.Builder.html#labelParameter(java.lang.String)"><code>HtmlSerializer.Builder.labelParameter(String)</code></a>
  </ul></div>
 <dl class="notes">
@@ -384,7 +392,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-251">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-260">rank</a></span></div>
 <div class="block">Optional rank for this config.
 
  <p>
@@ -402,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriAnchorText()">
 <h3>uriAnchorText</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-282">uriAnchorText</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlConfig.html#line-291">uriAnchorText</a></span></div>
 <div class="block">Anchor text source.
 
  <p>
@@ -420,12 +428,12 @@ loadScripts(document, 'script');</script>
    <li><js>"PATH_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a path-relative path.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlSerializer.Builder.html#uriAnchorText(org.apache.juneau.marshall.html.AnchorText)"><code>HtmlSerializer.Builder.uriAnchorText(AnchorText)</code></a>
  </ul></div>
 <dl class="notes">

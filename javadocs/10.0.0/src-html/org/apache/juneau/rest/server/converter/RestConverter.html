@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li class='ja'&gt;{@link RestOp#converters()}</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;jk&gt;public class&lt;/jk&gt; RequestEchoResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> * Converters can also be associated at the servlet level using the {@link Rest#converters() @Rest(converters)} annotation.</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;br&gt;Applying converters at the resource level is equivalent to applying converters to each resource method individually.</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='topic'&gt;How to implement&lt;/h5&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='topic'&gt;How to implement&lt;/h2&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
 <span class="source-line-no">056</span><span id="line-56"> * Implementers should simply implement the {@link #convert(RestRequest, Object)} and return back a 'converted' object.</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;br&gt;It's up to the implementer to decide what this means.</span>
@@ -79,32 +79,31 @@
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * Subclasses can also be defined as inner classes of the resource class.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='topic'&gt;Predefined converters&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='topic'&gt;Predefined converters&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;ul class='javatree'&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='jc'&gt;{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link Queryable} - Allows BeanQuery search/view/sort/paging functions to be performed on POJOs.</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li class='jc'&gt;{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;/ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='ja'&gt;{@link RestOp#converters()}</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Converters"&gt;Converters&lt;/a&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
-<span class="source-line-no">081</span><span id="line-81"> */</span>
-<span class="source-line-no">082</span><span id="line-82">public interface RestConverter {</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Performs post-call conversion on the specified response object.</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * @param req The servlet request.</span>
-<span class="source-line-no">088</span><span id="line-88">    * @param res The response object set by the REST method through the {@link RestResponse#setContent(Object)} method.</span>
-<span class="source-line-no">089</span><span id="line-89">    * @return The converted object.</span>
-<span class="source-line-no">090</span><span id="line-90">    * @throws BasicHttpException Thrown if any errors occur during conversion.</span>
-<span class="source-line-no">091</span><span id="line-91">    * @throws SerializeException Generic serialization error occurred.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   Object convert(RestRequest req, Object res) throws BasicHttpException, SerializeException;</span>
-<span class="source-line-no">094</span><span id="line-94">}</span>
+<span class="source-line-no">080</span><span id="line-80"> */</span>
+<span class="source-line-no">081</span><span id="line-81">public interface RestConverter {</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Performs post-call conversion on the specified response object.</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    * @param req The servlet request.</span>
+<span class="source-line-no">087</span><span id="line-87">    * @param res The response object set by the REST method through the {@link RestResponse#setContent(Object)} method.</span>
+<span class="source-line-no">088</span><span id="line-88">    * @return The converted object.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @throws BasicHttpException Thrown if any errors occur during conversion.</span>
+<span class="source-line-no">090</span><span id="line-90">    * @throws SerializeException Generic serialization error occurred.</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   Object convert(RestRequest req, Object res) throws BasicHttpException, SerializeException;</span>
+<span class="source-line-no">093</span><span id="line-93">}</span>
 
 
 

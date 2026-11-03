@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -85,7 +84,7 @@ loadScripts(document, 'script');</script>
       <code>engine.process(templateName, context, writer)</code>.
  </ul>
 
- <h5 class='figure'>Composition example (microservice):</h5>
+ <h2 class='figure'>Composition example (microservice):</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/app"</js>, mixins=ThymeleafMixin.<jk>class</jk>)
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Engine-agnostic packaging:</h5>
+ <h2 class='section'>Engine-agnostic packaging:</h2>
 
  <p>
  The bridge module's main POM declares <b>only</b> <code>org.thymeleaf:thymeleaf</code> in
@@ -127,7 +126,7 @@ loadScripts(document, 'script');</script>
  the missing dependency and linking to the "Choosing a TemplateEngine" matrix in
  <code>ThymeleafViewSupport.md</code>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../View.html" title="interface in org.apache.juneau.rest.server.view"><code>View</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

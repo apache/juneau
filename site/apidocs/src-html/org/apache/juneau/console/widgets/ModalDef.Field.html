@@ -39,13 +39,13 @@
 <span class="source-line-no">026</span><span id="line-26"> * The declarative modal (dialog) a {@code present=dialog} row action opens &amp;mdash; the payload the</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;b&gt;modal-open confirmation fetch&lt;/b&gt; returns.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;A widget contract driven by a view-module runtime&lt;/h5&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='section'&gt;A widget contract driven by a view-module runtime&lt;/h2&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * This bean is a general widget contract and lives in this module, but the browser runtime that paints it ships with</span>
 <span class="source-line-no">032</span><span id="line-32"> * the rich-view module (it is part of that module's {@code juneau-views.js} monolith, which is not split apart here).</span>
 <span class="source-line-no">033</span><span id="line-33"> * So a page that opens one of these dialogs loads the view runtime; nothing in this module reaches back to it.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Safe-by-construction confirmation body&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Safe-by-construction confirmation body&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * The confirmation body is &lt;b&gt;typed structured fields&lt;/b&gt; ({@link #fields}: incident #, title, service, current</span>
 <span class="source-line-no">038</span><span id="line-38"> * status &amp;mdash; the confirmation field set), server-rendered against the current, authoritative record and</span>
@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> * origin holds the CSRF token, so an HTML sink here would be stored-XSS&amp;nbsp;&amp;rarr;&amp;nbsp;token-theft&amp;nbsp;&amp;rarr;</span>
 <span class="source-line-no">043</span><span id="line-43"> * arbitrary-write; typed fields painted with {@code textContent} close that off by construction.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;The idempotency key rides here&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;The idempotency key rides here&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@link #idempotencyKey} is a server-minted key value, minted at modal-open and bound to</span>
 <span class="source-line-no">048</span><span id="line-48"> * {@code (action, targetId)}.  The runtime carries it verbatim on the submit so a double-click / re-submit / browser</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> * refusal, never a replayed success.  The minting/binding helper itself is a table-and-row-action concern and stays</span>
 <span class="source-line-no">051</span><span id="line-51"> * in the rich-view module, which is why this field is a plain {@code String} rather than that helper's type.</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;{@link #selfTargeted} &amp;mdash; the opt-in for a key that targets itself&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;{@link #selfTargeted} &amp;mdash; the opt-in for a key that targets itself&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * A dialog opened where there is &lt;b&gt;no row&lt;/b&gt; (a ribbon-hosted dialog whose submit creates the thing it is about)</span>
 <span class="source-line-no">056</span><span id="line-56"> * has no artifact id to bind its key to at modal-open.  The rich-view module's key helper can mint a key whose</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> * Set it &lt;b&gt;only&lt;/b&gt; on a modal whose key came from the self-targeted mint helper.  Setting it on a modal carrying</span>
 <span class="source-line-no">067</span><span id="line-67"> * an artifact-bound key silently discards the real target and makes the server's binding check vacuous.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;{@link #keepOpenOnSubmit} &amp;mdash; the opt-in for an in-dialog result receipt&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;{@link #keepOpenOnSubmit} &amp;mdash; the opt-in for an in-dialog result receipt&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * By default the runtime closes a dialog at confirm-click time and then submits, so every dialog is gone before its</span>
 <span class="source-line-no">072</span><span id="line-72"> * result exists.  {@link #keepOpenOnSubmit} suppresses that close, and the runtime instead paints the write's</span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85"> * Additive, and named degradation, accepted: an older runtime ignoring this flag closes the dialog and drops the</span>
 <span class="source-line-no">086</span><span id="line-86"> * receipt.  The write still happens; the receipt is simply not shown.</span>
 <span class="source-line-no">087</span><span id="line-87"> *</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;h5 class='section'&gt;{@link #childActions} &amp;mdash; the dialog-scoped child-action catalog&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;h2 class='section'&gt;{@link #childActions} &amp;mdash; the dialog-scoped child-action catalog&lt;/h2&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;p&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * A {@code type="action"} form input names an action id, and the runtime resolves it against the enclosing view's</span>
 <span class="source-line-no">091</span><span id="line-91"> * row-action catalog.  A &lt;b&gt;stacked&lt;/b&gt; step reached from inside an already-open dialog (a Review step in a wizard)</span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97"> * rot.  Resolution precedence is likewise fail-safe: the existing row-action check runs &lt;b&gt;first&lt;/b&gt; and unchanged,</span>
 <span class="source-line-no">098</span><span id="line-98"> * so a served payload can never shadow &amp;mdash; and thereby bypass the gating of &amp;mdash; a declared row action.</span>
 <span class="source-line-no">099</span><span id="line-99"> *</span>
-<span class="source-line-no">100</span><span id="line-100"> * &lt;h5 class='section'&gt;{@link #chrome} and {@link #steps} &amp;mdash; dialog styling and a built-in wizard&lt;/h5&gt;</span>
+<span class="source-line-no">100</span><span id="line-100"> * &lt;h2 class='section'&gt;{@link #chrome} and {@link #steps} &amp;mdash; dialog styling and a built-in wizard&lt;/h2&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> * &lt;p&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> * {@link #chrome} names a dialog chrome the page script registered with the runtime; the runtime hands that chrome the</span>
 <span class="source-line-no">103</span><span id="line-103"> * freshly built dialog parts so it can restyle them.  An unregistered name is ignored and the default chrome is kept.</span>
@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106"> * buttons, and the last step's button is the dialog's own confirm.  Both are additive-only and omitted from the wire</span>
 <span class="source-line-no">107</span><span id="line-107"> * when unset, so neither bumps {@link #CONTRACT_VERSION}.</span>
 <span class="source-line-no">108</span><span id="line-108"> *</span>
-<span class="source-line-no">109</span><span id="line-109"> * &lt;h5 class='section'&gt;{@link #nav} &amp;mdash; the inner-navigation style&lt;/h5&gt;</span>
+<span class="source-line-no">109</span><span id="line-109"> * &lt;h2 class='section'&gt;{@link #nav} &amp;mdash; the inner-navigation style&lt;/h2&gt;</span>
 <span class="source-line-no">110</span><span id="line-110"> * &lt;p&gt;</span>
 <span class="source-line-no">111</span><span id="line-111"> * {@link #nav} picks how the runtime draws the section strip of a {@link FormDef#sections sectioned} form:</span>
 <span class="source-line-no">112</span><span id="line-112"> * {@link #NAV_PILL} (the default) or {@link #NAV_FOLDER} (square-topped folder tabs).  A wizard needs no value here:</span>
@@ -127,14 +127,14 @@
 <span class="source-line-no">114</span><span id="line-114"> * strip.  {@link #validate()} rejects any other value; the runtime still treats an unknown one as {@link #NAV_PILL}.</span>
 <span class="source-line-no">115</span><span id="line-115"> * Additive-only and omitted from the wire when unset, so it does not bump {@link #CONTRACT_VERSION}.</span>
 <span class="source-line-no">116</span><span id="line-116"> *</span>
-<span class="source-line-no">117</span><span id="line-117"> * &lt;h5 class='section'&gt;Not a new row-action wire field&lt;/h5&gt;</span>
+<span class="source-line-no">117</span><span id="line-117"> * &lt;h2 class='section'&gt;Not a new row-action wire field&lt;/h2&gt;</span>
 <span class="source-line-no">118</span><span id="line-118"> * &lt;p&gt;</span>
 <span class="source-line-no">119</span><span id="line-119"> * This is the response a row action's form-source URL returns, &lt;b&gt;not&lt;/b&gt; a new field on the frozen row-action wire</span>
 <span class="source-line-no">120</span><span id="line-120"> * schema: the modal's declaration lives in this separately-served payload so the row-action contract stays frozen.</span>
 <span class="source-line-no">121</span><span id="line-121"> * The same reasoning is why {@link #keepOpenOnSubmit} and {@link #childActions} land here rather than on</span>
 <span class="source-line-no">122</span><span id="line-122"> * {@code RowAction} / {@code RibbonAction}, which stay frozen and untouched.</span>
 <span class="source-line-no">123</span><span id="line-123"> *</span>
-<span class="source-line-no">124</span><span id="line-124"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">124</span><span id="line-124"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">125</span><span id="line-125"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">126</span><span id="line-126"> *    ModalDef &lt;jv&gt;modal&lt;/jv&gt; = ModalDef.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"Acknowledge this incident?"&lt;/js&gt;)</span>
 <span class="source-line-no">127</span><span id="line-127"> *       .field(&lt;js&gt;"Incident"&lt;/js&gt;, &lt;jv&gt;incidentNumber&lt;/jv&gt;)</span>
@@ -145,13 +145,13 @@
 <span class="source-line-no">132</span><span id="line-132"> *       .idempotencyKey(&lt;jv&gt;keyValue&lt;/jv&gt;);</span>
 <span class="source-line-no">133</span><span id="line-133"> * &lt;/p&gt;</span>
 <span class="source-line-no">134</span><span id="line-134"> *</span>
-<span class="source-line-no">135</span><span id="line-135"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">135</span><span id="line-135"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">136</span><span id="line-136"> * &lt;ul&gt;</span>
 <span class="source-line-no">137</span><span id="line-137"> *    &lt;li class='jc'&gt;{@link FormDef}</span>
 <span class="source-line-no">138</span><span id="line-138"> *    &lt;li class='jc'&gt;{@link Widget}</span>
 <span class="source-line-no">139</span><span id="line-139"> * &lt;/ul&gt;</span>
 <span class="source-line-no">140</span><span id="line-140"> *</span>
-<span class="source-line-no">141</span><span id="line-141"> * &lt;h5 class='section'&gt;The third named bar-slot host&lt;/h5&gt;</span>
+<span class="source-line-no">141</span><span id="line-141"> * &lt;h2 class='section'&gt;The third named bar-slot host&lt;/h2&gt;</span>
 <span class="source-line-no">142</span><span id="line-142"> * &lt;p&gt;</span>
 <span class="source-line-no">143</span><span id="line-143"> * {@link #barSlot} is the &lt;i&gt;third&lt;/i&gt; named {@link BarSlot} attachment &amp;mdash; alongside the rich-view module's page</span>
 <span class="source-line-no">144</span><span id="line-144"> * and row-detail hosts (that module never depends on this one, so they are not linked here).  Unlike those two</span>
@@ -341,12 +341,12 @@
 <span class="source-line-no">328</span><span id="line-328">    * One entry in a dialog's {@link ModalDef#childActions} catalog &amp;mdash; a stacked step a {@code type="action"}</span>
 <span class="source-line-no">329</span><span id="line-329">    * input inside &lt;i&gt;this&lt;/i&gt; dialog's form may open.</span>
 <span class="source-line-no">330</span><span id="line-330">    *</span>
-<span class="source-line-no">331</span><span id="line-331">    * &lt;h5 class='section'&gt;Dialog-presenting by construction&lt;/h5&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    * &lt;h2 class='section'&gt;Dialog-presenting by construction&lt;/h2&gt;</span>
 <span class="source-line-no">332</span><span id="line-332">    * &lt;p&gt;</span>
 <span class="source-line-no">333</span><span id="line-333">    * A child action carries no {@code present} field: opening a stacked dialog is the only thing it does.  A child</span>
 <span class="source-line-no">334</span><span id="line-334">    * with no {@link #form} is a legal confirm-only child dialog.</span>
 <span class="source-line-no">335</span><span id="line-335">    *</span>
-<span class="source-line-no">336</span><span id="line-336">    * &lt;h5 class='section'&gt;No gating vocabulary, on purpose&lt;/h5&gt;</span>
+<span class="source-line-no">336</span><span id="line-336">    * &lt;h2 class='section'&gt;No gating vocabulary, on purpose&lt;/h2&gt;</span>
 <span class="source-line-no">337</span><span id="line-337">    * &lt;p&gt;</span>
 <span class="source-line-no">338</span><span id="line-338">    * There is deliberately no {@code enabledWhen} here, for three independent reasons.  The rule type lives in the</span>
 <span class="source-line-no">339</span><span id="line-339">    * rich-view module, which this module must not reference.  A dialog opened where there is no row has no row data</span>

@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Only elements that pass the filter (i.e., the predicate returns &lt;jk&gt;true&lt;/jk&gt;) are actually stored in</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * the underlying set.</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Flexible Filtering:&lt;/b&gt; Use any {@link Predicate} to filter elements based on any criteria</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Optional Filter:&lt;/b&gt; Filter is optional when using the builder - defaults to accepting all elements</em>
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Automatic Deduplication:&lt;/b&gt; Duplicate elements are automatically handled by the underlying set</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create a filtered set that only accepts non-null values&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	FilteredSet&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// set now contains: ["value1", "value3"]&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example - Custom Set Type:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example - Custom Set Type:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create a filtered TreeSet that only accepts positive numbers&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;set&lt;/jv&gt;.add(10);  &lt;jc&gt;// Added&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Behavior Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Behavior Notes:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Filtering is applied to all element addition methods: {@link #add(Object)}, {@link #addAll(Collection)}, etc.</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;If the filter returns &lt;jk&gt;false&lt;/jk&gt;, the element is silently ignored (not added)</em>
@@ -90,12 +90,12 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Duplicate elements are automatically handled by the underlying set (only one occurrence is stored)</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * This class is not thread-safe unless the underlying set is thread-safe. If thread safety is required,</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * use a thread-safe set type (e.g., {@link java.util.concurrent.CopyOnWriteArraySet}) via the &lt;c&gt;inner&lt;/c&gt; method.</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * Builder for creating {@link FilteredSet} instances.</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">		 * This method can be called multiple times. When called multiple times, all filters are combined</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">		 * using AND logic - an element must pass all filters to be added to the set.</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Filter out null values&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">		 * 	Builder&amp;lt;String&amp;gt; &lt;jv&gt;b&lt;/jv&gt; = FilteredSet.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">		 * If not specified, a new {@link LinkedHashSet} will be created during {@link #build()}.</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Use a TreeSet for sorted order&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">		 * 	Builder&amp;lt;String&amp;gt; &lt;jv&gt;b&lt;/jv&gt; = FilteredSet.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -204,7 +204,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">		 * this function before being added to the set. If not specified, elements must already be of the</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">		 * correct type (or &lt;c&gt;Object.class&lt;/c&gt; is used if types were not specified, which accepts any type).</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">		 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">		 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * allowing any element types to be added. However, the generic type parameter should still be</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * specified for type safety.</em>
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Explicitly specify generic types using diamond operator&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
@@ -342,7 +342,7 @@
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * adding it to the set. This is useful for validation, debugging, or pre-checking elements before</em>
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * attempting to add them.</em>
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -369,7 +369,7 @@
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * The returned predicate is the combined filter used internally by this set. If multiple filters</em>
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * were set via the builder, they are combined using AND logic.</em>
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -449,25 +449,25 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * the type (if element type was specified when creating the set). After conversion and validation,</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * the element is added using the standard {@link #add(Object)} method, which applies the filter.</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Type Conversion:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Type Conversion:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If an element function is configured, the element is converted by applying the function</em>
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If no function is configured, the object is used as-is (but may be validated if types were specified)</em>
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Type Validation:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Type Validation:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If element type was specified (via {@link #create(Class)}), the converted element must be an instance of that type</em>
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If {@link #create()} was used (no types specified), &lt;c&gt;Object.class&lt;/c&gt; is used, which accepts any type</em>
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Return Value:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Return Value:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the element is added successfully, returns &lt;jk&gt;true&lt;/jk&gt;</em>
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;If the element is filtered out or already present, returns &lt;jk&gt;false&lt;/jk&gt;</em>
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -494,7 +494,7 @@
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * This method iterates over all elements in the source collection and adds each one using {@link #addConverted(Object)},</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * which applies conversion and validation before adding.</em>
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * Each element from the collections/arrays will be added using {@link #add(Object)}, which applies</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * conversion and filtering.</em>
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * 	FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * 		.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</em>

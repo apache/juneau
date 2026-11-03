@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -114,7 +113,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
       <code>present</code> but <code>dialog</code> and no <code>onSuccess: "navigate"</code>.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bcode'>
    &lt;@card type="chart" id="orders-trend" title="Orders" src="/console/store/stats/daily"&gt;
    { kind: 'line', x: { field: 'day' }, series: [ { field: 'placed', label: 'Placed' } ] }
@@ -235,7 +234,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
 <div class="block">Roles this type accepts in <code>subscribes[].as</code>, beyond <code>refresh</code> and <code>params</code>.
  <code>null</code> (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Override</ja>
    <jk>public</jk> Set&lt;String&gt; acceptedRoles() { <jk>return</jk> Set.<jsm>of</jsm>(<js>"highlight"</js>); }
@@ -257,7 +256,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
  <code>null</code> (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports
  an unhandled op at runtime (E-JS-48).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Override</ja>
    <jk>public</jk> Set&lt;String&gt; acceptedOps() { <jk>return</jk> Set.<jsm>of</jsm>(<js>"set-target"</js>); }
@@ -277,7 +276,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../CardTypeHandler.html#implicitTopics(org.apache.juneau.marshall.collections.JsonMap)">CardTypeHandler</a></code></span></div>
 <div class="block">Topics this card publishes without declaring them, for R-10. Default: none (the shell adds card:/cmd:).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Override</ja>
    <jk>public</jk> List&lt;String&gt; implicitTopics(JsonMap <jv>card</jv>) {

@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * grammar for {@link #getSearch() search} and {@link #getOpts() opts} lives &lt;b&gt;inside&lt;/b&gt; those single strings and is</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * decoded by a {@link BeanQuerySession session} when the query runs, not by this bean.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Fields&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Fields&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;search&lt;/b&gt; ({@link String}) &amp;mdash; the one search string.  Top-level commas (outside parentheses) separate</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 		clauses; the first unescaped {@code =} separates a column from its raw {@code $}-expression</em>
@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * Construct with {@link #create()}, which returns a {@link Builder} that assembles these raw strings fluently:</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	BeanQuery &lt;jv&gt;q&lt;/jv&gt; = BeanQuery.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 		.eq(&lt;js&gt;"status"&lt;/js&gt;, &lt;js&gt;"active"&lt;/js&gt;)</em>
@@ -276,7 +276,7 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Exposes the same condition methods as {@link Builder}, minus paging/view/sort/opts, since a group only</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * ever contributes conditions to its enclosing level.</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * 	BeanQuery.&lt;jsm&gt;create&lt;/jsm&gt;().or(&lt;jv&gt;g&lt;/jv&gt; -&amp;gt; &lt;jv&gt;g&lt;/jv&gt;.eq(&lt;js&gt;"a"&lt;/js&gt;, 1).eq(&lt;js&gt;"b"&lt;/js&gt;, 2));</em>
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// -&amp;gt; "$or(a=$eq(\&quot;1\&quot;),b=$eq(\&quot;2\&quot;))"&lt;/jc&gt;</em>
@@ -561,7 +561,7 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Exposes every {@link GroupBuilder} condition method (they add top-level conditions here) plus</em>
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * view/sort/paging/opts/counts and {@link #build()}.</em>
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * 	BeanQuery &lt;jv&gt;q&lt;/jv&gt; = BeanQuery.&lt;jsm&gt;create&lt;/jsm&gt;().eq(&lt;js&gt;"status"&lt;/js&gt;, &lt;js&gt;"active"&lt;/js&gt;).build();</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,12 +87,12 @@ loadScripts(document, 'script');</script>
 <div class="block">One entry in a dialog's <a href="ModalDef.html#childActions"><code>ModalDef.childActions</code></a> catalog &mdash; a stacked step a <code>type="action"</code>
  input inside <i>this</i> dialog's form may open.
 
- <h5 class='section'>Dialog-presenting by construction</h5>
+ <h2 class='section'>Dialog-presenting by construction</h2>
  <p>
  A child action carries no <code>present</code> field: opening a stacked dialog is the only thing it does.  A child
  with no <a href="#form"><code>form</code></a> is a legal confirm-only child dialog.
 
- <h5 class='section'>No gating vocabulary, on purpose</h5>
+ <h2 class='section'>No gating vocabulary, on purpose</h2>
  <p>
  There is deliberately no <code>enabledWhen</code> here, for three independent reasons.  The rule type lives in the
  rich-view module, which this module must not reference.  A dialog opened where there is no row has no row data

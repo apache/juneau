@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,7 +96,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  This class is typically used indirectly through <a href="SimpleReadWriteLock.html#read()"><code>SimpleReadWriteLock.read()</code></a> and
  <a href="SimpleReadWriteLock.html#write()"><code>SimpleReadWriteLock.write()</code></a>, but can also be used directly with any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>Lock</code></a> instance.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Using with a ReentrantLock</jc>
    <jk>var</jk> <jv>lock</jv> = <jk>new</jk> ReentrantLock();
@@ -116,12 +115,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <jc>// Read lock is automatically released</jc>
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is not thread-safe itself. Each instance wraps a single <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>Lock</code></a> and should be used
  by a single thread. The underlying lock's thread-safety guarantees apply to the wrapped lock.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>The lock is automatically acquired in the constructor and released in <a href="#close()"><code>close()</code></a>.
    <li class='note'>If <jk>null</jk> is passed to the constructor, no locking operations are performed
       (useful for creating no-op locks).
@@ -133,7 +132,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
       reentrant locking, the same thread can acquire it multiple times.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="SimpleReadWriteLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleReadWriteLock</code></a> - A read-write lock that returns <a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> instances
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>Lock</code></a> - The underlying lock interface
  </ul></div>
@@ -216,7 +215,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent"><code>SimpleLock</code></a> instance but don't want any actual synchronization overhead.
  All lock operations on this instance are no-ops.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Use NO_OP when locking is disabled</jc>
    <jk>var</jk> <jv>lock</jv> = isLockingEnabled() ? <jk>new</jk> SimpleLock(<jk>new</jk> ReentrantLock()) : SimpleLock.NO_OP;
@@ -226,7 +225,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Calling <a href="#close()"><code>close()</code></a> on this instance has no effect.
    <li class='note'>This instance is thread-safe and can be shared across threads.
    <li class='note'>This instance wraps a <jk>null</jk> lock, so no actual locking occurs.
@@ -252,7 +251,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  automatically acquired during construction. If <jk>null</jk> is passed, no locking operations
  are performed (useful for creating no-op locks).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Wrap a ReentrantLock</jc>
    <jk>var</jk> <jv>underlyingLock</jv> = <jk>new</jk> ReentrantLock();
@@ -263,7 +262,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>The lock is acquired immediately in the constructor. This method may block
       if the lock is not available.
    <li class='note'>If <jk>null</jk> is passed, no lock is acquired and <a href="#close()"><code>close()</code></a> will have no effect.
@@ -294,14 +293,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  called explicitly to release the lock early. If the lock was <jk>null</jk> (no-op lock),
  this method has no effect.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>var</jk> <jv>lock</jv> = <jk>new</jk> SimpleLock(<jk>new</jk> ReentrantLock());
    <jc>// Lock is held</jc>
    <jv>lock</jv>.close();  <jc>// Explicitly release the lock</jc>
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method is called automatically when exiting a try-with-resources block.
    <li class='note'>Multiple calls to this method are safe - subsequent calls have no effect if
       the lock has already been released.

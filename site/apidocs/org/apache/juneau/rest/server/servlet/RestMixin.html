@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
  <a href="../Rest.html#mixins()"><code>@Rest(mixins=ThatMixin.class)</code></a>. Mixins compose through the existing sub-context
  model; <code>RestMixin</code> does <b>not</b> change that composition mechanism.
 
- <h5 class='section'>Opt-in, not mandatory:</h5>
+ <h2 class='section'>Opt-in, not mandatory:</h2>
 
  <p>
  Extending <code>RestMixin</code> is <b>optional</b>. A bare <code>@Rest</code> POJO with no base class remains a
@@ -103,7 +102,7 @@ loadScripts(document, 'script');</script>
  base-less; the new single-responsibility op-mixins extend this base to make the triad membership
  explicit.
 
- <h5 class='section'>Builder support:</h5>
+ <h2 class='section'>Builder support:</h2>
 
  <p>
  The fluent programmatic-builder surface (<a href="../RestBuilder.html" title="interface in org.apache.juneau.rest.server"><code>RestBuilder</code></a>/ <a href="RestMixin.Builder.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestMixin.Builder</code></a>) lets a mixin be configured
@@ -111,7 +110,7 @@ loadScripts(document, 'script');</script>
  over <a href="../Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a> annotation values.  Use <a href="#builder(java.lang.Class)"><code>builder(Class)</code></a> for the common case, or subclass
  <a href="RestMixin.Builder.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestMixin.Builder</code></a> for capability mixins that add their own setters.
 
- <h5 class='section'>Reaching the host resource:</h5>
+ <h2 class='section'>Reaching the host resource:</h2>
 
  <p>
  Because a mixin's <code>@RestOp</code> methods are bound to a per-mixin <a href="../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> sub-context (the
@@ -127,7 +126,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a>
    <li class='jc'><a href="RestResource.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestResource</code></a>
    <li class='jm'><a href="#getHostContext()"><code>getHostContext()</code></a>
@@ -318,7 +317,7 @@ loadScripts(document, 'script');</script>
  <a href="../RestContext.html#getParentContext()"><code>parent linkage</code></a>, so it is usable at config time and does not depend
  on an in-flight request.
 
- <h5 class='section'>Edge cases:</h5><ul>
+ <h4 class='section'>Edge cases:</h4><ul>
    <li class='note'><b>Standalone / no host</b> &mdash; when a <code>RestMixin</code> subclass is instantiated
       directly rather than composed via <a href="../Rest.html#mixins()"><code>@Rest(mixins=...)</code></a>, this returns <code>null</code>,
       mirroring <a href="../RestContext.html#getParentContext()"><code>RestContext.getParentContext()</code></a>'s top-level contract.  Callers needing host-only

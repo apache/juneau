@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
    This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
  </p>
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <ja>@RestPost</ja>
    <jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
@@ -109,6 +108,7 @@ loadScripts(document, 'script');</script>
    The following table shows the behavioral differences between <ja>@HasFormData</ja> and <ja>@FormData</ja>:
  </p>
  <table class='styled w400'>
+   <caption>Body content to return value</caption>
    <tr>
       <th><c>Body content</c></th>
       <th><c><ja>@HasFormData</ja>(<js>"a"</js>)</c></th>
@@ -136,7 +136,7 @@ loadScripts(document, 'script');</script>
    </tr>
  </table>
 
- <h5 class='topic'>Important note concerning FORM posts</h5>
+ <h2 class='topic'>Important note concerning FORM posts</h2>
  <p>
    This annotation should not be combined with the <a href="Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a> annotation or <code>RestRequest.getContent()</code> method
    for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet API to
@@ -145,9 +145,7 @@ loadScripts(document, 'script');</script>
  <p>
    The <a href="HasQuery.html" title="annotation interface in org.apache.juneau.http"><code>@HasQuery</code></a> annotation can be used to check for the existing of a URL parameter in the URL string
    without triggering the servlet to drain the body content.
- </p>
-
- <p></div>
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -212,7 +210,7 @@ loadScripts(document, 'script');</script>
 
  Required. The name of the parameter. Parameter names are case sensitive.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is plain-text.
  </ul></div>

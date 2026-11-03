@@ -48,14 +48,14 @@
 <span class="source-line-no">035</span><span id="line-35"> * interfere with each other's settings. Settings are typically configured via the {@link BctConfig @BctConfig}</span>
 <span class="source-line-no">036</span><span id="line-36"> * annotation, but can also be set programmatically.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Configuration Properties:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Configuration Properties:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;{@link #BCT_SORT_MAPS}:&lt;/b&gt; Enable sorting of maps in assertions&lt;/li&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;b&gt;{@link #BCT_SORT_COLLECTIONS}:&lt;/b&gt; Enable sorting of collections in assertions&lt;/li&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;b&gt;Bean Converter:&lt;/b&gt; Custom bean converter instance for property access and conversion&lt;/li&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Usage via Annotation:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Usage via Annotation:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;ja&gt;@BctConfig&lt;/ja&gt;(sortMaps=TriState.&lt;jsf&gt;TRUE&lt;/jsf&gt;, beanConverter=MyConverter.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;jk&gt;class&lt;/jk&gt; MyTest {</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *    }</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Usage via Programmatic API:&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Usage via Programmatic API:&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;ja&gt;@BeforeEach&lt;/ja&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;jk&gt;void&lt;/jk&gt; setUp() {</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> *    }</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * All methods in this class are thread-safe. Configuration is stored in thread-local storage,</span>
 <span class="source-line-no">075</span><span id="line-75"> * ensuring that each test thread has its own isolated configuration that doesn't interfere</span>
@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101">    * When set to &lt;jk&gt;true&lt;/jk&gt;, maps will be sorted by key before comparison in assertions.</span>
 <span class="source-line-no">102</span><span id="line-102">    * This ensures consistent ordering regardless of the map's internal ordering.</span>
 <span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    *    BctConfiguration.&lt;jsm&gt;set&lt;/jsm&gt;(BctConfiguration.&lt;jsf&gt;BCT_SORT_MAPS&lt;/jsf&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">107</span><span id="line-107">    * &lt;/p&gt;</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">    * When set to &lt;jk&gt;true&lt;/jk&gt;, collections will be sorted before comparison in assertions.</span>
 <span class="source-line-no">116</span><span id="line-116">    * This ensures consistent ordering regardless of the collection's internal ordering.</span>
 <span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">119</span><span id="line-119">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">120</span><span id="line-120">    *    BctConfiguration.&lt;jsm&gt;set&lt;/jsm&gt;(BctConfiguration.&lt;jsf&gt;BCT_SORT_COLLECTIONS&lt;/jsf&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">121</span><span id="line-121">    * &lt;/p&gt;</span>
@@ -147,7 +147,7 @@
 <span class="source-line-no">134</span><span id="line-134">    * The value is stored in thread-local storage and will only affect the current thread.</span>
 <span class="source-line-no">135</span><span id="line-135">    * This is the recommended way to set configuration for individual tests.</span>
 <span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">138</span><span id="line-138">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">139</span><span id="line-139">    *    BctConfiguration.&lt;jsm&gt;set&lt;/jsm&gt;(BctConfiguration.&lt;jsf&gt;BCT_SORT_MAPS&lt;/jsf&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">140</span><span id="line-140">    * &lt;/p&gt;</span>
@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line-155">    * Global values apply to all threads and persist until explicitly cleared.</span>
 <span class="source-line-no">156</span><span id="line-156">    * Use with caution in multi-threaded test environments.</span>
 <span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    *    BctConfiguration.&lt;jsm&gt;setGlobal&lt;/jsm&gt;(BctConfiguration.&lt;jsf&gt;BCT_SORT_MAPS&lt;/jsf&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">161</span><span id="line-161">    * &lt;/p&gt;</span>
@@ -205,7 +205,7 @@
 <span class="source-line-no">192</span><span id="line-192">    * Returns the configured value if set, otherwise returns the provided default value.</span>
 <span class="source-line-no">193</span><span id="line-193">    * Thread-local values take precedence over global values.</span>
 <span class="source-line-no">194</span><span id="line-194">    *</span>
-<span class="source-line-no">195</span><span id="line-195">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">196</span><span id="line-196">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">197</span><span id="line-197">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;sortMaps&lt;/jv&gt; = BctConfiguration.&lt;jsm&gt;get&lt;/jsm&gt;(BctConfiguration.&lt;jsf&gt;BCT_SORT_MAPS&lt;/jsf&gt;, &lt;jk&gt;false&lt;/jk&gt;);</span>
 <span class="source-line-no">198</span><span id="line-198">    * &lt;/p&gt;</span>
@@ -228,7 +228,7 @@
 <span class="source-line-no">215</span><span id="line-215">    * Returns the configured boolean value if set, otherwise returns the provided default value.</span>
 <span class="source-line-no">216</span><span id="line-216">    * Thread-local values take precedence over global values.</span>
 <span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">219</span><span id="line-219">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">220</span><span id="line-220">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;sortMaps&lt;/jv&gt; = BctConfiguration.&lt;jsm&gt;get&lt;/jsm&gt;(BctConfiguration.&lt;jsf&gt;BCT_SORT_MAPS&lt;/jsf&gt;, &lt;jk&gt;false&lt;/jk&gt;);</span>
 <span class="source-line-no">221</span><span id="line-221">    * &lt;/p&gt;</span>
@@ -258,7 +258,7 @@
 <span class="source-line-no">245</span><span id="line-245">    * a clean state for subsequent tests. The {@link BctConfigExtension BctConfigExtension}</span>
 <span class="source-line-no">246</span><span id="line-246">    * automatically calls this method after each test.</span>
 <span class="source-line-no">247</span><span id="line-247">    *</span>
-<span class="source-line-no">248</span><span id="line-248">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">248</span><span id="line-248">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">249</span><span id="line-249">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">250</span><span id="line-250">    *    &lt;ja&gt;@AfterEach&lt;/ja&gt;</span>
 <span class="source-line-no">251</span><span id="line-251">    *    &lt;jk&gt;void&lt;/jk&gt; tearDown() {</span>
@@ -300,7 +300,7 @@
 <span class="source-line-no">287</span><span id="line-287">    * for specific tests. The converter can be configured via the {@link BctConfig @BctConfig}</span>
 <span class="source-line-no">288</span><span id="line-288">    * annotation or set programmatically.</span>
 <span class="source-line-no">289</span><span id="line-289">    *</span>
-<span class="source-line-no">290</span><span id="line-290">    * &lt;h5 class='section'&gt;Usage Example:&lt;/h5&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    * &lt;h4 class='section'&gt;Usage Example:&lt;/h4&gt;</span>
 <span class="source-line-no">291</span><span id="line-291">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">292</span><span id="line-292">    *    &lt;ja&gt;@BeforeEach&lt;/ja&gt;</span>
 <span class="source-line-no">293</span><span id="line-293">    *    &lt;jk&gt;void&lt;/jk&gt; setUp() {</span>
@@ -323,7 +323,7 @@
 <span class="source-line-no">310</span><span id="line-310">    *    }</span>
 <span class="source-line-no">311</span><span id="line-311">    * &lt;/p&gt;</span>
 <span class="source-line-no">312</span><span id="line-312">    *</span>
-<span class="source-line-no">313</span><span id="line-313">    * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">313</span><span id="line-313">    * &lt;h4 class='section'&gt;Thread Safety:&lt;/h4&gt;</span>
 <span class="source-line-no">314</span><span id="line-314">    * &lt;p&gt;</span>
 <span class="source-line-no">315</span><span id="line-315">    * This method is thread-safe and uses thread-local storage. Each test method running in parallel</span>
 <span class="source-line-no">316</span><span id="line-316">    * will have its own converter instance, preventing cross-thread interference.</span>

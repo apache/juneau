@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
 implements <a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing">TracerHook</a></span></div>
 <div class="block"><a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bridge that opens an OpenTelemetry <code>Span</code> for every <code>@RestOp</code> call.
 
- <h5 class='topic'>Span shape</h5>
+ <h2 class='topic'>Span shape</h2>
 
  <p>
  Each request becomes a single span with kind <code>SpanKind.SERVER</code>, named after the HTTP method
@@ -107,7 +106,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
  span status is set to <code>StatusCode.ERROR</code>, and an <code>exception.type</code> attribute carries the
  exception's simple-name.
 
- <h5 class='topic'>W3C trace context propagation</h5>
+ <h2 class='topic'>W3C trace context propagation</h2>
 
  <p>
  Incoming <code>traceparent</code> / <code>tracestate</code> request headers are extracted via the configured
@@ -116,7 +115,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
  up the active span's context automatically when the consumer's outbound HTTP client honors the OTel
  <code>current context</code> (the standard OTel client instrumentations do).
 
- <h5 class='topic'>Wiring</h5>
+ <h2 class='topic'>Wiring</h2>
 
  <p class='bjava'>
    <ja>@Configuration</ja>
@@ -136,7 +135,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
    <li class='link'><a class="doclink" href="https://opentelemetry.io/docs/specs/semconv/http/http-spans/">OpenTelemetry HTTP semantic conventions</a>

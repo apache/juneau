@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Other dependency injection frameworks</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 	BeanStore &lt;jv&gt;beanStore&lt;/jv&gt; = ...;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	Map&amp;lt;String, MyService&amp;gt; &lt;jv&gt;allServices&lt;/jv&gt; = &lt;jv&gt;beanStore&lt;/jv&gt;.getBeansOfType(MyService.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://docs.spring.io/spring-framework/reference/core/beans.html" target="alexandria_uri">https://docs.spring.io/spring-framework/reference/core/beans.html</a>"&gt;Spring Framework - The IoC Container&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> */</em>
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * (subtype, factory-method names, builder hooks, etc.).  For more control over instantiation,</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * use {@link BeanInstantiator#of(Class, BeanStore)} directly.</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Instantiate a bean using this store for parameter resolution&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * 	MyService &lt;jv&gt;service&lt;/jv&gt; = &lt;jv&gt;beanStore&lt;/jv&gt;.instantiate(MyService.&lt;jk&gt;class&lt;/jk&gt;);</em>
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * The default implementation returns {@link Optional#empty()}.</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * Override in concrete stores (see {@link BasicBeanStore}) to enable factory-method scanning.</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Filter only&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(RichLogger.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;,</em>
@@ -259,7 +259,7 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * synthetic method, it is an instance method and &lt;c&gt;onClassOrObject&lt;/c&gt; is a {@link Class}, or one of its parameters</em>
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * cannot be resolved from this store plus &lt;c&gt;extraBeans&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Invoke one specific @Bean factory method, instead of searching by return type.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * 	MethodInfo &lt;jv&gt;m&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;).getDeclaredMethod(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; &lt;jv&gt;x&lt;/jv&gt;.hasName(&lt;js&gt;"cacheIndicator"&lt;/js&gt;)).get();</em>

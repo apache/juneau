@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,14 +87,14 @@ loadScripts(document, 'script');</script>
  Carries the standard six top-level members: <code>data</code>, <code>errors</code>, <code>meta</code>, <code>jsonapi</code>,
  <code>links</code>, <code>included</code>.
 
- <h5 class='topic'>Mutual exclusion</h5>
+ <h2 class='topic'>Mutual exclusion</h2>
 
  <p>
  Per spec, a document MUST contain at least one of <code>data</code>/<code>errors</code>/<code>meta</code>, and <code>data</code>
  and <code>errors</code> MUST NOT coexist. The <a href="#validate()"><code>validate()</code></a> helper checks both rules and throws
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> on violation.
 
- <h5 class='topic'>The polymorphic <code>data</code> member</h5>
+ <h2 class='topic'>The polymorphic <code>data</code> member</h2>
 
  <p>
  The top-level <code>data</code> can be <code>null</code>, a single <a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi"><code>JsonApiResource</code></a>, or an array of them. We
@@ -103,7 +102,7 @@ loadScripts(document, 'script');</script>
  which value was set. Typed setters <a href="#setData(org.apache.juneau.bean.jsonapi.JsonApiResource)"><code>setData(JsonApiResource)</code></a> and <a href="#setData(java.util.List)"><code>setData(List)</code></a> are provided
  for convenience.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  </ul></div>
 </section>

@@ -47,13 +47,13 @@
 <span class="source-line-no">034</span><span id="line-34">/**</span>
 <span class="source-line-no">035</span><span id="line-35"> * Serializes POJO models to UON (a notation for URL-encoded query parameter values).</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='topic'&gt;Media types&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;text/uon&lt;/bc&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * Produces &lt;c&gt;Content-Type&lt;/c&gt; types:  &lt;bc&gt;text/uon&lt;/bc&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='topic'&gt;Description&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * This serializer provides several serialization options.</span>
 <span class="source-line-no">046</span><span id="line-46"> * Typically, one of the predefined DEFAULT serializers will be sufficient.</span>
@@ -109,17 +109,17 @@
 <span class="source-line-no">096</span><span id="line-96"> *    )</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;/p&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *</span>
-<span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> * &lt;h2 class='figure'&gt;Example output (Map of name/age):&lt;/h2&gt;</span>
 <span class="source-line-no">100</span><span id="line-100"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> *    (name=Alice,age=30)</span>
 <span class="source-line-no">102</span><span id="line-102"> * &lt;/p&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> *</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;h5 class='figure'&gt;Complex (nested object + array):&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;h2 class='figure'&gt;Complex (nested object + array):&lt;/h2&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">106</span><span id="line-106"> *    (name=Alice,age=30,address=(street=123+Main+St,city=Boston,state=MA),tags=@(a,b,c))</span>
 <span class="source-line-no">107</span><span id="line-107"> * &lt;/p&gt;</span>
 <span class="source-line-no">108</span><span id="line-108"> *</span>
-<span class="source-line-no">109</span><span id="line-109"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">109</span><span id="line-109"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">110</span><span id="line-110"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">111</span><span id="line-111"> *    &lt;jc&gt;// Serialize a Map&lt;/jc&gt;</span>
 <span class="source-line-no">112</span><span id="line-112"> *    Map &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"&lt;/js&gt;);</span>
@@ -151,11 +151,11 @@
 <span class="source-line-no">138</span><span id="line-138"> *    String &lt;jv&gt;uon&lt;/jv&gt; = UonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;person&lt;/jv&gt;);</span>
 <span class="source-line-no">139</span><span id="line-139"> * &lt;/p&gt;</span>
 <span class="source-line-no">140</span><span id="line-140"> *</span>
-<span class="source-line-no">141</span><span id="line-141"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">141</span><span id="line-141"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">142</span><span id="line-142"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
 <span class="source-line-no">143</span><span id="line-143"> * &lt;/ul&gt;</span>
 <span class="source-line-no">144</span><span id="line-144"> *</span>
-<span class="source-line-no">145</span><span id="line-145"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">145</span><span id="line-145"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">146</span><span id="line-146"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UonSupport"&gt;UON&lt;/a&gt;</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148"> * &lt;/ul&gt;</span>
@@ -269,7 +269,7 @@
 <span class="source-line-no">256</span><span id="line-256">       * &lt;br&gt;Set to &lt;jk&gt;false&lt;/jk&gt; if parameter value is being passed to some other code that will already perform</span>
 <span class="source-line-no">257</span><span id="line-257">       * URL-encoding of non-valid URI characters.</span>
 <span class="source-line-no">258</span><span id="line-258">       *</span>
-<span class="source-line-no">259</span><span id="line-259">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">259</span><span id="line-259">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">260</span><span id="line-260">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">261</span><span id="line-261">       *    &lt;jc&gt;// Create a non-encoding UON serializer.&lt;/jc&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">       *    UonSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = UonSerializer.</span>
@@ -327,7 +327,7 @@
 <span class="source-line-no">314</span><span id="line-314">       * &lt;p&gt;</span>
 <span class="source-line-no">315</span><span id="line-315">       * Specifies the format to use for URL GET parameter keys and values.</span>
 <span class="source-line-no">316</span><span id="line-316">       *</span>
-<span class="source-line-no">317</span><span id="line-317">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">317</span><span id="line-317">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">318</span><span id="line-318">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">319</span><span id="line-319">       *    &lt;jc&gt;// Create a normal UON serializer.&lt;/jc&gt;</span>
 <span class="source-line-no">320</span><span id="line-320">       *    UonSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = UonSerializer</span>
@@ -352,290 +352,289 @@
 <span class="source-line-no">339</span><span id="line-339">       *    String &lt;jv&gt;uon2&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
 <span class="source-line-no">340</span><span id="line-340">       * &lt;/p&gt;</span>
 <span class="source-line-no">341</span><span id="line-341">       *</span>
-<span class="source-line-no">342</span><span id="line-342">       * &lt;p&gt;</span>
-<span class="source-line-no">343</span><span id="line-343">       * &lt;ul class='values javatree'&gt;</span>
-<span class="source-line-no">344</span><span id="line-344">       *    &lt;li class='jf'&gt;{@link ParamFormat#UON} (default) - Use UON notation for parameters.</span>
-<span class="source-line-no">345</span><span id="line-345">       *    &lt;li class='jf'&gt;{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.</span>
-<span class="source-line-no">346</span><span id="line-346">       * &lt;/ul&gt;</span>
-<span class="source-line-no">347</span><span id="line-347">       *</span>
-<span class="source-line-no">348</span><span id="line-348">       * @param value</span>
-<span class="source-line-no">349</span><span id="line-349">       *    The new value for this property.</span>
-<span class="source-line-no">350</span><span id="line-350">       *    &lt;br&gt;The default value is {@link ParamFormat#UON}.</span>
-<span class="source-line-no">351</span><span id="line-351">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">352</span><span id="line-352">       * @return This object.</span>
-<span class="source-line-no">353</span><span id="line-353">       */</span>
-<span class="source-line-no">354</span><span id="line-354">      public SELF paramFormat(ParamFormat value) {</span>
-<span class="source-line-no">355</span><span id="line-355">         paramFormat = reqnn("value", value);</span>
-<span class="source-line-no">356</span><span id="line-356">         return self();</span>
-<span class="source-line-no">357</span><span id="line-357">      }</span>
-<span class="source-line-no">358</span><span id="line-358"></span>
-<span class="source-line-no">359</span><span id="line-359">      /**</span>
-<span class="source-line-no">360</span><span id="line-360">       * Format to use for query/form-data/header values.</span>
-<span class="source-line-no">361</span><span id="line-361">       *</span>
-<span class="source-line-no">362</span><span id="line-362">       * &lt;p&gt;</span>
-<span class="source-line-no">363</span><span id="line-363">       * Specifies plain-text for the format to use for URL GET parameter keys and values.</span>
-<span class="source-line-no">364</span><span id="line-364">       *</span>
-<span class="source-line-no">365</span><span id="line-365">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">366</span><span id="line-366">       * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">367</span><span id="line-367">       *    &lt;jc&gt;// Create a plain-text UON serializer.&lt;/jc&gt;</span>
-<span class="source-line-no">368</span><span id="line-368">       *    UonSerializer &lt;jv&gt;serializer&lt;/jv&gt; = UonSerializer</span>
-<span class="source-line-no">369</span><span id="line-369">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">370</span><span id="line-370">       *       .paramFormatPlain()</span>
-<span class="source-line-no">371</span><span id="line-371">       *       .build();</span>
-<span class="source-line-no">372</span><span id="line-372">       *</span>
-<span class="source-line-no">373</span><span id="line-373">       *    JsonMap &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(</span>
-<span class="source-line-no">374</span><span id="line-374">       *       &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;,</span>
-<span class="source-line-no">375</span><span id="line-375">       *       &lt;js&gt;"baz"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"qux"&lt;/js&gt;, &lt;js&gt;"true"&lt;/js&gt;, &lt;js&gt;"123"&lt;/js&gt;}</span>
-<span class="source-line-no">376</span><span id="line-376">       *    );</span>
-<span class="source-line-no">377</span><span id="line-377">       *</span>
-<span class="source-line-no">378</span><span id="line-378">       *    &lt;jc&gt;// Produces: "foo=bar,baz=qux,true,123"&lt;/jc&gt;</span>
-<span class="source-line-no">379</span><span id="line-379">       *    String &lt;jv&gt;uon&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
-<span class="source-line-no">380</span><span id="line-380">       * &lt;/p&gt;</span>
-<span class="source-line-no">381</span><span id="line-381">       *</span>
-<span class="source-line-no">382</span><span id="line-382">       * @return This object.</span>
-<span class="source-line-no">383</span><span id="line-383">       */</span>
-<span class="source-line-no">384</span><span id="line-384">      public SELF paramFormatPlain() {</span>
-<span class="source-line-no">385</span><span id="line-385">         return paramFormat(ParamFormat.PLAINTEXT);</span>
-<span class="source-line-no">386</span><span id="line-386">      }</span>
-<span class="source-line-no">387</span><span id="line-387"></span>
-<span class="source-line-no">388</span><span id="line-388">      /**</span>
-<span class="source-line-no">389</span><span id="line-389">       * Specifies the quote character.</span>
-<span class="source-line-no">390</span><span id="line-390">       *</span>
-<span class="source-line-no">391</span><span id="line-391">       * @param value The value for this setting.</span>
-<span class="source-line-no">392</span><span id="line-392">       * @return This object.</span>
-<span class="source-line-no">393</span><span id="line-393">       */</span>
-<span class="source-line-no">394</span><span id="line-394">      public SELF quoteCharUon(char value) {</span>
-<span class="source-line-no">395</span><span id="line-395">         quoteCharUon = value;</span>
-<span class="source-line-no">396</span><span id="line-396">         return self();</span>
-<span class="source-line-no">397</span><span id="line-397">      }</span>
+<span class="source-line-no">342</span><span id="line-342">       * &lt;ul class='values javatree'&gt;</span>
+<span class="source-line-no">343</span><span id="line-343">       *    &lt;li class='jf'&gt;{@link ParamFormat#UON} (default) - Use UON notation for parameters.</span>
+<span class="source-line-no">344</span><span id="line-344">       *    &lt;li class='jf'&gt;{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.</span>
+<span class="source-line-no">345</span><span id="line-345">       * &lt;/ul&gt;</span>
+<span class="source-line-no">346</span><span id="line-346">       *</span>
+<span class="source-line-no">347</span><span id="line-347">       * @param value</span>
+<span class="source-line-no">348</span><span id="line-348">       *    The new value for this property.</span>
+<span class="source-line-no">349</span><span id="line-349">       *    &lt;br&gt;The default value is {@link ParamFormat#UON}.</span>
+<span class="source-line-no">350</span><span id="line-350">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">351</span><span id="line-351">       * @return This object.</span>
+<span class="source-line-no">352</span><span id="line-352">       */</span>
+<span class="source-line-no">353</span><span id="line-353">      public SELF paramFormat(ParamFormat value) {</span>
+<span class="source-line-no">354</span><span id="line-354">         paramFormat = reqnn("value", value);</span>
+<span class="source-line-no">355</span><span id="line-355">         return self();</span>
+<span class="source-line-no">356</span><span id="line-356">      }</span>
+<span class="source-line-no">357</span><span id="line-357"></span>
+<span class="source-line-no">358</span><span id="line-358">      /**</span>
+<span class="source-line-no">359</span><span id="line-359">       * Format to use for query/form-data/header values.</span>
+<span class="source-line-no">360</span><span id="line-360">       *</span>
+<span class="source-line-no">361</span><span id="line-361">       * &lt;p&gt;</span>
+<span class="source-line-no">362</span><span id="line-362">       * Specifies plain-text for the format to use for URL GET parameter keys and values.</span>
+<span class="source-line-no">363</span><span id="line-363">       *</span>
+<span class="source-line-no">364</span><span id="line-364">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">365</span><span id="line-365">       * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">366</span><span id="line-366">       *    &lt;jc&gt;// Create a plain-text UON serializer.&lt;/jc&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">       *    UonSerializer &lt;jv&gt;serializer&lt;/jv&gt; = UonSerializer</span>
+<span class="source-line-no">368</span><span id="line-368">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">369</span><span id="line-369">       *       .paramFormatPlain()</span>
+<span class="source-line-no">370</span><span id="line-370">       *       .build();</span>
+<span class="source-line-no">371</span><span id="line-371">       *</span>
+<span class="source-line-no">372</span><span id="line-372">       *    JsonMap &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(</span>
+<span class="source-line-no">373</span><span id="line-373">       *       &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;,</span>
+<span class="source-line-no">374</span><span id="line-374">       *       &lt;js&gt;"baz"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"qux"&lt;/js&gt;, &lt;js&gt;"true"&lt;/js&gt;, &lt;js&gt;"123"&lt;/js&gt;}</span>
+<span class="source-line-no">375</span><span id="line-375">       *    );</span>
+<span class="source-line-no">376</span><span id="line-376">       *</span>
+<span class="source-line-no">377</span><span id="line-377">       *    &lt;jc&gt;// Produces: "foo=bar,baz=qux,true,123"&lt;/jc&gt;</span>
+<span class="source-line-no">378</span><span id="line-378">       *    String &lt;jv&gt;uon&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
+<span class="source-line-no">379</span><span id="line-379">       * &lt;/p&gt;</span>
+<span class="source-line-no">380</span><span id="line-380">       *</span>
+<span class="source-line-no">381</span><span id="line-381">       * @return This object.</span>
+<span class="source-line-no">382</span><span id="line-382">       */</span>
+<span class="source-line-no">383</span><span id="line-383">      public SELF paramFormatPlain() {</span>
+<span class="source-line-no">384</span><span id="line-384">         return paramFormat(ParamFormat.PLAINTEXT);</span>
+<span class="source-line-no">385</span><span id="line-385">      }</span>
+<span class="source-line-no">386</span><span id="line-386"></span>
+<span class="source-line-no">387</span><span id="line-387">      /**</span>
+<span class="source-line-no">388</span><span id="line-388">       * Specifies the quote character.</span>
+<span class="source-line-no">389</span><span id="line-389">       *</span>
+<span class="source-line-no">390</span><span id="line-390">       * @param value The value for this setting.</span>
+<span class="source-line-no">391</span><span id="line-391">       * @return This object.</span>
+<span class="source-line-no">392</span><span id="line-392">       */</span>
+<span class="source-line-no">393</span><span id="line-393">      public SELF quoteCharUon(char value) {</span>
+<span class="source-line-no">394</span><span id="line-394">         quoteCharUon = value;</span>
+<span class="source-line-no">395</span><span id="line-395">         return self();</span>
+<span class="source-line-no">396</span><span id="line-396">      }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
 <span class="source-line-no">398</span><span id="line-398"></span>
-<span class="source-line-no">399</span><span id="line-399"></span>
-<span class="source-line-no">400</span><span id="line-400">   }</span>
-<span class="source-line-no">401</span><span id="line-401"></span>
-<span class="source-line-no">402</span><span id="line-402">   /**</span>
-<span class="source-line-no">403</span><span id="line-403">    * Concrete default builder leaf for the non-subclassed {@link UonSerializer#create()} / {@link UonSerializer#copy()} path.</span>
-<span class="source-line-no">404</span><span id="line-404">    */</span>
-<span class="source-line-no">405</span><span id="line-405">   public static final class DefaultBuilder extends Builder&lt;DefaultBuilder&gt; {</span>
-<span class="source-line-no">406</span><span id="line-406"></span>
-<span class="source-line-no">407</span><span id="line-407">      DefaultBuilder() {}</span>
-<span class="source-line-no">408</span><span id="line-408"></span>
-<span class="source-line-no">409</span><span id="line-409">      DefaultBuilder(UonSerializer copyFrom) {</span>
-<span class="source-line-no">410</span><span id="line-410">         super(copyFrom);</span>
-<span class="source-line-no">411</span><span id="line-411">      }</span>
-<span class="source-line-no">412</span><span id="line-412"></span>
-<span class="source-line-no">413</span><span id="line-413">      DefaultBuilder(Builder&lt;?&gt; copyFrom) {</span>
-<span class="source-line-no">414</span><span id="line-414">         super(copyFrom);</span>
-<span class="source-line-no">415</span><span id="line-415">      }</span>
-<span class="source-line-no">416</span><span id="line-416"></span>
-<span class="source-line-no">417</span><span id="line-417">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">418</span><span id="line-418">      public DefaultBuilder copy() {</span>
-<span class="source-line-no">419</span><span id="line-419">         return new DefaultBuilder(this);</span>
-<span class="source-line-no">420</span><span id="line-420">      }</span>
-<span class="source-line-no">421</span><span id="line-421">   }</span>
-<span class="source-line-no">422</span><span id="line-422"></span>
-<span class="source-line-no">423</span><span id="line-423">   /**</span>
-<span class="source-line-no">424</span><span id="line-424">    * Equivalent to &lt;code&gt;UonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().encoding().build();&lt;/code&gt;.</span>
-<span class="source-line-no">425</span><span id="line-425">    */</span>
-<span class="source-line-no">426</span><span id="line-426">   public static class Encoding extends UonSerializer {</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">      /**</span>
-<span class="source-line-no">429</span><span id="line-429">       * Constructor.</span>
-<span class="source-line-no">430</span><span id="line-430">       *</span>
-<span class="source-line-no">431</span><span id="line-431">       * @param builder The builder for this object.</span>
-<span class="source-line-no">432</span><span id="line-432">       */</span>
-<span class="source-line-no">433</span><span id="line-433">      public Encoding(Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">434</span><span id="line-434">         super(builder.encoding());</span>
-<span class="source-line-no">435</span><span id="line-435">      }</span>
-<span class="source-line-no">436</span><span id="line-436">   }</span>
-<span class="source-line-no">437</span><span id="line-437"></span>
-<span class="source-line-no">438</span><span id="line-438">   /**</span>
-<span class="source-line-no">439</span><span id="line-439">    * Equivalent to &lt;code&gt;UonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().ws().build();&lt;/code&gt;.</span>
-<span class="source-line-no">440</span><span id="line-440">    */</span>
-<span class="source-line-no">441</span><span id="line-441">   public static class Readable extends UonSerializer {</span>
-<span class="source-line-no">442</span><span id="line-442"></span>
-<span class="source-line-no">443</span><span id="line-443">      /**</span>
-<span class="source-line-no">444</span><span id="line-444">       * Constructor.</span>
-<span class="source-line-no">445</span><span id="line-445">       *</span>
-<span class="source-line-no">446</span><span id="line-446">       * @param builder The builder for this object.</span>
-<span class="source-line-no">447</span><span id="line-447">       */</span>
-<span class="source-line-no">448</span><span id="line-448">      public Readable(Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">449</span><span id="line-449">         super(builder.useWhitespace());</span>
-<span class="source-line-no">450</span><span id="line-450">      }</span>
-<span class="source-line-no">451</span><span id="line-451">   }</span>
-<span class="source-line-no">452</span><span id="line-452"></span>
-<span class="source-line-no">453</span><span id="line-453">   /** Reusable instance of {@link UonSerializer}, all default settings. */</span>
-<span class="source-line-no">454</span><span id="line-454">   public static final UonSerializer DEFAULT = new UonSerializer(create());</span>
-<span class="source-line-no">455</span><span id="line-455">   /** Reusable instance of {@link UonSerializer.Readable}. */</span>
-<span class="source-line-no">456</span><span id="line-456">   public static final UonSerializer DEFAULT_READABLE = new Readable(create());</span>
-<span class="source-line-no">457</span><span id="line-457"></span>
-<span class="source-line-no">458</span><span id="line-458">   /** Reusable instance of {@link UonSerializer.Encoding}. */</span>
-<span class="source-line-no">459</span><span id="line-459">   public static final UonSerializer DEFAULT_ENCODING = new Encoding(create());</span>
-<span class="source-line-no">460</span><span id="line-460"></span>
-<span class="source-line-no">461</span><span id="line-461">   /**</span>
-<span class="source-line-no">462</span><span id="line-462">    * Creates a new builder for this object.</span>
-<span class="source-line-no">463</span><span id="line-463">    *</span>
-<span class="source-line-no">464</span><span id="line-464">    * @return A new builder.</span>
-<span class="source-line-no">465</span><span id="line-465">    */</span>
-<span class="source-line-no">466</span><span id="line-466">   @SuppressWarnings({</span>
-<span class="source-line-no">467</span><span id="line-467">      "java:S1452" // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
-<span class="source-line-no">468</span><span id="line-468">   })</span>
-<span class="source-line-no">469</span><span id="line-469">   public static Builder&lt;?&gt; create() {</span>
-<span class="source-line-no">470</span><span id="line-470">      return new DefaultBuilder();</span>
-<span class="source-line-no">471</span><span id="line-471">   }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">   protected final boolean addBeanTypesUon;</span>
-<span class="source-line-no">474</span><span id="line-474">   protected final boolean encoding;</span>
-<span class="source-line-no">475</span><span id="line-475">   protected final Character quoteCharUon;</span>
-<span class="source-line-no">476</span><span id="line-476">   protected final ParamFormat paramFormat;</span>
-<span class="source-line-no">477</span><span id="line-477">   private final boolean addBeanTypes2;</span>
-<span class="source-line-no">478</span><span id="line-478"></span>
-<span class="source-line-no">479</span><span id="line-479">   private final char quoteChar2;</span>
-<span class="source-line-no">480</span><span id="line-480">   private final Map&lt;BeanPropertyMeta,UonBeanPropertyMeta&gt; uonBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">481</span><span id="line-481">   private final Map&lt;ClassMeta&lt;?&gt;,UonClassMeta&gt; uonClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">482</span><span id="line-482"></span>
-<span class="source-line-no">483</span><span id="line-483">   /**</span>
-<span class="source-line-no">484</span><span id="line-484">    * Constructor.</span>
-<span class="source-line-no">485</span><span id="line-485">    *</span>
-<span class="source-line-no">486</span><span id="line-486">    * @param builder</span>
-<span class="source-line-no">487</span><span id="line-487">    *    The builder for this object.</span>
-<span class="source-line-no">488</span><span id="line-488">    */</span>
-<span class="source-line-no">489</span><span id="line-489">   public UonSerializer(Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">490</span><span id="line-490">      super(builder);</span>
-<span class="source-line-no">491</span><span id="line-491"></span>
-<span class="source-line-no">492</span><span id="line-492">      addBeanTypesUon = builder.addBeanTypesUon;</span>
-<span class="source-line-no">493</span><span id="line-493">      encoding = builder.encoding;</span>
-<span class="source-line-no">494</span><span id="line-494">      paramFormat = builder.paramFormat;</span>
-<span class="source-line-no">495</span><span id="line-495">      quoteCharUon = builder.quoteCharUon;</span>
-<span class="source-line-no">496</span><span id="line-496"></span>
-<span class="source-line-no">497</span><span id="line-497">      addBeanTypes2 = addBeanTypesUon || super.isAddBeanTypes();</span>
-<span class="source-line-no">498</span><span id="line-498">      if (nn(quoteCharUon)) {</span>
-<span class="source-line-no">499</span><span id="line-499">         quoteChar2 = quoteCharUon;</span>
-<span class="source-line-no">500</span><span id="line-500">      } else if (nn(super.quoteChar())) {</span>
-<span class="source-line-no">501</span><span id="line-501">         quoteChar2 = super.quoteChar();</span>
-<span class="source-line-no">502</span><span id="line-502">      } else {</span>
-<span class="source-line-no">503</span><span id="line-503">         quoteChar2 = '\'';</span>
-<span class="source-line-no">504</span><span id="line-504">      }</span>
-<span class="source-line-no">505</span><span id="line-505">   }</span>
-<span class="source-line-no">506</span><span id="line-506"></span>
-<span class="source-line-no">507</span><span id="line-507">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">508</span><span id="line-508">   public Builder&lt;?&gt; copy() {</span>
-<span class="source-line-no">509</span><span id="line-509">      return new DefaultBuilder(this);</span>
-<span class="source-line-no">510</span><span id="line-510">   }</span>
-<span class="source-line-no">511</span><span id="line-511"></span>
-<span class="source-line-no">512</span><span id="line-512">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">513</span><span id="line-513">   public UonSerializerSession.Builder&lt;?&gt; createSession() {</span>
-<span class="source-line-no">514</span><span id="line-514">      return UonSerializerSession.create(this);</span>
-<span class="source-line-no">515</span><span id="line-515">   }</span>
-<span class="source-line-no">516</span><span id="line-516"></span>
-<span class="source-line-no">517</span><span id="line-517">   @Override /* Overridden from HttpPartSerializer */</span>
-<span class="source-line-no">518</span><span id="line-518">   public UonSerializerSession getPartSession() { return UonSerializerSession.create(this).build(); }</span>
-<span class="source-line-no">519</span><span id="line-519"></span>
-<span class="source-line-no">520</span><span id="line-520">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">521</span><span id="line-521">   public UonSerializerSession getSession() { return createSession().build(); }</span>
-<span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">   /**</span>
-<span class="source-line-no">524</span><span id="line-524">    * Convenience delegator that opens a whole-value {@link RecordWriter} over the output using</span>
-<span class="source-line-no">525</span><span id="line-525">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
-<span class="source-line-no">526</span><span id="line-526">    *</span>
-<span class="source-line-no">527</span><span id="line-527">    * &lt;p&gt;</span>
-<span class="source-line-no">528</span><span id="line-528">    * The real implementation lives on {@link UonSerializerSession#writeRecords(Object)}.</span>
-<span class="source-line-no">529</span><span id="line-529">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">530</span><span id="line-530">    * invoke {@link UonSerializerSession#writeRecords(Object)} on the built session instead.</span>
-<span class="source-line-no">531</span><span id="line-531">    *</span>
-<span class="source-line-no">532</span><span id="line-532">    * @param output The output.</span>
-<span class="source-line-no">533</span><span id="line-533">    * @return A new {@link RecordWriter}.</span>
-<span class="source-line-no">534</span><span id="line-534">    * @throws IOException If a problem occurred opening the underlying output.</span>
-<span class="source-line-no">535</span><span id="line-535">    */</span>
-<span class="source-line-no">536</span><span id="line-536">   @Override /* RecordWritable */</span>
-<span class="source-line-no">537</span><span id="line-537">   public RecordWriter writeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">538</span><span id="line-538">      return getSession().writeRecords(output);</span>
-<span class="source-line-no">539</span><span id="line-539">   }</span>
-<span class="source-line-no">540</span><span id="line-540"></span>
-<span class="source-line-no">541</span><span id="line-541">   @Override /* RecordWritable */</span>
-<span class="source-line-no">542</span><span id="line-542">   public boolean isRecordStreaming() {</span>
-<span class="source-line-no">543</span><span id="line-543">      return false;</span>
-<span class="source-line-no">544</span><span id="line-544">   }</span>
-<span class="source-line-no">545</span><span id="line-545"></span>
-<span class="source-line-no">546</span><span id="line-546">   @Override /* Overridden from UonMetaProvider */</span>
-<span class="source-line-no">547</span><span id="line-547">   public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">548</span><span id="line-548">      if (bpm == null)</span>
-<span class="source-line-no">549</span><span id="line-549">         return UonBeanPropertyMeta.DEFAULT;</span>
-<span class="source-line-no">550</span><span id="line-550">      return uonBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new UonBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">551</span><span id="line-551">   }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">   @Override /* Overridden from UonMetaProvider */</span>
-<span class="source-line-no">554</span><span id="line-554">   public UonClassMeta getUonClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">555</span><span id="line-555">      return uonClassMetas.computeIfAbsent(cm, k -&gt; new UonClassMeta(k, this));</span>
-<span class="source-line-no">556</span><span id="line-556">   }</span>
-<span class="source-line-no">557</span><span id="line-557"></span>
-<span class="source-line-no">558</span><span id="line-558">   /**</span>
-<span class="source-line-no">559</span><span id="line-559">    * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,</span>
-<span class="source-line-no">560</span><span id="line-560">    * form-data parameter, or URI path variable.</span>
-<span class="source-line-no">561</span><span id="line-561">    *</span>
-<span class="source-line-no">562</span><span id="line-562">    * &lt;p&gt;</span>
-<span class="source-line-no">563</span><span id="line-563">    * Returned values should NOT be URL-encoded.</span>
-<span class="source-line-no">564</span><span id="line-564">    *</span>
-<span class="source-line-no">565</span><span id="line-565">    * @param partType The category of value being serialized.</span>
-<span class="source-line-no">566</span><span id="line-566">    * @param schema</span>
-<span class="source-line-no">567</span><span id="line-567">    *    Schema information about the part.</span>
-<span class="source-line-no">568</span><span id="line-568">    *    &lt;br&gt;May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">569</span><span id="line-569">    *    &lt;br&gt;Not all part serializers use the schema information.</span>
-<span class="source-line-no">570</span><span id="line-570">    * @param value The value being serialized.</span>
-<span class="source-line-no">571</span><span id="line-571">    * @return The serialized value.</span>
-<span class="source-line-no">572</span><span id="line-572">    * @throws SerializeException If a problem occurred while trying to parse the input.</span>
-<span class="source-line-no">573</span><span id="line-573">    * @throws SchemaValidationException If the output fails schema validation.</span>
-<span class="source-line-no">574</span><span id="line-574">    */</span>
-<span class="source-line-no">575</span><span id="line-575">   public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {</span>
-<span class="source-line-no">576</span><span id="line-576">      return getPartSession().write(partType, schema, value);</span>
-<span class="source-line-no">577</span><span id="line-577">   }</span>
-<span class="source-line-no">578</span><span id="line-578"></span>
-<span class="source-line-no">579</span><span id="line-579">   /**</span>
-<span class="source-line-no">580</span><span id="line-580">    * Format to use for query/form-data/header values.</span>
-<span class="source-line-no">581</span><span id="line-581">    *</span>
-<span class="source-line-no">582</span><span id="line-582">    * @see Builder#paramFormat(ParamFormat)</span>
-<span class="source-line-no">583</span><span id="line-583">    * @return</span>
-<span class="source-line-no">584</span><span id="line-584">    *    Specifies the format to use for URL GET parameter keys and values.</span>
-<span class="source-line-no">585</span><span id="line-585">    */</span>
-<span class="source-line-no">586</span><span id="line-586">   protected final ParamFormat getParamFormat() { return paramFormat; }</span>
-<span class="source-line-no">587</span><span id="line-587"></span>
-<span class="source-line-no">588</span><span id="line-588">   /**</span>
-<span class="source-line-no">589</span><span id="line-589">    * Quote character.</span>
-<span class="source-line-no">590</span><span id="line-590">    *</span>
-<span class="source-line-no">591</span><span id="line-591">    * @see Builder#quoteCharUon(char)</span>
-<span class="source-line-no">592</span><span id="line-592">    * @return</span>
-<span class="source-line-no">593</span><span id="line-593">    *    The character used for quoting attributes and values.</span>
-<span class="source-line-no">594</span><span id="line-594">    */</span>
-<span class="source-line-no">595</span><span id="line-595">   @Override</span>
-<span class="source-line-no">596</span><span id="line-596">   protected final char getQuoteChar() { return quoteChar2; }</span>
-<span class="source-line-no">597</span><span id="line-597"></span>
-<span class="source-line-no">598</span><span id="line-598">   /**</span>
-<span class="source-line-no">599</span><span id="line-599">    * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
-<span class="source-line-no">600</span><span id="line-600">    *</span>
-<span class="source-line-no">601</span><span id="line-601">    * @see Builder#addBeanTypesUon()</span>
-<span class="source-line-no">602</span><span id="line-602">    * @return</span>
-<span class="source-line-no">603</span><span id="line-603">    *    &lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
-<span class="source-line-no">604</span><span id="line-604">    *    through reflection.</span>
-<span class="source-line-no">605</span><span id="line-605">    */</span>
-<span class="source-line-no">606</span><span id="line-606">   @Override</span>
-<span class="source-line-no">607</span><span id="line-607">   protected final boolean isAddBeanTypes() { return addBeanTypes2; }</span>
-<span class="source-line-no">608</span><span id="line-608"></span>
-<span class="source-line-no">609</span><span id="line-609">   /**</span>
-<span class="source-line-no">610</span><span id="line-610">    * Encode non-valid URI characters.</span>
-<span class="source-line-no">611</span><span id="line-611">    *</span>
-<span class="source-line-no">612</span><span id="line-612">    * @see Builder#encoding()</span>
-<span class="source-line-no">613</span><span id="line-613">    * @return</span>
-<span class="source-line-no">614</span><span id="line-614">    *    &lt;jk&gt;true&lt;/jk&gt; if non-valid URI characters should be encoded with &lt;js&gt;"%xx"&lt;/js&gt; constructs.</span>
-<span class="source-line-no">615</span><span id="line-615">    */</span>
-<span class="source-line-no">616</span><span id="line-616">   protected final boolean isEncoding() { return encoding; }</span>
-<span class="source-line-no">617</span><span id="line-617"></span>
-<span class="source-line-no">618</span><span id="line-618">   @Override /* Overridden from WriterSerializer */</span>
-<span class="source-line-no">619</span><span id="line-619">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">620</span><span id="line-620">      return super.properties()</span>
-<span class="source-line-no">621</span><span id="line-621">         .a("addBeanTypes", addBeanTypes2)</span>
-<span class="source-line-no">622</span><span id="line-622">         .a("encoding", encoding)</span>
-<span class="source-line-no">623</span><span id="line-623">         .a("paramFormat", paramFormat);</span>
-<span class="source-line-no">624</span><span id="line-624">   }</span>
-<span class="source-line-no">625</span><span id="line-625">}</span>
+<span class="source-line-no">399</span><span id="line-399">   }</span>
+<span class="source-line-no">400</span><span id="line-400"></span>
+<span class="source-line-no">401</span><span id="line-401">   /**</span>
+<span class="source-line-no">402</span><span id="line-402">    * Concrete default builder leaf for the non-subclassed {@link UonSerializer#create()} / {@link UonSerializer#copy()} path.</span>
+<span class="source-line-no">403</span><span id="line-403">    */</span>
+<span class="source-line-no">404</span><span id="line-404">   public static final class DefaultBuilder extends Builder&lt;DefaultBuilder&gt; {</span>
+<span class="source-line-no">405</span><span id="line-405"></span>
+<span class="source-line-no">406</span><span id="line-406">      DefaultBuilder() {}</span>
+<span class="source-line-no">407</span><span id="line-407"></span>
+<span class="source-line-no">408</span><span id="line-408">      DefaultBuilder(UonSerializer copyFrom) {</span>
+<span class="source-line-no">409</span><span id="line-409">         super(copyFrom);</span>
+<span class="source-line-no">410</span><span id="line-410">      }</span>
+<span class="source-line-no">411</span><span id="line-411"></span>
+<span class="source-line-no">412</span><span id="line-412">      DefaultBuilder(Builder&lt;?&gt; copyFrom) {</span>
+<span class="source-line-no">413</span><span id="line-413">         super(copyFrom);</span>
+<span class="source-line-no">414</span><span id="line-414">      }</span>
+<span class="source-line-no">415</span><span id="line-415"></span>
+<span class="source-line-no">416</span><span id="line-416">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">417</span><span id="line-417">      public DefaultBuilder copy() {</span>
+<span class="source-line-no">418</span><span id="line-418">         return new DefaultBuilder(this);</span>
+<span class="source-line-no">419</span><span id="line-419">      }</span>
+<span class="source-line-no">420</span><span id="line-420">   }</span>
+<span class="source-line-no">421</span><span id="line-421"></span>
+<span class="source-line-no">422</span><span id="line-422">   /**</span>
+<span class="source-line-no">423</span><span id="line-423">    * Equivalent to &lt;code&gt;UonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().encoding().build();&lt;/code&gt;.</span>
+<span class="source-line-no">424</span><span id="line-424">    */</span>
+<span class="source-line-no">425</span><span id="line-425">   public static class Encoding extends UonSerializer {</span>
+<span class="source-line-no">426</span><span id="line-426"></span>
+<span class="source-line-no">427</span><span id="line-427">      /**</span>
+<span class="source-line-no">428</span><span id="line-428">       * Constructor.</span>
+<span class="source-line-no">429</span><span id="line-429">       *</span>
+<span class="source-line-no">430</span><span id="line-430">       * @param builder The builder for this object.</span>
+<span class="source-line-no">431</span><span id="line-431">       */</span>
+<span class="source-line-no">432</span><span id="line-432">      public Encoding(Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">433</span><span id="line-433">         super(builder.encoding());</span>
+<span class="source-line-no">434</span><span id="line-434">      }</span>
+<span class="source-line-no">435</span><span id="line-435">   }</span>
+<span class="source-line-no">436</span><span id="line-436"></span>
+<span class="source-line-no">437</span><span id="line-437">   /**</span>
+<span class="source-line-no">438</span><span id="line-438">    * Equivalent to &lt;code&gt;UonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().ws().build();&lt;/code&gt;.</span>
+<span class="source-line-no">439</span><span id="line-439">    */</span>
+<span class="source-line-no">440</span><span id="line-440">   public static class Readable extends UonSerializer {</span>
+<span class="source-line-no">441</span><span id="line-441"></span>
+<span class="source-line-no">442</span><span id="line-442">      /**</span>
+<span class="source-line-no">443</span><span id="line-443">       * Constructor.</span>
+<span class="source-line-no">444</span><span id="line-444">       *</span>
+<span class="source-line-no">445</span><span id="line-445">       * @param builder The builder for this object.</span>
+<span class="source-line-no">446</span><span id="line-446">       */</span>
+<span class="source-line-no">447</span><span id="line-447">      public Readable(Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">448</span><span id="line-448">         super(builder.useWhitespace());</span>
+<span class="source-line-no">449</span><span id="line-449">      }</span>
+<span class="source-line-no">450</span><span id="line-450">   }</span>
+<span class="source-line-no">451</span><span id="line-451"></span>
+<span class="source-line-no">452</span><span id="line-452">   /** Reusable instance of {@link UonSerializer}, all default settings. */</span>
+<span class="source-line-no">453</span><span id="line-453">   public static final UonSerializer DEFAULT = new UonSerializer(create());</span>
+<span class="source-line-no">454</span><span id="line-454">   /** Reusable instance of {@link UonSerializer.Readable}. */</span>
+<span class="source-line-no">455</span><span id="line-455">   public static final UonSerializer DEFAULT_READABLE = new Readable(create());</span>
+<span class="source-line-no">456</span><span id="line-456"></span>
+<span class="source-line-no">457</span><span id="line-457">   /** Reusable instance of {@link UonSerializer.Encoding}. */</span>
+<span class="source-line-no">458</span><span id="line-458">   public static final UonSerializer DEFAULT_ENCODING = new Encoding(create());</span>
+<span class="source-line-no">459</span><span id="line-459"></span>
+<span class="source-line-no">460</span><span id="line-460">   /**</span>
+<span class="source-line-no">461</span><span id="line-461">    * Creates a new builder for this object.</span>
+<span class="source-line-no">462</span><span id="line-462">    *</span>
+<span class="source-line-no">463</span><span id="line-463">    * @return A new builder.</span>
+<span class="source-line-no">464</span><span id="line-464">    */</span>
+<span class="source-line-no">465</span><span id="line-465">   @SuppressWarnings({</span>
+<span class="source-line-no">466</span><span id="line-466">      "java:S1452" // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
+<span class="source-line-no">467</span><span id="line-467">   })</span>
+<span class="source-line-no">468</span><span id="line-468">   public static Builder&lt;?&gt; create() {</span>
+<span class="source-line-no">469</span><span id="line-469">      return new DefaultBuilder();</span>
+<span class="source-line-no">470</span><span id="line-470">   }</span>
+<span class="source-line-no">471</span><span id="line-471"></span>
+<span class="source-line-no">472</span><span id="line-472">   protected final boolean addBeanTypesUon;</span>
+<span class="source-line-no">473</span><span id="line-473">   protected final boolean encoding;</span>
+<span class="source-line-no">474</span><span id="line-474">   protected final Character quoteCharUon;</span>
+<span class="source-line-no">475</span><span id="line-475">   protected final ParamFormat paramFormat;</span>
+<span class="source-line-no">476</span><span id="line-476">   private final boolean addBeanTypes2;</span>
+<span class="source-line-no">477</span><span id="line-477"></span>
+<span class="source-line-no">478</span><span id="line-478">   private final char quoteChar2;</span>
+<span class="source-line-no">479</span><span id="line-479">   private final Map&lt;BeanPropertyMeta,UonBeanPropertyMeta&gt; uonBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">480</span><span id="line-480">   private final Map&lt;ClassMeta&lt;?&gt;,UonClassMeta&gt; uonClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">481</span><span id="line-481"></span>
+<span class="source-line-no">482</span><span id="line-482">   /**</span>
+<span class="source-line-no">483</span><span id="line-483">    * Constructor.</span>
+<span class="source-line-no">484</span><span id="line-484">    *</span>
+<span class="source-line-no">485</span><span id="line-485">    * @param builder</span>
+<span class="source-line-no">486</span><span id="line-486">    *    The builder for this object.</span>
+<span class="source-line-no">487</span><span id="line-487">    */</span>
+<span class="source-line-no">488</span><span id="line-488">   public UonSerializer(Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">489</span><span id="line-489">      super(builder);</span>
+<span class="source-line-no">490</span><span id="line-490"></span>
+<span class="source-line-no">491</span><span id="line-491">      addBeanTypesUon = builder.addBeanTypesUon;</span>
+<span class="source-line-no">492</span><span id="line-492">      encoding = builder.encoding;</span>
+<span class="source-line-no">493</span><span id="line-493">      paramFormat = builder.paramFormat;</span>
+<span class="source-line-no">494</span><span id="line-494">      quoteCharUon = builder.quoteCharUon;</span>
+<span class="source-line-no">495</span><span id="line-495"></span>
+<span class="source-line-no">496</span><span id="line-496">      addBeanTypes2 = addBeanTypesUon || super.isAddBeanTypes();</span>
+<span class="source-line-no">497</span><span id="line-497">      if (nn(quoteCharUon)) {</span>
+<span class="source-line-no">498</span><span id="line-498">         quoteChar2 = quoteCharUon;</span>
+<span class="source-line-no">499</span><span id="line-499">      } else if (nn(super.quoteChar())) {</span>
+<span class="source-line-no">500</span><span id="line-500">         quoteChar2 = super.quoteChar();</span>
+<span class="source-line-no">501</span><span id="line-501">      } else {</span>
+<span class="source-line-no">502</span><span id="line-502">         quoteChar2 = '\'';</span>
+<span class="source-line-no">503</span><span id="line-503">      }</span>
+<span class="source-line-no">504</span><span id="line-504">   }</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">507</span><span id="line-507">   public Builder&lt;?&gt; copy() {</span>
+<span class="source-line-no">508</span><span id="line-508">      return new DefaultBuilder(this);</span>
+<span class="source-line-no">509</span><span id="line-509">   }</span>
+<span class="source-line-no">510</span><span id="line-510"></span>
+<span class="source-line-no">511</span><span id="line-511">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">512</span><span id="line-512">   public UonSerializerSession.Builder&lt;?&gt; createSession() {</span>
+<span class="source-line-no">513</span><span id="line-513">      return UonSerializerSession.create(this);</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   @Override /* Overridden from HttpPartSerializer */</span>
+<span class="source-line-no">517</span><span id="line-517">   public UonSerializerSession getPartSession() { return UonSerializerSession.create(this).build(); }</span>
+<span class="source-line-no">518</span><span id="line-518"></span>
+<span class="source-line-no">519</span><span id="line-519">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">520</span><span id="line-520">   public UonSerializerSession getSession() { return createSession().build(); }</span>
+<span class="source-line-no">521</span><span id="line-521"></span>
+<span class="source-line-no">522</span><span id="line-522">   /**</span>
+<span class="source-line-no">523</span><span id="line-523">    * Convenience delegator that opens a whole-value {@link RecordWriter} over the output using</span>
+<span class="source-line-no">524</span><span id="line-524">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
+<span class="source-line-no">525</span><span id="line-525">    *</span>
+<span class="source-line-no">526</span><span id="line-526">    * &lt;p&gt;</span>
+<span class="source-line-no">527</span><span id="line-527">    * The real implementation lives on {@link UonSerializerSession#writeRecords(Object)}.</span>
+<span class="source-line-no">528</span><span id="line-528">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
+<span class="source-line-no">529</span><span id="line-529">    * invoke {@link UonSerializerSession#writeRecords(Object)} on the built session instead.</span>
+<span class="source-line-no">530</span><span id="line-530">    *</span>
+<span class="source-line-no">531</span><span id="line-531">    * @param output The output.</span>
+<span class="source-line-no">532</span><span id="line-532">    * @return A new {@link RecordWriter}.</span>
+<span class="source-line-no">533</span><span id="line-533">    * @throws IOException If a problem occurred opening the underlying output.</span>
+<span class="source-line-no">534</span><span id="line-534">    */</span>
+<span class="source-line-no">535</span><span id="line-535">   @Override /* RecordWritable */</span>
+<span class="source-line-no">536</span><span id="line-536">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">537</span><span id="line-537">      return getSession().writeRecords(output);</span>
+<span class="source-line-no">538</span><span id="line-538">   }</span>
+<span class="source-line-no">539</span><span id="line-539"></span>
+<span class="source-line-no">540</span><span id="line-540">   @Override /* RecordWritable */</span>
+<span class="source-line-no">541</span><span id="line-541">   public boolean isRecordStreaming() {</span>
+<span class="source-line-no">542</span><span id="line-542">      return false;</span>
+<span class="source-line-no">543</span><span id="line-543">   }</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   @Override /* Overridden from UonMetaProvider */</span>
+<span class="source-line-no">546</span><span id="line-546">   public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">547</span><span id="line-547">      if (bpm == null)</span>
+<span class="source-line-no">548</span><span id="line-548">         return UonBeanPropertyMeta.DEFAULT;</span>
+<span class="source-line-no">549</span><span id="line-549">      return uonBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new UonBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">550</span><span id="line-550">   }</span>
+<span class="source-line-no">551</span><span id="line-551"></span>
+<span class="source-line-no">552</span><span id="line-552">   @Override /* Overridden from UonMetaProvider */</span>
+<span class="source-line-no">553</span><span id="line-553">   public UonClassMeta getUonClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">554</span><span id="line-554">      return uonClassMetas.computeIfAbsent(cm, k -&gt; new UonClassMeta(k, this));</span>
+<span class="source-line-no">555</span><span id="line-555">   }</span>
+<span class="source-line-no">556</span><span id="line-556"></span>
+<span class="source-line-no">557</span><span id="line-557">   /**</span>
+<span class="source-line-no">558</span><span id="line-558">    * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,</span>
+<span class="source-line-no">559</span><span id="line-559">    * form-data parameter, or URI path variable.</span>
+<span class="source-line-no">560</span><span id="line-560">    *</span>
+<span class="source-line-no">561</span><span id="line-561">    * &lt;p&gt;</span>
+<span class="source-line-no">562</span><span id="line-562">    * Returned values should NOT be URL-encoded.</span>
+<span class="source-line-no">563</span><span id="line-563">    *</span>
+<span class="source-line-no">564</span><span id="line-564">    * @param partType The category of value being serialized.</span>
+<span class="source-line-no">565</span><span id="line-565">    * @param schema</span>
+<span class="source-line-no">566</span><span id="line-566">    *    Schema information about the part.</span>
+<span class="source-line-no">567</span><span id="line-567">    *    &lt;br&gt;May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">568</span><span id="line-568">    *    &lt;br&gt;Not all part serializers use the schema information.</span>
+<span class="source-line-no">569</span><span id="line-569">    * @param value The value being serialized.</span>
+<span class="source-line-no">570</span><span id="line-570">    * @return The serialized value.</span>
+<span class="source-line-no">571</span><span id="line-571">    * @throws SerializeException If a problem occurred while trying to parse the input.</span>
+<span class="source-line-no">572</span><span id="line-572">    * @throws SchemaValidationException If the output fails schema validation.</span>
+<span class="source-line-no">573</span><span id="line-573">    */</span>
+<span class="source-line-no">574</span><span id="line-574">   public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {</span>
+<span class="source-line-no">575</span><span id="line-575">      return getPartSession().write(partType, schema, value);</span>
+<span class="source-line-no">576</span><span id="line-576">   }</span>
+<span class="source-line-no">577</span><span id="line-577"></span>
+<span class="source-line-no">578</span><span id="line-578">   /**</span>
+<span class="source-line-no">579</span><span id="line-579">    * Format to use for query/form-data/header values.</span>
+<span class="source-line-no">580</span><span id="line-580">    *</span>
+<span class="source-line-no">581</span><span id="line-581">    * @see Builder#paramFormat(ParamFormat)</span>
+<span class="source-line-no">582</span><span id="line-582">    * @return</span>
+<span class="source-line-no">583</span><span id="line-583">    *    Specifies the format to use for URL GET parameter keys and values.</span>
+<span class="source-line-no">584</span><span id="line-584">    */</span>
+<span class="source-line-no">585</span><span id="line-585">   protected final ParamFormat getParamFormat() { return paramFormat; }</span>
+<span class="source-line-no">586</span><span id="line-586"></span>
+<span class="source-line-no">587</span><span id="line-587">   /**</span>
+<span class="source-line-no">588</span><span id="line-588">    * Quote character.</span>
+<span class="source-line-no">589</span><span id="line-589">    *</span>
+<span class="source-line-no">590</span><span id="line-590">    * @see Builder#quoteCharUon(char)</span>
+<span class="source-line-no">591</span><span id="line-591">    * @return</span>
+<span class="source-line-no">592</span><span id="line-592">    *    The character used for quoting attributes and values.</span>
+<span class="source-line-no">593</span><span id="line-593">    */</span>
+<span class="source-line-no">594</span><span id="line-594">   @Override</span>
+<span class="source-line-no">595</span><span id="line-595">   protected final char getQuoteChar() { return quoteChar2; }</span>
+<span class="source-line-no">596</span><span id="line-596"></span>
+<span class="source-line-no">597</span><span id="line-597">   /**</span>
+<span class="source-line-no">598</span><span id="line-598">    * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
+<span class="source-line-no">599</span><span id="line-599">    *</span>
+<span class="source-line-no">600</span><span id="line-600">    * @see Builder#addBeanTypesUon()</span>
+<span class="source-line-no">601</span><span id="line-601">    * @return</span>
+<span class="source-line-no">602</span><span id="line-602">    *    &lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
+<span class="source-line-no">603</span><span id="line-603">    *    through reflection.</span>
+<span class="source-line-no">604</span><span id="line-604">    */</span>
+<span class="source-line-no">605</span><span id="line-605">   @Override</span>
+<span class="source-line-no">606</span><span id="line-606">   protected final boolean isAddBeanTypes() { return addBeanTypes2; }</span>
+<span class="source-line-no">607</span><span id="line-607"></span>
+<span class="source-line-no">608</span><span id="line-608">   /**</span>
+<span class="source-line-no">609</span><span id="line-609">    * Encode non-valid URI characters.</span>
+<span class="source-line-no">610</span><span id="line-610">    *</span>
+<span class="source-line-no">611</span><span id="line-611">    * @see Builder#encoding()</span>
+<span class="source-line-no">612</span><span id="line-612">    * @return</span>
+<span class="source-line-no">613</span><span id="line-613">    *    &lt;jk&gt;true&lt;/jk&gt; if non-valid URI characters should be encoded with &lt;js&gt;"%xx"&lt;/js&gt; constructs.</span>
+<span class="source-line-no">614</span><span id="line-614">    */</span>
+<span class="source-line-no">615</span><span id="line-615">   protected final boolean isEncoding() { return encoding; }</span>
+<span class="source-line-no">616</span><span id="line-616"></span>
+<span class="source-line-no">617</span><span id="line-617">   @Override /* Overridden from WriterSerializer */</span>
+<span class="source-line-no">618</span><span id="line-618">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">619</span><span id="line-619">      return super.properties()</span>
+<span class="source-line-no">620</span><span id="line-620">         .a("addBeanTypes", addBeanTypes2)</span>
+<span class="source-line-no">621</span><span id="line-621">         .a("encoding", encoding)</span>
+<span class="source-line-no">622</span><span id="line-622">         .a("paramFormat", paramFormat);</span>
+<span class="source-line-no">623</span><span id="line-623">   }</span>
+<span class="source-line-no">624</span><span id="line-624">}</span>
 
 
 

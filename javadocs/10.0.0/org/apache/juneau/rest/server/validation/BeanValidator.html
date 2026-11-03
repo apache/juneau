@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  construction time, then conditionally invoke <a href="#validate(T,org.apache.juneau.commons.inject.BeanStore)"><code>validate(Object, BeanStore)</code></a> per request only when an
  explicit <code>@jakarta.validation.Valid</code> (or equivalent) marker is present.
 
- <h5 class='topic'>Validator resolution order</h5>
+ <h2 class='topic'>Validator resolution order</h2>
  <ol>
    <li>A user-supplied <code>Validator</code> bean visible from the supplied <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> &mdash; typically
       contributed via a <code>@Bean public Validator validator()</code> factory on a <code>@Rest</code>-annotated
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
       flooding the log.
  </ol>
 
- <h5 class='topic'>Why static dispatch?</h5>
+ <h2 class='topic'>Why static dispatch?</h2>
  <p>
  Each REST argument resolver is built once per <code>@RestOp</code> method at servlet startup, then invoked on
  every request. By keeping the validator lookup off the arg-resolver constructor and inside this class's
@@ -113,7 +112,7 @@ loadScripts(document, 'script');</script>
  per request &mdash; and resolvers for <code>@RestOp</code> methods that never opt in pay nothing at all (the
  static initializer doesn't run until the first call to <a href="#validate(T,org.apache.juneau.commons.inject.BeanStore)"><code>validate(Object, BeanStore)</code></a>).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ValidationException.html" title="class in org.apache.juneau.rest.server.validation"><code>ValidationException</code></a>
    <li class='jc'><a href="ValidationViolation.html" title="class in org.apache.juneau.rest.server.validation"><code>ValidationViolation</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>

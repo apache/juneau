@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="block">The row-selection opt-in for a <a href="ViewTable.html" title="class in org.apache.juneau.console.views"><code>ViewTable</code></a> &mdash; the first of the view table's two INDEPENDENT
  opt-ins.
 
- <h5 class='section'>Independent from bulk mutation, by construction</h5>
+ <h2 class='section'>Independent from bulk mutation, by construction</h2>
  <p>
  Declaring a <a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a> adds a per-row checkbox column (and, when <a href="#selectAll()"><code>selectAll()</code></a> is set, a
  select-all header checkbox) to a view table &mdash; nothing else. It does <b>not</b>, by any default or
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  <b>consumes</b> a <a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a> (it requires one to be constructed at all) but a <a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a>
  never requires, implies, or references one back.
 
- <h5 class='section'>Non-wire: never touches <code>VIEW_META</code></h5>
+ <h2 class='section'>Non-wire: never touches <code>VIEW_META</code></h2>
  <p>
  A <a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a> is deliberately <b>not</b> part of <code>VIEW_META</code> and never reaches the
  JSON sidecar. <a href="ViewTable.html" title="class in org.apache.juneau.console.views"><code>ViewTable</code></a> instead stamps it as
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
  <a href="BulkMutateDef.html" title="class in org.apache.juneau.console.views"><code>BulkMutateDef</code></a>, whose actual bulk-action list <i>is</i> wire data and therefore carries its own,
  separate <a href="BulkMutateDef.html#CONTRACT_VERSION"><code>BulkMutateDef.CONTRACT_VERSION</code></a>).
 
- <h5 class='section'>Selection identity is a stable row id, never a DOM/table index</h5>
+ <h2 class='section'>Selection identity is a stable row id, never a DOM/table index</h2>
  <p>
  <a href="#rowIdField()"><code>rowIdField()</code></a> names the row-data key <code>juneau-views.js</code> reads to stamp a stable
  <code>data-juneau-row-id</code> attribute on each rendered <code>&lt;tr&gt;</code> (see <code>createdRow</code> in that runtime).
@@ -117,7 +116,7 @@ loadScripts(document, 'script');</script>
  previously-selected id that is no longer present in the newly drawn row set, so a selection whose rows have
  scrolled off screen or off the current page is never kept as a live, actionable target.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Selectable for export, with NO bulk-mutate capability - satisfies the separability condition by construction.</jc>
    SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>)
@@ -127,7 +126,7 @@ loadScripts(document, 'script');</script>
       .labelField(<js>"name"</js>);
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="BulkMutateDef.html" title="class in org.apache.juneau.console.views"><code>BulkMutateDef</code></a>
    <li class='jc'><a href="ViewTable.html" title="class in org.apache.juneau.console.views"><code>ViewTable</code></a>

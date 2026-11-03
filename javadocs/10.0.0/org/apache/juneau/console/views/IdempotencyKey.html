@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="block">A server-minted idempotency key for a row-action submit, bound at mint time to the <code>(action, targetId)</code> pair
  it was issued for.
 
- <h5 class='section'>Why the key is server-minted and bound, not a client UUID</h5>
+ <h2 class='section'>Why the key is server-minted and bound, not a client UUID</h2>
  <p>
  The key is minted <b>when the modal opens</b> &mdash; the server is already in the loop then, since the modal-open
  confirmation is server-rendered against the current record &mdash; so a double-click, an impatient re-submit and a
@@ -97,13 +96,13 @@ loadScripts(document, 'script');</script>
  <code>(action, targetId)</code> does not <a href="#matches(java.lang.String,java.lang.String)"><code>match</code></a> the binding is a <b>named refusal</b>,
  never a replayed success.
 
- <h5 class='section'>Unforgeability</h5>
+ <h2 class='section'>Unforgeability</h2>
  <p>
  The key value is 32 random bytes (256&nbsp;bits) from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom.html" title="class or interface in java.security" class="external-link"><code>SecureRandom</code></a>,
  hex-encoded &mdash; well beyond the ≥128-bit bar, matching <a href="../../rest/server/filter/SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter"><code>SynchronizerToken</code></a>'s
  256-bit reference.  The binding is what makes it safe; the width is what makes it unguessable.
 
- <h5 class='section'>Example &mdash; the artifact-bound pattern (the default):</h5>
+ <h2 class='section'>Example &mdash; the artifact-bound pattern (the default):</h2>
  <p class='bjava'>
    <jc>// At modal-open: mint a key bound to this action + this row.</jc>
    IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mint</jsm>(<js>"ack"</js>, <jv>incidentId</jv>);
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
       <jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"write-guard:idempotency-binding-mismatch"</js>);
  </p>
 
- <h5 class='section'>The row-less, self-targeted pattern (the opt-in)</h5>
+ <h2 class='section'>The row-less, self-targeted pattern (the opt-in)</h2>
  <p>
  A dialog opened from a view's <b>ribbon</b> has no row, so at mint time there is no artifact id to bind to.
  <a href="#mintSelfTargeted(java.lang.String)"><code>mintSelfTargeted(String)</code></a> mints a key whose <a href="#targetId()"><code>targetId()</code></a> <b>is its own <a href="#value()"><code>value()</code></a></b>, and
@@ -134,7 +133,7 @@ loadScripts(document, 'script');</script>
       per-dialog opt-in rather than a blanket client-side precedence rule.
  </ul>
 
- <h5 class='section'>Example &mdash; the self-targeted pattern:</h5>
+ <h2 class='section'>Example &mdash; the self-targeted pattern:</h2>
  <p class='bjava'>
    <jc>// At modal-open on a ribbon-hosted dialog: there is no row, so the key targets itself.</jc>
    IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mintSelfTargeted</jsm>(<js>"create"</js>);
@@ -145,7 +144,7 @@ loadScripts(document, 'script');</script>
       <jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"write-guard:idempotency-binding-mismatch"</js>);
  </p>
 
- <h5 class='section'>What a self-targeted key does and does not guarantee</h5>
+ <h2 class='section'>What a self-targeted key does and does not guarantee</h2>
  <p>
  A self-targeted key binds to <code>(action, one-opened-dialog)</code> &mdash; <b>not</b> <code>(action, artifact)</code>.
  It is minted per modal-open, and it is <b>single-execution, replay-on-duplicate</b>: it stops one opened dialog's
@@ -158,7 +157,7 @@ loadScripts(document, 'script');</script>
  the unchanged <a href="#mint(java.lang.String,java.lang.String)"><code>mint(String, String)</code></a> binds to a real artifact identity, and that guarantee is strictly
  stronger; it stays available to any consumer that has an artifact to bind to.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="../widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a>
    <li class='jc'><a href="ActionResult.html" title="class in org.apache.juneau.console.views"><code>ActionResult</code></a>

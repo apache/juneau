@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -71,7 +70,7 @@ loadScripts(document, 'script');</script>
  integration for <code>juneau-rest-server</code> &mdash; declarative validation of request beans via
  <code>jakarta.validation.constraints.*</code> annotations.
 
- <h5 class='topic'>Off by default &mdash; opt in per parameter</h5>
+ <h2 class='topic'>Off by default &mdash; opt in per parameter</h2>
  <p>
  Validation is <b>off by default and never runs automatically</b>. A <a href="BeanValidator.html" title="class in org.apache.juneau.rest.server.validation"><code>BeanValidator</code></a>
  is only constructed when an arg resolver sees a <code>@jakarta.validation.Valid</code> (or Spring
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  via <code>@Valid</code>. This is a deliberate behavior difference from Spring MVC (which auto-validates beans whose
  type carries constraint annotations) and from the standard Jakarta cascade rules.
 
- <h5 class='topic'>Dependency stance</h5>
+ <h2 class='topic'>Dependency stance</h2>
  <p>
  <code>juneau-rest-server</code> declares <code>jakarta.validation:jakarta.validation-api</code> in <code>provided</code>
  scope. A concrete provider (e.g. <code>org.hibernate.validator:hibernate-validator</code>) is <b>not</b> bundled
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
  runtime, the integration degrades to a no-op &mdash; the request bean is returned unmodified and a warning is
  logged on first attempted use.
 
- <h5 class='topic'>Failure handling</h5>
+ <h2 class='topic'>Failure handling</h2>
  <p>
  A constraint violation throws <a href="ValidationException.html" title="class in org.apache.juneau.rest.server.validation"><code>ValidationException</code></a> (a 400 Bad Request
  subclass) carrying the list of <a href="ValidationViolation.html" title="class in org.apache.juneau.rest.server.validation"><code>ValidationViolation</code></a> details. The
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
       <code>{ "status":400, "errors":[ ... ] }</code> envelope.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>
  </ul></div>
 <dl class="notes">

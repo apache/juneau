@@ -36,7 +36,7 @@
 <span class="source-line-no">023</span><span id="line-23"> * {@link ReactiveResponseProcessor} understands: a {@link CompletionStage} (single value) or a</span>
 <span class="source-line-no">024</span><span id="line-24"> * {@link java.util.concurrent.Flow.Publisher Flow.Publisher} (a stream of values).</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='topic'&gt;Why this exists&lt;/h5&gt;</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;h2 class='topic'&gt;Why this exists&lt;/h2&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * The opt-in {@code juneau-rest-server-reactive} module handles {@link java.util.concurrent.Flow.Publisher Flow.Publisher}</span>
 <span class="source-line-no">029</span><span id="line-29"> * (and, via the existing {@code AsyncResponseProcessor}, {@link CompletionStage}) using only JDK APIs &amp;mdash;</span>
@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * convert those types into the JDK-native shapes, so the streaming / buffering / SSE / NDJSON plumbing</span>
 <span class="source-line-no">035</span><span id="line-35"> * is implemented exactly once in the core.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Registration&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='topic'&gt;Registration&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * Adapters are discovered via the JDK {@link java.util.ServiceLoader} mechanism. A bridge module (or a</span>
 <span class="source-line-no">040</span><span id="line-40"> * consumer who wants a custom adapter) ships a</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -322,7 +321,7 @@ loadScripts(document, 'script');</script>
  <p>
  Adds to the list of classes that make up the bean dictionary for this bean.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#dictionary()"><code>Marshalled.dictionary()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanDictionary(java.lang.Class...)"><code>MarshallingContext.Builder.beanDictionary(Class...)</code></a>
  </ul></div>
@@ -372,7 +371,7 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies properties to exclude from the bean class.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#excludeProperties()"><code>BeanType.excludeProperties()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanPropertiesExcludes(java.lang.Class,java.lang.String)"><code>MarshallingContext.Builder.beanPropertiesExcludes(Class, String)</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanPropertiesExcludes(java.lang.String,java.lang.String)"><code>MarshallingContext.Builder.beanPropertiesExcludes(String, String)</code></a>
@@ -396,7 +395,7 @@ loadScripts(document, 'script');</script>
  <p>
  When enabled, fluent setters are detected on beans.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#findFluentSetters()"><code>BeanType.findFluentSetters()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#findFluentSetters()"><code>MarshallingContext.Builder.findFluentSetters()</code></a>
  </ul></div>
@@ -444,7 +443,7 @@ loadScripts(document, 'script');</script>
  <p>
  The interceptor to use for intercepting and altering getter and setter calls.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#interceptor()"><code>Marshalled.interceptor()</code></a>
    <li class='jc'><a href="../commons/bean/BeanInterceptor.html" title="class in org.apache.juneau.commons.bean"><code>BeanInterceptor</code></a>
  </ul></div>
@@ -483,7 +482,7 @@ loadScripts(document, 'script');</script>
  Identifies a class to be used as the interface class for this and all subclasses.
  When specified, only the list of properties defined on the interface class will be used during serialization.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#interfaceClass()"><code>BeanType.interfaceClass()</code></a>
  </ul></div>
 <dl class="notes">
@@ -519,7 +518,7 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies the set and order of names of properties associated with the bean class.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#properties()"><code>BeanType.properties()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanProperties(java.lang.Class,java.lang.String)"><code>MarshallingContext.Builder.beanProperties(Class, String)</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanProperties(java.lang.String,java.lang.String)"><code>MarshallingContext.Builder.beanProperties(String, String)</code></a>
@@ -543,7 +542,7 @@ loadScripts(document, 'script');</script>
  <p>
  The class to use for calculating bean property names.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#propertyNamer()"><code>BeanType.propertyNamer()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#propertyNamer(java.lang.Class)"><code>MarshallingContext.Builder.propertyNamer(Class)</code></a>
    <li class='jc'><a href="../commons/bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a>
@@ -582,7 +581,7 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies one or more properties on a bean that are read-only despite having valid getters.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#readOnlyProperties()"><code>BeanType.readOnlyProperties()</code></a>
    <li class='ja'><a href="../commons/bean/BeanProp.html#ro()"><code>BeanProp.ro()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanPropertiesReadOnly(java.lang.Class,java.lang.String)"><code>MarshallingContext.Builder.beanPropertiesReadOnly(Class, String)</code></a>
@@ -604,7 +603,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledFilter.Builder.html" title="class in org.apache.juneau.marshall">MarshalledFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledFilter.Builder.html#line-468">unsortedProperties</a></span>()</div>
 <div class="block">Opt out of alphabetical property sorting for this specific bean.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#unsorted()"><code>BeanType.unsorted()</code></a>
    <li class='jf'><a href="MarshallingContext.Builder.html#unsortedProperties()"><code>MarshallingContext.Builder.unsortedProperties()</code></a>
  </ul></div>
@@ -620,7 +619,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledFilter.Builder.html" title="class in org.apache.juneau.marshall">MarshalledFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledFilter.Builder.html#line-486">unsortedProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Opt out of alphabetical property sorting for this specific bean.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#unsorted()"><code>BeanType.unsorted()</code></a>
    <li class='jf'><a href="MarshallingContext.Builder.html#unsortedProperties()"><code>MarshallingContext.Builder.unsortedProperties()</code></a>
  </ul></div>
@@ -643,7 +642,7 @@ loadScripts(document, 'script');</script>
  Identifies a stop class for this class and all subclasses.
  Identical in purpose to the stop class specified by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/beans/Introspector.html#getBeanInfo(java.lang.Class,java.lang.Class)" title="class or interface in java.beans" class="external-link"><code>Introspector.getBeanInfo(Class, Class)</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#stopClass()"><code>BeanType.stopClass()</code></a>
  </ul></div>
 <dl class="notes">
@@ -679,7 +678,7 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies the dictionary type name for this bean.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#typeName()"><code>Marshalled.typeName()</code></a>
  </ul></div>
 <dl class="notes">
@@ -699,7 +698,7 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies one or more properties on a bean that are write-only despite having valid setters.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../commons/bean/BeanType.html#writeOnlyProperties()"><code>BeanType.writeOnlyProperties()</code></a>
    <li class='ja'><a href="../commons/bean/BeanProp.html#wo()"><code>BeanProp.wo()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanPropertiesWriteOnly(java.lang.Class,java.lang.String)"><code>MarshallingContext.Builder.beanPropertiesWriteOnly(Class, String)</code></a>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,13 +95,13 @@ implements freemarker.template.TemplateDirectiveModel</span></div>
  theme name are all rejected (fail closed). There is deliberately <b>no</b> <code>default=</code>: if the tag is
  present, that <i>is</i> the theme.
 
- <h5 class='section'>Nameless form:</h5>
+ <h2 class='section'>Nameless form:</h2>
  <p>
  Without <code>name=</code>, the directive inherits the page theme as its seed: <code>&lt;@console theme="…"&gt;</code> if given,
  else the <a href="PageSpec.html#theme(java.lang.String)"><code>PageSpec.theme(String)</code></a> value, else <code>open</code>. It never conflicts with a page-spec theme, so
  <code>&lt;@theme&gt;&lt;@token …/&gt;&lt;/@theme&gt;</code> customises whatever theme the page already selected.
 
- <h5 class='section'>Custom tokens:</h5>
+ <h2 class='section'>Custom tokens:</h2>
  <p>
  The named stock palette is the <b>seed</b>: this directive opens a <code>ThemeBuildContext</code> holding a
  <code>Theme.Builder</code> copied from the named stock palette, renders the nested body so each <code>&lt;@token&gt;</code> folds
@@ -118,7 +117,7 @@ implements freemarker.template.TemplateDirectiveModel</span></div>
  whose target is not a light-theme token or alias, a <a href="../Theme.html#OPEN"><code>Theme.OPEN</code></a> token, a chrome role alias or another dark
  declaration is rejected.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bftl'>
    &lt;#-- Stock palette only: links juneau-theme-light-brown.css, no inline block. --&gt;
    &lt;@theme name="light-brown"/&gt;
@@ -127,7 +126,7 @@ implements freemarker.template.TemplateDirectiveModel</span></div>
    &lt;@theme name="light-brown"&gt;&lt;@token name="--jc-accent-selected" value="#8a5a1a"/&gt;&lt;/@theme&gt;
  </p>
 
- <h5 class='section'>How the link lands:</h5>
+ <h2 class='section'>How the link lands:</h2>
  <p>
  <code>&lt;@theme&gt;</code> must be nested inside <code>&lt;@console&gt;</code>; it records the resolved stock-theme URL (via
  <a href="../ConsoleChromeMixin.html#themeAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)"><code>ConsoleChromeMixin.themeAssetUrl(org.apache.juneau.rest.server.RestRequest, String)</code></a>) and the optional

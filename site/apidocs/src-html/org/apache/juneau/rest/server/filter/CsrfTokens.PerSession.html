@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> *       the &lt;c&gt;Origin&lt;/c&gt; check.</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Masking&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;Masking&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * The value written into a page is never the token itself.  Each embed gets a fresh 32-byte pad, and the</span>
 <span class="source-line-no">047</span><span id="line-47"> * published value is &lt;c&gt;hex(pad || (pad XOR token))&lt;/c&gt;: 128 lower-case hex characters.  The secret therefore</span>
@@ -62,20 +62,20 @@
 <span class="source-line-no">049</span><span id="line-49"> * compression oracle (BREACH).  That is &lt;b&gt;all&lt;/b&gt; masking buys: anyone who sees the wire value can unmask it, so</span>
 <span class="source-line-no">050</span><span id="line-50"> * the token header must never be logged, and masking gives no protection to logs, proxies or the browser.</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;Verification&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;Verification&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * A presented value must be exactly 128 lower-case hex characters; anything else is refused before the secret is</span>
 <span class="source-line-no">055</span><span id="line-55"> * touched.  It is then unmasked and compared with {@link MessageDigest#isEqual(byte[], byte[])} against the</span>
 <span class="source-line-no">056</span><span id="line-56"> * expected 32 bytes.  A request with no session is compared against the HMAC of a fixed placeholder id that no</span>
 <span class="source-line-no">057</span><span id="line-57"> * container can issue, so "no session" and "wrong token" do the same work and give the same answer.</span>
 <span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;Session ids&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h2 class='section'&gt;Session ids&lt;/h2&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * A per-session token changes whenever the session id changes, and this class never changes it.  An application</span>
 <span class="source-line-no">062</span><span id="line-62"> * must call {@link HttpServletRequest#changeSessionId()} on login; otherwise a token seen before login stays</span>
 <span class="source-line-no">063</span><span id="line-63"> * valid after it.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;jc&gt;// Default: one token per session, keyed by 32 fresh random bytes for this process.&lt;/jc&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    CsrfTokens &lt;jv&gt;tokens&lt;/jv&gt; = CsrfTokens.&lt;jsm&gt;perSession&lt;/jsm&gt;();</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    CsrfTokens &lt;jv&gt;clustered&lt;/jv&gt; = CsrfTokens.&lt;jsm&gt;perSession&lt;/jsm&gt;().key(&lt;jv&gt;keyBytesFromSecretStore&lt;/jv&gt;);</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link SynchronizerToken}</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;/ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="block">The single public parser for the <code>$</code>-search language (design §5.1).  Engines call it; a <a href="BeanQuery.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuery</code></a>
  itself carries only the raw strings.
 
- <h5 class='section'>Grammar</h5>
+ <h2 class='section'>Grammar</h2>
  <p>
  A column's expression is one of:
  <ul>
@@ -99,26 +98,26 @@ loadScripts(document, 'script');</script>
       <code>$not</code> combine within one column.
  </ul>
 
- <h5 class='section'>Literal dollar</h5>
+ <h2 class='section'>Literal dollar</h2>
  <p>
  <code>$$</code> is a literal <code>$</code> everywhere.  A token that starts with <code>$$</code> is always a pattern (never an
  operator), and every <code>$$</code> inside a literal decodes to a single <code>$</code>.  So <code>$$eq(x)</code> is the literal
  text <code>$eq(x)</code>, while <code>$eq(x)</code> is the operator.
 
- <h5 class='section'>Quoting</h5>
+ <h2 class='section'>Quoting</h2>
  <p>
  A quoted literal argument (design §5.1) may contain its own delimiter by doubling it &mdash; <code>""</code> inside a
  double-quoted value, or <code>''</code> inside a single-quoted value, decodes to one literal quote character of that
  same kind.  So <code>$eq("a""b")</code> is the literal text <code>a"b</code>.  This doubling decode is independent of, and
  composes with, the <code>$$</code> &rarr; <code>$</code> decoding above.
 
- <h5 class='section'>Errors</h5>
+ <h2 class='section'>Errors</h2>
  <p>
  An unknown <code>$name(...)</code>, a malformed expression (unclosed/unbalanced parentheses, junk after the close paren,
  a stray comma, a wrong argument count), or an empty expression throws <a href="BeanQuerySyntaxException.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuerySyntaxException</code></a>.  There is no
  "incomplete draft" state on the server: a request-facing adapter catches the exception and surfaces the message.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>try</jk> {
       SearchExpression <jv>node</jv> = SearchExpressionParser.<jsm>parse</jsm>(<js>"$gt(10)"</js>, SearchOperatorSet.<jsm>standard</jsm>());

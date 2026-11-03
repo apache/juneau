@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,7 +85,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cp/FileFinder.html#line-90">FileFinder</a></span></div>
 <div class="block">Utility class for finding regular or localized files on the classpath and file system.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Constructor a file source that looks for files in the "files" working directory, then in the
    // package "foo.bar", then in the package "foo.bar.files", then in the package "files".</jc>
@@ -121,7 +120,7 @@ loadScripts(document, 'script');</script>
  The default implementation of this interface is <a href="BasicFileFinder.html" title="class in org.apache.juneau.marshall.cp"><code>BasicFileFinder</code></a>.
  To instantiate subclasses, create a subclass-specific builder and pass it to the subclass constructor.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
       <jk>public</jk> MyFileFinder(FileFinder.Builder <jv>builder</jv>) {

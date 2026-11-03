@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used primarily for specifying bean configuration properties on REST classes and methods.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  </ul></div>
 </section>
@@ -178,7 +177,7 @@ loadScripts(document, 'script');</script>
  <p>
  The description is the result of calling <a href="../../commons/reflect/ClassInfo.html#getName()"><code>ClassInfo.getName()</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is a comma-delimited list of any of the following values:
       <ul class='doctree'>
@@ -196,7 +195,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#addDescriptionsTo(org.apache.juneau.marshall.jsonschema.TypeCategory...)"><code>JsonSchemaGenerator.Builder.addDescriptionsTo(TypeCategory...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -225,7 +224,7 @@ loadScripts(document, 'script');</script>
    <li class='ja'><a href="../Marshalled.html#example()"><code>Marshalled(example)</code></a>
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is a comma-delimited list of any of the following values:
       <ul class='doctree'>
@@ -243,7 +242,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#addDescriptionsTo(org.apache.juneau.marshall.jsonschema.TypeCategory...)"><code>JsonSchemaGenerator.Builder.addDescriptionsTo(TypeCategory...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -270,12 +269,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#allowNestedDescriptions()"><code>JsonSchemaGenerator.Builder.allowNestedDescriptions()</code></a>
  </ul></div>
 <dl class="notes">
@@ -302,12 +301,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#allowNestedExamples()"><code>JsonSchemaGenerator.Builder.allowNestedExamples()</code></a>
  </ul></div>
 <dl class="notes">
@@ -332,12 +331,12 @@ loadScripts(document, 'script');</script>
  <p>
  Used primarily for defining common definition sections for beans in Swagger JSON.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This setting is ignored if <a href="JsonSchemaGenerator.Builder.html#useBeanDefs()"><code>JsonSchemaGenerator.Builder.useBeanDefs()</code></a> is not enabled.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#beanDefMapper(java.lang.Class)"><code>JsonSchemaGenerator.Builder.beanDefMapper(Class)</code></a>
  </ul></div>
 <dl class="notes">
@@ -380,14 +379,14 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='warn'>
       Checking for recursion can cause a small performance penalty.
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="../MarshallingTraverseContext.Builder.html#detectRecursions()"><code>MarshallingTraverseContext.Builder#detectRecursions()</code></a>
  </ul></div>
 <dl class="notes">
@@ -419,12 +418,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="../MarshallingTraverseContext.Builder.html#ignoreRecursions()"><code>MarshallingTraverseContext.Builder#ignoreRecursions()</code></a>
  </ul></div>
 <dl class="notes">
@@ -447,14 +446,14 @@ loadScripts(document, 'script');</script>
  Defines class name patterns that should be ignored when generating schema definitions in the generated
  Swagger documentation.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: Comma-delimited list of patterns
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#ignoreTypes(java.lang.String...)"><code>JsonSchemaGenerator.Builder.ignoreTypes(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -477,7 +476,7 @@ loadScripts(document, 'script');</script>
  The initial indentation level at the root.
  <br>Useful when constructing document fragments that need to be indented at a certain level.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: integer
    <li class='note'>
@@ -486,7 +485,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="../MarshallingTraverseContext.Builder.html#initialDepth(int)"><code>MarshallingTraverseContext.Builder#initialDepth(int)</code></a>
  </ul></div>
 <dl class="notes">
@@ -509,7 +508,7 @@ loadScripts(document, 'script');</script>
  Abort traversal if specified depth is reached in the POJO tree.
  <br>If this depth is exceeded, an exception is thrown.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: integer
    <li class='note'>
@@ -518,7 +517,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="../MarshallingTraverseContext.Builder.html#maxDepth(int)"><code>MarshallingTraverseContext.Builder#maxDepth(int)</code></a>
  </ul></div>
 <dl class="notes">
@@ -575,12 +574,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="JsonSchemaGenerator.Builder.html#useBeanDefs()"><code>JsonSchemaGenerator.Builder.useBeanDefs()</code></a>
  </ul></div>
 <dl class="notes">

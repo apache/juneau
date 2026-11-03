@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
       <a href="../../Rest.html#responseProcessors()"><code>@Rest(responseProcessors=...)</code></a> declaration.
  </ol>
 
- <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
+ <h2 class='section'>Auto-wiring the renderer into the host's own endpoints:</h2>
 
  <p>
  A bare <code>@Rest(mixins=JspMixin.class)</code> is enough &mdash; a host whose own <code>@RestOp</code> method returns
@@ -128,7 +127,7 @@ loadScripts(document, 'script');</script>
  <code>SerializedPojoProcessor</code> in every case, so the <a href="JspView.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspView</code></a> bean is dispatched to the JSP engine
  rather than bean-serialized.
 
- <h5 class='figure'>Composition example (microservice):</h5>
+ <h2 class='figure'>Composition example (microservice):</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
@@ -147,7 +146,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Configurable mount path:</h5>
+ <h2 class='section'>Configurable mount path:</h2>
 
  <p>
  The default mount <code>/jsp/*</code> can be overridden via the SVL variable
@@ -161,7 +160,7 @@ loadScripts(document, 'script');</script>
  Override accepts bare token (<code>jsp</code>), leading slash (<code>/jsp</code>), trailing slash
  (<code>jsp/</code>), or wildcard suffix (<code>/jsp/*</code>) &mdash; all resolve to the same mount.
 
- <h5 class='section'>Mixin-only deployment:</h5>
+ <h2 class='section'>Mixin-only deployment:</h2>
 
  <p>
  This resource is designed for composition via <code>@Rest(mixins=...)</code>. The mount path is
@@ -169,7 +168,7 @@ loadScripts(document, 'script');</script>
  <a href="#render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)"><code>render(java.lang.String, org.apache.juneau.rest.server.RestRequest, org.apache.juneau.rest.server.RestResponse)</code></a>; a class-level <code>@Rest(paths=...)</code> declaration would be silently
  ignored under the mixin pattern (see <a href="../../Rest.html#paths()"><code>@Rest(paths)</code></a> Javadoc).
 
- <h5 class='section'>Engine-agnostic packaging:</h5>
+ <h2 class='section'>Engine-agnostic packaging:</h2>
 
  <p>
  The <code>juneau-rest-server-view-jsp</code> module ships <b>only</b> the JSP API + JSTL impl in
@@ -188,7 +187,7 @@ loadScripts(document, 'script');</script>
  When no engine is on the classpath, the renderer surfaces
  <a href="JspViewRenderer.html#NO_ENGINE_DIAGNOSTIC"><code>JspViewRenderer.NO_ENGINE_DIAGNOSTIC</code></a> naming the missing dependency.
 
- <h5 class='section'>Spring Boot fat-jar caveat:</h5>
+ <h2 class='section'>Spring Boot fat-jar caveat:</h2>
 
  <p>
  Spring Boot's repackaged fat jar does not place <code>.jsp</code> files where the embedded JSP
@@ -197,7 +196,7 @@ loadScripts(document, 'script');</script>
  prefix is the Servlet 3.0 convention Spring Boot honors for embedded servlets). Both
  <code>mvn spring-boot:run</code> and the deployed jar pick the files up this way.
 
- <h5 class='section'>Multiple base paths:</h5>
+ <h2 class='section'>Multiple base paths:</h2>
 
  <p>
  A host with <code>/views/</code> JSPs and <code>/admin/views/</code> JSPs registers two
@@ -206,13 +205,13 @@ loadScripts(document, 'script');</script>
  <code>JspMixin_MultiBasePath_Test</code> test in <code>juneau-integration-tests</code> for the canonical
  pattern.
 
- <h5 class='section'>OpenAPI surface:</h5>
+ <h2 class='section'>OpenAPI surface:</h2>
 
  <p>
  The greedy <code>/*</code> handler is not API-meaningful and is excluded from generated
  Swagger / OpenAPI specs via <a href="../../OpSwagger.html#ignore()"><code>@OpSwagger(ignore=true)</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="JspView.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspView</code></a>
    <li class='jc'><a href="JspViewRenderer.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspViewRenderer</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>

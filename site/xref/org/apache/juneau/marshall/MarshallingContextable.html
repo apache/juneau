@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * This abstraction exists to allow different kinds of subclasses (e.g. JsonSerilalizer, XmlParser...) to share bean context objects since</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * bean context objects are heavyweight objects that cache metadata about encountered beans.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class is thread safe and reusable.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> */</em>
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">		 * will not be interpreted as a bean class and be serialized as a string.</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">		 * Use this setting to reduce the visibility requirement.</em>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a protected class and one field.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;protected class&lt;/jk&gt; MyBean {</em>
@@ -142,13 +142,13 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">		 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link Marshalled @Marshalled} annotation can be used on a non-public bean class to override this setting.</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">		 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beanClassVisibility()}</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">		 * This setting affects the logic for finding no-arg constructors for bean.  Normally, only &lt;jk&gt;public&lt;/jk&gt; no-arg</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">		 * constructors are used.  Use this setting if you want to reduce the visibility requirement.</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a protected constructor and one field.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -193,12 +193,12 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'bar'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanCtor @BeanCtor} annotation can also be used to expose a non-public constructor.</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beanConstructorVisibility()}</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">		 *</em>
@@ -297,7 +297,7 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;Any array or collection of the objects above.</em>
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">		 * 	&lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</em>
@@ -347,7 +347,7 @@
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">		 * 	Body &lt;jv&gt;body&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"&amp;lt;body&amp;gt;&amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;foo&amp;lt;/li&amp;gt;&amp;lt;li&amp;gt;bar&amp;lt;/li&amp;gt;&amp;lt;/ul&amp;gt;"&lt;/js&gt;, Body.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link Marshalled#dictionary()}</em>
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledProp#dictionary()}</em>
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledConfig#dictionary()}</em>
@@ -375,7 +375,7 @@
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">		 * This affects which fields on a bean class are considered bean properties.  Normally only &lt;jk&gt;public&lt;/jk&gt; fields are considered.</em>
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">		 * Use this setting if you want to reduce the visibility requirement.</em>
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a protected field.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -403,12 +403,12 @@
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanProp @BeanProp} annotation can also be used to expose a non-public field.</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beanFieldVisibility()}</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">		 *</em>
@@ -429,7 +429,7 @@
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">		 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Interceptor that strips out sensitive information.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; AddressInterceptor &lt;jk&gt;extends&lt;/jk&gt; BeanInterceptor&amp;lt;Address&amp;gt; {</em>
@@ -463,7 +463,7 @@
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; Address());</em>
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jc'&gt;{@link BeanInterceptor}</em>
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link Marshalled#interceptor() @Marshalled(interceptor)}</em>
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -490,7 +490,7 @@
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">		 * Disabled by default because it introduces a slight performance penalty during serialization.</em>
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a context that creates BeanMaps with normal put() behavior.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">		 * 	MarshallingContext &lt;jv&gt;context&lt;/jv&gt; = MarshallingContext</em>
@@ -503,7 +503,7 @@
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">		 * 	Object &lt;jv&gt;oldValue&lt;/jv&gt; = &lt;jv&gt;beanMap&lt;/jv&gt;.put(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"baz"&lt;/js&gt;);  &lt;jc&gt;// oldValue == "bar"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beanMapPutReturnsOldValue()}</em>
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanMapPutReturnsOldValue()}</em>
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -525,7 +525,7 @@
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">		 * This affects which methods are detected as getters and setters on a bean class. Normally only &lt;jk&gt;public&lt;/jk&gt; getters and setters are considered.</em>
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">		 * Use this setting if you want to reduce the visibility requirement.</em>
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a protected getter.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -543,12 +543,12 @@
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanProp @BeanProp} annotation can also be used to expose a non-public method.</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.</em>
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beanMethodVisibility()}</em>
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">		 *</em>
@@ -584,7 +584,7 @@
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -610,7 +610,7 @@
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClass&lt;/jv&gt;).properties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link BeanType#properties()}/{@link BeanType#p()} - On an annotation on the bean class itself.</em>
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">		 *</em>
@@ -645,7 +645,7 @@
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -671,7 +671,7 @@
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;key&lt;/jv&gt;).properties(&lt;jv&gt;value&lt;/jv&gt;.toString()).build());</em>
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#properties()} / {@link BeanType#p()}- On an annotation on the bean class itself.</em>
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">		 *</em>
@@ -708,7 +708,7 @@
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -734,7 +734,7 @@
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClassName&lt;/jv&gt;).properties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#properties()} / {@link BeanType#p()} - On an annotation on the bean class itself.</em>
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">		 *</em>
@@ -764,7 +764,7 @@
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -790,7 +790,7 @@
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClass&lt;/jv&gt;).excludeProperties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#excludeProperties()} / {@link BeanType#xp()}</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">		 *</em>
@@ -817,7 +817,7 @@
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -843,7 +843,7 @@
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;key&lt;/jv&gt;).excludeProperties(&lt;jv&gt;value&lt;/jv&gt;.toString()).build());</em>
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#excludeProperties()} / {@link BeanType#xp()}</em>
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">		 *</em>
@@ -872,7 +872,7 @@
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -898,7 +898,7 @@
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClassName&lt;/jv&gt;).excludeProperties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#excludeProperties()} / {@link BeanType#xp()}</em>
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">		 *</em>
@@ -924,7 +924,7 @@
 <a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties</em>
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">		 * for both serializers and parsers.</em>
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -957,7 +957,7 @@
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClass&lt;/jv&gt;).readOnlyProperties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}</em>
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">		 *</em>
@@ -980,7 +980,7 @@
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties</em>
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">		 * for both serializers and parsers.</em>
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1013,7 +1013,7 @@
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;key&lt;/jv&gt;).readOnlyProperties(&lt;jv&gt;value&lt;/jv&gt;.toString()).build());</em>
 <a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}</em>
 <a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1038,7 +1038,7 @@
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties</em>
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">		 * for both serializers and parsers.</em>
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1071,7 +1071,7 @@
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClassName&lt;/jv&gt;).readOnlyProperties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}</em>
 <a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1097,7 +1097,7 @@
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties</em>
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> <em class="jxr_javadoccomment">		 * for both serializers and parsers.</em>
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1129,7 +1129,7 @@
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClass&lt;/jv&gt;).writeOnlyProperties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}</em>
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1152,7 +1152,7 @@
 <a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> <em class="jxr_javadoccomment">		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties</em>
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> <em class="jxr_javadoccomment">		 * for both serializers and parsers.</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1184,7 +1184,7 @@
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;key&lt;/jv&gt;).writeOnlyProperties(&lt;jv&gt;value&lt;/jv&gt;.toString()).build());</em>
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}</em>
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1209,7 +1209,7 @@
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties</em>
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">		 * for both serializers and parsers.</em>
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with 3 properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1241,7 +1241,7 @@
 <a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;beanClassName&lt;/jv&gt;).writeOnlyProperties(&lt;jv&gt;properties&lt;/jv&gt;).build());</em>
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jma'&gt;{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}</em>
 <a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1265,7 +1265,7 @@
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> <em class="jxr_javadoccomment">		 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.</em>
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> <em class="jxr_javadoccomment">		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.</em>
 <a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean without a no-arg constructor.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1294,12 +1294,12 @@
 <a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link Marshalled @Marshalled} annotation can be used on a bean class to override this setting.</em>
 <a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.</em>
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beansRequireDefaultConstructor()}</em>
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#beansRequireDefaultConstructor()}</em>
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1318,7 +1318,7 @@
 <a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> <em class="jxr_javadoccomment">		 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.</em>
 <a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> <em class="jxr_javadoccomment">		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.</em>
 <a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean without a Serializable interface.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1342,12 +1342,12 @@
 <a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link Marshalled @Marshalled} annotation can be used on a bean class to override this setting.</em>
 <a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.</em>
 <a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beansRequireSerializable()}</em>
 <a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#beansRequireSerializable()}</em>
 <a class="jxr_linenumber" name="L1345" href="#L1345">1345</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1365,7 +1365,7 @@
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> <em class="jxr_javadoccomment">		 * When enabled, ignore read-only properties (properties with getters but not setters).</em>
 <a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean without a Serializable interface.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1388,12 +1388,12 @@
 <a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanProp @BeanProp} annotation can be used on the getter to override this setting.</em>
 <a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.</em>
 <a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#beansRequireSettersForGetters()}</em>
 <a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#beansRequireSettersForGetters()}</em>
 <a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1422,7 +1422,7 @@
 <a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">		 * This is identical to {@link #beanDictionary(Class...)}, but specifies a dictionary within the context of</em>
 <a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">		 * a single class as opposed to globally.</em>
 <a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> <em class="jxr_javadoccomment">		 * 	&lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</em>
@@ -1448,7 +1448,7 @@
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">		 * This is functionally equivalent to the {@link Marshalled#dictionary()} annotation.</em>
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link Marshalled#dictionary()}</em>
 <a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</em>
 <a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1476,7 +1476,7 @@
 <a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> <em class="jxr_javadoccomment">		 * The {@link Marshalled @Marshalled} annotation can be used on a class to override this setting when &lt;jk&gt;true&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with no properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1492,12 +1492,12 @@
 <a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link Marshalled @Marshalled} annotation can be used on the class to force it to be recognized as a bean class</em>
 <a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">		 * 		even if it has no properties.</em>
 <a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#disableBeansRequireSomeProperties()}</em>
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#disableBeansRequireSomeProperties()}</em>
 <a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1516,7 +1516,7 @@
 <a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> <em class="jxr_javadoccomment">		 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.</em>
 <a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> <em class="jxr_javadoccomment">		 * Otherwise, it will be silently ignored.</em>
 <a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a property with a getter but not a setter.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1535,11 +1535,11 @@
 <a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'bar'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.</em>
 <a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#disableIgnoreMissingSetters()}</em>
 <a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#disableIgnoreMissingSetters()}</em>
 <a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1557,7 +1557,7 @@
 <a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> <em class="jxr_javadoccomment">		 * When enabled, methods and fields marked as &lt;jk&gt;transient&lt;/jk&gt; will not be ignored as bean properties.</em>
 <a class="jxr_linenumber" name="L1551" href="#L1551">1551</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1552" href="#L1552">1552</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1553" href="#L1553">1553</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1554" href="#L1554">1554</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a transient field.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1555" href="#L1555">1555</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1574,11 +1574,11 @@
 <a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanProp @BeanProp} annotation can also be used on transient fields to keep them from being ignored.</em>
 <a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1573" href="#L1573">1573</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1574" href="#L1574">1574</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#disableIgnoreTransientFields()}</em>
 <a class="jxr_linenumber" name="L1575" href="#L1575">1575</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#disableIgnoreTransientFields()}</em>
 <a class="jxr_linenumber" name="L1576" href="#L1576">1576</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1597,7 +1597,7 @@
 <a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> <em class="jxr_javadoccomment">		 * When enabled, trying to set a &lt;jk&gt;null&lt;/jk&gt; value on a non-existent bean property will throw a {@link BeanRuntimeException}.</em>
 <a class="jxr_linenumber" name="L1590" href="#L1590">1590</a> <em class="jxr_javadoccomment">		 * Otherwise it will be silently ignored.</em>
 <a class="jxr_linenumber" name="L1591" href="#L1591">1591</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1592" href="#L1592">1592</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a single property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1614,7 +1614,7 @@
 <a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'foo',bar:null}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L1607" href="#L1607">1607</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1608" href="#L1608">1608</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1609" href="#L1609">1609</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}</em>
 <a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()}</em>
 <a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1634,7 +1634,7 @@
 <a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> <em class="jxr_javadoccomment">		 * {@link InvocationHandler} if there is no other way of instantiating them.</em>
 <a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> <em class="jxr_javadoccomment">		 * Otherwise, throws a {@link BeanRuntimeException}.</em>
 <a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#disableInterfaceProxies()}</em>
 <a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#disableInterfaceProxies()}</em>
 <a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1661,7 +1661,7 @@
 <a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> <em class="jxr_javadoccomment">		 * This value can be overridden per call via {@link MarshallingSession.Builder#activeView(String)}.</em>
 <a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledProp#view()}</em>
 <a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#activeView(String)}</em>
 <a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingSession.Builder#activeView(String)}</em>
@@ -1684,7 +1684,7 @@
 <a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> <em class="jxr_javadoccomment">		 * every active view.  Calling this method reverses the policy: untagged properties are &lt;em&gt;excluded&lt;/em&gt;</em>
 <a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> <em class="jxr_javadoccomment">		 * when any active view is set.</em>
 <a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledProp#view()}</em>
 <a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#disableDefaultViewInclusion()}</em>
 <a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1709,7 +1709,7 @@
 <a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> <em class="jxr_javadoccomment">		 * Setting applies to specified class and all subclasses.</em>
 <a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
@@ -1732,7 +1732,7 @@
 <a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;A static method with name &lt;c&gt;example&lt;/c&gt; with no arguments or one {@link MarshallingSession} argument.</em>
 <a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link Marshalled#example()}</em>
 <a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1757,7 +1757,7 @@
 <a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> <em class="jxr_javadoccomment">		 * Examples are used in cases such as POJO examples in Swagger documents.</em>
 <a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
@@ -1772,7 +1772,7 @@
 <a class="jxr_linenumber" name="L1764" href="#L1764">1764</a> <em class="jxr_javadoccomment">		 * 		&lt;jv&gt;builder&lt;/jv&gt;.annotations(MarshalledAnnotation.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;pojoClass&lt;/jv&gt;).example(Json5.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.toString(&lt;jv&gt;object&lt;/jv&gt;)).build())</em>
 <a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;Using this method assumes the serialized form of the object is the same as that produced</em>
 <a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> <em class="jxr_javadoccomment">		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.</em>
 <a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1814,7 +1814,7 @@
 <a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;Return the bean itself.</em>
 <a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1811" href="#L1811">1811</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a fluent setter.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1831,12 +1831,12 @@
 <a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'bar'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1827" href="#L1827">1827</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanProp @BeanProp} annotation can also be used on methods to individually identify them as fluent setters.</em>
 <a class="jxr_linenumber" name="L1828" href="#L1828">1828</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanType#findFluentSetters() @BeanType(findFluentSetters=true)} annotation can also be used on classes to specify to look for fluent setters.</em>
 <a class="jxr_linenumber" name="L1829" href="#L1829">1829</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1830" href="#L1830">1830</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1831" href="#L1831">1831</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1832" href="#L1832">1832</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanType#findFluentSetters()}</em>
 <a class="jxr_linenumber" name="L1833" href="#L1833">1833</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#findFluentSetters()}</em>
 <a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#findFluentSetters()}</em>
@@ -1855,7 +1855,7 @@
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> <em class="jxr_javadoccomment">		 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.</em>
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a fluent setter.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1872,11 +1872,11 @@
 <a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'bar'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;This method is functionally equivalent to using the {@link BeanType#findFluentSetters()} annotation.</em>
 <a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanType#findFluentSetters()}</em>
 <a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#findFluentSetters()}</em>
 <a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1908,7 +1908,7 @@
 <a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> <em class="jxr_javadoccomment">		 * When enabled, errors thrown when calling bean getter methods will silently be ignored.</em>
 <a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> <em class="jxr_javadoccomment">		 * Otherwise, a {@code BeanRuntimeException} is thrown.</em>
 <a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a property that throws an exception.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1927,7 +1927,7 @@
 <a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#ignoreInvocationExceptionsOnGetters()}</em>
 <a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()}</em>
 <a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1946,7 +1946,7 @@
 <a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> <em class="jxr_javadoccomment">		 * When enabled, errors thrown when calling bean setter methods will silently be ignored.</em>
 <a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> <em class="jxr_javadoccomment">		 * Otherwise, a {@code BeanRuntimeException} is thrown.</em>
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a property that throws an exception.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -1965,7 +1965,7 @@
 <a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'bar'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#ignoreInvocationExceptionsOnSetters()}</em>
 <a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()}</em>
 <a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -1984,7 +1984,7 @@
 <a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">		 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.</em>
 <a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">		 * Otherwise, a {@code BeanRuntimeException} is thrown.</em>
 <a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a single property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -2001,7 +2001,7 @@
 <a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"{foo:'foo',bar:'bar'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#ignoreUnknownBeanProperties()}</em>
 <a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#ignoreUnknownBeanProperties()}</em>
 <a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -2031,7 +2031,7 @@
 <a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> <em class="jxr_javadoccomment">		 * If {@code juneau-bean-jsonschema} is not on the classpath, this flag becomes a silent no-op.</em>
 <a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a length-constrained property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -2045,7 +2045,7 @@
 <a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> <em class="jxr_javadoccomment">		 * 	&lt;jv&gt;p&lt;/jv&gt;.read(&lt;js&gt;"{name:'a'}"&lt;/js&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// throws ParseException - too short&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#validateSchema()}</em>
 <a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#validateSchema()}</em>
 <a class="jxr_linenumber" name="L2043" href="#L2043">2043</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -2076,7 +2076,7 @@
 <a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> <em class="jxr_javadoccomment">		 * When enabled, unknown enum values are set to &lt;jk&gt;null&lt;/jk&gt; instead of throwing a parse exception.</em>
 <a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#ignoreUnknownEnumValues()}</em>
 <a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#ignoreUnknownEnumValues()}</em>
 <a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -2096,7 +2096,7 @@
 <a class="jxr_linenumber" name="L2088" href="#L2088">2088</a> <em class="jxr_javadoccomment">		 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a</em>
 <a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> <em class="jxr_javadoccomment">		 * parse).</em>
 <a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean interface.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public interface&lt;/jk&gt; MyBean {</em>
@@ -2137,7 +2137,7 @@
 <a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> <em class="jxr_javadoccomment">		 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a</em>
 <a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> <em class="jxr_javadoccomment">		 * parse).</em>
 <a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a single property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public interface&lt;/jk&gt; MyBean {</em>
@@ -2201,7 +2201,7 @@
 <a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> <em class="jxr_javadoccomment">		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set</em>
 <a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> <em class="jxr_javadoccomment">		 * individually on the child classes.</em>
 <a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.</em>
 <a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2249,7 +2249,7 @@
 <a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> <em class="jxr_javadoccomment">		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set</em>
 <a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> <em class="jxr_javadoccomment">		 * individually on the child classes.</em>
 <a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.</em>
 <a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2273,7 +2273,7 @@
 <a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> <em class="jxr_javadoccomment">		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and</em>
 <a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> <em class="jxr_javadoccomment">		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.</em>
 <a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Define a POJO swap that skips serializing beans if we're in the UK.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBeanSwap &lt;jk&gt;extends&lt;/jk&gt; StringSwap&amp;lt;MyBean&amp;gt; {</em>
@@ -2293,7 +2293,7 @@
 <a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledConfig#locale()}</em>
 <a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#locale(Locale)}</em>
 <a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingSession.Builder#locale(Locale)}</em>
@@ -2318,7 +2318,7 @@
 <a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> <em class="jxr_javadoccomment">		 * and &lt;js&gt;"application/json+foo"&lt;/js&gt; slightly differently even though they're both being handled by the same JSON</em>
 <a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> <em class="jxr_javadoccomment">		 * serializer or parser.</em>
 <a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Define a POJO swap that skips serializing beans if the media type is application/json.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBeanSwap &lt;jk&gt;extends&lt;/jk&gt; StringSwap&amp;lt;MyBean&amp;gt; {</em>
@@ -2337,7 +2337,7 @@
 <a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledConfig#mediaType()}</em>
 <a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#mediaType(MediaType)}</em>
 <a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingSession.Builder#mediaType(MediaType)}</em>
@@ -2366,7 +2366,7 @@
 <a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;Arrays and collections of classes.</em>
 <a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2362" href="#L2362">2362</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2363" href="#L2363">2363</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a single property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2364" href="#L2364">2364</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -2387,11 +2387,11 @@
 <a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.</em>
 <a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2385" href="#L2385">2385</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanIgnore}</em>
 <a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanConfig#notBeanClasses()}</em>
 <a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jf'&gt;{@link MarshallingContext.Builder#notBeanClasses()}</em>
@@ -2430,7 +2430,7 @@
 <a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;Arrays and collections of strings.</em>
 <a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2424" href="#L2424">2424</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2426" href="#L2426">2426</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2427" href="#L2427">2427</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a serializer that ignores beans in the specified packages.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
@@ -2439,7 +2439,7 @@
 <a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2435" href="#L2435">2435</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#notBeanPackages(String...)}</em>
 <a class="jxr_linenumber" name="L2436" href="#L2436">2436</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2437" href="#L2437">2437</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2466,7 +2466,7 @@
 <a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> <em class="jxr_javadoccomment">		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.</em>
 <a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2462" href="#L2462">2462</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2463" href="#L2463">2463</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a single property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2464" href="#L2464">2464</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -2484,7 +2484,7 @@
 <a class="jxr_linenumber" name="L2476" href="#L2476">2476</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L2477" href="#L2477">2477</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2478" href="#L2478">2478</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanType#propertyNamer() @BeanType(propertyNamer)}</em>
 <a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#propertyNamer(Class)}</em>
 <a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -2516,7 +2516,7 @@
 <a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;{@link PropertyNamerULC} - Dashed-upper-case names.</em>
 <a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// A bean with a single property.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {</em>
@@ -2534,7 +2534,7 @@
 <a class="jxr_linenumber" name="L2526" href="#L2526">2526</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L2527" href="#L2527">2527</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2528" href="#L2528">2528</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2529" href="#L2529">2529</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2529" href="#L2529">2529</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2530" href="#L2530">2530</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#propertyNamer(Class)}</em>
 <a class="jxr_linenumber" name="L2531" href="#L2531">2531</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2532" href="#L2532">2532</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2555,7 +2555,7 @@
 <a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> <em class="jxr_javadoccomment">		 * When called, bean properties will be serialized in declaration order instead of the default alphabetical order.</em>
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#unsortedProperties()}</em>
 <a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2569,7 +2569,7 @@
 <a class="jxr_linenumber" name="L2561" href="#L2561">2561</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L2562" href="#L2562">2562</a> <em class="jxr_javadoccomment">		 * Use record component order for {@link Record} beans.</em>
 <a class="jxr_linenumber" name="L2563" href="#L2563">2563</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2564" href="#L2564">2564</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2564" href="#L2564">2564</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2565" href="#L2565">2565</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#recordComponentOrder()}</em>
 <a class="jxr_linenumber" name="L2566" href="#L2566">2566</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2567" href="#L2567">2567</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2583,7 +2583,7 @@
 <a class="jxr_linenumber" name="L2575" href="#L2575">2575</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L2576" href="#L2576">2576</a> <em class="jxr_javadoccomment">		 * Opt specific bean classes out of alphabetical property sorting.</em>
 <a class="jxr_linenumber" name="L2577" href="#L2577">2577</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2579" href="#L2579">2579</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link BeanType#unsorted() @BeanType(unsorted)}</em>
 <a class="jxr_linenumber" name="L2580" href="#L2580">2580</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#unsortedProperties(Class...)}</em>
 <a class="jxr_linenumber" name="L2581" href="#L2581">2581</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -2609,7 +2609,7 @@
 <a class="jxr_linenumber" name="L2601" href="#L2601">2601</a> <em class="jxr_javadoccomment">		 * For example, in the following class hierarchy, instances of &lt;c&gt;C3&lt;/c&gt; will include property &lt;c&gt;p3&lt;/c&gt;,</em>
 <a class="jxr_linenumber" name="L2602" href="#L2602">2602</a> <em class="jxr_javadoccomment">		 * but not &lt;c&gt;p1&lt;/c&gt; or &lt;c&gt;p2&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L2603" href="#L2603">2603</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2604" href="#L2604">2604</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2604" href="#L2604">2604</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2605" href="#L2605">2605</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2606" href="#L2606">2606</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; C1 {</em>
 <a class="jxr_linenumber" name="L2607" href="#L2607">2607</a> <em class="jxr_javadoccomment">		 * 		&lt;jk&gt;public int&lt;/jk&gt; getP1();</em>
@@ -2648,7 +2648,7 @@
 <a class="jxr_linenumber" name="L2640" href="#L2640">2640</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L2641" href="#L2641">2641</a> <em class="jxr_javadoccomment">		 * A shortcut for defining a {@link FunctionalSwap}.</em>
 <a class="jxr_linenumber" name="L2642" href="#L2642">2642</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2643" href="#L2643">2643</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2643" href="#L2643">2643</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2644" href="#L2644">2644</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2645" href="#L2645">2645</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a serializer that performs a custom format for Date objects.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2646" href="#L2646">2646</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
@@ -2675,7 +2675,7 @@
 <a class="jxr_linenumber" name="L2667" href="#L2667">2667</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L2668" href="#L2668">2668</a> <em class="jxr_javadoccomment">		 * A shortcut for defining a {@link FunctionalSwap}.</em>
 <a class="jxr_linenumber" name="L2669" href="#L2669">2669</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2670" href="#L2670">2670</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2670" href="#L2670">2670</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2671" href="#L2671">2671</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2672" href="#L2672">2672</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a serializer that performs a custom format for Date objects.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2673" href="#L2673">2673</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
@@ -2744,7 +2744,7 @@
 <a class="jxr_linenumber" name="L2736" href="#L2736">2736</a> <em class="jxr_javadoccomment">		 * 	&lt;li&gt;Any array or collection of the objects above.</em>
 <a class="jxr_linenumber" name="L2737" href="#L2737">2737</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2738" href="#L2738">2738</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2739" href="#L2739">2739</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2739" href="#L2739">2739</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2740" href="#L2740">2740</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2741" href="#L2741">2741</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Sample swap for converting Dates to ISO8601 strings.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2742" href="#L2742">2742</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyDateSwap &lt;jk&gt;extends&lt;/jk&gt; StringSwap&amp;lt;Date&amp;gt; {</em>
@@ -2786,12 +2786,12 @@
 <a class="jxr_linenumber" name="L2778" href="#L2778">2778</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L2779" href="#L2779">2779</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2780" href="#L2780">2780</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2781" href="#L2781">2781</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2781" href="#L2781">2781</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2782" href="#L2782">2782</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.</em>
 <a class="jxr_linenumber" name="L2783" href="#L2783">2783</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.</em>
 <a class="jxr_linenumber" name="L2784" href="#L2784">2784</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2785" href="#L2785">2785</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2786" href="#L2786">2786</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2786" href="#L2786">2786</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2787" href="#L2787">2787</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jf'&gt;{@link MarshallingContext.Builder#swaps(Class...)}</em>
 <a class="jxr_linenumber" name="L2788" href="#L2788">2788</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2789" href="#L2789">2789</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2821,7 +2821,7 @@
 <a class="jxr_linenumber" name="L2813" href="#L2813">2813</a> <em class="jxr_javadoccomment">		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and</em>
 <a class="jxr_linenumber" name="L2814" href="#L2814">2814</a> <em class="jxr_javadoccomment">		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.</em>
 <a class="jxr_linenumber" name="L2815" href="#L2815">2815</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2816" href="#L2816">2816</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L2816" href="#L2816">2816</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L2817" href="#L2817">2817</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L2818" href="#L2818">2818</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Define a POJO swap that skips serializing beans if the time zone is GMT.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2819" href="#L2819">2819</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBeanSwap &lt;jk&gt;extends&lt;/jk&gt; StringSwap&amp;lt;MyBean&amp;gt; {</em>
@@ -2840,7 +2840,7 @@
 <a class="jxr_linenumber" name="L2832" href="#L2832">2832</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L2833" href="#L2833">2833</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2834" href="#L2834">2834</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2835" href="#L2835">2835</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2835" href="#L2835">2835</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2836" href="#L2836">2836</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledConfig#timeZone()}</em>
 <a class="jxr_linenumber" name="L2837" href="#L2837">2837</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#timeZone(TimeZone)}</em>
 <a class="jxr_linenumber" name="L2838" href="#L2838">2838</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingSession.Builder#timeZone(TimeZone)}</em>
@@ -3070,7 +3070,7 @@
 <a class="jxr_linenumber" name="L3062" href="#L3062">3062</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L3063" href="#L3063">3063</a> <em class="jxr_javadoccomment">		 * It is also used to specify element names in XML.</em>
 <a class="jxr_linenumber" name="L3064" href="#L3064">3064</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3065" href="#L3065">3065</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L3065" href="#L3065">3065</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L3066" href="#L3066">3066</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L3067" href="#L3067">3067</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Use _type='mybean' to identify this bean.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L3068" href="#L3068">3068</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</em>
@@ -3085,11 +3085,11 @@
 <a class="jxr_linenumber" name="L3077" href="#L3077">3077</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L3078" href="#L3078">3078</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3079" href="#L3079">3079</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3080" href="#L3080">3080</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3080" href="#L3080">3080</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3081" href="#L3081">3081</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='note'&gt;Equivalent to the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.</em>
 <a class="jxr_linenumber" name="L3082" href="#L3082">3082</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3083" href="#L3083">3083</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3084" href="#L3084">3084</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3084" href="#L3084">3084</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3085" href="#L3085">3085</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jc'&gt;{@link Marshalled#typeName() @Marshalled(typeName)}</em>
 <a class="jxr_linenumber" name="L3086" href="#L3086">3086</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</em>
 <a class="jxr_linenumber" name="L3087" href="#L3087">3087</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -3112,7 +3112,7 @@
 <a class="jxr_linenumber" name="L3104" href="#L3104">3104</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L3105" href="#L3105">3105</a> <em class="jxr_javadoccomment">		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.</em>
 <a class="jxr_linenumber" name="L3106" href="#L3106">3106</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3107" href="#L3107">3107</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L3107" href="#L3107">3107</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L3108" href="#L3108">3108</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L3109" href="#L3109">3109</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L3110" href="#L3110">3110</a> <em class="jxr_javadoccomment">		 * 	&lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</em>
@@ -3136,7 +3136,7 @@
 <a class="jxr_linenumber" name="L3128" href="#L3128">3128</a> <em class="jxr_javadoccomment">		 * 	String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</em>
 <a class="jxr_linenumber" name="L3129" href="#L3129">3129</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3130" href="#L3130">3130</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3131" href="#L3131">3131</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3131" href="#L3131">3131</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3132" href="#L3132">3132</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link Marshalled#typePropertyName() @Marshalled(typePropertyName)}</em>
 <a class="jxr_linenumber" name="L3133" href="#L3133">3133</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</em>
 <a class="jxr_linenumber" name="L3134" href="#L3134">3134</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
@@ -3160,7 +3160,7 @@
 <a class="jxr_linenumber" name="L3152" href="#L3152">3152</a> <em class="jxr_javadoccomment">		 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the</em>
 <a class="jxr_linenumber" name="L3153" href="#L3153">3153</a> <em class="jxr_javadoccomment">		 * parser knows the data type to reconstruct.</em>
 <a class="jxr_linenumber" name="L3154" href="#L3154">3154</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3155" href="#L3155">3155</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L3155" href="#L3155">3155</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L3156" href="#L3156">3156</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L3157" href="#L3157">3157</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// POJOs with @Marshalled(name) annotations.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L3158" href="#L3158">3158</a> <em class="jxr_javadoccomment">		 * 	&lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"foo"&lt;/js&gt;)</em>
@@ -3194,7 +3194,7 @@
 <a class="jxr_linenumber" name="L3186" href="#L3186">3186</a> <em class="jxr_javadoccomment">		 * 	MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L3187" href="#L3187">3187</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3188" href="#L3188">3188</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3189" href="#L3189">3189</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3189" href="#L3189">3189</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3190" href="#L3190">3190</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link Marshalled#typePropertyName()}</em>
 <a class="jxr_linenumber" name="L3191" href="#L3191">3191</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='ja'&gt;{@link MarshalledConfig#typePropertyName()}</em>
 <a class="jxr_linenumber" name="L3192" href="#L3192">3192</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</em>
@@ -3218,7 +3218,7 @@
 <a class="jxr_linenumber" name="L3210" href="#L3210">3210</a> <em class="jxr_javadoccomment">		 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.</em>
 <a class="jxr_linenumber" name="L3211" href="#L3211">3211</a> <em class="jxr_javadoccomment">		 * &lt;br&gt;Most {@link Marshalled @Marshalled} annotations will be ignored.</em>
 <a class="jxr_linenumber" name="L3212" href="#L3212">3212</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3213" href="#L3213">3213</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L3213" href="#L3213">3213</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L3214" href="#L3214">3214</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L3215" href="#L3215">3215</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Create a serializer that only uses the built-in java bean introspector for finding properties.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L3216" href="#L3216">3216</a> <em class="jxr_javadoccomment">		 * 	WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer</em>
@@ -3227,7 +3227,7 @@
 <a class="jxr_linenumber" name="L3219" href="#L3219">3219</a> <em class="jxr_javadoccomment">		 * 		.build();</em>
 <a class="jxr_linenumber" name="L3220" href="#L3220">3220</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L3221" href="#L3221">3221</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L3222" href="#L3222">3222</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3222" href="#L3222">3222</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3223" href="#L3223">3223</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jmf'&gt;{@link MarshallingContext.Builder#useJavaBeanIntrospector()}</em>
 <a class="jxr_linenumber" name="L3224" href="#L3224">3224</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3225" href="#L3225">3225</a> <em class="jxr_javadoccomment">		 *</em>

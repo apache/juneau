@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -1061,12 +1060,12 @@ loadScripts(document, 'script');</script>
  The function is only invoked once per property name per <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> instance. Subsequent calls
  with the same name will return the cached value without re-invoking the function.
 
- <h5 class='section'>Thread Safety:</h5>
+ <h4 class='section'>Thread Safety:</h4>
  <p>
  This method is thread-safe. If multiple threads call this method simultaneously with the same property name,
  the function may be invoked multiple times, but only one result will be cached and returned.
 
- <h5 class='section'>Usage:</h5>
+ <h4 class='section'>Usage:</h4>
  <p class='bjava'>
    <jc>// Compute and cache an expensive property</jc>
    Optional&lt;String&gt; <jv>computedValue</jv> = classMeta.<jsm>getProperty</jsm>(<js>"expensiveProperty"</js>, cm -&gt; {
@@ -1176,7 +1175,7 @@ loadScripts(document, 'script');</script>
    <li>All other types: empty array.
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <ul>
    <li><c>ClassMeta&lt;Optional&lt;Integer&gt;&gt;</c> → <c>[Integer]</c>
    <li><c>ClassMeta&lt;List&lt;Integer&gt;&gt;</c> → <c>[Integer]</c>
@@ -1890,7 +1889,7 @@ loadScripts(document, 'script');</script>
    <li>Generic type parameters with bounds (if any)
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Regular class</jc>
    ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).toString();
@@ -1919,14 +1918,14 @@ loadScripts(document, 'script');</script>
    <jc>// Returns: "public record org.example.MyRecord"</jc>
  </p>
 
- <h5 class='section'>Notes:</h5>
+ <h4 class='section'>Notes:</h4>
  <ul class='spaced-list'>
    <li>For interfaces, the "abstract" modifier is omitted since it's implicit.
    <li>For non-class types (e.g., TypeVariable, ParameterizedType), returns the result of <code>Type.toString()</code>.
    <li>Type parameters include bounds when present (e.g., "&lt;T extends Comparable&lt;T&gt;&gt;").
  </ul>
 
- <h5 class='section'>Comparison with Other Methods:</h5>
+ <h4 class='section'>Comparison with Other Methods:</h4>
  <ul class='spaced-list'>
    <li><a href="../commons/reflect/ClassInfo.html#getNameSimple()"><code>ClassInfo.getNameSimple()</code></a> - Returns simple class name without package (e.g., "String")
    <li><a href="../commons/reflect/ClassInfo.html#getNameShort()"><code>ClassInfo.getNameShort()</code></a> - Returns short name with outer classes (e.g., "MyClass$Inner")

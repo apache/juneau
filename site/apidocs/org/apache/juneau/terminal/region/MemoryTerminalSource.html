@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ implements <a href="TerminalSource.html" title="interface in org.apache.juneau.t
  been written, the oldest bytes are overwritten; a reader asking for them gets a <code>truncated</code> chunk that starts
  at the oldest offset still held.  All methods are thread-safe.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    MemoryTerminalSource <jv>term</jv> = MemoryTerminalSource.<jsm>create</jsm>(4 * 1024 * 1024, 120, 40);
    <jv>term</jv>.write(<jv>bytes</jv>, 0, <jv>bytes</jv>.length);

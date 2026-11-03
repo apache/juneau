@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -120,7 +119,7 @@ loadScripts(document, 'script');</script>
       <code>&lt;EncryptedAssertion&gt;</code>, a <code>decryptionCredential</code> must be configured.
  </ul>
 
- <h5 class='topic'>Marker claim</h5>
+ <h2 class='topic'>Marker claim</h2>
  <p>
  The returned <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> is annotated with <code>issuerType=SAML</code> so downstream code
  can distinguish SAML-derived principals from JWT-derived principals without resorting to a subclass:
@@ -131,7 +130,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='topic'>Builder usage</h5>
+ <h2 class='topic'>Builder usage</h2>
 
  <p>
  This recipe builds a <b>standalone</b> validator with no <a href="SamlAssertionValidator.Builder.html#recipient(java.lang.String)"><code>SamlAssertionValidator.Builder.recipient(String)</code></a> configured, so
@@ -149,7 +148,7 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlAuthFilter</code></a>
    <li class='jc'><a href="SamlMetadataResolvers.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlMetadataResolvers</code></a>

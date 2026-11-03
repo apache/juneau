@@ -42,13 +42,13 @@
 <span class="source-line-no">029</span><span id="line-29">/**</span>
 <span class="source-line-no">030</span><span id="line-30"> * Simple in-memory cache for storing and retrieving objects by three-part keys.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Overview:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Overview:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic</span>
 <span class="source-line-no">035</span><span id="line-35"> * value computation, cache eviction, and statistics tracking for three-part composite keys. It's designed for</span>
 <span class="source-line-no">036</span><span id="line-36"> * caching expensive-to-compute or frequently-accessed objects indexed by three keys.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Thread-safe concurrent access without external synchronization</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Three-part composite key support</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Can be disabled entirely via builder or system property</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;WEAK Mode Semantics:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;WEAK Mode Semantics:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * {@link CacheMode#WEAK} on this class is &lt;b&gt;best-effort&lt;/b&gt;, not retention-guaranteed. Each lookup synthesizes</span>
 <span class="source-line-no">053</span><span id="line-53"> * an internal {@code Tuple3} composite key that is never exposed to the caller, so that key is reachable only</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58"> * remains strongly reachable elsewhere. If guaranteed retention is required, use {@link CacheMode#FULL} (the</span>
 <span class="source-line-no">059</span><span id="line-59"> * default mode) instead of WEAK. See {@link CacheMode#WEAK} for details.</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Create a cache with default supplier&lt;/jc&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    Cache3&amp;lt;String,String,String,Translation&amp;gt; &lt;jv&gt;translationCache&lt;/jv&gt; = Cache3</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> *    Translation &lt;jv&gt;t2&lt;/jv&gt; = &lt;jv&gt;translationCache&lt;/jv&gt;.get(&lt;js&gt;"fr"&lt;/js&gt;, &lt;js&gt;"FR"&lt;/js&gt;, &lt;js&gt;"greeting"&lt;/js&gt;, () -&amp;gt; customTranslation);</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;/p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;ul&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='jc'&gt;{@link Cache}</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link Cache2}</span>

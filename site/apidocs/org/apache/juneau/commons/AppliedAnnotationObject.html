@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
  This class extends <a href="AnnotationObject.html" title="class in org.apache.juneau.commons"><code>AnnotationObject</code></a> to provide support for annotations that have an <c>on</c> property which
  allows them to be targeted to specific program elements based on their fully-qualified names.
 
- <h5 class='section'>Overview:</h5>
+ <h2 class='section'>Overview:</h2>
  <p>
  Applied annotations allow you to define annotation properties in external configuration or programmatically at runtime,
  rather than requiring them to be declared directly on classes, methods, fields, or constructors at compile-time.
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    <li>Centralized configuration - Define annotation properties for multiple classes in one place
  </ul>
 
- <h5 class='section'>Targeting with <c>on</c>:</h5>
+ <h2 class='section'>Targeting with <c>on</c>:</h2>
  <p>
  The base <a href="AppliedAnnotationObject.Builder.html#on(java.lang.String...)"><code>AppliedAnnotationObject.Builder.on(String...)</code></a> method accepts fully-qualified names in the following formats:
  <ul class='spaced-list'>
@@ -120,7 +119,7 @@ loadScripts(document, 'script');</script>
    <li><js>"com.example.MyClass(java.lang.String,int)"</js> - Target a specific constructor
  </ul>
 
- <h5 class='section'>Builder Variants:</h5>
+ <h2 class='section'>Builder Variants:</h2>
  <p>
  This class provides specialized builder variants for different targeting scenarios:
  <ul class='javatree'>
@@ -154,7 +153,7 @@ loadScripts(document, 'script');</script>
    <li class='jc'><a href="AppliedAnnotationObject.BuilderTMFC.html" title="class in org.apache.juneau.commons"><code>AppliedAnnotationObject.BuilderTMFC</code></a> - For targeting classes, methods, fields, and constructors
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a Bean annotation that applies to MyClass</jc>
    MarshalledAnnotation <jv>annotation</jv> = MarshalledAnnotation
@@ -170,7 +169,7 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>Notes:</h5>
+ <h2 class='section'>Notes:</h2>
  <ul class='spaced-list'>
    <li>The <a href="#on()"><code>on()</code></a> method returns the string-based targets
    <li>Subclasses may provide additional <code>onClass()</code>, <code>onMethod()</code>, etc. methods for type-safe access
@@ -178,7 +177,7 @@ loadScripts(document, 'script');</script>
    <li>Hashcode is calculated lazily on first access and then cached for performance
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  </ul></div>
 </section>

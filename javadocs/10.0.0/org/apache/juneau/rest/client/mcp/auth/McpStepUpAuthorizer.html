@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  <code>client_credentials</code> (own-behalf) clients MAY abort immediately rather than attempt step-up
  (<a href="McpStepUpAuthorizer.Builder.html#attemptStepUp(boolean)"><code>attemptStepUp(false)</code></a>).
 
- <h5 class='topic'>Attempt-counter lifetime</h5>
+ <h2 class='topic'>Attempt-counter lifetime</h2>
  <p>
  Per-<code>(resource, operation)</code> attempt counts exist only to bound a single step-up burst.  A counter is
  <b>cleared automatically</b> when <a href="#execute(java.lang.String,org.apache.juneau.rest.client.mcp.auth.McpStepUpAuthorizer.ScopedCall)"><code>execute</code></a> returns successfully for that operation,

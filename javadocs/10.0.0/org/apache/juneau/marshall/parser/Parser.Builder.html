@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.html#line-149">Parser.Builder</a>&lt;SELF extends Parser.Builder&lt;SELF&gt;&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.html#line-151">Parser.Builder</a>&lt;SELF extends Parser.Builder&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="../MarshallingContextable.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContextable.Builder</a>&lt;SELF&gt;</span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -235,14 +234,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-165">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-167">Builder</a></span>()</div>
 <div class="block">Constructor, default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.Parser.Builder)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-181">Builder</a></span><wbr><span class="parameters">(<a href="Parser.Builder.html" title="class in org.apache.juneau.marshall.parser">Parser.Builder</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-183">Builder</a></span><wbr><span class="parameters">(<a href="Parser.Builder.html" title="class in org.apache.juneau.marshall.parser">Parser.Builder</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -254,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.Parser)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-198">Builder</a></span><wbr><span class="parameters">(<a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-200">Builder</a></span><wbr><span class="parameters">(<a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -274,14 +273,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="autoCloseStreams()">
 <h3>autoCloseStreams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-232">autoCloseStreams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-234">autoCloseStreams</a></span>()</div>
 <div class="block">Auto-close streams.
 
  <p>
  When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
  after parsing is complete.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a parser using strict mode.</jc>
    ReaderParser <jv>parser</jv> = JsonParser
@@ -303,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="autoCloseStreams(boolean)">
 <h3>autoCloseStreams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-242">autoCloseStreams</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-244">autoCloseStreams</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#autoCloseStreams()"><code>autoCloseStreams()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -316,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-247">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-249">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#build()">Context.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">
@@ -330,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consumes(java.lang.String)">
 <h3>consumes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-263">consumes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-265">consumes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Specifies the media type that this parser consumes.
 
  <p>
@@ -348,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-268">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-270">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#copy()">Context.Builder</a></code></span></div>
 <div class="block">Copy creator.</div>
 <dl class="notes">
@@ -362,14 +361,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="debugOutputLines(int)">
 <h3>debugOutputLines</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-305">debugOutputLines</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-307">debugOutputLines</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Debug output lines.
 
  <p>
  When parse errors occur, this specifies the number of lines of input before and after the
  error location to be printed as part of the exception message.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
    ReaderParser <jv>parser</jv> = JsonParser
@@ -402,7 +401,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConsumes()">
 <h3>getConsumes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-315">getConsumes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-317">getConsumes</a></span>()</div>
 <div class="block">Returns the current value for the 'consumes' property.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -413,7 +412,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashKey()">
 <h3>hashKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-317">hashKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-319">hashKey</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#hashKey()">Context.Builder</a></code></span></div>
 <div class="block">Returns the hashkey of this builder.
 
@@ -432,13 +431,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listener(java.lang.Class)">
 <h3>listener</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-384">listener</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ParserListener.html" title="class in org.apache.juneau.marshall.parser">ParserListener</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-386">listener</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ParserListener.html" title="class in org.apache.juneau.marshall.parser">ParserListener</a>&gt;&nbsp;value)</span></div>
 <div class="block">Parser listener.
 
  <p>
  Class used to listen for errors and warnings that occur during parsing.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Define our parser listener.</jc>
    <jc>// Simply captures all unknown bean property events.</jc>
@@ -490,7 +489,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nulls(org.apache.juneau.marshall.Nulls)">
 <h3>nulls</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-413">nulls</a></span><wbr><span class="parameters">(<a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-415">nulls</a></span><wbr><span class="parameters">(<a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a>&nbsp;value)</span></div>
 <div class="block">Sets the default per-property null-coercion policy applied during parsing.
 
  <p>
@@ -499,7 +498,7 @@ loadScripts(document, 'script');</script>
  Applied as the fallback when no per-property
  <a href="../MarshalledProp.html#nulls()"><code>@MarshalledProp(nulls=…)</code></a> is configured.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Substitute the empty value for any property whose wire value is null.</jc>
    ReaderParser <jv>parser</jv> = JsonParser
@@ -522,7 +521,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNulls()">
 <h3>getNulls</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-424">getNulls</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-426">getNulls</a></span>()</div>
 <div class="block">Returns the current context-level <a href="../Nulls.html" title="enum class in org.apache.juneau.marshall"><code>Nulls</code></a> default configured on this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -535,14 +534,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimStrings()">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-451">trimStrings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-453">trimStrings</a></span>()</div>
 <div class="block">Trim parsed strings.
 
  <p>
  When enabled, string values will be trimmed of whitespace using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#trim()" title="class or interface in java.lang" class="external-link"><code>String.trim()</code></a> before being added to
  the POJO.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a parser with trim-strings enabled.</jc>
    ReaderParser <jv>parser</jv> = JsonParser
@@ -566,7 +565,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimStrings(boolean)">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-461">trimStrings</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-463">trimStrings</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#trimStrings()"><code>trimStrings()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -579,7 +578,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unbuffered()">
 <h3>unbuffered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-512">unbuffered</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-514">unbuffered</a></span>()</div>
 <div class="block">Unbuffered.
 
  <p>
@@ -590,7 +589,7 @@ loadScripts(document, 'script');</script>
  because it may contain multiple independent POJOs to parse.
  <br>Buffering would cause the parser to read past the current POJO in the stream.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a parser using strict mode.</jc>
    ReaderParser <jv>parser</jv> = JsonParser.
@@ -608,7 +607,7 @@ loadScripts(document, 'script');</script>
    MyBean <jv>myBean2</jv> = <jv>session</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This only allows for multi-input streams for the following parsers:
       <ul>
@@ -631,7 +630,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unbuffered(boolean)">
 <h3>unbuffered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-522">unbuffered</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Parser.Builder.html" title="type parameter in Parser.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/Parser.Builder.html#line-524">unbuffered</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#unbuffered()"><code>unbuffered()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

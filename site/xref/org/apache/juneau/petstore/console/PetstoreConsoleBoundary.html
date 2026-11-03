@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * the token to the page renderer, which stamps it on {@code &lt;body data-juneau-csrf&gt;} for the console toolkit to send</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * back.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The effective method&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;The effective method&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * A request is judged on the method it claims, not only on its request line.  A {@code method} query parameter or</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * an {@code X-Method}, {@code X-HTTP-Method-Override}, {@code X-HTTP-Method} or {@code X-Method-Override} header</em>
@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * honour that override.  So {@code GET /console/pets/1?method=DELETE} needs the same Origin and token a real</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * {@code DELETE} does, and a later change to a resource's allowed method overrides cannot open a hole here.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The API's token&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;The API's token&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * The {@code /petstore} API is not covered by this boundary: it sits behind its own, {@link PetstoreApiBoundary},</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * which has a different token.  The console's one write to the API, its photo upload</em>
@@ -71,12 +71,12 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * only its own token attributes, so on that rare path the API's token can still be emitted, possibly without</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * {@code no-store}.  That is accepted, as {@link PetstoreApiBoundary} describes.</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What is outside&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;What is outside&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * The {@code /petstore-ui} app (which only reads) is covered by neither boundary.  The Jetty deployment puts the</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * microservice admin resources behind a third boundary of their own.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The authority&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;The authority&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * The single accepted {@code Host} is the {@value #AUTHORITY_PROPERTY} setting when set, else</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * {@code localhost:&lt;port&gt;} with the port the request arrived on.  It is fixed on the first console request, after</em>
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * demo does not configure the framework boundary's {@code CONTAINER} origin source, so behind a TLS-terminating proxy</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * the API refuses writes too (see {@link PetstoreApiBoundary}).</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;reg&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FilterRegistrationBean&amp;lt;&amp;gt;(&lt;jk&gt;new&lt;/jk&gt; PetstoreConsoleBoundary(&lt;jv&gt;apiBoundary&lt;/jv&gt;));</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;reg&lt;/jv&gt;.addUrlPatterns(PetstoreConsoleBoundary.&lt;jsf&gt;URL_PATTERN&lt;/jsf&gt;);</em>

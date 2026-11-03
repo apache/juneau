@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  Both factories return resolvers that are <b>already initialized</b> &mdash; ready to hand to
  <a href="SamlAssertionValidator.Builder.html#metadataResolver(org.opensaml.saml.metadata.resolver.MetadataResolver)"><code>SamlAssertionValidator.Builder.metadataResolver(MetadataResolver)</code></a> immediately.
 
- <h5 class='section'>Notes:</h5>
+ <h2 class='section'>Notes:</h2>
  <p>
  The URL factory uses the JDK <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a> (Java 17) to fetch the metadata blob once at construction
  time and wraps the parsed DOM in a <code>DOMMetadataResolver</code>.  No background refresh is performed; applications
@@ -201,7 +200,7 @@ loadScripts(document, 'script');</script>
  periodic refresh should construct an OpenSAML <code>HTTPMetadataResolver</code> directly with an Apache
  HttpClient.
 
- <h5 class='section'>Transport:</h5>
+ <h4 class='section'>Transport:</h4>
  <p>
  The metadata blob supplies the trust-anchor signing certificate, so the transport must not be
  downgradeable by a network intermediary.  The URL must therefore use <js>"https"</js> or target a

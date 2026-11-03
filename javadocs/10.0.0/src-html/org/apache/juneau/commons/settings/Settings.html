@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * Settings instances are created using the {@link Builder} pattern. Use {@link #create()} to create a new builder,</span>
 <span class="source-line-no">041</span><span id="line-41"> * or {@link #get()} to get the singleton instance (which is created using default builder settings).</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Lookup Order:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Lookup Order:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * When retrieving a property value, the lookup order is:</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;ol&gt;</span>
@@ -73,14 +73,14 @@
 <span class="source-line-no">060</span><span id="line-60"> * If SPI registered no system-property source (a shaded jar that does not merge &lt;c&gt;META-INF/services&lt;/c&gt;, for example),</span>
 <span class="source-line-no">061</span><span id="line-61"> * a fallback system-property source sits just above the relaxed environment source.</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Sources vs Stores:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Sources vs Stores:&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *    &lt;li&gt;&lt;b&gt;Sources&lt;/b&gt; ({@link PropertySource}) - Provide read-only access to property values. Examples: {@link FunctionalPropertySource}</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;&lt;b&gt;Stores&lt;/b&gt; ({@link PropertyStore}) - Provide read/write access to property values. Examples: {@link MapStore}, {@link FunctionalPropertyStore}</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;Stores can be used as sources (they extend {@link PropertySource}), so you can add stores via {@link Builder#addSource(PropertySource)}</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;System property access - read Java system properties with type conversion via {@link StringSetting}</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li&gt;Global overrides - override system properties globally for all threads (stored in a {@link PropertyStore})</span>
@@ -91,7 +91,7 @@
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li&gt;Resettable suppliers - settings are returned as {@link StringSetting} instances that can be reset to force recomputation</span>
 <span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> *</span>
-<span class="source-line-no">081</span><span id="line-81"> * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;h2 class='section'&gt;Usage Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;jc&gt;// Get a system property as a StringSetting (using singleton instance)&lt;/jc&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *    StringSetting &lt;jv&gt;setting&lt;/jv&gt; = Settings.&lt;jsf&gt;get&lt;/jsf&gt;().get(&lt;js&gt;"my.property"&lt;/js&gt;);</span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124"> *       .build();</span>
 <span class="source-line-no">125</span><span id="line-125"> * &lt;/p&gt;</span>
 <span class="source-line-no">126</span><span id="line-126"> *</span>
-<span class="source-line-no">127</span><span id="line-127"> * &lt;h5 class='section'&gt;System Properties:&lt;/h5&gt;</span>
+<span class="source-line-no">127</span><span id="line-127"> * &lt;h2 class='section'&gt;System Properties:&lt;/h2&gt;</span>
 <span class="source-line-no">128</span><span id="line-128"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">129</span><span id="line-129"> *    &lt;li&gt;&lt;c&gt;juneau.settings.disableGlobal&lt;/c&gt; (system property) or &lt;c&gt;JUNEAU_SETTINGS_DISABLEGLOBAL&lt;/c&gt; (system env) - If set to &lt;c&gt;true&lt;/c&gt;, prevents new global overrides</span>
 <span class="source-line-no">130</span><span id="line-130"> *       from being set via {@link #setGlobal(String, String)}. Existing global overrides will still be</span>
@@ -212,7 +212,7 @@
 <span class="source-line-no">199</span><span id="line-199">    * configuration. The builder allows you to configure stores, sources, and other settings</span>
 <span class="source-line-no">200</span><span id="line-200">    * before building the final Settings instance.</span>
 <span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">204</span><span id="line-204">    *    &lt;jc&gt;// Create a custom Settings instance&lt;/jc&gt;</span>
 <span class="source-line-no">205</span><span id="line-205">    *    Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</span>
@@ -339,7 +339,7 @@
 <span class="source-line-no">326</span><span id="line-326">       * {@link Settings#get(String, Object)}. The function will be used to convert string values</span>
 <span class="source-line-no">327</span><span id="line-327">       * to the specified type.</span>
 <span class="source-line-no">328</span><span id="line-328">       *</span>
-<span class="source-line-no">329</span><span id="line-329">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">329</span><span id="line-329">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">330</span><span id="line-330">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">331</span><span id="line-331">       *    &lt;jc&gt;// Register a custom converter for a custom type&lt;/jc&gt;</span>
 <span class="source-line-no">332</span><span id="line-332">       *    Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</span>
@@ -630,7 +630,7 @@
 <span class="source-line-no">617</span><span id="line-617">    * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</span>
 <span class="source-line-no">618</span><span id="line-618">    * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.</span>
 <span class="source-line-no">619</span><span id="line-619">    *</span>
-<span class="source-line-no">620</span><span id="line-620">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">620</span><span id="line-620">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">621</span><span id="line-621">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">622</span><span id="line-622">    *    &lt;jc&gt;// System property: -Dmy.property=true&lt;/jc&gt;</span>
 <span class="source-line-no">623</span><span id="line-623">    *    Boolean &lt;jv&gt;flag&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -816,7 +816,7 @@
 <span class="source-line-no">803</span><span id="line-803">    * When a conversion method or constructor is found via reflection, it is cached in the</span>
 <span class="source-line-no">804</span><span id="line-804">    * &lt;c&gt;toTypeFunctions&lt;/c&gt; map for future use.</span>
 <span class="source-line-no">805</span><span id="line-805">    *</span>
-<span class="source-line-no">806</span><span id="line-806">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">806</span><span id="line-806">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">807</span><span id="line-807">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">808</span><span id="line-808">    *    &lt;li&gt;&lt;c&gt;Boolean&lt;/c&gt; - Uses &lt;c&gt;Boolean.valueOf(String)&lt;/c&gt; static method</span>
 <span class="source-line-no">809</span><span id="line-809">    *    &lt;li&gt;&lt;c&gt;Integer&lt;/c&gt; - Uses &lt;c&gt;Integer.valueOf(String)&lt;/c&gt; static method</span>

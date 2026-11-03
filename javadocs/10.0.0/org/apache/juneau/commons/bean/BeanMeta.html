@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,14 +85,14 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Encapsulates all access to the properties of a bean class (like a souped-up <a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean"><code>BeanInfo</code></a>).
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
 
  Uses introspection to find all the properties associated with this class.  If the
  <a href="BeanType.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanType</code></a> annotation is present on the class (or the marshalling-side
  <code>@Marshalled</code> sibling), that information is used to determine the properties on the class.
  Otherwise, the <code>BeanInfo</code> functionality in Java is used to determine the properties on the class.
 
- <h5 class='topic'>Bean property ordering</h5>
+ <h2 class='topic'>Bean property ordering</h2>
 
  The order of the properties is as follows:
  <ul class='spaced-list'>
@@ -120,7 +119,7 @@ loadScripts(document, 'script');</script>
  Field order comes from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getDeclaredFields()" title="class or interface in java.lang" class="external-link"><code>Class.getDeclaredFields()</code></a>, which is declaration order on HotSpot and OpenJ9 but is
  not guaranteed by the JLS.
 
- <h5 class='topic'>Thread safety</h5>
+ <h2 class='topic'>Thread safety</h2>
 
  Instances are effectively immutable after construction and are safe for concurrent read access.
  Construction is not thread-safe and should be completed before sharing an instance across threads.</div>
@@ -478,12 +477,12 @@ loadScripts(document, 'script');</script>
  class via <a href="BeanMetaInitializer.html#buildBeanFilter(org.apache.juneau.commons.bean.BeanInfo)"><code>BeanMetaInitializer.buildBeanFilter(BeanInfo)</code></a>.  See <a href="#of(java.lang.Class,org.apache.juneau.commons.bean.BeanConfigContext)"><code>of(Class, BeanConfigContext)</code></a> for
  the pure bean-modeling-side entry point that does not require a <a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean"><code>BeanInfo</code></a>.
 
- <h5 class='section'>Exception handling:</h5>
+ <h4 class='section'>Exception handling:</h4>
  <p>
  If a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> is thrown during bean metadata creation, it is caught and the exception message
  is returned as the <code>notABeanReason</code> with <jk>null</jk> for the bean metadata.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create bean metadata for a class via the marshalling-side context.</jc>
    BeanInfo&lt;Person&gt; <jv>cm</jv> = <jv>marshallingContext</jv>.getClassMeta(Person.<jk>class</jk>);
@@ -549,7 +548,7 @@ loadScripts(document, 'script');</script>
  iteration; marshalling-aware reads (<a href="#getBeanInfo()"><code>getBeanInfo()</code></a>, type-resolution on each
  <a href="BeanPropertyMeta.html#getBeanInfo()"><code>BeanPropertyMeta.getBeanInfo()</code></a>, the per-property registry lookup) remain <jk>null</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BeanMeta&lt;Person&gt; <jv>bm</jv> = BeanMeta.<jsm>of</jsm>(Person.<jk>class</jk>, BeanConfigContext.<jsf>DEFAULT</jsf>);
    BeanPropertyMeta <jv>name</jv> = <jv>bm</jv>.getProperties().get(<js>"name"</js>);
@@ -1068,7 +1067,7 @@ loadScripts(document, 'script');</script>
  <p>
  Hidden and excluded properties are not included, since input can never set them.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
 

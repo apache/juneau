@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * program elements at compile-time. It allows annotations to be constructed using a builder pattern and</span>
 <span class="source-line-no">037</span><span id="line-37"> * follows all standard Java annotation semantics for equality, hashcode, and string representation.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Overview:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Overview:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * Java annotations are typically declared statically on classes, methods, fields, etc. at compile-time:</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> *       .build();</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;Equality and Hashcode:&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;Equality and Hashcode:&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * Follows the standard Java conventions for annotation equality and hashcode calculation as defined in</span>
 <span class="source-line-no">059</span><span id="line-59"> * {@link Annotation#equals(Object)} and {@link Annotation#hashCode()}. This ensures that programmatically-created</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jv&gt;declared&lt;/jv&gt;.hashCode(), &lt;jv&gt;programmatic&lt;/jv&gt;.hashCode());  &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;Hashcode Caching:&lt;/h5&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;Hashcode Caching:&lt;/h2&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * For performance reasons, the hashcode is calculated once and cached on first access.</span>
 <span class="source-line-no">077</span><span id="line-77"> * The hash is computed lazily when {@link #hashCode()} is first called and then stored for subsequent calls.</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83"> *    }</span>
 <span class="source-line-no">084</span><span id="line-84"> * &lt;/p&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='section'&gt;Builder Pattern:&lt;/h5&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;h2 class='section'&gt;Builder Pattern:&lt;/h2&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> * Subclasses should provide a nested {@link Builder} class that extends {@link AnnotationObject.Builder}</span>
 <span class="source-line-no">089</span><span id="line-89"> * to construct instances using a fluent builder pattern. The builder should:</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93"> *    &lt;li&gt;Provide a {@code build()} method that constructs the final annotation object</span>
 <span class="source-line-no">094</span><span id="line-94"> * &lt;/ul&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;h5 class='section'&gt;Example Implementation:&lt;/h5&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * &lt;h2 class='section'&gt;Example Implementation:&lt;/h2&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *    &lt;jk&gt;public class&lt;/jk&gt; MyAnnotationObject &lt;jk&gt;extends&lt;/jk&gt; AnnotationObject &lt;jk&gt;implements&lt;/jk&gt; MyAnnotation {</span>
 <span class="source-line-no">099</span><span id="line-99"> *</span>
@@ -141,7 +141,7 @@
 <span class="source-line-no">128</span><span id="line-128"> *    }</span>
 <span class="source-line-no">129</span><span id="line-129"> * &lt;/p&gt;</span>
 <span class="source-line-no">130</span><span id="line-130"> *</span>
-<span class="source-line-no">131</span><span id="line-131"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">131</span><span id="line-131"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">132</span><span id="line-132"> *    &lt;li class='jc'&gt;{@link AppliedAnnotationObject} - For annotations with dynamic targeting support</span>
 <span class="source-line-no">133</span><span id="line-133"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations"&gt;Overview &amp;gt; juneau-commons &amp;gt; Annotations&lt;/a&gt;</span>
 <span class="source-line-no">134</span><span id="line-134"> * &lt;/ul&gt;</span>

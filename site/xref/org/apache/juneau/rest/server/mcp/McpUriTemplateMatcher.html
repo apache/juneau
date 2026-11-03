@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 		an immutable, insertion-ordered, percent-decoded variable map, or &lt;jk&gt;null&lt;/jk&gt; if the URI does not match.</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Reverse-matchable forms:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Reverse-matchable forms:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Non-explode, non-prefix simple scalar &lt;c&gt;{var}&lt;/c&gt;, reserved scalar &lt;c&gt;{+var}&lt;/c&gt;, fragment scalar</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;{#var}&lt;/c&gt;, path segments &lt;c&gt;{/var}&lt;/c&gt; / &lt;c&gt;{/x,y}&lt;/c&gt;, label segments &lt;c&gt;{.var}&lt;/c&gt; / &lt;c&gt;{.x,y}&lt;/c&gt;, query</em>
@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * successfully (so they remain listable and completable) but are never selected for a template-backed read;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * {@link #match(String)} always returns &lt;jk&gt;null&lt;/jk&gt; for them.</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Percent-encoding normalization:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Percent-encoding normalization:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * Matching and literal-specificity counting follow RFC 3986 percent-normalization implemented fresh by this</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * class: valid &lt;c&gt;%HH&lt;/c&gt; triplets are hex-uppercased; triplets that decode to an unreserved octet</em>
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * (&lt;c&gt;+&lt;/c&gt; as space) and lack hex-case normalization, reserved-octet preservation, and malformed-escape</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * rejection, all of which contradict the rules above.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Ambiguous-capture resolution:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Ambiguous-capture resolution:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * A reversible template compiles to an alternating sequence of literal and capture pieces; because an</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * expression with ambiguous adjacency to another expression is rejected as non-reverse-matchable (see above),</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * intentional and consistent with this matcher covering reliable inversion of a narrow subset, not a complete</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * RFC 6570 engine.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Scope:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Scope:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * This matcher is intentionally MCP-local. It is not registered as a general-purpose RFC 3986/6570 utility;</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * if a second real consumer outside MCP resource templates needs equivalent percent-normalization or</em>

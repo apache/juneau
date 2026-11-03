@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -102,7 +101,7 @@ extends <a href="Function4.html" title="interface in org.apache.juneau.commons.f
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>, making it compatible with standard <a href="Function4.html" title="interface in org.apache.juneau.commons.function"><code>Function4</code></a> usage while still allowing
  the implementation to throw checked exceptions via <a href="#applyThrows(A,B,C,D)"><code>applyThrows(Object, Object, Object, Object)</code></a>.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Functional interface - can be used with lambda expressions and method references
    <li>Exception support - allows checked exceptions to be thrown via <a href="#applyThrows(A,B,C,D)"><code>applyThrows(Object, Object, Object, Object)</code></a>
@@ -110,7 +109,7 @@ extends <a href="Function4.html" title="interface in org.apache.juneau.commons.f
    <li>Dual interface - can be used as both Function4 and ThrowingFunction4
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Four-argument transformations that may throw I/O exceptions
    <li>Parsing operations that may throw validation exceptions
@@ -118,7 +117,7 @@ extends <a href="Function4.html" title="interface in org.apache.juneau.commons.f
    <li>Operations that need to propagate checked exceptions
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Lambda with exception</jc>
    ThrowingFunction4&lt;String,String,String,String,File&gt; <jv>fileParser</jv> = (<jv>dir</jv>, <jv>subdir1</jv>, <jv>subdir2</jv>, <jv>name</jv>) -&gt; {
@@ -140,7 +139,7 @@ extends <a href="Function4.html" title="interface in org.apache.juneau.commons.f
    File <jv>file</jv> = <jv>fileParser</jv>.apply(<js>"/tmp"</js>, <js>"data"</js>, <js>"2024"</js>, <js>"file.txt"</js>);  <jc>// May throw RuntimeException</jc>
  </p>
 
- <h5 class='section'>Exception Handling:</h5>
+ <h2 class='section'>Exception Handling:</h2>
  <ul class='spaced-list'>
    <li><a href="#applyThrows(A,B,C,D)"><code>applyThrows(Object, Object, Object, Object)</code></a> - Throws checked exceptions directly
    <li><a href="#apply(A,B,C,D)"><code>apply(Object, Object, Object, Object)</code></a> - Wraps checked exceptions in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>
@@ -148,7 +147,7 @@ extends <a href="Function4.html" title="interface in org.apache.juneau.commons.f
    <li>Use <code>apply</code> when you want standard Function4 behavior
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ThrowingFunction.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingFunction</code></a> - Single-argument function that throws exceptions
    <li class='jc'><a href="ThrowingFunction2.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingFunction2</code></a> - Two-argument function that throws exceptions
    <li class='jc'><a href="ThrowingFunction3.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingFunction3</code></a> - Three-argument function that throws exceptions
@@ -271,7 +270,7 @@ extends <a href="Function4.html" title="interface in org.apache.juneau.commons.f
  This is the functional method that implementations must provide. It allows checked exceptions
  to be thrown directly, unlike the standard <a href="Function4.html#apply(A,B,C,D)"><code>Function4.apply(Object, Object, Object, Object)</code></a> method.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ThrowingFunction4&lt;String,Integer,Boolean,Double,Integer&gt; <jv>parser</jv> = (<jv>s</jv>, <jv>base</jv>, <jv>signed</jv>, <jv>multiplier</jv>) -&gt; {
       <jk>try</jk> {

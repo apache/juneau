@@ -763,12 +763,12 @@
 <span class="source-line-no">750</span><span id="line-750">    * The function is only invoked once per property name per {@link ClassMeta} instance. Subsequent calls</span>
 <span class="source-line-no">751</span><span id="line-751">    * with the same name will return the cached value without re-invoking the function.</span>
 <span class="source-line-no">752</span><span id="line-752">    *</span>
-<span class="source-line-no">753</span><span id="line-753">    * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">753</span><span id="line-753">    * &lt;h4 class='section'&gt;Thread Safety:&lt;/h4&gt;</span>
 <span class="source-line-no">754</span><span id="line-754">    * &lt;p&gt;</span>
 <span class="source-line-no">755</span><span id="line-755">    * This method is thread-safe. If multiple threads call this method simultaneously with the same property name,</span>
 <span class="source-line-no">756</span><span id="line-756">    * the function may be invoked multiple times, but only one result will be cached and returned.</span>
 <span class="source-line-no">757</span><span id="line-757">    *</span>
-<span class="source-line-no">758</span><span id="line-758">    * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">758</span><span id="line-758">    * &lt;h4 class='section'&gt;Usage:&lt;/h4&gt;</span>
 <span class="source-line-no">759</span><span id="line-759">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">760</span><span id="line-760">    *    &lt;jc&gt;// Compute and cache an expensive property&lt;/jc&gt;</span>
 <span class="source-line-no">761</span><span id="line-761">    *    Optional&amp;lt;String&amp;gt; &lt;jv&gt;computedValue&lt;/jv&gt; = classMeta.&lt;jsm&gt;getProperty&lt;/jsm&gt;(&lt;js&gt;"expensiveProperty"&lt;/js&gt;, cm -&amp;gt; {</span>
@@ -882,7 +882,7 @@
 <span class="source-line-no">869</span><span id="line-869">    *    &lt;li&gt;All other types: empty array.</span>
 <span class="source-line-no">870</span><span id="line-870">    * &lt;/ul&gt;</span>
 <span class="source-line-no">871</span><span id="line-871">    *</span>
-<span class="source-line-no">872</span><span id="line-872">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">872</span><span id="line-872">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">873</span><span id="line-873">    * &lt;ul&gt;</span>
 <span class="source-line-no">874</span><span id="line-874">    *    &lt;li&gt;&lt;c&gt;ClassMeta&amp;lt;Optional&amp;lt;Integer&amp;gt;&amp;gt;&lt;/c&gt; → &lt;c&gt;[Integer]&lt;/c&gt;</span>
 <span class="source-line-no">875</span><span id="line-875">    *    &lt;li&gt;&lt;c&gt;ClassMeta&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt;&lt;/c&gt; → &lt;c&gt;[Integer]&lt;/c&gt;</span>

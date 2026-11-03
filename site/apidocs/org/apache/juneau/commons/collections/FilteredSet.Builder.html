@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for creating <a href="FilteredSet.html" title="class in org.apache.juneau.commons.collections"><code>FilteredSet</code></a> instances.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
       .<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -193,7 +192,7 @@ loadScripts(document, 'script');</script>
  This method can be called multiple times. When called multiple times, all filters are combined
  using AND logic - an element must pass all filters to be added to the set.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Filter out null values</jc>
    Builder&lt;String&gt; <jv>b</jv> = FilteredSet.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -226,7 +225,7 @@ loadScripts(document, 'script');</script>
  <p>
  If not specified, a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashSet.html" title="class or interface in java.util" class="external-link"><code>LinkedHashSet</code></a> will be created during <a href="#build()"><code>build()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Use a TreeSet for sorted order</jc>
    Builder&lt;String&gt; <jv>b</jv> = FilteredSet.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -260,7 +259,7 @@ loadScripts(document, 'script');</script>
  this function before being added to the set. If not specified, elements must already be of the
  correct type (or <c>Object.class</c> is used if types were not specified, which accepts any type).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
       .<jsm>create</jsm>(Integer.<jk>class</jk>)

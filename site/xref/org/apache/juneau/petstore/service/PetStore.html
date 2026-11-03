@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * Every successful create, update or delete is recorded in the audit trail; see {@link #getAudit()}.</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauPetstore" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauPetstore</a>"&gt;juneau-petstore&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> */</em>
@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * Adds a batch of available pets, one per requested count, and records one summary {@code RESTOCK} audit entry.</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;added&lt;/jv&gt; = &lt;jv&gt;store&lt;/jv&gt;.restock(Map.&lt;jsm&gt;of&lt;/jsm&gt;(Species.&lt;jsf&gt;DOG&lt;/jsf&gt;, 2, Species.&lt;jsf&gt;CAT&lt;/jsf&gt;, 1), &lt;js&gt;"job:restock"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// 3 new pets named "DOG #101", "DOG #102", "CAT #103" (species + store-unique id), plus one RESTOCK audit entry.&lt;/jc&gt;</em>
@@ -624,7 +624,7 @@
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 * Opens a query session over a snapshot of the pets.</em>
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt; = &lt;jv&gt;store&lt;/jv&gt;.queryPets()) {</em>
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;return&lt;/jk&gt; DataTablesQuery.&lt;jsm&gt;run&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, &lt;jv&gt;s&lt;/jv&gt;);</em>

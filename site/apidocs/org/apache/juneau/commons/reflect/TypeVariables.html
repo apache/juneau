@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,7 +85,7 @@ loadScripts(document, 'script');</script>
  This class provides a type-safe wrapper around type variable implementations,
  using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> instead of arrays for better API consistency.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Given class hierarchy:</jc>
    <jk>public static class</jk> BeanA&lt;T&gt; {
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
    Class&lt;?&gt; <jv>impl</jv> = <jv>tv</jv>.get(BeanA.<jk>class</jk>, 0);  <jc>// Returns Integer.class</jc>
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li><a href="#of(java.lang.reflect.Type)"><code>of(Type)</code></a>
  </ul></div>
@@ -219,7 +218,7 @@ loadScripts(document, 'script');</script>
    {BeanA.class:[Integer.class]}
  </p>
 
- <h5 class='section'>Known Limitations:</h5>
+ <h4 class='section'>Known Limitations:</h4>
  <p>
  This code doesn't currently properly handle the following situation with nested generic bounds:
  <p class='bjava'>
@@ -311,7 +310,7 @@ loadScripts(document, 'script');</script>
  This method resolves generic types, parameterized types, generic arrays, and type variables
  to their concrete class representations.
 
- <h5 class='section'>Type Resolution:</h5>
+ <h4 class='section'>Type Resolution:</h4>
  <ul>
    <li><b>Class</b> - Returns the class as-is
    <li><b>ParameterizedType</b> - Returns the raw type class

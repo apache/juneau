@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * resource classes.  Requests are dispatched directly to the {@link RestContext} without any network activity,</span>
 <span class="source-line-no">044</span><span id="line-44"> * making tests fast and self-contained.</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;ja&gt;@Rest&lt;/ja&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;jk&gt;public class&lt;/jk&gt; MyResource {</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> *    }</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/p&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;Next-Generation REST Client&lt;/a&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
@@ -230,7 +230,7 @@
 <span class="source-line-no">217</span><span id="line-217">       * Setting this disables the per-resource {@link RestContext} cache for the duration of this</span>
 <span class="source-line-no">218</span><span id="line-218">       * build, so the overlay is not silently shared with a previously-cached instance.</span>
 <span class="source-line-no">219</span><span id="line-219">       *</span>
-<span class="source-line-no">220</span><span id="line-220">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">220</span><span id="line-220">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">221</span><span id="line-221">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">       *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;overlay&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; TestBeanStore().override(MyService.&lt;jk&gt;class&lt;/jk&gt;, mockSvc);</span>
 <span class="source-line-no">223</span><span id="line-223">       *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">       * so the server must be able to produce that content type.  Omit this (the default) when the target</span>
 <span class="source-line-no">247</span><span id="line-247">       * resource does not have a JSON serializer configured.</span>
 <span class="source-line-no">248</span><span id="line-248">       *</span>
-<span class="source-line-no">249</span><span id="line-249">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">250</span><span id="line-250">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">251</span><span id="line-251">       *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyJsonResource.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">252</span><span id="line-252">       *          .defaultParser(JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;)</span>
@@ -285,7 +285,7 @@
 <span class="source-line-no">272</span><span id="line-272">       * Opt-in only; no other builder option turns it on. The one-line access record is still logged.  To do the</span>
 <span class="source-line-no">273</span><span id="line-273">       * same for a single call, use {@link RestRequest#noTrace()}.</span>
 <span class="source-line-no">274</span><span id="line-274">       *</span>
-<span class="source-line-no">275</span><span id="line-275">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">276</span><span id="line-276">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">277</span><span id="line-277">       *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;).noTrace().build()) {</span>
 <span class="source-line-no">278</span><span id="line-278">       *       &lt;jv&gt;client&lt;/jv&gt;.get(&lt;js&gt;"/missing"&lt;/js&gt;).run().assertStatus().is(404);</span>

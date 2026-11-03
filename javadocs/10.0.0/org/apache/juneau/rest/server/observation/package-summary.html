@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -70,7 +69,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Explicit programmatic observation API for <code>juneau-rest-server</code> &mdash; custom (non-request)
  metrics + tracing around an arbitrary block of work.
 
- <h5 class='topic'>Why explicit (no <code>@Observed</code> annotation)</h5>
+ <h2 class='topic'>Why explicit (no <code>@Observed</code> annotation)</h2>
 
  <p>
  Juneau has no method-interception / AOP substrate (no dynamic proxying of arbitrary beans, no
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  This is consistent with the framework's explicit-over-magic philosophy &mdash; the same reason the
  curated dependency bundles register nothing automatically.
 
- <h5 class='topic'>Reuses the request-path SPIs</h5>
+ <h2 class='topic'>Reuses the request-path SPIs</h2>
 
  <p>
  Observations are recorded through the very same two SPIs the request path uses &mdash;
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  The shipped bridges (<code>MicrometerMetricsRecorder</code>, <code>OtelTracerHook</code>) override those default
  methods; bridges that do not simply skip custom observations.
 
- <h5 class='topic'>No-backend contract</h5>
+ <h2 class='topic'>No-backend contract</h2>
 
  <p>
  When no backend is installed, <a href="Observations.html#observe(java.lang.String,java.lang.String)"><code>Observations#observe(String, String)</code></a>

@@ -36,14 +36,14 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * two-argument functions. It's useful when you need to pass functions with two parameters to methods</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * that expect functional interfaces, such as in stream operations, builders, or callback patterns.</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Functional interface - can be used with lambda expressions and method references</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Composition support - provides {@link #andThen(Function)} for function chaining</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Type-safe - generic type parameters ensure compile-time type safety</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Two-argument transformations in functional programming patterns</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Builder methods that accept two-parameter functions</em>
@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Callback patterns with two parameters</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Lambda expression&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	Function2&amp;lt;String,Integer,String&amp;gt; &lt;jv&gt;concat&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;i&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;s&lt;/jv&gt; + &lt;js&gt;"-"&lt;/js&gt; + &lt;jv&gt;i&lt;/jv&gt;;</em>
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;sum&lt;/jv&gt; = &lt;jv&gt;addAndFormat&lt;/jv&gt;.apply(5, 3);  &lt;jc&gt;// Returns "8"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Function3} - Three-argument function</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Function4} - Four-argument function</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Function5} - Five-argument function</em>
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * This method enables function composition, allowing you to chain multiple transformations together.</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * 	Function2&amp;lt;Integer,Integer,Integer&amp;gt; &lt;jv&gt;multiply&lt;/jv&gt; = (&lt;jv&gt;a&lt;/jv&gt;, &lt;jv&gt;b&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;a&lt;/jv&gt; * &lt;jv&gt;b&lt;/jv&gt;;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * 	Function2&amp;lt;Integer,Integer,String&amp;gt; &lt;jv&gt;multiplyAndFormat&lt;/jv&gt; = &lt;jv&gt;multiply&lt;/jv&gt;.andThen(&lt;jv&gt;n&lt;/jv&gt; -&amp;gt; &lt;js&gt;"Result: "&lt;/js&gt; + &lt;jv&gt;n&lt;/jv&gt;);</em>
@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * Applies this function to the given arguments.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * 	Function2&amp;lt;String,Integer,String&amp;gt; &lt;jv&gt;repeat&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;n&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;s&lt;/jv&gt;.repeat(&lt;jv&gt;n&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;repeat&lt;/jv&gt;.apply(&lt;js&gt;"ha"&lt;/js&gt;, 3);  &lt;jc&gt;// Returns "hahaha"&lt;/jc&gt;</em>

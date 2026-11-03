@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -73,7 +72,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Swagger.html#line-33">Swagger</a></span></div>
 <div class="block">Extended annotation for <a href="Rest.html#swagger()"><code>@Rest(swagger)</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  </ul></div>
 </section>
@@ -166,7 +165,7 @@ loadScripts(document, 'script');</script>
  (e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or
  <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       swagger=<ja>@Swagger</ja>(
@@ -175,7 +174,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
       <br>Multiple lines are concatenated with newlines.
@@ -198,7 +197,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Swagger.html#line-108">description</a></span></div>
 <div class="block">Defines the swagger field <c>/info/description</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       swagger=<ja>@Swagger</ja>(
@@ -210,7 +209,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is plain text.
       <br>Multiple lines are concatenated with newlines.
@@ -249,7 +248,7 @@ loadScripts(document, 'script');</script>
  (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
  <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       swagger=<ja>@Swagger</ja>(
@@ -290,7 +289,7 @@ loadScripts(document, 'script');</script>
  (e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or
  <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       swagger=<ja>@Swagger</ja>(
@@ -299,7 +298,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
       <br>Multiple lines are concatenated with newlines.
@@ -348,7 +347,7 @@ loadScripts(document, 'script');</script>
  (e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or
  <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       swagger=<ja>@Swagger</ja>(
@@ -357,7 +356,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> array.
       <br>Multiple lines are concatenated with newlines.
@@ -390,7 +389,7 @@ loadScripts(document, 'script');</script>
  The default value pulls the description from the <c>termsOfService</c> entry in the servlet resource bundle.
  (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is plain text.
       <br>Multiple lines are concatenated with newlines.
@@ -413,7 +412,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Swagger.html#line-280">title</a></span></div>
 <div class="block">Defines the swagger field <c>/info/title</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       swagger=<ja>@Swagger</ja>(
@@ -422,7 +421,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is plain-text.
       <br>Multiple lines are concatenated with newlines.
@@ -541,7 +540,7 @@ loadScripts(document, 'script');</script>
    <li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
    <li class='note'>
@@ -587,7 +586,7 @@ loadScripts(document, 'script');</script>
  The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
  (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is plain text.
    <li class='note'>

@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -73,7 +72,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#PARAMETER" title="class or interface in java.lang.annotation" class="external-link">PARAMETER</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#TYPE" title="class or interface in java.lang.annotation" class="external-link">TYPE</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>})
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-82">Header</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-80">Header</a></span></div>
 <div class="block">REST request header annotation.
 
  <p>
@@ -87,12 +86,12 @@ loadScripts(document, 'script');</script>
    <li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  </ul>
 
- <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
+ <h2 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h2>
  <p>
  Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a HTTP
  request header.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@RestGet</ja>
    <jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
@@ -108,26 +107,24 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
    <li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  </ul>
 
- <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ <h2 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h2>
  <p>
  Annotation applied to Java method arguments of interface proxies to denote that they are serialized as an HTTP
  header value.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Header">@Header</a>
  </ul>
 
- <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- <p>
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h2>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
- </ul>
- <p></div>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -185,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="def()">
 <h3>def</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-93">def</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-91">def</a></span></div>
 <div class="block">Default value for this parameter.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -200,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-101">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-99">description</a></span></div>
 <div class="block">Optional description for the exposed API.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -217,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="summary()">
 <h3>summary</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-114">summary</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-112">summary</a></span></div>
 <div class="block">Short, concise summary of the exposed API.
 
  <p>
@@ -239,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="name()">
 <h3>name</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-175">name</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-173">name</a></span></div>
 <div class="block">HTTP header name.
  <p>
  A blank value (the default) indicates to reuse the bean property name when used on a request bean property.
@@ -254,7 +251,7 @@ loadScripts(document, 'script');</script>
       If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
       then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 
-      <h5 class='figure'>Examples:</h5>
+      <h4 class='figure'>Examples:</h4>
       <p class='bjava'>
    <jc>// When used on a REST method</jc>
    <ja>@RestPost</ja>(<js>"/addPet"</js>)
@@ -283,7 +280,7 @@ loadScripts(document, 'script');</script>
    <li>
       If used on a request bean method, uses the bean property name.
 
-      <h5 class='figure'>Example:</h5>
+      <h4 class='figure'>Example:</h4>
       <p class='bjava'>
    <jk>public interface</jk> MyRequest {
 
@@ -308,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schema()">
 <h3>schema</h3>
-<div class="member-signature"><span class="return-type"><a href="../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">Schema</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-200">schema</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">Schema</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-198">schema</a></span></div>
 <div class="block"><mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
 
  <p>
@@ -319,7 +316,7 @@ loadScripts(document, 'script');</script>
  Values specified on this field override values specified on the type, and values specified on child types override values
  specified on parent types.
 
- <h5 class='section'>Used for:</h5>
+ <h4 class='section'>Used for:</h4>
  <ul class='spaced-list'>
    <li>
       Server-side schema-based parsing and parsing validation.
@@ -341,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value()">
 <h3>value</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-219">value</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/Header.html#line-217">value</a></span></div>
 <div class="block">A synonym for <a href="#name()"><code>name()</code></a>.
 
  <p>

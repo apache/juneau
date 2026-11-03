@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
  the REST resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
  the public constructor takes a <a href="RestContext.Args.html" title="class in org.apache.juneau.rest.server"><code>RestContext.Args</code></a> record carrying the bootstrap state.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/myresource"</js>, serializers=JsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
    <jk>public class</jk> MyResource {
@@ -114,11 +113,11 @@ loadScripts(document, 'script');</script>
  See <a class="doclink" href="https://juneau.apache.org/docs/topics/V10MigrationGuide">v10.0 Migration Guide</a>
  for replacement recipes.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
  </ul></div>
 </section>
@@ -1301,7 +1300,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-3983">getAllowedHeaderParams</a></span>()</div>
 <div class="block">Allowed header URL parameters.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#allowedHeaderParams()"><code>Rest.allowedHeaderParams()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1317,7 +1316,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-3996">getAllowedMethodHeaders</a></span>()</div>
 <div class="block">Allowed method headers.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#allowedMethodHeaders()"><code>Rest.allowedMethodHeaders()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1333,7 +1332,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4009">getAllowedMethodParams</a></span>()</div>
 <div class="block">Allowed method URL parameters.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#allowedMethodParams()"><code>Rest.allowedMethodParams()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1401,7 +1400,7 @@ loadScripts(document, 'script');</script>
  <a href="logging/RestDebugFormatter.html" title="interface in org.apache.juneau.rest.server.logging"><code>RestDebugFormatter</code></a> bean registered in the bean store (or a <a href="../../commons/inject/Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a>-annotated factory method)
  &gt; <a href="logging/BasicRestDebugFormatter.html" title="class in org.apache.juneau.rest.server.logging"><code>BasicRestDebugFormatter</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  </ul></div>
 <dl class="notes">
@@ -1435,7 +1434,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4098">getClientVersionHeader</a></span>()</div>
 <div class="block">Returns the name of the client version header name used by this resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#clientVersionHeader()"><code>Rest.clientVersionHeader()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1484,7 +1483,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="httppart/NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4138">getDefaultRequestAttributes</a></span>()</div>
 <div class="block">Returns the default request attributes for this resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#defaultRequestAttributes()"><code>Rest.defaultRequestAttributes()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1500,7 +1499,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4151">getDefaultRequestHeaders</a></span>()</div>
 <div class="block">Returns the default request headers for this resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#defaultRequestHeaders()"><code>Rest.defaultRequestHeaders()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1516,7 +1515,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4164">getDefaultResponseHeaders</a></span>()</div>
 <div class="block">Returns the default response headers for this resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#defaultResponseHeaders()"><code>Rest.defaultResponseHeaders()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1547,7 +1546,7 @@ loadScripts(document, 'script');</script>
  <p>
  If path is not specified, returns <js>""</js>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#path()"><code>Rest.path()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1661,7 +1660,7 @@ loadScripts(document, 'script');</script>
  <p>
  If path is not specified, returns <js>""</js>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#path()"><code>Rest.path()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1698,7 +1697,7 @@ loadScripts(document, 'script');</script>
  <code>JettyServerComponent</code>, and Spring Boot's <code>ServletRegistrationBean</code> wiring &mdash; should
  consume when mounting the resource at the top level.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Returns an empty array (not <code>null</code>) when none of the rungs resolve. Hosting runtimes interpret
       an empty array as &quot;no top-level mounts&quot; and surface a clear error naming the resource.
@@ -1706,7 +1705,7 @@ loadScripts(document, 'script');</script>
       The scalar <a href="#getPath()"><code>getPath()</code></a> accessor remains orthogonal to this method.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#paths()"><code>Rest.paths()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1783,7 +1782,7 @@ loadScripts(document, 'script');</script>
  Returned in the order they're invoked by <a href="#processResponse(org.apache.juneau.rest.server.RestOpSession)"><code>processResponse(RestOpSession)</code></a>.
  The returned array is the live backing array — callers must not mutate it.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#responseProcessors()"><code>Rest.responseProcessors()</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  </ul></div>
@@ -1805,7 +1804,7 @@ loadScripts(document, 'script');</script>
  (see <a href="#findRestOperationArgs(java.lang.reflect.Method,org.apache.juneau.commons.inject.BeanStore)"><code>findRestOperationArgs(Method, BeanStore)</code></a>); this getter returns the class list
  that drives that resolution.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#restOpArgs()"><code>Rest.restOpArgs()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1879,7 +1878,7 @@ loadScripts(document, 'script');</script>
    <li>Beans flow down only: a child's beans are never visible to its parent or its siblings.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(children={PetResource.<jk>class</jk>, OrderResource.<jk>class</jk>})
    <jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
@@ -1976,7 +1975,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="swagger/SwaggerProvider.html" title="interface in org.apache.juneau.rest.server.swagger">SwaggerProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4542">getSwaggerProvider</a></span>()</div>
 <div class="block">Returns the Swagger provider used by this resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#swaggerProvider()"><code>Rest.swaggerProvider()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2005,7 +2004,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="openapi/OpenApiProvider.html" title="interface in org.apache.juneau.rest.server.openapi">OpenApiProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4578">getOpenApiProvider</a></span>()</div>
 <div class="block">Returns the OpenAPI 3.1 provider used by this resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#openApiProvider()"><code>Rest.openApiProvider()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2033,7 +2032,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4600">getUriAuthority</a></span>()</div>
 <div class="block">Returns the authority path of the resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#uriAuthority()"><code>Rest.uriAuthority()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2049,7 +2048,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4615">getUriContext</a></span>()</div>
 <div class="block">Returns the context path of the resource.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#uriContext()"><code>Rest.uriContext()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2065,7 +2064,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/UriRelativity.html" title="enum class in org.apache.juneau.marshall">UriRelativity</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4630">getUriRelativity</a></span>()</div>
 <div class="block">Returns the setting on how relative URIs should be interpreted as relative to.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#uriRelativity()"><code>Rest.uriRelativity()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2081,7 +2080,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/UriResolution.html" title="enum class in org.apache.juneau.marshall">UriResolution</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4643">getUriResolution</a></span>()</div>
 <div class="block">Returns the setting on how relative URIs should be resolved.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#uriResolution()"><code>Rest.uriResolution()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2102,7 +2101,7 @@ loadScripts(document, 'script');</script>
  They can be nested arbitrarily deep.
  They can also return values that themselves contain other variables.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bjava'>
    <ja>@Rest</ja>(
       messages=<js>"nls/Messages"</js>,
@@ -2139,7 +2138,7 @@ loadScripts(document, 'script');</script>
    <jk>public</jk> LoggerEntry getLogger(RestRequest <jv>req</jv>, <ja>@Path</ja> String <jv>name</jv>) <jk>throws</jk> Exception {
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
  </ul></div>
 <dl class="notes">
@@ -2176,7 +2175,7 @@ loadScripts(document, 'script');</script>
  <c>PUT</c>/<c>POST</c> requests, so a simple cross-origin <c>GET</c> can't use it to smuggle a body past
  an endpoint's real <c>Content-Type</c> gate.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#disableContentParam()"><code>Rest.disableContentParam()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2223,7 +2222,7 @@ loadScripts(document, 'script');</script>
       <code>Accept</code> header matches <code>application/problem+json</code> (or <code>*&amp;#47;*</code>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#problemDetails()"><code>Rest.problemDetails()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2244,7 +2243,7 @@ loadScripts(document, 'script');</script>
  handle requests &mdash; engaging recursion-detection-that-throws, parse-input buffering, and stack-trace-prefixed
  marshalling exceptions. This is independent of the JUL logger level.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#debugMarshalling()"><code>Rest.debugMarshalling()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2409,7 +2408,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-4911">isEagerInit</a></span>()</div>
 <div class="block">Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#eagerInit()"><code>Rest.eagerInit()</code></a>
  </ul></div>
 <dl class="notes">
@@ -2433,7 +2432,7 @@ loadScripts(document, 'script');</script>
    <li><code>RestContext.lazyChildren</code> env-driven default (default <code>false</code>).</li>
  </ol>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#lazyChildren()"><code>Rest.lazyChildren()</code></a>
    <li class='jm'><code>RestContext.Builder.lazyChildInit(boolean)</code>
  </ul></div>

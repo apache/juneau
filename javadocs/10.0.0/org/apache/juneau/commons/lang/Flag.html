@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
  where atomic operations are not required. It is useful in situations where you need to pass a mutable boolean
  reference to lambdas, inner classes, or methods.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       This class is <b>not thread-safe</b>. For concurrent access, use <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicBoolean.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicBoolean</code></a> instead.
    <li class='note'>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
       (<c>true</c>/<c>false</c>/<c>null</c>), use <a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang"><code>BooleanHolder</code></a> instead.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a flag to track if an operation was performed</jc>
    Flag <jv>processed</jv> = Flag.<jsm>create</jsm>();
@@ -113,7 +112,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
    <li class='jc'><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang"><code>BooleanHolder</code></a>
  </ul></div>
@@ -224,7 +223,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Flag.html" title="class in org.apache.juneau.commons.lang">Flag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-76">create</a></span>()</div>
 <div class="block">Creates a new flag initialized to <jk>false</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
    <jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
@@ -241,7 +240,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Flag.html" title="class in org.apache.juneau.commons.lang">Flag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-92">of</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Creates a new flag with the specified initial state.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
    <jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
@@ -260,7 +259,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-114">getAndSet</a></span>()</div>
 <div class="block">Sets the flag to <jk>true</jk> and returns the previous value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
    <jk>boolean</jk> <jv>wasSet</jv> = <jv>flag</jv>.getAndSet();  <jc>// Returns false, flag is now true</jc>
@@ -278,7 +277,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-132">getAndUnset</a></span>()</div>
 <div class="block">Sets the flag to <jk>false</jk> and returns the previous value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
    <jk>boolean</jk> <jv>wasSet</jv> = <jv>flag</jv>.getAndUnset();  <jc>// Returns true, flag is now false</jc>
@@ -300,7 +299,7 @@ loadScripts(document, 'script');</script>
  This method is useful for conditional execution based on the flag state, particularly in lambda expressions
  or method chains.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>initialized</jv> = Flag.<jsm>create</jsm>();
 
@@ -328,7 +327,7 @@ loadScripts(document, 'script');</script>
  This method is useful for conditional execution based on the flag state, particularly in lambda expressions
  or method chains.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>hasErrors</jv> = Flag.<jsm>create</jsm>();
 
@@ -349,7 +348,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-200">isSet</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the flag is set.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
    <jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
@@ -366,7 +365,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-213">isUnset</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the flag is not set.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
    <jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
@@ -383,7 +382,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Flag.html" title="class in org.apache.juneau.commons.lang">Flag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-227">set</a></span>()</div>
 <div class="block">Sets the flag to <jk>true</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
    <jv>flag</jv>.set();
@@ -405,7 +404,7 @@ loadScripts(document, 'script');</script>
  This method uses a logical OR operation, so once the flag is set, it remains set regardless of subsequent
  calls with <jk>false</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
    <jv>flag</jv>.setIf(<jk>false</jk>);  <jc>// Flag remains false</jc>
@@ -426,7 +425,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Flag.html" title="class in org.apache.juneau.commons.lang">Flag</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Flag.html#line-267">unset</a></span>()</div>
 <div class="block">Sets the flag to <jk>false</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
    <jv>flag</jv>.unset();

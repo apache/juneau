@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * a single map, without actually copying the entries. When the same key exists in multiple maps,</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * the value from the first map (in constructor order) is returned.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Zero-Copy Composition:&lt;/b&gt; No data is copied when creating a MultiMap; it simply wraps the provided maps</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Transparent Access:&lt;/b&gt; Accessing entries by key seamlessly searches all underlying maps in order</em>
@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Efficient Size Calculation:&lt;/b&gt; The size is computed by counting unique keys across all maps</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Create a MultiMap from three separate maps&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map1&lt;/jv&gt; = Map.of(&lt;js&gt;"key1"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;, &lt;js&gt;"key2"&lt;/js&gt;, &lt;js&gt;"value2"&lt;/js&gt;);</em>
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;totalSize&lt;/jv&gt; = &lt;jv&gt;multiMap&lt;/jv&gt;.size(); &lt;jc&gt;// Returns: 4 (key1, key2, key3, key4)&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Behavior Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Behavior Notes:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The order of key lookup follows the order of maps as provided in the constructor</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;When a key exists in multiple maps, {@link #get(Object)} returns the value from the first map containing that key</em>
@@ -82,12 +82,12 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The {@link #entrySet()} iterator only returns each key once (first occurrence), even if it exists in multiple maps</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * This class is not inherently thread-safe. If the underlying maps are modified concurrently</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * during iteration or access, the behavior is undefined. Synchronization must be handled externally if needed.</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example - Processing Multiple Configuration Sources:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example - Processing Multiple Configuration Sources:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Combine configuration from system properties, environment, and defaults&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;systemProps&lt;/jv&gt; = getSystemProperties();</em>
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;host&lt;/jv&gt; = &lt;jv&gt;config&lt;/jv&gt;.get(&lt;js&gt;"host"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * The maps are stored by reference (not copied), so modifications made through the</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * MultiMap's iterator will affect the original maps.</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;(Map.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;));</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;(Map.of(&lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;));</em>
@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * If a key exists in multiple maps, it is counted only once. The size is recalculated</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * each time this method is called (it is not cached).</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map1&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;);  &lt;jc&gt;// size = 2&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = Map.of(&lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"3"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;, &lt;js&gt;"4"&lt;/js&gt;);  &lt;jc&gt;// size = 2&lt;/jc&gt;</em>
@@ -406,7 +406,7 @@
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * The format is &lt;c&gt;"[{...},{...},...]"&lt;/c&gt; where each &lt;c&gt;{...}&lt;/c&gt; is the standard</em>
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * standard string representation of each underlying map (as returned by {@link Object#toString()}).</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map1&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * 	Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = Map.of(&lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;);</em>

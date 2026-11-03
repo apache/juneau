@@ -36,7 +36,7 @@
 <span class="source-line-no">023</span><span id="line-23"> * Reflective accessor for the currently-active OpenTelemetry trace / span id, used by</span>
 <span class="source-line-no">024</span><span id="line-24"> * {@link LogEntryFormatter} to populate the optional {@code {traceId}} / {@code {spanId}} log fields.</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='topic'&gt;Optional / reflective coupling&lt;/h5&gt;</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;h2 class='topic'&gt;Optional / reflective coupling&lt;/h2&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * OpenTelemetry is &lt;b&gt;not&lt;/b&gt; a compile-time dependency of {@code juneau-microservice}. This class</span>
@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * {@link #isAvailable()} returns {@code false} and {@link #currentTraceId()} / {@link #currentSpanId()}</span>
 <span class="source-line-no">034</span><span id="line-34"> * return the empty string, so the {@code {traceId}} / {@code {spanId}} placeholders render empty.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='topic'&gt;Where the id comes from&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='topic'&gt;Where the id comes from&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * The id is read from {@code Span.current().getSpanContext()} &amp;mdash; the OTel context active on the</span>

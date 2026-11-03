@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -335,7 +334,7 @@ loadScripts(document, 'script');</script>
  <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
  URL-encoding of non-valid URI characters.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a non-encoding UON serializer.</jc>
    UonSerializer <jv>serializer1</jv> = UonSerializer.
@@ -397,13 +396,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="paramFormat(org.apache.juneau.marshall.uon.ParamFormat)">
 <h3>paramFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonSerializer.Builder.html" title="type parameter in UonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializer.Builder.html#line-354">paramFormat</a></span><wbr><span class="parameters">(<a href="ParamFormat.html" title="enum class in org.apache.juneau.marshall.uon">ParamFormat</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonSerializer.Builder.html" title="type parameter in UonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializer.Builder.html#line-353">paramFormat</a></span><wbr><span class="parameters">(<a href="ParamFormat.html" title="enum class in org.apache.juneau.marshall.uon">ParamFormat</a>&nbsp;value)</span></div>
 <div class="block">Format to use for query/form-data/header values.
 
  <p>
  Specifies the format to use for URL GET parameter keys and values.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a normal UON serializer.</jc>
    UonSerializer <jv>serializer1</jv> = UonSerializer
@@ -428,7 +427,6 @@ loadScripts(document, 'script');</script>
    String <jv>uon2</jv> = <jv>serializer2</jv>.write(<jv>map</jv>)
  </p>
 
- <p>
  <ul class='values javatree'>
    <li class='jf'><a href="ParamFormat.html#UON"><code>ParamFormat.UON</code></a> (default) - Use UON notation for parameters.
    <li class='jf'><a href="ParamFormat.html#PLAINTEXT"><code>ParamFormat.PLAINTEXT</code></a> - Use plain text for parameters.
@@ -446,13 +444,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="paramFormatPlain()">
 <h3>paramFormatPlain</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonSerializer.Builder.html" title="type parameter in UonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializer.Builder.html#line-384">paramFormatPlain</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonSerializer.Builder.html" title="type parameter in UonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializer.Builder.html#line-383">paramFormatPlain</a></span>()</div>
 <div class="block">Format to use for query/form-data/header values.
 
  <p>
  Specifies plain-text for the format to use for URL GET parameter keys and values.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a plain-text UON serializer.</jc>
    UonSerializer <jv>serializer</jv> = UonSerializer
@@ -477,7 +475,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="quoteCharUon(char)">
 <h3>quoteCharUon</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonSerializer.Builder.html" title="type parameter in UonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializer.Builder.html#line-394">quoteCharUon</a></span><wbr><span class="parameters">(char&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonSerializer.Builder.html" title="type parameter in UonSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonSerializer.Builder.html#line-393">quoteCharUon</a></span><wbr><span class="parameters">(char&nbsp;value)</span></div>
 <div class="block">Specifies the quote character.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

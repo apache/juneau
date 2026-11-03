@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36">/**</span>
 <span class="source-line-no">037</span><span id="line-37"> * A simple list of HTTP headers with various convenience methods.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='figure'&gt;Example&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    HeaderList &lt;jv&gt;headers&lt;/jv&gt; = HeaderList</span>
 <span class="source-line-no">042</span><span id="line-42"> *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58"> *    HeaderList &lt;jv&gt;headers&lt;/jv&gt; = &lt;jsm&gt;headerList&lt;/jsm&gt;(&lt;jsm&gt;accept&lt;/jsm&gt;(&lt;js&gt;"text/xml"&lt;/js&gt;), &lt;jsm&gt;contentType&lt;/jsm&gt;(&lt;js&gt;"text/xml"&lt;/js&gt;));</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;/p&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon"&gt;juneau-rest-common&lt;/a&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> * &lt;/ul&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> */</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">   /**</span>
 <span class="source-line-no">116</span><span id="line-116">    * Creates a new {@link HeaderList} initialized with the specified name/value pairs.</span>
 <span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * &lt;h4 class='figure'&gt;Example&lt;/h4&gt;</span>
 <span class="source-line-no">119</span><span id="line-119">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">120</span><span id="line-120">    *    HeaderList &lt;jv&gt;headers&lt;/jv&gt; = HeaderList.&lt;jsm&gt;ofPairs&lt;/jsm&gt;(&lt;js&gt;"Accept"&lt;/js&gt;, &lt;js&gt;"text/xml"&lt;/js&gt;, &lt;js&gt;"Content-Type"&lt;/js&gt;, &lt;js&gt;"text/xml"&lt;/js&gt;);</span>
 <span class="source-line-no">121</span><span id="line-121">    * &lt;/p&gt;</span>
@@ -334,7 +334,7 @@
 <span class="source-line-no">321</span><span id="line-321">    * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.Header#name()} or</span>
 <span class="source-line-no">322</span><span id="line-322">    *    {@link org.apache.juneau.http.Header#value()} annotations.</span>
 <span class="source-line-no">323</span><span id="line-323">    *</span>
-<span class="source-line-no">324</span><span id="line-324">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">324</span><span id="line-324">    * &lt;h4 class='figure'&gt;Example&lt;/h4&gt;</span>
 <span class="source-line-no">325</span><span id="line-325">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">326</span><span id="line-326">    *    Age &lt;jv&gt;age&lt;/jv&gt; = headerList.get(Age.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">327</span><span id="line-327">    * &lt;/p&gt;</span>
@@ -410,7 +410,7 @@
 <span class="source-line-no">397</span><span id="line-397">    *    &lt;li&gt;&lt;c&gt;X(String &lt;jv&gt;name&lt;/jv&gt;, Object &lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;</span>
 <span class="source-line-no">398</span><span id="line-398">    * &lt;/ul&gt;</span>
 <span class="source-line-no">399</span><span id="line-399">    *</span>
-<span class="source-line-no">400</span><span id="line-400">    * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">400</span><span id="line-400">    * &lt;h4 class='figure'&gt;Example&lt;/h4&gt;</span>
 <span class="source-line-no">401</span><span id="line-401">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">402</span><span id="line-402">    *    BasicIntegerHeader &lt;jv&gt;age&lt;/jv&gt; = headerList.get(&lt;js&gt;"Age"&lt;/js&gt;, BasicIntegerHeader.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">403</span><span id="line-403">    * &lt;/p&gt;</span>

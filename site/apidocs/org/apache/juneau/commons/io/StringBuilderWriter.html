@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link"><code>StringBuffer</code></a> to avoid synchronization overhead. This makes it more efficient for
  single-threaded use cases where thread-safety is not required.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>No synchronization overhead - uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a> instead of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link"><code>StringBuffer</code></a>
    <li>Efficient string building - optimized for single-threaded string construction
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
    <li>No-op close/flush - close and flush operations do nothing
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Building strings efficiently in single-threaded contexts
    <li>Capturing output from APIs that require a Writer
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    <li>Performance-critical string building where synchronization is not needed
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Basic usage</jc>
    StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter();
@@ -128,7 +127,7 @@ loadScripts(document, 'script');</script>
    <jc>// sb now contains "test"</jc>
  </p>
 
- <h5 class='section'>Comparison with StringWriter:</h5>
+ <h2 class='section'>Comparison with StringWriter:</h2>
  <ul class='spaced-list'>
    <li><b>StringWriter:</b> Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuffer.html" title="class or interface in java.lang" class="external-link"><code>StringBuffer</code></a> (thread-safe, synchronized)
    <li><b>StringBuilderWriter:</b> Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a> (not thread-safe, faster)
@@ -136,13 +135,13 @@ loadScripts(document, 'script');</script>
    <li><b>StringBuilderWriter:</b> Suitable for single-threaded scenarios where performance matters
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is <b>not thread-safe</b>. It uses a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a> internally, which is not
  synchronized. If multiple threads need to write to the same StringBuilderWriter instance,
  external synchronization is required.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  </ul></div>
 </section>
@@ -256,7 +255,7 @@ loadScripts(document, 'script');</script>
  <p>
  Creates a new StringBuilderWriter with the default initial capacity (16 characters).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter();
    <jv>writer</jv>.write(<js>"Hello"</js>);
@@ -274,7 +273,7 @@ loadScripts(document, 'script');</script>
  performance if you know approximately how large the resulting string will be, avoiding
  multiple buffer reallocations.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Pre-allocate buffer for known size</jc>
    StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter(1000);
@@ -285,7 +284,7 @@ loadScripts(document, 'script');</script>
 <dd><code>initialSize</code> - The initial capacity of the internal StringBuilder in characters.
                     Must be non-negative.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <tt>initialSize</tt> is negative.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <c>initialSize</c> is negative.</dd>
 </dl>
 </section>
 </li>
@@ -300,7 +299,7 @@ loadScripts(document, 'script');</script>
  this writer will be appended to the provided StringBuilder. This is useful when you
  want to write to a StringBuilder that you already have a reference to.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<js>"Prefix: "</js>);
    StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter(<jv>sb</jv>);

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -104,8 +103,25 @@ implements <a href="../health/ReadinessStateAware.html" title="interface in org.
  <code>init</code> time), or by registering an <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> bean in their <code>RestContext</code>
  bean store.
 
- <h5 class='section'>Example:</h5>
- <pre></div>
+ <h2 class='section'>Example:</h2>
+ <pre>
+ &#64;Rest(path="/mcp")
+ public class MyMcpServlet extends org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet {
+     &#64;Override
+     protected McpServerConfig createMcpConfig() {
+         return new McpServerConfig()
+             .setName("my-server").setVersion("1.0.0")
+             .addTool(new MyEchoTool());
+     }
+ }
+ </pre>
+
+ <p>
+ The servlet enables <code>addBeanTypes</code> on its serializer so that polymorphic wire types a
+ revision emits (content blocks, resource payloads) are tagged with their <code>type</code>
+ discriminator, and disables URI resolution (<code>uriResolution="NONE"</code>) so that JSON-Schema
+ JSON-Pointer <code>$ref</code> values (e.g. <code>"#/$defs/text"</code>) and absolute URIs with fragments
+ are emitted verbatim rather than rewritten against the servlet path.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

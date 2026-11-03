@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> * API with additional functionality for constructor introspection, annotation handling, and instance creation.</span>
 <span class="source-line-no">036</span><span id="line-36"> * It extends {@link ExecutableInfo} to provide common functionality shared with methods.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Constructor introspection - access constructor metadata, parameters, exceptions</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Annotation support - get annotations declared on the constructor</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Thread-safe - instances are immutable and safe for concurrent access</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Introspecting constructor metadata for code generation or analysis</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;Creating instances of classes dynamically</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;Building frameworks that need to instantiate objects</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/ul&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Get ConstructorInfo from a class&lt;/jc&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68"> *    MyClass &lt;jv&gt;obj&lt;/jv&gt; = &lt;jv&gt;ctor&lt;/jv&gt;.invoke(&lt;js&gt;"arg"&lt;/js&gt;);</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/p&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link ClassInfo} - Class introspection</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li class='jc'&gt;{@link MethodInfo} - Method introspection</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;li class='jc'&gt;{@link FieldInfo} - Field introspection</span>
@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">   /**</span>
 <span class="source-line-no">085</span><span id="line-85">    * Creates a ConstructorInfo wrapper for the specified constructor.</span>
 <span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">088</span><span id="line-88">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">089</span><span id="line-89">    *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">090</span><span id="line-90">    *    Constructor&amp;lt;?&amp;gt; &lt;jv&gt;c&lt;/jv&gt; = MyClass.&lt;jk&gt;class&lt;/jk&gt;.getConstructor(String.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106">    * &lt;p&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    * This convenience method automatically determines the declaring class from the constructor.</span>
 <span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">109</span><span id="line-109">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">110</span><span id="line-110">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">111</span><span id="line-111">    *    Constructor&amp;lt;?&amp;gt; &lt;jv&gt;c&lt;/jv&gt; = MyClass.&lt;jk&gt;class&lt;/jk&gt;.getConstructor(String.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">112</span><span id="line-112">    *    ConstructorInfo &lt;jv&gt;ci&lt;/jv&gt; = ConstructorInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;c&lt;/jv&gt;);</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169">   /**</span>
 <span class="source-line-no">170</span><span id="line-170">    * Returns the wrapped constructor.</span>
 <span class="source-line-no">171</span><span id="line-171">    *</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">173</span><span id="line-173">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    *    ConstructorInfo &lt;jv&gt;ci&lt;/jv&gt; = ...;</span>
 <span class="source-line-no">175</span><span id="line-175">    *    Constructor&amp;lt;MyClass&amp;gt; &lt;jv&gt;ctor&lt;/jv&gt; = &lt;jv&gt;ci&lt;/jv&gt;.inner();</span>
@@ -367,7 +367,7 @@
 <span class="source-line-no">354</span><span id="line-354">    *    &lt;li&gt;If not found in the bean store, checks the &lt;c&gt;otherBeans&lt;/c&gt; parameter.</span>
 <span class="source-line-no">355</span><span id="line-355">    * &lt;/ul&gt;</span>
 <span class="source-line-no">356</span><span id="line-356">    *</span>
-<span class="source-line-no">357</span><span id="line-357">    * &lt;h5 class='section'&gt;Parameter Resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">357</span><span id="line-357">    * &lt;h4 class='section'&gt;Parameter Resolution:&lt;/h4&gt;</span>
 <span class="source-line-no">358</span><span id="line-358">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">359</span><span id="line-359">    *    &lt;li&gt;&lt;b&gt;Single beans&lt;/b&gt; - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.</span>
 <span class="source-line-no">360</span><span id="line-360">    *       If not found, checks &lt;c&gt;otherBeans&lt;/c&gt; for a compatible instance.</span>

@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * selected stock theme's override block if one other than {@code open} was selected, appended as</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * {@code html:root{}} blocks.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Mount styles:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Mount styles:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Both of the following arrangements serve the stylesheets at the {@link #CHROME_CSS_PATH} / {@link #THEME_CSS_DIR}</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * URLs with no path juggling by the host resource:</em>
@@ -70,11 +70,11 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * Each operation below therefore declares &lt;i&gt;both&lt;/i&gt; its prefixed path and the same path minus the</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * {@code /juneau-console} prefix, so whichever one the arrangement leaves to be matched resolves.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Theme precedence&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Theme precedence&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;{@link Builder#theme(String)} if set, else {@link Theme#OPEN}. {@link Theme#OPEN}'s block is always appended</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * first; a selected non-{@code open} stock theme adds exactly one more block.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Stylesheet load-order band:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Stylesheet load-order band:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * At equal cascade specificity, whichever of {@code juneau-views.css} and this class's {@code chrome.css} is</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * declared later in a page's {@code &lt;head&gt;} wins &amp;mdash; the exact ambiguity the {@code overrideBlock} theme block</em>
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * {@code juneau-views.css} in either order, which is precisely why the {@code html:root} fix exists: so the</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * active theme wins regardless of which order the consumer's links happen to appear in.</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Stock chrome.css (Theme.OPEN tokens), mounted standalone at /juneau-console/*.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@Rest&lt;/ja&gt;(mixins=ConsoleChromeMixin.&lt;jk&gt;class&lt;/jk&gt;)</em>
@@ -727,7 +727,7 @@
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * carry one). This method is public so the FreeMarker {@code &lt;@theme&gt;} directive renders its inline block with</em>
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * the same code that serves {@code chrome.css}.</em>
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 * 	Theme &lt;jv&gt;theme&lt;/jv&gt; = Theme.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"corporate"&lt;/js&gt;)</em>
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> <em class="jxr_javadoccomment">	 * 		.token(&lt;js&gt;"--jc-accent"&lt;/js&gt;, &lt;js&gt;"#b45309"&lt;/js&gt;)</em>
@@ -778,7 +778,7 @@
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * piece is {@link #SCHEME_SCRIPT} (stamped with the request's CSP nonce when one is set) followed by a link to the</em>
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 * shipped dark layer.</em>
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * 	SchemeHead &lt;jv&gt;h&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;schemeHead&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, &lt;js&gt;"auto"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;attrs&lt;/jv&gt; = &lt;jv&gt;h&lt;/jv&gt;.htmlAttributes().isEmpty() ? &lt;js&gt;""&lt;/js&gt; : &lt;js&gt;" "&lt;/js&gt; + &lt;jv&gt;h&lt;/jv&gt;.htmlAttributes();</em>
@@ -856,7 +856,7 @@
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * as {@link Theme.Builder}: the name shape, the reserved {@code --jc-chrome-*} namespace, the value grammar, and</em>
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * one channel per name.</em>
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;css&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;schemeOverrideBlock&lt;/jsm&gt;(</em>
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 * 		Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"--jc-link"&lt;/js&gt;, &lt;js&gt;"#6cb4ff"&lt;/js&gt;), Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"--jc-focus"&lt;/js&gt;, &lt;js&gt;"var(--jc-accent)"&lt;/js&gt;));</em>

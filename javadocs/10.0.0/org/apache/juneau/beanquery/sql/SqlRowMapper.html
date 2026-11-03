@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -111,7 +110,7 @@ loadScripts(document, 'script');</script>
  <code>Object</code>, <code>Map</code> types a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> is not assignable to (such as <code>TreeMap</code>) and types
  that cannot be planned get none, and <code>find</code>/<code>stream</code> then throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Custom mapper.</jc>
    SqlRowMapper&lt;Person&gt; <jv>mapper</jv> = (<jv>rs</jv>, <jv>columns</jv>) -&gt; <jk>new</jk> Person(
@@ -212,7 +211,7 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
  <code>SELECT</code> order, with each value read via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.sql/java/sql/ResultSet.html#getObject(int)" title="class or interface in java.sql" class="external-link"><code>ResultSet.getObject(int)</code></a> (the driver's natural type;
  <jk>null</jk> for SQL <code>NULL</code>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    SqlRowMapper&lt;Map&lt;String,Object&gt;&gt; <jv>mapper</jv> = SqlRowMapper.<jsm>map</jsm>();
  </p></div>
@@ -243,7 +242,7 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
  A failure reading or setting a column throws a <a href="../../commons/beanquery/BeanQueryExecutionException.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQueryExecutionException</code></a> naming the column.  The
  returned mapper is thread-safe.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>record</jk> Task(String name, <jk>int</jk> age) {}
    SqlRowMapper&lt;Task&gt; <jv>mapper</jv> = SqlRowMapper.<jsm>bean</jsm>(Task.<jk>class</jk>);
@@ -270,7 +269,7 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
 <div class="block">Same as <a href="#bean(java.lang.Class)"><code>bean(Class)</code></a>, but follows the bean rules of existing bean metadata, for example the metadata of
  the serializer that renders the rows, so column names match the property names it emits.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BeanConfigContext <jv>config</jv> = BeanConfigContext.<jsm>create</jsm>().propertyNamer(PropertyNamerDLC.<jsf>INSTANCE</jsf>).build();
    SqlRowMapper&lt;Task&gt; <jv>mapper</jv> = SqlRowMapper.<jsm>bean</jsm>(BeanMeta.<jsm>of</jsm>(Task.<jk>class</jk>, <jv>config</jv>));

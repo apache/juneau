@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  behind it.  The shipped default is <a href="CommonmarkMarkdownRenderer.html" title="class in org.apache.juneau.console.views.markdown"><code>CommonmarkMarkdownRenderer</code></a> (commonmark-java with the GFM tables
  extension enabled), but a consumer can swap in their own parser without the toolkit knowing which library won.
 
- <h5 class='section'>Selecting an implementation:</h5>
+ <h2 class='section'>Selecting an implementation:</h2>
  <p>
  <a href="#resolve()"><code>resolve()</code></a> returns the active renderer via the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> SPI mechanism: if a
  consumer registers their own provider (a <code>META-INF/services/</code>
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
  that provider wins; otherwise the built-in commonmark-java default is used.  The default is intentionally
  <b>not</b> registered as a service, so a single consumer-supplied provider is always unambiguous.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Render markdown to an HTML fragment using whichever renderer is active.</jc>
    MarkdownRenderer <jv>renderer</jv> = MarkdownRenderer.<jsm>resolve</jsm>();
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  The row-detail runtime still allowlist-copies the fragment (never <code>innerHTML</code>) when
  <code>FieldFormat.MARKDOWN</code> is set.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="CommonmarkMarkdownRenderer.html" title="class in org.apache.juneau.console.views.markdown"><code>CommonmarkMarkdownRenderer</code></a>
  </ul></div>

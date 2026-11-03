@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  enabled, prints the throwable's stack trace to the logger.  It is <b>not</b> invoked automatically by any
  factory — callers that want verbose logging at a specific site must call it explicitly.
 
- <h5 class='section'>Example — enabling for a single test thread:</h5>
+ <h2 class='section'>Example — enabling for a single test thread:</h2>
  <p class='bjava'>
    Settings.<jsm>get</jsm>().setLocal(<js>"juneau.enableVerboseExceptions"</js>, <js>"true"</js>);
    <jk>try</jk> {
@@ -103,7 +102,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsUtils">Utils Package</a>
  </ul></div>
 </section>
@@ -363,7 +362,7 @@ loadScripts(document, 'script');</script>
  can cause additional errors due to stack exhaustion. The stack trace will be limited to the specified
  maximum number of elements.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> {
       <jc>// Some code that might cause StackOverflowError</jc>
@@ -395,7 +394,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as <a href="#printStackTrace(java.lang.Throwable,java.io.PrintWriter,java.lang.Integer)"><code>printStackTrace(Throwable, PrintWriter, Integer)</code></a> but writes to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#err" title="class or interface in java.lang" class="external-link"><code>System.err</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> {
       <jc>// Some code that might cause StackOverflowError</jc>

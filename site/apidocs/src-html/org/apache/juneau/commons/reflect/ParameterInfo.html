@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> * It supports resolving parameter names from bytecode (when compiled with &lt;c&gt;-parameters&lt;/c&gt;) or from</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;ja&gt;@Name&lt;/ja&gt; annotations.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Parameter introspection - access parameter metadata, type, annotations</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Name resolution - resolve parameter names from bytecode or annotations</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;Annotation support - get annotations declared on the parameter</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;Introspecting parameter metadata for code generation or analysis</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;Resolving parameter names for dependency injection frameworks</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li&gt;Building frameworks that need to analyze method/constructor signatures</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *    &lt;jc&gt;// Get ParameterInfo from a method&lt;/jc&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ...;</span>
@@ -90,7 +90,7 @@
 <span class="source-line-no">077</span><span id="line-77"> *       &lt;jv&gt;param&lt;/jv&gt;.getAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;).toList();</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;/p&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;h5 class='section'&gt;Parameter Name Resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;h2 class='section'&gt;Parameter Name Resolution:&lt;/h2&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;p&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> * Parameter names are resolved in the following order:</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;ol class='spaced-list'&gt;</span>
@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line-86"> *    &lt;li&gt;&lt;c&gt;arg0&lt;/c&gt;, &lt;c&gt;arg1&lt;/c&gt;, etc. (fallback if names unavailable)</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;/ol&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
-<span class="source-line-no">089</span><span id="line-89"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *    &lt;li class='jc'&gt;{@link MethodInfo} - Method introspection</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;li class='jc'&gt;{@link ConstructorInfo} - Constructor introspection</span>
 <span class="source-line-no">092</span><span id="line-92"> *    &lt;li class='jc'&gt;{@link ExecutableInfo} - Common executable functionality</span>
@@ -134,7 +134,7 @@
 <span class="source-line-no">121</span><span id="line-121">    * This convenience method automatically determines the declaring executable from the parameter</span>
 <span class="source-line-no">122</span><span id="line-122">    * and finds the matching ParameterInfo.</span>
 <span class="source-line-no">123</span><span id="line-123">    *</span>
-<span class="source-line-no">124</span><span id="line-124">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">124</span><span id="line-124">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">125</span><span id="line-125">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">126</span><span id="line-126">    *    Parameter &lt;jv&gt;p&lt;/jv&gt; = ...;</span>
 <span class="source-line-no">127</span><span id="line-127">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ParameterInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;p&lt;/jv&gt;);</span>
@@ -219,7 +219,7 @@
 <span class="source-line-no">206</span><span id="line-206">    * &lt;p&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    * Same as calling {@link Parameter#getAnnotatedType()}.</span>
 <span class="source-line-no">208</span><span id="line-208">    *</span>
-<span class="source-line-no">209</span><span id="line-209">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">210</span><span id="line-210">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">211</span><span id="line-211">    *    &lt;jc&gt;// Get annotated type: void method(@NotNull String value)&lt;/jc&gt;</span>
 <span class="source-line-no">212</span><span id="line-212">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -274,7 +274,7 @@
 <span class="source-line-no">261</span><span id="line-261">    * &lt;p&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    * Same as calling {@link Parameter#getDeclaringExecutable()} but returns {@link ExecutableInfo} instead.</span>
 <span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">264</span><span id="line-264">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">265</span><span id="line-265">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">266</span><span id="line-266">    *    &lt;jc&gt;// Get the method or constructor that declares this parameter&lt;/jc&gt;</span>
 <span class="source-line-no">267</span><span id="line-267">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -315,7 +315,7 @@
 <span class="source-line-no">302</span><span id="line-302">    * For methods, searches matching methods (same signature) in parent classes/interfaces</span>
 <span class="source-line-no">303</span><span id="line-303">    * for parameters at the same index with matching name and type.</span>
 <span class="source-line-no">304</span><span id="line-304">    *</span>
-<span class="source-line-no">305</span><span id="line-305">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">305</span><span id="line-305">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">306</span><span id="line-306">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">307</span><span id="line-307">    *    &lt;jc&gt;// Constructor with different parameter counts:&lt;/jc&gt;</span>
 <span class="source-line-no">308</span><span id="line-308">    *    &lt;jk&gt;class&lt;/jk&gt; A {</span>
@@ -349,7 +349,7 @@
 <span class="source-line-no">336</span><span id="line-336">    * &lt;p&gt;</span>
 <span class="source-line-no">337</span><span id="line-337">    * Same as calling {@link Parameter#getModifiers()}.</span>
 <span class="source-line-no">338</span><span id="line-338">    *</span>
-<span class="source-line-no">339</span><span id="line-339">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">339</span><span id="line-339">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">340</span><span id="line-340">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">341</span><span id="line-341">    *    &lt;jc&gt;// Check if parameter is final&lt;/jc&gt;</span>
 <span class="source-line-no">342</span><span id="line-342">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -393,7 +393,7 @@
 <span class="source-line-no">380</span><span id="line-380">    * &lt;p&gt;</span>
 <span class="source-line-no">381</span><span id="line-381">    * Same as calling {@link Parameter#getParameterizedType()}.</span>
 <span class="source-line-no">382</span><span id="line-382">    *</span>
-<span class="source-line-no">383</span><span id="line-383">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">383</span><span id="line-383">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">384</span><span id="line-384">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">385</span><span id="line-385">    *    &lt;jc&gt;// Get generic type information for parameter: List&amp;lt;String&amp;gt; values&lt;/jc&gt;</span>
 <span class="source-line-no">386</span><span id="line-386">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -537,7 +537,7 @@
 <span class="source-line-no">524</span><span id="line-524">    * &lt;p&gt;</span>
 <span class="source-line-no">525</span><span id="line-525">    * Same as calling {@link Parameter#isImplicit()}.</span>
 <span class="source-line-no">526</span><span id="line-526">    *</span>
-<span class="source-line-no">527</span><span id="line-527">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">527</span><span id="line-527">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">528</span><span id="line-528">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">529</span><span id="line-529">    *    &lt;jc&gt;// Filter out implicit parameters&lt;/jc&gt;</span>
 <span class="source-line-no">530</span><span id="line-530">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -561,7 +561,7 @@
 <span class="source-line-no">548</span><span id="line-548">    * &lt;b&gt;Note:&lt;/b&gt; This method is different from {@link #hasName()} which also checks for the presence</span>
 <span class="source-line-no">549</span><span id="line-549">    * of a &lt;c&gt;@Name&lt;/c&gt; annotation. This method only checks if the name is present in the bytecode.</span>
 <span class="source-line-no">550</span><span id="line-550">    *</span>
-<span class="source-line-no">551</span><span id="line-551">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">551</span><span id="line-551">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">552</span><span id="line-552">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">553</span><span id="line-553">    *    &lt;jc&gt;// Check if parameter name is in bytecode&lt;/jc&gt;</span>
 <span class="source-line-no">554</span><span id="line-554">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -582,7 +582,7 @@
 <span class="source-line-no">569</span><span id="line-569">    * &lt;p&gt;</span>
 <span class="source-line-no">570</span><span id="line-570">    * Same as calling {@link Parameter#isSynthetic()}.</span>
 <span class="source-line-no">571</span><span id="line-571">    *</span>
-<span class="source-line-no">572</span><span id="line-572">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">572</span><span id="line-572">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">573</span><span id="line-573">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">574</span><span id="line-574">    *    &lt;jc&gt;// Filter out compiler-generated parameters&lt;/jc&gt;</span>
 <span class="source-line-no">575</span><span id="line-575">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -618,7 +618,7 @@
 <span class="source-line-no">605</span><span id="line-605">    * &lt;p&gt;</span>
 <span class="source-line-no">606</span><span id="line-606">    * Only returns &lt;jk&gt;true&lt;/jk&gt; for the last parameter of a variable arity method.</span>
 <span class="source-line-no">607</span><span id="line-607">    *</span>
-<span class="source-line-no">608</span><span id="line-608">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">608</span><span id="line-608">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">609</span><span id="line-609">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">610</span><span id="line-610">    *    &lt;jc&gt;// Check if this is a varargs parameter&lt;/jc&gt;</span>
 <span class="source-line-no">611</span><span id="line-611">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -644,7 +644,7 @@
 <span class="source-line-no">631</span><span id="line-631">    *    &lt;li&gt;Varargs indicator (if applicable)</span>
 <span class="source-line-no">632</span><span id="line-632">    * &lt;/ul&gt;</span>
 <span class="source-line-no">633</span><span id="line-633">    *</span>
-<span class="source-line-no">634</span><span id="line-634">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">634</span><span id="line-634">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">635</span><span id="line-635">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">636</span><span id="line-636">    *    &lt;jc&gt;// Simple parameter&lt;/jc&gt;</span>
 <span class="source-line-no">637</span><span id="line-637">    *    ParameterInfo &lt;jv&gt;pi&lt;/jv&gt; = ...;</span>
@@ -866,7 +866,7 @@
 <span class="source-line-no">853</span><span id="line-853">    *    &lt;li&gt;If not found in the bean store, checks the &lt;c&gt;otherBeans&lt;/c&gt; parameter.</span>
 <span class="source-line-no">854</span><span id="line-854">    * &lt;/ul&gt;</span>
 <span class="source-line-no">855</span><span id="line-855">    *</span>
-<span class="source-line-no">856</span><span id="line-856">    * &lt;h5 class='section'&gt;Parameter Resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">856</span><span id="line-856">    * &lt;h4 class='section'&gt;Parameter Resolution:&lt;/h4&gt;</span>
 <span class="source-line-no">857</span><span id="line-857">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">858</span><span id="line-858">    *    &lt;li&gt;&lt;b&gt;Single beans&lt;/b&gt; - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.</span>
 <span class="source-line-no">859</span><span id="line-859">    *       If not found, checks &lt;c&gt;otherBeans&lt;/c&gt; for a compatible instance.</span>

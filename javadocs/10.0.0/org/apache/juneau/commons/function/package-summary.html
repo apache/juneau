@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -98,6 +97,7 @@ loadScripts(document, 'script');</script>
    </p>
 
    <table class='styled'>
+      <caption>Lifecycle phases of BeanSupplier and BeanConsumer</caption>
       <tr><th>Phase</th><th>BeanSupplier (serialization)</th><th>BeanConsumer (parsing)</th></tr>
       <tr><td><b>Setup</b></td><td><a href="BeanSupplier.html#begin()"><code>BeanSupplier#begin()</code></a> — open cursor, execute query</td><td><a href="BeanConsumer.html#begin()"><code>BeanConsumer#begin()</code></a> — open connection, prepare statement</td></tr>
       <tr><td><b>Transfer</b></td><td><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html#iterator()" title="class or interface in java.lang" class="external-link"><code>BeanSupplier#iterator()</code></a> — yield one bean per call</td><td><a href="ThrowingConsumer.html#acceptThrows(T)"><code>BeanConsumer#acceptThrows(Object)</code></a> — receive one bean per call</td></tr>
@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
    <code>DataSource</code> is supplied via a factory registered with <a href="BeanFactory.html" title="interface in org.apache.juneau.commons.function"><code>BeanFactory</code></a>.
    </p>
 
-   <h5 class='figure'>Bean class with factory annotation</h5>
+   <h4 class='figure'>Bean class with factory annotation</h4>
    <p class='bjava'>
    <jk>package</jk> com.example;
 
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
    }
    </p>
 
-   <h5 class='figure'>Spring REST endpoint</h5>
+   <h4 class='figure'>Spring REST endpoint</h4>
    <p class='bjava'>
    <ja>@Rest</ja>
    <jk>public class</jk> EmployeeResource <jk>extends</jk> BasicRestServlet {
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
    it rolls back and rethrows; on completion it performs a final commit and closes resources.
    </p>
 
-   <h5 class='figure'>BeanConsumer with batch commits</h5>
+   <h4 class='figure'>BeanConsumer with batch commits</h4>
    <p class='bjava'>
    <ja>@Marshalled</ja>(factory=EmployeeConsumer.Factory.<jk>class</jk>)
    <jk>public class</jk> EmployeeConsumer <jk>implements</jk> BeanConsumer&lt;Employee&gt; {
@@ -274,14 +274,14 @@ loadScripts(document, 'script');</script>
    }
    </p>
 
-   <h5 class='figure'>Parsing via parseToBeanConsumer</h5>
+   <h4 class='figure'>Parsing via parseToBeanConsumer</h4>
    <p class='bjava'>
    <jc>// Direct API usage — framework calls begin(), acceptThrows() per element, complete().</jc>
    <jk>var</jk> <jv>consumer</jv> = <jv>consumerFactory</jv>.create();
    JsonParser.<jsf>DEFAULT</jsf>.getSession().parseToBeanConsumer(<jv>inputStream</jv>, <jv>consumer</jv>, Employee.<jk>class</jk>);
    </p>
 
-   <h5 class='figure'>Spring REST endpoint</h5>
+   <h4 class='figure'>Spring REST endpoint</h4>
    <p class='bjava'>
    <ja>@Rest</ja>
    <jk>public class</jk> EmployeeResource <jk>extends</jk> BasicRestServlet {
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
    the exception (log-and-skip) for fault-tolerant ingestion of partially-invalid input:
    </p>
 
-   <h5 class='figure'>Fault-tolerant ingestion (skip bad records)</h5>
+   <h4 class='figure'>Fault-tolerant ingestion (skip bad records)</h4>
    <p class='bjava'>
    BeanConsumer&lt;Employee&gt; <jv>consumer</jv> = <jk>new</jk> BeanConsumer&lt;&gt;() {
       <ja>@Override</ja>
@@ -331,7 +331,7 @@ loadScripts(document, 'script');</script>
    both serialization and parsing. The implementation itself determines direction at runtime.
    </p>
 
-   <h5 class='figure'>In-memory channel — ListBeanChannel</h5>
+   <h4 class='figure'>In-memory channel — ListBeanChannel</h4>
    <p class='bjava'>
    <jk>public class</jk> EmployeeCollection {
 
@@ -349,7 +349,7 @@ loadScripts(document, 'script');</script>
    Json5Parser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, EmployeeCollection.<jk>class</jk>);
    </p>
 
-   <h5 class='figure'>Database-backed channel</h5>
+   <h4 class='figure'>Database-backed channel</h4>
    <p class='bjava'>
    <ja>@Marshalled</ja>(factory=EmployeeChannel.Factory.<jk>class</jk>)
    <jk>public class</jk> EmployeeChannel <jk>implements</jk> BeanChannel&lt;Employee&gt; {
@@ -436,7 +436,7 @@ loadScripts(document, 'script');</script>
    runtime.
    </p>
 
-   <h5 class='figure'>Spring configuration</h5>
+   <h4 class='figure'>Spring configuration</h4>
    <p class='bjava'>
    <ja>@Configuration</ja>
    <jk>public class</jk> JuneauStreamingConfig {
@@ -458,7 +458,7 @@ loadScripts(document, 'script');</script>
    }
    </p>
 
-   <h5 class='figure'>Wiring the SpringBeanStore into a REST resource</h5>
+   <h4 class='figure'>Wiring the SpringBeanStore into a REST resource</h4>
    <p class='bjava'>
    <ja>@Rest</ja>
    <jk>public class</jk> EmployeeResource <jk>extends</jk> BasicSpringRestServlet {
@@ -488,6 +488,7 @@ loadScripts(document, 'script');</script>
    <div class='topic'>
 
    <table class='styled'>
+      <caption>Annotations used with streaming beans</caption>
       <tr>
          <th>Annotation</th>
          <th>Target</th>

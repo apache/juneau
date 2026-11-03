@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  single central interception point (<a href="RichLogger.html#log(java.util.logging.LogRecord)"><code>RichLogger.log(java.util.logging.LogRecord)</code></a>), not per logger instance.  The
  "on <a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a>" framing is about API home (<a href="RichLogger.html#context()"><code>RichLogger.context()</code></a>), not about per-instance scoping.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jk>try</jk> (LogContext.Scope <jv>c</jv> = RichLogger.<jsm>context</jsm>().with(<js>"requestId"</js>, <jv>id</jv>)) {
       <jc>// Every record logged in this scope automatically carries requestId.</jc>
@@ -96,33 +95,33 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Nesting semantics:</h5>
+ <h2 class='section'>Nesting semantics:</h2>
  <p>
  Classic MDC save/restore: <a href="#with(java.lang.String,java.lang.Object)"><code>with(String, Object)</code></a> records the key's <i>previous</i> value (or "absent") before
  overwriting, and <a href="LogContext.Scope.html#close()"><code>LogContext.Scope.close()</code></a> restores exactly that prior state &mdash; never a blanket clear.  Nested scopes on
  the same key are safe: closing the inner scope restores the outer value, not the empty state.  <a href="#with(java.util.Map)"><code>with(Map)</code></a>
  restores all entries in one <a href="LogContext.Scope.html#close()"><code>LogContext.Scope.close()</code></a>.
 
- <h5 class='section'>Null policy:</h5>
+ <h2 class='section'>Null policy:</h2>
  <p>
  <a href="#with(java.lang.String,java.lang.Object)"><code>with(String, Object)</code></a> rejects a <jk>null</jk> key.  A <jk>null</jk> value means "remove this key for the scope's
  duration" &mdash; a <jk>null</jk> is never stored, so <a href="#snapshot()"><code>snapshot()</code></a> (an immutable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#copyOf(java.util.Map)" title="class or interface in java.util" class="external-link"><code>copy</code></a>) never
  blows up on a null key or value.
 
- <h5 class='section'>Thread confinement (v1):</h5>
+ <h2 class='section'>Thread confinement (v1):</h2>
  <p>
  This context is <b>thread-confined only</b>.  It is not inherited by child threads, not propagated across executor or
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> boundaries, and is <b>not</b> SLF4J MDC and is <b>not</b> restored by
  <code>MdcAsyncListener</code>.  Apps that rely on SLF4J MDC on an async-completion thread keep it; apps that rely on
  <code>LogContext</code> do not (except the REST debug-pipeline completion record, which carries it explicitly).
 
- <h5 class='section'>Scope discipline:</h5>
+ <h2 class='section'>Scope discipline:</h2>
  <p>
  A <a href="LogContext.Scope.html" title="interface in org.apache.juneau.commons.logging"><code>LogContext.Scope</code></a> must be closed on the same thread that opened it (use try-with-resources).  A forgotten
  <a href="LogContext.Scope.html#close()"><code>LogContext.Scope.close()</code></a> leaves the entry live on that thread and is visible on the next <a href="#get(java.lang.String)"><code>get(String)</code></a> on the same
  thread &mdash; the leak is the caller's, not the framework's.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="RichLogger.html#context()"><code>RichLogger.context()</code></a>
    <li class='jc'><a href="LogRecordContext.html" title="class in org.apache.juneau.commons.logging"><code>LogRecordContext</code></a>
  </ul></div>

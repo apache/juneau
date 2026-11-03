@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * The SSE transport writes each frame as {@code event: bus}, {@code id: &lt;seq&gt;}, {@code data: &lt;frame&gt;}; the WebSocket</span>
 <span class="source-line-no">034</span><span id="line-34"> * transport sends one frame per text message.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *   String &lt;jv&gt;f&lt;/jv&gt; = BusFrames.&lt;jsm&gt;pub&lt;/jsm&gt;(&lt;js&gt;"ops.jobs"&lt;/js&gt;, Json.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;payload&lt;/jv&gt;), &lt;jk&gt;true&lt;/jk&gt;, 7);</span>
 <span class="source-line-no">039</span><span id="line-39"> *   &lt;jc&gt;// {"v":1,"type":"pub","topic":"ops.jobs","payload":{...},"retained":true,"seq":7}&lt;/jc&gt;</span>

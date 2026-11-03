@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for creating configured <a href="Cache.html" title="class in org.apache.juneau.commons.collections"><code>Cache</code></a> instances.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Using of() for simple types</jc>
    Cache&lt;String,Pattern&gt; <jv>cache1</jv> = Cache
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
          .build();
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jm'><a href="Cache.html#of(java.lang.Class,java.lang.Class)"><code>Cache.of(Class, Class)</code></a>
    <li class='jm'><a href="Cache.html#create()"><code>Cache.create()</code></a>
@@ -209,7 +208,7 @@ loadScripts(document, 'script');</script>
    <li><a href="CacheMode.html#FULL"><code>FULL</code></a> - Full caching (uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a>, default)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// No caching for testing</jc>
    Cache&lt;String,Object&gt; <jv>cache1</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
@@ -297,7 +296,7 @@ loadScripts(document, 'script');</script>
  <p>
  Default value: 1000 (or value of system property <c>juneau.cache.maxSize</c>)
 
- <h5 class='section'>Notes:</h5>
+ <h4 class='section'>Notes:</h4>
  <ul>
    <li>Setting this too low may cause excessive cache clearing and reduce effectiveness
    <li>Setting this too high may consume excessive memory
@@ -321,7 +320,7 @@ loadScripts(document, 'script');</script>
  This supplier will be used by <a href="Cache.html#get(K)"><code>Cache.get(Object)</code></a> when a key is not in the cache.
  Individual lookups can override this supplier using <a href="Cache.html#get(K,java.util.function.Supplier)"><code>Cache.get(Object, Supplier)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache
       .<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>)
@@ -352,7 +351,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is a shortcut for wrapping a cache in a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html" title="class or interface in java.lang" class="external-link"><code>ThreadLocal</code></a>, but provides a cleaner API.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Thread-local cache for MessageFormat instances</jc>
    Cache&lt;String,MessageFormat&gt; <jv>cache</jv> = Cache
@@ -390,7 +389,7 @@ loadScripts(document, 'script');</script>
  Weak caching uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/WeakHashMap.html" title="class or interface in java.util" class="external-link"><code>WeakHashMap</code></a> for storage, allowing cache entries to be
  garbage collected when keys are no longer strongly referenced elsewhere.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Weak caching for Class metadata</jc>
    Cache&lt;Class&lt;?&gt;,ClassMeta&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(Class.<jk>class</jk>, ClassMeta.<jk>class</jk>)

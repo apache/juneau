@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
  Contribute one as a <c>@Bean</c> from a <c>@Configuration</c> class.  It is the container-neutral counterpart of
  Spring Boot's <code>FilterRegistrationBean</code>, so the same registration works on Jetty and Tomcat.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@Configuration</ja>
    <jk>public class</jk> MyAppConfig {
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h2 class='section'>Order:</h2>
  <p>
  Filters run outermost first, by ascending <a href="#getOrder()"><code>order</code></a>.  A bean-supplied <a href="../rest/server/auth/AuthFilterChain.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilterChain</code></a> is
  mounted automatically at <a href="#AUTH_ORDER"><code>AUTH_ORDER</code></a>, so a registration at the default <a href="#DEFAULT_ORDER"><code>DEFAULT_ORDER</code></a> runs after
@@ -119,19 +118,19 @@ loadScripts(document, 'script');</script>
  on <js>"/console/*"</js> rejects a bad request before authentication ever sees it; the same filter on <js>"/*"</js>
  at <a href="#HIGHEST_PRECEDENCE"><code>HIGHEST_PRECEDENCE</code></a> would also intercept authentication redirects and challenges.
 
- <h5 class='section'>Names:</h5>
+ <h2 class='section'>Names:</h2>
  <p>
  More than one registration in an application needs a distinct bean name, because a <c>@Bean</c> of one type with the
  same (default empty) name is a duplicate.  Distinct filters must be distinct instances: wrapping one filter instance
  in two registrations fails at startup, because the container would otherwise initialize and destroy it twice.
 
- <h5 class='section'>Replacing the authentication mount:</h5>
+ <h2 class='section'>Replacing the authentication mount:</h2>
  <p>
  An application that needs the <a href="../rest/server/auth/AuthFilterChain.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilterChain</code></a> on other dispatcher types, or at another position, registers it
  itself: wrap the injected <a href="../rest/server/auth/AuthFilterChain.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilterChain</code></a> bean instance in a registration.  That registration then replaces
  the automatic mount.  It must be the injected instance; a new instance is a second, separate filter.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty</a>
  </ul></div>
 <dl class="notes">

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,13 +87,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">An in-memory, per-process registry of <a href="AsyncJob.html" title="class in org.apache.juneau.console.views"><code>async jobs</code></a> &mdash; the single-process job store a future
  async write variant runs on.
 
- <h5 class='section'>Single-process, by decision</h5>
+ <h2 class='section'>Single-process, by decision</h2>
  <p>
  Job state lives only in this object's heap, which is enough for a single-user loopback console and a documented
  limitation for anything else: a process restart drops every in-flight job, exactly as a restart invalidates
  every <a href="../../rest/server/filter/SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter"><code>SynchronizerToken</code></a>.  There is deliberately no store abstraction.
 
- <h5 class='section'>The id is the capability; the caps are load-bearing</h5>
+ <h2 class='section'>The id is the capability; the caps are load-bearing</h2>
  <p>
  Each job is keyed by an unguessable <a href="#CAPABILITY_BITS">256</a>-bit <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/SecureRandom.html" title="class or interface in java.security" class="external-link"><code>SecureRandom</code></a> id
  (<a href="#CAPABILITY_BYTES">32</a> bytes, hex-encoded), matching
@@ -114,7 +113,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
       <a href="AsyncJob.html#acquireSubscriber()"><code>AsyncJob.acquireSubscriber()</code></a>.
  </ul>
 
- <h5 class='section'>De-duplication by <a href="IdempotencyKey.html" title="class in org.apache.juneau.console.views"><code>IdempotencyKey</code></a></h5>
+ <h2 class='section'>De-duplication by <a href="IdempotencyKey.html" title="class in org.apache.juneau.console.views"><code>IdempotencyKey</code></a></h2>
  <p>
  <a href="#tryCreate(org.apache.juneau.console.views.IdempotencyKey)"><code>tryCreate(IdempotencyKey)</code></a> / <a href="#create(org.apache.juneau.console.views.IdempotencyKey)"><code>create(IdempotencyKey)</code></a> register a job under an idempotency key's
  <a href="IdempotencyKey.html#value()"><code>value</code></a>; submitting again with a key that is already registered returns the
@@ -128,7 +127,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  heap (see <a href="#sweepTimeouts()"><code>sweepTimeouts()</code></a>), its key is forgotten too, and the same key starts a fresh job.  A duplicate
  never counts against <a href="#MAX_CONCURRENT_JOBS"><code>MAX_CONCURRENT_JOBS</code></a>, since it creates nothing.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    AsyncJobRegistry <jv>registry</jv> = <jk>new</jk> AsyncJobRegistry();
    IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mintSelfTargeted</jsm>(<js>"create"</js>);
@@ -138,7 +137,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <jsm>assert</jsm> <jv>first</jv> == <jv>again</jv>;
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="AsyncJob.html" title="class in org.apache.juneau.console.views"><code>AsyncJob</code></a>
    <li class='jc'><a href="AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views"><code>AsyncJobsMixin</code></a>

@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment"> * the REST resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment"> * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/myresource"&lt;/js&gt;, serializers=JsonSerializer.&lt;jk&gt;class&lt;/jk&gt;, parsers=JsonParser.&lt;jk&gt;class&lt;/jk&gt;)</em>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment"> * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource {</em>
@@ -141,11 +141,11 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment"> * See &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/V10MigrationGuide" target="alexandria_uri">https://juneau.apache.org/docs/topics/V10MigrationGuide</a>"&gt;v10.0 Migration Guide&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment"> * for replacement recipes.</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class is thread safe and reusable.</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestContext" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestContext</a>"&gt;RestContext&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment"> */</em>
@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * (above the resource's local {@code @Bean} factory entries and the Spring bridge).  This is the</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * canonical Mode INJECT wiring point for {@code juneau-junit5}'s {@code TestBeanStore}.</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;ctx&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; RestContext(&lt;jk&gt;new&lt;/jk&gt; RestContext.Args(MyResource.&lt;jk&gt;class&lt;/jk&gt;, () -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; MyResource()));</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
@@ -3980,7 +3980,7 @@
 <a class="jxr_linenumber" name="L3972" href="#L3972">3972</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L3973" href="#L3973">3973</a> <em class="jxr_javadoccomment">	 * Allowed header URL parameters.</em>
 <a class="jxr_linenumber" name="L3974" href="#L3974">3974</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3976" href="#L3976">3976</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#allowedHeaderParams}</em>
 <a class="jxr_linenumber" name="L3977" href="#L3977">3977</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3978" href="#L3978">3978</a> <em class="jxr_javadoccomment">	 *</em>
@@ -3993,7 +3993,7 @@
 <a class="jxr_linenumber" name="L3985" href="#L3985">3985</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L3986" href="#L3986">3986</a> <em class="jxr_javadoccomment">	 * Allowed method headers.</em>
 <a class="jxr_linenumber" name="L3987" href="#L3987">3987</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L3988" href="#L3988">3988</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L3988" href="#L3988">3988</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L3989" href="#L3989">3989</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#allowedMethodHeaders}</em>
 <a class="jxr_linenumber" name="L3990" href="#L3990">3990</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L3991" href="#L3991">3991</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4006,7 +4006,7 @@
 <a class="jxr_linenumber" name="L3998" href="#L3998">3998</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L3999" href="#L3999">3999</a> <em class="jxr_javadoccomment">	 * Allowed method URL parameters.</em>
 <a class="jxr_linenumber" name="L4000" href="#L4000">4000</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4001" href="#L4001">4001</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4001" href="#L4001">4001</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4002" href="#L4002">4002</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#allowedMethodParams}</em>
 <a class="jxr_linenumber" name="L4003" href="#L4003">4003</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4004" href="#L4004">4004</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4063,7 +4063,7 @@
 <a class="jxr_linenumber" name="L4055" href="#L4055">4055</a> <em class="jxr_javadoccomment">	 * {@link RestDebugFormatter} bean registered in the bean store (or a {@link Bean @Bean}-annotated factory method)</em>
 <a class="jxr_linenumber" name="L4056" href="#L4056">4056</a> <em class="jxr_javadoccomment">	 * &amp;gt; {@link BasicRestDebugFormatter}.</em>
 <a class="jxr_linenumber" name="L4057" href="#L4057">4057</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4058" href="#L4058">4058</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4058" href="#L4058">4058</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4059" href="#L4059">4059</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging</a>"&gt;Logging / Debugging&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L4060" href="#L4060">4060</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4061" href="#L4061">4061</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4095,7 +4095,7 @@
 <a class="jxr_linenumber" name="L4087" href="#L4087">4087</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4088" href="#L4088">4088</a> <em class="jxr_javadoccomment">	 * Returns the name of the client version header name used by this resource.</em>
 <a class="jxr_linenumber" name="L4089" href="#L4089">4089</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4090" href="#L4090">4090</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4090" href="#L4090">4090</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4091" href="#L4091">4091</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#clientVersionHeader}</em>
 <a class="jxr_linenumber" name="L4092" href="#L4092">4092</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4093" href="#L4093">4093</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4135,7 +4135,7 @@
 <a class="jxr_linenumber" name="L4127" href="#L4127">4127</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4128" href="#L4128">4128</a> <em class="jxr_javadoccomment">	 * Returns the default request attributes for this resource.</em>
 <a class="jxr_linenumber" name="L4129" href="#L4129">4129</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4130" href="#L4130">4130</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4130" href="#L4130">4130</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4131" href="#L4131">4131</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#defaultRequestAttributes()}</em>
 <a class="jxr_linenumber" name="L4132" href="#L4132">4132</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4133" href="#L4133">4133</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4148,7 +4148,7 @@
 <a class="jxr_linenumber" name="L4140" href="#L4140">4140</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4141" href="#L4141">4141</a> <em class="jxr_javadoccomment">	 * Returns the default request headers for this resource.</em>
 <a class="jxr_linenumber" name="L4142" href="#L4142">4142</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4143" href="#L4143">4143</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4143" href="#L4143">4143</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4144" href="#L4144">4144</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#defaultRequestHeaders()}</em>
 <a class="jxr_linenumber" name="L4145" href="#L4145">4145</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4146" href="#L4146">4146</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4161,7 +4161,7 @@
 <a class="jxr_linenumber" name="L4153" href="#L4153">4153</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4154" href="#L4154">4154</a> <em class="jxr_javadoccomment">	 * Returns the default response headers for this resource.</em>
 <a class="jxr_linenumber" name="L4155" href="#L4155">4155</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4156" href="#L4156">4156</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4156" href="#L4156">4156</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4157" href="#L4157">4157</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#defaultResponseHeaders()}</em>
 <a class="jxr_linenumber" name="L4158" href="#L4158">4158</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4159" href="#L4159">4159</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4185,7 +4185,7 @@
 <a class="jxr_linenumber" name="L4177" href="#L4177">4177</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L4178" href="#L4178">4178</a> <em class="jxr_javadoccomment">	 * If path is not specified, returns &lt;js&gt;""&lt;/js&gt;.</em>
 <a class="jxr_linenumber" name="L4179" href="#L4179">4179</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4180" href="#L4180">4180</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4180" href="#L4180">4180</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4181" href="#L4181">4181</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#path()}</em>
 <a class="jxr_linenumber" name="L4182" href="#L4182">4182</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4183" href="#L4183">4183</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4272,7 +4272,7 @@
 <a class="jxr_linenumber" name="L4264" href="#L4264">4264</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L4265" href="#L4265">4265</a> <em class="jxr_javadoccomment">	 * If path is not specified, returns &lt;js&gt;""&lt;/js&gt;.</em>
 <a class="jxr_linenumber" name="L4266" href="#L4266">4266</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4267" href="#L4267">4267</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4267" href="#L4267">4267</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4268" href="#L4268">4268</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#path()}</em>
 <a class="jxr_linenumber" name="L4269" href="#L4269">4269</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4270" href="#L4270">4270</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4305,7 +4305,7 @@
 <a class="jxr_linenumber" name="L4297" href="#L4297">4297</a> <em class="jxr_javadoccomment">	 * {@code JettyServerComponent}, and Spring Boot's {@code ServletRegistrationBean} wiring &amp;mdash; should</em>
 <a class="jxr_linenumber" name="L4298" href="#L4298">4298</a> <em class="jxr_javadoccomment">	 * consume when mounting the resource at the top level.</em>
 <a class="jxr_linenumber" name="L4299" href="#L4299">4299</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4300" href="#L4300">4300</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4300" href="#L4300">4300</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4301" href="#L4301">4301</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L4302" href="#L4302">4302</a> <em class="jxr_javadoccomment">	 * 		Returns an empty array (not {@code null}) when none of the rungs resolve. Hosting runtimes interpret</em>
 <a class="jxr_linenumber" name="L4303" href="#L4303">4303</a> <em class="jxr_javadoccomment">	 * 		an empty array as &amp;quot;no top-level mounts&amp;quot; and surface a clear error naming the resource.</em>
@@ -4313,7 +4313,7 @@
 <a class="jxr_linenumber" name="L4305" href="#L4305">4305</a> <em class="jxr_javadoccomment">	 * 		The scalar {@link #getPath()} accessor remains orthogonal to this method.</em>
 <a class="jxr_linenumber" name="L4306" href="#L4306">4306</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4307" href="#L4307">4307</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4308" href="#L4308">4308</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4308" href="#L4308">4308</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4309" href="#L4309">4309</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#paths()}</em>
 <a class="jxr_linenumber" name="L4310" href="#L4310">4310</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4311" href="#L4311">4311</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4371,7 +4371,7 @@
 <a class="jxr_linenumber" name="L4363" href="#L4363">4363</a> <em class="jxr_javadoccomment">	 * Returned in the order they're invoked by {@link #processResponse(RestOpSession)}.</em>
 <a class="jxr_linenumber" name="L4364" href="#L4364">4364</a> <em class="jxr_javadoccomment">	 * The returned array is the live backing array — callers must not mutate it.</em>
 <a class="jxr_linenumber" name="L4365" href="#L4365">4365</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4366" href="#L4366">4366</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4366" href="#L4366">4366</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4367" href="#L4367">4367</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#responseProcessors}</em>
 <a class="jxr_linenumber" name="L4368" href="#L4368">4368</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/ResponseProcessors" target="alexandria_uri">https://juneau.apache.org/docs/topics/ResponseProcessors</a>"&gt;Response Processors&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L4369" href="#L4369">4369</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
@@ -4390,7 +4390,7 @@
 <a class="jxr_linenumber" name="L4382" href="#L4382">4382</a> <em class="jxr_javadoccomment">	 * (see {@link #findRestOperationArgs(Method, BeanStore)}); this getter returns the class list</em>
 <a class="jxr_linenumber" name="L4383" href="#L4383">4383</a> <em class="jxr_javadoccomment">	 * that drives that resolution.</em>
 <a class="jxr_linenumber" name="L4384" href="#L4384">4384</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4385" href="#L4385">4385</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4385" href="#L4385">4385</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4386" href="#L4386">4386</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#restOpArgs}</em>
 <a class="jxr_linenumber" name="L4387" href="#L4387">4387</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4388" href="#L4388">4388</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4451,7 +4451,7 @@
 <a class="jxr_linenumber" name="L4443" href="#L4443">4443</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Beans flow down only: a child's beans are never visible to its parent or its siblings.</em>
 <a class="jxr_linenumber" name="L4444" href="#L4444">4444</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4445" href="#L4445">4445</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4446" href="#L4446">4446</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L4446" href="#L4446">4446</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L4447" href="#L4447">4447</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L4448" href="#L4448">4448</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(children={PetResource.&lt;jk&gt;class&lt;/jk&gt;, OrderResource.&lt;jk&gt;class&lt;/jk&gt;})</em>
 <a class="jxr_linenumber" name="L4449" href="#L4449">4449</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; RootResources &lt;jk&gt;extends&lt;/jk&gt; BasicRestServletGroup {</em>
@@ -4539,7 +4539,7 @@
 <a class="jxr_linenumber" name="L4531" href="#L4531">4531</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4532" href="#L4532">4532</a> <em class="jxr_javadoccomment">	 * Returns the Swagger provider used by this resource.</em>
 <a class="jxr_linenumber" name="L4533" href="#L4533">4533</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4534" href="#L4534">4534</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4534" href="#L4534">4534</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4535" href="#L4535">4535</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#swaggerProvider()}</em>
 <a class="jxr_linenumber" name="L4536" href="#L4536">4536</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4537" href="#L4537">4537</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4575,7 +4575,7 @@
 <a class="jxr_linenumber" name="L4567" href="#L4567">4567</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4568" href="#L4568">4568</a> <em class="jxr_javadoccomment">	 * Returns the OpenAPI 3.1 provider used by this resource.</em>
 <a class="jxr_linenumber" name="L4569" href="#L4569">4569</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4570" href="#L4570">4570</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4570" href="#L4570">4570</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4571" href="#L4571">4571</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#openApiProvider()}</em>
 <a class="jxr_linenumber" name="L4572" href="#L4572">4572</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4573" href="#L4573">4573</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4597,7 +4597,7 @@
 <a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> <em class="jxr_javadoccomment">	 * Returns the authority path of the resource.</em>
 <a class="jxr_linenumber" name="L4591" href="#L4591">4591</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4592" href="#L4592">4592</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4592" href="#L4592">4592</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4593" href="#L4593">4593</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#uriAuthority()}</em>
 <a class="jxr_linenumber" name="L4594" href="#L4594">4594</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4595" href="#L4595">4595</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4612,7 +4612,7 @@
 <a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4605" href="#L4605">4605</a> <em class="jxr_javadoccomment">	 * Returns the context path of the resource.</em>
 <a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4608" href="#L4608">4608</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#uriContext()}</em>
 <a class="jxr_linenumber" name="L4609" href="#L4609">4609</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4610" href="#L4610">4610</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4627,7 +4627,7 @@
 <a class="jxr_linenumber" name="L4619" href="#L4619">4619</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4620" href="#L4620">4620</a> <em class="jxr_javadoccomment">	 * Returns the setting on how relative URIs should be interpreted as relative to.</em>
 <a class="jxr_linenumber" name="L4621" href="#L4621">4621</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4622" href="#L4622">4622</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4622" href="#L4622">4622</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4623" href="#L4623">4623</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#uriRelativity()}</em>
 <a class="jxr_linenumber" name="L4624" href="#L4624">4624</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4625" href="#L4625">4625</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4640,7 +4640,7 @@
 <a class="jxr_linenumber" name="L4632" href="#L4632">4632</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4633" href="#L4633">4633</a> <em class="jxr_javadoccomment">	 * Returns the setting on how relative URIs should be resolved.</em>
 <a class="jxr_linenumber" name="L4634" href="#L4634">4634</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4635" href="#L4635">4635</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4635" href="#L4635">4635</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4636" href="#L4636">4636</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#uriResolution()}</em>
 <a class="jxr_linenumber" name="L4637" href="#L4637">4637</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4638" href="#L4638">4638</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4658,7 +4658,7 @@
 <a class="jxr_linenumber" name="L4650" href="#L4650">4650</a> <em class="jxr_javadoccomment">	 * They can be nested arbitrarily deep.</em>
 <a class="jxr_linenumber" name="L4651" href="#L4651">4651</a> <em class="jxr_javadoccomment">	 * They can also return values that themselves contain other variables.</em>
 <a class="jxr_linenumber" name="L4652" href="#L4652">4652</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4653" href="#L4653">4653</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L4653" href="#L4653">4653</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='figure'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L4654" href="#L4654">4654</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L4655" href="#L4655">4655</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
 <a class="jxr_linenumber" name="L4656" href="#L4656">4656</a> <em class="jxr_javadoccomment">	 * 		messages=&lt;js&gt;"nls/Messages"&lt;/js&gt;,</em>
@@ -4695,7 +4695,7 @@
 <a class="jxr_linenumber" name="L4687" href="#L4687">4687</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public&lt;/jk&gt; LoggerEntry getLogger(RestRequest &lt;jv&gt;req&lt;/jv&gt;, &lt;ja&gt;@Path&lt;/ja&gt; String &lt;jv&gt;name&lt;/jv&gt;) &lt;jk&gt;throws&lt;/jk&gt; Exception {</em>
 <a class="jxr_linenumber" name="L4688" href="#L4688">4688</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L4689" href="#L4689">4689</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4690" href="#L4690">4690</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4690" href="#L4690">4690</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4691" href="#L4691">4691</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L4692" href="#L4692">4692</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4693" href="#L4693">4693</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4724,7 +4724,7 @@
 <a class="jxr_linenumber" name="L4716" href="#L4716">4716</a> <em class="jxr_javadoccomment">	 * &lt;c&gt;PUT&lt;/c&gt;/&lt;c&gt;POST&lt;/c&gt; requests, so a simple cross-origin &lt;c&gt;GET&lt;/c&gt; can't use it to smuggle a body past</em>
 <a class="jxr_linenumber" name="L4717" href="#L4717">4717</a> <em class="jxr_javadoccomment">	 * an endpoint's real &lt;c&gt;Content-Type&lt;/c&gt; gate.</em>
 <a class="jxr_linenumber" name="L4718" href="#L4718">4718</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4719" href="#L4719">4719</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4719" href="#L4719">4719</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4720" href="#L4720">4720</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#disableContentParam()}</em>
 <a class="jxr_linenumber" name="L4721" href="#L4721">4721</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4722" href="#L4722">4722</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4763,7 +4763,7 @@
 <a class="jxr_linenumber" name="L4755" href="#L4755">4755</a> <em class="jxr_javadoccomment">	 * 		{@code Accept} header matches {@code application/problem+json} (or {@code *&amp;#47;*}).</em>
 <a class="jxr_linenumber" name="L4756" href="#L4756">4756</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4757" href="#L4757">4757</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4758" href="#L4758">4758</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4758" href="#L4758">4758</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4759" href="#L4759">4759</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#problemDetails()}</em>
 <a class="jxr_linenumber" name="L4760" href="#L4760">4760</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4761" href="#L4761">4761</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4780,7 +4780,7 @@
 <a class="jxr_linenumber" name="L4772" href="#L4772">4772</a> <em class="jxr_javadoccomment">	 * handle requests &amp;mdash; engaging recursion-detection-that-throws, parse-input buffering, and stack-trace-prefixed</em>
 <a class="jxr_linenumber" name="L4773" href="#L4773">4773</a> <em class="jxr_javadoccomment">	 * marshalling exceptions. This is independent of the JUL logger level.</em>
 <a class="jxr_linenumber" name="L4774" href="#L4774">4774</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4775" href="#L4775">4775</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4775" href="#L4775">4775</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4776" href="#L4776">4776</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#debugMarshalling()}</em>
 <a class="jxr_linenumber" name="L4777" href="#L4777">4777</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4778" href="#L4778">4778</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4910,7 +4910,7 @@
 <a class="jxr_linenumber" name="L4902" href="#L4902">4902</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L4903" href="#L4903">4903</a> <em class="jxr_javadoccomment">	 * Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.</em>
 <a class="jxr_linenumber" name="L4904" href="#L4904">4904</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4905" href="#L4905">4905</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4905" href="#L4905">4905</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4906" href="#L4906">4906</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#eagerInit()}</em>
 <a class="jxr_linenumber" name="L4907" href="#L4907">4907</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L4908" href="#L4908">4908</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4930,7 +4930,7 @@
 <a class="jxr_linenumber" name="L4922" href="#L4922">4922</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code RestContext.lazyChildren} env-driven default (default {@code false}).&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L4923" href="#L4923">4923</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L4924" href="#L4924">4924</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4925" href="#L4925">4925</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L4925" href="#L4925">4925</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L4926" href="#L4926">4926</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#lazyChildren()}</em>
 <a class="jxr_linenumber" name="L4927" href="#L4927">4927</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link Builder#lazyChildInit(boolean)}</em>
 <a class="jxr_linenumber" name="L4928" href="#L4928">4928</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>

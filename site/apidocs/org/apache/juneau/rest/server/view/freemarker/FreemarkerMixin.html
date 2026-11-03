@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -100,7 +99,7 @@ loadScripts(document, 'script');</script>
       <a href="../../Rest.html#responseProcessors()"><code>@Rest(responseProcessors=...)</code></a> declaration.
  </ol>
 
- <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
+ <h2 class='section'>Auto-wiring the renderer into the host's own endpoints:</h2>
 
  <p>
  A bare <code>@Rest(mixins=FreemarkerMixin.class)</code> is enough &mdash; a host whose own <code>@RestOp</code> method
@@ -134,7 +133,7 @@ loadScripts(document, 'script');</script>
  <code>SerializedPojoProcessor</code> in every case, so the <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a> bean is dispatched to the
  FreeMarker engine rather than bean-serialized.
 
- <h5 class='figure'>Composition example (microservice):</h5>
+ <h2 class='figure'>Composition example (microservice):</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/app"</js>, mixins=FreemarkerMixin.<jk>class</jk>)
@@ -154,7 +153,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Configurable mount path:</h5>
+ <h2 class='section'>Configurable mount path:</h2>
 
  <p>
  The default mount <code>/freemarker/*</code> can be overridden via the SVL variable
@@ -164,7 +163,7 @@ loadScripts(document, 'script');</script>
  (<code>juneau.freemarker.path = views</code>) to change the runtime mount without subclassing.
  Resolution happens once at <a href="../../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> construction time (SVL resolution in <code>@RestOp(path)</code>).
 
- <h5 class='section'>Mixin-only deployment:</h5>
+ <h2 class='section'>Mixin-only deployment:</h2>
 
  <p>
  This resource is designed for composition via <code>@Rest(mixins=...)</code>. The mount path is
@@ -173,7 +172,7 @@ loadScripts(document, 'script');</script>
  a class-level <code>@Rest(paths=...)</code> declaration would be silently ignored under the mixin
  pattern (see <a href="../../Rest.html#paths()"><code>@Rest(paths)</code></a> Javadoc).
 
- <h5 class='section'>Choosing a Configuration:</h5>
+ <h2 class='section'>Choosing a Configuration:</h2>
 
  <p>
  The <code>juneau-rest-server-view-freemarker</code> module ships <b>only</b>
@@ -204,7 +203,7 @@ loadScripts(document, 'script');</script>
  When no FreeMarker engine is on the classpath, the renderer surfaces
  <a href="FreemarkerViewRenderer.html#NO_ENGINE_DIAGNOSTIC"><code>FreemarkerViewRenderer.NO_ENGINE_DIAGNOSTIC</code></a> naming the missing dependency.
 
- <h5 class='section'>Public-field DTOs (getter-only default trap):</h5>
+ <h2 class='section'>Public-field DTOs (getter-only default trap):</h2>
 
  <p>
  FreeMarker's own version-default <code>ObjectWrapper</code> exposes only JavaBean getters &mdash; a
@@ -220,7 +219,7 @@ loadScripts(document, 'script');</script>
  (e.g. a <code>BeansWrapper</code> with custom exposure rules). Both knobs only affect the
  bridge-default <code>Configuration</code>; a user-supplied <code>@Bean Configuration</code> is used as-is.
 
- <h5 class='section'>Template suffix:</h5>
+ <h2 class='section'>Template suffix:</h2>
 
  <p>
  FreeMarker's API does not expose a configuration-level resolver suffix &mdash; the literal
@@ -230,14 +229,14 @@ loadScripts(document, 'script');</script>
  with it (idempotent), so callers can write <code>FreemarkerView.of("hello")</code> or request
  <code>/freemarker/hello</code> and have it resolve to <code>hello.ftlh</code> on the classpath.
 
- <h5 class='section'><code>.ftl</code> vs <code>.ftlh</code>:</h5>
+ <h2 class='section'><code>.ftl</code> vs <code>.ftlh</code>:</h2>
 
  <p>
  FreeMarker auto-selects HTML escaping by file extension: <code>.ftlh</code> templates emit
  HTML-escaped output; <code>.ftl</code> templates emit raw output. For HTML responses, prefer
  <code>.ftlh</code> so a future attribute-binding change can't introduce an XSS regression.
 
- <h5 class='section'>Multiple base paths:</h5>
+ <h2 class='section'>Multiple base paths:</h2>
 
  <p>
  A host with <code>/templates/</code> and <code>/admin/templates/</code> template trees registers two
@@ -246,13 +245,13 @@ loadScripts(document, 'script');</script>
  <code>FreemarkerMixin_MockRest_Test</code> test in <code>juneau-integration-tests</code> for the canonical
  pattern.
 
- <h5 class='section'>OpenAPI surface:</h5>
+ <h2 class='section'>OpenAPI surface:</h2>
 
  <p>
  The greedy <code>/*</code> handler is not API-meaningful and is excluded from generated
  Swagger / OpenAPI specs via <a href="../../OpSwagger.html#ignore()"><code>@OpSwagger(ignore=true)</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a>
    <li class='jc'><a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
@@ -535,7 +534,7 @@ loadScripts(document, 'script');</script>
  freemarker()</code> was not found and the renderer silently used a plain mixin. Subclasses call this from a static
  initializer.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyMixin <jk>extends</jk> FreemarkerMixin {
       <jk>static</jk> { FreemarkerMixin.<jsm>registerSubtype</jsm>(MyMixin.<jk>class</jk>); }

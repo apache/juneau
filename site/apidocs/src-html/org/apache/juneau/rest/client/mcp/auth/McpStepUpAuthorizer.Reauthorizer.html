@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * {@code client_credentials} (own-behalf) clients MAY abort immediately rather than attempt step-up</span>
 <span class="source-line-no">042</span><span id="line-42"> * ({@link Builder#attemptStepUp(boolean) attemptStepUp(false)}).</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='topic'&gt;Attempt-counter lifetime&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='topic'&gt;Attempt-counter lifetime&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * Per-&lt;code&gt;(resource, operation)&lt;/code&gt; attempt counts exist only to bound a single step-up burst.  A counter is</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;b&gt;cleared automatically&lt;/b&gt; when {@link #execute(String, ScopedCall) execute} returns successfully for that operation,</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ implements jakarta.servlet.Filter</span></div>
  the token to the page renderer, which stamps it on <code>&lt;body data-juneau-csrf&gt;</code> for the console toolkit to send
  back.
 
- <h5 class='section'>The effective method</h5>
+ <h2 class='section'>The effective method</h2>
  <p>
  A request is judged on the method it claims, not only on its request line.  A <code>method</code> query parameter or
  an <code>X-Method</code>, <code>X-HTTP-Method-Override</code>, <code>X-HTTP-Method</code> or <code>X-Method-Override</code> header
@@ -101,7 +100,7 @@ implements jakarta.servlet.Filter</span></div>
  honour that override.  So <code>GET /console/pets/1?method=DELETE</code> needs the same Origin and token a real
  <code>DELETE</code> does, and a later change to a resource's allowed method overrides cannot open a hole here.
 
- <h5 class='section'>The API's token</h5>
+ <h2 class='section'>The API's token</h2>
  <p>
  The <code>/petstore</code> API is not covered by this boundary: it sits behind its own, <a href="PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreApiBoundary</code></a>,
  which has a different token.  The console's one write to the API, its photo upload
@@ -120,12 +119,12 @@ implements jakarta.servlet.Filter</span></div>
  only its own token attributes, so on that rare path the API's token can still be emitted, possibly without
  <code>no-store</code>.  That is accepted, as <a href="PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreApiBoundary</code></a> describes.
 
- <h5 class='section'>What is outside</h5>
+ <h2 class='section'>What is outside</h2>
  <p>
  The <code>/petstore-ui</code> app (which only reads) is covered by neither boundary.  The Jetty deployment puts the
  microservice admin resources behind a third boundary of their own.
 
- <h5 class='section'>The authority</h5>
+ <h2 class='section'>The authority</h2>
  <p>
  The single accepted <code>Host</code> is the <a href="#AUTHORITY_PROPERTY">"petstore.console.authority"</a> setting when set, else
  <code>localhost:&lt;port&gt;</code> with the port the request arrived on.  It is fixed on the first console request, after
@@ -143,7 +142,7 @@ implements jakarta.servlet.Filter</span></div>
  demo does not configure the framework boundary's <code>CONTAINER</code> origin source, so behind a TLS-terminating proxy
  the API refuses writes too (see <a href="PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreApiBoundary</code></a>).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>var</jk> <jv>reg</jv> = <jk>new</jk> FilterRegistrationBean&lt;&gt;(<jk>new</jk> PetstoreConsoleBoundary(<jv>apiBoundary</jv>));
    <jv>reg</jv>.addUrlPatterns(PetstoreConsoleBoundary.<jsf>URL_PATTERN</jsf>);

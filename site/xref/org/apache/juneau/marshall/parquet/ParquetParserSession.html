@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * Buffered array-element {@link RecordReader} for Parquet, bound to this live session.  Calls</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * {@code parse(input, List.class, Object.class)} once and iterates the result.</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Why this stays buffered (not O(1) streaming):&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Why this stays buffered (not O(1) streaming):&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * Although a Parquet file is logically row-shaped, it is &lt;b&gt;not&lt;/b&gt; a forward, element-at-a-time</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * wire format.  Its metadata footer (schema + row-group/column-chunk offsets) lives at the</em>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
  JSON array string directly into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a>.  It also contains accessor methods for to avoid common typecasting
  when accessing elements in a list.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Construct an empty List</jc>
    JsonList <jv>list</jv> = JsonList.<jsm>of</jsm>();
@@ -152,7 +151,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe.
  </ul></div>
 </section>
@@ -912,7 +911,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method performs a round-trip serialization and deserialization to convert the list into the target type.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='warn'>The current implementation uses a serialization round-trip which may be inefficient for
       frequent conversions of large objects. Consider caching results or using direct object conversion where possible.
  </ul></div>

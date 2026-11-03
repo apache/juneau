@@ -47,14 +47,14 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * This tree is the parser's output, not a wire format: a {@link BeanQuery} carries only raw expression strings, and</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * engines call the parser themselves.  See {@link SearchExpressionParser}.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * 	SearchExpression &lt;jv&gt;node&lt;/jv&gt; = SearchExpressionParser.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"$contains(err)"&lt;/js&gt;, SearchOperatorSet.&lt;jsm&gt;standard&lt;/jsm&gt;());</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;node&lt;/jv&gt;.isFunction())</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 		&lt;jsm&gt;evaluate&lt;/jsm&gt;(&lt;jv&gt;node&lt;/jv&gt;.name(), &lt;jv&gt;node&lt;/jv&gt;.literalArgs());  &lt;jc&gt;// name() == "$contains", literalArgs() == ["err"]&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example (typed values):&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example (typed values):&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	SearchExpression &lt;jv&gt;e&lt;/jv&gt; = SearchExpressionParser.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"$eq(42)"&lt;/js&gt;, SearchOperatorSet.&lt;jsm&gt;standard&lt;/jsm&gt;());</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// After QueryResolver types it against a NUMERIC column, the arg's typedValue() is a BigDecimal, not "42".&lt;/jc&gt;</em>

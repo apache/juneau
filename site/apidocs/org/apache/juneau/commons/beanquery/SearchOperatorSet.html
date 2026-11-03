@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  Juneau uses the spellings <code>$prefix</code> and <code>$blank</code> as first-class names; there are deliberately <b>no</b>
  <code>$starts</code>/<code>$empty</code> aliases.
 
- <h5 class='section'>Case-insensitive names</h5>
+ <h2 class='section'>Case-insensitive names</h2>
  <p>
  Lookup (<a href="#get(java.lang.String)"><code>get(String)</code></a>, <a href="#contains(java.lang.String)"><code>contains(String)</code></a>, <a href="#without(java.lang.String)"><code>without(String)</code></a>) is case-insensitive: <code>
  $EQ</code>, <code>$Eq</code> and <code>$eq</code> all resolve to the same operator. <a href="#of(org.apache.juneau.commons.beanquery.SearchOperator...)"><code>of(SearchOperator...)</code></a> rejects two
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
  operator, the same way it replaces an exact-name one. <a href="#operators()"><code>operators()</code></a> and <a href="#get(java.lang.String)"><code>get(String)</code></a> always expose
  the operator's own canonical (registered) name, never the casing a caller looked it up with.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Hide $regex unless a caller opts in.</jc>
    SearchOperatorSet <jv>restricted</jv> = SearchOperatorSet.<jsm>standard</jsm>().without(<js>"$regex"</js>);

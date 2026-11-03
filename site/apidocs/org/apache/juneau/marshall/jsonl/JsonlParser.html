@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,15 +91,15 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../json/JsonMetaProvider.html" title="interface in org.apache.juneau.marshall.json">JsonMetaProvider</a></code>, <code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code>, <code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code>, <code><a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream">TokenReadable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-86">JsonlParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-85">JsonlParser</a></span>
 <span class="extends-implements">extends <a href="../json/JsonParser.html" title="class in org.apache.juneau.marshall.json">JsonParser</a></span></div>
 <div class="block">Parses JSONL (JSON Lines) input into POJO models.
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Handles <c>Content-Type</c> types:  <bc>application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl</bc>
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
  <p>
  Parses JSONL input where each non-empty line is a complete JSON value.  Blank lines are ignored.
  The conversion is as follows...
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
  When the target type is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> or array, each line is parsed
  as one element.  When the target type is a single value, only the first non-empty line is parsed.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Use the default parser to parse JSONL into a list of POJOs</jc>
    List&lt;MyBean&gt; <jv>list</jv> = JsonlParser.<jsf>DEFAULT</jsf>.read(<jv>jsonlInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -130,15 +129,14 @@ loadScripts(document, 'script');</script>
    <jv>parser</jv> = JsonlParser.<jsf>DEFAULT</jsf>.copy().build();
  </p>
 
- <h5 class='figure'>Example input:</h5>
+ <h2 class='figure'>Example input:</h2>
  <p class='bjson'>
  {"name":"Alice","age":30}
  {"name":"Bob","age":25}
  {"name":"Carol","age":35}
  </p>
 
- <h5 class='section'>Limitations compared to JSON</h5>
- <p>
+ <h2 class='section'>Limitations compared to JSON</h2>
  <ul class='spaced-list'>
    <li><b>No multi-line JSON input</b>: Each JSON value must be on a single line.
       Multi-line (pretty-printed) JSON piped as JSONL input will cause parse errors.
@@ -147,11 +145,11 @@ loadScripts(document, 'script');</script>
       silently ignored.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonlSupport">JSONL</a>
  </ul></div>
 </section>
@@ -281,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonlParser.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-93">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonlParser.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-92">DEFAULT</a></span></div>
 <div class="block">Default parser.</div>
 </section>
 </li>
@@ -296,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.json.JsonParser.Builder)">
 <h3>JsonlParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-114">JsonlParser</a></span><wbr><span class="parameters">(<a href="../json/JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-113">JsonlParser</a></span><wbr><span class="parameters">(<a href="../json/JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -315,7 +313,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../json/JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-100">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../json/JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-99">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -326,7 +324,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonlParserSession.Builder.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-118">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonlParserSession.Builder.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlParser.html#line-117">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  selected stock theme's override block if one other than <code>open</code> was selected, appended as
  <code>html:root{}</code> blocks.
 
- <h5 class='section'>Mount styles:</h5>
+ <h2 class='section'>Mount styles:</h2>
  <p>
  Both of the following arrangements serve the stylesheets at the <a href="#CHROME_CSS_PATH"><code>CHROME_CSS_PATH</code></a> / <a href="#THEME_CSS_DIR"><code>THEME_CSS_DIR</code></a>
  URLs with no path juggling by the host resource:
@@ -110,11 +109,11 @@ loadScripts(document, 'script');</script>
  Each operation below therefore declares <i>both</i> its prefixed path and the same path minus the
  <code>/juneau-console</code> prefix, so whichever one the arrangement leaves to be matched resolves.
 
- <h5 class='section'>Theme precedence</h5>
+ <h2 class='section'>Theme precedence</h2>
  <p><a href="ConsoleChromeMixin.Builder.html#theme(java.lang.String)"><code>ConsoleChromeMixin.Builder.theme(String)</code></a> if set, else <a href="Theme.html#OPEN"><code>Theme.OPEN</code></a>. <a href="Theme.html#OPEN"><code>Theme.OPEN</code></a>'s block is always appended
  first; a selected non-<code>open</code> stock theme adds exactly one more block.
 
- <h5 class='section'>Stylesheet load-order band:</h5>
+ <h2 class='section'>Stylesheet load-order band:</h2>
  <p>
  At equal cascade specificity, whichever of <code>juneau-views.css</code> and this class's <code>chrome.css</code> is
  declared later in a page's <code>&lt;head&gt;</code> wins &mdash; the exact ambiguity the <code>overrideBlock</code> theme block
@@ -134,7 +133,7 @@ loadScripts(document, 'script');</script>
  <code>juneau-views.css</code> in either order, which is precisely why the <code>html:root</code> fix exists: so the
  active theme wins regardless of which order the consumer's links happen to appear in.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Stock chrome.css (Theme.OPEN tokens), mounted standalone at /juneau-console/*.</jc>
    <ja>@Rest</ja>(mixins=ConsoleChromeMixin.<jk>class</jk>)
@@ -1105,7 +1104,7 @@ loadScripts(document, 'script');</script>
  carry one). This method is public so the FreeMarker <code>&lt;@theme&gt;</code> directive renders its inline block with
  the same code that serves <code>chrome.css</code>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Theme <jv>theme</jv> = Theme.<jsm>create</jsm>(<js>"corporate"</js>)
       .token(<js>"--jc-accent"</js>, <js>"#b45309"</js>)
@@ -1137,7 +1136,7 @@ loadScripts(document, 'script');</script>
  piece is <a href="#SCHEME_SCRIPT"><code>SCHEME_SCRIPT</code></a> (stamped with the request's CSP nonce when one is set) followed by a link to the
  shipped dark layer.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    SchemeHead <jv>h</jv> = ConsoleChromeMixin.<jsm>schemeHead</jsm>(<jv>req</jv>, <js>"auto"</js>, <jk>true</jk>);
    <jk>var</jk> <jv>attrs</jv> = <jv>h</jv>.htmlAttributes().isEmpty() ? <js>""</js> : <js>" "</js> + <jv>h</jv>.htmlAttributes();
@@ -1221,7 +1220,7 @@ loadScripts(document, 'script');</script>
  as <a href="Theme.Builder.html" title="class in org.apache.juneau.console"><code>Theme.Builder</code></a>: the name shape, the reserved <code>--jc-chrome-*</code> namespace, the value grammar, and
  one channel per name.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    String <jv>css</jv> = ConsoleChromeMixin.<jsm>schemeOverrideBlock</jsm>(
       Map.<jsm>of</jsm>(<js>"--jc-link"</js>, <js>"#6cb4ff"</js>), Map.<jsm>of</jsm>(<js>"--jc-focus"</js>, <js>"var(--jc-accent)"</js>));

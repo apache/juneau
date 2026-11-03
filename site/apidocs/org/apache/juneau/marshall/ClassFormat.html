@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  The default is <a href="#FQCN"><code>FQCN</code></a> which mirrors the historical <code>ClassSwap</code> behavior (canonical dotted
  name with sensible fallback to the JVM binary name).
 
- <h5 class='topic'>FQCN vs BINARY_NAME for nested classes</h5>
+ <h2 class='topic'>FQCN vs BINARY_NAME for nested classes</h2>
 
  <p>
  For nested-type encoding the two forms diverge:
@@ -117,14 +116,14 @@ loadScripts(document, 'script');</script>
    <li><a href="#BINARY_NAME"><code>BINARY_NAME</code></a> produces <code>"[I"</code> / <code>"[Ljava.lang.String;"</code> (JVM descriptor form).
  </ul>
 
- <h5 class='topic'>SIMPLE_NAME is serialize-only</h5>
+ <h2 class='topic'>SIMPLE_NAME is serialize-only</h2>
 
  <p>
  <a href="#SIMPLE_NAME"><code>SIMPLE_NAME</code></a> discards package and outer-class context and is <b>not round-trip safe</b>. The
  parser path for this constant throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>; use <a href="#FQCN"><code>FQCN</code></a> or
  <a href="#BINARY_NAME"><code>BINARY_NAME</code></a> for round-trippable wires.
 
- <h5 class='topic'>Precedence (highest to lowest)</h5>
+ <h2 class='topic'>Precedence (highest to lowest)</h2>
  <ol>
    <li><a href="MarshalledProp.html#classFormat()"><code>@MarshalledProp(classFormat=…)</code></a> on the bean property.
    <li><a href="Marshalled.html#classFormat()"><code>@Marshalled(classFormat=…)</code></a> on the bean class.
@@ -135,7 +134,7 @@ loadScripts(document, 'script');</script>
    <li>The default constant (<a href="#FQCN"><code>FQCN</code></a>).
  </ol>
 
- <h5 class='topic'>Parser leniency</h5>
+ <h2 class='topic'>Parser leniency</h2>
 
  <p>
  Parsers SHALL try <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#forName(java.lang.String,boolean,java.lang.ClassLoader)" title="class or interface in java.lang" class="external-link"><code>Class.forName(String, boolean, ClassLoader)</code></a> first regardless of the
@@ -149,7 +148,7 @@ loadScripts(document, 'script');</script>
  — so <code>"int[]"</code> resolves to <code>int[].class</code> and <code>"java.lang.String[][]"</code> resolves to
  <code>String[][].class</code>.
 
- <h5 class='topic'>Binary serializers</h5>
+ <h2 class='topic'>Binary serializers</h2>
 
  <p>
  Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this
@@ -275,7 +274,7 @@ the order they are declared.</div>
  Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getCanonicalName()" title="class or interface in java.lang" class="external-link"><code>Class.getCanonicalName()</code></a> when available; falls back to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getName()" title="class or interface in java.lang" class="external-link"><code>Class.getName()</code></a> for
  local / anonymous classes where <code>getCanonicalName()</code> returns <code>null</code>.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    java.lang.String
    java.util.Map.Entry
@@ -289,7 +288,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-130">BINARY_NAME</a></span></div>
 <div class="block">JVM binary name per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getName()" title="class or interface in java.lang" class="external-link"><code>Class.getName()</code></a>.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    java.lang.String
    java.util.Map$Entry
@@ -308,7 +307,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-147">SIMPLE_NAME</a></span></div>
 <div class="block">Unqualified simple name per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getSimpleName()" title="class or interface in java.lang" class="external-link"><code>Class.getSimpleName()</code></a>.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    java.lang.String
    Entry

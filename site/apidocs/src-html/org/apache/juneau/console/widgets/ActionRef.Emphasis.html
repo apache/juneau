@@ -102,13 +102,13 @@
 <span class="source-line-no">089</span><span id="line-89">    * carrying {@code reason} as its explanation.  Call this more than once to declare more than one rule; all of</span>
 <span class="source-line-no">090</span><span id="line-90">    * them must match.</span>
 <span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * &lt;h5 class='section'&gt;This is presentation only &amp;mdash; never the authorization gate:&lt;/h5&gt;</span>
+<span class="source-line-no">092</span><span id="line-92">    * &lt;h4 class='section'&gt;This is presentation only &amp;mdash; never the authorization gate:&lt;/h4&gt;</span>
 <span class="source-line-no">093</span><span id="line-93">    * &lt;p&gt;</span>
 <span class="source-line-no">094</span><span id="line-94">    * The rule exists so an operator is not offered a button that cannot possibly work.  The server still re-reads</span>
 <span class="source-line-no">095</span><span id="line-95">    * the row's state and refuses on its own authority; a client-side rule that quietly became the only check would</span>
 <span class="source-line-no">096</span><span id="line-96">    * be a regression, not an optimization.  Nothing here is a substitute for the server's own refusal.</span>
 <span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * &lt;h5 class='section'&gt;Disabled, never hidden:&lt;/h5&gt;</span>
+<span class="source-line-no">098</span><span id="line-98">    * &lt;h4 class='section'&gt;Disabled, never hidden:&lt;/h4&gt;</span>
 <span class="source-line-no">099</span><span id="line-99">    * &lt;p&gt;</span>
 <span class="source-line-no">100</span><span id="line-100">    * Prefer disabled; hide only when the action is irrelevant.  A detail-panel action has no</span>
 <span class="source-line-no">101</span><span id="line-101">    * {@code visibleWhen(...)}: removing a momentarily-impossible action makes the bar's contents jump between rows</span>
@@ -116,14 +116,14 @@
 <span class="source-line-no">103</span><span id="line-103">    * action is invalid for an &lt;b&gt;entire&lt;/b&gt; view rather than per row, omit it from that view's action list</span>
 <span class="source-line-no">104</span><span id="line-104">    * &amp;mdash; that is the right tool, and it is why per-row hiding is not offered.</span>
 <span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * &lt;h5 class='section'&gt;Which reason an operator sees:&lt;/h5&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;h4 class='section'&gt;Which reason an operator sees:&lt;/h4&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    * &lt;p&gt;</span>
 <span class="source-line-no">108</span><span id="line-108">    * When several rules on one action fail, the &lt;b&gt;first-declared&lt;/b&gt; one wins and evaluation stops there.  The</span>
 <span class="source-line-no">109</span><span id="line-109">    * author's ordering is therefore the priority mechanism: no severity field, no concatenation, no</span>
 <span class="source-line-no">110</span><span id="line-110">    * most-specific-rule heuristic.  The runtime surfaces that one reason through both a native tooltip and</span>
 <span class="source-line-no">111</span><span id="line-111">    * {@code aria-describedby}, and clears both again when the rules pass.</span>
 <span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;h5 class='section'&gt;A field the row does not carry fails closed:&lt;/h5&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;h4 class='section'&gt;A field the row does not carry fails closed:&lt;/h4&gt;</span>
 <span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
 <span class="source-line-no">115</span><span id="line-115">    * A rule keyed on a field the enclosing panel never declares is rejected at startup.  If the field is</span>
 <span class="source-line-no">116</span><span id="line-116">    * nonetheless missing from a row's payload at runtime, the rule &lt;b&gt;fails&lt;/b&gt; and the action disables &amp;mdash;</span>

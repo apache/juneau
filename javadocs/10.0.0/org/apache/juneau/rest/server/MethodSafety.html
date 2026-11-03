@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  &mdash; reads it from this class, so a security filter and a startup check cannot come to disagree about which
  methods are writes.  A divergence between those two would be silent and would defeat both.
 
- <h5 class='section'>The check</h5>
+ <h2 class='section'>The check</h2>
  <p>
  <a href="#check(java.util.List)"><code>check(List)</code></a> runs when a resource's operation table is assembled, from
  <a href="RestOperations.html#%3Cinit%3E(org.apache.juneau.rest.server.RestOperations.Builder)"><code>RestOperations(RestOperations.Builder)</code></a> &mdash; the one constructor every operation table
@@ -110,14 +109,14 @@ loadScripts(document, 'script');</script>
  unsafe, to <code>"*"</code> or to <code>"RRPC"</code>, or that is also <a href="Mutating.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Mutating</code></a>.  A read can be reached by
  overriding a safe request, so a misdeclared read would be a write behind a plain link.
 
- <h5 class='section'>Why the rule is a declared contradiction rather than a detected one</h5>
+ <h2 class='section'>Why the rule is a declared contradiction rather than a detected one</h2>
  <p>
  See <a href="Mutating.html" title="annotation interface in org.apache.juneau.rest.server"><code>Mutating</code></a>, which records why inferring "this handler mutates" is not soundly possible and why a check
  that can wrongly refuse to start an application is worse than no check at all.  The short form: this class only
  ever reports a contradiction the developer wrote down, so it cannot produce a false positive, and it cannot catch
  a handler that mutates and says nothing.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='ja'><a href="Mutating.html" title="annotation interface in org.apache.juneau.rest.server"><code>Mutating</code></a>
    <li class='jc'><a href="filter/LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a>
  </ul></div>

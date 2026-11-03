@@ -50,14 +50,14 @@
 <span class="source-line-no">037</span><span id="line-37"> * Instances are built with {@link Builder}: {@link #create(String, String)} starts a new custom operator, and</span>
 <span class="source-line-no">038</span><span id="line-38"> * {@link #copy()} starts a modified copy of an existing one (built-in or custom).</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Combinators vs. leaves&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Combinators vs. leaves&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * {@code $and}/{@code $or}/{@code $not} are {@link #isCombinator() combinators}: their children are sub-expressions,</span>
 <span class="source-line-no">043</span><span id="line-43"> * not literal value arguments, and they apply to every type.  Every other operator is a leaf whose arguments are</span>
 <span class="source-line-no">044</span><span id="line-44"> * literal values and whose {@link #appliesTo(SearchType) applicability} is a fixed type set (an &lt;b&gt;empty&lt;/b&gt; type set</span>
 <span class="source-line-no">045</span><span id="line-45"> * means "applies to all types").</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Example (custom operator, with a typed extension):&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Example (custom operator, with a typed extension):&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    SearchOperator &lt;jv&gt;op&lt;/jv&gt; = SearchOperator.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"$near"&lt;/js&gt;, &lt;js&gt;"Fuzzy match. Example: $near(jhon)"&lt;/js&gt;)</span>
 <span class="source-line-no">050</span><span id="line-50"> *       .types(SearchType.&lt;jsf&gt;TEXT&lt;/jsf&gt;)</span>
@@ -192,7 +192,7 @@
 <span class="source-line-no">179</span><span id="line-179">    * falls back to.  Custom operators always return non-blank text, because {@link Builder#build()} rejects a custom</span>
 <span class="source-line-no">180</span><span id="line-180">    * operator without it.</span>
 <span class="source-line-no">181</span><span id="line-181">    *</span>
-<span class="source-line-no">182</span><span id="line-182">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">182</span><span id="line-182">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">184</span><span id="line-184">    *    SearchOperator &lt;jv&gt;near&lt;/jv&gt; = SearchOperator.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"$near"&lt;/js&gt;, &lt;js&gt;"Within N units. Example: $near(5)"&lt;/js&gt;).build();</span>
 <span class="source-line-no">185</span><span id="line-185">    *    &lt;jv&gt;near&lt;/jv&gt;.help();                                                &lt;jc&gt;// "Within N units. Example: $near(5)"&lt;/jc&gt;</span>

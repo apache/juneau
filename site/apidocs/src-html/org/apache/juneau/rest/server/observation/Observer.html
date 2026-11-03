@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> * has no method-interception / AOP substrate, so observation is explicit (a try-with-resources block)</span>
 <span class="source-line-no">036</span><span id="line-36"> * rather than annotation-driven &amp;mdash; consistent with the framework's explicit-over-magic philosophy.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='topic'&gt;No-backend contract&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='topic'&gt;No-backend contract&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * An {@code Observer} built from the no-op SPIs ({@link #NOOP}) never takes a timestamp and hands back</span>
@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * try-with-resources scaffolding. {@link #start(String, String)} short-circuits to the no-op handle</span>
 <span class="source-line-no">044</span><span id="line-44"> * whenever &lt;i&gt;both&lt;/i&gt; backends are the no-op singletons.</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='topic'&gt;Wiring&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='topic'&gt;Wiring&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * Typically obtained from a {@code RestContext}'s bean store &amp;mdash; register the same</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *    Observer &lt;jv&gt;o&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Observer(&lt;jk&gt;new&lt;/jk&gt; MicrometerMetricsRecorder(&lt;jv&gt;registry&lt;/jv&gt;), &lt;jk&gt;new&lt;/jk&gt; OtelTracerHook(&lt;jv&gt;otel&lt;/jv&gt;));</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='jc'&gt;{@link Observations}</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='jc'&gt;{@link Observation}</span>
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;li class='jc'&gt;{@link MetricsRecorder}</span>

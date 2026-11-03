@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  <p>
  The default is <a href="#NUMBER"><code>NUMBER</code></a> which preserves the historical wire output (a bare numeric token).
 
- <h5 class='topic'>JS-interop motivation</h5>
+ <h2 class='topic'>JS-interop motivation</h2>
 
  <p>
  JavaScript's <code>Number.MAX_SAFE_INTEGER</code> is <code>2^53 − 1</code> (= <code>9007199254740991</code>).
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
  for values that are JS-safe and <a href="#STRING"><code>STRING</code></a> for everything else — the typical "safe default" for
  services that may be consumed by both JVM and browser clients.
 
- <h5 class='topic'>Precedence (highest to lowest)</h5>
+ <h2 class='topic'>Precedence (highest to lowest)</h2>
  <ol>
    <li><a href="MarshalledProp.html#bigNumberFormat()"><code>@MarshalledProp(bigNumberFormat=…)</code></a> on the bean property.
    <li><a href="Marshalled.html#bigNumberFormat()"><code>@Marshalled(bigNumberFormat=…)</code></a> on the bean class.
@@ -118,13 +117,13 @@ loadScripts(document, 'script');</script>
    <li>The default constant (<a href="#NUMBER"><code>NUMBER</code></a>).
  </ol>
 
- <h5 class='topic'>Parser leniency</h5>
+ <h2 class='topic'>Parser leniency</h2>
 
  <p>
  Parsers SHALL accept both bare numeric and quoted-string input regardless of the parser-side
  <code>BigNumberFormat</code> setting. The configured constant is informational only.
 
- <h5 class='topic'>Binary serializers</h5>
+ <h2 class='topic'>Binary serializers</h2>
 
  <p>
  Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native numeric types regardless of the
@@ -250,7 +249,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-86">NUMBER</a></span></div>
 <div class="block">Bare numeric token (the default).
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    12345678901234567890
  </p>
@@ -265,7 +264,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BigNumberFormat.html#line-100">STRING</a></span></div>
 <div class="block">Quoted-string form for lossless precision.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    "12345678901234567890"
  </p>

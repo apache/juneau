@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  Compose into a host resource via <a href="../../rest/server/Rest.html#mixins()"><code>@Rest(mixins=WidgetsMixin.class)</code></a>; the asset URLs then become
  available alongside the host's own endpoints.
 
- <h5 class='section'>These assets still need the view runtime beside them</h5>
+ <h2 class='section'>These assets still need the view runtime beside them</h2>
  <p>
  The bytes live here, but they are <b>not</b> a standalone widget runtime: the calendar script
  resolves its glyphs through the rich-view module's icon registry (<code>juneau-icons.js</code>) and pushes its
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
  these assets from before they moved, reading the bytes from <b>this</b> module's classpath.  An existing
  application therefore keeps working unchanged; a new one composes this mixin.
 
- <h5 class='section'>Contract-version handshake:</h5>
+ <h2 class='section'>Contract-version handshake:</h2>
  <p>
  Each <code>*_CONTRACT_VERSION</code> constant is the handshake stamp the matching runtime bakes in.
  <a href="#CALENDAR_CONTRACT_VERSION"><code>CALENDAR_CONTRACT_VERSION</code></a> aliases <a href="CalendarDef.html#CONTRACT_VERSION"><code>CalendarDef.CONTRACT_VERSION</code></a>;
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  <a href="#HEADER_CONTRACT_VERSION"><code>HEADER_CONTRACT_VERSION</code></a> is a literal (the header bean is gone). The three are deliberately distinct from one another: a calendar-envelope
  revision must never force a header or bar-sidecar bump, or vice-versa.
 
- <h5 class='section'>Cache-busting + versioned URLs:</h5>
+ <h2 class='section'>Cache-busting + versioned URLs:</h2>
  <p>
  <a href="#widgetAssetUrl(java.lang.String)"><code>widgetAssetUrl(String)</code></a> carries the same <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code> content-sensitive cache-buster
  shape the views mixin uses: an 8-hex-char content hash of the asset's own served bytes, computed once and cached.
@@ -121,7 +120,7 @@ loadScripts(document, 'script');</script>
  <code>buildVersion</code> resolves this module's implementation version rather than a neighbouring module's.  The two
  modules share the hash function, not a cache.
 
- <h5 class='section'>The serving-path <code>Widget.validate()</code> gate</h5>
+ <h2 class='section'>The serving-path <code>Widget.validate()</code> gate</h2>
  <p>
  This class also nests <a href="WidgetsMixin.WidgetValidationProcessor.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin.WidgetValidationProcessor</code></a>, a <a href="../../rest/server/processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a> that calls
  <a href="Widget.html#validate()"><code>Widget.validate()</code></a> on any REST response content that is a <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a>, fail-closed, ahead of every
@@ -140,7 +139,7 @@ loadScripts(document, 'script');</script>
  processor is itself a serving-framework type, so nesting it here keeps that rule literally true rather than
  requiring an amendment.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="CalendarDef.html" title="class in org.apache.juneau.console.widgets"><code>CalendarDef</code></a>
    <li class='jc'><a href="WidgetsMixin.WidgetValidationProcessor.html" title="class in org.apache.juneau.console.widgets"><code>WidgetsMixin.WidgetValidationProcessor</code></a>
@@ -281,7 +280,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/WidgetsMixin.html#line-110">CALENDAR_JS_PATH</a></span></div>
 <div class="block">The URL path at which the reusable-calendar runtime is served (relative to the host mount).
 
- <h5 class='section'>Load order is a contract, not a preference:</h5>
+ <h4 class='section'>Load order is a contract, not a preference:</h4>
  <p>
  This <code>&lt;script&gt;</code> MUST come after the view module's <code>juneau-views.js</code>.  The calendar's
  <code>"+N more"</code> popover is pushed onto the ONE shared layer stack that script publishes, so Escape, focus

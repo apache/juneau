@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,7 +85,7 @@ loadScripts(document, 'script');</script>
  Bean-only (<code>juneau-console-widgets</code>): the emitter and runtime live in <code>juneau-console-views</code>.
  Titles, tooltips, and labels are painted with <code>textContent</code> by the runtime, never as markup.
 
- <h5 class='section'><code>end</code> is layout-significant, with split inclusivity:</h5>
+ <h2 class='section'><code>end</code> is layout-significant, with split inclusivity:</h2>
  <ul>
    <li><b>All-day (date-only <code>end</code>):</b> <b>inclusive</b>.  <code>start=2026-03-02</code>, <code>end=2026-03-04</code>
       occupies <b>three</b> day cells.
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
       <code>start</code> is zero-duration and is rejected, as is any <code>end</code> before <code>start</code>.
  </ul>
 
- <h5 class='section'>All-day agreement and the malformed set:</h5>
+ <h2 class='section'>All-day agreement and the malformed set:</h2>
  <p>
  Agreement between <code>allDay</code> and the shape of <code>end</code> is decided by <a href="#effectiveAllDay()"><code>effectiveAllDay()</code></a>, never by
  the raw <a href="#allDay"><code>allDay</code></a> field, so a <jk>null</jk> <code>allDay</code> paired with matching <code>start</code>/<code>end</code>
@@ -117,7 +116,7 @@ loadScripts(document, 'script');</script>
  through <a href="#retainWellFormed(java.util.Collection)"><code>retainWellFormed(Collection)</code></a> &mdash; the same rule on both paths.  Neither fails the whole
  definition nor the whole month payload.  An omitted <code>end</code> is <b>not</b> malformed.
 
- <h5 class='section'>Timezone contract:</h5>
+ <h2 class='section'>Timezone contract:</h2>
  <p>
  <code>start</code>/<code>end</code> are interpreted as an ISO-8601 local date (<code>yyyy-MM-dd</code>) or local date-time
  (<code>yyyy-MM-ddTHH:mm</code>).  A trailing offset or <code>Z</code> is <b>fail-soft ignored, never rejected</b> &mdash; a

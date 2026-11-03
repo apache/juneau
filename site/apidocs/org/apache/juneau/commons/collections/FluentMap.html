@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
  This class wraps an underlying map and provides a fluent API for adding entries. All methods return
  <c>this</c> to allow method chaining. The underlying map can be any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> implementation.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li><b>Fluent API:</b> All methods return <c>this</c> for method chaining
    <li><b>Arbitrary Map Support:</b> Works with any map implementation
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
    <li><b>Transparent Interface:</b> Implements the full <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> interface, so it can be used anywhere a map is expected
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create a FluentMap wrapping a LinkedHashMap</jc>
    FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;());
@@ -121,7 +120,7 @@ loadScripts(document, 'script');</script>
    <jv>map</jv>.aa(<jv>other</jv>);
  </p>
 
- <h5 class='section'>Example - Conditional Building:</h5>
+ <h2 class='section'>Example - Conditional Building:</h2>
  <p class='bjava'>
    <jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
    <jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;
@@ -133,7 +132,7 @@ loadScripts(document, 'script');</script>
       .ai(<jv>includeTest</jv>, <js>"test"</js>, <js>"true"</js>);    <jc>// Not added</jc>
  </p>
 
- <h5 class='section'>Behavior Notes:</h5>
+ <h2 class='section'>Behavior Notes:</h2>
  <ul class='spaced-list'>
    <li>All map operations are delegated to the underlying map
    <li>The fluent methods (<a href="#a(K,V)"><code>a(Object, Object)</code></a>, <a href="#aa(java.util.Map)"><code>aa(Map)</code></a>, <a href="#ai(boolean,K,V)"><code>ai(boolean, Object, Object)</code></a>) return <c>this</c> for chaining
@@ -141,12 +140,12 @@ loadScripts(document, 'script');</script>
    <li>The underlying map is stored by reference (not copied), so modifications affect the original map
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is not thread-safe unless the underlying map is thread-safe. If thread safety is required,
  use a thread-safe map type (e.g., <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a>).
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  </ul></div>
@@ -315,7 +314,7 @@ loadScripts(document, 'script');</script>
  This is a convenience method that calls <a href="#put(K,V)"><code>put(Object, Object)</code></a> and returns <c>this</c>
  for method chaining.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;());
    <jv>map</jv>.a(<js>"key1"</js>, <js>"value1"</js>).a(<js>"key2"</js>, <js>"value2"</js>);
@@ -339,7 +338,7 @@ loadScripts(document, 'script');</script>
  This is a convenience method that calls <a href="#putAll(java.util.Map)"><code>putAll(Map)</code></a> and returns <c>this</c>
  for method chaining. If the specified map is <jk>null</jk>, this is a no-op.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;());
    Map&lt;String, String&gt; <jv>other</jv> = Map.of(<js>"key1"</js>, <js>"value1"</js>, <js>"key2"</js>, <js>"value2"</js>);
@@ -366,7 +365,7 @@ loadScripts(document, 'script');</script>
  If the condition is <jk>false</jk>, the entry is not added and this method returns <c>this</c>
  without modifying the map.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
    <jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;
@@ -400,7 +399,7 @@ loadScripts(document, 'script');</script>
  If the predicate returns <jk>false</jk>, the entry is not added and this method returns <c>this</c>
  without modifying the map.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;())
       .a(<js>"host"</js>, <js>"localhost"</js>)

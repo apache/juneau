@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62"> * Leading slashes in URLs are ignored.</span>
 <span class="source-line-no">063</span><span id="line-63"> * So &lt;js&gt;"/xxx/yyy/zzz"&lt;/js&gt; and &lt;js&gt;"xxx/yyy/zzz"&lt;/js&gt; are considered identical.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;jc&gt;// Construct an unstructured POJO model&lt;/jc&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    JsonMap &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;""&lt;/js&gt;</span>
@@ -141,7 +141,7 @@
 <span class="source-line-no">128</span><span id="line-128"> * of index numbers on GET requests to return a map/bean with a specified attribute value.</span>
 <span class="source-line-no">129</span><span id="line-129"> * &lt;br&gt;The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.</span>
 <span class="source-line-no">130</span><span id="line-130"> *</span>
-<span class="source-line-no">131</span><span id="line-131"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">131</span><span id="line-131"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">132</span><span id="line-132"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">133</span><span id="line-133"> *    &lt;jc&gt;// Get map/bean with name attribute value of 'foo' from a list of items&lt;/jc&gt;</span>
 <span class="source-line-no">134</span><span id="line-134"> *    Map &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;pathTraversal&lt;/jv&gt;.getMap(&lt;js&gt;"/items/@name=foo"&lt;/js&gt;);</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285">    * &lt;p&gt;</span>
 <span class="source-line-no">286</span><span id="line-286">    * Will convert object to the specified type per {@link MarshallingSession#convertToType(Object, Class)}.</span>
 <span class="source-line-no">287</span><span id="line-287">    *</span>
-<span class="source-line-no">288</span><span id="line-288">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">288</span><span id="line-288">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">289</span><span id="line-289">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">290</span><span id="line-290">    *    PathTraversal &lt;jv&gt;pathTraversal&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; PathTraversal(&lt;jv&gt;object&lt;/jv&gt;);</span>
 <span class="source-line-no">291</span><span id="line-291">    *</span>
@@ -339,7 +339,7 @@
 <span class="source-line-no">326</span><span id="line-326">    * &lt;p&gt;</span>
 <span class="source-line-no">327</span><span id="line-327">    * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).</span>
 <span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">329</span><span id="line-329">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">330</span><span id="line-330">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">331</span><span id="line-331">    *    PathTraversal &lt;jv&gt;pathTraversal&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; PathTraversal(&lt;jv&gt;object&lt;/jv&gt;);</span>
 <span class="source-line-no">332</span><span id="line-332">    *</span>
@@ -368,7 +368,7 @@
 <span class="source-line-no">355</span><span id="line-355">    * &lt;p&gt;</span>
 <span class="source-line-no">356</span><span id="line-356">    * The array can be arbitrarily long to indicate arbitrarily complex data structures.</span>
 <span class="source-line-no">357</span><span id="line-357">    *</span>
-<span class="source-line-no">358</span><span id="line-358">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">358</span><span id="line-358">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">359</span><span id="line-359">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">360</span><span id="line-360">    *       Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.</span>
 <span class="source-line-no">361</span><span id="line-361">    * &lt;/ul&gt;</span>
@@ -701,7 +701,7 @@
 <span class="source-line-no">688</span><span id="line-688">    * &lt;p&gt;</span>
 <span class="source-line-no">689</span><span id="line-689">    * This method expands the POJO model as necessary to create the new element.</span>
 <span class="source-line-no">690</span><span id="line-690">    *</span>
-<span class="source-line-no">691</span><span id="line-691">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">691</span><span id="line-691">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">692</span><span id="line-692">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">693</span><span id="line-693">    *       You can only post to three types of nodes:</span>
 <span class="source-line-no">694</span><span id="line-694">    *       &lt;ul&gt;</span>

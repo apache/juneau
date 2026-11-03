@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * The {@link Var} interface defines how variables are converted to values.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;jk&gt;public class&lt;/jk&gt; SystemPropertiesVar &lt;jk&gt;extends&lt;/jk&gt; SimpleVar {</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63"> *    System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;varResolver&lt;/jv&gt;.resolve(&lt;js&gt;"java.home is set to $S{java.home}"&lt;/js&gt;));</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage"&gt;Marshall Simple Variable Language&lt;/a&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> */</span>
@@ -324,7 +324,7 @@
 <span class="source-line-no">311</span><span id="line-311">    * Default string variable resolver with support for system properties, environment</span>
 <span class="source-line-no">312</span><span id="line-312">    * variables, and the built-in {@link VarFunction} catalog.</span>
 <span class="source-line-no">313</span><span id="line-313">    *</span>
-<span class="source-line-no">314</span><span id="line-314">    * &lt;h5 class='section'&gt;Built-in {@link Var} bindings:&lt;/h5&gt;</span>
+<span class="source-line-no">314</span><span id="line-314">    * &lt;h4 class='section'&gt;Built-in {@link Var} bindings:&lt;/h4&gt;</span>
 <span class="source-line-no">315</span><span id="line-315">    * &lt;ul&gt;</span>
 <span class="source-line-no">316</span><span id="line-316">    *    &lt;li&gt;&lt;c&gt;$S{key[,default]}&lt;/c&gt; - {@link SystemPropertiesVar}</span>
 <span class="source-line-no">317</span><span id="line-317">    *    &lt;li&gt;&lt;c&gt;$E{key[,default]}&lt;/c&gt; - {@link EnvVariablesVar}</span>
@@ -334,7 +334,7 @@
 <span class="source-line-no">321</span><span id="line-321">    *    &lt;li&gt;&lt;c&gt;$MF{key[,default]}&lt;/c&gt; - {@link ManifestFileVar}</span>
 <span class="source-line-no">322</span><span id="line-322">    * &lt;/ul&gt;</span>
 <span class="source-line-no">323</span><span id="line-323">    *</span>
-<span class="source-line-no">324</span><span id="line-324">    * &lt;h5 class='section'&gt;Built-in {@link VarFunction} catalog:&lt;/h5&gt;</span>
+<span class="source-line-no">324</span><span id="line-324">    * &lt;h4 class='section'&gt;Built-in {@link VarFunction} catalog:&lt;/h4&gt;</span>
 <span class="source-line-no">325</span><span id="line-325">    * &lt;p&gt;</span>
 <span class="source-line-no">326</span><span id="line-326">    * Ships ~68 built-in functions across 10 categories — string, type-conversion, arithmetic,</span>
 <span class="source-line-no">327</span><span id="line-327">    * boolean, conditional, regex, encoding, date/time, random/UUID, and JSON-navigation.</span>
@@ -485,7 +485,7 @@
 <span class="source-line-no">472</span><span id="line-472">    * {@link VarTemplate#asSupplierWithFreshSessions(VarResolver)} for a threadsafe re-evaluating</span>
 <span class="source-line-no">473</span><span id="line-473">    * Supplier.</span>
 <span class="source-line-no">474</span><span id="line-474">    *</span>
-<span class="source-line-no">475</span><span id="line-475">    * &lt;h5 class='section'&gt;Compile-binding contract:&lt;/h5&gt;</span>
+<span class="source-line-no">475</span><span id="line-475">    * &lt;h4 class='section'&gt;Compile-binding contract:&lt;/h4&gt;</span>
 <span class="source-line-no">476</span><span id="line-476">    * &lt;p&gt;</span>
 <span class="source-line-no">477</span><span id="line-477">    * The compiled template is bound to &lt;i&gt;this&lt;/i&gt; resolver. Cached {@link Var} (and, in the</span>
 <span class="source-line-no">478</span><span id="line-478">    * future, function) references are resolved at compile time. Passing the compiled template</span>

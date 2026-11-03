@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,11 +96,11 @@ loadScripts(document, 'script');</script>
 implements <a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a>, <a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="CborSerializer.html" title="class in org.apache.juneau.marshall.cbor"><code>CborSerializer</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe and is typically discarded after one use.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  </ul></div>
 </section>
@@ -280,12 +279,12 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
  know element counts up front; matching <code>endXxx</code> calls emit the BREAK byte
  (<c>0xFF</c>).  Resulting bytes are valid RFC-8949 CBOR.
 
- <h5 class='section'>Builder properties honored:</h5>
+ <h4 class='section'>Builder properties honored:</h4>
  Databind-level settings flow through to <a href="../stream/TokenWriter.html#object(java.lang.Object)"><code>object(Object)</code></a>:
  <c>keepNullProperties</c>, <c>trimEmptyMaps</c>, <c>trimEmptyCollections</c>,
  <c>sortMaps</c>, <c>sortCollections</c>, <c>trimStrings</c>.
 
- <h5 class='section'>Builder properties NOT honored:</h5>
+ <h4 class='section'>Builder properties NOT honored:</h4>
  <c>useWhitespace</c>, <c>maxIndent</c>, <c>quoteChar</c>, <c>escapeSolidus</c> (binary
  format &mdash; no text-formatting concepts apply); <c>uriContext</c>,
  <c>uriResolution</c>, <c>uriRelativity</c>, <c>listener</c>.</div>

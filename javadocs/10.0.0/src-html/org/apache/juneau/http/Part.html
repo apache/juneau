@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * request body &amp;mdash; the Retrofit &lt;c&gt;@Part&lt;/c&gt; pattern.  The engine adapts each {@code @Part} parameter into the</span>
 <span class="source-line-no">031</span><span id="line-31"> * streaming {@link org.apache.juneau.http.entity.MultipartBody}.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='topic'&gt;Accepted part-source types&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='topic'&gt;Accepted part-source types&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * The bound argument type determines how the part body is produced:</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;ul class='spaced-list'&gt;</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * A &lt;jk&gt;null&lt;/jk&gt; argument contributes no part.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='figure'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;ja&gt;@RemotePost&lt;/ja&gt;(&lt;js&gt;"/upload"&lt;/js&gt;)</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;ja&gt;@Multipart&lt;/ja&gt;</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *       &lt;ja&gt;@Part&lt;/ja&gt;(name=&lt;js&gt;"attachment"&lt;/js&gt;, fileName=&lt;js&gt;"report.pdf"&lt;/js&gt;, contentType=&lt;js&gt;"application/pdf"&lt;/js&gt;) &lt;jk&gt;byte&lt;/jk&gt;[] &lt;jv&gt;data&lt;/jv&gt;);</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *       Valid only on a method also annotated {@link org.apache.juneau.http.remote.Multipart @Multipart}; a</span>
 <span class="source-line-no">061</span><span id="line-61"> *       {@code @Part} parameter on a non-multipart method is rejected at proxy-build time.</span>
@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64"> *       ignores this annotation.</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;Next-Generation REST Client&lt;/a&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>

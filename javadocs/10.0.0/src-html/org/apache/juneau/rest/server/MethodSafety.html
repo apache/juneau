@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * &amp;mdash; reads it from this class, so a security filter and a startup check cannot come to disagree about which</span>
 <span class="source-line-no">041</span><span id="line-41"> * methods are writes.  A divergence between those two would be silent and would defeat both.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;The check&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;The check&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * {@link #check(List)} runs when a resource's operation table is assembled, from</span>
 <span class="source-line-no">046</span><span id="line-46"> * {@link RestOperations#RestOperations(RestOperations.Builder)} &amp;mdash; the one constructor every operation table</span>
@@ -73,14 +73,14 @@
 <span class="source-line-no">060</span><span id="line-60"> * unsafe, to {@code "*"} or to {@code "RRPC"}, or that is also {@link Mutating @Mutating}.  A read can be reached by</span>
 <span class="source-line-no">061</span><span id="line-61"> * overriding a safe request, so a misdeclared read would be a write behind a plain link.</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Why the rule is a declared contradiction rather than a detected one&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Why the rule is a declared contradiction rather than a detected one&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * See {@link Mutating}, which records why inferring "this handler mutates" is not soundly possible and why a check</span>
 <span class="source-line-no">066</span><span id="line-66"> * that can wrongly refuse to start an application is worse than no check at all.  The short form: this class only</span>
 <span class="source-line-no">067</span><span id="line-67"> * ever reports a contradiction the developer wrote down, so it cannot produce a false positive, and it cannot catch</span>
 <span class="source-line-no">068</span><span id="line-68"> * a handler that mutates and says nothing.</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='ja'&gt;{@link Mutating}</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link org.apache.juneau.rest.server.filter.LoopbackBoundary}</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>

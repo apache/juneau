@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,7 +96,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  It extends <a href="AccessibleInfo.html" title="class in org.apache.juneau.commons.reflect"><code>AccessibleInfo</code></a> to provide <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AccessibleObject.html" title="class or interface in java.lang.reflect" class="external-link"><code>AccessibleObject</code></a> functionality for accessing
  private fields.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Field introspection - access field metadata, type, modifiers
    <li>Annotation support - get annotations declared on the field
@@ -106,7 +105,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <li>Thread-safe - instances are immutable and safe for concurrent access
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Introspecting field metadata for code generation or analysis
    <li>Accessing field values in beans or data objects
@@ -115,7 +114,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <li>Building frameworks that need to analyze or manipulate field values
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Get FieldInfo from a class</jc>
    ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -134,7 +133,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    Object <jv>value</jv> = <jv>field</jv>.get(<jv>obj</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> - Class introspection
    <li class='jc'><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> - Method introspection
    <li class='jc'><a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> - Constructor introspection
@@ -380,7 +379,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html" title="class or interface in java.lang.reflect" class="external-link">Field</a>&nbsp;inner)</span></div>
 <div class="block">Creates a FieldInfo wrapper for the specified field.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
    Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
@@ -404,7 +403,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  This convenience method automatically determines the declaring class from the field.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
    FieldInfo <jv>fi</jv> = FieldInfo.<jsm>of</jsm>(<jv>f</jv>);
@@ -482,7 +481,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html#getAnnotatedType()" title="class or interface in java.lang.reflect" class="external-link"><code>Field.getAnnotatedType()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get annotated type: @NotNull String name</jc>
    FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"name"</js>);
@@ -563,7 +562,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/FieldInfo.html#line-269">getNameFull</a></span>()</div>
 <div class="block">Returns the full name of this field.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <ul>
    <li><js>"com.foo.MyClass.myField"</js> - Method.
  </ul></div>
@@ -726,7 +725,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html#isEnumConstant()" title="class or interface in java.lang.reflect" class="external-link"><code>Field.isEnumConstant()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if field is an enum constant</jc>
    FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyEnum.<jk>class</jk>).getField(<js>"VALUE1"</js>);
@@ -766,7 +765,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html#isSynthetic()" title="class or interface in java.lang.reflect" class="external-link"><code>Field.isSynthetic()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Filter out compiler-generated fields</jc>
    FieldInfo <jv>fi</jv> = ...;
@@ -842,7 +841,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html#toGenericString()" title="class or interface in java.lang.reflect" class="external-link"><code>Field.toGenericString()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get generic string for: public static final List&lt;String&gt; VALUES</jc>
    FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"VALUES"</js>);
@@ -875,7 +874,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <li>Fully qualified field name (declaring-class.field-name)
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Simple field</jc>
    FieldInfo <jv>fi</jv> = ...;
@@ -911,7 +910,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  supporting single beans, <code>Optional</code>, arrays, <code>List</code>, <code>Set</code>, and <code>Map</code>.
  The field is made accessible before setting its value.
 
- <h5 class='section'>Field Resolution:</h5>
+ <h4 class='section'>Field Resolution:</h4>
  <ul class='spaced-list'>
    <li><b>Single beans</b> - Resolved using <a href="../inject/BeanStore.html#getBean(java.lang.Class)"><code>BeanStore.getBean(Class)</code></a> or <a href="../inject/BeanStore.html#getBean(java.lang.Class,java.lang.String)"><code>BeanStore.getBean(Class, String)</code></a>.
       Throws <a href="ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> if not found.

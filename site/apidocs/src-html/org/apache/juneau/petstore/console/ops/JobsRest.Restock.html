@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65"> * {@link TerminalMixin} and shown two ways &amp;mdash; a FreeMarker terminal card over the in-memory output, and a second</span>
 <span class="source-line-no">066</span><span id="line-66"> * card over the same run's file-backed transcript.</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *    &lt;jc&gt;// POST /console/ops/jobs/restock {DOG:2, slowMs:3000, holdMs:1000, idempotencyKey:'7f3c...'}&lt;/jc&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;body&lt;/jv&gt; = Restock.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;json&lt;/jv&gt;);</span>
@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">    * A per-host override of the jobs hard timeout.  Declare it as a {@code @Bean} on the host that mounts the</span>
 <span class="source-line-no">140</span><span id="line-140">    * console; it is per instance, so one test host's short timeout does not leak into another.</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">142</span><span id="line-142">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">143</span><span id="line-143">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">144</span><span id="line-144">    *    &lt;ja&gt;@Bean&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; JobsRest.HardTimeout jobsHardTimeout() {</span>
 <span class="source-line-no">145</span><span id="line-145">    *       &lt;jk&gt;return new&lt;/jk&gt; JobsRest.HardTimeout(Duration.&lt;jsm&gt;ofSeconds&lt;/jsm&gt;(5));</span>
@@ -225,7 +225,7 @@
 <span class="source-line-no">212</span><span id="line-212">   /**</span>
 <span class="source-line-no">213</span><span id="line-213">    * The restock request.</span>
 <span class="source-line-no">214</span><span id="line-214">    *</span>
-<span class="source-line-no">215</span><span id="line-215">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">215</span><span id="line-215">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">217</span><span id="line-217">    *    &lt;jc&gt;// Wire form: {perSpecies:{DOG:2, CAT:1}, idempotencyKey:'7f3c...'}&lt;/jc&gt;</span>
 <span class="source-line-no">218</span><span id="line-218">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;r&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Restock(Map.&lt;jsm&gt;of&lt;/jsm&gt;(Species.&lt;jsf&gt;DOG&lt;/jsf&gt;, 2), &lt;js&gt;"7f3c"&lt;/js&gt;, 0, 1000);</span>

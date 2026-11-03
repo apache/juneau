@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * {@link Executable} in Java. It extends {@link AccessibleInfo} to provide {@link AccessibleObject}</span>
 <span class="source-line-no">041</span><span id="line-41"> * functionality for accessing private methods and constructors.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Parameter introspection - access method/constructor parameters</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Exception handling - get declared exceptions</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;Accessibility control - make private executables accessible</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;Working with both methods and constructors in a unified way</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;Finding methods/constructors that match specific parameter types</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;li&gt;Building frameworks that need to analyze executable signatures</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;/ul&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Get ExecutableInfo (could be MethodInfo or ConstructorInfo)&lt;/jc&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ...;</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;ei&lt;/jv&gt;.parameterMatches(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;/p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='jc'&gt;{@link MethodInfo} - Method introspection</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='jc'&gt;{@link ConstructorInfo} - Constructor introspection</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link ParameterInfo} - Parameter introspection</span>
@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">    * implicit outer class instance (e.g., {@code Outer.this}). This method checks against the</span>
 <span class="source-line-no">148</span><span id="line-148">    * &lt;em&gt;actual&lt;/em&gt; parameters including this implicit parameter.</span>
 <span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">151</span><span id="line-151">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">152</span><span id="line-152">    *    &lt;jc&gt;// Regular method&lt;/jc&gt;</span>
 <span class="source-line-no">153</span><span id="line-153">    *    &lt;jk&gt;public void&lt;/jk&gt; foo(String &lt;jv&gt;s&lt;/jv&gt;, Integer &lt;jv&gt;i&lt;/jv&gt;);</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">    * &lt;p&gt;</span>
 <span class="source-line-no">188</span><span id="line-188">    * Same as calling {@link Executable#getAnnotatedExceptionTypes()}.</span>
 <span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">191</span><span id="line-191">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">192</span><span id="line-192">    *    &lt;jc&gt;// Get annotated exception types from method: void myMethod() throws @NotNull IOException&lt;/jc&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;);</span>
@@ -221,7 +221,7 @@
 <span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
 <span class="source-line-no">209</span><span id="line-209">    * Same as calling {@link Executable#getAnnotatedParameterTypes()}.</span>
 <span class="source-line-no">210</span><span id="line-210">    *</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">211</span><span id="line-211">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">212</span><span id="line-212">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">213</span><span id="line-213">    *    &lt;jc&gt;// Get annotated parameter types from method: void myMethod(@NotNull String s, @Range(min=0) int i)&lt;/jc&gt;</span>
 <span class="source-line-no">214</span><span id="line-214">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -242,7 +242,7 @@
 <span class="source-line-no">229</span><span id="line-229">    * &lt;p&gt;</span>
 <span class="source-line-no">230</span><span id="line-230">    * Same as calling {@link Executable#getAnnotatedReceiverType()}.</span>
 <span class="source-line-no">231</span><span id="line-231">    *</span>
-<span class="source-line-no">232</span><span id="line-232">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">232</span><span id="line-232">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">233</span><span id="line-233">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">234</span><span id="line-234">    *    &lt;jc&gt;// Get annotated receiver type from method: void myMethod(@MyAnnotation MyClass this)&lt;/jc&gt;</span>
 <span class="source-line-no">235</span><span id="line-235">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;);</span>
@@ -313,7 +313,7 @@
 <span class="source-line-no">300</span><span id="line-300">   /**</span>
 <span class="source-line-no">301</span><span id="line-301">    * Returns the full name of this executable.</span>
 <span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">303</span><span id="line-303">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    * &lt;ul&gt;</span>
 <span class="source-line-no">305</span><span id="line-305">    *    &lt;li&gt;&lt;js&gt;"com.foo.MyClass.get(java.util.String)"&lt;/js&gt; - Method.</span>
 <span class="source-line-no">306</span><span id="line-306">    *    &lt;li&gt;&lt;js&gt;"com.foo.MyClass(java.util.String)"&lt;/js&gt; - Constructor.</span>
@@ -360,7 +360,7 @@
 <span class="source-line-no">347</span><span id="line-347">    * &lt;p&gt;</span>
 <span class="source-line-no">348</span><span id="line-348">    * This is a convenience method that extracts the parameter types from {@link #getParameters()}.</span>
 <span class="source-line-no">349</span><span id="line-349">    *</span>
-<span class="source-line-no">350</span><span id="line-350">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">350</span><span id="line-350">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">351</span><span id="line-351">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">352</span><span id="line-352">    *    &lt;jc&gt;// Get parameter types: void myMethod(String s, int i)&lt;/jc&gt;</span>
 <span class="source-line-no">353</span><span id="line-353">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -377,7 +377,7 @@
 <span class="source-line-no">364</span><span id="line-364">   /**</span>
 <span class="source-line-no">365</span><span id="line-365">    * Returns the short name of this executable.</span>
 <span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">368</span><span id="line-368">    * &lt;ul&gt;</span>
 <span class="source-line-no">369</span><span id="line-369">    *    &lt;li&gt;&lt;js&gt;"MyClass.get(String)"&lt;/js&gt; - Method.</span>
 <span class="source-line-no">370</span><span id="line-370">    *    &lt;li&gt;&lt;js&gt;"MyClass(String)"&lt;/js&gt; - Constructor.</span>
@@ -403,7 +403,7 @@
 <span class="source-line-no">390</span><span id="line-390">    * &lt;p&gt;</span>
 <span class="source-line-no">391</span><span id="line-391">    * Same as calling {@link Executable#getTypeParameters()}.</span>
 <span class="source-line-no">392</span><span id="line-392">    *</span>
-<span class="source-line-no">393</span><span id="line-393">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">393</span><span id="line-393">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">394</span><span id="line-394">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">395</span><span id="line-395">    *    &lt;jc&gt;// Get type parameters from method: &amp;lt;T extends Number&amp;gt; void myMethod(T value)&lt;/jc&gt;</span>
 <span class="source-line-no">396</span><span id="line-396">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;, Number.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -652,7 +652,7 @@
 <span class="source-line-no">639</span><span id="line-639">    * &lt;p&gt;</span>
 <span class="source-line-no">640</span><span id="line-640">    * Same as calling {@link Executable#isSynthetic()}.</span>
 <span class="source-line-no">641</span><span id="line-641">    *</span>
-<span class="source-line-no">642</span><span id="line-642">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">642</span><span id="line-642">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">643</span><span id="line-643">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">644</span><span id="line-644">    *    &lt;jc&gt;// Check if method is compiler-generated&lt;/jc&gt;</span>
 <span class="source-line-no">645</span><span id="line-645">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"access$000"&lt;/js&gt;);</span>
@@ -670,7 +670,7 @@
 <span class="source-line-no">657</span><span id="line-657">    * &lt;p&gt;</span>
 <span class="source-line-no">658</span><span id="line-658">    * Same as calling {@link Executable#isVarArgs()}.</span>
 <span class="source-line-no">659</span><span id="line-659">    *</span>
-<span class="source-line-no">660</span><span id="line-660">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">660</span><span id="line-660">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">661</span><span id="line-661">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">662</span><span id="line-662">    *    &lt;jc&gt;// Check if method accepts varargs&lt;/jc&gt;</span>
 <span class="source-line-no">663</span><span id="line-663">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;, String[].&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -799,7 +799,7 @@
 <span class="source-line-no">786</span><span id="line-786">    * &lt;p&gt;</span>
 <span class="source-line-no">787</span><span id="line-787">    * Same as calling {@link Executable#toGenericString()}.</span>
 <span class="source-line-no">788</span><span id="line-788">    *</span>
-<span class="source-line-no">789</span><span id="line-789">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">789</span><span id="line-789">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">790</span><span id="line-790">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">791</span><span id="line-791">    *    &lt;jc&gt;// Get generic string for: public &amp;lt;T&amp;gt; List&amp;lt;T&amp;gt; myMethod(T value) throws IOException&lt;/jc&gt;</span>
 <span class="source-line-no">792</span><span id="line-792">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;, Object.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -828,7 +828,7 @@
 <span class="source-line-no">815</span><span id="line-815">    *    &lt;li&gt;Throws declarations (if any)</span>
 <span class="source-line-no">816</span><span id="line-816">    * &lt;/ul&gt;</span>
 <span class="source-line-no">817</span><span id="line-817">    *</span>
-<span class="source-line-no">818</span><span id="line-818">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">818</span><span id="line-818">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">819</span><span id="line-819">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">820</span><span id="line-820">    *    &lt;jc&gt;// Constructor&lt;/jc&gt;</span>
 <span class="source-line-no">821</span><span id="line-821">    *    ConstructorInfo &lt;jv&gt;ci&lt;/jv&gt; = ConstructorInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;.getConstructor(String.&lt;jk&gt;class&lt;/jk&gt;));</span>
@@ -856,7 +856,7 @@
 <span class="source-line-no">843</span><span id="line-843">    *    &lt;jc&gt;// Returns: "public &amp;lt;T extends java.lang.Comparable&amp;lt;T&amp;gt;&amp;gt; void org.example.MyClass.boundedMethod(T)"&lt;/jc&gt;</span>
 <span class="source-line-no">844</span><span id="line-844">    * &lt;/p&gt;</span>
 <span class="source-line-no">845</span><span id="line-845">    *</span>
-<span class="source-line-no">846</span><span id="line-846">    * &lt;h5 class='section'&gt;Comparison with Other Methods:&lt;/h5&gt;</span>
+<span class="source-line-no">846</span><span id="line-846">    * &lt;h4 class='section'&gt;Comparison with Other Methods:&lt;/h4&gt;</span>
 <span class="source-line-no">847</span><span id="line-847">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">848</span><span id="line-848">    *    &lt;li&gt;{@link #getNameShort()} - Returns short name with parameters (e.g., "myMethod(int, String)")</span>
 <span class="source-line-no">849</span><span id="line-849">    *    &lt;li&gt;{@link #getNameFull()} - Returns fully qualified name with parameters (e.g., "org.example.MyClass.myMethod(int, java.lang.String)")</span>

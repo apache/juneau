@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -76,7 +75,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Declares that a REST operation changes state, so that binding it to an HTTP method defined as safe becomes a
  startup failure instead of a silent mistake.
 
- <h5 class='section'>The mistake this exists to catch</h5>
+ <h2 class='section'>The mistake this exists to catch</h2>
  <p>
  RFC 9110 defines <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code> and <code>TRACE</code> as <i>safe</i>: a client, a proxy,
  a crawler or a browser prefetcher may issue them freely, repeat them, and follow them without asking, precisely
@@ -106,7 +105,7 @@ loadScripts(document, 'script');</script>
  safe method through nobody's decision.  The check resolves the method the same way dispatch does, so it sees the
  inferred <code>GET</code> rather than the absent annotation.
 
- <h5 class='section'>Why this is declared and not detected</h5>
+ <h2 class='section'>Why this is declared and not detected</h2>
  <p>
  The obvious alternative is for the framework to work out for itself which handlers mutate, and it was rejected
  because no sound version of it exists.  "Mutates" is a claim about effects on state the <i>application</i> cares
@@ -137,7 +136,7 @@ loadScripts(document, 'script');</script>
  operation mutates, and the operation is bound to a method defined as safe.  Those cannot both be intended, and
  no inference is involved in noticing it.
 
- <h5 class='section'>What this does not catch</h5>
+ <h2 class='section'>What this does not catch</h2>
  <p>
  <b>An operation that mutates and says nothing is invisible to this check.</b>  The check finds contradictions,
  not omissions, and a developer who does not reach for the annotation gets no protection from it.  That limit is
@@ -157,7 +156,7 @@ loadScripts(document, 'script');</script>
  would be convenient and would immediately produce false failures on the page-rendering <code>GET</code> that nearly
  every such resource also has &mdash; reintroducing exactly the false-positive problem that ruled out inference.
 
- <h5 class='section'>When it runs</h5>
+ <h2 class='section'>When it runs</h2>
  <p>
  When the resource's operation table is assembled: at startup under <a href="Rest.html#eagerInit()"><code>Rest.eagerInit()</code></a>, and otherwise on
  the first request to that resource.  In both cases it runs <b>before any operation on that resource can be
@@ -168,7 +167,7 @@ loadScripts(document, 'script');</script>
  a property of a security filter &mdash; it is a property of the resource, which the filter then depends on.  An
  application with no <code>@Mutating</code> anywhere is unaffected.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Correct: declared mutating, bound to a method that is not safe.  Boots, and the boundary's write
    // checks apply to it because POST is not in the safe set.</jc>
@@ -177,7 +176,7 @@ loadScripts(document, 'script');</script>
    <jk>public</jk> ArmResult <jsm>arm</jsm>(<ja>@Path</ja>(<js>"version"</js>) String <jv>version</jv>, <ja>@Content</ja> ArmRequest <jv>body</jv>) {...}
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="filter/LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a>
    <li class='jm'><a href="MethodSafety.html#check(java.util.List)"><code>MethodSafety.check(java.util.List)</code></a>
  </ul></div>

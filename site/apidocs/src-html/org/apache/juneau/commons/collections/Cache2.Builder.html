@@ -42,13 +42,13 @@
 <span class="source-line-no">029</span><span id="line-29">/**</span>
 <span class="source-line-no">030</span><span id="line-30"> * Simple in-memory cache for storing and retrieving objects by two-part keys.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Overview:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Overview:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic</span>
 <span class="source-line-no">035</span><span id="line-35"> * value computation, cache eviction, and statistics tracking for two-part composite keys. It's designed for</span>
 <span class="source-line-no">036</span><span id="line-36"> * caching expensive-to-compute or frequently-accessed objects indexed by two keys.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Thread-safe concurrent access without external synchronization</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Two-part composite key support</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Can be disabled entirely via builder or system property</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;WEAK Mode Semantics:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;WEAK Mode Semantics:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * {@link CacheMode#WEAK} on this class is &lt;b&gt;best-effort&lt;/b&gt;, not retention-guaranteed. Each lookup synthesizes</span>
 <span class="source-line-no">053</span><span id="line-53"> * an internal {@code Tuple2} composite key that is never exposed to the caller, so that key is reachable only</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58"> * remains strongly reachable elsewhere. If guaranteed retention is required, use {@link CacheMode#FULL} (the</span>
 <span class="source-line-no">059</span><span id="line-59"> * default mode) instead of WEAK. See {@link CacheMode#WEAK} for details.</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Create a cache with default supplier&lt;/jc&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    Cache2&amp;lt;ClassLoader,Class&amp;lt;?&amp;gt;,ClassMeta&amp;gt; &lt;jv&gt;metaCache&lt;/jv&gt; = Cache2</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> *    ClassMeta &lt;jv&gt;meta2&lt;/jv&gt; = &lt;jv&gt;metaCache&lt;/jv&gt;.get(&lt;jv&gt;classLoader&lt;/jv&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, () -&amp;gt; customMeta);</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;/p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;Cache Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;Cache Behavior:&lt;/h2&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;When a key pair is requested:</span>
 <span class="source-line-no">080</span><span id="line-80"> *       &lt;ul&gt;</span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87"> *    &lt;li&gt;Null keys always bypass the cache and invoke the supplier</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;/ul&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> *</span>
-<span class="source-line-no">090</span><span id="line-90"> * &lt;h5 class='section'&gt;Environment Variables:&lt;/h5&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> * &lt;h2 class='section'&gt;Environment Variables:&lt;/h2&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> * &lt;p&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> * The following system properties can be used to configure default cache behavior:</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;ul class='spaced-list'&gt;</span>
@@ -109,14 +109,14 @@
 <span class="source-line-no">096</span><span id="line-96"> *    &lt;li&gt;&lt;c&gt;juneau.cache.logOnExit&lt;/c&gt; - Log cache statistics on shutdown (default: &lt;jk&gt;false&lt;/jk&gt;)</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;/ul&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *</span>
-<span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">100</span><span id="line-100"> * &lt;p&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> * This class is thread-safe and can be safely used from multiple threads without external synchronization.</span>
 <span class="source-line-no">102</span><span id="line-102"> * However, note that when the cache is cleared due to exceeding max size, there's a small window where</span>
 <span class="source-line-no">103</span><span id="line-103"> * multiple threads might compute the same value. This is acceptable for most use cases as it only affects</span>
 <span class="source-line-no">104</span><span id="line-104"> * performance, not correctness.</span>
 <span class="source-line-no">105</span><span id="line-105"> *</span>
-<span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;Performance Considerations:&lt;/h5&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> * &lt;h2 class='section'&gt;Performance Considerations:&lt;/h2&gt;</span>
 <span class="source-line-no">107</span><span id="line-107"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">108</span><span id="line-108"> *    &lt;li&gt;Cache operations are O(1) average time complexity</span>
 <span class="source-line-no">109</span><span id="line-109"> *    &lt;li&gt;The {@link #get(Object, Object, java.util.function.Supplier)} method uses</span>
@@ -126,7 +126,7 @@
 <span class="source-line-no">113</span><span id="line-113"> *    &lt;li&gt;Statistics tracking uses {@link AtomicInteger} for thread-safe counting without locking</span>
 <span class="source-line-no">114</span><span id="line-114"> * &lt;/ul&gt;</span>
 <span class="source-line-no">115</span><span id="line-115"> *</span>
-<span class="source-line-no">116</span><span id="line-116"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">116</span><span id="line-116"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">117</span><span id="line-117"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">118</span><span id="line-118"> *    &lt;jc&gt;// Simple cache with defaults&lt;/jc&gt;</span>
 <span class="source-line-no">119</span><span id="line-119"> *    Cache2&amp;lt;String,String,Config&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache2.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, Config.&lt;jk&gt;class&lt;/jk&gt;).build();</span>
@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133"> *       .build();</span>
 <span class="source-line-no">134</span><span id="line-134"> * &lt;/p&gt;</span>
 <span class="source-line-no">135</span><span id="line-135"> *</span>
-<span class="source-line-no">136</span><span id="line-136"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">136</span><span id="line-136"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">137</span><span id="line-137"> * &lt;ul&gt;</span>
 <span class="source-line-no">138</span><span id="line-138"> *    &lt;li class='jc'&gt;{@link Cache}</span>
 <span class="source-line-no">139</span><span id="line-139"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</span>
@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151">   /**</span>
 <span class="source-line-no">152</span><span id="line-152">    * Builder for creating configured {@link Cache2} instances.</span>
 <span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">155</span><span id="line-155">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">156</span><span id="line-156">    *    Cache2&amp;lt;String,Integer,User&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache2</span>
 <span class="source-line-no">157</span><span id="line-157">    *       .&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, User.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -173,7 +173,7 @@
 <span class="source-line-no">160</span><span id="line-160">    *       .build();</span>
 <span class="source-line-no">161</span><span id="line-161">    * &lt;/p&gt;</span>
 <span class="source-line-no">162</span><span id="line-162">    *</span>
-<span class="source-line-no">163</span><span id="line-163">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">163</span><span id="line-163">    * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">164</span><span id="line-164">    * &lt;ul&gt;</span>
 <span class="source-line-no">165</span><span id="line-165">    *    &lt;li class='jm'&gt;{@link Cache2#of(Class, Class, Class)}</span>
 <span class="source-line-no">166</span><span id="line-166">    * &lt;/ul&gt;</span>
@@ -292,7 +292,7 @@
 <span class="source-line-no">279</span><span id="line-279">       * &lt;p&gt;</span>
 <span class="source-line-no">280</span><span id="line-280">       * Default value: 1000 (or value of system property &lt;c&gt;juneau.cache.maxSize&lt;/c&gt;)</span>
 <span class="source-line-no">281</span><span id="line-281">       *</span>
-<span class="source-line-no">282</span><span id="line-282">       * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">282</span><span id="line-282">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;</span>
 <span class="source-line-no">283</span><span id="line-283">       * &lt;ul&gt;</span>
 <span class="source-line-no">284</span><span id="line-284">       *    &lt;li&gt;Setting this too low may cause excessive cache clearing and reduce effectiveness</span>
 <span class="source-line-no">285</span><span id="line-285">       *    &lt;li&gt;Setting this too high may consume excessive memory</span>
@@ -315,7 +315,7 @@
 <span class="source-line-no">302</span><span id="line-302">       * Individual lookups can override this supplier using</span>
 <span class="source-line-no">303</span><span id="line-303">       * {@link Cache2#get(Object, Object, java.util.function.Supplier)}.</span>
 <span class="source-line-no">304</span><span id="line-304">       *</span>
-<span class="source-line-no">305</span><span id="line-305">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">305</span><span id="line-305">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">306</span><span id="line-306">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">307</span><span id="line-307">       *    Cache2&amp;lt;String,Integer,User&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache2</span>
 <span class="source-line-no">308</span><span id="line-308">       *       .&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, User.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -383,7 +383,7 @@
 <span class="source-line-no">370</span><span id="line-370">    * This variant allows you to specify the cache's generic types explicitly without passing</span>
 <span class="source-line-no">371</span><span id="line-371">    * the class objects, which is useful when working with complex parameterized types.</span>
 <span class="source-line-no">372</span><span id="line-372">    *</span>
-<span class="source-line-no">373</span><span id="line-373">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">373</span><span id="line-373">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">374</span><span id="line-374">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">375</span><span id="line-375">    *    &lt;jc&gt;// Working with complex generic types&lt;/jc&gt;</span>
 <span class="source-line-no">376</span><span id="line-376">    *    Cache2&amp;lt;Class&amp;lt;?&amp;gt;,Class&amp;lt;? extends Annotation&amp;gt;,List&amp;lt;Annotation&amp;gt;&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; =</span>
@@ -404,7 +404,7 @@
 <span class="source-line-no">391</span><span id="line-391">   /**</span>
 <span class="source-line-no">392</span><span id="line-392">    * Creates a new {@link Builder} for constructing a cache.</span>
 <span class="source-line-no">393</span><span id="line-393">    *</span>
-<span class="source-line-no">394</span><span id="line-394">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">394</span><span id="line-394">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">395</span><span id="line-395">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">396</span><span id="line-396">    *    Cache2&amp;lt;String,Integer,User&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache2</span>
 <span class="source-line-no">397</span><span id="line-397">    *       .&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, User.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -528,7 +528,7 @@
 <span class="source-line-no">515</span><span id="line-515">    * This method uses the default supplier configured via {@link Builder#supplier(Function2)}.</span>
 <span class="source-line-no">516</span><span id="line-516">    * If no default supplier was configured, this method will throw a {@link NullPointerException}.</span>
 <span class="source-line-no">517</span><span id="line-517">    *</span>
-<span class="source-line-no">518</span><span id="line-518">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">518</span><span id="line-518">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">519</span><span id="line-519">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">520</span><span id="line-520">    *    Cache2&amp;lt;String,Integer,User&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache2</span>
 <span class="source-line-no">521</span><span id="line-521">    *       .&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, User.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -561,7 +561,7 @@
 <span class="source-line-no">548</span><span id="line-548">    *    &lt;li&gt;Return the value</span>
 <span class="source-line-no">549</span><span id="line-549">    * &lt;/ol&gt;</span>
 <span class="source-line-no">550</span><span id="line-550">    *</span>
-<span class="source-line-no">551</span><span id="line-551">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">551</span><span id="line-551">    * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</span>
 <span class="source-line-no">552</span><span id="line-552">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">553</span><span id="line-553">    *    &lt;li&gt;If the cache is disabled, always invokes the supplier without caching</span>
 <span class="source-line-no">554</span><span id="line-554">    *    &lt;li&gt;If the cache exceeds {@link Builder#maxSize(int)}, clears all entries before storing the new value</span>
@@ -570,7 +570,7 @@
 <span class="source-line-no">557</span><span id="line-557">    *       (due to {@link ConcurrentHashMap#putIfAbsent(Object, Object)} semantics)</span>
 <span class="source-line-no">558</span><span id="line-558">    * &lt;/ul&gt;</span>
 <span class="source-line-no">559</span><span id="line-559">    *</span>
-<span class="source-line-no">560</span><span id="line-560">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">560</span><span id="line-560">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">561</span><span id="line-561">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">562</span><span id="line-562">    *    Cache2&amp;lt;String,Integer,User&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache2.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;, User.&lt;jk&gt;class&lt;/jk&gt;).build();</span>
 <span class="source-line-no">563</span><span id="line-563">    *</span>
@@ -617,7 +617,7 @@
 <span class="source-line-no">604</span><span id="line-604">    * {@link #get(Object, Object, java.util.function.Supplier)} finds an existing cached value</span>
 <span class="source-line-no">605</span><span id="line-605">    * for the requested key pair, avoiding the need to invoke the supplier.</span>
 <span class="source-line-no">606</span><span id="line-606">    *</span>
-<span class="source-line-no">607</span><span id="line-607">    * &lt;h5 class='section'&gt;Cache Effectiveness:&lt;/h5&gt;</span>
+<span class="source-line-no">607</span><span id="line-607">    * &lt;h4 class='section'&gt;Cache Effectiveness:&lt;/h4&gt;</span>
 <span class="source-line-no">608</span><span id="line-608">    * &lt;p&gt;</span>
 <span class="source-line-no">609</span><span id="line-609">    * You can calculate the cache hit ratio using:</span>
 <span class="source-line-no">610</span><span id="line-610">    * &lt;p class='bjava'&gt;</span>
@@ -627,7 +627,7 @@
 <span class="source-line-no">614</span><span id="line-614">    *    &lt;jk&gt;double&lt;/jk&gt; &lt;jv&gt;hitRatio&lt;/jv&gt; = (&lt;jk&gt;double&lt;/jk&gt;) &lt;jv&gt;hits&lt;/jv&gt; / &lt;jv&gt;total&lt;/jv&gt;;  &lt;jc&gt;// 0.0 to 1.0&lt;/jc&gt;</span>
 <span class="source-line-no">615</span><span id="line-615">    * &lt;/p&gt;</span>
 <span class="source-line-no">616</span><span id="line-616">    *</span>
-<span class="source-line-no">617</span><span id="line-617">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">617</span><span id="line-617">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;</span>
 <span class="source-line-no">618</span><span id="line-618">    * &lt;ul&gt;</span>
 <span class="source-line-no">619</span><span id="line-619">    *    &lt;li&gt;This counter is never reset, even when {@link #clear()} is called</span>
 <span class="source-line-no">620</span><span id="line-620">    *    &lt;li&gt;Thread-safe using {@link AtomicInteger}</span>

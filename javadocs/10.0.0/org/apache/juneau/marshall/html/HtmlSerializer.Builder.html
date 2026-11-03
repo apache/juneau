@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -316,13 +315,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addKeyValueTableHeaders()">
 <h3>addKeyValueTableHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-296">addKeyValueTableHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-299">addKeyValueTableHeaders</a></span>()</div>
 <div class="block"><i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Add key/value headers on bean/map tables.
 
  <p>
  When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjson'>
    <jc>// Our bean class.</jc>
    <jk>public class</jk> MyBean {
@@ -347,6 +346,7 @@ loadScripts(document, 'script');</script>
  The following shows the difference between the two generated outputs:
 
  <table class='styled'>
+   <caption>Serialized output without headers</caption>
    <tr>
       <th><c>withoutHeaders</c></th>
       <th><c>withHeaders</c></th>
@@ -354,12 +354,14 @@ loadScripts(document, 'script');</script>
    <tr>
       <td>
          <table class='unstyled'>
+            <caption>Nested table without headers (1)</caption>
             <tr><td>f1</td><td>foo</td></tr>
             <tr><td>f2</td><td>bar</td></tr>
          </table>
       </td>
       <td>
          <table class='unstyled'>
+            <caption>Nested table without headers (2)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td>foo</td></tr>
             <tr><td>f2</td><td>bar</td></tr>
@@ -376,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addKeyValueTableHeaders(boolean)">
 <h3>addKeyValueTableHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-306">addKeyValueTableHeaders</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-309">addKeyValueTableHeaders</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#addKeyValueTableHeaders()"><code>addKeyValueTableHeaders()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -389,7 +391,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.html" title="class in org.apache.juneau.marshall.html">HtmlSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-311">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.html" title="class in org.apache.juneau.marshall.html">HtmlSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-314">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#build()">Context.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">
@@ -403,7 +405,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-316">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-319">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#copy()">Context.Builder</a></code></span></div>
 <div class="block">Copy creator.</div>
 <dl class="notes">
@@ -417,7 +419,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableDetectLabelParameters()">
 <h3>disableDetectLabelParameters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-379">disableDetectLabelParameters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-385">disableDetectLabelParameters</a></span>()</div>
 <div class="block"><i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Dont look for link labels in URIs.
 
  <p>
@@ -426,7 +428,7 @@ loadScripts(document, 'script');</script>
  <p>
  The parameter name can be changed via the <a href="#labelParameter(java.lang.String)"><code>labelParameter(String)</code></a> property.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjson'>
    <jc>// Our bean class with a property containing what looks like a URL.</jc>
    <jk>public class</jk> MyBean {
@@ -455,6 +457,7 @@ loadScripts(document, 'script');</script>
  <br>Note that they're both hyperlinks, but the anchor text differs:
 
  <table class='styled'>
+   <caption>Serialized output with labels</caption>
    <tr>
       <th><c>withLabels</c></th>
       <th><c>withoutLabels</c></th>
@@ -462,12 +465,14 @@ loadScripts(document, 'script');</script>
    <tr>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with labels (1)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
          </table>
       </td>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with labels (2)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
          </table>
@@ -483,7 +488,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableDetectLabelParameters(boolean)">
 <h3>disableDetectLabelParameters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-389">disableDetectLabelParameters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-395">disableDetectLabelParameters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#disableDetectLabelParameters()"><code>disableDetectLabelParameters()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -496,14 +501,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableDetectLinksInStrings()">
 <h3>disableDetectLinksInStrings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-451">disableDetectLinksInStrings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-460">disableDetectLinksInStrings</a></span>()</div>
 <div class="block"><i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Don't look for URLs in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>Strings</code></a>.
 
  <p>
  Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
  and make it into a hyperlink based on the rules specified by <a href="#uriAnchorText(org.apache.juneau.marshall.html.AnchorText)"><code>uriAnchorText(AnchorText)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjson'>
    <jc>// Our bean class with a property containing what looks like a URL.</jc>
    <jk>public class</jk> MyBean {
@@ -531,6 +536,7 @@ loadScripts(document, 'script');</script>
  The following shows the difference between the two generated outputs:
 
  <table class='styled'>
+   <caption>Serialized output with links</caption>
    <tr>
       <th><c>withLinks</c></th>
       <th><c>withoutLinks</c></th>
@@ -538,12 +544,14 @@ loadScripts(document, 'script');</script>
    <tr>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with links (1)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
          </table>
       </td>
       <td>
          <table class='unstyled'>
+            <caption>Nested table with links (2)</caption>
             <tr><th>key</th><th>value</th></tr>
             <tr><td>f1</td><td>http://www.apache.org</td></tr>
          </table>
@@ -559,7 +567,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disableDetectLinksInStrings(boolean)">
 <h3>disableDetectLinksInStrings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-461">disableDetectLinksInStrings</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-470">disableDetectLinksInStrings</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Same as <a href="#disableDetectLinksInStrings()"><code>disableDetectLinksInStrings()</code></a> but allows you to explicitly specify the value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -572,7 +580,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashKey()">
 <h3>hashKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-466">hashKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-475">hashKey</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.Builder.html#hashKey()">Context.Builder</a></code></span></div>
 <div class="block">Returns the hashkey of this builder.
 
@@ -591,7 +599,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="labelParameter(java.lang.String)">
 <h3>labelParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-493">labelParameter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-502">labelParameter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Link label parameter name.
 
  <p>
@@ -609,7 +617,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriAnchorText(org.apache.juneau.marshall.html.AnchorText)">
 <h3>uriAnchorText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-657">uriAnchorText</a></span><wbr><span class="parameters">(<a href="AnchorText.html" title="enum class in org.apache.juneau.marshall.html">AnchorText</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlSerializer.Builder.html" title="type parameter in HtmlSerializer.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlSerializer.Builder.html#line-666">uriAnchorText</a></span><wbr><span class="parameters">(<a href="AnchorText.html" title="enum class in org.apache.juneau.marshall.html">AnchorText</a>&nbsp;value)</span></div>
 <div class="block"><i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Anchor text source.
 
  <p>
@@ -623,7 +631,7 @@ loadScripts(document, 'script');</script>
    <ul>
       <li class='jf'><a href="AnchorText.html#TO_STRING"><code>TO_STRING</code></a> (default) - Set to whatever is returned by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a> on the object.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -638,7 +646,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#PROPERTY_NAME"><code>PROPERTY_NAME</code></a> - Set to the bean property name.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -653,7 +661,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#URI"><code>URI</code></a> - Set to the URI value.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -668,7 +676,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#LAST_TOKEN"><code>LAST_TOKEN</code></a> - Set to the last token of the URI value.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -683,7 +691,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#URI_ANCHOR"><code>URI_ANCHOR</code></a> - Set to the anchor of the URL.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -698,7 +706,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#CONTEXT_RELATIVE"><code>CONTEXT_RELATIVE</code></a> - Same as <a href="AnchorText.html#TO_STRING"><code>TO_STRING</code></a> but assumes it's a context-relative path.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -719,7 +727,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#SERVLET_RELATIVE"><code>SERVLET_RELATIVE</code></a> - Same as <a href="AnchorText.html#TO_STRING"><code>TO_STRING</code></a> but assumes it's a servlet-relative path.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {
@@ -740,7 +748,7 @@ loadScripts(document, 'script');</script>
          </p>
       <li class='jf'><a href="AnchorText.html#PATH_RELATIVE"><code>PATH_RELATIVE</code></a> - Same as <a href="AnchorText.html#TO_STRING"><code>TO_STRING</code></a> but assumes it's a path-relative path.
          <br>
-         <h5 class='section'>Example:</h5>
+         <h4 class='section'>Example:</h4>
          <p class='bjson'>
    <jc>// Our bean class with a URI property.</jc>
    <jk>public class</jk> MyBean {

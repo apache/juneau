@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
  map read instead of whatever the delegate does (for example the relaxed environment source tokenizes the name and
  probes up to three environment variables).
 
- <h5 class='section'>Contract:</h5>
+ <h2 class='section'>Contract:</h2>
  <p>
  <b>Wrap only sources whose answers cannot change after construction, including their misses.</b>
  A wrapped source that answers <a href="PropertyLookupResult.html#missing()"><code>PropertyLookupResult.missing()</code></a> once, for any reason, answers it forever.
@@ -101,13 +100,13 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
  Do not wrap a <code>SensitivePropertySource</code> either: the wrapper hides the redaction marker and keeps secret values in
  memory for its lifetime.
 
- <h5 class='section'>Soft cap:</h5>
+ <h2 class='section'>Soft cap:</h2>
  <p>
  The cache holds at most <a href="#MAX_ENTRIES"><code>MAX_ENTRIES</code></a> names. Once full, new names pass through to the delegate uncached; there
  is no eviction, so the first names seen win. The check is not locked: concurrent first lookups can overshoot the cap
  by at most the number of racing threads.
 
- <h5 class='section'>Null names:</h5>
+ <h2 class='section'>Null names:</h2>
  <p>
  A <code>null</code> name skips the cache (it cannot hold a <code>null</code> key) and goes to the delegate, so each delegate
  keeps its own <code>null</code> behavior.</div>

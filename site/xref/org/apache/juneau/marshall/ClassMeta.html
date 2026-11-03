@@ -758,12 +758,12 @@
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">	 * The function is only invoked once per property name per {@link ClassMeta} instance. Subsequent calls</em>
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">	 * with the same name will return the cached value without re-invoking the function.</em>
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Thread Safety:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">	 * This method is thread-safe. If multiple threads call this method simultaneously with the same property name,</em>
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * the function may be invoked multiple times, but only one result will be cached and returned.</em>
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Compute and cache an expensive property&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">	 * 	Optional&amp;lt;String&amp;gt; &lt;jv&gt;computedValue&lt;/jv&gt; = classMeta.&lt;jsm&gt;getProperty&lt;/jsm&gt;(&lt;js&gt;"expensiveProperty"&lt;/js&gt;, cm -&amp;gt; {</em>
@@ -877,7 +877,7 @@
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;All other types: empty array.</em>
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;ClassMeta&amp;lt;Optional&amp;lt;Integer&amp;gt;&amp;gt;&lt;/c&gt; → &lt;c&gt;[Integer]&lt;/c&gt;</em>
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;ClassMeta&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt;&lt;/c&gt; → &lt;c&gt;[Integer]&lt;/c&gt;</em>

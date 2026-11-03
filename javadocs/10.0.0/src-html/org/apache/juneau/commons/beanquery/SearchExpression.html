@@ -52,14 +52,14 @@
 <span class="source-line-no">039</span><span id="line-39"> * This tree is the parser's output, not a wire format: a {@link BeanQuery} carries only raw expression strings, and</span>
 <span class="source-line-no">040</span><span id="line-40"> * engines call the parser themselves.  See {@link SearchExpressionParser}.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    SearchExpression &lt;jv&gt;node&lt;/jv&gt; = SearchExpressionParser.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"$contains(err)"&lt;/js&gt;, SearchOperatorSet.&lt;jsm&gt;standard&lt;/jsm&gt;());</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;node&lt;/jv&gt;.isFunction())</span>
 <span class="source-line-no">046</span><span id="line-46"> *       &lt;jsm&gt;evaluate&lt;/jsm&gt;(&lt;jv&gt;node&lt;/jv&gt;.name(), &lt;jv&gt;node&lt;/jv&gt;.literalArgs());  &lt;jc&gt;// name() == "$contains", literalArgs() == ["err"]&lt;/jc&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Example (typed values):&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Example (typed values):&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    SearchExpression &lt;jv&gt;e&lt;/jv&gt; = SearchExpressionParser.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"$eq(42)"&lt;/js&gt;, SearchOperatorSet.&lt;jsm&gt;standard&lt;/jsm&gt;());</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;jc&gt;// After QueryResolver types it against a NUMERIC column, the arg's typedValue() is a BigDecimal, not "42".&lt;/jc&gt;</span>

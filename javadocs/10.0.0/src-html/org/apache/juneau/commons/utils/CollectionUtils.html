@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33">/**</span>
 <span class="source-line-no">034</span><span id="line-34"> * Utility methods for working with collections and maps.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;Complex Data Structure Construction:&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='section'&gt;Complex Data Structure Construction:&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * This class provides convenient shorthand methods for creating complex nested data structures.</span>
 <span class="source-line-no">039</span><span id="line-39"> * The primary methods for building structures are:</span>
@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;{@link #immutableMap(Object, Object, Object, Object, Object, Object)} - Creates unmodifiable maps</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Array of lists of maps&lt;/jc&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;data&lt;/jv&gt; = &lt;jsm&gt;a&lt;/jsm&gt;(</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111"> *    );</span>
 <span class="source-line-no">112</span><span id="line-112"> * &lt;/p&gt;</span>
 <span class="source-line-no">113</span><span id="line-113"> *</span>
-<span class="source-line-no">114</span><span id="line-114"> * &lt;h5 class='section'&gt;Best Practices:&lt;/h5&gt;</span>
+<span class="source-line-no">114</span><span id="line-114"> * &lt;h2 class='section'&gt;Best Practices:&lt;/h2&gt;</span>
 <span class="source-line-no">115</span><span id="line-115"> * &lt;ul&gt;</span>
 <span class="source-line-no">116</span><span id="line-116"> *    &lt;li&gt;Use {@link #array(Object...)} for arrays when type can be inferred, {@link #objectArray(Object...)} for Object arrays</span>
 <span class="source-line-no">117</span><span id="line-117"> *    &lt;li&gt;Use {@link #map(Object, Object, Object, Object, Object, Object)} when you need modifiable maps</span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120"> *    &lt;li&gt;Static import these methods for maximum readability: &lt;code&gt;import static org.apache.juneau.commons.utils.CollectionUtils.*;&lt;/code&gt;</span>
 <span class="source-line-no">121</span><span id="line-121"> * &lt;/ul&gt;</span>
 <span class="source-line-no">122</span><span id="line-122"> *</span>
-<span class="source-line-no">123</span><span id="line-123"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">123</span><span id="line-123"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">124</span><span id="line-124"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;juneau-commons&lt;/a&gt;</span>
 <span class="source-line-no">125</span><span id="line-125"> * &lt;/ul&gt;</span>
 <span class="source-line-no">126</span><span id="line-126"> */</span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">    *       to the result — not even a {@code null} element.</span>
 <span class="source-line-no">150</span><span id="line-150">    * &lt;/ul&gt;</span>
 <span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">153</span><span id="line-153">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">154</span><span id="line-154">    *    List&amp;lt;Object&amp;gt; &lt;jv&gt;nested&lt;/jv&gt; = List.of(&lt;jk&gt;new&lt;/jk&gt; &lt;jk&gt;int&lt;/jk&gt;[]{1, 2}, List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;));</span>
 <span class="source-line-no">155</span><span id="line-155">    *</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">    * Named {@code deepStream} rather than {@code stream} to avoid an erasure conflict with the existing</span>
 <span class="source-line-no">185</span><span id="line-185">    * shallow-array overload {@link #stream(Object[])}, which has the same erased parameter type ({@code Object[]}).</span>
 <span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">187</span><span id="line-187">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">188</span><span id="line-188">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">189</span><span id="line-189">    *    List&amp;lt;Object&amp;gt; &lt;jv&gt;nested&lt;/jv&gt; = List.of(&lt;jk&gt;new&lt;/jk&gt; &lt;jk&gt;int&lt;/jk&gt;[]{1, 2}, List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;));</span>
 <span class="source-line-no">190</span><span id="line-190">    *</span>
@@ -301,7 +301,7 @@
 <span class="source-line-no">288</span><span id="line-288">    * &lt;jk&gt;null&lt;/jk&gt; elements are skipped.</span>
 <span class="source-line-no">289</span><span id="line-289">    * A &lt;jk&gt;null&lt;/jk&gt; entries array is a no-op.</span>
 <span class="source-line-no">290</span><span id="line-290">    *</span>
-<span class="source-line-no">291</span><span id="line-291">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">291</span><span id="line-291">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">292</span><span id="line-292">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">293</span><span id="line-293">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;();</span>
 <span class="source-line-no">294</span><span id="line-294">    *    addAllNn(&lt;jv&gt;list&lt;/jv&gt;, &lt;js&gt;"a"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"b"&lt;/js&gt;);  &lt;jc&gt;// list is [a, b]&lt;/jc&gt;</span>
@@ -329,7 +329,7 @@
 <span class="source-line-no">316</span><span id="line-316">    * &lt;jk&gt;null&lt;/jk&gt; elements are skipped.</span>
 <span class="source-line-no">317</span><span id="line-317">    * A &lt;jk&gt;null&lt;/jk&gt; entries collection is a no-op.</span>
 <span class="source-line-no">318</span><span id="line-318">    *</span>
-<span class="source-line-no">319</span><span id="line-319">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">319</span><span id="line-319">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">320</span><span id="line-320">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">321</span><span id="line-321">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LinkedHashSet&amp;lt;&amp;gt;();</span>
 <span class="source-line-no">322</span><span id="line-322">    *    addAllNn(&lt;jv&gt;set&lt;/jv&gt;, Arrays.&lt;jsm&gt;asList&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"b"&lt;/js&gt;));  &lt;jc&gt;// set is [a, b]&lt;/jc&gt;</span>
@@ -532,7 +532,7 @@
 <span class="source-line-no">519</span><span id="line-519">    * This is a null-safe operation. Returns an empty Optional if the iterator is &lt;jk&gt;null&lt;/jk&gt; or</span>
 <span class="source-line-no">520</span><span id="line-520">    * has no more elements.</span>
 <span class="source-line-no">521</span><span id="line-521">    *</span>
-<span class="source-line-no">522</span><span id="line-522">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">522</span><span id="line-522">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">523</span><span id="line-523">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">524</span><span id="line-524">    *    Iterator&amp;lt;String&amp;gt; &lt;jv&gt;it&lt;/jv&gt; = list.iterator();</span>
 <span class="source-line-no">525</span><span id="line-525">    *    Optional&amp;lt;String&amp;gt; &lt;jv&gt;first&lt;/jv&gt; = &lt;jsm&gt;next&lt;/jsm&gt;(&lt;jv&gt;it&lt;/jv&gt;);  &lt;jc&gt;// Optional.of("first")&lt;/jc&gt;</span>
@@ -557,7 +557,7 @@
 <span class="source-line-no">544</span><span id="line-544">    * &lt;p&gt;</span>
 <span class="source-line-no">545</span><span id="line-545">    * This is a null-safe operation. Returns an empty Optional if the iterable is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">546</span><span id="line-546">    *</span>
-<span class="source-line-no">547</span><span id="line-547">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">547</span><span id="line-547">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">548</span><span id="line-548">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">549</span><span id="line-549">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;l&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
 <span class="source-line-no">550</span><span id="line-550">    *    Optional&amp;lt;String&amp;gt; &lt;jv&gt;first&lt;/jv&gt; = &lt;jsm&gt;first&lt;/jsm&gt;(&lt;jv&gt;list&lt;/jv&gt;);  &lt;jc&gt;// Optional.of("a")&lt;/jc&gt;</span>
@@ -717,7 +717,7 @@
 <span class="source-line-no">704</span><span id="line-704">    * This is a null-safe convenience method that wraps {@link Array#getLength(Object)}.</span>
 <span class="source-line-no">705</span><span id="line-705">    * Works with both object arrays and primitive arrays.</span>
 <span class="source-line-no">706</span><span id="line-706">    *</span>
-<span class="source-line-no">707</span><span id="line-707">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">707</span><span id="line-707">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">708</span><span id="line-708">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">709</span><span id="line-709">    *    String[] &lt;jv&gt;array1&lt;/jv&gt; = {&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;};</span>
 <span class="source-line-no">710</span><span id="line-710">    *    &lt;jk&gt;int&lt;/jk&gt;[] &lt;jv&gt;array2&lt;/jv&gt; = {1, 2, 3};</span>
@@ -1358,7 +1358,7 @@
 <span class="source-line-no">1345</span><span id="line-1345">    * &lt;p&gt;</span>
 <span class="source-line-no">1346</span><span id="line-1346">    * This is a shortcut for &lt;c&gt;Maps.create().ordered()&lt;/c&gt;.</span>
 <span class="source-line-no">1347</span><span id="line-1347">    *</span>
-<span class="source-line-no">1348</span><span id="line-1348">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1348</span><span id="line-1348">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1349</span><span id="line-1349">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1350</span><span id="line-1350">    *    Map&amp;lt;String,Object&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = mapBuilder()</span>
 <span class="source-line-no">1351</span><span id="line-1351">    *       .add(&lt;js&gt;"foo"&lt;/js&gt;, 1)</span>
@@ -1381,7 +1381,7 @@
 <span class="source-line-no">1368</span><span id="line-1368">    * &lt;p&gt;</span>
 <span class="source-line-no">1369</span><span id="line-1369">    * This is a shortcut for &lt;c&gt;Maps.create(String.&lt;jk&gt;class&lt;/jk&gt;, Object.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
 <span class="source-line-no">1370</span><span id="line-1370">    *</span>
-<span class="source-line-no">1371</span><span id="line-1371">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1371</span><span id="line-1371">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1372</span><span id="line-1372">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1373</span><span id="line-1373">    *    Map&amp;lt;String,Object&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = mapBuilder()</span>
 <span class="source-line-no">1374</span><span id="line-1374">    *       .add(&lt;js&gt;"foo"&lt;/js&gt;, 1)</span>
@@ -1419,7 +1419,7 @@
 <span class="source-line-no">1406</span><span id="line-1406">    * &lt;p&gt;</span>
 <span class="source-line-no">1407</span><span id="line-1407">    * This is typically used for creating property maps in &lt;c&gt;toString()&lt;/c&gt; methods that need to be sorted and filtered.</span>
 <span class="source-line-no">1408</span><span id="line-1408">    *</span>
-<span class="source-line-no">1409</span><span id="line-1409">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1409</span><span id="line-1409">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1410</span><span id="line-1410">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1411</span><span id="line-1411">    *    &lt;jc&gt;// In a properties() method&lt;/jc&gt;</span>
 <span class="source-line-no">1412</span><span id="line-1412">    *    &lt;jk&gt;return&lt;/jk&gt; filteredBeanPropertyMap()</span>
@@ -1529,7 +1529,7 @@
 <span class="source-line-no">1516</span><span id="line-1516">   /**</span>
 <span class="source-line-no">1517</span><span id="line-1517">    * Returns a reverse stream of the specified list.</span>
 <span class="source-line-no">1518</span><span id="line-1518">    *</span>
-<span class="source-line-no">1519</span><span id="line-1519">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1519</span><span id="line-1519">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1520</span><span id="line-1520">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1521</span><span id="line-1521">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;list&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
 <span class="source-line-no">1522</span><span id="line-1522">    *    Stream&amp;lt;String&amp;gt; &lt;jv&gt;reversed&lt;/jv&gt; = &lt;jsm&gt;rstream&lt;/jsm&gt;(&lt;jv&gt;list&lt;/jv&gt;);</span>
@@ -1553,7 +1553,7 @@
 <span class="source-line-no">1540</span><span id="line-1540">    * A negation token is a string starting with &lt;js&gt;'-'&lt;/js&gt; followed by at least one character.</span>
 <span class="source-line-no">1541</span><span id="line-1541">    * When encountered, it removes the first prior occurrence of the corresponding positive token.</span>
 <span class="source-line-no">1542</span><span id="line-1542">    *</span>
-<span class="source-line-no">1543</span><span id="line-1543">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1543</span><span id="line-1543">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1544</span><span id="line-1544">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1545</span><span id="line-1545">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;result&lt;/jv&gt; = &lt;jsm&gt;removeNegations&lt;/jsm&gt;(list(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"-a"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;));</span>
 <span class="source-line-no">1546</span><span id="line-1546">    *    &lt;jc&gt;// Produces: ["b", "c"]&lt;/jc&gt;</span>
@@ -1719,7 +1719,7 @@
 <span class="source-line-no">1706</span><span id="line-1706">    * &lt;p&gt;</span>
 <span class="source-line-no">1707</span><span id="line-1707">    * Gracefully handles &lt;jk&gt;null&lt;/jk&gt; arrays by returning an empty stream.</span>
 <span class="source-line-no">1708</span><span id="line-1708">    *</span>
-<span class="source-line-no">1709</span><span id="line-1709">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1709</span><span id="line-1709">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1710</span><span id="line-1710">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1711</span><span id="line-1711">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;};</span>
 <span class="source-line-no">1712</span><span id="line-1712">    *</span>
@@ -1827,7 +1827,7 @@
 <span class="source-line-no">1814</span><span id="line-1814">    * &lt;p&gt;This utility method enables testing of any collection-like object by converting it to a List that can be</span>
 <span class="source-line-no">1815</span><span id="line-1815">    * passed to methods such as TestUtils.assertList().&lt;/p&gt;</span>
 <span class="source-line-no">1816</span><span id="line-1816">    *</span>
-<span class="source-line-no">1817</span><span id="line-1817">    * &lt;h5 class='section'&gt;Supported Input Types:&lt;/h5&gt;</span>
+<span class="source-line-no">1817</span><span id="line-1817">    * &lt;h4 class='section'&gt;Supported Input Types:&lt;/h4&gt;</span>
 <span class="source-line-no">1818</span><span id="line-1818">    * &lt;ul&gt;</span>
 <span class="source-line-no">1819</span><span id="line-1819">    *    &lt;li&gt;&lt;b&gt;List:&lt;/b&gt; Returns the input unchanged&lt;/li&gt;</span>
 <span class="source-line-no">1820</span><span id="line-1820">    *    &lt;li&gt;&lt;b&gt;Iterable:&lt;/b&gt; Any collection, set, queue, etc. (converted to List preserving order)&lt;/li&gt;</span>
@@ -1838,7 +1838,7 @@
 <span class="source-line-no">1825</span><span id="line-1825">    *    &lt;li&gt;&lt;b&gt;Array:&lt;/b&gt; Converts any array type (including primitive arrays) to List&lt;/li&gt;</span>
 <span class="source-line-no">1826</span><span id="line-1826">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1827</span><span id="line-1827">    *</span>
-<span class="source-line-no">1828</span><span id="line-1828">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1828</span><span id="line-1828">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1829</span><span id="line-1829">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1830</span><span id="line-1830">    *    &lt;jc&gt;// Test a Set&lt;/jc&gt;</span>
 <span class="source-line-no">1831</span><span id="line-1831">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;mySet&lt;/jv&gt; = Set.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
@@ -1865,7 +1865,7 @@
 <span class="source-line-no">1852</span><span id="line-1852">    *    assertList(toList(&lt;jv&gt;myQueue&lt;/jv&gt;), &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
 <span class="source-line-no">1853</span><span id="line-1853">    * &lt;/p&gt;</span>
 <span class="source-line-no">1854</span><span id="line-1854">    *</span>
-<span class="source-line-no">1855</span><span id="line-1855">    * &lt;h5 class='section'&gt;Integration with Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">1855</span><span id="line-1855">    * &lt;h4 class='section'&gt;Integration with Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">1856</span><span id="line-1856">    * &lt;p&gt;This method is specifically designed to work with testing frameworks to provide</span>
 <span class="source-line-no">1857</span><span id="line-1857">    * a unified testing approach for all collection-like types. Instead of having separate assertion methods</span>
 <span class="source-line-no">1858</span><span id="line-1858">    * for arrays, sets, and other collections, you can convert them all to Lists and use standard</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  <p>
    The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Using instance.</jc>
    Marshaller <jv>json</jv> = <jk>new</jk> Json();
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  </ul></div>
 </section>
@@ -272,7 +271,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is the preferred parse method for simple types since you don't need to cast the results.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    Marshaller <jv>marshaller</jv>  = Json.<jsf>DEFAULT</jsf>;
 
@@ -337,7 +336,7 @@ loadScripts(document, 'script');</script>
  <p>
  The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    Marshaller <jv>marshaller</jv> = Json.<jsf>DEFAULT</jsf>;
 
@@ -366,7 +365,7 @@ loadScripts(document, 'script');</script>
  <p>
  The array can be arbitrarily long to indicate arbitrarily complex data structures.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Use the <a href="#read(java.lang.Object,java.lang.Class)"><code>read(Object, Class)</code></a> method instead if you don't need a parameterized map/collection.
  </ul></div>
@@ -457,7 +456,7 @@ loadScripts(document, 'script');</script>
  Shortcut for <c>((TokenReadable)getParser()).readTokens(<jv>input</jv>)</c>.  See
  <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> for the cursor contract.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This capability depends on the underlying parser.  Formats whose parser
       does not implement <a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReadable</code></a> (the structural-token role) yield a
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="class or interface in java.lang" class="external-link"><code>ClassCastException</code></a>.
@@ -484,7 +483,7 @@ loadScripts(document, 'script');</script>
  Shortcut for <c>((TokenWritable)getSerializer()).writeTokens(<jv>output</jv>)</c>.  See
  <a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> for the generator contract.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This capability depends on the underlying serializer.  Formats whose
       serializer does not implement <a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWritable</code></a> (the structural-token role) yield a
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="class or interface in java.lang" class="external-link"><code>ClassCastException</code></a>.
@@ -511,7 +510,7 @@ loadScripts(document, 'script');</script>
  Shortcut for <c>((RecordReadable)getParser()).readRecords(<jv>input</jv>)</c>.  See
  <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> for the cursor contract.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This capability depends on the underlying parser.  Formats whose parser
       does not implement <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReadable</code></a> yield a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="class or interface in java.lang" class="external-link"><code>ClassCastException</code></a>.
  </ul></div>
@@ -537,7 +536,7 @@ loadScripts(document, 'script');</script>
  Shortcut for <c>((RecordWritable)getSerializer()).writeRecords(<jv>output</jv>)</c>.  See
  <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> for the cursor contract.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This capability depends on the underlying serializer.  Formats whose
       serializer does not implement <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWritable</code></a> yield a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="class or interface in java.lang" class="external-link"><code>ClassCastException</code></a>.
  </ul></div>
@@ -563,7 +562,7 @@ loadScripts(document, 'script');</script>
  <p>
  Shortcut for <c>((ArrayRecordReadable)getParser()).readArrayRecords(<jv>input</jv>)</c>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This capability depends on the underlying parser.  Formats whose parser
       does not implement <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream"><code>ArrayRecordReadable</code></a> yield a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="class or interface in java.lang" class="external-link"><code>ClassCastException</code></a>.
  </ul></div>
@@ -589,7 +588,7 @@ loadScripts(document, 'script');</script>
  <p>
  Shortcut for <c>((ArrayRecordWritable)getSerializer()).writeArrayRecords(<jv>output</jv>)</c>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This capability depends on the underlying serializer.  Formats whose
       serializer does not implement <a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream"><code>ArrayRecordWritable</code></a> yield a
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassCastException.html" title="class or interface in java.lang" class="external-link"><code>ClassCastException</code></a>.

@@ -44,17 +44,17 @@
 <span class="source-line-no">031</span><span id="line-31"> * On the commons-side construction path ({@code BeanMeta.of(Class, BeanConfigContext)}) the session is</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;jk&gt;null&lt;/jk&gt; and these operations are skipped; the bean-modeling code runs in raw-reflection mode.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Method parameter typing:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Method parameter typing:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * The {@code targetType} parameters are typed as {@link Object} because the marshalling layer expresses them</span>
 <span class="source-line-no">037</span><span id="line-37"> * as {@code ClassMeta&lt;?&gt;} — a marshalling-side type that {@code commons.bean} cannot reference.  Callers in</span>
 <span class="source-line-no">038</span><span id="line-38"> * the bean-modeling layer pass through whatever opaque type-metadata handle they received; the</span>
 <span class="source-line-no">039</span><span id="line-39"> * {@code MarshallingSession} implementation interprets it as a {@code ClassMeta}.</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='topic'&gt;Thread safety&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='topic'&gt;Thread safety&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * Thread safety depends on implementation.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='ja'&gt;{@link BeanConfigContext} — bean-modeling configuration counterpart.</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> */</span>

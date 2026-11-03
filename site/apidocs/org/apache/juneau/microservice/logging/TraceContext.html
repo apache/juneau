@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Reflective accessor for the currently-active OpenTelemetry trace / span id, used by
  <a href="LogEntryFormatter.html" title="class in org.apache.juneau.microservice.logging"><code>LogEntryFormatter</code></a> to populate the optional <code>{traceId}</code> / <code>{spanId}</code> log fields.
 
- <h5 class='topic'>Optional / reflective coupling</h5>
+ <h2 class='topic'>Optional / reflective coupling</h2>
 
  <p>
  OpenTelemetry is <b>not</b> a compile-time dependency of <code>juneau-microservice</code>. This class
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  <a href="#isAvailable()"><code>isAvailable()</code></a> returns <code>false</code> and <a href="#currentTraceId()"><code>currentTraceId()</code></a> / <a href="#currentSpanId()"><code>currentSpanId()</code></a>
  return the empty string, so the <code>{traceId}</code> / <code>{spanId}</code> placeholders render empty.
 
- <h5 class='topic'>Where the id comes from</h5>
+ <h2 class='topic'>Where the id comes from</h2>
 
  <p>
  The id is read from <code>Span.current().getSpanContext()</code> &mdash; the OTel context active on the

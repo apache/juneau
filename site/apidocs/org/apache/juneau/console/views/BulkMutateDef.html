@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="block">The bulk-mutate opt-in for a <a href="ViewTable.html" title="class in org.apache.juneau.console.views"><code>ViewTable</code></a> &mdash; the second, INDEPENDENT half of the row-selection /
  bulk-mutate separability guarantee.
 
- <h5 class='section'>Two required parameters make it structurally, not conventionally, safe</h5>
+ <h2 class='section'>Two required parameters make it structurally, not conventionally, safe</h2>
  <p>
  There is no zero-argument (or permit-less) way to obtain a <a href="BulkMutateDef.html" title="class in org.apache.juneau.console.views"><code>BulkMutateDef</code></a>: <a href="#create(org.apache.juneau.console.views.WritePermit,org.apache.juneau.console.views.SelectionDef)"><code>create(WritePermit, SelectionDef)</code></a> takes both a <a href="WritePermit.html" title="class in org.apache.juneau.console.views"><code>WritePermit</code></a> <b>and</b> the <a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a> it operates against as
  required positional parameters. Omitting either is a <b>compile</b> failure, not a missed javadoc sentence
@@ -100,7 +99,7 @@ loadScripts(document, 'script');</script>
       references) bulk-mutate &mdash; so enabling selection alone can never surface a bulk-mutate control.
  </ul>
 
- <h5 class='section'>Reuses <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> and <a href="ActionResult.html" title="class in org.apache.juneau.console.views"><code>ActionResult</code></a> verbatim &mdash; N per-row writes, per-target results</h5>
+ <h2 class='section'>Reuses <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> and <a href="ActionResult.html" title="class in org.apache.juneau.console.views"><code>ActionResult</code></a> verbatim &mdash; N per-row writes, per-target results</h2>
  <p>
  A bulk action is declared as an ordinary <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> (the <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> wire schema is completely
  untouched by this type); <code>juneau-views.js</code> executes a bulk action as N independent, per-row invocations
@@ -112,7 +111,7 @@ loadScripts(document, 'script');</script>
  <code>data-juneau-inflight</code> marker clears on ITS OWN terminal outcome (success/failure/refusal/unknown) so a
  stuck marker on one target can never halt the whole table's polling.
 
- <h5 class='section'>Its own, independent contract version</h5>
+ <h2 class='section'>Its own, independent contract version</h2>
  <p>
  Unlike <a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a> (which is pure DOM attributes, never wire data), a bulk action LIST is itself wire
  data the client must parse &mdash; so it travels as its own JSON sidecar (distinct from the <code>VIEW_META</code>
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
  <a href="WritePermit.html" title="class in org.apache.juneau.console.views"><code>WritePermit</code></a> carried by this builder is a server-side-only construction guard and is <b>never</b>
  serialized &mdash; only <a href="#contractVersion"><code>contractVersion</code></a> and <a href="#actions"><code>actions</code></a> reach the wire.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>);
    <jc>// Requires a permit the CALLER's own write-gate has already minted, and the selection it targets.</jc>
@@ -132,7 +131,7 @@ loadScripts(document, 'script');</script>
          .endpoint(<js>"servlet:/incidents/ack"</js>).method(RowAction.Method.<jsf>POST</jsf>));
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a>
    <li class='jc'><a href="WritePermit.html" title="class in org.apache.juneau.console.views"><code>WritePermit</code></a>

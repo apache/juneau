@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="IniMetaProvider.html" title="interface in org.apache.juneau.marshall.ini">IniMetaProvider</a></code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-96">IniSerializer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-95">IniSerializer</a></span>
 <span class="extends-implements">extends <a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>
 implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.marshall.ini">IniMetaProvider</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
 <div class="block">Serializes POJO models to INI format.
@@ -100,12 +99,12 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
  <p>
  Converts Java POJOs to INI format (section/key-value structure).
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Produces: <bc>text/ini</bc>
  <br>Accepts: <bc>text/ini, text/x-ini</bc>
 
- <h5 class='topic'>Bean-to-INI mapping</h5>
+ <h2 class='topic'>Bean-to-INI mapping</h2>
  <ul class='spaced-list'>
    <li>Simple properties → key-value pairs in the default section
    <li>Nested beans → <c>[sectionName]</c> sections
@@ -115,7 +114,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
    <li>Null values → unquoted <c>null</c> token
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Serialize a bean to INI</jc>
    String <jv>ini</jv> = IniSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -125,13 +124,13 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
    <jv>ini</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  </p>
 
- <h5 class='figure'>Example output (Map of name/age):</h5>
+ <h2 class='figure'>Example output (Map of name/age):</h2>
  <p class='bini'>
    <ck>name</ck> = <cv>Alice</cv>
    <ck>age</ck> = <cv>30</cv>
  </p>
 
- <h5 class='figure'>Complex (nested object + array):</h5>
+ <h2 class='figure'>Complex (nested object + array):</h2>
  <p class='bini'>
    <ck>name</ck> = <cv>Alice</cv>
    <ck>age</ck> = <cv>30</cv>
@@ -143,21 +142,20 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
    <ck>state</ck> = <cv>MA</cv>
  </p>
 
- <h5 class='topic'>Limitations</h5>
- <p>
+ <h2 class='topic'>Limitations</h2>
  <ul class='spaced-list'>
    <li>Top-level collections, arrays, and scalar values are not supported. The root must be a bean or
       <c>Map&lt;String,?&gt;</c>. Throws <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializeException</code></a> for unsupported root types.
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> passthrough is not supported.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
    <li class='note'>Complex values (collections, maps with complex values) are embedded as JSON5 inline
       strings and remain fully round-trippable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Ini">INI Basics</a>
  </ul></div>
 </section>
@@ -343,35 +341,35 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IniSerializer.html" title="class in org.apache.juneau.marshall.ini">IniSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-214">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IniSerializer.html" title="class in org.apache.juneau.marshall.ini">IniSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-213">DEFAULT</a></span></div>
 <div class="block">Default serializer.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_READABLE">
 <h3>DEFAULT_READABLE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IniSerializer.html" title="class in org.apache.juneau.marshall.ini">IniSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-217">DEFAULT_READABLE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IniSerializer.html" title="class in org.apache.juneau.marshall.ini">IniSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-216">DEFAULT_READABLE</a></span></div>
 <div class="block">Default serializer with blank lines between sections.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="kvSeparator">
 <h3>kvSeparator</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-229">kvSeparator</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-228">kvSeparator</a></span></div>
 <div class="block">Key-value separator.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="spacedSeparator">
 <h3>spacedSeparator</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-232">spacedSeparator</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-231">spacedSeparator</a></span></div>
 <div class="block">Whether to add spaces around the separator.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="useComments">
 <h3>useComments</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-235">useComments</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-234">useComments</a></span></div>
 <div class="block">Whether to emit property descriptions as comments.</div>
 </section>
 </li>
@@ -386,7 +384,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.ini.IniSerializer.Builder)">
 <h3>IniSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-242">IniSerializer</a></span><wbr><span class="parameters">(<a href="IniSerializer.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-241">IniSerializer</a></span><wbr><span class="parameters">(<a href="IniSerializer.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -405,7 +403,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IniSerializer.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-224">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IniSerializer.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-223">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -416,7 +414,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-249">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-248">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -434,7 +432,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniSerializer.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-254">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniSerializer.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-253">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -451,7 +449,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getIniBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getIniBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.ini">IniBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-259">getIniBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.ini">IniBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-258">getIniBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="IniMetaProvider.html#getIniBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">IniMetaProvider</a></code></span></div>
 <div class="block">Returns the INI-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -467,7 +465,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getIniClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getIniClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniClassMeta.html" title="class in org.apache.juneau.marshall.ini">IniClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-266">getIniClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniClassMeta.html" title="class in org.apache.juneau.marshall.ini">IniClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-265">getIniClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="IniMetaProvider.html#getIniClassMeta(org.apache.juneau.marshall.ClassMeta)">IniMetaProvider</a></code></span></div>
 <div class="block">Returns the INI-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -483,7 +481,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-271">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-270">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
@@ -497,7 +495,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="writeRecords(java.lang.Object)">
 <h3>writeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-292">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-291">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> over the output using
  <b>default session arguments</b> (mirrors <a href="../serializer/WriterSerializer.html#write(java.lang.Object)"><code>WriterSerializer.write(Object)</code></a>).
@@ -521,7 +519,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-297">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializer.html#line-296">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#isRecordStreaming()">RecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">

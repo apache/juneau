@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * {@link RuntimeException}, making it compatible with standard {@link Consumer3} usage while still allowing</span>
 <span class="source-line-no">029</span><span id="line-29"> * the implementation to throw checked exceptions via {@link #acceptThrows(Object, Object, Object)}.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Functional interface - can be used with lambda expressions and method references</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Exception support - allows checked exceptions to be thrown via {@link #acceptThrows(Object, Object, Object)}</span>
@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Dual interface - can be used as both Consumer3 and ThrowingConsumer3</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Three-argument operations that may throw I/O exceptions</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Validation operations that may throw validation exceptions</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Operations that need to propagate checked exceptions</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Lambda with exception&lt;/jc&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    ThrowingConsumer3&amp;lt;String,Integer,Boolean&amp;gt; &lt;jv&gt;fileWriter&lt;/jv&gt; = (&lt;jv&gt;path&lt;/jv&gt;, &lt;jv&gt;content&lt;/jv&gt;, &lt;jv&gt;append&lt;/jv&gt;) -&amp;gt; {</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;jv&gt;fileWriter&lt;/jv&gt;.apply(&lt;js&gt;"/tmp/output.txt"&lt;/js&gt;, &lt;js&gt;"Hello World"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;);  &lt;jc&gt;// May throw RuntimeException&lt;/jc&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Exception Handling:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;Exception Handling:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;{@link #acceptThrows(Object, Object, Object)} - Throws checked exceptions directly</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;{@link #apply(Object, Object, Object)} - Wraps checked exceptions in {@link RuntimeException}</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;li&gt;Use {@code apply} when you want standard Consumer3 behavior</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;/ul&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='jc'&gt;{@link ThrowingConsumer} - Single-argument consumer that throws exceptions</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='jc'&gt;{@link ThrowingConsumer2} - Two-argument consumer that throws exceptions</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link ThrowingConsumer4} - Four-argument consumer that throws exceptions</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141">    * This is the functional method that implementations must provide. It allows checked exceptions</span>
 <span class="source-line-no">142</span><span id="line-142">    * to be thrown directly, unlike the standard {@link Consumer3#apply(Object, Object, Object)} method.</span>
 <span class="source-line-no">143</span><span id="line-143">    *</span>
-<span class="source-line-no">144</span><span id="line-144">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">144</span><span id="line-144">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">145</span><span id="line-145">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    *    ThrowingConsumer3&amp;lt;String,Integer,Boolean&amp;gt; &lt;jv&gt;validator&lt;/jv&gt; = (&lt;jv&gt;name&lt;/jv&gt;, &lt;jv&gt;age&lt;/jv&gt;, &lt;jv&gt;active&lt;/jv&gt;) -&amp;gt; {</span>
 <span class="source-line-no">147</span><span id="line-147">    *       &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;name&lt;/jv&gt; == &lt;jk&gt;null&lt;/jk&gt; || &lt;jv&gt;name&lt;/jv&gt;.isEmpty()) {</span>

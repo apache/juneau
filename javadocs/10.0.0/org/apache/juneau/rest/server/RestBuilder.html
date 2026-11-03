@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,14 +98,14 @@ loadScripts(document, 'script');</script>
    MyRest <jv>r</jv> = MyRest.<jsm>builder</jsm>().path(<js>"/foo"</js>).allowedHeaderParams(<js>"foo"</js>).build();
  </p>
 
- <h5 class='section'>Self type (CRTP):</h5>
+ <h2 class='section'>Self type (CRTP):</h2>
 
  <p>
  The <code>SELF</code> type parameter is the concrete builder type, so every fluent setter returns the most-derived
  builder type and bespoke setters added by a builder subclass chain with true covariant returns.  This mirrors
  the project-wide <code>SELF</code>/<code>self()</code> self-type convention.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="AbstractRestBuilder.html" title="class in org.apache.juneau.rest.server"><code>AbstractRestBuilder</code></a>
    <li class='jc'><a href="servlet/RestServlet.Builder.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet.Builder</code></a>
    <li class='jc'><a href="servlet/RestResource.Builder.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestResource.Builder</code></a>

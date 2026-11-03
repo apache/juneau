@@ -40,14 +40,14 @@
 <span class="source-line-no">027</span><span id="line-27"> * four-argument consumers. It's useful when you need to pass operations with four parameters to methods</span>
 <span class="source-line-no">028</span><span id="line-28"> * that expect functional interfaces, such as in iteration, builders, or callback patterns.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;Functional interface - can be used with lambda expressions and method references</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Composition support - provides {@link #andThen(Consumer4)} for operation chaining</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Side-effect operations - designed for operations that perform side effects rather than return values</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;Four-argument operations in iteration patterns</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Builder methods that accept four-parameter operations</span>
@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Event handlers that process four values</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Lambda expression&lt;/jc&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    Consumer4&amp;lt;String,Integer,Boolean,Double&amp;gt; &lt;jv&gt;printer&lt;/jv&gt; = (&lt;jv&gt;name&lt;/jv&gt;, &lt;jv&gt;age&lt;/jv&gt;, &lt;jv&gt;active&lt;/jv&gt;, &lt;jv&gt;score&lt;/jv&gt;) -&amp;gt;</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;jv&gt;validateAndProcess&lt;/jv&gt;.apply(&lt;js&gt;"data"&lt;/js&gt;, 42, &lt;jk&gt;true&lt;/jk&gt;, 10.5);  &lt;jc&gt;// Validates then processes&lt;/jc&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;/p&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='jc'&gt;{@link Consumer2} - Two-argument consumer</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link Consumer3} - Three-argument consumer</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='jc'&gt;{@link Consumer5} - Five-argument consumer</span>
@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">    * If performing either operation throws an exception, it is relayed to the caller of the composed operation.</span>
 <span class="source-line-no">085</span><span id="line-85">    * If performing this operation throws an exception, the {@code after} operation will not be performed.</span>
 <span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">088</span><span id="line-88">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">089</span><span id="line-89">    *    Consumer4&amp;lt;String,Integer,Boolean,Double&amp;gt; &lt;jv&gt;log&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;i&lt;/jv&gt;, &lt;jv&gt;b&lt;/jv&gt;, &lt;jv&gt;d&lt;/jv&gt;) -&amp;gt; &lt;jsm&gt;logger&lt;/jsm&gt;.info(&lt;jv&gt;s&lt;/jv&gt; + &lt;js&gt;": "&lt;/js&gt; + &lt;jv&gt;i&lt;/jv&gt; + &lt;js&gt;", "&lt;/js&gt; + &lt;jv&gt;b&lt;/jv&gt; + &lt;js&gt;", "&lt;/js&gt; + &lt;jv&gt;d&lt;/jv&gt;);</span>
 <span class="source-line-no">090</span><span id="line-90">    *    Consumer4&amp;lt;String,Integer,Boolean,Double&amp;gt; &lt;jv&gt;store&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;i&lt;/jv&gt;, &lt;jv&gt;b&lt;/jv&gt;, &lt;jv&gt;d&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;cache&lt;/jv&gt;.put(&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;i&lt;/jv&gt;, &lt;jv&gt;b&lt;/jv&gt;, &lt;jv&gt;d&lt;/jv&gt;);</span>
@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">   /**</span>
 <span class="source-line-no">108</span><span id="line-108">    * Performs this operation on the given arguments.</span>
 <span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">111</span><span id="line-111">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">112</span><span id="line-112">    *    Consumer4&amp;lt;String,Integer,Boolean,Double&amp;gt; &lt;jv&gt;handler&lt;/jv&gt; = (&lt;jv&gt;key&lt;/jv&gt;, &lt;jv&gt;value&lt;/jv&gt;, &lt;jv&gt;flag&lt;/jv&gt;, &lt;jv&gt;weight&lt;/jv&gt;) -&amp;gt; {</span>
 <span class="source-line-no">113</span><span id="line-113">    *       &lt;jv&gt;map&lt;/jv&gt;.put(&lt;jv&gt;key&lt;/jv&gt;, &lt;jv&gt;value&lt;/jv&gt;);</span>

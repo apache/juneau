@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * is typically associated with an input element through the list attribute, and the options within</span>
 <span class="source-line-no">030</span><span id="line-30"> * the datalist provide autocomplete suggestions.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
@@ -102,31 +102,30 @@
 <span class="source-line-no">089</span><span id="line-89"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#datalist(String, Option...) datalist(String, Option...)}</span>
 <span class="source-line-no">090</span><span id="line-90"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> * &lt;/ul&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;/p&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> *</span>
-<span class="source-line-no">094</span><span id="line-94"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">095</span><span id="line-95"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;/ul&gt;</span>
-<span class="source-line-no">097</span><span id="line-97"> */</span>
-<span class="source-line-no">098</span><span id="line-98">@Marshalled(typeName = "datalist")</span>
-<span class="source-line-no">099</span><span id="line-99">public class Datalist extends HtmlElementContainer&lt;Datalist&gt; {</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   /**</span>
-<span class="source-line-no">102</span><span id="line-102">    * Creates an empty {@link Datalist} element.</span>
-<span class="source-line-no">103</span><span id="line-103">    */</span>
-<span class="source-line-no">104</span><span id="line-104">   public Datalist() {}</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * Creates a {@link Datalist} element with the specified {@link Datalist#id(String)} attribute and child nodes.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * @param id The {@link Datalist#id(String)} attribute.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @param children The child nodes.</span>
-<span class="source-line-no">111</span><span id="line-111">    */</span>
-<span class="source-line-no">112</span><span id="line-112">   public Datalist(String id, Option...children) {</span>
-<span class="source-line-no">113</span><span id="line-113">      id(id).children((Object[])children);</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">}</span>
+<span class="source-line-no">092</span><span id="line-92"> *</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;/ul&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> */</span>
+<span class="source-line-no">097</span><span id="line-97">@Marshalled(typeName = "datalist")</span>
+<span class="source-line-no">098</span><span id="line-98">public class Datalist extends HtmlElementContainer&lt;Datalist&gt; {</span>
+<span class="source-line-no">099</span><span id="line-99"></span>
+<span class="source-line-no">100</span><span id="line-100">   /**</span>
+<span class="source-line-no">101</span><span id="line-101">    * Creates an empty {@link Datalist} element.</span>
+<span class="source-line-no">102</span><span id="line-102">    */</span>
+<span class="source-line-no">103</span><span id="line-103">   public Datalist() {}</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /**</span>
+<span class="source-line-no">106</span><span id="line-106">    * Creates a {@link Datalist} element with the specified {@link Datalist#id(String)} attribute and child nodes.</span>
+<span class="source-line-no">107</span><span id="line-107">    *</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param id The {@link Datalist#id(String)} attribute.</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param children The child nodes.</span>
+<span class="source-line-no">110</span><span id="line-110">    */</span>
+<span class="source-line-no">111</span><span id="line-111">   public Datalist(String id, Option...children) {</span>
+<span class="source-line-no">112</span><span id="line-112">      id(id).children((Object[])children);</span>
+<span class="source-line-no">113</span><span id="line-113">   }</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">}</span>
 
 
 

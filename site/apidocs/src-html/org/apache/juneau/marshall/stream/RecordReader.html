@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * formats (json, xml, bson, yaml, ...) degenerate to a one-record stream; multi-rooted formats</span>
 <span class="source-line-no">033</span><span id="line-33"> * (jsonl, csv, sse) expose each line / row / event as a separate record.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jk&gt;try&lt;/jk&gt; (RecordReader &lt;jv&gt;r&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.readRecords(&lt;jv&gt;input&lt;/jv&gt;)) {</span>
 <span class="source-line-no">038</span><span id="line-38"> *       &lt;jk&gt;while&lt;/jk&gt; (&lt;jv&gt;r&lt;/jv&gt;.canRead()) {</span>
@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> *    }</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Streaming quality:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Streaming quality:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;{@link #isStreaming()} == &lt;jk&gt;true&lt;/jk&gt; &amp;mdash; O(1)-memory streaming.  FULL-token formats</span>
 <span class="source-line-no">048</span><span id="line-48"> *       return a cursor that is also a {@link TokenReader} (the structural surface).</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> *       the structural surface is not available.</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;{@link RecordWriter} &amp;mdash; the push-side counterpart.</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@link TokenReader} &amp;mdash; structural extension for FULL-capability formats.</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers"&gt;Serializers and Parsers&lt;/a&gt;</span>

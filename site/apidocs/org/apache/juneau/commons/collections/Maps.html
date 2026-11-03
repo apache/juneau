@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
  Instances of this builder can be created using <a href="#create(java.lang.Class,java.lang.Class)"><code>create(Class, Class)</code></a> or the convenience method
  <a href="../utils/CollectionUtils.html#mapBuilder(java.lang.Class,java.lang.Class)"><code>CollectionUtils.mapBuilder(Class, Class)</code></a>.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Fluent API - all methods return <c>this</c> for method chaining
    <li>Multiple add methods - single entries, pairs, other maps
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
    <li>Custom conversion functions - type conversion via <a href="#keyFunction(java.util.function.Function)"><code>keyFunction(Function)</code></a> and <a href="#valueFunction(java.util.function.Function)"><code>valueFunction(Function)</code></a>
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -165,12 +164,12 @@ loadScripts(document, 'script');</script>
       .buildFiltered();
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
  properly synchronized.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">Collections Package</a>
    <li class='jc'><a href="Lists.html" title="class in org.apache.juneau.commons.collections"><code>Lists</code></a>
    <li class='jc'><a href="Sets.html" title="class in org.apache.juneau.commons.collections"><code>Sets</code></a>
@@ -389,7 +388,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  The types will be inferred from usage context. Internally uses <c>Object.class</c> for both
  key and value types, which allows any types to be added.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Map&lt;String, Integer&gt; <jv>map</jv> = Maps.<jsm>create</jsm>()
       .add(<js>"one"</js>, 1)
@@ -514,7 +513,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  <p>
  This is a convenience method that calls <a href="#build()"><code>build()</code></a> and wraps the result in a <a href="FluentMap.html" title="class in org.apache.juneau.commons.collections"><code>FluentMap</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -543,7 +542,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
    <li>Otherwise: Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a> (or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a> if concurrent)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -631,7 +630,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
    <li>Empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collections</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -666,7 +665,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  <p>
  Note: Filtering is applied at build time, not when adding entries.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -770,7 +769,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  <p>
  This is useful when the map needs to be accessed from multiple threads.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -811,7 +810,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  <p>
  This is useful when the map needs to be accessed from multiple threads.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -842,7 +841,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  Note: If <a href="#sorted()"><code>sorted()</code></a> was previously called, calling this method will override it.
  The last method called (<a href="#ordered()"><code>ordered()</code></a> or <a href="#sorted()"><code>sorted()</code></a>) determines the final map type.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -873,7 +872,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Maps.html" title="class in 
  Note: If <a href="#sorted()"><code>sorted()</code></a> was previously called, calling this method with <c>true</c> will override it.
  The last method called (<a href="#ordered()"><code>ordered()</code></a> or <a href="#sorted()"><code>sorted()</code></a>) determines the final map type.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 

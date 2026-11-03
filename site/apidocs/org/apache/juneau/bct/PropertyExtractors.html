@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -82,7 +81,7 @@ loadScripts(document, 'script');</script>
  object types and property access patterns. These extractors are automatically registered when
  using <a href="BasicBeanConverter.Builder.html#defaultSettings()"><code>BasicBeanConverter.Builder.defaultSettings()</code></a>.</p>
 
- <h5 class='section'>Extractor Hierarchy:</h5>
+ <h2 class='section'>Extractor Hierarchy:</h2>
  <p>The extractors form an inheritance hierarchy for code reuse:</p>
  <ul>
     <li><b><a href="PropertyExtractors.ObjectPropertyExtractor.html" title="class in org.apache.juneau.bct"><code>PropertyExtractors.ObjectPropertyExtractor</code></a></b> - Base class with JavaBean property access</li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
     <li><b><a href="PropertyExtractors.MapPropertyExtractor.html" title="class in org.apache.juneau.bct"><code>PropertyExtractors.MapPropertyExtractor</code></a></b> - Extends ObjectPropertyExtractor with Map key access</li>
  </ul>
 
- <h5 class='section'>Execution Order:</h5>
+ <h2 class='section'>Execution Order:</h2>
  <p>In <a href="BasicBeanConverter.html" title="class in org.apache.juneau.bct"><code>BasicBeanConverter</code></a>, the extractors are tried in this order:</p>
  <ol>
     <li><b>Custom extractors</b> - User-registered extractors via <a href="BasicBeanConverter.Builder.html#addPropertyExtractor(org.apache.juneau.bct.PropertyExtractor)"><code>BasicBeanConverter.Builder.addPropertyExtractor(PropertyExtractor)</code></a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
     <li><b><a href="PropertyExtractors.MapPropertyExtractor.html" title="class in org.apache.juneau.bct"><code>PropertyExtractors.MapPropertyExtractor</code></a></b> - Map key access and size property</li>
  </ol>
 
- <h5 class='section'>Property Access Strategy:</h5>
+ <h2 class='section'>Property Access Strategy:</h2>
  <p>Each extractor implements a comprehensive fallback strategy for maximum compatibility:</p></div>
 <dl class="notes">
 <dt>See Also:</dt>

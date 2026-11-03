@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html" title="class or interface in java.lang.reflect" class="external-link"><code>Executable</code></a> in Java. It extends <a href="AccessibleInfo.html" title="class in org.apache.juneau.commons.reflect"><code>AccessibleInfo</code></a> to provide <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AccessibleObject.html" title="class or interface in java.lang.reflect" class="external-link"><code>AccessibleObject</code></a>
  functionality for accessing private methods and constructors.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Parameter introspection - access method/constructor parameters
    <li>Exception handling - get declared exceptions
@@ -106,7 +105,7 @@ loadScripts(document, 'script');</script>
    <li>Accessibility control - make private executables accessible
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Working with both methods and constructors in a unified way
    <li>Finding methods/constructors that match specific parameter types
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
    <li>Building frameworks that need to analyze executable signatures
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Get ExecutableInfo (could be MethodInfo or ConstructorInfo)</jc>
    MethodInfo <jv>mi</jv> = ...;
@@ -130,7 +129,7 @@ loadScripts(document, 'script');</script>
    <jk>boolean</jk> <jv>matches</jv> = <jv>ei</jv>.parameterMatches(String.<jk>class</jk>, Integer.<jk>class</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> - Method introspection
    <li class='jc'><a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> - Constructor introspection
    <li class='jc'><a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ParameterInfo</code></a> - Parameter introspection
@@ -502,7 +501,7 @@ loadScripts(document, 'script');</script>
  implicit outer class instance (e.g., <code>Outer.this</code>). This method checks against the
  <em>actual</em> parameters including this implicit parameter.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Regular method</jc>
    <jk>public void</jk> foo(String <jv>s</jv>, Integer <jv>i</jv>);
@@ -539,7 +538,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#getAnnotatedExceptionTypes()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.getAnnotatedExceptionTypes()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get annotated exception types from method: void myMethod() throws @NotNull IOException</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
@@ -569,7 +568,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#getAnnotatedParameterTypes()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.getAnnotatedParameterTypes()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get annotated parameter types from method: void myMethod(@NotNull String s, @Range(min=0) int i)</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
@@ -599,7 +598,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#getAnnotatedReceiverType()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.getAnnotatedReceiverType()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get annotated receiver type from method: void myMethod(@MyAnnotation MyClass this)</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
@@ -692,7 +691,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-311">getNameFull</a></span>()</div>
 <div class="block">Returns the full name of this executable.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <ul>
    <li><js>"com.foo.MyClass.get(java.util.String)"</js> - Method.
    <li><js>"com.foo.MyClass(java.util.String)"</js> - Constructor.
@@ -753,7 +752,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is a convenience method that extracts the parameter types from <a href="#getParameters()"><code>getParameters()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get parameter types: void myMethod(String s, int i)</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
@@ -772,7 +771,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-375">getNameShort</a></span>()</div>
 <div class="block">Returns the short name of this executable.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <ul>
    <li><js>"MyClass.get(String)"</js> - Method.
    <li><js>"MyClass(String)"</js> - Constructor.
@@ -806,7 +805,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#getTypeParameters()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.getTypeParameters()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get type parameters from method: &lt;T extends Number&gt; void myMethod(T value)</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, Number.<jk>class</jk>);
@@ -1095,7 +1094,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#isSynthetic()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.isSynthetic()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if method is compiler-generated</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"access$000"</js>);
@@ -1122,7 +1121,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#isVarArgs()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.isVarArgs()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if method accepts varargs</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String[].<jk>class</jk>);
@@ -1241,7 +1240,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html#toGenericString()" title="class or interface in java.lang.reflect" class="external-link"><code>Executable.toGenericString()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get generic string for: public &lt;T&gt; List&lt;T&gt; myMethod(T value) throws IOException</jc>
    MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, Object.<jk>class</jk>);
@@ -1277,7 +1276,7 @@ loadScripts(document, 'script');</script>
    <li>Throws declarations (if any)
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Constructor</jc>
    ConstructorInfo <jv>ci</jv> = ConstructorInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>));
@@ -1305,7 +1304,7 @@ loadScripts(document, 'script');</script>
    <jc>// Returns: "public &lt;T extends java.lang.Comparable&lt;T&gt;&gt; void org.example.MyClass.boundedMethod(T)"</jc>
  </p>
 
- <h5 class='section'>Comparison with Other Methods:</h5>
+ <h4 class='section'>Comparison with Other Methods:</h4>
  <ul class='spaced-list'>
    <li><a href="#getNameShort()"><code>getNameShort()</code></a> - Returns short name with parameters (e.g., "myMethod(int, String)")
    <li><a href="#getNameFull()"><code>getNameFull()</code></a> - Returns fully qualified name with parameters (e.g., "org.example.MyClass.myMethod(int, java.lang.String)")

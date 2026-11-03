@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  <p>
  The default is <a href="#INDICES"><code>INDICES</code></a> which emits the ascending set-bit indices as a comma-delimited token.
 
- <h5 class='topic'>Precedence (highest to lowest)</h5>
+ <h2 class='topic'>Precedence (highest to lowest)</h2>
  <ol>
    <li><a href="MarshalledProp.html#bitSetFormat()"><code>@MarshalledProp(bitSetFormat=…)</code></a> on the bean property.
    <li><a href="Marshalled.html#bitSetFormat()"><code>@Marshalled(bitSetFormat=…)</code></a> on the bean class.
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
    <li>The default constant (<a href="#INDICES"><code>INDICES</code></a>).
  </ol>
 
- <h5 class='topic'>Parsing</h5>
+ <h2 class='topic'>Parsing</h2>
 
  <p>
  Parsing is directed by the configured constant — a serializer and parser sharing the same
@@ -227,7 +226,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BitSetFormat.html#line-72">INDICES</a></span></div>
 <div class="block">Ascending set-bit indices as a comma-delimited token (the default).
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    0,2,5
  </p>
@@ -242,7 +241,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BitSetFormat.html#line-85">BITS</a></span></div>
 <div class="block">Little-endian bit string — character at position <c>i</c> is <c>'1'</c> when bit <c>i</c> is set.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    101001
  </p>
@@ -257,7 +256,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BitSetFormat.html#line-98">HEX</a></span></div>
 <div class="block">Hex-encoded little-endian byte array (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/BitSet.html#toByteArray()" title="class or interface in java.util" class="external-link"><code>BitSet.toByteArray()</code></a>).
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    25
  </p>

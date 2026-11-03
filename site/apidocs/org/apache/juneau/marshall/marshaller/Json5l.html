@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Pairs <a href="../json5l/Json5lSerializer.html" title="class in org.apache.juneau.marshall.json5l"><code>Json5lSerializer</code></a> and <a href="../json5l/Json5lParser.html" title="class in org.apache.juneau.marshall.json5l"><code>Json5lParser</code></a> into a single class with convenience
  to/of methods.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Serialize to JSON5L using instance</jc>
    Json5l <jv>json5l</jv> = <jk>new</jk> Json5l();
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
    List&lt;MyBean&gt; <jv>in</jv> = Json5l.<jsm>to</jsm>(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  </p>
 
- <h5 class='figure'>Example output (List of beans, strict-per-line default):</h5>
+ <h2 class='figure'>Example output (List of beans, strict-per-line default):</h2>
  <p class='bjson'>
  {"name":"Alice","age":30}
  {"name":"Bob","age":25}
@@ -111,7 +110,7 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = Json5l.<jsm>of</jsm>(<jv>myPojo</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  </ul></div>
 </section>

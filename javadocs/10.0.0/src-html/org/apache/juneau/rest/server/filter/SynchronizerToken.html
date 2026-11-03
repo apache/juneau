@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26"> * A server-held CSRF token: a secret minted in this process's memory, embedded into the pages this process</span>
 <span class="source-line-no">027</span><span id="line-27"> * serves, and required back on every state-changing request.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Why this is a synchronizer token and not a double-submit cookie&lt;/h5&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='section'&gt;Why this is a synchronizer token and not a double-submit cookie&lt;/h2&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * The cheap, common CSRF design is &lt;i&gt;double submit&lt;/i&gt;: the server sets a random value in a cookie, the page</span>
 <span class="source-line-no">032</span><span id="line-32"> * reads it back out and echoes it in a header, and the server accepts the request when the cookie and the header</span>
@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48"> * from one.  Doing so does not weaken the mechanism slightly &amp;mdash; it reintroduces exactly the bypass described</span>
 <span class="source-line-no">049</span><span id="line-49"> * above, because a cookie-borne token is attacker-choosable from any port on the same host.</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;Lifetime&lt;/h5&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;h2 class='section'&gt;Lifetime&lt;/h2&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * A token instance is a secret with no expiry and no rotation: it lives as long as the object does.  An</span>
 <span class="source-line-no">054</span><span id="line-54"> * application that constructs one at startup therefore gets per-boot tokens, and a restart invalidates every</span>
@@ -69,14 +69,14 @@
 <span class="source-line-no">056</span><span id="line-56"> * whose server no longer shares any state with it, and requiring a reload is the honest outcome.  Two instances</span>
 <span class="source-line-no">057</span><span id="line-57"> * never share a value, so a token minted by one is rejected by the other.</span>
 <span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;jc&gt;// One token per process, embedded into every page this process serves.&lt;/jc&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    SynchronizerToken &lt;jv&gt;token&lt;/jv&gt; = SynchronizerToken.&lt;jsm&gt;generate&lt;/jsm&gt;();</span>
 <span class="source-line-no">063</span><span id="line-63"> *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;js&gt;"&amp;lt;meta name='csrf-token' content='"&lt;/js&gt; + &lt;jv&gt;token&lt;/jv&gt;.value() + &lt;js&gt;"'&amp;gt;"&lt;/js&gt;;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='jc'&gt;{@link LoopbackBoundary}</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>

@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> * on the Bean-Centric Testing (BCT) framework. BCT enables sophisticated assertion patterns for</span>
 <span class="source-line-no">039</span><span id="line-39"> * testing object properties, collections, maps, and complex nested structures with minimal code.&lt;/p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Bean-Centric Testing (BCT) Framework:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Bean-Centric Testing (BCT) Framework:&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;The BCT framework consists of several key components:&lt;/p&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;&lt;b&gt;{@link BeanConverter}:&lt;/b&gt; Core interface for object conversion and property access&lt;/li&gt;</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;&lt;b&gt;Assertion Methods:&lt;/b&gt; High-level testing methods that leverage the converter framework&lt;/li&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Primary BCT Assertion Methods:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Primary BCT Assertion Methods:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;dl&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;dt&gt;&lt;b&gt;{@link #assertBean(Object, String, String)}&lt;/b&gt;&lt;/dt&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;dd&gt;Tests object properties with nested syntax support and collection iteration&lt;/dd&gt;</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;dd&gt;Tests list/collection elements with varargs for expected values&lt;/dd&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;/dl&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;BCT Advanced Features:&lt;/h5&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h2 class='section'&gt;BCT Advanced Features:&lt;/h2&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;&lt;b&gt;Nested Property Syntax:&lt;/b&gt; "address{street,city}" for testing nested objects&lt;/li&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;&lt;b&gt;Collection Iteration:&lt;/b&gt; "#{address{street,city}}" syntax for testing all elements&lt;/li&gt;</span>
@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;&lt;b&gt;Map Key Access:&lt;/b&gt; Including special &lt;js&gt;"&amp;lt;null&amp;gt;"&lt;/js&gt; syntax for null keys&lt;/li&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;Converter Extensibility:&lt;/h5&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;h2 class='section'&gt;Converter Extensibility:&lt;/h2&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;p&gt;The BCT framework is built on the extensible {@link BasicBeanConverter} which allows:&lt;/p&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;ul&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li&gt;&lt;b&gt;Custom Stringifiers:&lt;/b&gt; Type-specific string conversion logic&lt;/li&gt;</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li&gt;&lt;b&gt;Configurable Settings:&lt;/b&gt; Formatting, delimiters, and display options&lt;/li&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='section'&gt;Usage Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;&lt;b&gt;Basic Property Testing:&lt;/b&gt;&lt;/p&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;p class='bjava'&gt;</span>
@@ -131,7 +131,7 @@
 <span class="source-line-no">118</span><span id="line-118"> *       &lt;js&gt;"prop1,prop2"&lt;/js&gt;, &lt;js&gt;"value1,value2"&lt;/js&gt;);</span>
 <span class="source-line-no">119</span><span id="line-119"> * &lt;/p&gt;</span>
 <span class="source-line-no">120</span><span id="line-120"> *</span>
-<span class="source-line-no">121</span><span id="line-121"> * &lt;h5 class='section'&gt;Customizing the Default Converter:&lt;/h5&gt;</span>
+<span class="source-line-no">121</span><span id="line-121"> * &lt;h2 class='section'&gt;Customizing the Default Converter:&lt;/h2&gt;</span>
 <span class="source-line-no">122</span><span id="line-122"> * &lt;p&gt;The default bean converter can be customized on a per-thread basis using:&lt;/p&gt;</span>
 <span class="source-line-no">123</span><span id="line-123"> * &lt;ul&gt;</span>
 <span class="source-line-no">124</span><span id="line-124"> *    &lt;li&gt;&lt;b&gt;{@link BctConfiguration#set(BeanConverter)}:&lt;/b&gt; Set a custom converter for the current thread&lt;/li&gt;</span>
@@ -172,15 +172,15 @@
 <span class="source-line-no">159</span><span id="line-159"> *          .addStringifier(LocalDateTime.&lt;jk&gt;class&lt;/jk&gt;, &lt;jp&gt;dt&lt;/jp&gt; -&gt; &lt;jp&gt;dt&lt;/jp&gt;.format(DateTimeFormatter.&lt;jsf&gt;ISO_DATE_TIME&lt;/jsf&gt;))</span>
 <span class="source-line-no">160</span><span id="line-160"> *          .build();</span>
 <span class="source-line-no">161</span><span id="line-161"> *       BctAssertions.&lt;jsm&gt;setConverter&lt;/jsm&gt;(&lt;jv&gt;dateConverter&lt;/jv&gt;);</span>
-<span class="source-line-no">162</span><span id="line-162"> *       &lt;jkt&gt;try&lt;/jkt&gt; {</span>
+<span class="source-line-no">162</span><span id="line-162"> *       &lt;jk&gt;try&lt;/jk&gt; {</span>
 <span class="source-line-no">163</span><span id="line-163"> *          &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;event&lt;/jv&gt;, &lt;js&gt;"timestamp"&lt;/js&gt;, &lt;js&gt;"2023-12-01T10:30:00"&lt;/js&gt;);</span>
-<span class="source-line-no">164</span><span id="line-164"> *       } &lt;jkt&gt;finally&lt;/jkt&gt; {</span>
+<span class="source-line-no">164</span><span id="line-164"> *       } &lt;jk&gt;finally&lt;/jk&gt; {</span>
 <span class="source-line-no">165</span><span id="line-165"> *          BctAssertions.&lt;jsm&gt;resetConverter&lt;/jsm&gt;();</span>
 <span class="source-line-no">166</span><span id="line-166"> *       }</span>
 <span class="source-line-no">167</span><span id="line-167"> *    }</span>
 <span class="source-line-no">168</span><span id="line-168"> * &lt;/p&gt;</span>
 <span class="source-line-no">169</span><span id="line-169"> *</span>
-<span class="source-line-no">170</span><span id="line-170"> * &lt;h5 class='section'&gt;Performance and Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">170</span><span id="line-170"> * &lt;h2 class='section'&gt;Performance and Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">171</span><span id="line-171"> * &lt;p&gt;The BCT framework is designed for high performance with:&lt;/p&gt;</span>
 <span class="source-line-no">172</span><span id="line-172"> * &lt;ul&gt;</span>
 <span class="source-line-no">173</span><span id="line-173"> *    &lt;li&gt;&lt;b&gt;Caching:&lt;/b&gt; Type-to-handler mappings cached for fast lookup&lt;/li&gt;</span>
@@ -208,7 +208,7 @@
 <span class="source-line-no">195</span><span id="line-195">    * BCT caller already statically imports {@link BctAssertions}.&lt;jsm&gt;*&lt;/jsm&gt; and would otherwise need to</span>
 <span class="source-line-no">196</span><span id="line-196">    * separately reference {@link BctConfiguration} just to override the converter.&lt;/p&gt;</span>
 <span class="source-line-no">197</span><span id="line-197">    *</span>
-<span class="source-line-no">198</span><span id="line-198">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">198</span><span id="line-198">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">199</span><span id="line-199">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">200</span><span id="line-200">    *    &lt;ja&gt;@BeforeEach&lt;/ja&gt;</span>
 <span class="source-line-no">201</span><span id="line-201">    *    &lt;jk&gt;void&lt;/jk&gt; &lt;jsm&gt;setUp&lt;/jsm&gt;() {</span>
@@ -232,7 +232,7 @@
 <span class="source-line-no">219</span><span id="line-219">    * already statically imports {@link BctAssertions}.&lt;jsm&gt;*&lt;/jsm&gt; and would otherwise need to</span>
 <span class="source-line-no">220</span><span id="line-220">    * separately reference {@link BctConfiguration} just to reset the converter.&lt;/p&gt;</span>
 <span class="source-line-no">221</span><span id="line-221">    *</span>
-<span class="source-line-no">222</span><span id="line-222">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    *    &lt;ja&gt;@AfterEach&lt;/ja&gt;</span>
 <span class="source-line-no">225</span><span id="line-225">    *    &lt;jk&gt;void&lt;/jk&gt; &lt;jsm&gt;tearDown&lt;/jsm&gt;() {</span>
@@ -273,7 +273,7 @@
 <span class="source-line-no">260</span><span id="line-260">    * and value extraction. The converter provides sophisticated property access through the {@link BeanConverter}</span>
 <span class="source-line-no">261</span><span id="line-261">    * interface, supporting multiple fallback mechanisms for accessing object properties and values.&lt;/p&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    *</span>
-<span class="source-line-no">263</span><span id="line-263">    * &lt;h5 class='section'&gt;Basic Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">263</span><span id="line-263">    * &lt;h4 class='section'&gt;Basic Usage:&lt;/h4&gt;</span>
 <span class="source-line-no">264</span><span id="line-264">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">265</span><span id="line-265">    *    &lt;jc&gt;// Test multiple properties&lt;/jc&gt;</span>
 <span class="source-line-no">266</span><span id="line-266">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"prop1,prop2,prop3"&lt;/js&gt;, &lt;js&gt;"val1,val2,val3"&lt;/js&gt;);</span>
@@ -288,7 +288,7 @@
 <span class="source-line-no">275</span><span id="line-275">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"name,age"&lt;/js&gt;, &lt;js&gt;"John,30"&lt;/js&gt;, &lt;jsm&gt;fs&lt;/jsm&gt;(&lt;js&gt;"User %s validation failed"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;));</span>
 <span class="source-line-no">276</span><span id="line-276">    * &lt;/p&gt;</span>
 <span class="source-line-no">277</span><span id="line-277">    *</span>
-<span class="source-line-no">278</span><span id="line-278">    * &lt;h5 class='section'&gt;Nested Property Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">278</span><span id="line-278">    * &lt;h4 class='section'&gt;Nested Property Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">279</span><span id="line-279">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">280</span><span id="line-280">    *    &lt;jc&gt;// Test nested bean properties&lt;/jc&gt;</span>
 <span class="source-line-no">281</span><span id="line-281">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"name,address{street,city,state}"&lt;/js&gt;, &lt;js&gt;"John,{123 Main St,Springfield,IL}"&lt;/js&gt;);</span>
@@ -297,7 +297,7 @@
 <span class="source-line-no">284</span><span id="line-284">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"name,person{address{geo{lat,lon}}}"&lt;/js&gt;, &lt;js&gt;"John,{{{40.7,-74.0}}}"&lt;/js&gt;);</span>
 <span class="source-line-no">285</span><span id="line-285">    * &lt;/p&gt;</span>
 <span class="source-line-no">286</span><span id="line-286">    *</span>
-<span class="source-line-no">287</span><span id="line-287">    * &lt;h5 class='section'&gt;Array, List, and Stream Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">287</span><span id="line-287">    * &lt;h4 class='section'&gt;Array, List, and Stream Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">288</span><span id="line-288">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">289</span><span id="line-289">    *    &lt;jc&gt;// Test array/list elements by index - items is a String[] or List&amp;lt;String&amp;gt;&lt;/jc&gt;</span>
 <span class="source-line-no">290</span><span id="line-290">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"items{0,1,2}"&lt;/js&gt;, &lt;js&gt;"{item1,item2,item3}"&lt;/js&gt;);</span>
@@ -312,7 +312,7 @@
 <span class="source-line-no">299</span><span id="line-299">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"userStream{#{name}}"&lt;/js&gt;, &lt;js&gt;"[{Alice},{Bob}]"&lt;/js&gt;);</span>
 <span class="source-line-no">300</span><span id="line-300">    * &lt;/p&gt;</span>
 <span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * &lt;h5 class='section'&gt;Collection Iteration Syntax:&lt;/h5&gt;</span>
+<span class="source-line-no">302</span><span id="line-302">    * &lt;h4 class='section'&gt;Collection Iteration Syntax:&lt;/h4&gt;</span>
 <span class="source-line-no">303</span><span id="line-303">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    *    &lt;jc&gt;// Test properties across ALL elements in a collection using #{...} syntax - userList is a List&amp;lt;User&amp;gt; where User has getName()&lt;/jc&gt;</span>
 <span class="source-line-no">305</span><span id="line-305">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"userList{#{name}}"&lt;/js&gt;, &lt;js&gt;"[{John},{Jane},{Bob}]"&lt;/js&gt;);</span>
@@ -329,7 +329,7 @@
 <span class="source-line-no">316</span><span id="line-316">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;processor&lt;/jv&gt;, &lt;js&gt;"dataStream{#{value}}"&lt;/js&gt;, &lt;js&gt;"[{A},{B},{C}]"&lt;/js&gt;);</span>
 <span class="source-line-no">317</span><span id="line-317">    * &lt;/p&gt;</span>
 <span class="source-line-no">318</span><span id="line-318">    *</span>
-<span class="source-line-no">319</span><span id="line-319">    * &lt;h5 class='section'&gt;Universal Collection Size Properties:&lt;/h5&gt;</span>
+<span class="source-line-no">319</span><span id="line-319">    * &lt;h4 class='section'&gt;Universal Collection Size Properties:&lt;/h4&gt;</span>
 <span class="source-line-no">320</span><span id="line-320">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">321</span><span id="line-321">    *    &lt;jc&gt;// Both 'length' and 'size' work universally across all collection types&lt;/jc&gt;</span>
 <span class="source-line-no">322</span><span id="line-322">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"myArray{length}"&lt;/js&gt;, &lt;js&gt;"{5}"&lt;/js&gt;);        &lt;jc&gt;// Arrays&lt;/jc&gt;</span>
@@ -342,7 +342,7 @@
 <span class="source-line-no">329</span><span id="line-329">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"myMap{length}"&lt;/js&gt;, &lt;js&gt;"{7}"&lt;/js&gt;);          &lt;jc&gt;// Also works for maps&lt;/jc&gt;</span>
 <span class="source-line-no">330</span><span id="line-330">    * &lt;/p&gt;</span>
 <span class="source-line-no">331</span><span id="line-331">    *</span>
-<span class="source-line-no">332</span><span id="line-332">    * &lt;h5 class='section'&gt;Class Name Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">332</span><span id="line-332">    * &lt;h4 class='section'&gt;Class Name Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">333</span><span id="line-333">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">334</span><span id="line-334">    *    &lt;jc&gt;// Test class properties (prefer simple names for maintainability)&lt;/jc&gt;</span>
 <span class="source-line-no">335</span><span id="line-335">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"obj{class{simpleName}}"&lt;/js&gt;, &lt;js&gt;"{{MyClass}}"&lt;/js&gt;);</span>
@@ -351,7 +351,7 @@
 <span class="source-line-no">338</span><span id="line-338">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"obj{class{name}}"&lt;/js&gt;, &lt;js&gt;"{{com.example.MyClass}}"&lt;/js&gt;);</span>
 <span class="source-line-no">339</span><span id="line-339">    * &lt;/p&gt;</span>
 <span class="source-line-no">340</span><span id="line-340">    *</span>
-<span class="source-line-no">341</span><span id="line-341">    * &lt;h5 class='section'&gt;Method Chaining Support:&lt;/h5&gt;</span>
+<span class="source-line-no">341</span><span id="line-341">    * &lt;h4 class='section'&gt;Method Chaining Support:&lt;/h4&gt;</span>
 <span class="source-line-no">342</span><span id="line-342">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">343</span><span id="line-343">    *    &lt;jc&gt;// Test fluent setter chains (returns same object)&lt;/jc&gt;</span>
 <span class="source-line-no">344</span><span id="line-344">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(</span>
@@ -361,7 +361,7 @@
 <span class="source-line-no">348</span><span id="line-348">    *    );</span>
 <span class="source-line-no">349</span><span id="line-349">    * &lt;/p&gt;</span>
 <span class="source-line-no">350</span><span id="line-350">    *</span>
-<span class="source-line-no">351</span><span id="line-351">    * &lt;h5 class='section'&gt;Advanced Collection Analysis:&lt;/h5&gt;</span>
+<span class="source-line-no">351</span><span id="line-351">    * &lt;h4 class='section'&gt;Advanced Collection Analysis:&lt;/h4&gt;</span>
 <span class="source-line-no">352</span><span id="line-352">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">353</span><span id="line-353">    *    &lt;jc&gt;// Combine size/length, metadata, and content iteration in single assertions - users is a List&amp;lt;User&amp;gt;&lt;/jc&gt;</span>
 <span class="source-line-no">354</span><span id="line-354">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"users{length,class{simpleName},#{name}}"&lt;/js&gt;,</span>
@@ -379,7 +379,7 @@
 <span class="source-line-no">366</span><span id="line-366">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;response&lt;/jv&gt;, &lt;js&gt;"results{size},metadata{length}"&lt;/js&gt;, &lt;js&gt;"{25},{4}"&lt;/js&gt;);</span>
 <span class="source-line-no">367</span><span id="line-367">    * &lt;/p&gt;</span>
 <span class="source-line-no">368</span><span id="line-368">    *</span>
-<span class="source-line-no">369</span><span id="line-369">    * &lt;h5 class='section'&gt;Direct Field Access:&lt;/h5&gt;</span>
+<span class="source-line-no">369</span><span id="line-369">    * &lt;h4 class='section'&gt;Direct Field Access:&lt;/h4&gt;</span>
 <span class="source-line-no">370</span><span id="line-370">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">371</span><span id="line-371">    *    &lt;jc&gt;// Test public fields directly (no getters required)&lt;/jc&gt;</span>
 <span class="source-line-no">372</span><span id="line-372">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"f1,f2,f3"&lt;/js&gt;, &lt;js&gt;"val1,val2,val3"&lt;/js&gt;);</span>
@@ -388,7 +388,7 @@
 <span class="source-line-no">375</span><span id="line-375">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"f1{length},f2{class{simpleName}}"&lt;/js&gt;, &lt;js&gt;"{5},{{String}}"&lt;/js&gt;);</span>
 <span class="source-line-no">376</span><span id="line-376">    * &lt;/p&gt;</span>
 <span class="source-line-no">377</span><span id="line-377">    *</span>
-<span class="source-line-no">378</span><span id="line-378">    * &lt;h5 class='section'&gt;Map Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">378</span><span id="line-378">    * &lt;h4 class='section'&gt;Map Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">379</span><span id="line-379">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">380</span><span id="line-380">    *    &lt;jc&gt;// Test map values by key&lt;/jc&gt;</span>
 <span class="source-line-no">381</span><span id="line-381">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"configMap{timeout,retries}"&lt;/js&gt;, &lt;js&gt;"{30000,3}"&lt;/js&gt;);</span>
@@ -400,7 +400,7 @@
 <span class="source-line-no">387</span><span id="line-387">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"mapWithNullKey{&amp;lt;null&amp;gt;}"&lt;/js&gt;, &lt;js&gt;"{nullKeyValue}"&lt;/js&gt;);</span>
 <span class="source-line-no">388</span><span id="line-388">    * &lt;/p&gt;</span>
 <span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * &lt;h5 class='section'&gt;Collection and Boolean Values:&lt;/h5&gt;</span>
+<span class="source-line-no">390</span><span id="line-390">    * &lt;h4 class='section'&gt;Collection and Boolean Values:&lt;/h4&gt;</span>
 <span class="source-line-no">391</span><span id="line-391">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">392</span><span id="line-392">    *    &lt;jc&gt;// Test boolean values&lt;/jc&gt;</span>
 <span class="source-line-no">393</span><span id="line-393">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"enabled,visible"&lt;/js&gt;, &lt;js&gt;"true,false"&lt;/js&gt;);</span>
@@ -409,7 +409,7 @@
 <span class="source-line-no">396</span><span id="line-396">    *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;myBean&lt;/jv&gt;, &lt;js&gt;"statuses"&lt;/js&gt;, &lt;js&gt;"[ACTIVE,PENDING]"&lt;/js&gt;);</span>
 <span class="source-line-no">397</span><span id="line-397">    * &lt;/p&gt;</span>
 <span class="source-line-no">398</span><span id="line-398">    *</span>
-<span class="source-line-no">399</span><span id="line-399">    * &lt;h5 class='section'&gt;Value Syntax Rules:&lt;/h5&gt;</span>
+<span class="source-line-no">399</span><span id="line-399">    * &lt;h4 class='section'&gt;Value Syntax Rules:&lt;/h4&gt;</span>
 <span class="source-line-no">400</span><span id="line-400">    * &lt;ul&gt;</span>
 <span class="source-line-no">401</span><span id="line-401">    *    &lt;li&gt;&lt;b&gt;Simple values:&lt;/b&gt; &lt;js&gt;"value"&lt;/js&gt; for direct property values&lt;/li&gt;</span>
 <span class="source-line-no">402</span><span id="line-402">    *    &lt;li&gt;&lt;b&gt;Nested values:&lt;/b&gt; &lt;js&gt;"{value}"&lt;/js&gt; for single-level nested properties&lt;/li&gt;</span>
@@ -421,7 +421,7 @@
 <span class="source-line-no">408</span><span id="line-408">    *    &lt;li&gt;&lt;b&gt;Null values:&lt;/b&gt; &lt;js&gt;"null"&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">409</span><span id="line-409">    * &lt;/ul&gt;</span>
 <span class="source-line-no">410</span><span id="line-410">    *</span>
-<span class="source-line-no">411</span><span id="line-411">    * &lt;h5 class='section'&gt;Property Access Priority:&lt;/h5&gt;</span>
+<span class="source-line-no">411</span><span id="line-411">    * &lt;h4 class='section'&gt;Property Access Priority:&lt;/h4&gt;</span>
 <span class="source-line-no">412</span><span id="line-412">    * &lt;ol&gt;</span>
 <span class="source-line-no">413</span><span id="line-413">    *    &lt;li&gt;&lt;b&gt;Collection/Array access:&lt;/b&gt; Numeric indices for arrays/lists (e.g., &lt;js&gt;"0"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;)&lt;/li&gt;</span>
 <span class="source-line-no">414</span><span id="line-414">    *    &lt;li&gt;&lt;b&gt;Universal size properties:&lt;/b&gt; &lt;js&gt;"length"&lt;/js&gt; and &lt;js&gt;"size"&lt;/js&gt; for arrays, collections, and maps&lt;/li&gt;</span>
@@ -458,14 +458,14 @@
 <span class="source-line-no">445</span><span id="line-445">    * using the same property access logic as {@link #assertBean(Object, String, String)}.</span>
 <span class="source-line-no">446</span><span id="line-446">    * It's perfect for testing collections of similar objects or validation results.&lt;/p&gt;</span>
 <span class="source-line-no">447</span><span id="line-447">    *</span>
-<span class="source-line-no">448</span><span id="line-448">    * &lt;h5 class='section'&gt;Basic Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">448</span><span id="line-448">    * &lt;h4 class='section'&gt;Basic Usage:&lt;/h4&gt;</span>
 <span class="source-line-no">449</span><span id="line-449">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">450</span><span id="line-450">    *    &lt;jc&gt;// Test list of user beans&lt;/jc&gt;</span>
 <span class="source-line-no">451</span><span id="line-451">    *    &lt;jsm&gt;assertBeans&lt;/jsm&gt;(&lt;jv&gt;userList&lt;/jv&gt;, &lt;js&gt;"name,age"&lt;/js&gt;,</span>
 <span class="source-line-no">452</span><span id="line-452">    *       &lt;js&gt;"John,25"&lt;/js&gt;, &lt;js&gt;"Jane,30"&lt;/js&gt;, &lt;js&gt;"Bob,35"&lt;/js&gt;);</span>
 <span class="source-line-no">453</span><span id="line-453">    * &lt;/p&gt;</span>
 <span class="source-line-no">454</span><span id="line-454">    *</span>
-<span class="source-line-no">455</span><span id="line-455">    * &lt;h5 class='section'&gt;Complex Property Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">455</span><span id="line-455">    * &lt;h4 class='section'&gt;Complex Property Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">456</span><span id="line-456">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">457</span><span id="line-457">    *    &lt;jc&gt;// Test nested properties across multiple beans - orderList is a List&amp;lt;Order&amp;gt; where Order has getId() and getCustomer() returning Customer with getName() and getEmail()&lt;/jc&gt;</span>
 <span class="source-line-no">458</span><span id="line-458">    *    &lt;jsm&gt;assertBeans&lt;/jsm&gt;(&lt;jv&gt;orderList&lt;/jv&gt;, &lt;js&gt;"id,customer{name,email}"&lt;/js&gt;,</span>
@@ -478,7 +478,7 @@
 <span class="source-line-no">465</span><span id="line-465">    *       &lt;js&gt;"{{Phone}},599.99"&lt;/js&gt;);</span>
 <span class="source-line-no">466</span><span id="line-466">    * &lt;/p&gt;</span>
 <span class="source-line-no">467</span><span id="line-467">    *</span>
-<span class="source-line-no">468</span><span id="line-468">    * &lt;h5 class='section'&gt;Validation Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">468</span><span id="line-468">    * &lt;h4 class='section'&gt;Validation Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">469</span><span id="line-469">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">470</span><span id="line-470">    *    &lt;jc&gt;// Test validation results&lt;/jc&gt;</span>
 <span class="source-line-no">471</span><span id="line-471">    *    &lt;jsm&gt;assertBeans&lt;/jsm&gt;(&lt;jv&gt;validationErrors&lt;/jv&gt;, &lt;js&gt;"field,message,code"&lt;/js&gt;,</span>
@@ -486,7 +486,7 @@
 <span class="source-line-no">473</span><span id="line-473">    *       &lt;js&gt;"age,Must be 18 or older,E002"&lt;/js&gt;);</span>
 <span class="source-line-no">474</span><span id="line-474">    * &lt;/p&gt;</span>
 <span class="source-line-no">475</span><span id="line-475">    *</span>
-<span class="source-line-no">476</span><span id="line-476">    * &lt;h5 class='section'&gt;Collection Iteration Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">476</span><span id="line-476">    * &lt;h4 class='section'&gt;Collection Iteration Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">477</span><span id="line-477">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">478</span><span id="line-478">    *    &lt;jc&gt;// Test collection iteration within beans (#{...} syntax)&lt;/jc&gt;</span>
 <span class="source-line-no">479</span><span id="line-479">    *    &lt;jsm&gt;assertBeans&lt;/jsm&gt;(&lt;jv&gt;departmentList&lt;/jv&gt;, &lt;js&gt;"name,employees{#{name}}"&lt;/js&gt;,</span>
@@ -494,7 +494,7 @@
 <span class="source-line-no">481</span><span id="line-481">    *       &lt;js&gt;"Marketing,[{David},{Eve}]"&lt;/js&gt;);</span>
 <span class="source-line-no">482</span><span id="line-482">    * &lt;/p&gt;</span>
 <span class="source-line-no">483</span><span id="line-483">    *</span>
-<span class="source-line-no">484</span><span id="line-484">    * &lt;h5 class='section'&gt;Parser Result Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">484</span><span id="line-484">    * &lt;h4 class='section'&gt;Parser Result Testing:&lt;/h4&gt;</span>
 <span class="source-line-no">485</span><span id="line-485">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">486</span><span id="line-486">    *    &lt;jc&gt;// Test parsed object collections&lt;/jc&gt;</span>
 <span class="source-line-no">487</span><span id="line-487">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;parsed&lt;/jv&gt; = JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;jsonArray&lt;/jv&gt;, MyBean[].class);</span>
@@ -578,7 +578,7 @@
 <span class="source-line-no">565</span><span id="line-565">    * {@link BeanConverter} and then checks if it contains the expected substring. This is useful</span>
 <span class="source-line-no">566</span><span id="line-566">    * for testing partial content matches without requiring exact string equality.&lt;/p&gt;</span>
 <span class="source-line-no">567</span><span id="line-567">    *</span>
-<span class="source-line-no">568</span><span id="line-568">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">568</span><span id="line-568">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">569</span><span id="line-569">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">570</span><span id="line-570">    *    &lt;jc&gt;// Test that error message contains key information&lt;/jc&gt;</span>
 <span class="source-line-no">571</span><span id="line-571">    *    &lt;jsm&gt;assertContains&lt;/jsm&gt;(&lt;js&gt;"FileNotFoundException"&lt;/js&gt;, &lt;jv&gt;exception&lt;/jv&gt;);</span>
@@ -627,7 +627,7 @@
 <span class="source-line-no">614</span><span id="line-614">    * converted to its string representation using the current {@link BeanConverter} and must not contain</span>
 <span class="source-line-no">615</span><span id="line-615">    * the substring.&lt;/p&gt;</span>
 <span class="source-line-no">616</span><span id="line-616">    *</span>
-<span class="source-line-no">617</span><span id="line-617">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">617</span><span id="line-617">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">618</span><span id="line-618">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">619</span><span id="line-619">    *    &lt;jc&gt;// Test that a rendered page does not leak a value&lt;/jc&gt;</span>
 <span class="source-line-no">620</span><span id="line-620">    *    &lt;jsm&gt;assertNotContains&lt;/jsm&gt;(&lt;js&gt;"password"&lt;/js&gt;, &lt;jv&gt;html&lt;/jv&gt;);</span>
@@ -669,7 +669,7 @@
 <span class="source-line-no">656</span><span id="line-656">    * required substrings. All provided substrings must be present in the actual object's string</span>
 <span class="source-line-no">657</span><span id="line-657">    * representation for the assertion to pass.&lt;/p&gt;</span>
 <span class="source-line-no">658</span><span id="line-658">    *</span>
-<span class="source-line-no">659</span><span id="line-659">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">659</span><span id="line-659">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">660</span><span id="line-660">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">661</span><span id="line-661">    *    &lt;jc&gt;// Test that error contains multiple pieces of information&lt;/jc&gt;</span>
 <span class="source-line-no">662</span><span id="line-662">    *    &lt;jsm&gt;assertContainsAll&lt;/jsm&gt;(&lt;jv&gt;exception&lt;/jv&gt;, &lt;js&gt;"FileNotFoundException"&lt;/js&gt;, &lt;js&gt;"config.xml"&lt;/js&gt;, &lt;js&gt;"/etc"&lt;/js&gt;);</span>
@@ -736,7 +736,7 @@
 <span class="source-line-no">723</span><span id="line-723">    *    &lt;li&gt;&lt;b&gt;Other objects:&lt;/b&gt; Must be convertible to an empty List via {@link BeanConverter#listify(Object)}&lt;/li&gt;</span>
 <span class="source-line-no">724</span><span id="line-724">    * &lt;/ul&gt;</span>
 <span class="source-line-no">725</span><span id="line-725">    *</span>
-<span class="source-line-no">726</span><span id="line-726">    * &lt;h5 class='section'&gt;Supported Types:&lt;/h5&gt;</span>
+<span class="source-line-no">726</span><span id="line-726">    * &lt;h4 class='section'&gt;Supported Types:&lt;/h4&gt;</span>
 <span class="source-line-no">727</span><span id="line-727">    * &lt;p&gt;Any object that can be converted to a List, including:&lt;/p&gt;</span>
 <span class="source-line-no">728</span><span id="line-728">    * &lt;ul&gt;</span>
 <span class="source-line-no">729</span><span id="line-729">    *    &lt;li&gt;Collections (List, Set, Queue, etc.)&lt;/li&gt;</span>
@@ -746,7 +746,7 @@
 <span class="source-line-no">733</span><span id="line-733">    *    &lt;li&gt;Optional objects&lt;/li&gt;</span>
 <span class="source-line-no">734</span><span id="line-734">    * &lt;/ul&gt;</span>
 <span class="source-line-no">735</span><span id="line-735">    *</span>
-<span class="source-line-no">736</span><span id="line-736">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">736</span><span id="line-736">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">737</span><span id="line-737">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">738</span><span id="line-738">    *    &lt;jc&gt;// Test empty collections&lt;/jc&gt;</span>
 <span class="source-line-no">739</span><span id="line-739">    *    &lt;jsm&gt;assertEmpty&lt;/jsm&gt;(Collections.&lt;jsm&gt;emptyList&lt;/jsm&gt;());</span>
@@ -794,7 +794,7 @@
 <span class="source-line-no">781</span><span id="line-781">   /**</span>
 <span class="source-line-no">782</span><span id="line-782">    * Asserts that a List or List-like object contains the expected values using flexible comparison logic.</span>
 <span class="source-line-no">783</span><span id="line-783">    *</span>
-<span class="source-line-no">784</span><span id="line-784">    * &lt;h5 class='section'&gt;Testing Non-List Collections:&lt;/h5&gt;</span>
+<span class="source-line-no">784</span><span id="line-784">    * &lt;h4 class='section'&gt;Testing Non-List Collections:&lt;/h4&gt;</span>
 <span class="source-line-no">785</span><span id="line-785">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">786</span><span id="line-786">    *    &lt;jc&gt;// Test a Set using l() conversion&lt;/jc&gt;</span>
 <span class="source-line-no">787</span><span id="line-787">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;mySet&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; TreeSet&amp;lt;&amp;gt;(Arrays.&lt;jsm&gt;asList&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;));</span>
@@ -809,17 +809,17 @@
 <span class="source-line-no">796</span><span id="line-796">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(&lt;jsm&gt;l&lt;/jsm&gt;(&lt;jv&gt;myStream&lt;/jv&gt;), &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</span>
 <span class="source-line-no">797</span><span id="line-797">    * &lt;/p&gt;</span>
 <span class="source-line-no">798</span><span id="line-798">    *</span>
-<span class="source-line-no">799</span><span id="line-799">    * &lt;h5 class='section'&gt;Comparison Modes:&lt;/h5&gt;</span>
+<span class="source-line-no">799</span><span id="line-799">    * &lt;h4 class='section'&gt;Comparison Modes:&lt;/h4&gt;</span>
 <span class="source-line-no">800</span><span id="line-800">    * &lt;p&gt;The method supports three different ways to compare expected vs actual values:&lt;/p&gt;</span>
 <span class="source-line-no">801</span><span id="line-801">    *</span>
-<span class="source-line-no">802</span><span id="line-802">    * &lt;h6 class='section'&gt;1. String Comparison (Readable Format):&lt;/h6&gt;</span>
+<span class="source-line-no">802</span><span id="line-802">    * &lt;h5 class='section'&gt;1. String Comparison (Readable Format):&lt;/h5&gt;</span>
 <span class="source-line-no">803</span><span id="line-803">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">804</span><span id="line-804">    *    &lt;jc&gt;// Elements are converted to strings using the bean converter and compared as strings&lt;/jc&gt;</span>
 <span class="source-line-no">805</span><span id="line-805">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(1, 2, 3), &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;, &lt;js&gt;"3"&lt;/js&gt;);</span>
 <span class="source-line-no">806</span><span id="line-806">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;), &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;);</span>
 <span class="source-line-no">807</span><span id="line-807">    * &lt;/p&gt;</span>
 <span class="source-line-no">808</span><span id="line-808">    *</span>
-<span class="source-line-no">809</span><span id="line-809">    * &lt;h6 class='section'&gt;2. Predicate Testing (Functional Validation):&lt;/h6&gt;</span>
+<span class="source-line-no">809</span><span id="line-809">    * &lt;h5 class='section'&gt;2. Predicate Testing (Functional Validation):&lt;/h5&gt;</span>
 <span class="source-line-no">810</span><span id="line-810">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">811</span><span id="line-811">    *    &lt;jc&gt;// Use Predicate&amp;lt;T&amp;gt; for functional testing&lt;/jc&gt;</span>
 <span class="source-line-no">812</span><span id="line-812">    *    Predicate&amp;lt;Integer&amp;gt; &lt;jv&gt;greaterThanOne&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt; -&amp;gt; &lt;jv&gt;x&lt;/jv&gt; &amp;gt; 1;</span>
@@ -830,7 +830,7 @@
 <span class="source-line-no">817</span><span id="line-817">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"banana"&lt;/js&gt;), &lt;jv&gt;startsWithA&lt;/jv&gt;, &lt;js&gt;"banana"&lt;/js&gt;);</span>
 <span class="source-line-no">818</span><span id="line-818">    * &lt;/p&gt;</span>
 <span class="source-line-no">819</span><span id="line-819">    *</span>
-<span class="source-line-no">820</span><span id="line-820">    * &lt;h6 class='section'&gt;3. Object Equality (Direct Comparison):&lt;/h6&gt;</span>
+<span class="source-line-no">820</span><span id="line-820">    * &lt;h5 class='section'&gt;3. Object Equality (Direct Comparison):&lt;/h5&gt;</span>
 <span class="source-line-no">821</span><span id="line-821">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">822</span><span id="line-822">    *    &lt;jc&gt;// Non-String, non-Predicate objects use &lt;jsm&gt;Objects.equals&lt;/jsm&gt;() comparison&lt;/jc&gt;</span>
 <span class="source-line-no">823</span><span id="line-823">    *    &lt;jsm&gt;assertList&lt;/jsm&gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(1, 2, 3), 1, 2, 3); &lt;jc&gt;// Integer objects&lt;/jc&gt;</span>
@@ -909,11 +909,11 @@
 <span class="source-line-no">896</span><span id="line-896">   /**</span>
 <span class="source-line-no">897</span><span id="line-897">    * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.</span>
 <span class="source-line-no">898</span><span id="line-898">    *</span>
-<span class="source-line-no">899</span><span id="line-899">    * &lt;h5 class='section'&gt;Map Entry Serialization:&lt;/h5&gt;</span>
+<span class="source-line-no">899</span><span id="line-899">    * &lt;h4 class='section'&gt;Map Entry Serialization:&lt;/h4&gt;</span>
 <span class="source-line-no">900</span><span id="line-900">    * &lt;p&gt;Map entries are serialized to strings as key/value pairs in the format &lt;js&gt;"key=value"&lt;/js&gt;.</span>
 <span class="source-line-no">901</span><span id="line-901">    * Nested maps and collections are supported with appropriate formatting.&lt;/p&gt;</span>
 <span class="source-line-no">902</span><span id="line-902">    *</span>
-<span class="source-line-no">903</span><span id="line-903">    * &lt;h5 class='section'&gt;Testing Nested Maps and Collections:&lt;/h5&gt;</span>
+<span class="source-line-no">903</span><span id="line-903">    * &lt;h4 class='section'&gt;Testing Nested Maps and Collections:&lt;/h4&gt;</span>
 <span class="source-line-no">904</span><span id="line-904">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">905</span><span id="line-905">    *    &lt;jc&gt;// Test simple map entries&lt;/jc&gt;</span>
 <span class="source-line-no">906</span><span id="line-906">    *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;simpleMap&lt;/jv&gt; = Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;);</span>
@@ -928,30 +928,30 @@
 <span class="source-line-no">915</span><span id="line-915">    *    &lt;jsm&gt;assertMap&lt;/jsm&gt;(&lt;jv&gt;mapWithArrays&lt;/jv&gt;, &lt;js&gt;"a={b=[1,2]}"&lt;/js&gt;);</span>
 <span class="source-line-no">916</span><span id="line-916">    * &lt;/p&gt;</span>
 <span class="source-line-no">917</span><span id="line-917">    *</span>
-<span class="source-line-no">918</span><span id="line-918">    * &lt;h5 class='section'&gt;Comparison Modes:&lt;/h5&gt;</span>
+<span class="source-line-no">918</span><span id="line-918">    * &lt;h4 class='section'&gt;Comparison Modes:&lt;/h4&gt;</span>
 <span class="source-line-no">919</span><span id="line-919">    * &lt;p&gt;The method supports the same comparison modes as {@link #assertList(Object, Object...)}:&lt;/p&gt;</span>
 <span class="source-line-no">920</span><span id="line-920">    *</span>
-<span class="source-line-no">921</span><span id="line-921">    * &lt;h6 class='section'&gt;1. String Comparison (Readable Format):&lt;/h6&gt;</span>
+<span class="source-line-no">921</span><span id="line-921">    * &lt;h5 class='section'&gt;1. String Comparison (Readable Format):&lt;/h5&gt;</span>
 <span class="source-line-no">922</span><span id="line-922">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">923</span><span id="line-923">    *    &lt;jc&gt;// Map entries are converted to strings and compared as strings&lt;/jc&gt;</span>
 <span class="source-line-no">924</span><span id="line-924">    *    &lt;jsm&gt;assertMap&lt;/jsm&gt;(Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"key1"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;), &lt;js&gt;"key1=value1"&lt;/js&gt;);</span>
 <span class="source-line-no">925</span><span id="line-925">    *    &lt;jsm&gt;assertMap&lt;/jsm&gt;(Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"count"&lt;/js&gt;, 42), &lt;js&gt;"count=42"&lt;/js&gt;);</span>
 <span class="source-line-no">926</span><span id="line-926">    * &lt;/p&gt;</span>
 <span class="source-line-no">927</span><span id="line-927">    *</span>
-<span class="source-line-no">928</span><span id="line-928">    * &lt;h6 class='section'&gt;2. Predicate Testing (Functional Validation):&lt;/h6&gt;</span>
+<span class="source-line-no">928</span><span id="line-928">    * &lt;h5 class='section'&gt;2. Predicate Testing (Functional Validation):&lt;/h5&gt;</span>
 <span class="source-line-no">929</span><span id="line-929">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">930</span><span id="line-930">    *    &lt;jc&gt;// Use Predicate&amp;lt;Map.Entry&amp;lt;K,V&amp;gt;&amp;gt; for functional testing&lt;/jc&gt;</span>
 <span class="source-line-no">931</span><span id="line-931">    *    Predicate&amp;lt;Map.Entry&amp;lt;String,Integer&amp;gt;&amp;gt; &lt;jv&gt;valueGreaterThanTen&lt;/jv&gt; = &lt;jv&gt;entry&lt;/jv&gt; -&amp;gt; &lt;jv&gt;entry&lt;/jv&gt;.getValue() &amp;gt; 10;</span>
 <span class="source-line-no">932</span><span id="line-932">    *    &lt;jsm&gt;assertMap&lt;/jsm&gt;(Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"count"&lt;/js&gt;, 42), &lt;jv&gt;valueGreaterThanTen&lt;/jv&gt;);</span>
 <span class="source-line-no">933</span><span id="line-933">    * &lt;/p&gt;</span>
 <span class="source-line-no">934</span><span id="line-934">    *</span>
-<span class="source-line-no">935</span><span id="line-935">    * &lt;h6 class='section'&gt;3. Object Equality (Direct Comparison):&lt;/h6&gt;</span>
+<span class="source-line-no">935</span><span id="line-935">    * &lt;h5 class='section'&gt;3. Object Equality (Direct Comparison):&lt;/h5&gt;</span>
 <span class="source-line-no">936</span><span id="line-936">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">937</span><span id="line-937">    *    &lt;jc&gt;// Non-String, non-Predicate objects use &lt;jsm&gt;Objects.equals&lt;/jsm&gt;() comparison&lt;/jc&gt;</span>
 <span class="source-line-no">938</span><span id="line-938">    *    &lt;jsm&gt;assertMap&lt;/jsm&gt;(Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"key"&lt;/js&gt;, &lt;jv&gt;myObject&lt;/jv&gt;), &lt;jv&gt;expectedEntry&lt;/jv&gt;);</span>
 <span class="source-line-no">939</span><span id="line-939">    * &lt;/p&gt;</span>
 <span class="source-line-no">940</span><span id="line-940">    *</span>
-<span class="source-line-no">941</span><span id="line-941">    * &lt;h5 class='section'&gt;Map Ordering Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">941</span><span id="line-941">    * &lt;h4 class='section'&gt;Map Ordering Behavior:&lt;/h4&gt;</span>
 <span class="source-line-no">942</span><span id="line-942">    * &lt;p&gt;The {@link Listifiers#mapListifier()} method ensures deterministic ordering for map entries:&lt;/p&gt;</span>
 <span class="source-line-no">943</span><span id="line-943">    * &lt;ul&gt;</span>
 <span class="source-line-no">944</span><span id="line-944">    *    &lt;li&gt;&lt;b&gt;{@link SortedMap} (TreeMap, etc.):&lt;/b&gt; Preserves existing sort order&lt;/li&gt;</span>
@@ -1047,7 +1047,7 @@
 <span class="source-line-no">1034</span><span id="line-1034">    * {@link BeanConverter} and then tests it against the provided glob-style pattern.</span>
 <span class="source-line-no">1035</span><span id="line-1035">    * This is useful for testing string formats with simple wildcard patterns.&lt;/p&gt;</span>
 <span class="source-line-no">1036</span><span id="line-1036">    *</span>
-<span class="source-line-no">1037</span><span id="line-1037">    * &lt;h5 class='section'&gt;Pattern Syntax:&lt;/h5&gt;</span>
+<span class="source-line-no">1037</span><span id="line-1037">    * &lt;h4 class='section'&gt;Pattern Syntax:&lt;/h4&gt;</span>
 <span class="source-line-no">1038</span><span id="line-1038">    * &lt;p&gt;The pattern uses glob-style wildcards:&lt;/p&gt;</span>
 <span class="source-line-no">1039</span><span id="line-1039">    * &lt;ul&gt;</span>
 <span class="source-line-no">1040</span><span id="line-1040">    *    &lt;li&gt;&lt;b&gt;{@code *}&lt;/b&gt; matches any sequence of characters (including none)&lt;/li&gt;</span>
@@ -1055,7 +1055,7 @@
 <span class="source-line-no">1042</span><span id="line-1042">    *    &lt;li&gt;&lt;b&gt;All other characters&lt;/b&gt; are treated literally&lt;/li&gt;</span>
 <span class="source-line-no">1043</span><span id="line-1043">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1044</span><span id="line-1044">    *</span>
-<span class="source-line-no">1045</span><span id="line-1045">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1045</span><span id="line-1045">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1046</span><span id="line-1046">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1047</span><span id="line-1047">    *    &lt;jc&gt;// Test filename patterns&lt;/jc&gt;</span>
 <span class="source-line-no">1048</span><span id="line-1048">    *    &lt;jsm&gt;assertMatchesGlob&lt;/jsm&gt;(&lt;js&gt;"user_*_temp"&lt;/js&gt;, &lt;jv&gt;filename&lt;/jv&gt;);</span>
@@ -1110,7 +1110,7 @@
 <span class="source-line-no">1097</span><span id="line-1097">    *    &lt;li&gt;&lt;b&gt;Other objects:&lt;/b&gt; Must convert to a non-empty List via {@link BeanConverter#listify(Object)}&lt;/li&gt;</span>
 <span class="source-line-no">1098</span><span id="line-1098">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1099</span><span id="line-1099">    *</span>
-<span class="source-line-no">1100</span><span id="line-1100">    * &lt;h5 class='section'&gt;Supported Types:&lt;/h5&gt;</span>
+<span class="source-line-no">1100</span><span id="line-1100">    * &lt;h4 class='section'&gt;Supported Types:&lt;/h4&gt;</span>
 <span class="source-line-no">1101</span><span id="line-1101">    * &lt;p&gt;Any object that can be converted to a List, including:&lt;/p&gt;</span>
 <span class="source-line-no">1102</span><span id="line-1102">    * &lt;ul&gt;</span>
 <span class="source-line-no">1103</span><span id="line-1103">    *    &lt;li&gt;Collections (List, Set, Queue, etc.)&lt;/li&gt;</span>
@@ -1120,7 +1120,7 @@
 <span class="source-line-no">1107</span><span id="line-1107">    *    &lt;li&gt;Optional objects&lt;/li&gt;</span>
 <span class="source-line-no">1108</span><span id="line-1108">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1109</span><span id="line-1109">    *</span>
-<span class="source-line-no">1110</span><span id="line-1110">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1110</span><span id="line-1110">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1111</span><span id="line-1111">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1112</span><span id="line-1112">    *    &lt;jc&gt;// Test non-empty collections&lt;/jc&gt;</span>
 <span class="source-line-no">1113</span><span id="line-1113">    *    &lt;jsm&gt;assertNotEmpty&lt;/jsm&gt;(List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"item1"&lt;/js&gt;, &lt;js&gt;"item2"&lt;/js&gt;));</span>
@@ -1171,7 +1171,7 @@
 <span class="source-line-no">1158</span><span id="line-1158">    *    &lt;li&gt;&lt;b&gt;Collection-like objects:&lt;/b&gt; Any object that can be converted to a List via the underlying converter&lt;/li&gt;</span>
 <span class="source-line-no">1159</span><span id="line-1159">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1160</span><span id="line-1160">    *</span>
-<span class="source-line-no">1161</span><span id="line-1161">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1161</span><span id="line-1161">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1162</span><span id="line-1162">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1163</span><span id="line-1163">    *    &lt;jc&gt;// Test string length&lt;/jc&gt;</span>
 <span class="source-line-no">1164</span><span id="line-1164">    *    &lt;jsm&gt;assertSize&lt;/jsm&gt;(5, &lt;js&gt;"hello"&lt;/js&gt;);</span>
@@ -1215,7 +1215,7 @@
 <span class="source-line-no">1202</span><span id="line-1202">    * {@link BeanConverter} and performs an exact equality comparison with the expected string.</span>
 <span class="source-line-no">1203</span><span id="line-1203">    * This is useful for testing complete string output, formatted objects, or converted values.&lt;/p&gt;</span>
 <span class="source-line-no">1204</span><span id="line-1204">    *</span>
-<span class="source-line-no">1205</span><span id="line-1205">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1205</span><span id="line-1205">    * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1206</span><span id="line-1206">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1207</span><span id="line-1207">    *    &lt;jc&gt;// Test exact string conversion&lt;/jc&gt;</span>
 <span class="source-line-no">1208</span><span id="line-1208">    *    &lt;jsm&gt;assertString&lt;/jsm&gt;(&lt;js&gt;"John,30,true"&lt;/js&gt;, &lt;jv&gt;user&lt;/jv&gt;); &lt;jc&gt;// Assuming user converts to this format&lt;/jc&gt;</span>

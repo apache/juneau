@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
    <li class='jm'><a href="#of(java.lang.Class)"><code>of(Class)</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Bean with builder pattern</jc>
    <jk>public class</jk> MyBean {
@@ -154,7 +153,7 @@ loadScripts(document, 'script');</script>
       .run();
  </p>
 
- <h5 class='section'>Bean Creation Order:</h5>
+ <h2 class='section'>Bean Creation Order:</h2>
  <p>
  The creator attempts to instantiate beans in the following order:
  <ol class='spaced-list'>
@@ -177,7 +176,7 @@ loadScripts(document, 'script');</script>
       </ol>
  </ol>
 
- <h5 class='section'>Builder Detection:</h5>
+ <h2 class='section'>Builder Detection:</h2>
  <p>
  Builders are detected in the following priority order:
  <ol class='spaced-list'>
@@ -192,7 +191,7 @@ loadScripts(document, 'script');</script>
       </ul>
  </ol>
 
- <h5 class='section'>Dependency Injection:</h5>
+ <h2 class='section'>Dependency Injection:</h2>
  <p>
  Both builder instances and the final bean have automatic dependency injection performed via
  <a href="../reflect/ClassInfo.html#inject(T,org.apache.juneau.commons.inject.BeanStore)"><code>ClassInfo.inject(Object, BeanStore)</code></a>, which processes <code>@Inject</code> and <code>@Autowired</code> annotations
@@ -202,7 +201,7 @@ loadScripts(document, 'script');</script>
  This means that after a bean is created, all of its fields and methods annotated with <code>@Inject</code> or <code>@Autowired</code>
  will automatically be populated with beans from the bean store.
 
- <h5 class='section'>Caching:</h5>
+ <h2 class='section'>Caching:</h2>
  <p>
  By default, each call to <a href="#run()"><code>run()</code></a> creates a new bean instance. To enable caching, call <a href="BeanInstantiator.Builder.html#cached()"><code>BeanInstantiator.Builder.cached()</code></a>.
  When caching is enabled, bean instances are cached using <a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function"><code>Memoizer</code></a>, so multiple calls to <a href="#run()"><code>run()</code></a>
@@ -210,14 +209,14 @@ loadScripts(document, 'script');</script>
  <a href="BeanInstantiator.Builder.html#impl(T)"><code>BeanInstantiator.Builder.impl(Object)</code></a> and explicit builder instances set via <a href="BeanInstantiator.Builder.html#builder(java.lang.Object)"><code>BeanInstantiator.Builder.builder(Object)</code></a> are preserved
  across resets.
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  Configuration is performed on the inner <a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator.Builder</code></a> which is <b>not</b> thread-safe. Configure on a single
  thread, then call <a href="BeanInstantiator.Builder.html#build()"><code>BeanInstantiator.Builder.build()</code></a> to produce an immutable <a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a> that is safe for
  shared concurrent use. The <a href="BeanInstantiator.Builder.html#run()"><code>BeanInstantiator.Builder.run()</code></a> shorthand is equivalent to <code>build().run()</code> and is
  appropriate for one-shot bean creation from a single thread.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>Builders must have a <c>build()</c>, <c>create()</c>, or <c>get()</c> method that returns the bean type.
       This method is required - constructors accepting builders are no longer supported.
    <li class='note'>The builder's <c>build()</c>/<c>create()</c>/<c>get()</c> method may have <c>@Inject</c> or <c>@Autowired</c>
@@ -230,7 +229,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>Deprecated and <a class="doclink" href="https://juneau.apache.org/site/apidocs/org/apache/juneau/commons/bean/BeanIgnore.html">@BeanIgnore</a>-annotated methods/constructors are ignored.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a>
  </ul></div>
 </section>

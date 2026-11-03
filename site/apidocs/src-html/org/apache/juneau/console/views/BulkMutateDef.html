@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26"> * The bulk-mutate opt-in for a {@link ViewTable} &amp;mdash; the second, INDEPENDENT half of the row-selection /</span>
 <span class="source-line-no">027</span><span id="line-27"> * bulk-mutate separability guarantee.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Two required parameters make it structurally, not conventionally, safe&lt;/h5&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='section'&gt;Two required parameters make it structurally, not conventionally, safe&lt;/h2&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * There is no zero-argument (or permit-less) way to obtain a {@link BulkMutateDef}: {@link #create(WritePermit,</span>
 <span class="source-line-no">032</span><span id="line-32"> * SelectionDef)} takes both a {@link WritePermit} &lt;b&gt;and&lt;/b&gt; the {@link SelectionDef} it operates against as</span>
@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> *       references) bulk-mutate &amp;mdash; so enabling selection alone can never surface a bulk-mutate control.</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Reuses {@link RowAction} and {@link ActionResult} verbatim &amp;mdash; N per-row writes, per-target results&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Reuses {@link RowAction} and {@link ActionResult} verbatim &amp;mdash; N per-row writes, per-target results&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * A bulk action is declared as an ordinary {@link RowAction} (the {@link RowAction} wire schema is completely</span>
 <span class="source-line-no">049</span><span id="line-49"> * untouched by this type); {@code juneau-views.js} executes a bulk action as N independent, per-row invocations</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> * {@code data-juneau-inflight} marker clears on ITS OWN terminal outcome (success/failure/refusal/unknown) so a</span>
 <span class="source-line-no">056</span><span id="line-56"> * stuck marker on one target can never halt the whole table's polling.</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Its own, independent contract version&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Its own, independent contract version&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * Unlike {@link SelectionDef} (which is pure DOM attributes, never wire data), a bulk action LIST is itself wire</span>
 <span class="source-line-no">061</span><span id="line-61"> * data the client must parse &amp;mdash; so it travels as its own JSON sidecar (distinct from the {@code VIEW_META}</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> * {@link WritePermit} carried by this builder is a server-side-only construction guard and is &lt;b&gt;never&lt;/b&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * serialized &amp;mdash; only {@link #contractVersion} and {@link #actions} reach the wire.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    SelectionDef &lt;jv&gt;selection&lt;/jv&gt; = SelectionDef.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"id"&lt;/js&gt;);</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;jc&gt;// Requires a permit the CALLER's own write-gate has already minted, and the selection it targets.&lt;/jc&gt;</span>
@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75"> *          .endpoint(&lt;js&gt;"servlet:/incidents/ack"&lt;/js&gt;).method(RowAction.Method.&lt;jsf&gt;POST&lt;/jsf&gt;));</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;/p&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> * &lt;ul&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link SelectionDef}</span>
 <span class="source-line-no">081</span><span id="line-81"> *    &lt;li class='jc'&gt;{@link WritePermit}</span>

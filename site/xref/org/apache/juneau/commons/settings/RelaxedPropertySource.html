@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * environment variable such as {@code MY_SECTION_MY_KEY} satisfy a lookup for {@code MySection/myKey}, or</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * {@code MY_PROP} satisfy {@code my.prop} / {@code myProp}.</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Candidate order&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Candidate order&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The requested name is always tried &lt;b&gt;verbatim first&lt;/b&gt;, so exact-match behavior is preserved unchanged (an</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * already-canonical key resolves with no transformation, and a source that defines the literal name wins).  Only on a</em>
@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * logical key and the decorator generates the environment-convention spellings to probe.  It never tries to reverse a</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * flat env name back into a {@code section/key} pair.</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Wrap the system-env source so env vars bind relaxedly.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;settings&lt;/jv&gt; = Settings.&lt;jsm&gt;create&lt;/jsm&gt;().addSource(&lt;jk&gt;new&lt;/jk&gt; RelaxedPropertySource(Settings.&lt;jsf&gt;SYSTEM_ENV_SOURCE&lt;/jsf&gt;)).build();</em>

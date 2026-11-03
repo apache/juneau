@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  When multiple traversal types are specified, they are automatically sorted by their precedence
  to ensure consistent behavior regardless of the order they are specified.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// These produce the same result (automatically sorted by precedence):</jc>
    Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> = 
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
       annotationProvider.streamClassAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF, PARENTS, PACKAGE);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect"><code>AnnotationProvider</code></a>
    <li class='jm'><a href="AnnotationProvider.html#find(java.lang.Class,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>AnnotationProvider.find(Class, ClassInfo, AnnotationTraversal...)</code></a>
    <li class='jm'><a href="AnnotationProvider.html#find(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>AnnotationProvider.find(Class, MethodInfo, AnnotationTraversal...)</code></a>
@@ -228,10 +227,10 @@ the order they are declared.</div>
  <p>
  This searches for annotations directly declared on the target element.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  All element types (classes, methods, fields, constructors, parameters).
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 10 (highest - searched first)</div>
 </section>
 </li>
@@ -246,16 +245,16 @@ the order they are declared.</div>
  interleaved in child-to-parent order (using <a href="ClassInfo.html#getParentsAndInterfaces()"><code>ClassInfo.getParentsAndInterfaces()</code></a>).
  Default order is child-to-parent unless <a href="#REVERSE"><code>REVERSE</code></a> is specified.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Classes.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Given: class Child extends Parent implements Interface</jc>
    <jc>// Traverses parents and interfaces interleaved: Parent → Interface → GrandParent → ...</jc>
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 20</div>
 </section>
 </li>
@@ -269,10 +268,10 @@ the order they are declared.</div>
  For methods: Searches annotations on methods with the same signature in parent classes and interfaces.
  This finds annotations on overridden methods.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Methods.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Given:</jc>
    <jk>class</jk> Parent {
@@ -285,7 +284,7 @@ the order they are declared.</div>
    }
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 20</div>
 </section>
 </li>
@@ -299,10 +298,10 @@ the order they are declared.</div>
  For parameters: Searches annotations on parameters in matching parent methods or constructors.
  This finds annotations on parameters in overridden methods or parent constructors.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Parameters.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Given:</jc>
    <jk>class</jk> Parent {
@@ -314,7 +313,7 @@ the order they are declared.</div>
    }
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 20</div>
 </section>
 </li>
@@ -328,16 +327,16 @@ the order they are declared.</div>
  For methods: Searches annotations on the method's return type and its hierarchy.
  Automatically includes <a href="#PARENTS"><code>PARENTS</code></a> of the return type.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Methods.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Given: public MyClass myMethod() {...}</jc>
    <jc>// Searches: MyClass hierarchy and its interfaces</jc>
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 30</div>
 </section>
 </li>
@@ -351,16 +350,16 @@ the order they are declared.</div>
  For methods, fields, and constructors: Searches annotations on the declaring class and its parent hierarchy.
  Automatically includes the declaring class and all its parents and interfaces.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Methods, fields, and constructors.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Given: class Child extends Parent { void method() {...} }</jc>
    <jc>// Searches: Child hierarchy (Child, Parent, interfaces, etc.)</jc>
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 35</div>
 </section>
 </li>
@@ -374,16 +373,16 @@ the order they are declared.</div>
  For parameters: Searches annotations on the parameter's type and its hierarchy.
  Automatically includes <a href="#PARENTS"><code>PARENTS</code></a> and <a href="#PACKAGE"><code>PACKAGE</code></a> of the parameter type.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Parameters.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Given: void method(MyClass param) {...}</jc>
    <jc>// Searches: MyClass hierarchy, its interfaces, and package</jc>
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 30</div>
 </section>
 </li>
@@ -396,15 +395,15 @@ the order they are declared.</div>
  <p>
  Searches for annotations on the package-info class.
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  Classes and parameters (via <a href="#PARAMETER_TYPE"><code>PARAMETER_TYPE</code></a>).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Searches annotations in package-info.java</jc>
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 40 (lowest - searched last)</div>
 </section>
 </li>
@@ -422,10 +421,10 @@ the order they are declared.</div>
  By default, traversals return results in child-to-parent order (child annotations first).
  Using <code>REVERSE</code> changes this to parent-to-child order (parent annotations first).
 
- <h5 class='section'>Applicable to:</h5>
+ <h4 class='section'>Applicable to:</h4>
  All stream-based traversal methods.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Default (child-first): Child → Parent → GrandParent</jc>
    Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> = 
@@ -436,7 +435,7 @@ the order they are declared.</div>
       streamClassAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, PARENTS, REVERSE);
  </p>
 
- <h5 class='section'>Order:</h5>
+ <h4 class='section'>Order:</h4>
  Precedence: 999 (modifier - does not affect traversal order)</div>
 </section>
 </li>

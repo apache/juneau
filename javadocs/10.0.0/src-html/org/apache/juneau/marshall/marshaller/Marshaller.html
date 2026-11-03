@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> *    The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='figure'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;jc&gt;// Using instance.&lt;/jc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37">    *    Marshaller &lt;jv&gt;json&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Json();</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    String &lt;jv&gt;string&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers"&gt;Marshallers&lt;/a&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;/ul&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> */</span>
@@ -103,7 +103,7 @@
 <span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;</span>
 <span class="source-line-no">091</span><span id="line-91">    * This is the preferred parse method for simple types since you don't need to cast the results.</span>
 <span class="source-line-no">092</span><span id="line-92">    *</span>
-<span class="source-line-no">093</span><span id="line-93">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">093</span><span id="line-93">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">094</span><span id="line-94">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">095</span><span id="line-95">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt;  = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
 <span class="source-line-no">096</span><span id="line-96">    *</span>
@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">    * &lt;p&gt;</span>
 <span class="source-line-no">148</span><span id="line-148">    * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).</span>
 <span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">151</span><span id="line-151">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">152</span><span id="line-152">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt; = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
 <span class="source-line-no">153</span><span id="line-153">    *</span>
@@ -189,7 +189,7 @@
 <span class="source-line-no">176</span><span id="line-176">    * &lt;p&gt;</span>
 <span class="source-line-no">177</span><span id="line-177">    * The array can be arbitrarily long to indicate arbitrarily complex data structures.</span>
 <span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">180</span><span id="line-180">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">181</span><span id="line-181">    *       Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.</span>
 <span class="source-line-no">182</span><span id="line-182">    * &lt;/ul&gt;</span>
@@ -267,7 +267,7 @@
 <span class="source-line-no">254</span><span id="line-254">    * Shortcut for &lt;c&gt;((TokenReadable)getParser()).readTokens(&lt;jv&gt;input&lt;/jv&gt;)&lt;/c&gt;.  See</span>
 <span class="source-line-no">255</span><span id="line-255">    * {@link TokenReader} for the cursor contract.</span>
 <span class="source-line-no">256</span><span id="line-256">    *</span>
-<span class="source-line-no">257</span><span id="line-257">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">257</span><span id="line-257">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">258</span><span id="line-258">    *    &lt;li class='note'&gt;This capability depends on the underlying parser.  Formats whose parser</span>
 <span class="source-line-no">259</span><span id="line-259">    *       does not implement {@link TokenReadable} (the structural-token role) yield a</span>
 <span class="source-line-no">260</span><span id="line-260">    *       {@link ClassCastException}.</span>
@@ -289,7 +289,7 @@
 <span class="source-line-no">276</span><span id="line-276">    * Shortcut for &lt;c&gt;((TokenWritable)getSerializer()).writeTokens(&lt;jv&gt;output&lt;/jv&gt;)&lt;/c&gt;.  See</span>
 <span class="source-line-no">277</span><span id="line-277">    * {@link TokenWriter} for the generator contract.</span>
 <span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">279</span><span id="line-279">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">280</span><span id="line-280">    *    &lt;li class='note'&gt;This capability depends on the underlying serializer.  Formats whose</span>
 <span class="source-line-no">281</span><span id="line-281">    *       serializer does not implement {@link TokenWritable} (the structural-token role) yield a</span>
 <span class="source-line-no">282</span><span id="line-282">    *       {@link ClassCastException}.</span>
@@ -311,7 +311,7 @@
 <span class="source-line-no">298</span><span id="line-298">    * Shortcut for &lt;c&gt;((RecordReadable)getParser()).readRecords(&lt;jv&gt;input&lt;/jv&gt;)&lt;/c&gt;.  See</span>
 <span class="source-line-no">299</span><span id="line-299">    * {@link RecordReader} for the cursor contract.</span>
 <span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">302</span><span id="line-302">    *    &lt;li class='note'&gt;This capability depends on the underlying parser.  Formats whose parser</span>
 <span class="source-line-no">303</span><span id="line-303">    *       does not implement {@link RecordReadable} yield a {@link ClassCastException}.</span>
 <span class="source-line-no">304</span><span id="line-304">    * &lt;/ul&gt;</span>
@@ -332,7 +332,7 @@
 <span class="source-line-no">319</span><span id="line-319">    * Shortcut for &lt;c&gt;((RecordWritable)getSerializer()).writeRecords(&lt;jv&gt;output&lt;/jv&gt;)&lt;/c&gt;.  See</span>
 <span class="source-line-no">320</span><span id="line-320">    * {@link RecordWriter} for the cursor contract.</span>
 <span class="source-line-no">321</span><span id="line-321">    *</span>
-<span class="source-line-no">322</span><span id="line-322">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">322</span><span id="line-322">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">323</span><span id="line-323">    *    &lt;li class='note'&gt;This capability depends on the underlying serializer.  Formats whose</span>
 <span class="source-line-no">324</span><span id="line-324">    *       serializer does not implement {@link RecordWritable} yield a {@link ClassCastException}.</span>
 <span class="source-line-no">325</span><span id="line-325">    * &lt;/ul&gt;</span>
@@ -353,7 +353,7 @@
 <span class="source-line-no">340</span><span id="line-340">    * &lt;p&gt;</span>
 <span class="source-line-no">341</span><span id="line-341">    * Shortcut for &lt;c&gt;((ArrayRecordReadable)getParser()).readArrayRecords(&lt;jv&gt;input&lt;/jv&gt;)&lt;/c&gt;.</span>
 <span class="source-line-no">342</span><span id="line-342">    *</span>
-<span class="source-line-no">343</span><span id="line-343">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">343</span><span id="line-343">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">344</span><span id="line-344">    *    &lt;li class='note'&gt;This capability depends on the underlying parser.  Formats whose parser</span>
 <span class="source-line-no">345</span><span id="line-345">    *       does not implement {@link ArrayRecordReadable} yield a {@link ClassCastException}.</span>
 <span class="source-line-no">346</span><span id="line-346">    * &lt;/ul&gt;</span>
@@ -374,7 +374,7 @@
 <span class="source-line-no">361</span><span id="line-361">    * &lt;p&gt;</span>
 <span class="source-line-no">362</span><span id="line-362">    * Shortcut for &lt;c&gt;((ArrayRecordWritable)getSerializer()).writeArrayRecords(&lt;jv&gt;output&lt;/jv&gt;)&lt;/c&gt;.</span>
 <span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">364</span><span id="line-364">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">365</span><span id="line-365">    *    &lt;li class='note'&gt;This capability depends on the underlying serializer.  Formats whose</span>
 <span class="source-line-no">366</span><span id="line-366">    *       serializer does not implement {@link ArrayRecordWritable} yield a</span>
 <span class="source-line-no">367</span><span id="line-367">    *       {@link ClassCastException}.</span>

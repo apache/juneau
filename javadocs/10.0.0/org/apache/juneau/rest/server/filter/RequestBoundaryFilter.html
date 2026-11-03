@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ implements jakarta.servlet.Filter</span></div>
 <div class="block">Applies a <a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter"><code>RequestBoundary</code></a> to every request reaching the servlet container, rejecting those that did not
  come from a page this application served.
 
- <h5 class='section'>Why a servlet filter, and not a mixin or a guard</h5>
+ <h2 class='section'>Why a servlet filter, and not a mixin or a guard</h2>
  <p>
  The boundary's value depends entirely on there being no way around it, and the two lighter-weight Juneau
  mechanisms both leave one:
@@ -110,7 +109,7 @@ implements jakarta.servlet.Filter</span></div>
  resolve to nothing and would 404.  Nothing can opt out by omission, which is the property that makes it worth
  having.
 
- <h5 class='section'>Rejection behavior</h5>
+ <h2 class='section'>Rejection behavior</h2>
  <p>
  A rejected request is answered directly and the chain is not invoked, so the request never reaches application
  code.  The response carries the boundary's chosen status, a <a href="#REJECTION_HEADER">"X-Request-Boundary"</a> header naming the
@@ -122,7 +121,7 @@ implements jakarta.servlet.Filter</span></div>
  the application being reached at <code>localhost</code> when it accepts <code>127.0.0.1</code>, say &mdash; is immediately
  diagnosable instead of presenting as an inexplicably broken page.
 
- <h5 class='section'>Token availability to the page renderer</h5>
+ <h2 class='section'>Token availability to the page renderer</h2>
  <p>
  On an allowed request the boundary's <a href="RequestBoundary.html#tokenFor(jakarta.servlet.http.HttpServletRequest)"><code>token for that request</code></a>
  is placed under the <a href="#TOKEN_ATTRIBUTE"><code>TOKEN_ATTRIBUTE</code></a> request attribute, and the header name it must be sent back under is
@@ -140,7 +139,7 @@ implements jakarta.servlet.Filter</span></div>
  that writes the token calls <a href="#markTokenBearing(jakarta.servlet.http.HttpServletResponse)"><code>markTokenBearing(HttpServletResponse)</code></a> before it writes any of the body; this
  filter cannot know which responses embed it.
 
- <h5 class='section'>Sessions</h5>
+ <h2 class='section'>Sessions</h2>
  <p>
  A <a href="CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a> with a <a href="CsrfTokens.html#perSession()">per-session</a> token needs the session to exist
  before the page is written, or the page carries a token that verifies against nothing.  The boundary itself never
@@ -158,7 +157,7 @@ implements jakarta.servlet.Filter</span></div>
  for HTML, Juneau's own HTML REST pages included, does.  The filter never changes a session id and never sets cookie
  attributes; those stay the application's (see <a href="CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a>).
 
- <h5 class='section'>Registration: order and dispatcher types</h5>
+ <h2 class='section'>Registration: order and dispatcher types</h2>
  <p>
  Map the filter at <code>/*</code> so nothing can be reached around it.  Register it ahead of any filter that acts on the
  request on the application's behalf.  A <a href="CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a> using
@@ -179,7 +178,7 @@ implements jakarta.servlet.Filter</span></div>
  <code>null</code> dispatcher set in <code>addMappingForUrlPatterns</code>, or Spring Boot's <code>FilterRegistrationBean</code>
  default) is <code>REQUEST</code> only.
 
- <h5 class='section'>Example (Spring Boot):</h5>
+ <h2 class='section'>Example (Spring Boot):</h2>
  <p class='bjava'>
    <ja>@Bean</ja>
    <jk>public</jk> FilterRegistrationBean&lt;RequestBoundaryFilter&gt; boundary(RequestBoundary <jv>b</jv>) {
@@ -190,7 +189,7 @@ implements jakarta.servlet.Filter</span></div>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jic'><a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter"><code>RequestBoundary</code></a>
    <li class='jc'><a href="LoopbackBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundaryFilter</code></a>
  </ul></div>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  directives; <a href="#directive(java.lang.String,java.lang.String...)"><code>directive(String, String...)</code></a> is a generic escape hatch so new directives never require an API
  change.  Setting the same directive more than once <b>replaces</b> the previous source list.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    String <jv>value</jv> = ContentSecurityPolicy.<jsm>create</jsm>()
       .defaultSrc(<jsf>SELF</jsf>)
@@ -103,14 +102,14 @@ loadScripts(document, 'script');</script>
    <jc>// =&gt; "default-src 'self'; img-src 'self' data:; object-src 'none'"</jc>
  </p>
 
- <h5 class='section'>Nonces:</h5>
+ <h2 class='section'>Nonces:</h2>
  <p>
  Source helper <a href="#nonce(java.lang.String)"><code>nonce(String)</code></a> renders a <c>'nonce-&lt;token&gt;'</c> source expression.  For per-request
  nonces (where the actual token is not known until the response is rendered), use <a href="#NONCE_PLACEHOLDER"><code>NONCE_PLACEHOLDER</code></a> as the
  token and have the REST layer rewrite it per-response via <a href="#resolveNonce(java.lang.String,java.lang.String)"><code>resolveNonce(String, String)</code></a>; the same nonce is
  then stamped onto the inline <c>&lt;script&gt;</c>/<c>&lt;style&gt;</c> tags the serializer emits.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ContentSecurityPolicy.html" title="class in org.apache.juneau.http.header"><code>ContentSecurityPolicy</code></a>
    <li class='extlink'><a class='doclink' href='https://www.w3.org/TR/CSP3/'>Content Security Policy Level 3 (W3C WD)</a>
  </ul></div>

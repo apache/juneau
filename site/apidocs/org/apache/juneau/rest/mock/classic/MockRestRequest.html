@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,11 +94,11 @@ loadScripts(document, 'script');</script>
  <p>
  Instances of this class are instantiated through methods on <a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic"><code>MockRestClient</code></a> such as <a href="MockRestClient.html#post(java.lang.Object,java.lang.Object)"><code>MockRestClient.post(Object,Object)</code></a>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock</a>
  </ul></div>
 </section>
@@ -1277,7 +1276,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#formData(org.apache.http.NameValuePair...)">RestRequest</a></code></span></div>
 <div class="block">Appends multiple form-data parameters to the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Appends two form-data parameters to the request.</jc>
    <jv>client</jv>
@@ -1307,7 +1306,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#formData(java.lang.String,java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Adds a form-data parameter to the request body.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds form data parameter "foo=bar".</jc>
    <jv>client</jv>
@@ -1336,7 +1335,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#formDataBean(java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Appends multiple form-data parameters to the request from properties defined on a Java bean.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyFormData {
       <jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
@@ -1367,7 +1366,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#formDataCustom(java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Adds form-data parameters as the entire body of the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Creates form data "foo=bar&amp;baz=qux".</jc>
    <jv>client</jv>
@@ -1424,7 +1423,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#formDataPairs(java.lang.String...)">RestRequest</a></code></span></div>
 <div class="block">Adds form-data parameters to the request body using free-form key/value pairs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Creates form data "key1=val1&amp;key2=val2".</jc>
    <jv>client</jv>
@@ -1786,7 +1785,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#header(org.apache.http.Header)">RestRequest</a></code></span></div>
 <div class="block">Appends a header to the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds header "Foo: bar".</jc>
    <jv>client</jv>
@@ -1813,7 +1812,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#header(java.lang.String,java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Appends a header to the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds header "Foo: bar".</jc>
    <jv>client</jv>
@@ -1840,7 +1839,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#headerPairs(java.lang.String...)">RestRequest</a></code></span></div>
 <div class="block">Appends multiple headers to the request using freeform key/value pairs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
    <jv>client</jv>
@@ -1869,7 +1868,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#headers(org.apache.http.Header...)">RestRequest</a></code></span></div>
 <div class="block">Appends multiple headers to the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Appends two headers to the request.</jc>
    <jv>client</jv>
@@ -1901,7 +1900,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../../../commons/bean/PropertyNamerDUCS.html" title="class in org.apache.juneau.commons.bean"><code>PropertyNamerDUCS</code></a> for resolving the header names from property names.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Marshalled</ja>
    <jk>public class</jk> MyHeaders {
@@ -2459,7 +2458,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#pathData(org.apache.http.NameValuePair...)">RestRequest</a></code></span></div>
 <div class="block">Sets or replaces multiple path parameters on the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Appends two path parameters to the request.</jc>
    <jv>client</jv>
@@ -2489,7 +2488,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#pathData(java.lang.String,java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Sets or replaces a path parameter of the form <js>"{name}"</js> in the URI.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Sets path to "/bar".</jc>
    <jv>client</jv>
@@ -2518,7 +2517,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#pathDataBean(java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Sets multiple path parameters to the request from properties defined on a Java bean.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyPathVars {
       <jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
@@ -2549,7 +2548,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#pathDataPairs(java.lang.String...)">RestRequest</a></code></span></div>
 <div class="block">Replaces path parameters of the form <js>"{name}"</js> in the URI using free-form key/value pairs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Sets path to "/baz/qux".</jc>
    <jv>client</jv>
@@ -2839,7 +2838,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#queryCustom(java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Adds a free-form custom query.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds query parameter "foo=bar&amp;baz=qux".</jc>
    <jv>client</jv>
@@ -2876,7 +2875,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#queryData(org.apache.http.NameValuePair...)">RestRequest</a></code></span></div>
 <div class="block">Appends multiple query parameters to the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Appends two query parameters to the request.</jc>
    <jv>client</jv>
@@ -2906,7 +2905,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#queryData(java.lang.String,java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Appends a query parameter to the URI of the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds query parameter "foo=bar".</jc>
    <jv>client</jv>
@@ -2935,7 +2934,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#queryDataBean(java.lang.Object)">RestRequest</a></code></span></div>
 <div class="block">Appends multiple query parameters to the request from properties defined on a Java bean.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyQuery {
       <jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
@@ -2967,7 +2966,7 @@ loadScripts(document, 'script');</script>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestRequest.html#queryDataPairs(java.lang.String...)">RestRequest</a></code></span></div>
 <div class="block">Adds query parameters to the URI query using free-form key/value pairs..
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Adds query parameters "foo=bar&amp;baz=qux".</jc>
    <jv>client</jv>

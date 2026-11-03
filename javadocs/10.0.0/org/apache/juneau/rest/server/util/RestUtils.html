@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -195,7 +194,7 @@ loadScripts(document, 'script');</script>
  This is useful when processing input that could be either a JSON value or a plain string,
  such as configuration values or user input that may or may not be JSON-encoded.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// JSON object is parsed</jc>
    Object <jv>result1</jv> = parseIfJson(<js>"{\"name\":\"John\"}"</js>);
@@ -240,7 +239,7 @@ loadScripts(document, 'script');</script>
    <li>Multiple occurrences of the same key append values to the list</li>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<js>"f1=v1&amp;f2=v2&amp;f1=v3"</js>);
    <jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1, v3]</jc>
@@ -273,7 +272,7 @@ loadScripts(document, 'script');</script>
    <li>Multiple occurrences of the same key append values to the list</li>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Parse from a reader</jc>
    Reader <jv>reader</jv> = <jk>new</jk> StringReader(<js>"f1=v1&amp;f2=v2"</js>);

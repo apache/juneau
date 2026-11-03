@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  and other attributes (synthetic, deprecated, etc.) that can be present on program elements. Each modifier has both
  a positive flag (e.g., <c>PUBLIC</c>) and a negated flag (e.g., <c>NOT_PUBLIC</c>) for convenient filtering.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Java modifiers - all standard Java modifiers (public, private, protected, static, final, etc.)
    <li>Negated flags - each modifier has a corresponding NOT_* flag for filtering
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
    <li>Type attributes - flags for identifying classes, interfaces, enums, records, annotations
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Filtering classes, methods, fields by modifiers
    <li>Identifying special attributes (synthetic, deprecated, bridge methods)
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
    <li>Building frameworks that need to analyze program element characteristics
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Check if a class is public</jc>
    ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -125,20 +124,20 @@ loadScripts(document, 'script');</script>
    <jk>boolean</jk> <jv>isDeprecated</jv> = <jv>method</jv>.hasFlag(ElementFlag.DEPRECATED);
  </p>
 
- <h5 class='section'>Modifier Flags:</h5>
+ <h2 class='section'>Modifier Flags:</h2>
  <p>
  Standard Java modifiers: <c>PUBLIC</c>, <c>PRIVATE</c>, <c>PROTECTED</c>, <c>STATIC</c>, <c>FINAL</c>,
  <c>SYNCHRONIZED</c>, <c>VOLATILE</c>, <c>TRANSIENT</c>, <c>NATIVE</c>, <c>ABSTRACT</c>.
  Each has a corresponding <c>NOT_*</c> flag.
 
- <h5 class='section'>Attribute Flags:</h5>
+ <h2 class='section'>Attribute Flags:</h2>
  <p>
  Non-modifier attributes: <c>ANNOTATION</c>, <c>ANONYMOUS</c>, <c>ARRAY</c>, <c>BRIDGE</c>, <c>CLASS</c>,
  <c>CONSTRUCTOR</c>, <c>DEFAULT</c>, <c>DEPRECATED</c>, <c>ENUM</c>, <c>ENUM_CONSTANT</c>, <c>HAS_PARAMS</c>,
  <c>LOCAL</c>, <c>MEMBER</c>, <c>NON_STATIC_MEMBER</c>, <c>PRIMITIVE</c>, <c>RECORD</c>, <c>SEALED</c>,
  <c>SYNTHETIC</c>, <c>VARARGS</c>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ElementInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ElementInfo</code></a> - Base class that uses these flags
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  </ul></div>

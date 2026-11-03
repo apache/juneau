@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,7 +96,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
  raw-JSP path) can add this class to their own
  <a href="../../Rest.html#responseProcessors()"><code>responseProcessors</code></a> list.
 
- <h5 class='section'>Behavior:</h5>
+ <h2 class='section'>Behavior:</h2>
 
  <ol class='spaced-list'>
    <li>Inspect the response content. If the value is not a <a href="JspView.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspView</code></a>, return
@@ -117,7 +116,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
       missing dependency and linking to the "Choosing a JSP engine" matrix.
  </ol>
 
- <h5 class='section'>Note on <code>forward()</code>:</h5>
+ <h2 class='section'>Note on <code>forward()</code>:</h2>
 
  <p>
  <code>forward()</code> resets the response output stream.
@@ -126,7 +125,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
  malformed output. The renderer runs at response-resolution time so this is rarely hit by
  accident; document the constraint for any user relying on <code>RestPreCall</code>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="JspMixin.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspMixin</code></a>
    <li class='jc'><a href="JspView.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspView</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>

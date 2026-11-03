@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,11 +98,11 @@ loadScripts(document, 'script');</script>
 implements <a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream">TokenReadable</a>, <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="JsonParser.html" title="class in org.apache.juneau.marshall.json"><code>JsonParser</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe and is typically discarded after one use.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
 
  </ul></div>
@@ -504,12 +503,12 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  The cursor is purely structural &mdash; object swaps and <code>@Schema</code> annotations are not
  applied at this layer.  See <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> for the contract.
 
- <h5 class='section'>Builder properties honored:</h5>
+ <h4 class='section'>Builder properties honored:</h4>
  The structurally-applicable subset flows through to the cursor: <c>autoCloseStreams</c>,
  <c>unbuffered</c>, <c>trimStrings</c> (applied to <a href="../stream/TokenType.html#VALUE_STRING"><code>TokenType.VALUE_STRING</code></a> and
  <a href="../stream/TokenType.html#FIELD_NAME"><code>TokenType.FIELD_NAME</code></a> values), and the <code>ReaderParser</code> stream/file charsets.
 
- <h5 class='section'>Builder properties NOT honored:</h5>
+ <h4 class='section'>Builder properties NOT honored:</h4>
  <c>validateEnd()</c> (the cursor leaves end-of-input checking to the caller),
  <c>listener(...)</c>/<c>debugOutputLines(...)</c>, <c>consumes(...)</c>, object swaps, and
  <code>@Schema</code> annotations (only applied on the POJO databind path).</div>

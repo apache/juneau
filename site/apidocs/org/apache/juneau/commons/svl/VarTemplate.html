@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  Templates are obtained via <a href="VarResolver.html#compile(java.lang.String)"><code>VarResolver.compile(String)</code></a> or
  <a href="VarResolverSession.html#compile(java.lang.String)"><code>VarResolverSession.compile(String)</code></a> — there is no public constructor.
 
- <h5 class='section'>Compile-binding contract:</h5>
+ <h2 class='section'>Compile-binding contract:</h2>
  <p>
  A compiled template is bound to the <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> instance it was compiled against. Cached
  <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> (and, in the future, <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a>) references are resolved at compile time.
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  resolver is undefined behavior. Rebuilding the resolver invalidates any compiled templates from
  the previous instance — caller's responsibility to re-compile.
 
- <h5 class='section'>Threadsafety:</h5>
+ <h2 class='section'>Threadsafety:</h2>
  <p>
  <a href="VarTemplate.html" title="class in org.apache.juneau.commons.svl"><code>VarTemplate</code></a> instances are immutable and threadsafe — the same template can be safely
  shared across threads. Note that <a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a> is <b>not</b> threadsafe; the
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
  inherits the standard session-threadsafety contract. The <a href="#asSupplierWithFreshSessions(org.apache.juneau.commons.svl.VarResolver)"><code>asSupplierWithFreshSessions(VarResolver)</code></a>
  variant opens a fresh session per call and is safe to share across threads.
 
- <h5 class='section'>Which Supplier do I want?</h5>
+ <h2 class='section'>Which Supplier do I want?</h2>
  <ul>
    <li><a href="#asSupplierWithFreshSessions(org.apache.juneau.commons.svl.VarResolver)"><code>asSupplierWithFreshSessions(VarResolver)</code></a> — opens a fresh session per
       <code>.get()</code> call. Safe to share across threads. Use this for user-facing code,
@@ -119,7 +118,7 @@ loadScripts(document, 'script');</script>
       session lifecycle.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  </ul></div>
 </section>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,14 +92,14 @@ loadScripts(document, 'script');</script>
  <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a> (printf-style <js>"%s"</js>/<js>"%d"</js>) for
  lazy formatting. The message is only formatted when <a href="#getMessage()"><code>getMessage()</code></a> is actually called.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p>
  This class is used internally by <a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a> when logging formatted messages.
  The formatted message is only computed when the LogRecord's message is actually
  accessed (e.g., by a Handler or Formatter).
  </p>
 
- <h5 class='section'>Formatting contract:</h5>
+ <h2 class='section'>Formatting contract:</h2>
  <p>
  Juneau <a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a> patterns are <b>printf-style</b> (rendered here via <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>).
  Because this override returns the already-substituted message, downstream <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link"><code>Handlers</code></a> and
@@ -111,7 +110,7 @@ loadScripts(document, 'script');</script>
  <c>{0}</c> pattern, so printf patterns are not intended for that scenario.
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a>
    <li class='jc'><a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a>
@@ -291,7 +290,7 @@ loadScripts(document, 'script');</script>
    <li><c>thrown</c> - The throwable object (if any)
  </ol>
 
- <h5 class='section'>Named Placeholders:</h5>
+ <h4 class='section'>Named Placeholders:</h4>
  <ul>
    <li><js>"{date}"</js> - The date/time formatted using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/SimpleFormatter.html" title="class or interface in java.util.logging" class="external-link"><code>SimpleFormatter</code></a>'s default date format
    <li><js>"{timestamp}"</js> - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)
@@ -304,7 +303,7 @@ loadScripts(document, 'script');</script>
    <li><js>"{thrown}"</js> - The throwable object (if thrown)
  </ul>
 
- <h5 class='section'>Formatter-Style Format Specifiers:</h5>
+ <h4 class='section'>Formatter-Style Format Specifiers:</h4>
  <p>
  You can use <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" title="class or interface in java.util" class="external-link"><code>Formatter</code></a>-style format specifiers directly in the format string.
  The arguments are passed in the same order as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/SimpleFormatter.html" title="class or interface in java.util.logging" class="external-link"><code>SimpleFormatter</code></a>:
@@ -337,7 +336,7 @@ loadScripts(document, 'script');</script>
  <p>
  The format string can also contain <js>"%n"</js> for newlines.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    LogRecord <jv>record</jv> = <jk>new</jk> LogRecord(Level.INFO, <js>"User {0} logged in"</js>, <js>"John"</js>);
 

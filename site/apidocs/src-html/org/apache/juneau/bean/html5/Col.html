@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * and is typically used within a colgroup element to define column properties such as width, alignment,</span>
 <span class="source-line-no">030</span><span id="line-30"> * and styling.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
@@ -86,47 +86,46 @@
 <span class="source-line-no">073</span><span id="line-73"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#col() col()}</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;/ul&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;/p&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> *</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
-<span class="source-line-no">081</span><span id="line-81"> */</span>
-<span class="source-line-no">082</span><span id="line-82">@Marshalled(typeName = "col")</span>
-<span class="source-line-no">083</span><span id="line-83">public class Col extends HtmlElementVoid&lt;Col&gt; {</span>
-<span class="source-line-no">084</span><span id="line-84"></span>
-<span class="source-line-no">085</span><span id="line-85">   /**</span>
-<span class="source-line-no">086</span><span id="line-86">    * Creates an empty {@link Col} element.</span>
-<span class="source-line-no">087</span><span id="line-87">    */</span>
-<span class="source-line-no">088</span><span id="line-88">   public Col() {}</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   /**</span>
-<span class="source-line-no">091</span><span id="line-91">    * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.</span>
-<span class="source-line-no">092</span><span id="line-92">    *</span>
-<span class="source-line-no">093</span><span id="line-93">    * @param span The {@link Col#span(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">094</span><span id="line-94">    */</span>
-<span class="source-line-no">095</span><span id="line-95">   public Col(Number span) {</span>
-<span class="source-line-no">096</span><span id="line-96">      span(span);</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /**</span>
-<span class="source-line-no">100</span><span id="line-100">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-col-span"&gt;span&lt;/a&gt; attribute.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * &lt;p&gt;</span>
-<span class="source-line-no">103</span><span id="line-103">    * Number of columns spanned by the element.</span>
-<span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * @param value</span>
-<span class="source-line-no">106</span><span id="line-106">    *    The new value for this attribute.</span>
-<span class="source-line-no">107</span><span id="line-107">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">108</span><span id="line-108">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">109</span><span id="line-109">    * @return This object.</span>
-<span class="source-line-no">110</span><span id="line-110">    */</span>
-<span class="source-line-no">111</span><span id="line-111">   public Col span(Object value) {</span>
-<span class="source-line-no">112</span><span id="line-112">      attr("span", value);</span>
-<span class="source-line-no">113</span><span id="line-113">      return this;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">}</span>
+<span class="source-line-no">076</span><span id="line-76"> *</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> */</span>
+<span class="source-line-no">081</span><span id="line-81">@Marshalled(typeName = "col")</span>
+<span class="source-line-no">082</span><span id="line-82">public class Col extends HtmlElementVoid&lt;Col&gt; {</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Creates an empty {@link Col} element.</span>
+<span class="source-line-no">086</span><span id="line-86">    */</span>
+<span class="source-line-no">087</span><span id="line-87">   public Col() {}</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /**</span>
+<span class="source-line-no">090</span><span id="line-90">    * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.</span>
+<span class="source-line-no">091</span><span id="line-91">    *</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param span The {@link Col#span(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">093</span><span id="line-93">    */</span>
+<span class="source-line-no">094</span><span id="line-94">   public Col(Number span) {</span>
+<span class="source-line-no">095</span><span id="line-95">      span(span);</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-col-span"&gt;span&lt;/a&gt; attribute.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * &lt;p&gt;</span>
+<span class="source-line-no">102</span><span id="line-102">    * Number of columns spanned by the element.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @param value</span>
+<span class="source-line-no">105</span><span id="line-105">    *    The new value for this attribute.</span>
+<span class="source-line-no">106</span><span id="line-106">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">107</span><span id="line-107">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">108</span><span id="line-108">    * @return This object.</span>
+<span class="source-line-no">109</span><span id="line-109">    */</span>
+<span class="source-line-no">110</span><span id="line-110">   public Col span(Object value) {</span>
+<span class="source-line-no">111</span><span id="line-111">      attr("span", value);</span>
+<span class="source-line-no">112</span><span id="line-112">      return this;</span>
+<span class="source-line-no">113</span><span id="line-113">   }</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">}</span>
 
 
 

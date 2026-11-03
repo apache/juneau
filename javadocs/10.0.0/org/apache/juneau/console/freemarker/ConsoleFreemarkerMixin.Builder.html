@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -380,7 +379,7 @@ loadScripts(document, 'script');</script>
  Defaults to the <code>juneau.console.devMode</code> system property. Intended for development and tests; it parses
  and validates the contract on every render.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
       <jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>().devMode(<jk>true</jk>).basePath(<js>"/templates/"</js>).build();
@@ -410,7 +409,7 @@ loadScripts(document, 'script');</script>
  (the last also logs a warning in <a href="#devMode(boolean)"><code>dev mode</code></a>). The URL path itself is never rewritten,
  so any context-path prefix must be added by the template.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
       <jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>()

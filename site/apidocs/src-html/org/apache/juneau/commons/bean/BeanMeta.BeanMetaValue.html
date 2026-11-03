@@ -58,14 +58,14 @@
 <span class="source-line-no">045</span><span id="line-45">/**</span>
 <span class="source-line-no">046</span><span id="line-46"> * Encapsulates all access to the properties of a bean class (like a souped-up {@link BeanInfo}).</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h2 class='topic'&gt;Description&lt;/h2&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> * Uses introspection to find all the properties associated with this class.  If the</span>
 <span class="source-line-no">051</span><span id="line-51"> * {@link BeanType @BeanType} annotation is present on the class (or the marshalling-side</span>
 <span class="source-line-no">052</span><span id="line-52"> * {@code @Marshalled} sibling), that information is used to determine the properties on the class.</span>
 <span class="source-line-no">053</span><span id="line-53"> * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h5 class='topic'&gt;Bean property ordering&lt;/h5&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='topic'&gt;Bean property ordering&lt;/h2&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> * The order of the properties is as follows:</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;ul class='spaced-list'&gt;</span>
@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79"> * Field order comes from {@link Class#getDeclaredFields()}, which is declaration order on HotSpot and OpenJ9 but is</span>
 <span class="source-line-no">080</span><span id="line-80"> * not guaranteed by the JLS.</span>
 <span class="source-line-no">081</span><span id="line-81"> *</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='topic'&gt;Thread safety&lt;/h5&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h2 class='topic'&gt;Thread safety&lt;/h2&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *</span>
 <span class="source-line-no">084</span><span id="line-84"> * Instances are effectively immutable after construction and are safe for concurrent read access.</span>
 <span class="source-line-no">085</span><span id="line-85"> * Construction is not thread-safe and should be completed before sharing an instance across threads.</span>
@@ -211,12 +211,12 @@
 <span class="source-line-no">198</span><span id="line-198">    * class via {@link BeanMetaInitializer#buildBeanFilter(BeanInfo)}.  See {@link #of(Class, BeanConfigContext)} for</span>
 <span class="source-line-no">199</span><span id="line-199">    * the pure bean-modeling-side entry point that does not require a {@link BeanInfo}.</span>
 <span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * &lt;h5 class='section'&gt;Exception handling:&lt;/h5&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">    * &lt;h4 class='section'&gt;Exception handling:&lt;/h4&gt;</span>
 <span class="source-line-no">202</span><span id="line-202">    * &lt;p&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    * If a {@link RuntimeException} is thrown during bean metadata creation, it is caught and the exception message</span>
 <span class="source-line-no">204</span><span id="line-204">    * is returned as the {@code notABeanReason} with &lt;jk&gt;null&lt;/jk&gt; for the bean metadata.</span>
 <span class="source-line-no">205</span><span id="line-205">    *</span>
-<span class="source-line-no">206</span><span id="line-206">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">208</span><span id="line-208">    *    &lt;jc&gt;// Create bean metadata for a class via the marshalling-side context.&lt;/jc&gt;</span>
 <span class="source-line-no">209</span><span id="line-209">    *    BeanInfo&amp;lt;Person&amp;gt; &lt;jv&gt;cm&lt;/jv&gt; = &lt;jv&gt;marshallingContext&lt;/jv&gt;.getClassMeta(Person.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -412,7 +412,7 @@
 <span class="source-line-no">399</span><span id="line-399">    * iteration; marshalling-aware reads ({@link #getBeanInfo()}, type-resolution on each</span>
 <span class="source-line-no">400</span><span id="line-400">    * {@link BeanPropertyMeta#getBeanInfo()}, the per-property registry lookup) remain &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">401</span><span id="line-401">    *</span>
-<span class="source-line-no">402</span><span id="line-402">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">402</span><span id="line-402">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">403</span><span id="line-403">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">404</span><span id="line-404">    *    BeanMeta&amp;lt;Person&amp;gt; &lt;jv&gt;bm&lt;/jv&gt; = BeanMeta.&lt;jsm&gt;of&lt;/jsm&gt;(Person.&lt;jk&gt;class&lt;/jk&gt;, BeanConfigContext.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;);</span>
 <span class="source-line-no">405</span><span id="line-405">    *    BeanPropertyMeta &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;bm&lt;/jv&gt;.getProperties().get(&lt;js&gt;"name"&lt;/js&gt;);</span>
@@ -1197,7 +1197,7 @@
 <span class="source-line-no">1184</span><span id="line-1184">    * &lt;p&gt;</span>
 <span class="source-line-no">1185</span><span id="line-1185">    * Hidden and excluded properties are not included, since input can never set them.</span>
 <span class="source-line-no">1186</span><span id="line-1186">    *</span>
-<span class="source-line-no">1187</span><span id="line-1187">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1187</span><span id="line-1187">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1188</span><span id="line-1188">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1189</span><span id="line-1189">    *    &lt;jk&gt;public record&lt;/jk&gt; Person(&lt;ja&gt;@BeanProp&lt;/ja&gt;(required=&lt;jk&gt;true&lt;/jk&gt;) String &lt;jv&gt;name&lt;/jv&gt;, Integer &lt;jv&gt;age&lt;/jv&gt;) {}</span>
 <span class="source-line-no">1190</span><span id="line-1190">    *</span>

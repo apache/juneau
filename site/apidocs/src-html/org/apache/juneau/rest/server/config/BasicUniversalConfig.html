@@ -146,118 +146,119 @@
 <span class="source-line-no">133</span><span id="line-133"> *    on this interface to be overridden by annotations defined on the implemented class.</span>
 <span class="source-line-no">134</span><span id="line-134"> * &lt;/p&gt;</span>
 <span class="source-line-no">135</span><span id="line-135"> *</span>
-<span class="source-line-no">136</span><span id="line-136"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">137</span><span id="line-137"> *    &lt;ul class='javatreec'&gt;</span>
-<span class="source-line-no">138</span><span id="line-138"> *       &lt;li class='jc'&gt;{@link BasicRestServlet}</span>
-<span class="source-line-no">139</span><span id="line-139"> *       &lt;li class='jc'&gt;{@link BasicRestServletGroup}</span>
-<span class="source-line-no">140</span><span id="line-140"> *       &lt;li class='jc'&gt;{@link BasicRestResource}</span>
-<span class="source-line-no">141</span><span id="line-141"> *       &lt;li class='jc'&gt;{@link BasicRestResourceGroup}</span>
-<span class="source-line-no">142</span><span id="line-142"> * &lt;/ul&gt;</span>
-<span class="source-line-no">143</span><span id="line-143"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class&lt;/a&gt;</span>
-<span class="source-line-no">144</span><span id="line-144"> * &lt;/ul&gt;</span>
-<span class="source-line-no">145</span><span id="line-145"> */</span>
-<span class="source-line-no">146</span><span id="line-146">// @formatter:off</span>
-<span class="source-line-no">147</span><span id="line-147">@Rest(</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   // Default serializers for all Java methods in the class.</span>
-<span class="source-line-no">150</span><span id="line-150">   serializers={</span>
-<span class="source-line-no">151</span><span id="line-151">      HtmlDocSerializer.class, // HTML must be listed first because Internet Explore does not include text/html in their Accept header.</span>
-<span class="source-line-no">152</span><span id="line-152">      HtmlStrippedDocSerializer.class,</span>
-<span class="source-line-no">153</span><span id="line-153">      HtmlSchemaDocSerializer.class,</span>
-<span class="source-line-no">154</span><span id="line-154">      HjsonSerializer.class,</span>
-<span class="source-line-no">155</span><span id="line-155">      HoconSerializer.class,</span>
-<span class="source-line-no">156</span><span id="line-156">      JsonSerializer.class,</span>
-<span class="source-line-no">157</span><span id="line-157">      JcsSerializer.class,</span>
-<span class="source-line-no">158</span><span id="line-158">      Json5Serializer.class,</span>
-<span class="source-line-no">159</span><span id="line-159">      Json5lSerializer.class,</span>
-<span class="source-line-no">160</span><span id="line-160">      JsonlSerializer.class,</span>
-<span class="source-line-no">161</span><span id="line-161">      JsonSchemaSerializer.class,</span>
-<span class="source-line-no">162</span><span id="line-162">      XmlDocSerializer.class,</span>
-<span class="source-line-no">163</span><span id="line-163">      UonSerializer.class,</span>
-<span class="source-line-no">164</span><span id="line-164">      UrlEncodingSerializer.class,</span>
-<span class="source-line-no">165</span><span id="line-165">      OpenApiSerializer.class,</span>
-<span class="source-line-no">166</span><span id="line-166">      BsonSerializer.class,</span>
-<span class="source-line-no">167</span><span id="line-167">      CborSerializer.class,</span>
-<span class="source-line-no">168</span><span id="line-168">      MsgPackSerializer.class,</span>
-<span class="source-line-no">169</span><span id="line-169">      SoapXmlSerializer.class,</span>
-<span class="source-line-no">170</span><span id="line-170">      PlainTextSerializer.class,</span>
-<span class="source-line-no">171</span><span id="line-171">      CsvSerializer.class,</span>
-<span class="source-line-no">172</span><span id="line-172">      YamlSerializer.class,</span>
-<span class="source-line-no">173</span><span id="line-173">      TomlSerializer.class,</span>
-<span class="source-line-no">174</span><span id="line-174">      IniSerializer.class,</span>
-<span class="source-line-no">175</span><span id="line-175">      ParquetSerializer.class,</span>
-<span class="source-line-no">176</span><span id="line-176">      PrototextSerializer.class,</span>
-<span class="source-line-no">177</span><span id="line-177">      MarkdownSerializer.class</span>
-<span class="source-line-no">178</span><span id="line-178">   },</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   // Default parsers for all Java methods in the class.</span>
-<span class="source-line-no">181</span><span id="line-181">   parsers={</span>
-<span class="source-line-no">182</span><span id="line-182">      JsonParser.class,</span>
-<span class="source-line-no">183</span><span id="line-183">      Json5Parser.class,</span>
-<span class="source-line-no">184</span><span id="line-184">      Json5lParser.class,</span>
-<span class="source-line-no">185</span><span id="line-185">      JsonlParser.class,</span>
-<span class="source-line-no">186</span><span id="line-186">      XmlParser.class,</span>
-<span class="source-line-no">187</span><span id="line-187">      HtmlParser.class,</span>
-<span class="source-line-no">188</span><span id="line-188">      HjsonParser.class,</span>
-<span class="source-line-no">189</span><span id="line-189">      HoconParser.class,</span>
-<span class="source-line-no">190</span><span id="line-190">      UonParser.class,</span>
-<span class="source-line-no">191</span><span id="line-191">      UrlEncodingParser.class,</span>
-<span class="source-line-no">192</span><span id="line-192">      OpenApiParser.class,</span>
-<span class="source-line-no">193</span><span id="line-193">      BsonParser.class,</span>
-<span class="source-line-no">194</span><span id="line-194">      CborParser.class,</span>
-<span class="source-line-no">195</span><span id="line-195">      MsgPackParser.class,</span>
-<span class="source-line-no">196</span><span id="line-196">      PlainTextParser.class,</span>
-<span class="source-line-no">197</span><span id="line-197">      CsvParser.class,</span>
-<span class="source-line-no">198</span><span id="line-198">      YamlParser.class,</span>
-<span class="source-line-no">199</span><span id="line-199">      TomlParser.class,</span>
-<span class="source-line-no">200</span><span id="line-200">      IniParser.class,</span>
-<span class="source-line-no">201</span><span id="line-201">      ParquetParser.class,</span>
-<span class="source-line-no">202</span><span id="line-202">      PrototextParser.class,</span>
-<span class="source-line-no">203</span><span id="line-203">      MarkdownParser.class</span>
-<span class="source-line-no">204</span><span id="line-204">   },</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   // Serializer session properties that clients are allowed to override via HTTP headers/query parameters.</span>
-<span class="source-line-no">207</span><span id="line-207">   allowedSerializerOptions={</span>
-<span class="source-line-no">208</span><span id="line-208">      "useWhitespace",          // WriterSerializer - enable/disable whitespace</span>
-<span class="source-line-no">209</span><span id="line-209">      "maxIndent",              // WriterSerializer - max indentation level</span>
-<span class="source-line-no">210</span><span id="line-210">      "quoteChar",              // WriterSerializer - quote character</span>
-<span class="source-line-no">211</span><span id="line-211">      "keepNullProperties",     // SerializerSession - include null properties</span>
-<span class="source-line-no">212</span><span id="line-212">      "trimStrings",            // SerializerSession - trim string values</span>
-<span class="source-line-no">213</span><span id="line-213">      "addBeanTypes",           // SerializerSession - add bean type annotations</span>
-<span class="source-line-no">214</span><span id="line-214">      "addRootType",            // SerializerSession - add root type annotation</span>
-<span class="source-line-no">215</span><span id="line-215">      "sortCollections",        // SerializerSession - sort collections</span>
-<span class="source-line-no">216</span><span id="line-216">      "sortMaps",               // SerializerSession - sort maps</span>
-<span class="source-line-no">217</span><span id="line-217">      "trimEmptyCollections",   // SerializerSession - trim empty collections</span>
-<span class="source-line-no">218</span><span id="line-218">      "trimEmptyMaps",          // SerializerSession - trim empty maps</span>
-<span class="source-line-no">219</span><span id="line-219">      "binaryFormat",           // OutputStreamSerializer - binary encoding format</span>
-<span class="source-line-no">220</span><span id="line-220">      "escapeSolidus",          // JsonSerializerSession - escape forward slashes</span>
-<span class="source-line-no">221</span><span id="line-221">      "encoding",               // UonSerializerSession - URL-encode characters</span>
-<span class="source-line-no">222</span><span id="line-222">      "paramFormat",            // UonSerializerSession - parameter format style</span>
-<span class="source-line-no">223</span><span id="line-223">      "addNamespaceUrisToRoot", // XmlSerializerSession - add namespace URIs to root</span>
-<span class="source-line-no">224</span><span id="line-224">      "autoDetectNamespaces",   // XmlSerializerSession - auto-detect namespaces</span>
-<span class="source-line-no">225</span><span id="line-225">      "enableNamespaces",       // XmlSerializerSession - enable namespace support</span>
-<span class="source-line-no">226</span><span id="line-226">      "textNodeDelimiter",      // XmlSerializerSession - text node delimiter</span>
-<span class="source-line-no">227</span><span id="line-227">      "addKeyValueTableHeaders",// HtmlSerializerSession - add key/value table headers</span>
-<span class="source-line-no">228</span><span id="line-228">      "detectLabelParameters",  // HtmlSerializerSession - detect label parameters</span>
-<span class="source-line-no">229</span><span id="line-229">      "detectLinksInStrings",   // HtmlSerializerSession - detect links in strings</span>
-<span class="source-line-no">230</span><span id="line-230">      "labelParameter",         // HtmlSerializerSession - label parameter name</span>
-<span class="source-line-no">231</span><span id="line-231">      "uriAnchorText",          // HtmlSerializerSession - URI anchor text strategy</span>
-<span class="source-line-no">232</span><span id="line-232">      "byteArrayFormat",        // CsvSerializerSession - byte array encoding format</span>
-<span class="source-line-no">233</span><span id="line-233">      "allowNestedStructures"   // CsvSerializerSession - allow nested structures</span>
-<span class="source-line-no">234</span><span id="line-234">   },</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">   // Parser session properties that clients are allowed to override via HTTP headers/query parameters.</span>
-<span class="source-line-no">237</span><span id="line-237">   allowedParserOptions={</span>
-<span class="source-line-no">238</span><span id="line-238">      "trimStrings",            // ParserSession - trim string values</span>
-<span class="source-line-no">239</span><span id="line-239">      "binaryFormat",           // InputStreamParser - binary decoding format</span>
-<span class="source-line-no">240</span><span id="line-240">      "validateEnd",            // JsonParserSession/UonParserSession - validate end of input</span>
-<span class="source-line-no">241</span><span id="line-241">      "decoding",               // UonParserSession - URL-decode characters</span>
-<span class="source-line-no">242</span><span id="line-242">      "expandedParams",         // UrlEncodingParserSession - expanded parameters</span>
-<span class="source-line-no">243</span><span id="line-243">      "preserveRootElement",    // XmlParserSession - preserve root element</span>
-<span class="source-line-no">244</span><span id="line-244">      "validating"              // XmlParserSession - validate XML</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246">)</span>
-<span class="source-line-no">247</span><span id="line-247">public interface BasicUniversalConfig extends DefaultConfig, DefaultHtmlConfig {}</span>
+<span class="source-line-no">136</span><span id="line-136"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">137</span><span id="line-137"> *    &lt;li&gt;Related base classes:</span>
+<span class="source-line-no">138</span><span id="line-138"> *    &lt;ul class='javatreec'&gt;</span>
+<span class="source-line-no">139</span><span id="line-139"> *       &lt;li class='jc'&gt;{@link BasicRestServlet}</span>
+<span class="source-line-no">140</span><span id="line-140"> *       &lt;li class='jc'&gt;{@link BasicRestServletGroup}</span>
+<span class="source-line-no">141</span><span id="line-141"> *       &lt;li class='jc'&gt;{@link BasicRestResource}</span>
+<span class="source-line-no">142</span><span id="line-142"> *       &lt;li class='jc'&gt;{@link BasicRestResourceGroup}</span>
+<span class="source-line-no">143</span><span id="line-143"> *    &lt;/ul&gt;</span>
+<span class="source-line-no">144</span><span id="line-144"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class&lt;/a&gt;</span>
+<span class="source-line-no">145</span><span id="line-145"> * &lt;/ul&gt;</span>
+<span class="source-line-no">146</span><span id="line-146"> */</span>
+<span class="source-line-no">147</span><span id="line-147">// @formatter:off</span>
+<span class="source-line-no">148</span><span id="line-148">@Rest(</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   // Default serializers for all Java methods in the class.</span>
+<span class="source-line-no">151</span><span id="line-151">   serializers={</span>
+<span class="source-line-no">152</span><span id="line-152">      HtmlDocSerializer.class, // HTML must be listed first because Internet Explore does not include text/html in their Accept header.</span>
+<span class="source-line-no">153</span><span id="line-153">      HtmlStrippedDocSerializer.class,</span>
+<span class="source-line-no">154</span><span id="line-154">      HtmlSchemaDocSerializer.class,</span>
+<span class="source-line-no">155</span><span id="line-155">      HjsonSerializer.class,</span>
+<span class="source-line-no">156</span><span id="line-156">      HoconSerializer.class,</span>
+<span class="source-line-no">157</span><span id="line-157">      JsonSerializer.class,</span>
+<span class="source-line-no">158</span><span id="line-158">      JcsSerializer.class,</span>
+<span class="source-line-no">159</span><span id="line-159">      Json5Serializer.class,</span>
+<span class="source-line-no">160</span><span id="line-160">      Json5lSerializer.class,</span>
+<span class="source-line-no">161</span><span id="line-161">      JsonlSerializer.class,</span>
+<span class="source-line-no">162</span><span id="line-162">      JsonSchemaSerializer.class,</span>
+<span class="source-line-no">163</span><span id="line-163">      XmlDocSerializer.class,</span>
+<span class="source-line-no">164</span><span id="line-164">      UonSerializer.class,</span>
+<span class="source-line-no">165</span><span id="line-165">      UrlEncodingSerializer.class,</span>
+<span class="source-line-no">166</span><span id="line-166">      OpenApiSerializer.class,</span>
+<span class="source-line-no">167</span><span id="line-167">      BsonSerializer.class,</span>
+<span class="source-line-no">168</span><span id="line-168">      CborSerializer.class,</span>
+<span class="source-line-no">169</span><span id="line-169">      MsgPackSerializer.class,</span>
+<span class="source-line-no">170</span><span id="line-170">      SoapXmlSerializer.class,</span>
+<span class="source-line-no">171</span><span id="line-171">      PlainTextSerializer.class,</span>
+<span class="source-line-no">172</span><span id="line-172">      CsvSerializer.class,</span>
+<span class="source-line-no">173</span><span id="line-173">      YamlSerializer.class,</span>
+<span class="source-line-no">174</span><span id="line-174">      TomlSerializer.class,</span>
+<span class="source-line-no">175</span><span id="line-175">      IniSerializer.class,</span>
+<span class="source-line-no">176</span><span id="line-176">      ParquetSerializer.class,</span>
+<span class="source-line-no">177</span><span id="line-177">      PrototextSerializer.class,</span>
+<span class="source-line-no">178</span><span id="line-178">      MarkdownSerializer.class</span>
+<span class="source-line-no">179</span><span id="line-179">   },</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   // Default parsers for all Java methods in the class.</span>
+<span class="source-line-no">182</span><span id="line-182">   parsers={</span>
+<span class="source-line-no">183</span><span id="line-183">      JsonParser.class,</span>
+<span class="source-line-no">184</span><span id="line-184">      Json5Parser.class,</span>
+<span class="source-line-no">185</span><span id="line-185">      Json5lParser.class,</span>
+<span class="source-line-no">186</span><span id="line-186">      JsonlParser.class,</span>
+<span class="source-line-no">187</span><span id="line-187">      XmlParser.class,</span>
+<span class="source-line-no">188</span><span id="line-188">      HtmlParser.class,</span>
+<span class="source-line-no">189</span><span id="line-189">      HjsonParser.class,</span>
+<span class="source-line-no">190</span><span id="line-190">      HoconParser.class,</span>
+<span class="source-line-no">191</span><span id="line-191">      UonParser.class,</span>
+<span class="source-line-no">192</span><span id="line-192">      UrlEncodingParser.class,</span>
+<span class="source-line-no">193</span><span id="line-193">      OpenApiParser.class,</span>
+<span class="source-line-no">194</span><span id="line-194">      BsonParser.class,</span>
+<span class="source-line-no">195</span><span id="line-195">      CborParser.class,</span>
+<span class="source-line-no">196</span><span id="line-196">      MsgPackParser.class,</span>
+<span class="source-line-no">197</span><span id="line-197">      PlainTextParser.class,</span>
+<span class="source-line-no">198</span><span id="line-198">      CsvParser.class,</span>
+<span class="source-line-no">199</span><span id="line-199">      YamlParser.class,</span>
+<span class="source-line-no">200</span><span id="line-200">      TomlParser.class,</span>
+<span class="source-line-no">201</span><span id="line-201">      IniParser.class,</span>
+<span class="source-line-no">202</span><span id="line-202">      ParquetParser.class,</span>
+<span class="source-line-no">203</span><span id="line-203">      PrototextParser.class,</span>
+<span class="source-line-no">204</span><span id="line-204">      MarkdownParser.class</span>
+<span class="source-line-no">205</span><span id="line-205">   },</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">   // Serializer session properties that clients are allowed to override via HTTP headers/query parameters.</span>
+<span class="source-line-no">208</span><span id="line-208">   allowedSerializerOptions={</span>
+<span class="source-line-no">209</span><span id="line-209">      "useWhitespace",          // WriterSerializer - enable/disable whitespace</span>
+<span class="source-line-no">210</span><span id="line-210">      "maxIndent",              // WriterSerializer - max indentation level</span>
+<span class="source-line-no">211</span><span id="line-211">      "quoteChar",              // WriterSerializer - quote character</span>
+<span class="source-line-no">212</span><span id="line-212">      "keepNullProperties",     // SerializerSession - include null properties</span>
+<span class="source-line-no">213</span><span id="line-213">      "trimStrings",            // SerializerSession - trim string values</span>
+<span class="source-line-no">214</span><span id="line-214">      "addBeanTypes",           // SerializerSession - add bean type annotations</span>
+<span class="source-line-no">215</span><span id="line-215">      "addRootType",            // SerializerSession - add root type annotation</span>
+<span class="source-line-no">216</span><span id="line-216">      "sortCollections",        // SerializerSession - sort collections</span>
+<span class="source-line-no">217</span><span id="line-217">      "sortMaps",               // SerializerSession - sort maps</span>
+<span class="source-line-no">218</span><span id="line-218">      "trimEmptyCollections",   // SerializerSession - trim empty collections</span>
+<span class="source-line-no">219</span><span id="line-219">      "trimEmptyMaps",          // SerializerSession - trim empty maps</span>
+<span class="source-line-no">220</span><span id="line-220">      "binaryFormat",           // OutputStreamSerializer - binary encoding format</span>
+<span class="source-line-no">221</span><span id="line-221">      "escapeSolidus",          // JsonSerializerSession - escape forward slashes</span>
+<span class="source-line-no">222</span><span id="line-222">      "encoding",               // UonSerializerSession - URL-encode characters</span>
+<span class="source-line-no">223</span><span id="line-223">      "paramFormat",            // UonSerializerSession - parameter format style</span>
+<span class="source-line-no">224</span><span id="line-224">      "addNamespaceUrisToRoot", // XmlSerializerSession - add namespace URIs to root</span>
+<span class="source-line-no">225</span><span id="line-225">      "autoDetectNamespaces",   // XmlSerializerSession - auto-detect namespaces</span>
+<span class="source-line-no">226</span><span id="line-226">      "enableNamespaces",       // XmlSerializerSession - enable namespace support</span>
+<span class="source-line-no">227</span><span id="line-227">      "textNodeDelimiter",      // XmlSerializerSession - text node delimiter</span>
+<span class="source-line-no">228</span><span id="line-228">      "addKeyValueTableHeaders",// HtmlSerializerSession - add key/value table headers</span>
+<span class="source-line-no">229</span><span id="line-229">      "detectLabelParameters",  // HtmlSerializerSession - detect label parameters</span>
+<span class="source-line-no">230</span><span id="line-230">      "detectLinksInStrings",   // HtmlSerializerSession - detect links in strings</span>
+<span class="source-line-no">231</span><span id="line-231">      "labelParameter",         // HtmlSerializerSession - label parameter name</span>
+<span class="source-line-no">232</span><span id="line-232">      "uriAnchorText",          // HtmlSerializerSession - URI anchor text strategy</span>
+<span class="source-line-no">233</span><span id="line-233">      "byteArrayFormat",        // CsvSerializerSession - byte array encoding format</span>
+<span class="source-line-no">234</span><span id="line-234">      "allowNestedStructures"   // CsvSerializerSession - allow nested structures</span>
+<span class="source-line-no">235</span><span id="line-235">   },</span>
+<span class="source-line-no">236</span><span id="line-236"></span>
+<span class="source-line-no">237</span><span id="line-237">   // Parser session properties that clients are allowed to override via HTTP headers/query parameters.</span>
+<span class="source-line-no">238</span><span id="line-238">   allowedParserOptions={</span>
+<span class="source-line-no">239</span><span id="line-239">      "trimStrings",            // ParserSession - trim string values</span>
+<span class="source-line-no">240</span><span id="line-240">      "binaryFormat",           // InputStreamParser - binary decoding format</span>
+<span class="source-line-no">241</span><span id="line-241">      "validateEnd",            // JsonParserSession/UonParserSession - validate end of input</span>
+<span class="source-line-no">242</span><span id="line-242">      "decoding",               // UonParserSession - URL-decode characters</span>
+<span class="source-line-no">243</span><span id="line-243">      "expandedParams",         // UrlEncodingParserSession - expanded parameters</span>
+<span class="source-line-no">244</span><span id="line-244">      "preserveRootElement",    // XmlParserSession - preserve root element</span>
+<span class="source-line-no">245</span><span id="line-245">      "validating"              // XmlParserSession - validate XML</span>
+<span class="source-line-no">246</span><span id="line-246">   }</span>
+<span class="source-line-no">247</span><span id="line-247">)</span>
+<span class="source-line-no">248</span><span id="line-248">public interface BasicUniversalConfig extends DefaultConfig, DefaultHtmlConfig {}</span>
 
 
 

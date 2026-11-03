@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  program elements at compile-time. It allows annotations to be constructed using a builder pattern and
  follows all standard Java annotation semantics for equality, hashcode, and string representation.
 
- <h5 class='section'>Overview:</h5>
+ <h2 class='section'>Overview:</h2>
  <p>
  Java annotations are typically declared statically on classes, methods, fields, etc. at compile-time:
  <p class='bjava'>
@@ -113,7 +112,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
       .build();
  </p>
 
- <h5 class='section'>Equality and Hashcode:</h5>
+ <h2 class='section'>Equality and Hashcode:</h2>
  <p>
  Follows the standard Java conventions for annotation equality and hashcode calculation as defined in
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html#equals(java.lang.Object)" title="class or interface in java.lang.annotation" class="external-link"><code>Annotation.equals(Object)</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html#hashCode()" title="class or interface in java.lang.annotation" class="external-link"><code>Annotation.hashCode()</code></a>. This ensures that programmatically-created
@@ -131,7 +130,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <jsm>assertEquals</jsm>(<jv>declared</jv>.hashCode(), <jv>programmatic</jv>.hashCode());  <jc>// true</jc>
  </p>
 
- <h5 class='section'>Hashcode Caching:</h5>
+ <h2 class='section'>Hashcode Caching:</h2>
  <p>
  For performance reasons, the hashcode is calculated once and cached on first access.
  The hash is computed lazily when <a href="#hashCode()"><code>hashCode()</code></a> is first called and then stored for subsequent calls.
@@ -143,7 +142,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    }
  </p>
 
- <h5 class='section'>Builder Pattern:</h5>
+ <h2 class='section'>Builder Pattern:</h2>
  <p>
  Subclasses should provide a nested <a href="AnnotationObject.Builder.html" title="class in org.apache.juneau.commons"><code>AnnotationObject.Builder</code></a> class that extends <a href="AnnotationObject.Builder.html" title="class in org.apache.juneau.commons"><code>AnnotationObject.Builder</code></a>
  to construct instances using a fluent builder pattern. The builder should:
@@ -153,7 +152,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <li>Provide a <code>build()</code> method that constructs the final annotation object
  </ul>
 
- <h5 class='section'>Example Implementation:</h5>
+ <h2 class='section'>Example Implementation:</h2>
  <p class='bjava'>
    <jk>public class</jk> MyAnnotationObject <jk>extends</jk> AnnotationObject <jk>implements</jk> MyAnnotation {
 
@@ -188,7 +187,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="AppliedAnnotationObject.html" title="class in org.apache.juneau.commons"><code>AppliedAnnotationObject</code></a> - For annotations with dynamic targeting support
    <li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  </ul></div>

@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * API with additional functionality for method introspection, annotation handling, and hierarchy traversal.</span>
 <span class="source-line-no">042</span><span id="line-42"> * It's designed to be lightweight, thread-safe, and cached for efficient reuse.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Method introspection - access method metadata, parameters, return type, exceptions</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Annotation support - get annotations from method and overridden methods in hierarchy</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;Thread-safe - instances are immutable and safe for concurrent access</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;Introspecting method metadata for code generation or analysis</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;Finding annotations on methods including those from parent classes</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li&gt;Building frameworks that need to analyze method signatures</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;/ul&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;jc&gt;// Get MethodInfo from a class&lt;/jc&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -89,7 +89,7 @@
 <span class="source-line-no">076</span><span id="line-76"> *    List&amp;lt;MethodInfo&amp;gt; &lt;jv&gt;matching&lt;/jv&gt; = &lt;jv&gt;method&lt;/jv&gt;.getMatchingMethods();</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;/p&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *</span>
-<span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link ClassInfo} - Class introspection</span>
 <span class="source-line-no">081</span><span id="line-81"> *    &lt;li class='jc'&gt;{@link FieldInfo} - Field introspection</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li class='jc'&gt;{@link ConstructorInfo} - Constructor introspection</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93">   /**</span>
 <span class="source-line-no">094</span><span id="line-94">    * Creates a MethodInfo wrapper for the specified method.</span>
 <span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">096</span><span id="line-96">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">097</span><span id="line-97">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">098</span><span id="line-98">    *    Method &lt;jv&gt;m&lt;/jv&gt; = MyClass.&lt;jk&gt;class&lt;/jk&gt;.getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;);</span>
 <span class="source-line-no">099</span><span id="line-99">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = MethodInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;m&lt;/jv&gt;);</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line-110">   /**</span>
 <span class="source-line-no">111</span><span id="line-111">    * Creates a MethodInfo wrapper for the specified method.</span>
 <span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">114</span><span id="line-114">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">115</span><span id="line-115">    *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">116</span><span id="line-116">    *    Method &lt;jv&gt;m&lt;/jv&gt; = MyClass.&lt;jk&gt;class&lt;/jk&gt;.getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;);</span>
@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">    * &lt;p&gt;</span>
 <span class="source-line-no">133</span><span id="line-133">    * This convenience method automatically determines the declaring class from the method.</span>
 <span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">135</span><span id="line-135">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">    *    Method &lt;jv&gt;m&lt;/jv&gt; = MyClass.&lt;jk&gt;class&lt;/jk&gt;.getMethod(&lt;js&gt;"myMethod"&lt;/js&gt;);</span>
 <span class="source-line-no">138</span><span id="line-138">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = MethodInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;m&lt;/jv&gt;);</span>
@@ -228,7 +228,7 @@
 <span class="source-line-no">215</span><span id="line-215">    * &lt;p&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">    * Same as calling {@link Method#getAnnotatedReturnType()}.</span>
 <span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">219</span><span id="line-219">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">220</span><span id="line-220">    *    &lt;jc&gt;// For method: public @NotNull String getName()&lt;/jc&gt;</span>
 <span class="source-line-no">221</span><span id="line-221">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getName"&lt;/js&gt;);</span>
@@ -284,11 +284,11 @@
 <span class="source-line-no">271</span><span id="line-271">    * this method automatically expands container annotations into individual instances. This allows you to filter for</span>
 <span class="source-line-no">272</span><span id="line-272">    * a repeatable annotation and get back all individual occurrences without manually handling the container.</span>
 <span class="source-line-no">273</span><span id="line-273">    *</span>
-<span class="source-line-no">274</span><span id="line-274">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">275</span><span id="line-275">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">276</span><span id="line-276">    *    &lt;jc&gt;// Get all @Marshalled annotations on this method and overridden methods&lt;/jc&gt;</span>
 <span class="source-line-no">277</span><span id="line-277">    *    Stream&amp;lt;AnnotationInfo&amp;lt;Bean&amp;gt;&amp;gt; &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;methodInfo&lt;/jv&gt;.getAnnotations(Bean.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">278</span><span id="line-278">    *    &lt;jc&gt;// If method has @Beans({@Marshalled(...), @Marshalled(...)}), both individual @Marshalled instances are returned&lt;/jc&gt;</span>
+<span class="source-line-no">278</span><span id="line-278">    *    &lt;jc&gt;// If method has @Beans({&amp;#64;Marshalled(...), &amp;#64;Marshalled(...)}), both individual &amp;#64;Marshalled instances are returned&lt;/jc&gt;</span>
 <span class="source-line-no">279</span><span id="line-279">    * &lt;/p&gt;</span>
 <span class="source-line-no">280</span><span id="line-280">    *</span>
 <span class="source-line-no">281</span><span id="line-281">    * @param &lt;A&gt; The annotation type.</span>
@@ -311,7 +311,7 @@
 <span class="source-line-no">298</span><span id="line-298">    * &lt;p&gt;</span>
 <span class="source-line-no">299</span><span id="line-299">    * Returns &lt;jk&gt;null&lt;/jk&gt; if this method is not an annotation member, or if the annotation member has no default value.</span>
 <span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">302</span><span id="line-302">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">303</span><span id="line-303">    *    &lt;jc&gt;// For annotation: @interface MyAnnotation { String value() default "default"; }&lt;/jc&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"value"&lt;/js&gt;);</span>
@@ -333,7 +333,7 @@
 <span class="source-line-no">320</span><span id="line-320">    * &lt;p&gt;</span>
 <span class="source-line-no">321</span><span id="line-321">    * If the return type is a parameterized type, the {@link Type} object returned reflects the actual type parameters used in the source code.</span>
 <span class="source-line-no">322</span><span id="line-322">    *</span>
-<span class="source-line-no">323</span><span id="line-323">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">323</span><span id="line-323">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">324</span><span id="line-324">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">325</span><span id="line-325">    *    &lt;jc&gt;// For method: public List&amp;lt;String&amp;gt; getValues()&lt;/jc&gt;</span>
 <span class="source-line-no">326</span><span id="line-326">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getValues"&lt;/js&gt;);</span>
@@ -366,7 +366,7 @@
 <span class="source-line-no">353</span><span id="line-353">    *    &lt;li&gt;Continue up the hierarchy</span>
 <span class="source-line-no">354</span><span id="line-354">    * &lt;/ol&gt;</span>
 <span class="source-line-no">355</span><span id="line-355">    *</span>
-<span class="source-line-no">356</span><span id="line-356">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">356</span><span id="line-356">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">357</span><span id="line-357">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">358</span><span id="line-358">    *    &lt;jc&gt;// Interface and class hierarchy:&lt;/jc&gt;</span>
 <span class="source-line-no">359</span><span id="line-359">    *    &lt;jk&gt;interface&lt;/jk&gt; I1 {</span>
@@ -522,7 +522,7 @@
 <span class="source-line-no">509</span><span id="line-509">    * It checks if each parameter type is present in the specified list, but does not verify</span>
 <span class="source-line-no">510</span><span id="line-510">    * that the count of each type matches exactly.</span>
 <span class="source-line-no">511</span><span id="line-511">    *</span>
-<span class="source-line-no">512</span><span id="line-512">    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">512</span><span id="line-512">    * &lt;h4 class='figure'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">513</span><span id="line-513">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">514</span><span id="line-514">    *</span>
 <span class="source-line-no">515</span><span id="line-515">    *    &lt;jc&gt;// Example method:&lt;/jc&gt;</span>
@@ -743,7 +743,7 @@
 <span class="source-line-no">730</span><span id="line-730">    * &lt;p&gt;</span>
 <span class="source-line-no">731</span><span id="line-731">    * A default method is a public non-abstract instance method (i.e., non-static method with a body) declared in an interface.</span>
 <span class="source-line-no">732</span><span id="line-732">    *</span>
-<span class="source-line-no">733</span><span id="line-733">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">733</span><span id="line-733">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">734</span><span id="line-734">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">735</span><span id="line-735">    *    &lt;jc&gt;// For interface: interface MyInterface { default String getName() { return "default"; } }&lt;/jc&gt;</span>
 <span class="source-line-no">736</span><span id="line-736">    *    MethodInfo &lt;jv&gt;mi&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyInterface.&lt;jk&gt;class&lt;/jk&gt;).getMethod(&lt;js&gt;"getName"&lt;/js&gt;);</span>
@@ -877,7 +877,7 @@
 <span class="source-line-no">864</span><span id="line-864">    *    &lt;li&gt;If not found in the bean store, checks the &lt;c&gt;otherBeans&lt;/c&gt; parameter.</span>
 <span class="source-line-no">865</span><span id="line-865">    * &lt;/ul&gt;</span>
 <span class="source-line-no">866</span><span id="line-866">    *</span>
-<span class="source-line-no">867</span><span id="line-867">    * &lt;h5 class='section'&gt;Parameter Resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">867</span><span id="line-867">    * &lt;h4 class='section'&gt;Parameter Resolution:&lt;/h4&gt;</span>
 <span class="source-line-no">868</span><span id="line-868">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">869</span><span id="line-869">    *    &lt;li&gt;&lt;b&gt;Single beans&lt;/b&gt; - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.</span>
 <span class="source-line-no">870</span><span id="line-870">    *       If not found, checks &lt;c&gt;otherBeans&lt;/c&gt; for a compatible instance.</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  the <code>juneau-views.js</code> runtime can paint what actually happened (success, failure, a <i>named</i> refusal, or
  an honest unknown) rather than what the request asked for.
 
- <h5 class='section'>Its own, independent contract version</h5>
+ <h2 class='section'>Its own, independent contract version</h2>
  <p>
  The action-result is a <b>third</b> independently-versioned wire contract, alongside <code>VIEW_META</code>
  and the FTL card/slot envelope.  Its
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  <code>VIEW_META</code>: aliasing a per-view contract's version onto a separate contract couples two
  unrelated client/server locksteps, so this contract versions itself.
 
- <h5 class='section'>Refusals are an opaque, namespaced code &mdash; not a framework-closed enum</h5>
+ <h2 class='section'>Refusals are an opaque, namespaced code &mdash; not a framework-closed enum</h2>
  <p>
  A refusal's <a href="#refusalCode"><code>refusalCode</code></a> is an <b>opaque namespaced string</b>, not a framework-closed enum and not a
  free-text message.  Refusals span two independent sources, and the framework must be able to render a refusal it
@@ -117,14 +116,14 @@ loadScripts(document, 'script');</script>
  The runtime renders ANY code as a visible <i>named</i> refusal without the framework needing to know consumer
  concepts exist.
 
- <h5 class='section'>Reserved async terminal outcomes</h5>
+ <h2 class='section'>Reserved async terminal outcomes</h2>
  <p>
  <a href="ActionResult.Outcome.html#CANCELLED"><code>cancelled</code></a> and <a href="ActionResult.Outcome.html#CANCELLED_AFTER_EFFECT"><code>cancelled-after-effect</code></a> are
  <b>reserved from day one</b> (as <code>VIEW_META</code> reserved <code>rowActions</code> before it was implemented), even
  though a synchronous write never emits them.  A future async/streaming variant can therefore emit them without a
  second result-contract bump and a three-sided lockstep.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// A success carrying the authoritative row read back from the remote system.</jc>
    ActionResult <jv>ok</jv> = ActionResult.<jsm>success</jsm>(<jv>incidentReadBack</jv>);
@@ -136,7 +135,7 @@ loadScripts(document, 'script');</script>
    ActionResult <jv>again</jv> = ActionResult.<jsm>success</jsm>(<jv>incidentReadBack</jv>).replay(<jk>true</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a>
    <li class='jc'><a href="../widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a>
@@ -388,20 +387,20 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/ActionResult.html#line-197">resultForm</a></span></div>
 <div class="block">The follow-up <b>read-only</b> form-source URL a receipt is painted from; omitted from the wire when unset.
 
- <h5 class='section'>Honored on <a href="ActionResult.Outcome.html#SUCCESS"><code>success</code></a> only</h5>
+ <h4 class='section'>Honored on <a href="ActionResult.Outcome.html#SUCCESS"><code>success</code></a> only</h4>
  <p>
  This is the mechanical form of <i>a receipt must never look like a receipt for a write that didn't happen</i>.
  On a failure, a refusal, an unknown, or a transport failure this field is <b>ignored</b>, no follow-up GET is
  issued, and nothing is swapped &mdash; so no result host can appear for a write that did not commit.
 
- <h5 class='section'>The served payload must not carry a form</h5>
+ <h4 class='section'>The served payload must not carry a form</h4>
  <p>
  The URL serves a <code>ModalDef</code>, and that payload <b>must not</b> declare a <code>form</code>.  A result host is
  terminal by definition: the write already committed, so there is nothing left to gate.  A payload carrying
  inputs is refused <i>visibly</i> rather than rendered read-only or silently stripped, because it is a consumer
  authoring bug and should be visible as one.
 
- <h5 class='section'>It is a swap, not a new dialog</h5>
+ <h4 class='section'>It is a swap, not a new dialog</h4>
  <p>
  The runtime paints the receipt into the dialog that is <b>already open</b>, at the same layer depth, and only
  when that dialog opted in with <code>ModalDef.keepOpenOnSubmit</code>.  Set on a result whose dialog did not opt in,
@@ -452,7 +451,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Readability alias for <a href="#success(java.lang.Object)"><code>success(null)</code></a> &mdash; a <a href="ActionResult.Outcome.html#SUCCESS"><code>success</code></a> result
  that carries no row (e.g. a delete, or a navigate/redraw action).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Equivalent to ActionResult.success(null).message(...)</jc>
    <jk>return</jk> ActionResult.<jsm>ok</jsm>().message(<js>"Deleted"</js>);
@@ -469,7 +468,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/ActionResult.html#line-240">ok</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;row)</span></div>
 <div class="block">Readability alias for <a href="#success(java.lang.Object)"><code>success(Object)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>return</jk> ActionResult.<jsm>ok</jsm>(<jv>store</jv>.updatePet(<jv>pet</jv>)).message(<js>"Saved"</js>);
  </p></div>

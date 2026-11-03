@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,12 +100,12 @@ implements <a href="TomlMetaProvider.html" title="interface in org.apache.juneau
  TOML (Tom's Obvious Minimal Language) maps unambiguously to hash tables with native typing.
  See <a href="https://toml.io/en/v1.0.0">TOML v1.0.0</a> specification.
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Produces: <bc>application/toml</bc>
  <br>Accepts: <bc>application/toml</bc>
 
- <h5 class='topic'>Bean-to-TOML mapping</h5>
+ <h2 class='topic'>Bean-to-TOML mapping</h2>
  <ul class='spaced-list'>
    <li>Simple properties → key-value pairs
    <li>Nested beans → <c>[tableName]</c> sections
@@ -116,7 +115,7 @@ implements <a href="TomlMetaProvider.html" title="interface in org.apache.juneau
    <li>Null properties are omitted (TOML has no null type)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Serialize a bean to TOML</jc>
    String <jv>toml</jv> = TomlSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -133,13 +132,13 @@ implements <a href="TomlMetaProvider.html" title="interface in org.apache.juneau
    <jv>toml</jv> = <jv>s</jv>.write(<jv>config</jv>);
  </p>
 
- <h5 class='figure'>Example output (Map of name/age):</h5>
+ <h2 class='figure'>Example output (Map of name/age):</h2>
  <p class='bcode'>
    name = "Alice"
    age = 30
  </p>
 
- <h5 class='figure'>Complex (nested table + array):</h5>
+ <h2 class='figure'>Complex (nested table + array):</h2>
  <p class='bcode'>
    name = "Alice"
    age = 30
@@ -151,7 +150,7 @@ implements <a href="TomlMetaProvider.html" title="interface in org.apache.juneau
    state = "MA"
  </p>
 
- <h5 class='topic'>Limitations compared to JSON</h5>
+ <h2 class='topic'>Limitations compared to JSON</h2>
  <p>
  TOML is a configuration format with a more restricted type system than JSON.
  The following features supported by <a href="../json/JsonSerializer.html" title="class in org.apache.juneau.marshall.json"><code>JsonSerializer</code></a>
@@ -171,7 +170,7 @@ implements <a href="TomlMetaProvider.html" title="interface in org.apache.juneau
       keys may yield invalid TOML.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul></div>
 </section>

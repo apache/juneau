@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * mitigating cross-site-scripting (XSS) and data-injection attacks.  This bean carries an already-rendered policy</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * value; use {@link Builder} to assemble the value from typed directives.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Build a static policy and emit it as a response header.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	ContentSecurityPolicy &lt;jv&gt;csp&lt;/jv&gt; = ContentSecurityPolicy.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;defaultResponseHeaders&lt;/c&gt; {@link HttpHeaderList} (e.g. via a &lt;c&gt;&lt;ja&gt;@Bean&lt;/ja&gt;(name=&lt;js&gt;"defaultResponseHeaders"&lt;/js&gt;)&lt;/c&gt;</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * factory method) and is emitted through the normal response-header path.</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Builder}</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='extlink'&gt;&lt;a class='doclink' href='<a href="https://www.w3.org/TR/CSP3/'&gt;Content" target="alexandria_uri">https://www.w3.org/TR/CSP3/'&gt;Content</a> Security Policy Level 3 (W3C WD)&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='extlink'&gt;&lt;a class='doclink' href='<a href="https://www.w3.org/TR/CSP2/'&gt;Content" target="alexandria_uri">https://www.w3.org/TR/CSP2/'&gt;Content</a> Security Policy Level 2 (W3C Rec)&lt;/a&gt;</em>
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * directives; {@link #directive(String, String...)} is a generic escape hatch so new directives never require an API</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * change.  Setting the same directive more than once &lt;b&gt;replaces&lt;/b&gt; the previous source list.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * 	String &lt;jv&gt;value&lt;/jv&gt; = ContentSecurityPolicy.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * 		.defaultSrc(&lt;jsf&gt;SELF&lt;/jsf&gt;)</em>
@@ -198,14 +198,14 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// =&amp;gt; "default-src 'self'; img-src 'self' data:; object-src 'none'"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Nonces:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Nonces:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * Source helper {@link #nonce(String)} renders a &lt;c&gt;'nonce-&amp;lt;token&amp;gt;'&lt;/c&gt; source expression.  For per-request</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * nonces (where the actual token is not known until the response is rendered), use {@link #NONCE_PLACEHOLDER} as the</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * token and have the REST layer rewrite it per-response via {@link #resolveNonce(String, String)}; the same nonce is</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * then stamped onto the inline &lt;c&gt;&amp;lt;script&amp;gt;&lt;/c&gt;/&lt;c&gt;&amp;lt;style&amp;gt;&lt;/c&gt; tags the serializer emits.</em>
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link ContentSecurityPolicy}</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='extlink'&gt;&lt;a class='doclink' href='<a href="https://www.w3.org/TR/CSP3/'&gt;Content" target="alexandria_uri">https://www.w3.org/TR/CSP3/'&gt;Content</a> Security Policy Level 3 (W3C WD)&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>

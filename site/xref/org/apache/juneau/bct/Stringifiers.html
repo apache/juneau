@@ -41,12 +41,12 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * and objects. These stringifiers are automatically registered when using</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@link BasicBeanConverter.Builder#defaultSettings()}.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Purpose:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Purpose:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Stringifiers convert objects to human-readable string representations for use in BCT</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * assertions and test output. They provide consistent, meaningful string formats across</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * different object types while supporting customization for specific testing needs.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Built-in Stringifiers:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Built-in Stringifiers:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;{@link #mapEntryStringifier()}&lt;/b&gt; - Converts {@link java.util.Map.Entry} to &lt;js&gt;"key=value"&lt;/js&gt; format&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;{@link #calendarStringifier()}&lt;/b&gt; - Converts {@link GregorianCalendar} to ISO-8601 format&lt;/li&gt;</em>
@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;{@link #mapStringifier()}&lt;/b&gt; - Converts {@link Map} to brace-delimited format&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> *    &lt;jc&gt;// Register stringifiers using builder&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;converter&lt;/jv&gt; = BasicBeanConverter.&lt;jsm&gt;builder&lt;/jsm&gt;()</em>
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *       .build();</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Resource Handling:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Resource Handling:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; Some stringifiers consume or close their input resources:&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;{@link InputStream}:&lt;/b&gt; Stream is consumed and closed during stringification&lt;/li&gt;</em>
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;{@link File}:&lt;/b&gt; File content is read completely during stringification&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Custom Stringifier Development:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Custom Stringifier Development:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;When creating custom stringifiers, follow these patterns:&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> *    &lt;li&gt;&lt;b&gt;Null Safety:&lt;/b&gt; Handle &lt;jk&gt;null&lt;/jk&gt; inputs gracefully&lt;/li&gt;</em>
@@ -109,14 +109,14 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier provides a consistent way to represent binary data as readable</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * hexadecimal strings, useful for testing and debugging binary content.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Hex format:&lt;/b&gt; Each byte is represented as two uppercase hex digits&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;No separators:&lt;/b&gt; Bytes are concatenated without spaces or delimiters&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Empty arrays:&lt;/b&gt; Returns empty string for zero-length arrays&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test byte array stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;byte&lt;/jk&gt;[] &lt;jv&gt;data&lt;/jv&gt; = {&lt;jv&gt;0x48&lt;/jv&gt;, &lt;jv&gt;0x65&lt;/jv&gt;, &lt;jv&gt;0x6C&lt;/jv&gt;, &lt;jv&gt;0x6C&lt;/jv&gt;, &lt;jv&gt;0x6F&lt;/jv&gt;};</em>
@@ -146,14 +146,14 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier converts calendar objects to standardized ISO-8601 timestamp format,</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * which provides consistent, sortable, and internationally recognized date representations.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; Uses the {@code calendarFormat} setting (default: {@link java.time.format.DateTimeFormatter#ISO_INSTANT})&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Timezone:&lt;/b&gt; Respects the calendar's timezone information&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Precision:&lt;/b&gt; Includes full precision available in the calendar&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test calendar stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;calendar&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; GregorianCalendar(&lt;jv&gt;2023&lt;/jv&gt;, Calendar.&lt;jsf&gt;JANUARY&lt;/jsf&gt;, &lt;jv&gt;15&lt;/jv&gt;);</em>
@@ -180,14 +180,14 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier provides a simple way to convert char arrays to readable strings,</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * useful for testing character-based operations and string utilities.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Direct conversion:&lt;/b&gt; Each char is appended directly to the result string&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;No formatting:&lt;/b&gt; Characters are concatenated without any separators or encoding&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Empty arrays:&lt;/b&gt; Returns empty string for zero-length arrays&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test char array stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;char&lt;/jk&gt;[] &lt;jv&gt;chars&lt;/jv&gt; = {&lt;js&gt;'H'&lt;/js&gt;, &lt;js&gt;'e'&lt;/js&gt;, &lt;js&gt;'l'&lt;/js&gt;, &lt;js&gt;'l'&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;};</em>
@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier provides flexible class name formatting, supporting different</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * levels of detail from simple names to fully qualified class names.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format options:&lt;/b&gt; Controlled by {@code classNameFormat} setting&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Simple format:&lt;/b&gt; Class simple name (default)&lt;/li&gt;</em>
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Full format:&lt;/b&gt; Complete class name including package&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test with default simple format&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"&amp;lt;self&amp;gt;"&lt;/js&gt;, &lt;js&gt;"String"&lt;/js&gt;);</em>
@@ -245,14 +245,14 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier creates human-readable constructor signatures including the</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * declaring class name and parameter types, useful for reflection-based testing.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; &lt;js&gt;"{ClassName}({paramType1},{paramType2},...)"&lt;/js&gt;&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Class names:&lt;/b&gt; Uses the configured class name format&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Parameter types:&lt;/b&gt; Includes all parameter types in declaration order&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test constructor stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;constructor&lt;/jv&gt; = String.&lt;jk&gt;class&lt;/jk&gt;.getConstructor(&lt;jk&gt;char&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);</em>
@@ -287,14 +287,14 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier converts Date objects to ISO-8601 instant format, providing</em>
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * standardized timestamp representations suitable for logging and comparison.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; ISO-8601 instant format (e.g., &lt;js&gt;"2023-01-15T10:30:00Z"&lt;/js&gt;)&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Timezone:&lt;/b&gt; Always represents time in UTC (Z timezone)&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Precision:&lt;/b&gt; Millisecond precision as available in Date objects&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test date stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;date&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Date(&lt;jv&gt;1673780400000L&lt;/jv&gt;); &lt;jc&gt;// 2023-01-15T10:00:00Z&lt;/jc&gt;</em>
@@ -318,14 +318,14 @@
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier provides a consistent way to represent enum values as their</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * declared constant names, which is typically the most useful format for testing.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Name format:&lt;/b&gt; Uses {@link Enum#name()} method for string representation&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Case preservation:&lt;/b&gt; Maintains the exact case as declared in enum&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;All enum types:&lt;/b&gt; Works with any enum implementation&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test enum stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(Color.&lt;jsf&gt;RED&lt;/jsf&gt;, &lt;js&gt;"&amp;lt;self&amp;gt;"&lt;/js&gt;, &lt;js&gt;"RED"&lt;/js&gt;);</em>
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;task&lt;/jv&gt;, &lt;js&gt;"status"&lt;/js&gt;, &lt;js&gt;"COMPLETED"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Alternative Formats:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Alternative Formats:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;If you need different enum string representations (like {@link Enum#toString()}</em>
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * or custom formatting), register a custom stringifier for specific enum types.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 *</em>
@@ -354,14 +354,14 @@
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier reads the entire file content and returns it as a string,</em>
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * making it useful for testing file-based operations and content verification.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Content reading:&lt;/b&gt; Reads the entire file content into memory&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Encoding:&lt;/b&gt; Uses the default platform encoding for text files&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Resource management:&lt;/b&gt; Properly closes file resources after reading&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test file content&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;configFile&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; File(&lt;js&gt;"config.properties"&lt;/js&gt;);</em>
@@ -372,7 +372,7 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;emptyFile&lt;/jv&gt;, &lt;js&gt;"&amp;lt;self&amp;gt;"&lt;/js&gt;, &lt;js&gt;""&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Important Notes:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Memory usage:&lt;/b&gt; Large files will consume significant memory&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;File existence:&lt;/b&gt; Non-existent files will cause exceptions&lt;/li&gt;</em>
@@ -393,14 +393,14 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This stringifier consumes and closes the input stream during conversion.</em>
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * After stringification, the stream cannot be used again.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Content reading:&lt;/b&gt; Reads all available bytes from the stream&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Hex conversion:&lt;/b&gt; Converts bytes to uppercase hexadecimal representation&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Resource management:&lt;/b&gt; Automatically closes the stream after reading&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test with byte content&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;stream&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ByteArrayInputStream(&lt;jk&gt;new&lt;/jk&gt; &lt;jk&gt;byte&lt;/jk&gt;[]{&lt;jv&gt;0x48&lt;/jv&gt;, &lt;jv&gt;0x65&lt;/jv&gt;, &lt;jv&gt;0x6C&lt;/jv&gt;, &lt;jv&gt;0x6C&lt;/jv&gt;, &lt;jv&gt;0x6F&lt;/jv&gt;});</em>
@@ -411,7 +411,7 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;empty&lt;/jv&gt;, &lt;js&gt;"&amp;lt;self&amp;gt;"&lt;/js&gt;, &lt;js&gt;""&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Important Notes:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;One-time use:&lt;/b&gt; The stream is consumed and closed during conversion&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Memory usage:&lt;/b&gt; All content is loaded into memory for conversion&lt;/li&gt;</em>
@@ -431,7 +431,7 @@
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier converts lists to bracket-delimited strings with customizable</em>
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * separators and prefixes/suffixes, providing consistent list representation across tests.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; &lt;js&gt;"{prefix}{element1}{separator}{element2}...{suffix}"&lt;/js&gt;&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Separator:&lt;/b&gt; Uses {@code fieldSeparator} setting (default: &lt;js&gt;","&lt;/js&gt;)&lt;/li&gt;</em>
@@ -440,7 +440,7 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Recursive:&lt;/b&gt; Elements are converted using the same converter&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test list stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;list&lt;/jv&gt; = List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"banana"&lt;/js&gt;, &lt;js&gt;"cherry"&lt;/js&gt;);</em>
@@ -477,14 +477,14 @@
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier creates a human-readable representation of map entries by converting</em>
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * both the key and value to strings and joining them with the configured entry separator.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; Uses the pattern &lt;js&gt;"{key}{separator}{value}"&lt;/js&gt;&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Separator:&lt;/b&gt; Uses the {@code mapEntrySeparator} setting (default: &lt;js&gt;"="&lt;/js&gt;)&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Recursive conversion:&lt;/b&gt; Both key and value are converted using the same converter&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test map entry stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;entry&lt;/jv&gt; = Map.&lt;jsm&gt;entry&lt;/jsm&gt;(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;);</em>
@@ -512,7 +512,7 @@
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * map to a list of entries and then stringifying each entry, providing consistent</em>
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * map representation across tests.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; &lt;js&gt;"{prefix}{entry1}{separator}{entry2}...{suffix}"&lt;/js&gt;&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Separator:&lt;/b&gt; Uses {@code fieldSeparator} setting (default: &lt;js&gt;","&lt;/js&gt;)&lt;/li&gt;</em>
@@ -521,7 +521,7 @@
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Entry format:&lt;/b&gt; Each entry uses the map entry stringifier&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test map stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;map&lt;/jv&gt; = Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;, &lt;js&gt;"age"&lt;/js&gt;, &lt;jv&gt;25&lt;/jv&gt;);</em>
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertBean&lt;/jsm&gt;(&lt;jv&gt;emptyMap&lt;/jv&gt;, &lt;js&gt;"&amp;lt;self&amp;gt;"&lt;/js&gt;, &lt;js&gt;"{}"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Order Considerations:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Order Considerations:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;The order of entries in the string depends on the map implementation's iteration</em>
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * order. Use order-independent assertions (like {@code assertMatchesGlob}) for maps where</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * order is not guaranteed.&lt;/p&gt;</em>
@@ -559,14 +559,14 @@
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This stringifier creates human-readable method signatures including the method</em>
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 * name and parameter types, useful for reflection-based testing and debugging.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Format:&lt;/b&gt; &lt;js&gt;"{methodName}({paramType1},{paramType2},...)"&lt;/js&gt;&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Method name:&lt;/b&gt; Uses the declared method name&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Parameter types:&lt;/b&gt; Includes all parameter types in declaration order&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test method stringification&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;method&lt;/jv&gt; = String.&lt;jk&gt;class&lt;/jk&gt;.getMethod(&lt;js&gt;"substring"&lt;/js&gt;, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);</em>
@@ -601,14 +601,14 @@
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; This stringifier consumes and closes the reader during conversion.</em>
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 * After stringification, the reader cannot be used again.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Content reading:&lt;/b&gt; Reads all available characters from the reader&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;String conversion:&lt;/b&gt; Converts characters directly to string format&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Resource management:&lt;/b&gt; Automatically closes the reader after reading&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Usage Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Test with string content&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">	 *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;reader&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringReader(&lt;js&gt;"Hello World"&lt;/js&gt;);</em>
@@ -619,7 +619,7 @@
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 *    &lt;jsm&gt;assertMatchesGlob&lt;/jsm&gt;(&lt;js&gt;"*expected content*"&lt;/js&gt;, &lt;jv&gt;fileReader&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Important Notes:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;One-time use:&lt;/b&gt; The reader is consumed and closed during conversion&lt;/li&gt;</em>
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Memory usage:&lt;/b&gt; All content is loaded into memory for conversion&lt;/li&gt;</em>

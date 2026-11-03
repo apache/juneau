@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  <a href="HealthProbe.html#LIVE"><code>LIVE</code></a> probe (<code>/livez</code>) is intentionally <b>not</b> gated, so Kubernetes does
  not kill the pod mid-drain.
 
- <h5 class='section'>Resolution:</h5>
+ <h2 class='section'>Resolution:</h2>
  <p>
  <a href="HealthAggregator.html" title="class in org.apache.juneau.rest.server.health"><code>HealthAggregator</code></a> and the embedded-server shutdown hooks resolve the state via
  <a href="#resolve(org.apache.juneau.commons.inject.BeanStore)"><code>resolve(BeanStore)</code></a>: a <code>ReadinessState</code> bean registered in the relevant <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> wins;
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
  <p>
  This class is thread-safe; the flag is <code>volatile</code>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="HealthAggregator.html" title="class in org.apache.juneau.rest.server.health"><code>HealthAggregator</code></a>
  </ul></div>
 <dl class="notes">
@@ -298,7 +297,7 @@ loadScripts(document, 'script');</script>
  re-published on every server (re)start does not accumulate duplicate callbacks.  Callbacks run on the
  thread that calls <a href="#markOutOfService()"><code>markOutOfService()</code></a>; exceptions they throw are swallowed.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jv>state</jv>.onOutOfService(<js>"my-streams"</js>, () -&gt; <jv>streamRegistry</jv>.closeAll());
  </p></div>

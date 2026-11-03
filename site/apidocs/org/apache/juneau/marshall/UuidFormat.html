@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  The default is <a href="#STANDARD"><code>STANDARD</code></a> which preserves the historical wire output produced by
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html#toString()" title="class or interface in java.util" class="external-link"><code>UUID.toString()</code></a> (8-4-4-4-12 hyphenated form).
 
- <h5 class='topic'>Precedence (highest to lowest)</h5>
+ <h2 class='topic'>Precedence (highest to lowest)</h2>
  <ol>
    <li><a href="MarshalledProp.html#uuidFormat()"><code>@MarshalledProp(uuidFormat=…)</code></a> on the bean property.
    <li><a href="Marshalled.html#uuidFormat()"><code>@Marshalled(uuidFormat=…)</code></a> on the bean class.
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    <li>The default constant (<a href="#STANDARD"><code>STANDARD</code></a>).
  </ol>
 
- <h5 class='topic'>Parser leniency</h5>
+ <h2 class='topic'>Parser leniency</h2>
 
  <p>
  Parsers SHALL accept any wire shape that the corresponding serializer can produce, regardless of the
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
  (<a href="#STANDARD"><code>STANDARD</code></a> / <a href="#NO_DASHES"><code>NO_DASHES</code></a> / <a href="#URN"><code>URN</code></a>) — the configured constant is informational and
  is consulted only as a hint.
 
- <h5 class='topic'>Binary serializers</h5>
+ <h2 class='topic'>Binary serializers</h2>
 
  <p>
  Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native 16-byte binary regardless of the
@@ -235,7 +234,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/UuidFormat.html#line-79">STANDARD</a></span></div>
 <div class="block">8-4-4-4-12 hyphenated form (the default).
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    550e8400-e29b-41d4-a716-446655440000
  </p>
@@ -250,7 +249,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/UuidFormat.html#line-93">NO_DASHES</a></span></div>
 <div class="block">Compact 32-hex-character form (no hyphens).
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    550e8400e29b41d4a716446655440000
  </p>
@@ -266,7 +265,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/UuidFormat.html#line-106">URN</a></span></div>
 <div class="block">RFC 4122 URN namespace form.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    urn:uuid:550e8400-e29b-41d4-a716-446655440000
  </p>

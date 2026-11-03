@@ -35,20 +35,20 @@
 <span class="source-line-no">022</span><span id="line-22"> * &lt;p&gt;</span>
 <span class="source-line-no">023</span><span id="line-23"> * v1 ships the two HTTP-flavored bindings.  Artifact and SOAP back-channel bindings are deferred.</span>
 <span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='topic'&gt;HTTP POST binding&lt;/h5&gt;</span>
+<span class="source-line-no">025</span><span id="line-25"> * &lt;h2 class='topic'&gt;HTTP POST binding&lt;/h2&gt;</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * The IdP returns an auto-submitting HTML form whose {@code SAMLResponse} field carries the base64-encoded</span>
 <span class="source-line-no">028</span><span id="line-28"> * {@code &lt;Response&gt;} document.  The browser POSTs the form to the SP's assertion-consumer URL.  This is the</span>
 <span class="source-line-no">029</span><span id="line-29"> * dominant binding for SAML 2.0 web SSO.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='topic'&gt;HTTP Redirect binding&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='topic'&gt;HTTP Redirect binding&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * The IdP redirects the browser to the SP with the {@code SAMLResponse} carried in a query-string parameter.</span>
 <span class="source-line-no">034</span><span id="line-34"> * The value is deflated (RFC 1951) and then base64-encoded so that even mid-size assertions fit inside URL</span>
 <span class="source-line-no">035</span><span id="line-35"> * length limits.  This binding is more commonly used for {@code &lt;AuthnRequest&gt;} than for {@code &lt;Response&gt;},</span>
 <span class="source-line-no">036</span><span id="line-36"> * but some IdPs offer it for assertions too.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li class='jc'&gt;{@link SamlAuthFilter}</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf"&gt;SAML 2.0 Bindings (OASIS)&lt;/a&gt;</span>

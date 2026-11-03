@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,13 +95,13 @@ loadScripts(document, 'script');</script>
  The <a href="../widgets/Op.html#EQ"><code>eq</code></a>/<a href="../widgets/Op.html#NE"><code>ne</code></a> operators <b>require</b> a <a href="#value"><code>value</code></a>; the <a href="../widgets/Op.html#PRESENT"><code>present</code></a>/<a href="../widgets/Op.html#ABSENT"><code>absent</code></a> operators test only whether <code>row[field]</code> is non-null/non-empty and
  therefore <b>omit</b> <code>value</code> from the wire.
 
- <h5 class='section'>Presentation only, never the authorization gate:</h5>
+ <h2 class='section'>Presentation only, never the authorization gate:</h2>
  <p>
  A row whose field does not satisfy this rule renders its <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> present but disabled, carrying
  <a href="#reason"><code>reason</code></a> as a tooltip and <code>aria-describedby</code> text.  The endpoint behind the action must still
  perform its own real check and refuse on its own authority; this rule is never a substitute for that check.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a>
  </ul></div>

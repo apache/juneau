@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used primarily for specifying bean configuration properties on REST classes and methods.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
  </ul></div>
 </section>
@@ -197,7 +196,7 @@ loadScripts(document, 'script');</script>
  The aside section floats on the right of the page for providing content supporting the serialized content of
  the page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       aside={
@@ -210,7 +209,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: HTML
    <li class='note'>
@@ -228,7 +227,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#aside(java.lang.String...)"><code>HtmlDocSerializer.Builder.aside(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -253,7 +252,7 @@ loadScripts(document, 'script');</script>
  <p>
  By default, the aside section is floated to the right.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
   <ja>@HtmlDocConfig</ja>(
       aside={
@@ -275,7 +274,7 @@ loadScripts(document, 'script');</script>
    <li><js>"DEFAULT"</js> (defaults to <js>"RIGHT"</js>)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
@@ -284,7 +283,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#asideFloat(org.apache.juneau.marshall.html.AsideFloat)"><code>HtmlDocSerializer.Builder.asideFloat(AsideFloat)</code></a>
  </ul></div>
 <dl class="notes">
@@ -306,7 +305,7 @@ loadScripts(document, 'script');</script>
  <p>
  Allows you to specify the contents of the footer section on the HTML page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       footer={
@@ -315,7 +314,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: HTML
    <li class='note'>
@@ -333,7 +332,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#footer(java.lang.String...)"><code>HtmlDocSerializer.Builder.footer(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -355,7 +354,7 @@ loadScripts(document, 'script');</script>
  <p>
  Adds the specified HTML content to the head section of the page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       head={
@@ -364,7 +363,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: HTML
    <li class='note'>
@@ -380,7 +379,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#head(java.lang.String...)"><code>HtmlDocSerializer.Builder.head(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -403,7 +402,7 @@ loadScripts(document, 'script');</script>
  Allows you to override the contents of the header section on the HTML page.
  The header section normally contains the title and description at the top of the page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       header={
@@ -412,7 +411,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: HTML
    <li class='note'>
@@ -430,7 +429,7 @@ loadScripts(document, 'script');</script>
       parent class if not overridden.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#header(java.lang.String...)"><code>HtmlDocSerializer.Builder.header(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -453,7 +452,7 @@ loadScripts(document, 'script');</script>
  Allows you to override the contents of the nav section on the HTML page.
  The nav section normally contains the page links at the top of the page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       nav={
@@ -462,7 +461,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: HTML
    <li class='note'>
@@ -482,7 +481,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#nav(java.lang.String...)"><code>HtmlDocSerializer.Builder.nav(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -523,7 +522,7 @@ loadScripts(document, 'script');</script>
  can also be used in addition to various other protocols specified by <a href="../UriResolver.html" title="class in org.apache.juneau.marshall"><code>UriResolver</code></a> such as
  <js>"servlet:/..."</js>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       navlinks={
@@ -535,7 +534,7 @@ loadScripts(document, 'script');</script>
    <jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet {
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
    <li class='note'>
@@ -553,7 +552,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#navlinks(java.lang.String...)"><code>HtmlDocSerializer.Builder.navlinks(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -575,14 +574,14 @@ loadScripts(document, 'script');</script>
  <p>
  Allows you to specify the string message used when trying to serialize an empty array or empty list.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: HTML
    <li class='note'>
@@ -591,7 +590,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#noResultsMessage(java.lang.String)"><code>HtmlDocSerializer.Builder.noResultsMessage(String)</code></a>
  </ul></div>
 <dl class="notes">
@@ -618,12 +617,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#nowrap()"><code>HtmlDocSerializer.Builder.nowrap()</code></a>
  </ul></div>
 <dl class="notes">
@@ -665,12 +664,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#resolveBodyVars()"><code>HtmlDocSerializer.Builder.resolveBodyVars()</code></a>
  </ul></div>
 <dl class="notes">
@@ -692,7 +691,7 @@ loadScripts(document, 'script');</script>
  <p>
  Adds the specified Javascript code to the HTML page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       script={
@@ -701,7 +700,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: Javascript
    <li class='note'>
@@ -719,7 +718,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#script(java.lang.String...)"><code>HtmlDocSerializer.Builder.script(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -741,7 +740,7 @@ loadScripts(document, 'script');</script>
  <p>
  Adds the specified CSS instructions to the HTML page.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       style={
@@ -751,7 +750,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: CSS
    <li class='note'>
@@ -769,7 +768,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#style(java.lang.String...)"><code>HtmlDocSerializer.Builder.style(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -794,7 +793,7 @@ loadScripts(document, 'script');</script>
  <p>
  Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: URL
    <li class='note'>
@@ -806,7 +805,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#stylesheet(java.lang.String...)"><code>HtmlDocSerializer.Builder.stylesheet(String...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -832,14 +831,14 @@ loadScripts(document, 'script');</script>
  By default, the <a href="BasicHtmlDocTemplate.html" title="class in org.apache.juneau.marshall.html"><code>BasicHtmlDocTemplate</code></a> class is used to construct the contents of the HTML page, but
  can be overridden with your own custom implementation class.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       template=MySpecialDocTemplate.<jk>class</jk>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
    <li class='note'>
@@ -847,7 +846,7 @@ loadScripts(document, 'script');</script>
       parent class.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="HtmlDocSerializer.Builder.html#template(java.lang.Class)"><code>HtmlDocSerializer.Builder.template(Class)</code></a>
  </ul></div>
 <dl class="notes">
@@ -896,14 +895,14 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
    <li class='note'>
       Values are appended to the existing list.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlWidgets">Widgets</a>
  </ul></div>
 <dl class="notes">

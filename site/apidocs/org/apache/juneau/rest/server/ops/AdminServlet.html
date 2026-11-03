@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
  (e.g. <code>/threads</code>) &mdash; eliminating the path-doubling that mixin-shaped ops would produce
  when the servlet itself is mounted at <code>/admin/*</code>.
 
- <h5 class='section'>Default-deny security posture:</h5>
+ <h2 class='section'>Default-deny security posture:</h2>
 
  <p>
  Like the mixin, this servlet is annotated <a href="../Rest.html#guards()"><code>@Rest(guards=DenyAllGuard.class)</code></a>,
@@ -113,7 +112,7 @@ loadScripts(document, 'script');</script>
  <a href="../guard/RestGuardList.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuardList</code></a> factory. Pair the servlet with whatever authentication / authorization
  story your service uses.
 
- <h5 class='figure'>Microservice registration:</h5>
+ <h2 class='figure'>Microservice registration:</h2>
 
  <p class='bjava'>
    <ja>@Bean</ja> Servlet admin() {
@@ -121,7 +120,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminMixin</code></a>
    <li class='jc'><a href="AdminProvider.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminProvider</code></a>
    <li class='jc'><a href="../guard/DenyAllGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>DenyAllGuard</code></a>
@@ -318,7 +317,7 @@ loadScripts(document, 'script');</script>
 <dd><code>res</code> - The current REST response.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If an I/O error occurs while writing the response.</dd>
-<dd><code>NotFound</code> - If no <a href="../guard/RateLimitGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RateLimitGuard</code></a> bean is registered on the importer's bean
+<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If no <a href="../guard/RateLimitGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RateLimitGuard</code></a> bean is registered on the importer's bean
    store.</dd>
 </dl>
 </section>

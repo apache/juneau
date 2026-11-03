@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  This mirrors how the request path is instrumented (the framework opens / closes the observation around
  the <code>@RestOp</code> handler) but lets application code instrument arbitrary work.
 
- <h5 class='topic'>Installing a backend</h5>
+ <h2 class='topic'>Installing a backend</h2>
 
  <p>
  The default observer is <a href="Observer.html#NOOP"><code>Observer.NOOP</code></a> until a backend is installed via <a href="#install(org.apache.juneau.rest.server.observation.Observer)"><code>install(Observer)</code></a>
@@ -115,7 +114,7 @@ loadScripts(document, 'script');</script>
  (resolved from the <code>RestContext</code> bean store) and call <a href="Observer.html#start(java.lang.String,java.lang.String)"><code>Observer.start(String, String)</code></a> &mdash;
  this facade is a convenience, not the only entry point.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="Observer.html" title="class in org.apache.juneau.rest.server.observation"><code>Observer</code></a>
    <li class='jc'><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation"><code>Observation</code></a>
  </ul></div>

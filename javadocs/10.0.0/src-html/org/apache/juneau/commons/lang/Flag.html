@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * where atomic operations are not required. It is useful in situations where you need to pass a mutable boolean</span>
 <span class="source-line-no">030</span><span id="line-30"> * reference to lambdas, inner classes, or methods.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *       This class is &lt;b&gt;not thread-safe&lt;/b&gt;. For concurrent access, use {@link java.util.concurrent.atomic.AtomicBoolean} instead.</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='note'&gt;</span>
@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> *       (&lt;c&gt;true&lt;/c&gt;/&lt;c&gt;false&lt;/c&gt;/&lt;c&gt;null&lt;/c&gt;), use {@link BooleanHolder} instead.</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;jc&gt;// Create a flag to track if an operation was performed&lt;/jc&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    Flag &lt;jv&gt;processed&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *    }</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang"&gt;Lang Package&lt;/a&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='jc'&gt;{@link BooleanHolder}</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65">   /**</span>
 <span class="source-line-no">066</span><span id="line-66">    * Creates a new flag initialized to &lt;jk&gt;false&lt;/jk&gt;.</span>
 <span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">069</span><span id="line-69">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">070</span><span id="line-70">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">071</span><span id="line-71">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;flag&lt;/jv&gt;.isUnset());</span>
@@ -93,7 +93,7 @@
 <span class="source-line-no">080</span><span id="line-80">   /**</span>
 <span class="source-line-no">081</span><span id="line-81">    * Creates a new flag with the specified initial state.</span>
 <span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">083</span><span id="line-83">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">084</span><span id="line-84">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">085</span><span id="line-85">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">086</span><span id="line-86">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;flag&lt;/jv&gt;.isSet());</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   /**</span>
 <span class="source-line-no">103</span><span id="line-103">    * Sets the flag to &lt;jk&gt;true&lt;/jk&gt; and returns the previous value.</span>
 <span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">105</span><span id="line-105">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">108</span><span id="line-108">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;wasSet&lt;/jv&gt; = &lt;jv&gt;flag&lt;/jv&gt;.getAndSet();  &lt;jc&gt;// Returns false, flag is now true&lt;/jc&gt;</span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120">   /**</span>
 <span class="source-line-no">121</span><span id="line-121">    * Sets the flag to &lt;jk&gt;false&lt;/jk&gt; and returns the previous value.</span>
 <span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">124</span><span id="line-124">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">125</span><span id="line-125">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">126</span><span id="line-126">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;wasSet&lt;/jv&gt; = &lt;jv&gt;flag&lt;/jv&gt;.getAndUnset();  &lt;jc&gt;// Returns true, flag is now false&lt;/jc&gt;</span>
@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142">    * This method is useful for conditional execution based on the flag state, particularly in lambda expressions</span>
 <span class="source-line-no">143</span><span id="line-143">    * or method chains.</span>
 <span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">147</span><span id="line-147">    *    Flag &lt;jv&gt;initialized&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">148</span><span id="line-148">    *</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169">    * This method is useful for conditional execution based on the flag state, particularly in lambda expressions</span>
 <span class="source-line-no">170</span><span id="line-170">    * or method chains.</span>
 <span class="source-line-no">171</span><span id="line-171">    *</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">173</span><span id="line-173">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    *    Flag &lt;jv&gt;hasErrors&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">175</span><span id="line-175">    *</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">   /**</span>
 <span class="source-line-no">190</span><span id="line-190">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the flag is set.</span>
 <span class="source-line-no">191</span><span id="line-191">    *</span>
-<span class="source-line-no">192</span><span id="line-192">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">194</span><span id="line-194">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">195</span><span id="line-195">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;flag&lt;/jv&gt;.isSet());</span>
@@ -215,7 +215,7 @@
 <span class="source-line-no">202</span><span id="line-202">   /**</span>
 <span class="source-line-no">203</span><span id="line-203">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the flag is not set.</span>
 <span class="source-line-no">204</span><span id="line-204">    *</span>
-<span class="source-line-no">205</span><span id="line-205">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">205</span><span id="line-205">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">206</span><span id="line-206">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">208</span><span id="line-208">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;flag&lt;/jv&gt;.isUnset());</span>
@@ -228,7 +228,7 @@
 <span class="source-line-no">215</span><span id="line-215">   /**</span>
 <span class="source-line-no">216</span><span id="line-216">    * Sets the flag to &lt;jk&gt;true&lt;/jk&gt;.</span>
 <span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">219</span><span id="line-219">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">220</span><span id="line-220">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">221</span><span id="line-221">    *    &lt;jv&gt;flag&lt;/jv&gt;.set();</span>
@@ -249,7 +249,7 @@
 <span class="source-line-no">236</span><span id="line-236">    * This method uses a logical OR operation, so once the flag is set, it remains set regardless of subsequent</span>
 <span class="source-line-no">237</span><span id="line-237">    * calls with &lt;jk&gt;false&lt;/jk&gt;.</span>
 <span class="source-line-no">238</span><span id="line-238">    *</span>
-<span class="source-line-no">239</span><span id="line-239">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">239</span><span id="line-239">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">240</span><span id="line-240">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">241</span><span id="line-241">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">242</span><span id="line-242">    *    &lt;jv&gt;flag&lt;/jv&gt;.setIf(&lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// Flag remains false&lt;/jc&gt;</span>
@@ -268,7 +268,7 @@
 <span class="source-line-no">255</span><span id="line-255">   /**</span>
 <span class="source-line-no">256</span><span id="line-256">    * Sets the flag to &lt;jk&gt;false&lt;/jk&gt;.</span>
 <span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">258</span><span id="line-258">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">259</span><span id="line-259">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">260</span><span id="line-260">    *    Flag &lt;jv&gt;flag&lt;/jv&gt; = Flag.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">261</span><span id="line-261">    *    &lt;jv&gt;flag&lt;/jv&gt;.unset();</span>

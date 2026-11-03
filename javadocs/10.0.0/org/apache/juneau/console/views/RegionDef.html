@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  Juneau-shipped declarative default (<code>JuneauViews.regions.defaultPopulate</code>), which reads exactly
  this descriptor (via <code>ctx.declared</code>) and nothing else.
 
- <h5 class='section'>Mutability</h5>
+ <h2 class='section'>Mutability</h2>
  <p>
  Deliberately mutable, like <a href="Column.html" title="class in org.apache.juneau.console.views"><code>Column</code></a> and <a href="ViewDef.html" title="class in org.apache.juneau.console.views"><code>ViewDef</code></a> (the same rule, stated here since this class
  predates it): a <a href="RegionDef.html" title="class in org.apache.juneau.console.views"><code>RegionDef</code></a> is a server-side authoring bean built up once via its public fields and
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  mutate one concurrently from more than one thread, and must not reuse one across requests unless every request
  treats it as read-only after construction.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// A lazily-activated row-detail region backed by a data URL, refreshing every 30 seconds.</jc>
    RegionDef <jv>region</jv> = RegionDef.<jsm>create</jsm>(<js>"release-notes"</js>)

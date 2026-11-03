@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * and other attributes (synthetic, deprecated, etc.) that can be present on program elements. Each modifier has both</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * a positive flag (e.g., &lt;c&gt;PUBLIC&lt;/c&gt;) and a negated flag (e.g., &lt;c&gt;NOT_PUBLIC&lt;/c&gt;) for convenient filtering.</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Java modifiers - all standard Java modifiers (public, private, protected, static, final, etc.)</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Negated flags - each modifier has a corresponding NOT_* flag for filtering</em>
@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Type attributes - flags for identifying classes, interfaces, enums, records, annotations</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Filtering classes, methods, fields by modifiers</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Identifying special attributes (synthetic, deprecated, bridge methods)</em>
@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Building frameworks that need to analyze program element characteristics</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Check if a class is public&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 	ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</em>
@@ -64,20 +64,20 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isDeprecated&lt;/jv&gt; = &lt;jv&gt;method&lt;/jv&gt;.hasFlag(ElementFlag.DEPRECATED);</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Modifier Flags:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Modifier Flags:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * Standard Java modifiers: &lt;c&gt;PUBLIC&lt;/c&gt;, &lt;c&gt;PRIVATE&lt;/c&gt;, &lt;c&gt;PROTECTED&lt;/c&gt;, &lt;c&gt;STATIC&lt;/c&gt;, &lt;c&gt;FINAL&lt;/c&gt;,</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;SYNCHRONIZED&lt;/c&gt;, &lt;c&gt;VOLATILE&lt;/c&gt;, &lt;c&gt;TRANSIENT&lt;/c&gt;, &lt;c&gt;NATIVE&lt;/c&gt;, &lt;c&gt;ABSTRACT&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * Each has a corresponding &lt;c&gt;NOT_*&lt;/c&gt; flag.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Attribute Flags:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Attribute Flags:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * Non-modifier attributes: &lt;c&gt;ANNOTATION&lt;/c&gt;, &lt;c&gt;ANONYMOUS&lt;/c&gt;, &lt;c&gt;ARRAY&lt;/c&gt;, &lt;c&gt;BRIDGE&lt;/c&gt;, &lt;c&gt;CLASS&lt;/c&gt;,</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;CONSTRUCTOR&lt;/c&gt;, &lt;c&gt;DEFAULT&lt;/c&gt;, &lt;c&gt;DEPRECATED&lt;/c&gt;, &lt;c&gt;ENUM&lt;/c&gt;, &lt;c&gt;ENUM_CONSTANT&lt;/c&gt;, &lt;c&gt;HAS_PARAMS&lt;/c&gt;,</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;LOCAL&lt;/c&gt;, &lt;c&gt;MEMBER&lt;/c&gt;, &lt;c&gt;NON_STATIC_MEMBER&lt;/c&gt;, &lt;c&gt;PRIMITIVE&lt;/c&gt;, &lt;c&gt;RECORD&lt;/c&gt;, &lt;c&gt;SEALED&lt;/c&gt;,</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;c&gt;SYNTHETIC&lt;/c&gt;, &lt;c&gt;VARARGS&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link ElementInfo} - Base class that uses these flags</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauCommonsReflection</a>"&gt;Reflection Package&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
  This class provides a flexible, builder-based approach to defining properties on objects,
  supporting both method-based and field-based access patterns.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Type-safe - generic types for object and value types
    <li>Builder-based - fluent API for construction
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
    <li>Exception handling - uses <a href="../function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingFunction</code></a> and <a href="../function/ThrowingConsumer2.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingConsumer2</code></a> for exception support
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create property with method getter and setter</jc>
    Property&lt;MyClass, String&gt; <jv>nameProperty</jv> = Property
@@ -132,7 +131,7 @@ loadScripts(document, 'script');</script>
    String <jv>value</jv> = <jv>nameProperty</jv>.get(<jv>obj</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect"><code>FieldInfo</code></a> - Field introspection
    <li class='jc'><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> - Method introspection
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
@@ -256,7 +255,7 @@ V&gt;&nbsp;<a href="Property.Builder.html" title="class in org.apache.juneau.com
 V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" title="class in org.apache.juneau.commons.reflect">Property.Builder</a>&lt;T,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-103">create</a></span>()</div>
 <div class="block">Creates a new builder for constructing a property.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Property&lt;MyClass, String&gt; <jv>prop</jv> = Property
       .&lt;MyClass, String&gt;<jsm>create</jsm>()

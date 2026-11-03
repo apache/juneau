@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * Every successful create, update or delete is recorded in the audit trail; see {@link #getAudit()}.</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore"&gt;juneau-petstore&lt;/a&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> */</span>
@@ -231,7 +231,7 @@
 <span class="source-line-no">218</span><span id="line-218">   /**</span>
 <span class="source-line-no">219</span><span id="line-219">    * Adds a batch of available pets, one per requested count, and records one summary {@code RESTOCK} audit entry.</span>
 <span class="source-line-no">220</span><span id="line-220">    *</span>
-<span class="source-line-no">221</span><span id="line-221">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">221</span><span id="line-221">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;added&lt;/jv&gt; = &lt;jv&gt;store&lt;/jv&gt;.restock(Map.&lt;jsm&gt;of&lt;/jsm&gt;(Species.&lt;jsf&gt;DOG&lt;/jsf&gt;, 2, Species.&lt;jsf&gt;CAT&lt;/jsf&gt;, 1), &lt;js&gt;"job:restock"&lt;/js&gt;);</span>
 <span class="source-line-no">224</span><span id="line-224">    *    &lt;jc&gt;// 3 new pets named "DOG #101", "DOG #102", "CAT #103" (species + store-unique id), plus one RESTOCK audit entry.&lt;/jc&gt;</span>
@@ -629,7 +629,7 @@
 <span class="source-line-no">616</span><span id="line-616">   /**</span>
 <span class="source-line-no">617</span><span id="line-617">    * Opens a query session over a snapshot of the pets.</span>
 <span class="source-line-no">618</span><span id="line-618">    *</span>
-<span class="source-line-no">619</span><span id="line-619">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">619</span><span id="line-619">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">620</span><span id="line-620">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">621</span><span id="line-621">    *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt; = &lt;jv&gt;store&lt;/jv&gt;.queryPets()) {</span>
 <span class="source-line-no">622</span><span id="line-622">    *       &lt;jk&gt;return&lt;/jk&gt; DataTablesQuery.&lt;jsm&gt;run&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, &lt;jv&gt;s&lt;/jv&gt;);</span>

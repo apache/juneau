@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64">    * &lt;p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65">    * Results are cached for performance, so repeated calls for the same collection type are very fast.</span>
 <span class="source-line-no">066</span><span id="line-66">    *</span>
-<span class="source-line-no">067</span><span id="line-67">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">067</span><span id="line-67">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">068</span><span id="line-68">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">069</span><span id="line-69">    *    &lt;jc&gt;// Modifiable collections&lt;/jc&gt;</span>
 <span class="source-line-no">070</span><span id="line-70">    *    canAddTo(&lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;());        &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    * &lt;p&gt;</span>
 <span class="source-line-no">104</span><span id="line-104">    * Results are cached for performance, so repeated calls for the same map type are very fast.</span>
 <span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">108</span><span id="line-108">    *    &lt;jc&gt;// Modifiable maps&lt;/jc&gt;</span>
 <span class="source-line-no">109</span><span id="line-109">    *    canPutTo(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());          &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">    * &lt;p&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    * This method returns the canonical JVM class name including the full package path.</span>
 <span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">139</span><span id="line-139">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">140</span><span id="line-140">    *    &lt;jc&gt;// Regular classes&lt;/jc&gt;</span>
 <span class="source-line-no">141</span><span id="line-141">    *    className(String.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "java.lang.String"&lt;/jc&gt;</span>
@@ -190,7 +190,7 @@
 <span class="source-line-no">177</span><span id="line-177">    * This method returns only the simple class name without any package or outer class information.</span>
 <span class="source-line-no">178</span><span id="line-178">    * For inner classes, only the innermost class name is returned.</span>
 <span class="source-line-no">179</span><span id="line-179">    *</span>
-<span class="source-line-no">180</span><span id="line-180">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">181</span><span id="line-181">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">182</span><span id="line-182">    *    &lt;jc&gt;// Regular classes&lt;/jc&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    *    simpleClassName(String.&lt;jk&gt;class&lt;/jk&gt;);            &lt;jc&gt;// "String"&lt;/jc&gt;</span>
@@ -233,7 +233,7 @@
 <span class="source-line-no">220</span><span id="line-220">    * Inner class separators ($) are replaced with dots (.).</span>
 <span class="source-line-no">221</span><span id="line-221">    * Array types are properly formatted with brackets.</span>
 <span class="source-line-no">222</span><span id="line-222">    *</span>
-<span class="source-line-no">223</span><span id="line-223">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">223</span><span id="line-223">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">225</span><span id="line-225">    *    &lt;jc&gt;// Regular classes&lt;/jc&gt;</span>
 <span class="source-line-no">226</span><span id="line-226">    *    simpleQualifiedClassName(String.&lt;jk&gt;class&lt;/jk&gt;);                     &lt;jc&gt;// "String"&lt;/jc&gt;</span>
@@ -302,7 +302,7 @@
 <span class="source-line-no">289</span><span id="line-289">    * missing or extra arguments are provided. This is particularly useful for reflective method/constructor</span>
 <span class="source-line-no">290</span><span id="line-290">    * invocation where parameter order flexibility is desired.</span>
 <span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    * &lt;h5 class='section'&gt;Matching Rules:&lt;/h5&gt;</span>
+<span class="source-line-no">292</span><span id="line-292">    * &lt;h4 class='section'&gt;Matching Rules:&lt;/h4&gt;</span>
 <span class="source-line-no">293</span><span id="line-293">    * &lt;ul&gt;</span>
 <span class="source-line-no">294</span><span id="line-294">    *    &lt;li&gt;If arguments already match parameter types in order and count, they are returned as-is (fast path)</span>
 <span class="source-line-no">295</span><span id="line-295">    *    &lt;li&gt;Otherwise, each parameter type is matched with the first compatible argument</span>
@@ -312,7 +312,7 @@
 <span class="source-line-no">299</span><span id="line-299">    *    &lt;li&gt;Type hierarchy is respected (subclasses match parent parameters)</span>
 <span class="source-line-no">300</span><span id="line-300">    * &lt;/ul&gt;</span>
 <span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">302</span><span id="line-302">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">303</span><span id="line-303">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    *    &lt;jc&gt;// Already in correct order - fast path returns original array&lt;/jc&gt;</span>
 <span class="source-line-no">305</span><span id="line-305">    *    Class&amp;lt;?&amp;gt;[] types = {String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;};</span>
@@ -400,7 +400,7 @@
 <span class="source-line-no">387</span><span id="line-387">    *    &lt;li&gt;&lt;b&gt;Hibernate lazy proxies&lt;/b&gt; - Class name contains &lt;js&gt;"$HibernateProxy$"&lt;/js&gt;</span>
 <span class="source-line-no">388</span><span id="line-388">    * &lt;/ul&gt;</span>
 <span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">390</span><span id="line-390">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">391</span><span id="line-391">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">392</span><span id="line-392">    *    &lt;jc&gt;// Get the real class behind a Spring proxy&lt;/jc&gt;</span>
 <span class="source-line-no">393</span><span id="line-393">    *    &lt;ja&gt;@Service&lt;/ja&gt;</span>
@@ -411,7 +411,7 @@
 <span class="source-line-no">398</span><span id="line-398">    *    &lt;jc&gt;// Returns MyService.class instead of the CGLIB proxy class&lt;/jc&gt;</span>
 <span class="source-line-no">399</span><span id="line-399">    * &lt;/p&gt;</span>
 <span class="source-line-no">400</span><span id="line-400">    *</span>
-<span class="source-line-no">401</span><span id="line-401">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">401</span><span id="line-401">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;</span>
 <span class="source-line-no">402</span><span id="line-402">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">403</span><span id="line-403">    *    &lt;li&gt;For JDK dynamic proxies, returns the first interface implemented by the proxy</span>
 <span class="source-line-no">404</span><span id="line-404">    *    &lt;li&gt;For CGLIB/Javassist/ByteBuddy/Hibernate proxies, returns the superclass</span>

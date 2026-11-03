@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -66,7 +65,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Juneau <a href="../../marshall/Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for
  <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a>.
 
- <h5 class='topic'>Overview</h5>
+ <h2 class='topic'>Overview</h2>
 
  <p>
  A JSON Patch document is a JSON array of operation objects describing changes to apply to a target JSON
@@ -75,7 +74,7 @@ loadScripts(document, 'script');</script>
  member (JSON Pointer per RFC 6901), and op-specific additional members. The matching <code>ContentType</code>
  constant is <code>org.apache.juneau.http.header.ContentType#APPLICATION_JSON_PATCH</code>.
 
- <h5 class='topic'>Bean Classes</h5>
+ <h2 class='topic'>Bean Classes</h2>
  <ul class='spaced-list'>
    <li><a href="JsonPatchOperation.html" title="class in org.apache.juneau.bean.jsonpatch"><code>JsonPatchOperation</code></a> - Abstract base. Polymorphic dispatch
      wired via <code>@Marshalled(typePropertyName="op", dictionary={...})</code>, so the parser materializes the
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
      the JSON Patch <i>document</i> serializes as a top-level JSON array (mirrors <code>JsonSchemaArray</code>).
  </ul>
 
- <h5 class='topic'>Example</h5>
+ <h2 class='topic'>Example</h2>
 
  <p class='bjava'>
    JsonPatch <jv>patch</jv> = <jk>new</jk> JsonPatch()
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
    JsonPatch <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, JsonPatch.<jk>class</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a href="https://datatracker.ietf.org/doc/html/rfc6902">RFC 6902 - JSON Patch</a>
    <li class='link'><a href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901 - JSON Pointer</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonPatch">juneau-bean-jsonpatch</a>

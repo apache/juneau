@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * Applies a {@link RequestBoundary} to every request reaching the servlet container, rejecting those that did not</span>
 <span class="source-line-no">032</span><span id="line-32"> * come from a page this application served.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Why a servlet filter, and not a mixin or a guard&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Why a servlet filter, and not a mixin or a guard&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * The boundary's value depends entirely on there being no way around it, and the two lighter-weight Juneau</span>
 <span class="source-line-no">037</span><span id="line-37"> * mechanisms both leave one:</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> * resolve to nothing and would 404.  Nothing can opt out by omission, which is the property that makes it worth</span>
 <span class="source-line-no">050</span><span id="line-50"> * having.</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;Rejection behavior&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;Rejection behavior&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * A rejected request is answered directly and the chain is not invoked, so the request never reaches application</span>
 <span class="source-line-no">055</span><span id="line-55"> * code.  The response carries the boundary's chosen status, a {@value #REJECTION_HEADER} header naming the</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61"> * the application being reached at {@code localhost} when it accepts {@code 127.0.0.1}, say &amp;mdash; is immediately</span>
 <span class="source-line-no">062</span><span id="line-62"> * diagnosable instead of presenting as an inexplicably broken page.</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;Token availability to the page renderer&lt;/h5&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h2 class='section'&gt;Token availability to the page renderer&lt;/h2&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * On an allowed request the boundary's {@link RequestBoundary#tokenFor(HttpServletRequest) token for that request}</span>
 <span class="source-line-no">067</span><span id="line-67"> * is placed under the {@link #TOKEN_ATTRIBUTE} request attribute, and the header name it must be sent back under is</span>
@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79"> * that writes the token calls {@link #markTokenBearing(HttpServletResponse)} before it writes any of the body; this</span>
 <span class="source-line-no">080</span><span id="line-80"> * filter cannot know which responses embed it.</span>
 <span class="source-line-no">081</span><span id="line-81"> *</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='section'&gt;Sessions&lt;/h5&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h2 class='section'&gt;Sessions&lt;/h2&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;p&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> * A {@link CsrfBoundary} with a {@linkplain CsrfTokens#perSession() per-session} token needs the session to exist</span>
 <span class="source-line-no">085</span><span id="line-85"> * before the page is written, or the page carries a token that verifies against nothing.  The boundary itself never</span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97"> * for HTML, Juneau's own HTML REST pages included, does.  The filter never changes a session id and never sets cookie</span>
 <span class="source-line-no">098</span><span id="line-98"> * attributes; those stay the application's (see {@link CsrfBoundary}).</span>
 <span class="source-line-no">099</span><span id="line-99"> *</span>
-<span class="source-line-no">100</span><span id="line-100"> * &lt;h5 class='section'&gt;Registration: order and dispatcher types&lt;/h5&gt;</span>
+<span class="source-line-no">100</span><span id="line-100"> * &lt;h2 class='section'&gt;Registration: order and dispatcher types&lt;/h2&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> * &lt;p&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> * Map the filter at {@code /*} so nothing can be reached around it.  Register it ahead of any filter that acts on the</span>
 <span class="source-line-no">103</span><span id="line-103"> * request on the application's behalf.  A {@link CsrfBoundary} using</span>
@@ -131,7 +131,7 @@
 <span class="source-line-no">118</span><span id="line-118"> * {@code null} dispatcher set in {@code addMappingForUrlPatterns}, or Spring Boot's {@code FilterRegistrationBean}</span>
 <span class="source-line-no">119</span><span id="line-119"> * default) is {@code REQUEST} only.</span>
 <span class="source-line-no">120</span><span id="line-120"> *</span>
-<span class="source-line-no">121</span><span id="line-121"> * &lt;h5 class='section'&gt;Example (Spring Boot):&lt;/h5&gt;</span>
+<span class="source-line-no">121</span><span id="line-121"> * &lt;h2 class='section'&gt;Example (Spring Boot):&lt;/h2&gt;</span>
 <span class="source-line-no">122</span><span id="line-122"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">123</span><span id="line-123"> *    &lt;ja&gt;@Bean&lt;/ja&gt;</span>
 <span class="source-line-no">124</span><span id="line-124"> *    &lt;jk&gt;public&lt;/jk&gt; FilterRegistrationBean&amp;lt;RequestBoundaryFilter&amp;gt; boundary(RequestBoundary &lt;jv&gt;b&lt;/jv&gt;) {</span>
@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line-129"> *    }</span>
 <span class="source-line-no">130</span><span id="line-130"> * &lt;/p&gt;</span>
 <span class="source-line-no">131</span><span id="line-131"> *</span>
-<span class="source-line-no">132</span><span id="line-132"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">132</span><span id="line-132"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">133</span><span id="line-133"> *    &lt;li class='jic'&gt;{@link RequestBoundary}</span>
 <span class="source-line-no">134</span><span id="line-134"> *    &lt;li class='jc'&gt;{@link LoopbackBoundaryFilter}</span>
 <span class="source-line-no">135</span><span id="line-135"> * &lt;/ul&gt;</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  This is particularly useful in Spring Boot environments that auto-detect servlets to deploy in servlet containers,
  but you want this resource to be deployed as a child instead.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  </ul></div>
 </section>
@@ -388,7 +387,7 @@ loadScripts(document, 'script');</script>
       lowest precedence.
  </ol>
 
- <h5 class='section'>Accepted return shapes:</h5><ul>
+ <h4 class='section'>Accepted return shapes:</h4><ul>
    <li><code>null</code> &mdash; no override; resolution falls through to the <code>@Rest(paths=...)</code>
       annotation default.
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> &mdash; a single path or a comma-delimited list, e.g.
@@ -408,7 +407,7 @@ loadScripts(document, 'script');</script>
  and <code>$S{prop,default}</code> resolve through the bootstrap variable catalog), and the post-SVL value is
  comma-split with each piece trimmed and empty pieces dropped.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Returning <code>null</code> (the default) means &quot;inherit annotation&quot; &mdash; the next rung resolves.
    <li class='note'>

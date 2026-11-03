@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * Settings instances are created using the {@link Builder} pattern. Use {@link #create()} to create a new builder,</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * or {@link #get()} to get the singleton instance (which is created using default builder settings).</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Lookup Order:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Lookup Order:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * When retrieving a property value, the lookup order is:</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;</em>
@@ -68,14 +68,14 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * If SPI registered no system-property source (a shaded jar that does not merge &lt;c&gt;META-INF/services&lt;/c&gt;, for example),</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * a fallback system-property source sits just above the relaxed environment source.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Sources vs Stores:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Sources vs Stores:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Sources&lt;/b&gt; ({@link PropertySource}) - Provide read-only access to property values. Examples: {@link FunctionalPropertySource}</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Stores&lt;/b&gt; ({@link PropertyStore}) - Provide read/write access to property values. Examples: {@link MapStore}, {@link FunctionalPropertyStore}</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Stores can be used as sources (they extend {@link PropertySource}), so you can add stores via {@link Builder#addSource(PropertySource)}</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;System property access - read Java system properties with type conversion via {@link StringSetting}</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Global overrides - override system properties globally for all threads (stored in a {@link PropertyStore})</em>
@@ -86,7 +86,7 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Resettable suppliers - settings are returned as {@link StringSetting} instances that can be reset to force recomputation</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Usage Examples:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Get a system property as a StringSetting (using singleton instance)&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * 	StringSetting &lt;jv&gt;setting&lt;/jv&gt; = Settings.&lt;jsf&gt;get&lt;/jsf&gt;().get(&lt;js&gt;"my.property"&lt;/js&gt;);</em>
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment"> * 		.build();</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;System Properties:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;System Properties:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;c&gt;juneau.settings.disableGlobal&lt;/c&gt; (system property) or &lt;c&gt;JUNEAU_SETTINGS_DISABLEGLOBAL&lt;/c&gt; (system env) - If set to &lt;c&gt;true&lt;/c&gt;, prevents new global overrides</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment"> * 		from being set via {@link #setGlobal(String, String)}. Existing global overrides will still be</em>
@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * configuration. The builder allows you to configure stores, sources, and other settings</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * before building the final Settings instance.</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Create a custom Settings instance&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
@@ -334,7 +334,7 @@
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">		 * {@link Settings#get(String, Object)}. The function will be used to convert string values</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">		 * to the specified type.</em>
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">		 * 	&lt;jc&gt;// Register a custom converter for a custom type&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">		 * 	Settings &lt;jv&gt;custom&lt;/jv&gt; = Settings.&lt;jsf&gt;create&lt;/jsf&gt;()</em>
@@ -625,7 +625,7 @@
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</em>
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.</em>
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// System property: -Dmy.property=true&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * 	Boolean &lt;jv&gt;flag&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
@@ -811,7 +811,7 @@
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> <em class="jxr_javadoccomment">	 * When a conversion method or constructor is found via reflection, it is cached in the</em>
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> <em class="jxr_javadoccomment">	 * &lt;c&gt;toTypeFunctions&lt;/c&gt; map for future use.</em>
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> <em class="jxr_javadoccomment">	 * &lt;ul class='spaced-list'&gt;</em>
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Boolean&lt;/c&gt; - Uses &lt;c&gt;Boolean.valueOf(String)&lt;/c&gt; static method</em>
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Integer&lt;/c&gt; - Uses &lt;c&gt;Integer.valueOf(String)&lt;/c&gt; static method</em>

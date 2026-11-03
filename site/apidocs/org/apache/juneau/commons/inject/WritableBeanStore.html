@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
  This interface provides write operations for bean stores, allowing beans to be added
  either as direct instances or as suppliers for lazy initialization.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    WritableBeanStore <jv>beanStore</jv> = ...;
 
@@ -111,7 +110,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
    <jv>beanStore</jv>.clear();
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> - Read-only bean lookup interface
  </ul></div>
 </section>
@@ -526,7 +525,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
  bean store has a per-test overlay pushed at <code>@BeforeEach</code>, then popped at <code>@AfterEach</code>, so
  subsequent tests see the original beans again with no rebuild cost.
 
- <h5 class='section'>Composition with <code>overridingParent</code>:</h5>
+ <h4 class='section'>Composition with <code>overridingParent</code>:</h4>
  <p>
  When this store was constructed with an
  <a href="BasicBeanStore.html#%3Cinit%3E(org.apache.juneau.commons.inject.BeanStore,org.apache.juneau.commons.inject.BeanStore)">overriding parent</a> <i>and</i> has overlays

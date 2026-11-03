@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  and the submit endpoint calls <a href="#verify(java.lang.String,java.lang.String,java.lang.String,java.lang.String)"><code>verify(String, String, String, String)</code></a> (usually through
  <a href="RowJobSubmit.html#verify(org.apache.juneau.console.views.JobKeyLedger,java.lang.String,java.lang.String)"><code>RowJobSubmit.verify(JobKeyLedger, String, String)</code></a>).
 
- <h5 class='section'>Rules</h5>
+ <h2 class='section'>Rules</h2>
  <ul class='spaced-list'>
    <li><b>One refusal for every miss.</b>  Unknown, expired, evicted and mismatched keys all verify empty, and the
       caller answers all of them with <a href="#REFUSAL_CODE"><code>REFUSAL_CODE</code></a>, so the answer is no oracle for "this value exists for
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
  <p>
  In-memory and single-process, like <a href="AsyncJobRegistry.html" title="class in org.apache.juneau.console.views"><code>AsyncJobRegistry</code></a>.  Safe for concurrent use.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>private final</jk> JobKeyLedger <jv>jobKeys</jv> = JobKeyLedger.<jsm>create</jsm>();
 
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="IdempotencyKey.html" title="class in org.apache.juneau.console.views"><code>IdempotencyKey</code></a>
    <li class='jc'><a href="RowJobSubmit.html" title="class in org.apache.juneau.console.views"><code>RowJobSubmit</code></a>

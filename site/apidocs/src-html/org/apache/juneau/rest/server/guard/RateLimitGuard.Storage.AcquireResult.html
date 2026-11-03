@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * empty a {@link TooManyRequests} exception is thrown with a {@code Retry-After} header set to the integer</span>
 <span class="source-line-no">037</span><span id="line-37"> * number of seconds until the next token will be available.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='topic'&gt;Example usage&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='topic'&gt;Example usage&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/api"&lt;/js&gt;)</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *    }</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='topic'&gt;Keying&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='topic'&gt;Keying&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * The default key is the request's {@linkplain RestRequest#getRemoteAddr() remote address}.  Set</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67"> * of the application, attackers can spoof the {@code X-Forwarded-For} header and defeat the IP-based key.  Only</span>
 <span class="source-line-no">068</span><span id="line-68"> * opt in when the request edge enforces the header.</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='topic'&gt;Storage&lt;/h5&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='topic'&gt;Storage&lt;/h2&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * Bucket state is held by a pluggable {@link Storage} SPI.  The default {@link Storage#inMemory()} implementation</span>
@@ -88,14 +88,14 @@
 <span class="source-line-no">075</span><span id="line-75"> * for single-pod deployments.  Distributed deployments should provide a substrate-backed implementation</span>
 <span class="source-line-no">076</span><span id="line-76"> * (e.g. Redis) so per-pod buckets do not split the shared rate envelope.</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;h5 class='topic'&gt;Probe paths&lt;/h5&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> * &lt;h2 class='topic'&gt;Probe paths&lt;/h2&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;p&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * Built-in probe paths ({@code /healthz}, {@code /readyz}, {@code /livez}) are exempted from throttling by</span>
 <span class="source-line-no">082</span><span id="line-82"> * default so a misconfigured limit cannot mask a healthy pod from the orchestrator.  Override via</span>
 <span class="source-line-no">083</span><span id="line-83"> * {@link Builder#exemptPaths(String...)}.</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='topic'&gt;Time source&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='topic'&gt;Time source&lt;/h2&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> * Refill math uses {@link System#nanoTime()}.  This is monotonic and safe across wall-clock jumps but does not</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93"> * {@link BucketState#lastRequest()} instant reported by {@link Storage#snapshot()} is read from a separate</span>
 <span class="source-line-no">094</span><span id="line-94"> * {@link Clock} (default {@link Clock#systemUTC()}), likewise overridable through a package-private constructor.</span>
 <span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId"&gt;Rate-Limiting and Request-Id Propagation&lt;/a&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> * &lt;/ul&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> *</span>

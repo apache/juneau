@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30">/**</span>
 <span class="source-line-no">031</span><span id="line-31"> * Java bean wrapper class.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='topic'&gt;Description&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows properties on the wrapped</span>
 <span class="source-line-no">036</span><span id="line-36"> * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * {@link BeanMap#of(Object, BeanMeta)}; the marshalling layer's {@code MarshallingSession#toBeanMap(Object)}</span>
 <span class="source-line-no">041</span><span id="line-41"> * additionally wires a {@link BeanSession} into the resulting map for session-aware behavior.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='topic'&gt;Bean property order&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='topic'&gt;Bean property order&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()}</span>
 <span class="source-line-no">046</span><span id="line-46"> * methods is as follows:</span>
@@ -70,13 +70,13 @@
 <span class="source-line-no">057</span><span id="line-57"> *       Otherwise, properties are returned in alphabetical order.</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='topic'&gt;POJO swaps&lt;/h5&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h2 class='topic'&gt;POJO swaps&lt;/h2&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
 <span class="source-line-no">062</span><span id="line-62"> * If {@code ObjectSwap} transforms are defined on the class types of the properties of this bean or the bean properties</span>
 <span class="source-line-no">063</span><span id="line-63"> * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the</span>
 <span class="source-line-no">064</span><span id="line-64"> * property value to and from the serialized form.</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='topic'&gt;Thread safety&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='topic'&gt;Thread safety&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
 <span class="source-line-no">068</span><span id="line-68"> * Instances are not thread-safe.</span>
 <span class="source-line-no">069</span><span id="line-69"> * This type is mutable (wrapped bean reference, property caches, and optional session pointer) and does not perform</span>
@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161">    * A property counts as written once {@link #put(String, Object)} (or a collection {@code add}) has been called for</span>
 <span class="source-line-no">162</span><span id="line-162">    * it, even with a &lt;jk&gt;null&lt;/jk&gt; value.  Parsers call this once per bean, before the bean is constructed.</span>
 <span class="source-line-no">163</span><span id="line-163">    *</span>
-<span class="source-line-no">164</span><span id="line-164">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">164</span><span id="line-164">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">165</span><span id="line-165">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">166</span><span id="line-166">    *    &lt;jc&gt;// MyBean has @BeanProp(required=true) on 'name' and 'zip'.&lt;/jc&gt;</span>
 <span class="source-line-no">167</span><span id="line-167">    *    BeanMap&amp;lt;MyBean&amp;gt; &lt;jv&gt;m&lt;/jv&gt; = &lt;jv&gt;session&lt;/jv&gt;.newBeanMap(MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
@@ -416,7 +416,7 @@
 <span class="source-line-no">403</span><span id="line-403">    * {@code @Swap(value)} annotation, this method will return a String containing an</span>
 <span class="source-line-no">404</span><span id="line-404">    * ISO8601 date-time string value.</span>
 <span class="source-line-no">405</span><span id="line-405">    *</span>
-<span class="source-line-no">406</span><span id="line-406">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">406</span><span id="line-406">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">407</span><span id="line-407">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">408</span><span id="line-408">    *    &lt;jc&gt;// Construct a bean with a 'birthDate' Date field&lt;/jc&gt;</span>
 <span class="source-line-no">409</span><span id="line-409">    *    Person &lt;jv&gt;person&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Person();</span>
@@ -745,7 +745,7 @@
 <span class="source-line-no">732</span><span id="line-732">    * {@code @Swap(value)} annotation, the value being passed in must be</span>
 <span class="source-line-no">733</span><span id="line-733">    * a String containing an ISO8601 date-time string value.</span>
 <span class="source-line-no">734</span><span id="line-734">    *</span>
-<span class="source-line-no">735</span><span id="line-735">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">735</span><span id="line-735">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">736</span><span id="line-736">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">737</span><span id="line-737">    *    &lt;jc&gt;// Construct a bean with a 'birthDate' Date field&lt;/jc&gt;</span>
 <span class="source-line-no">738</span><span id="line-738">    *    Person &lt;jv&gt;person&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Person();</span>

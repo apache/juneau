@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * Bean-only ({@code juneau-console-widgets}): the emitter and runtime live in {@code juneau-console-views}.</span>
 <span class="source-line-no">032</span><span id="line-32"> * Titles, tooltips, and labels are painted with {@code textContent} by the runtime, never as markup.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;{@code end} is layout-significant, with split inclusivity:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;{@code end} is layout-significant, with split inclusivity:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;ul&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;b&gt;All-day (date-only {@code end}):&lt;/b&gt; &lt;b&gt;inclusive&lt;/b&gt;.  {@code start=2026-03-02}, {@code end=2026-03-04}</span>
 <span class="source-line-no">037</span><span id="line-37"> *       occupies &lt;b&gt;three&lt;/b&gt; day cells.</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *       {@code start} is zero-duration and is rejected, as is any {@code end} before {@code start}.</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;All-day agreement and the malformed set:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;All-day agreement and the malformed set:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * Agreement between {@code allDay} and the shape of {@code end} is decided by {@link #effectiveAllDay()}, never by</span>
 <span class="source-line-no">050</span><span id="line-50"> * the raw {@link #allDay} field, so a &lt;jk&gt;null&lt;/jk&gt; {@code allDay} paired with matching {@code start}/{@code end}</span>
@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62"> * through {@link #retainWellFormed(Collection)} &amp;mdash; the same rule on both paths.  Neither fails the whole</span>
 <span class="source-line-no">063</span><span id="line-63"> * definition nor the whole month payload.  An omitted {@code end} is &lt;b&gt;not&lt;/b&gt; malformed.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Timezone contract:&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;Timezone contract:&lt;/h2&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * {@code start}/{@code end} are interpreted as an ISO-8601 local date ({@code yyyy-MM-dd}) or local date-time</span>
 <span class="source-line-no">068</span><span id="line-68"> * ({@code yyyy-MM-ddTHH:mm}).  A trailing offset or {@code Z} is &lt;b&gt;fail-soft ignored, never rejected&lt;/b&gt; &amp;mdash; a</span>

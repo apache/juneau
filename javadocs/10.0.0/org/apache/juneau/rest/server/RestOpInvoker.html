@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="stats/MethodInvoker.html" title="class in org.apache.juneau.rest.server.stats">MethodInvoker</a></span></div>
 <div class="block">A specialized invoker for methods that are called during a servlet request.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
  </ul></div>
 </section>
@@ -226,7 +225,7 @@ loadScripts(document, 'script');</script>
  <a href="RestContext.html#postCall(org.apache.juneau.rest.server.RestOpSession)"><code>RestContext.postCall(RestOpSession)</code></a>) continue to use <a href="#invoke(org.apache.juneau.rest.server.RestOpSession)"><code>invoke(RestOpSession)</code></a> so the
  observability boundary stays anchored on the user-facing handler.
 
- <h5 class='section'>Virtual-thread dispatch</h5>
+ <h4 class='section'>Virtual-thread dispatch</h4>
  <p>
  When the operation opts into virtual threads via <code>@Rest(virtualThreads=true)</code> or
  <code>@RestOp(virtualThreads=true)</code> and the runtime is Java 21+, the entire body of this method
@@ -235,7 +234,7 @@ loadScripts(document, 'script');</script>
  That keeps observability scoping correct (open and close run on the same thread) while letting
  blocking I/O inside the handler park a virtual thread instead of the carrier.
 
- <h5 class='section'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> returns</h5>
+ <h4 class='section'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> returns</h4>
  <p>
  When the handler returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a>, the observability close is deferred to the
  future's <code>whenComplete</code> callback so metrics and traces capture the actual completion time

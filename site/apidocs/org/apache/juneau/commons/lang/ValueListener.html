@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,13 +95,13 @@ loadScripts(document, 'script');</script>
  Only one listener can be registered per <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a> object. Setting a new listener will replace any
  previously registered listener.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p>
  The listener is triggered every time <a href="Holder.html#set(T)"><code>Holder.set(Object)</code></a> is called, including when setting
  to <jk>null</jk>. Other methods like <a href="Holder.html#getAndSet(T)"><code>Holder.getAndSet(Object)</code></a> also trigger the listener
  since they call <code>set()</code> internally.
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Simple logging listener</jc>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"initial"</js>);
@@ -131,7 +130,7 @@ loadScripts(document, 'script');</script>
    <jv>number</jv>.set(5).set(10).set(15);  <jc>// sum = 30</jc>
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       The listener is called <b>after</b> the value has been changed, so <a href="Holder.html#get()"><code>Holder.get()</code></a> will return
       the new value.
@@ -144,7 +143,7 @@ loadScripts(document, 'script');</script>
       This interface is a functional interface and can be used with lambda expressions or method references.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
    <li class='jc'><a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>
  </ul></div>
@@ -191,7 +190,7 @@ loadScripts(document, 'script');</script>
  This method is called <b>after</b> the value has been updated, so calling <a href="Holder.html#get()"><code>Holder.get()</code></a> on the
  associated value object will return the new value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
    <jv>value</jv>.listener((<jv>newValue</jv>) -&gt; {

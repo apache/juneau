@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,7 +85,7 @@ loadScripts(document, 'script');</script>
  <a href="../Microservice.html#stop()"><code>stop()</code></a>s it afterward (releasing the port and
  firing <code>@PreDestroy</code> hooks).
 
- <h5 class='topic'>Specifying the system under test</h5>
+ <h2 class='topic'>Specifying the system under test</h2>
 
  <p>
  The SUT is declared <i>explicitly</i> (no classpath scanning), two complementary ways:
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
  In both cases the extension additionally installs an <a href="EphemeralJettyServerConfig.html" title="class in org.apache.juneau.microservice.test"><code>EphemeralJettyServerConfig</code></a> (binding a Jetty
  <code>Server</code> to port 0) and <code>JettyConfiguration</code>, so tests only contribute their resources.
 
- <h5 class='topic'>Mock-bean injection</h5>
+ <h2 class='topic'>Mock-bean injection</h2>
 
  <p>
  Declare collaborators to substitute with the existing <a href="../../bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a>
@@ -113,7 +112,7 @@ loadScripts(document, 'script');</script>
  service sees them from startup. <code>@TestBean(mode = Mode.OVERLAY)</code> pushes/pops against the already-booted
  instance instead.
 
- <h5 class='topic'>What gets injected into tests</h5>
+ <h2 class='topic'>What gets injected into tests</h2>
 
  <p>
  Test methods (and lifecycle methods) may declare parameters resolved by the extension:
@@ -123,14 +122,14 @@ loadScripts(document, 'script');</script>
  / <code>Integer</code>). The same <code>TestBeanStore</code> parameter the underlying
  <a href="../../bct/junit/JuneauBeanStoreExtension.html" title="class in org.apache.juneau.bct.junit"><code>JuneauBeanStoreExtension</code></a> resolves is available too.
 
- <h5 class='topic'>When to use this vs. <code>MockRestClient</code></h5>
+ <h2 class='topic'>When to use this vs. <code>MockRestClient</code></h2>
 
  <p>
  Use <code>@MicroserviceTest</code> for a genuine full-microservice integration test &mdash; real server, real
  connectors, real lifecycle, over HTTP. For an in-JVM test of a single <code>@Rest</code> resource (no server, no
  sockets), use <code>MockRestClient</code> directly; the two paths are intentionally distinct.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@MicroserviceTest</ja>(configurations=MyServerConfig.<jk>class</jk>)
    <jk>class</jk> MyServiceTest {
@@ -150,7 +149,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="MicroserviceExtension.html" title="class in org.apache.juneau.microservice.test"><code>MicroserviceExtension</code></a>
    <li class='jc'><a href="../../bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>TestBean</code></a>
  </ul></div>

@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * multipart or {@code text/plain} {@code POST} is refused.  Every refusal names its reason in the</span>
 <span class="source-line-no">042</span><span id="line-42"> * {@value RequestBoundaryFilter#REJECTION_HEADER} response header.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;The token&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;The token&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * The token is per process ({@link CsrfTokens#perProcess()}): the petstore has no login session, and the</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@code Origin} check does the real work.  A restart invalidates the token on every open page, so reload them.  A</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61"> * ever published on console pages, which carry the console's token too, so on every normal path the page is already</span>
 <span class="source-line-no">062</span><span id="line-62"> * marked.</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;The host&lt;/h5&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h2 class='section'&gt;The host&lt;/h2&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * The request's own origin is its scheme plus its {@code Host} header; forwarded headers are never read.  By default</span>
 <span class="source-line-no">067</span><span id="line-67"> * any {@code Host} is answered, which suits a loopback developer setup.  On a host served over plain HTTP, set</span>
@@ -89,7 +89,7 @@
 <span class="source-line-no">076</span><span id="line-76"> * framework boundary's {@link org.apache.juneau.rest.server.filter.CsrfBoundary.OriginSource#CONTAINER CONTAINER} origin source, which this demo does not</span>
 <span class="source-line-no">077</span><span id="line-77"> * configure.</span>
 <span class="source-line-no">078</span><span id="line-78"> *</span>
-<span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;p&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * In a Juneau microservice, contribute a &lt;c&gt;ServletFilterRegistration&lt;/c&gt; &lt;c&gt;@Bean&lt;/c&gt; just after the console</span>
 <span class="source-line-no">082</span><span id="line-82"> * boundary's, sharing the one instance with it:</span>

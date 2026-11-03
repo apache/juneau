@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
  <p>
  Every successful create, update or delete is recorded in the audit trail; see <a href="#getAudit()"><code>getAudit()</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  </ul></div>
 </section>
@@ -557,7 +556,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;actor)</span></div>
 <div class="block">Adds a batch of available pets, one per requested count, and records one summary <code>RESTOCK</code> audit entry.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>var</jk> <jv>added</jv> = <jv>store</jv>.restock(Map.<jsm>of</jsm>(Species.<jsf>DOG</jsf>, 2, Species.<jsf>CAT</jsf>, 1), <js>"job:restock"</js>);
    <jc>// 3 new pets named "DOG #101", "DOG #102", "CAT #103" (species + store-unique id), plus one RESTOCK audit entry.</jc>
@@ -958,7 +957,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/beanquery/InMemoryBeanQuerySession.html" title="class in org.apache.juneau.commons.beanquery">InMemoryBeanQuerySession</a>&lt;<a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/service/PetStore.html#line-628">queryPets</a></span>()</div>
 <div class="block">Opens a query session over a snapshot of the pets.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> (<jk>var</jk> <jv>s</jv> = <jv>store</jv>.queryPets()) {
       <jk>return</jk> DataTablesQuery.<jsm>run</jsm>(<jv>req</jv>, <jv>s</jv>);

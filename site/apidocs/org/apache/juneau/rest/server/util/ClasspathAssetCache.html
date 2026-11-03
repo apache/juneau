@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,7 +85,7 @@ loadScripts(document, 'script');</script>
  <code>ConsoleChromeMixin</code> (juneau-console) and <code>ViewsMixin</code> (juneau-console-views)
  previously each hand-rolled as their own private statics and static cache maps.
 
- <h5 class='section'>Version-anchor:</h5>
+ <h2 class='section'>Version-anchor:</h2>
  <p>
  <a href="#buildVersion()"><code>buildVersion()</code></a> resolves <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Package.html#getImplementationVersion()" title="class or interface in java.lang" class="external-link"><code>Package.getImplementationVersion()</code></a> from the constructor-supplied
  <b>anchor</b> class, not from this class's own class/package. A mixin composes one <a href="ClasspathAssetCache.html" title="class in org.apache.juneau.rest.server.util"><code>ClasspathAssetCache</code></a>
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
  on this class instead would resolve <code>juneau-rest-server</code>'s own implementation version for every
  consuming mixin, silently changing every consumer's cache-buster URLs.
 
- <h5 class='section'>Thread-safety:</h5>
+ <h2 class='section'>Thread-safety:</h2>
  <p>
  Backed by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a>s; safe to share across concurrent requests. Classpath-shipped resources
  are assumed immutable for the lifetime of the JVM, so bytes and hashes are computed at most once per resource.</div>

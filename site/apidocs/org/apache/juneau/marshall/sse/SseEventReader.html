@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,14 +91,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  WHATWG parse state machine (<a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">HTML §9.2</a>).
  Designed for long-lived SSE streams that outlive any reasonable per-call buffer.
 
- <h5 class='section'>Why a separate class:</h5>
+ <h2 class='section'>Why a separate class:</h2>
  <p>
  No other Juneau marshaller ships a separate iterator-style helper. SSE warrants the deviation
  because SSE responses are open until the client disconnects or the server pushes its last event;
  forcing callers through the eager <code>List&lt;SseEvent&gt;</code> path would defeat the entire point of
  using SSE.
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <jk>try</jk> (SseEventReader <jv>r</jv> = <jk>new</jk> SseEventReader(<jv>responseReader</jv>)) {
       <jk>while</jk> (<jv>r</jv>.hasNext()) {
@@ -109,11 +108,11 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  </ul></div>
 </section>

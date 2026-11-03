@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * selected stock theme's override block if one other than {@code open} was selected, appended as</span>
 <span class="source-line-no">044</span><span id="line-44"> * {@code html:root{}} blocks.</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Mount styles:&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Mount styles:&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * Both of the following arrangements serve the stylesheets at the {@link #CHROME_CSS_PATH} / {@link #THEME_CSS_DIR}</span>
 <span class="source-line-no">049</span><span id="line-49"> * URLs with no path juggling by the host resource:</span>
@@ -75,11 +75,11 @@
 <span class="source-line-no">062</span><span id="line-62"> * Each operation below therefore declares &lt;i&gt;both&lt;/i&gt; its prefixed path and the same path minus the</span>
 <span class="source-line-no">063</span><span id="line-63"> * {@code /juneau-console} prefix, so whichever one the arrangement leaves to be matched resolves.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Theme precedence&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;Theme precedence&lt;/h2&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p&gt;{@link Builder#theme(String)} if set, else {@link Theme#OPEN}. {@link Theme#OPEN}'s block is always appended</span>
 <span class="source-line-no">067</span><span id="line-67"> * first; a selected non-{@code open} stock theme adds exactly one more block.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Stylesheet load-order band:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;Stylesheet load-order band:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * At equal cascade specificity, whichever of {@code juneau-views.css} and this class's {@code chrome.css} is</span>
 <span class="source-line-no">072</span><span id="line-72"> * declared later in a page's {@code &lt;head&gt;} wins &amp;mdash; the exact ambiguity the {@code overrideBlock} theme block</span>
@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line-86"> * {@code juneau-views.css} in either order, which is precisely why the {@code html:root} fix exists: so the</span>
 <span class="source-line-no">087</span><span id="line-87"> * active theme wins regardless of which order the consumer's links happen to appear in.</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
-<span class="source-line-no">089</span><span id="line-89"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;jc&gt;// Stock chrome.css (Theme.OPEN tokens), mounted standalone at /juneau-console/*.&lt;/jc&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(mixins=ConsoleChromeMixin.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -732,7 +732,7 @@
 <span class="source-line-no">719</span><span id="line-719">    * carry one). This method is public so the FreeMarker {@code &lt;@theme&gt;} directive renders its inline block with</span>
 <span class="source-line-no">720</span><span id="line-720">    * the same code that serves {@code chrome.css}.</span>
 <span class="source-line-no">721</span><span id="line-721">    *</span>
-<span class="source-line-no">722</span><span id="line-722">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">722</span><span id="line-722">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">723</span><span id="line-723">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">724</span><span id="line-724">    *    Theme &lt;jv&gt;theme&lt;/jv&gt; = Theme.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"corporate"&lt;/js&gt;)</span>
 <span class="source-line-no">725</span><span id="line-725">    *       .token(&lt;js&gt;"--jc-accent"&lt;/js&gt;, &lt;js&gt;"#b45309"&lt;/js&gt;)</span>
@@ -783,7 +783,7 @@
 <span class="source-line-no">770</span><span id="line-770">    * piece is {@link #SCHEME_SCRIPT} (stamped with the request's CSP nonce when one is set) followed by a link to the</span>
 <span class="source-line-no">771</span><span id="line-771">    * shipped dark layer.</span>
 <span class="source-line-no">772</span><span id="line-772">    *</span>
-<span class="source-line-no">773</span><span id="line-773">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">773</span><span id="line-773">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">774</span><span id="line-774">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">775</span><span id="line-775">    *    SchemeHead &lt;jv&gt;h&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;schemeHead&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, &lt;js&gt;"auto"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">776</span><span id="line-776">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;attrs&lt;/jv&gt; = &lt;jv&gt;h&lt;/jv&gt;.htmlAttributes().isEmpty() ? &lt;js&gt;""&lt;/js&gt; : &lt;js&gt;" "&lt;/js&gt; + &lt;jv&gt;h&lt;/jv&gt;.htmlAttributes();</span>
@@ -861,7 +861,7 @@
 <span class="source-line-no">848</span><span id="line-848">    * as {@link Theme.Builder}: the name shape, the reserved {@code --jc-chrome-*} namespace, the value grammar, and</span>
 <span class="source-line-no">849</span><span id="line-849">    * one channel per name.</span>
 <span class="source-line-no">850</span><span id="line-850">    *</span>
-<span class="source-line-no">851</span><span id="line-851">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">851</span><span id="line-851">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">852</span><span id="line-852">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">853</span><span id="line-853">    *    String &lt;jv&gt;css&lt;/jv&gt; = ConsoleChromeMixin.&lt;jsm&gt;schemeOverrideBlock&lt;/jsm&gt;(</span>
 <span class="source-line-no">854</span><span id="line-854">    *       Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"--jc-link"&lt;/js&gt;, &lt;js&gt;"#6cb4ff"&lt;/js&gt;), Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"--jc-focus"&lt;/js&gt;, &lt;js&gt;"var(--jc-accent)"&lt;/js&gt;));</span>

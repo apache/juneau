@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during
  parsing.
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
 
  <p>
  <c>ObjectSwaps</c> are used to extend the functionality of the serializers and parsers to be able to handle
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
  <br><a href="../../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parsers</code></a> use swaps to convert objects of type S into objects of type T, and on calls to
  <a href="../../../commons/bean/BeanMap.html#put(java.lang.String,java.lang.Object)"><code>BeanMap.put(String,Object)</code></a>.
 
- <h5 class='topic'>Swap Class Type <code>&lt;S&gt;</code></h5>
+ <h2 class='topic'>Swap Class Type <code>&lt;S&gt;</code></h2>
 
  <p>
  For normal serialization, the swapped object representation of an object must be an object type that the serializers can natively convert to
@@ -149,12 +148,12 @@ loadScripts(document, 'script');</script>
  <p>
  For OpenAPI serialization, the valid swapped types also include <code><jk>byte</jk>[]</code> and <c>Calendar</c>.
 
- <h5 class='topic'>Normal Class Type <code>&lt;T&gt;</code></h5>
+ <h2 class='topic'>Normal Class Type <code>&lt;T&gt;</code></h2>
 
  <p>
  The normal object representation of an object.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
 
  </ul></div>
@@ -365,7 +364,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method is the programmatic equivalent to the <a href="../../Swap.html#mediaTypes()"><code>@Swap(mediaTypes)</code></a> annotation.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
  </ul></div>
 <dl class="notes">
@@ -380,7 +379,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;<a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/marshall/swap/spi/ObjectSwap.html#line-188">forMediaTypes</a></span><wbr><span class="parameters">(<a href="../../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>[]&nbsp;mediaTypes)</span></div>
 <div class="block">Sets the media types that this swap is associated with.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
  </ul></div>
 <dl class="notes">
@@ -626,7 +625,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method is the programmatic equivalent to the <a href="../../Swap.html#template()"><code>@Swap(template)</code></a> annotation.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
  </ul></div>
 <dl class="notes">
@@ -641,7 +640,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;<a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/marshall/swap/spi/ObjectSwap.html#line-418">withTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span></div>
 <div class="block">Sets the template string on this swap.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
  </ul></div>
 <dl class="notes">

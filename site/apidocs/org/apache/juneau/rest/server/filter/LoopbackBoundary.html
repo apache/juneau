@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -82,13 +81,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-187">LoopbackBoundary</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-188">LoopbackBoundary</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></span></div>
 <div class="block">The request-authenticity half of a loopback application's write protection: decides whether a request came from
  the page this process served, and refuses it when it did not.
 
- <h5 class='section'>What this answers, and what it does not</h5>
+ <h2 class='section'>What this answers, and what it does not</h2>
  <p>
  An application bound to <c>127.0.0.1</c> is reachable only from this host, but "reachable only from this host"
  is not an authorization boundary &mdash; every browser the user has open is on this host, and any page in any of
@@ -106,8 +105,9 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  arming gate is forgeable by any page in the browser, and an application with only this boundary will faithfully
  execute whatever its own page was tricked into asking for.
 
- <h5 class='section'>The checks</h5>
+ <h2 class='section'>The checks</h2>
  <table class='styled'>
+   <caption>Loopback boundary checks</caption>
    <tr><th>Check</th><th>Applies to</th><th>Rule</th><th>Rejection</th></tr>
    <tr>
       <td><code>Host</code></td><td><b>every</b> request</td>
@@ -142,7 +142,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  <code>?method=DELETE</code> or an <code>X-HTTP-Method-Override: PUT</code> header takes the write checks, whether or not the
  resource it reaches would honour the override.
 
- <h5 class='section'>HTTP/2</h5>
+ <h2 class='section'>HTTP/2</h2>
  <p>
  An HTTP/2 request has no <code>Host</code> header; the container surfaces its <code>:authority</code> only as
  <code>ServletRequest.getServerName()</code> and <code>ServletRequest.getServerPort()</code>.  A request with no
@@ -157,7 +157,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  sends <code>:authority</code>, so only a non-browser client can provoke this, and such a client must still present the
  <code>Origin</code> and token.
 
- <h5 class='section'>Why each check is present</h5>
+ <h2 class='section'>Why each check is present</h2>
  <p>
  <b><code>Host</code> on every request, not only writes.</b>  This is the check that defeats DNS rebinding, and it is
  the reason the boundary cannot be scoped to the write path.  An attacker serves a page from
@@ -189,13 +189,13 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  <b>A CSRF token on writes.</b>  A server-held <a href="SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter"><code>SynchronizerToken</code></a>, embedded in the served page.  See that
  class for why a double-submit cookie is unsound on a loopback port.
 
- <h5 class='section'>One canonical origin</h5>
+ <h2 class='section'>One canonical origin</h2>
  <p>
  The authority is a single exact spelling.  If the application is reached at <c>127.0.0.1:8790</c> then
  <c>localhost:8790</c> is <b>not</b> accepted, and vice versa.  Accepting both doubles the surface for no
  benefit, and an application that links only to the spelling it accepts never notices the difference.
 
- <h5 class='section'>What this does not defend against</h5>
+ <h2 class='section'>What this does not defend against</h2>
  <p>
  These are accepted residual risks, not oversights.  Stating them plainly matters, because a boundary described
  as stopping more than it does invites the wrong decisions to be built on top of it.
@@ -216,7 +216,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
    <li><b>Intent is not established.</b>  See the first section: that is a separate gate's job.
  </ul>
 
- <h5 class='section'>Non-browser callers</h5>
+ <h2 class='section'>Non-browser callers</h2>
  <p>
  There is deliberately no path-exemption or trusted-caller list.  A non-browser client that must write &mdash;
  including a process calling back into its own loopback port &mdash; presents the same <code>Host</code>,
@@ -224,7 +224,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  more entry added under deadline pressure until it covers the endpoint that mattered, so the boundary does not
  offer one.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    LoopbackBoundary <jv>boundary</jv> = LoopbackBoundary.<jsm>create</jsm>()
       .authority(<js>"127.0.0.1:8790"</js>)
@@ -236,7 +236,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
       <jv>response</jv>.sendError(<jv>result</jv>.status(), <jv>result</jv>.message());
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jic'><a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter"><code>RequestBoundary</code></a>
    <li class='jc'><a href="LoopbackBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundaryFilter</code></a>
    <li class='jc'><a href="SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter"><code>SynchronizerToken</code></a>
@@ -386,7 +386,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT_CSRF_HEADER">
 <h3>DEFAULT_CSRF_HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-193">DEFAULT_CSRF_HEADER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-194">DEFAULT_CSRF_HEADER</a></span></div>
 <div class="block">Default name of the request header carrying the CSRF token.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -401,7 +401,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="JSON_CONTENT_TYPE">
 <h3>JSON_CONTENT_TYPE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-196">JSON_CONTENT_TYPE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-197">JSON_CONTENT_TYPE</a></span></div>
 <div class="block">The only content type accepted on a state-changing request.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -424,7 +424,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.filter.LoopbackBoundary.Builder)">
 <h3>LoopbackBoundary</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-209">LoopbackBoundary</a></span><wbr><span class="parameters">(<a href="LoopbackBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-210">LoopbackBoundary</a></span><wbr><span class="parameters">(<a href="LoopbackBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -445,7 +445,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LoopbackBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-225">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LoopbackBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-226">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -456,7 +456,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="check(jakarta.servlet.http.HttpServletRequest)">
 <h3>check</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-235">check</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-236">check</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Applies the boundary to a request.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -471,7 +471,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="acceptsHandshakeHost(org.apache.juneau.rest.server.filter.HandshakeHosts,java.lang.String)">
 <h3>acceptsHandshakeHost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-299">acceptsHandshakeHost</a></span><wbr><span class="parameters">(<a href="HandshakeHosts.html" title="class in org.apache.juneau.rest.server.filter">HandshakeHosts</a>&nbsp;hosts,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-300">acceptsHandshakeHost</a></span><wbr><span class="parameters">(<a href="HandshakeHosts.html" title="class in org.apache.juneau.rest.server.filter">HandshakeHosts</a>&nbsp;hosts,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme)</span></div>
 <div class="block">Whether a WebSocket handshake's <code>Host</code> values match this boundary's authority.
 
@@ -494,7 +494,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isStateChanging(java.lang.String)">
 <h3>isStateChanging</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-335">isStateChanging</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-336">isStateChanging</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method)</span></div>
 <div class="block">Whether a request method is treated as state-changing, and therefore subject to the write checks.
 
  <p>
@@ -517,7 +517,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="authority()">
 <h3>authority</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-344">authority</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-345">authority</a></span>()</div>
 <div class="block">The expected <code>Host</code> value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -528,7 +528,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="origin()">
 <h3>origin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-351">origin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-352">origin</a></span>()</div>
 <div class="block">The single accepted request origin, derived from the authority.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -539,7 +539,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="csrfHeader()">
 <h3>csrfHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-358">csrfHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-359">csrfHeader</a></span>()</div>
 <div class="block">The name of the header a state-changing request must carry the CSRF token in.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -552,7 +552,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="tokenFor(jakarta.servlet.http.HttpServletRequest)">
 <h3>tokenFor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-367">tokenFor</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-368">tokenFor</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">The token a page must embed: this boundary's single per-process token, the same for every request.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -567,7 +567,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="selfCallHeaders()">
 <h3>selfCallHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-395">selfCallHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-396">selfCallHeaders</a></span>()</div>
 <div class="block">The headers an in-process client must add when calling this application's own loopback port.
 
  <p>
@@ -596,7 +596,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="token()">
 <h3>token</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter">SynchronizerToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-404">token</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter">SynchronizerToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/LoopbackBoundary.html#line-405">token</a></span>()</div>
 <div class="block">The token a page must embed and a state-changing request must present.</div>
 <dl class="notes">
 <dt>Returns:</dt>

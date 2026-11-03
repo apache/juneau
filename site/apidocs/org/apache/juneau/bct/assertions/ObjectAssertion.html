@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,19 +87,18 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The object type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-84">ObjectAssertion</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-81">ObjectAssertion</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="FluentObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentObjectAssertion</a>&lt;T,<wbr><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;T&gt;&gt;</span></div>
 <div class="block">Used for assertion calls against arbitrary POJOs.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Validates the specified POJO is the specified type.</jc>
    <jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
  </p>
 
 
- <h5 class='section'>Test Methods:</h5>
- <p>
+ <h2 class='section'>Test Methods:</h2>
  <ul class='javatree'>
    <li class='jc'><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.bct.assertions"><code>FluentObjectAssertion</code></a>
    <ul class='javatreec'>
@@ -119,8 +117,7 @@ loadScripts(document, 'script');</script>
    </ul>
  </ul>
 
- <h5 class='section'>Transform Methods:</h5>
- <p>
+ <h2 class='section'>Transform Methods:</h2>
  <ul class='javatree'>
    <li class='jc'><a href="FluentObjectAssertion.html" title="class in org.apache.juneau.bct.assertions"><code>FluentObjectAssertion</code></a>
    <ul class='javatreec'>
@@ -131,8 +128,7 @@ loadScripts(document, 'script');</script>
    </ul>
  </ul>
 
- <h5 class='section'>Configuration Methods:</h5>
- <p>
+ <h2 class='section'>Configuration Methods:</h2>
  <ul class='javatree'>
    <li class='jc'><a href="Assertion.html" title="class in org.apache.juneau.bct.assertions"><code>Assertion</code></a>
    <ul class='javatreec'>
@@ -144,7 +140,7 @@ loadScripts(document, 'script');</script>
    </ul>
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  </ul></div>
 </section>
@@ -236,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(T)">
 <h3 id="&lt;init&gt;(java.lang.Object)">ObjectAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-106">ObjectAssertion</a></span><wbr><span class="parameters">(<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-103">ObjectAssertion</a></span><wbr><span class="parameters">(<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -256,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(T)">
 <h3 id="create(java.lang.Object)">create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-95">create</a></span><wbr><span class="parameters">(T&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-92">create</a></span><wbr><span class="parameters">(T&nbsp;value)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -272,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMsg(java.lang.String,java.lang.Object...)">
 <h3>setMsg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-110">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-107">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setMsg(java.lang.String,java.lang.Object...)">Assertion</a></code></span></div>
 <div class="block">Allows you to override the assertion failure message.
@@ -280,7 +276,7 @@ loadScripts(document, 'script');</script>
  <p>
  String can contain <js>"{msg}"</js> to represent the original message.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -303,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setOut(java.io.PrintStream)">
 <h3>setOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-116">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-113">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setOut(java.io.PrintStream)">Assertion</a></code></span></div>
 <div class="block">If an error occurs, send the error message to the specified stream instead of STDERR.</div>
 <dl class="notes">
@@ -320,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSilent()">
 <h3>setSilent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-122">setSilent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-119">setSilent</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setSilent()">Assertion</a></code></span></div>
 <div class="block">Suppresses output to STDERR.
 
@@ -337,7 +333,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStdOut()">
 <h3>setStdOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-128">setStdOut</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-125">setStdOut</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setStdOut()">Assertion</a></code></span></div>
 <div class="block">If an error occurs, send the error message to STDOUT instead of STDERR.</div>
 <dl class="notes">
@@ -351,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setThrowable(java.lang.Class)">
 <h3>setThrowable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-134">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;<a href="ObjectAssertion.html" title="type parameter in ObjectAssertion">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/ObjectAssertion.html#line-131">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Assertion.html#setThrowable(java.lang.Class)">Assertion</a></code></span></div>
 <div class="block">If an error occurs, throw this exception instead of the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link"><code>AssertionError</code></a>.
 
@@ -365,7 +361,7 @@ loadScripts(document, 'script');</script>
  <p>
  If the throwable cannot be instantiated, a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> is thrown instead.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 

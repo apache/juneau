@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * Every problem is collected; nothing is thrown.  Callers decide how loud to be: the page render, the</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * template validator and C3's {@code PageSpec.build()} each turn the list into their own failure.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *   JsonMap &lt;jv&gt;contract&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofString&lt;/jsm&gt;(&lt;jv&gt;pageJson&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *   &lt;jk&gt;for&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;p&lt;/jv&gt; : BusWiringValidator.&lt;jsm&gt;validate&lt;/jsm&gt;(&lt;jv&gt;contract&lt;/jv&gt;, CardTypeRegistry.&lt;jsm&gt;standard&lt;/jsm&gt;()))</em>
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * One wiring problem.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;p&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; BusWiringValidator.Problem(&lt;js&gt;"E-52"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 *     &lt;js&gt;"topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"&lt;/js&gt;);</em>

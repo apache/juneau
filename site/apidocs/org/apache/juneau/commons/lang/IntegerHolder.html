@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,12 +87,12 @@ loadScripts(document, 'script');</script>
  This class extends <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a>&gt; and adds a convenience method for incrementing
  the value, which is useful for counting operations in lambdas and loops.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       This class is <b>not thread-safe</b>. For concurrent access, use <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicInteger</code></a> instead.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a counter</jc>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>create</jsm>();
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
    <jsm>log</jsm>(<js>"Valid items: "</js> + <jv>counter</jv>.get());
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  </ul></div>
 </section>
@@ -251,7 +250,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang">IntegerHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-70">create</a></span>()</div>
 <div class="block">Creates a new integer value initialized to <c>0</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>create</jsm>();
    <jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
@@ -268,7 +267,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang">IntegerHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-86">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;value)</span></div>
 <div class="block">Creates a new integer value with the specified initial value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(42);
    <jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
@@ -287,7 +286,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang">IntegerHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-119">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;x)</span></div>
 <div class="block">Adds the specified value to the current value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(10);
    <jv>value</jv>.add(5);
@@ -307,7 +306,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-138">addAndGet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;x)</span></div>
 <div class="block">Adds the specified value to the current value and returns the new value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(10);
    <jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
@@ -327,7 +326,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang">IntegerHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-157">decrement</a></span>()</div>
 <div class="block">Decrements the value by 1.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
    <jv>counter</jv>.decrement();
@@ -345,7 +344,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-175">decrementAndGet</a></span>()</div>
 <div class="block">Decrements the value by 1 and returns the new value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
    <jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
@@ -366,7 +365,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is a convenience method commonly used for counting operations in lambdas and loops.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
    <jk>int</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
@@ -384,7 +383,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang">IntegerHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-216">increment</a></span>()</div>
 <div class="block">Increments the value by 1.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
    <jv>counter</jv>.increment();
@@ -402,7 +401,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/IntegerHolder.html#line-234">incrementAndGet</a></span>()</div>
 <div class="block">Increments the value by 1 and returns the new value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
    <jk>int</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
@@ -423,7 +422,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison, which handles nulls safely.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(42);
    <jsm>assertTrue</jsm>(<jv>value</jv>.is(42));
@@ -448,7 +447,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison of each value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(5);
    <jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3, 5, 7));

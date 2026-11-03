@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -106,7 +105,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
       <a href="ProblemDetailsProcessor.html" title="class in org.apache.juneau.rest.server.processor"><code>ProblemDetailsProcessor</code></a>) handles it, then completes the <code>AsyncContext</code>.
  </ul>
 
- <h5 class='section'>Synchronous fallback</h5>
+ <h2 class='section'>Synchronous fallback</h2>
  <p>
  In environments where <code>ServletRequest.startAsync()</code> is unsupported (most notably
  Juneau's <code>MockServletRequest</code>, which returns <code>null</code>), this processor falls back to a
@@ -115,14 +114,14 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
  This keeps the unit-test surface working without requiring a real servlet container while
  preserving full <code>AsyncContext</code> semantics in production.
 
- <h5 class='section'>Timeout</h5>
+ <h2 class='section'>Timeout</h2>
  <p>
  The async timeout is configurable via <code>@Rest(asyncTimeoutMillis)</code> /
  <code>@RestOp(asyncTimeoutMillis)</code> (default 30s). On timeout the processor cancels the future
  with <code>mayInterruptIfRunning=true</code> and writes a <code>HttpServletResponse.SC_GATEWAY_TIMEOUT</code>
  response.
 
- <h5 class='section'>Bare <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link"><code>Future</code></a> rejection</h5>
+ <h2 class='section'>Bare <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link"><code>Future</code></a> rejection</h2>
  <p>
  Bare <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link"><code>Future</code></a> return types (anything that is a <code>Future</code> but not a
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a>) are rejected with an <a href="../../../http/response/InternalServerError.html" title="class in org.apache.juneau.http.response"><code>InternalServerError</code></a> —
@@ -130,7 +129,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
  cooperation guarantees that <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> provides. Handlers that need async dispatch
  must return <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a>.
 
- <h5 class='section'>Completion executor</h5>
+ <h2 class='section'>Completion executor</h2>
  <p>
  When <code>@Rest(asyncCompletionExecutor="poolName")</code> or the per-op equivalent is set, this processor
  switches from <code>future.whenComplete(callback)</code> to <code>future.whenCompleteAsync(callback, executor)</code>,
@@ -138,14 +137,14 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
  snapshot (see below) is taken on the request thread <em>before</em> the executor routing so the MDC context
  is always available regardless of which thread the executor picks.
 
- <h5 class='section'>Thread-local caveats</h5>
+ <h2 class='section'>Thread-local caveats</h2>
  <p>
  Anything carried via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html" title="class or interface in java.lang" class="external-link"><code>ThreadLocal</code></a> (SLF4J MDC, security contexts) does NOT survive the
  async boundary — the <code>whenComplete</code> callback typically runs on a different thread than the
  one that produced the future. <code>RequestAttributes</code>, <a href="../../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a>,
  and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link"><code>Locale</code></a> are request-scoped and survive correctly.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsyncDispatch">Async Returns + Virtual-Thread Dispatch</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  </ul></div>

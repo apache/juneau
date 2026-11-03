@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  boundary it uses, and so <a href="#boundary()"><code>boundary()</code></a> returns the <a href="LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a> without a cast.  The constants
  here are the same values as <a href="RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a>'s.
 
- <h5 class='section'>Example (Spring Boot):</h5>
+ <h2 class='section'>Example (Spring Boot):</h2>
  <p class='bjava'>
    <ja>@Bean</ja>
    <jk>public</jk> FilterRegistrationBean&lt;LoopbackBoundaryFilter&gt; boundary(LoopbackBoundary <jv>b</jv>) {
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a>
    <li class='jc'><a href="RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a>
    <li class='jc'><a href="SynchronizerToken.html" title="class in org.apache.juneau.rest.server.filter"><code>SynchronizerToken</code></a>

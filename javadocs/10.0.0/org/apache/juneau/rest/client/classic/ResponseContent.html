@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  its path-addressing methods &mdash; e.g. <c>getContent().as(JsonMap.<jk>class</jk>).getAt(<jv>path</jv>, <jv>type</jv>)</c>
  or the RFC 6901 form <c>getContent().as(JsonMap.<jk>class</jk>).at(<jv>pointer</jv>)</c>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  </ul></div>
 </section>
@@ -402,7 +401,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  This is the preferred parse method for simple types since you don't need to cast the results.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Parse into a string.</jc>
    String <jv>string</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(String.<jk>class</jk>);
@@ -420,7 +419,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
    Map <jv>map</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(TreeMap.<jk>class</jk>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       You can also specify any of the following types:
       <ul class='compact'>
@@ -458,7 +457,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
          throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Same as <a href="#as(java.lang.Class)"><code>as(Class)</code></a> except allows you to predefine complex data types using the <a href="../../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> API.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsf>DEFAULT</jsf>;
 
@@ -483,7 +482,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
    Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm5</jv>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If <a href="#cache()"><code>cache()</code></a> or <a href="RestResponse.html#cacheContent()"><code>RestResponse.cacheContent()</code></a> has been called, this method can be can be called multiple times and/or combined with
       other methods that retrieve the content of the response.  Otherwise a <a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic"><code>RestCallException</code></a>
@@ -523,7 +522,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Parse into a linked-list of strings.</jc>
    List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
@@ -565,7 +564,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  The array can be arbitrarily long to indicate arbitrarily complex data structures.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Use the <a href="#as(java.lang.Class)"><code>as(Class)</code></a> method instead if you don't need a parameterized map/collection.
    <li class='note'>
@@ -652,7 +651,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                        throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Same as <a href="#as(java.lang.Class)"><code>as(Class)</code></a> but allows you to run the call asynchronously.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If <a href="#cache()"><code>cache()</code></a> or <a href="RestResponse.html#cacheContent()"><code>RestResponse.cacheContent()</code></a> has been called, this method can be can be called multiple times and/or combined with
       other methods that retrieve the content of the response.  Otherwise a <a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic"><code>RestCallException</code></a>
@@ -686,7 +685,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                        throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Same as <a href="#as(org.apache.juneau.marshall.ClassMeta)"><code>as(ClassMeta)</code></a> but allows you to run the call asynchronously.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If <a href="#cache()"><code>cache()</code></a> or <a href="RestResponse.html#cacheContent()"><code>RestResponse.cacheContent()</code></a> has been called, this method can be can be called multiple times and/or combined with
       other methods that retrieve the content of the response.  Otherwise a <a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic"><code>RestCallException</code></a>
@@ -722,7 +721,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                        throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Same as <a href="#as(java.lang.reflect.Type,java.lang.reflect.Type...)"><code>as(Type,Type...)</code></a> but allows you to run the call asynchronously.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If <a href="#cache()"><code>cache()</code></a> or <a href="RestResponse.html#cacheContent()"><code>RestResponse.cacheContent()</code></a> has been called, this method can be can be called multiple times and/or combined with
       other methods that retrieve the content of the response.  Otherwise a <a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic"><code>RestCallException</code></a>
@@ -761,7 +760,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
              throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Returns the HTTP body content as a simple hexadecimal character string.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bcode'>
    0123456789ABCDEF
  </p></div>
@@ -780,7 +779,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the HTTP response message body as an input stream.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Once this input stream is exhausted, it will automatically be closed.
   <li class='note'>
@@ -805,7 +804,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                   throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Converts the contents of the response body to a string and then matches the specified pattern against it.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Parse response using a regular expression.</jc>
    Matcher <jv>matcher</jv> = <jv>client</jv>
@@ -818,7 +817,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
   <li class='note'>
@@ -843,7 +842,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                   throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Converts the contents of the response body to a string and then matches the specified pattern against it.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Parse response using a regular expression.</jc>
    Matcher <jv>matcher</jv> = <jv>client</jv>
@@ -857,7 +856,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  </p>
 
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
   <li class='note'>
@@ -885,7 +884,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                   throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Converts the contents of the response body to a string and then matches the specified pattern against it.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Parse response using a regular expression.</jc>
    Matcher <jv>matcher</jv> = <jv>client</jv>
@@ -899,7 +898,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  </p>
 
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
   <li class='note'>
@@ -927,7 +926,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the HTTP response message body as a reader based on the charset on the <code>Content-Type</code> response header.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
    <li class='note'>
@@ -954,7 +953,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the HTTP response message body as a reader using the specified charset.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Once this input stream is exhausted, it will automatically be closed.
   <li class='note'>
@@ -1036,7 +1035,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  This method is called directly from the <a href="RestResponse.html#assertContent()"><code>RestResponse.assertContent()</code></a> method to instantiate a fluent assertions object.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Validates the response body equals the text "OK".</jc>
    <jv>client</jv>
@@ -1088,7 +1087,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
       .getContent().as(MyBean.<jk>class</jk>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
   <li class='note'>
@@ -1109,7 +1108,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                    throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Returns the HTTP body content as a simple space-delimited hexadecimal character string.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bcode'>
    01 23 45 67 89 AB CD EF
  </p></div>
@@ -1128,7 +1127,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                 throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Returns the contents of this body as a string.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
   <li class='note'>
@@ -1154,7 +1153,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                               throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Same as <a href="#asString()"><code>asString()</code></a> but allows you to run the call asynchronously.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
   <li class='note'>
@@ -1186,7 +1185,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  Calling this method allows methods that read the response body to be called multiple times.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Multiple calls to this method are ignored.
  </ul></div>
@@ -1228,7 +1227,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span></div>
 <div class="block">Returns a content stream of the entity.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method is equivalent to <a href="#asInputStream()"><code>asInputStream()</code></a> which is the preferred method for fluent-style coding.
    <li class='note'>This input stream will auto-close once the end of stream has been reached.
    <li class='note'>It is up to the caller to properly close this stream if not fully consumed.
@@ -1325,7 +1324,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  A repeatable entity's <a href="#getContent()"><code>getContent()</code></a> and <a href="#writeTo(java.io.OutputStream)"><code>writeTo(OutputStream)</code></a> methods can be called more than
  once whereas a non-repeatable entity's can not.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method always returns <jk>true</jk> if the response body is cached (see <a href="#cache()"><code>cache()</code></a>).
  </ul></div>
 <dl class="notes">
@@ -1342,7 +1341,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/ResponseContent.html#line-1162">isStreaming</a></span>()</div>
 <div class="block">Tells whether this entity depends on an underlying stream.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method always returns <jk>false</jk> if the response body is cached (see <a href="#cache()"><code>cache()</code></a>.
  </ul></div>
 <dl class="notes">
@@ -1376,7 +1375,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Pipes the contents of the response to the specified output stream.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The output stream is not automatically closed.
    <li class='note'>
@@ -1404,7 +1403,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Pipes the contents of the response to the specified writer.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The writer is not automatically closed.
    <li class='note'>
@@ -1435,7 +1434,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Pipes the contents of the response to the specified writer.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The writer is not automatically closed.
    <li class='note'>
@@ -1467,7 +1466,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Pipes the contents of the response to the specified writer.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The writer is not automatically closed.
    <li class='note'>
@@ -1499,7 +1498,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Pipes the contents of the response to the specified writer.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The writer is not automatically closed.
    <li class='note'>
@@ -1567,7 +1566,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes the entity content out to the output stream.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>This method is equivalent to <a href="#pipeTo(java.io.OutputStream)"><code>pipeTo(OutputStream)</code></a> which is the preferred method for fluent-style coding.
  </ul></div>
 <dl class="notes">

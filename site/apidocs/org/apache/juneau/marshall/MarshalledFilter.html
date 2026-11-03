@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -105,7 +104,7 @@ implements <a href="../commons/bean/BeanFilter.html" title="interface in org.apa
  <a href="Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> annotation. Filters can be registered with serializers and parsers to customize
  how specific classes are handled.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Define a custom filter for MyBean</jc>
    <jk>public class</jk> MyMarshalledFilter <jk>extends</jk> MarshalledFilter.Builder&lt;MyBean&gt; {
@@ -124,7 +123,7 @@ implements <a href="../commons/bean/BeanFilter.html" title="interface in org.apa
       .build();
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='ja'><a href="Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a>
    <li class='jc'><a href="../commons/bean/BeanInterceptor.html" title="class in org.apache.juneau.commons.bean"><code>BeanInterceptor</code></a>

@@ -661,7 +661,7 @@
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * Calling this method is functionally equivalent to returning the object in the REST Java method.</em>
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/example2/{personId}"&lt;/js&gt;)</em>
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public void&lt;/jk&gt; doGet(RestResponse &lt;jv&gt;res&lt;/jv&gt;, &lt;ja&gt;@Path&lt;/ja&gt; UUID &lt;jv&gt;personId&lt;/jv&gt;) {</em>
@@ -670,14 +670,14 @@
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 * 	}</em>
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * 		Calling this method with a &lt;jk&gt;null&lt;/jk&gt; value is NOT the same as not calling this method at all.</em>
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 * 		&lt;br&gt;A &lt;jk&gt;null&lt;/jk&gt; output value means we want to serialize &lt;jk&gt;null&lt;/jk&gt; as a response (e.g. as a JSON &lt;c&gt;null&lt;/c&gt;).</em>
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 * 		&lt;br&gt;Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.</em>
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='ja'&gt;{@link Rest#responseProcessors()}</em>
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods</a>"&gt;@RestOp-Annotated Method&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
@@ -801,7 +801,7 @@
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">	 * ContentDisposition.attachment(filename)}).</em>
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='figure'&gt;Example&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;res&lt;/jv&gt;.downloadAs(&lt;js&gt;"example.pdf"&lt;/js&gt;).setContent(&lt;jv&gt;pdfBytes&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
@@ -824,7 +824,7 @@
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 * &lt;c&gt;*&lt;/c&gt; is accepted. The header is serialized in canonical form (re-quoted for strong tags,</em>
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 * &lt;c&gt;W/&lt;/c&gt;-prefixed for weak tags).</em>
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;res&lt;/jv&gt;.eTag(&lt;js&gt;"\&quot;v42\&quot;"&lt;/js&gt;);  &lt;jc&gt;// ETag: "v42"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;res&lt;/jv&gt;.eTag(&lt;js&gt;"W/\&quot;v42\&quot;"&lt;/js&gt;);  &lt;jc&gt;// ETag: W/"v42"&lt;/jc&gt;</em>
@@ -860,7 +860,7 @@
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * The instant is rendered in GMT regardless of the JVM's default timezone. The fractional-second</em>
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * portion is truncated, matching the per-spec one-second resolution of HTTP-date timestamps.</em>
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;res&lt;/jv&gt;.lastModified(Instant.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"2026-05-22T00:00:00Z"&lt;/js&gt;));</em>
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Last-Modified: Fri, 22 May 2026 00:00:00 GMT&lt;/jc&gt;</em>
@@ -914,7 +914,7 @@
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * Sets the &lt;c&gt;Cache-Control&lt;/c&gt; response header from a {@link org.apache.juneau.http.header.CacheControl.Builder CacheControl.Builder}.</em>
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;res&lt;/jv&gt;.cacheControl(CacheControl.&lt;jsm&gt;create&lt;/jsm&gt;().publicCache().maxAge(3600));</em>
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Cache-Control: public, max-age=3600&lt;/jc&gt;</em>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,13 +83,13 @@ loadScripts(document, 'script');</script>
 <div class="block">The response shape of an <code>aggregate</code>-mode bulk action (<a href="RowAction.BulkMode.html#AGGREGATE"><code>RowAction.BulkMode.AGGREGATE</code></a>) &mdash;
  one outcome per id submitted in the matching <a href="BulkRequest.html" title="class in org.apache.juneau.console.views"><code>BulkRequest</code></a>.
 
- <h5 class='section'>Own, independently-versioned contract</h5>
+ <h2 class='section'>Own, independently-versioned contract</h2>
  <p>
  <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a> is this type's own wire contract, never aliased to <code>VIEW</code>, <code>ACTION_RESULT</code>,
  or <a href="BulkMutateDef.html#CONTRACT_VERSION"><code>BulkMutateDef.CONTRACT_VERSION</code></a> &mdash; each of those versions what it defines (a view's shape, a
  single-row action's outcome, a bulk-mutate action list) and this one versions only this response shape.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@RestPost</ja>(path=<js>"/changes/abort"</js>)
    <jk>public</jk> BulkResult abortChanges(<ja>@Content</ja> BulkRequest <jv>request</jv>) {

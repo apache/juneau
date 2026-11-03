@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"> * The "job accepted" envelope a row action's submit returns &lt;b&gt;instead of&lt;/b&gt; a terminal {@link ActionResult} when</span>
 <span class="source-line-no">026</span><span id="line-26"> * the write is asynchronous.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;Why this is not a new {@code RowAction} wire field&lt;/h5&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;h2 class='section'&gt;Why this is not a new {@code RowAction} wire field&lt;/h2&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * Whether an action is asynchronous is a property of the &lt;b&gt;response&lt;/b&gt;, not of the declared action: the same</span>
 <span class="source-line-no">031</span><span id="line-31"> * {@link RowAction} POST returns either a terminal {@link ActionResult} (synchronous) or this pointer (asynchronous).</span>
@@ -46,14 +46,14 @@
 <span class="source-line-no">033</span><span id="line-33"> * {@code juneau-views.js} runtime routes to the streaming path purely by recognizing a {@link #streamUrl} in the 2xx</span>
 <span class="source-line-no">034</span><span id="line-34"> * body.  It carries no data to render, only capability pointers, so it needs no version handshake of its own.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;The URLs are capabilities&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='section'&gt;The URLs are capabilities&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * {@link #streamUrl} points at the SSE progress stream and {@link #cancelUrl} at the cancel endpoint; both embed the</span>
 <span class="source-line-no">039</span><span id="line-39"> * job's unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit id (see {@link AsyncJob}), which is the whole of the</span>
 <span class="source-line-no">040</span><span id="line-40"> * access control.  The browser {@code EventSource} that consumes {@link #streamUrl} cannot set a CSRF header,</span>
 <span class="source-line-no">041</span><span id="line-41"> * which is precisely why the id must be unguessable rather than CSRF-gated.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='jc'&gt;{@link AsyncJobsMixin}</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='jc'&gt;{@link AsyncJob}</span>

@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * Only elements that pass the filter (i.e., the predicate returns &lt;jk&gt;true&lt;/jk&gt;) are actually stored in</span>
 <span class="source-line-no">030</span><span id="line-30"> * the underlying set.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;&lt;b&gt;Flexible Filtering:&lt;/b&gt; Use any {@link Predicate} to filter elements based on any criteria</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;&lt;b&gt;Optional Filter:&lt;/b&gt; Filter is optional when using the builder - defaults to accepting all elements</span>
@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;b&gt;Automatic Deduplication:&lt;/b&gt; Duplicate elements are automatically handled by the underlying set</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Create a filtered set that only accepts non-null values&lt;/jc&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    FilteredSet&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
@@ -70,7 +70,7 @@
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;jc&gt;// set now contains: ["value1", "value3"]&lt;/jc&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;Example - Custom Set Type:&lt;/h5&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h2 class='section'&gt;Example - Custom Set Type:&lt;/h2&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;jc&gt;// Create a filtered TreeSet that only accepts positive numbers&lt;/jc&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;jv&gt;set&lt;/jv&gt;.add(10);  &lt;jc&gt;// Added&lt;/jc&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;Behavior Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;Behavior Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *    &lt;li&gt;Filtering is applied to all element addition methods: {@link #add(Object)}, {@link #addAll(Collection)}, etc.</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li&gt;If the filter returns &lt;jk&gt;false&lt;/jk&gt;, the element is silently ignored (not added)</span>
@@ -95,12 +95,12 @@
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li&gt;Duplicate elements are automatically handled by the underlying set (only one occurrence is stored)</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> * &lt;p&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> * This class is not thread-safe unless the underlying set is thread-safe. If thread safety is required,</span>
 <span class="source-line-no">088</span><span id="line-88"> * use a thread-safe set type (e.g., {@link java.util.concurrent.CopyOnWriteArraySet}) via the &lt;c&gt;inner&lt;/c&gt; method.</span>
 <span class="source-line-no">089</span><span id="line-89"> *</span>
-<span class="source-line-no">090</span><span id="line-90"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> * &lt;ul&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;/ul&gt;</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   /**</span>
 <span class="source-line-no">103</span><span id="line-103">    * Builder for creating {@link FilteredSet} instances.</span>
 <span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">105</span><span id="line-105">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">108</span><span id="line-108">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">       * This method can be called multiple times. When called multiple times, all filters are combined</span>
 <span class="source-line-no">134</span><span id="line-134">       * using AND logic - an element must pass all filters to be added to the set.</span>
 <span class="source-line-no">135</span><span id="line-135">       *</span>
-<span class="source-line-no">136</span><span id="line-136">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">136</span><span id="line-136">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">138</span><span id="line-138">       *    &lt;jc&gt;// Filter out null values&lt;/jc&gt;</span>
 <span class="source-line-no">139</span><span id="line-139">       *    Builder&amp;lt;String&amp;gt; &lt;jv&gt;b&lt;/jv&gt; = FilteredSet.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -177,7 +177,7 @@
 <span class="source-line-no">164</span><span id="line-164">       * &lt;p&gt;</span>
 <span class="source-line-no">165</span><span id="line-165">       * If not specified, a new {@link LinkedHashSet} will be created during {@link #build()}.</span>
 <span class="source-line-no">166</span><span id="line-166">       *</span>
-<span class="source-line-no">167</span><span id="line-167">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">167</span><span id="line-167">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">168</span><span id="line-168">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">169</span><span id="line-169">       *    &lt;jc&gt;// Use a TreeSet for sorted order&lt;/jc&gt;</span>
 <span class="source-line-no">170</span><span id="line-170">       *    Builder&amp;lt;String&amp;gt; &lt;jv&gt;b&lt;/jv&gt; = FilteredSet.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -209,7 +209,7 @@
 <span class="source-line-no">196</span><span id="line-196">       * this function before being added to the set. If not specified, elements must already be of the</span>
 <span class="source-line-no">197</span><span id="line-197">       * correct type (or &lt;c&gt;Object.class&lt;/c&gt; is used if types were not specified, which accepts any type).</span>
 <span class="source-line-no">198</span><span id="line-198">       *</span>
-<span class="source-line-no">199</span><span id="line-199">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">199</span><span id="line-199">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">200</span><span id="line-200">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">201</span><span id="line-201">       *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">202</span><span id="line-202">       *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -269,7 +269,7 @@
 <span class="source-line-no">256</span><span id="line-256">    * allowing any element types to be added. However, the generic type parameter should still be</span>
 <span class="source-line-no">257</span><span id="line-257">    * specified for type safety.</span>
 <span class="source-line-no">258</span><span id="line-258">    *</span>
-<span class="source-line-no">259</span><span id="line-259">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">259</span><span id="line-259">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">260</span><span id="line-260">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">261</span><span id="line-261">    *    &lt;jc&gt;// Explicitly specify generic types using diamond operator&lt;/jc&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
@@ -347,7 +347,7 @@
 <span class="source-line-no">334</span><span id="line-334">    * adding it to the set. This is useful for validation, debugging, or pre-checking elements before</span>
 <span class="source-line-no">335</span><span id="line-335">    * attempting to add them.</span>
 <span class="source-line-no">336</span><span id="line-336">    *</span>
-<span class="source-line-no">337</span><span id="line-337">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">337</span><span id="line-337">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">338</span><span id="line-338">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">339</span><span id="line-339">    *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">340</span><span id="line-340">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -374,7 +374,7 @@
 <span class="source-line-no">361</span><span id="line-361">    * The returned predicate is the combined filter used internally by this set. If multiple filters</span>
 <span class="source-line-no">362</span><span id="line-362">    * were set via the builder, they are combined using AND logic.</span>
 <span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">364</span><span id="line-364">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">365</span><span id="line-365">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">366</span><span id="line-366">    *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">367</span><span id="line-367">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -454,25 +454,25 @@
 <span class="source-line-no">441</span><span id="line-441">    * the type (if element type was specified when creating the set). After conversion and validation,</span>
 <span class="source-line-no">442</span><span id="line-442">    * the element is added using the standard {@link #add(Object)} method, which applies the filter.</span>
 <span class="source-line-no">443</span><span id="line-443">    *</span>
-<span class="source-line-no">444</span><span id="line-444">    * &lt;h5 class='section'&gt;Type Conversion:&lt;/h5&gt;</span>
+<span class="source-line-no">444</span><span id="line-444">    * &lt;h4 class='section'&gt;Type Conversion:&lt;/h4&gt;</span>
 <span class="source-line-no">445</span><span id="line-445">    * &lt;ul&gt;</span>
 <span class="source-line-no">446</span><span id="line-446">    *    &lt;li&gt;If an element function is configured, the element is converted by applying the function</span>
 <span class="source-line-no">447</span><span id="line-447">    *    &lt;li&gt;If no function is configured, the object is used as-is (but may be validated if types were specified)</span>
 <span class="source-line-no">448</span><span id="line-448">    * &lt;/ul&gt;</span>
 <span class="source-line-no">449</span><span id="line-449">    *</span>
-<span class="source-line-no">450</span><span id="line-450">    * &lt;h5 class='section'&gt;Type Validation:&lt;/h5&gt;</span>
+<span class="source-line-no">450</span><span id="line-450">    * &lt;h4 class='section'&gt;Type Validation:&lt;/h4&gt;</span>
 <span class="source-line-no">451</span><span id="line-451">    * &lt;ul&gt;</span>
 <span class="source-line-no">452</span><span id="line-452">    *    &lt;li&gt;If element type was specified (via {@link #create(Class)}), the converted element must be an instance of that type</span>
 <span class="source-line-no">453</span><span id="line-453">    *    &lt;li&gt;If {@link #create()} was used (no types specified), &lt;c&gt;Object.class&lt;/c&gt; is used, which accepts any type</span>
 <span class="source-line-no">454</span><span id="line-454">    * &lt;/ul&gt;</span>
 <span class="source-line-no">455</span><span id="line-455">    *</span>
-<span class="source-line-no">456</span><span id="line-456">    * &lt;h5 class='section'&gt;Return Value:&lt;/h5&gt;</span>
+<span class="source-line-no">456</span><span id="line-456">    * &lt;h4 class='section'&gt;Return Value:&lt;/h4&gt;</span>
 <span class="source-line-no">457</span><span id="line-457">    * &lt;ul&gt;</span>
 <span class="source-line-no">458</span><span id="line-458">    *    &lt;li&gt;If the element is added successfully, returns &lt;jk&gt;true&lt;/jk&gt;</span>
 <span class="source-line-no">459</span><span id="line-459">    *    &lt;li&gt;If the element is filtered out or already present, returns &lt;jk&gt;false&lt;/jk&gt;</span>
 <span class="source-line-no">460</span><span id="line-460">    * &lt;/ul&gt;</span>
 <span class="source-line-no">461</span><span id="line-461">    *</span>
-<span class="source-line-no">462</span><span id="line-462">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">462</span><span id="line-462">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">463</span><span id="line-463">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">464</span><span id="line-464">    *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">465</span><span id="line-465">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -499,7 +499,7 @@
 <span class="source-line-no">486</span><span id="line-486">    * This method iterates over all elements in the source collection and adds each one using {@link #addConverted(Object)},</span>
 <span class="source-line-no">487</span><span id="line-487">    * which applies conversion and validation before adding.</span>
 <span class="source-line-no">488</span><span id="line-488">    *</span>
-<span class="source-line-no">489</span><span id="line-489">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">489</span><span id="line-489">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">490</span><span id="line-490">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">491</span><span id="line-491">    *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">492</span><span id="line-492">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -537,7 +537,7 @@
 <span class="source-line-no">524</span><span id="line-524">    * Each element from the collections/arrays will be added using {@link #add(Object)}, which applies</span>
 <span class="source-line-no">525</span><span id="line-525">    * conversion and filtering.</span>
 <span class="source-line-no">526</span><span id="line-526">    *</span>
-<span class="source-line-no">527</span><span id="line-527">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">527</span><span id="line-527">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">528</span><span id="line-528">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">529</span><span id="line-529">    *    FilteredSet&amp;lt;Integer&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = FilteredSet</span>
 <span class="source-line-no">530</span><span id="line-530">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>

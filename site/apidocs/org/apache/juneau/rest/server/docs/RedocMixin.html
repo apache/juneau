@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  pulls in <code>OpenApiMixin</code> (and its <code>/openapi*</code> mounts) automatically when this
  mixin is composed into a host.
 
- <h5 class='section'>Configurable mount path:</h5>
+ <h2 class='section'>Configurable mount path:</h2>
 
  <p>
  The default mount <code>/redoc/*</code> can be overridden via the SVL variable
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
  Override accepts bare token (<code>redoc</code>), leading slash (<code>/redoc</code>), trailing slash
  (<code>redoc/</code>), or wildcard suffix (<code>/redoc/*</code>) &mdash; all resolve to the same mount.
 
- <h5 class='section'>Mixin-only deployment:</h5>
+ <h2 class='section'>Mixin-only deployment:</h2>
 
  <p>
  This resource is designed for composition via <code>@Rest(mixins=...)</code>. The mount path is
@@ -115,7 +114,7 @@ loadScripts(document, 'script');</script>
  <a href="#getRedoc(org.apache.juneau.rest.server.RestRequest)"><code>getRedoc(org.apache.juneau.rest.server.RestRequest)</code></a>; a class-level <code>@Rest(paths=...)</code> declaration would be silently
  ignored under the mixin pattern (see <a href="../Rest.html#paths()"><code>@Rest(paths)</code></a> Javadoc).
 
- <h5 class='figure'>Composition example:</h5>
+ <h2 class='figure'>Composition example:</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/myresource"</js>, mixins=RedocMixin.<jk>class</jk>)
@@ -124,7 +123,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Content negotiation:</h5>
+ <h2 class='section'>Content negotiation:</h2>
 
  <p>
  <a href="../Rest.html#defaultAccept()"><code>@Rest(defaultAccept="text/html")</code></a> causes bare browser requests
@@ -132,7 +131,7 @@ loadScripts(document, 'script');</script>
  (e.g. <code>Accept: application/json</code>) are honored normally.
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="SwaggerMixin.html" title="class in org.apache.juneau.rest.server.docs"><code>SwaggerMixin</code></a>
    <li class='jc'><a href="SwaggerUiMixin.html" title="class in org.apache.juneau.rest.server.docs"><code>SwaggerUiMixin</code></a>
    <li class='jc'><a href="OpenApiMixin.html" title="class in org.apache.juneau.rest.server.docs"><code>OpenApiMixin</code></a>

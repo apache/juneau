@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * Used on methods and fields of {@link BeanStore}-managed objects to denote methods and fields that override and</span>
 <span class="source-line-no">029</span><span id="line-29"> * customize beans used by the framework.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='figure'&gt;Example&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;jc&gt;// Rest resource that uses a customized logger.&lt;/jc&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;ja&gt;@Rest&lt;/ja&gt;</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    The {@link Bean#name()}/{@link Bean#value()} attributes are used to differentiate between named beans.</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/p&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='figure'&gt;Example&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// Customized default request headers.&lt;/jc&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;ja&gt;@Bean&lt;/ja&gt;(&lt;js&gt;"defaultRequestHeaders"&lt;/js&gt;)</span>
@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    The {@link Bean#methodScope()} attribute is used to define beans in the scope of specific {@code @RestOp}-annotated methods.</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='figure'&gt;Example&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;jc&gt;// Set a default header on a specific REST method.&lt;/jc&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;jc&gt;// Input parameter is the default header list builder with all annotations applied.&lt;/jc&gt;</span>
@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81"> *    This annotation can also be used to inject arbitrary beans into the bean store which allows them to be</span>
 <span class="source-line-no">082</span><span id="line-82"> *    passed as resolved parameters on {@code @RestOp}-annotated methods.</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/p&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;h2 class='figure'&gt;Example&lt;/h2&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *    &lt;jc&gt;// Custom beans injected into the bean store.&lt;/jc&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> *    &lt;ja&gt;@Bean&lt;/ja&gt; MyBean &lt;jv&gt;myBean1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MyBean();</span>
@@ -109,14 +109,14 @@
 <span class="source-line-no">096</span><span id="line-96"> *    This annotation can also be used on uninitialized fields.  When fields are uninitialized, they will</span>
 <span class="source-line-no">097</span><span id="line-97"> *    be set during initialization based on beans found in the bean store.</span>
 <span class="source-line-no">098</span><span id="line-98"> * &lt;/p&gt;</span>
-<span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='figure'&gt;Example&lt;/h5&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> * &lt;h2 class='figure'&gt;Example&lt;/h2&gt;</span>
 <span class="source-line-no">100</span><span id="line-100"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> *    &lt;jc&gt;// Fields that get set during initialization based on beans found in the bean store.&lt;/jc&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> *    &lt;ja&gt;@Bean&lt;/ja&gt; RichLogger &lt;jf&gt;logger&lt;/jf&gt;;</span>
 <span class="source-line-no">103</span><span id="line-103"> *    &lt;ja&gt;@Bean&lt;/ja&gt; BeanStore &lt;jf&gt;beanStore&lt;/jf&gt;;  &lt;jc&gt;// Note that the BeanStore itself can be accessed this way.&lt;/jc&gt;</span>
 <span class="source-line-no">104</span><span id="line-104"> * &lt;/p&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> *</span>
-<span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='note'&gt;Methods and fields can be static or non-static.</span>
 <span class="source-line-no">108</span><span id="line-108"> *    &lt;li class='note'&gt;Any injectable beans (including spring beans) can be passed as arguments into methods.</span>
 <span class="source-line-no">109</span><span id="line-109"> *    &lt;li class='note'&gt;Bean names are required when multiple beans of the same type exist in the bean store.</span>
@@ -127,13 +127,13 @@
 <span class="source-line-no">114</span><span id="line-114"> *       {@link Bean#methodScope()} annotation can be used to apply to method-level only (when applicable).</span>
 <span class="source-line-no">115</span><span id="line-115"> * &lt;/ul&gt;</span>
 <span class="source-line-no">116</span><span id="line-116"> *</span>
-<span class="source-line-no">117</span><span id="line-117"> * &lt;h5 class='section'&gt;Bean names:&lt;/h5&gt;</span>
+<span class="source-line-no">117</span><span id="line-117"> * &lt;h2 class='section'&gt;Bean names:&lt;/h2&gt;</span>
 <span class="source-line-no">118</span><span id="line-118"> * &lt;p&gt;</span>
 <span class="source-line-no">119</span><span id="line-119"> *    Each {@code @Bean} method registers its own result.  Two methods returning the same type are distinguished by name,</span>
 <span class="source-line-no">120</span><span id="line-120"> *    and both beans are kept.  Factory methods on &lt;ja&gt;@Rest&lt;/ja&gt; resources and &lt;ja&gt;@Configuration&lt;/ja&gt; classes</span>
 <span class="source-line-no">121</span><span id="line-121"> *    are the common use.</span>
 <span class="source-line-no">122</span><span id="line-122"> * &lt;/p&gt;</span>
-<span class="source-line-no">123</span><span id="line-123"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">123</span><span id="line-123"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">124</span><span id="line-124"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">125</span><span id="line-125"> *    &lt;jc&gt;// Two beans of the same type, distinguished by name.  Each method's own result is registered.&lt;/jc&gt;</span>
 <span class="source-line-no">126</span><span id="line-126"> *    &lt;ja&gt;@Rest&lt;/ja&gt;</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138"> *    }</span>
 <span class="source-line-no">139</span><span id="line-139"> * &lt;/p&gt;</span>
 <span class="source-line-no">140</span><span id="line-140"> *</span>
-<span class="source-line-no">141</span><span id="line-141"> * &lt;h5 class='section'&gt;Precedence (since 10.0.0):&lt;/h5&gt;</span>
+<span class="source-line-no">141</span><span id="line-141"> * &lt;h2 class='section'&gt;Precedence (since 10.0.0):&lt;/h2&gt;</span>
 <span class="source-line-no">142</span><span id="line-142"> * &lt;p&gt;</span>
 <span class="source-line-no">143</span><span id="line-143"> *    {@code @Bean} acts as a &lt;i&gt;programmable default&lt;/i&gt;, analogous to Spring's</span>
 <span class="source-line-no">144</span><span id="line-144"> *    &lt;c&gt;&amp;#64;ConditionalOnMissingBean&lt;/c&gt;.  When a REST context resolves a framework-managed bean</span>
@@ -179,7 +179,7 @@
 <span class="source-line-no">166</span><span id="line-166"> *    {@code @Bean} method's type with a Spring-native override such as &lt;c&gt;&amp;#64;Primary&lt;/c&gt;).</span>
 <span class="source-line-no">167</span><span id="line-167"> * &lt;/p&gt;</span>
 <span class="source-line-no">168</span><span id="line-168"> *</span>
-<span class="source-line-no">169</span><span id="line-169"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">169</span><span id="line-169"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">170</span><span id="line-170"> *    &lt;li class='jc'&gt;{@link BeanStore}</span>
 <span class="source-line-no">171</span><span id="line-171"> *    &lt;li class='jc'&gt;{@link WritableBeanStore}</span>
 <span class="source-line-no">172</span><span id="line-172"> * &lt;/ul&gt;</span>

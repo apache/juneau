@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;c&gt;via&lt;/c&gt; - The source of the information</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='figure'&gt;Schema&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='figure'&gt;Schema&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p class='bschema'&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    atomLink =</span>
 <span class="source-line-no">046</span><span id="line-46"> *       element atom:link {</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *       }</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;jc&gt;// Create links for an entry&lt;/jc&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    Entry &lt;jv&gt;entry&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Entry(...)</span>
@@ -82,12 +82,12 @@
 <span class="source-line-no">069</span><span id="line-69"> *       );</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Specification:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * Represents an &lt;c&gt;atomLink&lt;/c&gt; construct in the</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.7"&gt;RFC 4287 - Section 4.2.7&lt;/a&gt; specification.</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom"&gt;juneau-bean-atom&lt;/a&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='extlink'&gt;&lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287"&gt;RFC 4287 - The Atom Syndication Format&lt;/a&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='extlink'&gt;&lt;a class="doclink" href="https://www.iana.org/assignments/link-relations/link-relations.xhtml"&gt;IANA Link Relations&lt;/a&gt;</span>
@@ -212,7 +212,7 @@
 <span class="source-line-no">199</span><span id="line-199">    * &lt;p&gt;</span>
 <span class="source-line-no">200</span><span id="line-200">    * Sets the URI of the referenced resource (required).</span>
 <span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">204</span><span id="line-204">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link()</span>
 <span class="source-line-no">205</span><span id="line-205">    *       .setHref(&lt;js&gt;"http://example.org/posts/1"&lt;/js&gt;);</span>
@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">    * &lt;p&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">    * Sets the language of the resource pointed to by the link.</span>
 <span class="source-line-no">223</span><span id="line-223">    *</span>
-<span class="source-line-no">224</span><span id="line-224">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">225</span><span id="line-225">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">226</span><span id="line-226">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"alternate"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://example.org/post1.html"&lt;/js&gt;)</span>
 <span class="source-line-no">227</span><span id="line-227">    *       .setHreflang(&lt;js&gt;"en-US"&lt;/js&gt;);</span>
@@ -262,7 +262,7 @@
 <span class="source-line-no">249</span><span id="line-249">    * &lt;p&gt;</span>
 <span class="source-line-no">250</span><span id="line-250">    * Sets an advisory size in bytes of the linked resource.</span>
 <span class="source-line-no">251</span><span id="line-251">    *</span>
-<span class="source-line-no">252</span><span id="line-252">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">252</span><span id="line-252">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">253</span><span id="line-253">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">254</span><span id="line-254">    *    &lt;jc&gt;// Podcast episode with file size&lt;/jc&gt;</span>
 <span class="source-line-no">255</span><span id="line-255">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"enclosure"&lt;/js&gt;, &lt;js&gt;"audio/mpeg"&lt;/js&gt;, &lt;js&gt;"http://example.org/episode1.mp3"&lt;/js&gt;)</span>
@@ -290,7 +290,7 @@
 <span class="source-line-no">277</span><span id="line-277">    * &lt;js&gt;"enclosure"&lt;/js&gt;, &lt;js&gt;"via"&lt;/js&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"last"&lt;/js&gt;,</span>
 <span class="source-line-no">278</span><span id="line-278">    * &lt;js&gt;"previous"&lt;/js&gt;, &lt;js&gt;"next"&lt;/js&gt;.</span>
 <span class="source-line-no">279</span><span id="line-279">    *</span>
-<span class="source-line-no">280</span><span id="line-280">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">280</span><span id="line-280">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">281</span><span id="line-281">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">282</span><span id="line-282">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link()</span>
 <span class="source-line-no">283</span><span id="line-283">    *       .setRel(&lt;js&gt;"alternate"&lt;/js&gt;)</span>
@@ -313,7 +313,7 @@
 <span class="source-line-no">300</span><span id="line-300">    * &lt;p&gt;</span>
 <span class="source-line-no">301</span><span id="line-301">    * Sets human-readable information about the link.</span>
 <span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">303</span><span id="line-303">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">305</span><span id="line-305">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"related"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://example.org/related"&lt;/js&gt;)</span>
 <span class="source-line-no">306</span><span id="line-306">    *       .setTitle(&lt;js&gt;"Related Article"&lt;/js&gt;);</span>
@@ -338,7 +338,7 @@
 <span class="source-line-no">325</span><span id="line-325">    * &lt;p&gt;</span>
 <span class="source-line-no">326</span><span id="line-326">    * This should be a valid MIME media type as defined by RFC 4287.</span>
 <span class="source-line-no">327</span><span id="line-327">    *</span>
-<span class="source-line-no">328</span><span id="line-328">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">328</span><span id="line-328">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">329</span><span id="line-329">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">330</span><span id="line-330">    *    &lt;li&gt;&lt;js&gt;"text/html"&lt;/js&gt;</span>
 <span class="source-line-no">331</span><span id="line-331">    *    &lt;li&gt;&lt;js&gt;"application/pdf"&lt;/js&gt;</span>

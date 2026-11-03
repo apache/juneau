@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  registry expects (Micrometer <code>io.micrometer.core.instrument.Timer</code>, OpenTelemetry
  metric instruments, Dropwizard <code>MetricRegistry</code>, etc.).
 
- <h5 class='topic'>Off-by-default contract</h5>
+ <h2 class='topic'>Off-by-default contract</h2>
 
  <p>
  <code>juneau-rest-server</code> resolves the <code>MetricsRecorder</code> via
@@ -103,7 +102,7 @@ loadScripts(document, 'script');</script>
  cost beyond a single static-field read. To opt in, the consumer registers a <code>MetricsRecorder</code>
  bean &mdash; typically via <code>@Bean MetricsRecorder</code> on the resource or its parent.
 
- <h5 class='topic'>Usage</h5>
+ <h2 class='topic'>Usage</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>
@@ -116,7 +115,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='topic'>Threading</h5>
+ <h2 class='topic'>Threading</h2>
 
  <p>
  Implementations <b>must</b> be thread-safe &mdash; the same <code>MetricsRecorder</code> bean is invoked
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
  status is known, so implementations should keep the call cheap (constant-time tag computation,
  non-blocking registry writes).
 
- <h5 class='topic'>Event ordering</h5>
+ <h2 class='topic'>Event ordering</h2>
 
  <p>
  For a given <code>@RestOp</code> invocation, <code>record(...)</code> fires exactly once after the operation
@@ -135,7 +134,7 @@ loadScripts(document, 'script');</script>
  after the handler returns or throws). It does <b>not</b> include response serialization performed
  later in the request pipeline.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="NoOpMetricsRecorder.html" title="class in org.apache.juneau.rest.server.metrics"><code>NoOpMetricsRecorder</code></a>
    <li class='jc'><a href="../tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>

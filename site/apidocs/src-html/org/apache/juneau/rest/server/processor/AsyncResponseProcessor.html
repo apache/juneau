@@ -67,7 +67,7 @@
 <span class="source-line-no">054</span><span id="line-54"> *       {@link ProblemDetailsProcessor}) handles it, then completes the {@code AsyncContext}.</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;/ul&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;h5 class='section'&gt;Synchronous fallback&lt;/h5&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;h2 class='section'&gt;Synchronous fallback&lt;/h2&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * In environments where {@link HttpServletRequest#startAsync()} is unsupported (most notably</span>
 <span class="source-line-no">060</span><span id="line-60"> * Juneau's {@code MockServletRequest}, which returns {@code null}), this processor falls back to a</span>
@@ -76,14 +76,14 @@
 <span class="source-line-no">063</span><span id="line-63"> * This keeps the unit-test surface working without requiring a real servlet container while</span>
 <span class="source-line-no">064</span><span id="line-64"> * preserving full {@code AsyncContext} semantics in production.</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Timeout&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;Timeout&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * The async timeout is configurable via {@code @Rest(asyncTimeoutMillis)} /</span>
 <span class="source-line-no">069</span><span id="line-69"> * {@code @RestOp(asyncTimeoutMillis)} (default 30s). On timeout the processor cancels the future</span>
 <span class="source-line-no">070</span><span id="line-70"> * with {@code mayInterruptIfRunning=true} and writes a {@link HttpServletResponse#SC_GATEWAY_TIMEOUT}</span>
 <span class="source-line-no">071</span><span id="line-71"> * response.</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
-<span class="source-line-no">073</span><span id="line-73"> * &lt;h5 class='section'&gt;Bare {@link Future} rejection&lt;/h5&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;h2 class='section'&gt;Bare {@link Future} rejection&lt;/h2&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;p&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * Bare {@link Future} return types (anything that is a {@code Future} but not a</span>
 <span class="source-line-no">076</span><span id="line-76"> * {@link CompletionStage}) are rejected with an {@link InternalServerError} —</span>
@@ -91,7 +91,7 @@
 <span class="source-line-no">078</span><span id="line-78"> * cooperation guarantees that {@link CompletableFuture} provides. Handlers that need async dispatch</span>
 <span class="source-line-no">079</span><span id="line-79"> * must return {@link CompletableFuture} or {@link CompletionStage}.</span>
 <span class="source-line-no">080</span><span id="line-80"> *</span>
-<span class="source-line-no">081</span><span id="line-81"> * &lt;h5 class='section'&gt;Completion executor&lt;/h5&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;h2 class='section'&gt;Completion executor&lt;/h2&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> * &lt;p&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * When {@code @Rest(asyncCompletionExecutor="poolName")} or the per-op equivalent is set, this processor</span>
 <span class="source-line-no">084</span><span id="line-84"> * switches from {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)},</span>
@@ -99,14 +99,14 @@
 <span class="source-line-no">086</span><span id="line-86"> * snapshot (see below) is taken on the request thread &lt;em&gt;before&lt;/em&gt; the executor routing so the MDC context</span>
 <span class="source-line-no">087</span><span id="line-87"> * is always available regardless of which thread the executor picks.</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
-<span class="source-line-no">089</span><span id="line-89"> * &lt;h5 class='section'&gt;Thread-local caveats&lt;/h5&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;h2 class='section'&gt;Thread-local caveats&lt;/h2&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * &lt;p&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> * Anything carried via {@link ThreadLocal} (SLF4J MDC, security contexts) does NOT survive the</span>
 <span class="source-line-no">092</span><span id="line-92"> * async boundary — the {@code whenComplete} callback typically runs on a different thread than the</span>
 <span class="source-line-no">093</span><span id="line-93"> * one that produced the future. {@code RequestAttributes}, {@link org.apache.juneau.commons.svl.VarResolverSession},</span>
 <span class="source-line-no">094</span><span id="line-94"> * and {@link java.util.Locale} are request-scoped and survive correctly.</span>
 <span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsyncDispatch"&gt;Async Returns + Virtual-Thread Dispatch&lt;/a&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors"&gt;Response Processors&lt;/a&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> * &lt;/ul&gt;</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
  was consulted before a bulk-mutating affordance is configured (the opt-in separability
  guarantee).
 
- <h5 class='section'>Why this exists, and why it is NOT the console's own <code>WritePermit</code></h5>
+ <h2 class='section'>Why this exists, and why it is NOT the console's own <code>WritePermit</code></h2>
  <p>
  A consuming application (e.g. the Sandbox Support Console) may already have its own, much richer write-gate
  token &mdash; one bound to a journal, a box <code>Mode</code>, an idempotency key, and a target validator (see that
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
  is no zero-argument overload, so omitting one is a <b>compile</b> failure, not a missed javadoc sentence
  (mirroring the discipline of the console's own <code>WriteGuard</code>).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// After the consumer's OWN write-gate has already approved this capability:</jc>
    WritePermit <jv>permit</jv> = WritePermit.<jsm>forCapability</jsm>(<js>"incident:bulk-ack"</js>);
@@ -113,7 +112,7 @@ loadScripts(document, 'script');</script>
       .actions(RowAction.<jsm>create</jsm>(<js>"ack"</js>).endpoint(<js>"servlet:/incidents/{id}/ack"</js>).method(RowAction.Method.<jsf>POST</jsf>));
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="BulkMutateDef.html" title="class in org.apache.juneau.console.views"><code>BulkMutateDef</code></a>
    <li class='jc'><a href="SelectionDef.html" title="class in org.apache.juneau.console.views"><code>SelectionDef</code></a>

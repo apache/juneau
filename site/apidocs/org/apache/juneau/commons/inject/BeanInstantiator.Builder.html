@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  an immutable <a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a> suitable for shared concurrent use. Most call sites use the
  <a href="#run()"><code>run()</code></a> shorthand which is equivalent to <code>build().run()</code>.
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  Builder instances are <b>not</b> thread-safe. Configure on one thread, then either call <a href="#build()"><code>build()</code></a>
  to produce a thread-safe immutable <a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a>, or call <a href="#run()"><code>run()</code></a> to one-shot create a
@@ -459,7 +458,7 @@ loadScripts(document, 'script');</script>
  This method is useful when bean creation failure is expected and should not be treated as exceptional,
  such as when implementing optional features or trying multiple creation strategies.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Unlike <a href="#run()"><code>run()</code></a>, this method catches <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> and returns empty.
    <li class='note'>If a fallback is registered via <a href="#fallback(java.util.function.Supplier)"><code>fallback(Supplier)</code></a>,
       it will be used before returning empty, so this method will only return empty if both
@@ -471,7 +470,7 @@ loadScripts(document, 'script');</script>
       and will propagate to the caller.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Try to create, use default if it fails</jc>
    MyBean <jv>bean</jv> = BeanInstantiator
@@ -515,14 +514,14 @@ loadScripts(document, 'script');</script>
  This is particularly useful when the bean store contents change and you want to recreate the bean
  with updated dependencies.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>The returned <a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function"><code>Memoizer</code></a> is thread-safe.
    <li class='note'>Each call to <a href="../function/Memoizer.html#get()"><code>Memoizer.get()</code></a> after a reset() will invoke
       <a href="#run()"><code>run()</code></a>, which may trigger dependency injection and post-creation hooks.
    <li class='note'>The memoizer inherits all Optional-like methods from <a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function"><code>NullableSupplier</code></a>.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a memoizer for a bean with dependencies</jc>
    BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore(<jk>null</jk>);
@@ -655,7 +654,7 @@ loadScripts(document, 'script');</script>
  If the builder instance's class is invalid (does not have a valid build method), this method throws an
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>When specified, the builder type detection is bypassed.
    <li class='note'>The builder will be used to create the bean via:
       <ul>
@@ -685,7 +684,7 @@ loadScripts(document, 'script');</script>
  By default, <code>BeanInstantiator</code> looks for inner classes named <code>"Builder"</code>.
  This method allows you to specify alternative class names.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Inner builder classes must be public, static, and pass builder validation
       (have a build/create/get method or be accepted by a bean constructor).
    <li class='note'>If multiple inner classes match, the first valid one found will be used.
@@ -694,7 +693,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>Calling this method replaces the default builder class names.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Support alternative builder class naming conventions</jc>
    MyBean <jv>bean</jv> = BeanInstantiator
@@ -720,7 +719,7 @@ loadScripts(document, 'script');</script>
  By default, <code>BeanInstantiator</code> looks for static methods named <code>"create"</code> or <code>"builder"</code>
  that return a builder type. This method allows you to specify alternative method names.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Builder factory methods must be public, static, non-deprecated, and return a builder type
       (not the bean type itself).
    <li class='note'>If multiple builder factory methods match, the one with the most parameters that can be
@@ -729,7 +728,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>Calling this method replaces the default builder method names.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Support alternative builder factory method naming conventions</jc>
    MyBean <jv>bean</jv> = BeanInstantiator
@@ -755,7 +754,7 @@ loadScripts(document, 'script');</script>
  By default, <code>BeanInstantiator</code> looks for instance methods named <code>"build"</code>, <code>"create"</code>, or <code>"get"</code>
  on the builder that return the bean type. This method allows you to specify alternative method names.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Build methods must be public, non-static, non-deprecated, and return the bean type
       (or a parent type of the bean type).
    <li class='note'>If the method has <code>@Inject</code> or <code>@Autowired</code> annotation, its parameters are resolved from the bean store.
@@ -763,7 +762,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>Calling this method replaces the default build method names.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Support alternative build method naming conventions</jc>
    MyBean <jv>bean</jv> = BeanInstantiator
@@ -794,7 +793,7 @@ loadScripts(document, 'script');</script>
  When caching mode is disabled (the default), each call to <a href="#run()"><code>run()</code></a> will create a new bean instance
  by calling <code>findBeanImpl()</code> directly.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Enable caching mode - same instance returned on each run()</jc>
    <jk>var</jk> <jv>creator</jv> = BeanInstantiator
@@ -834,7 +833,7 @@ loadScripts(document, 'script');</script>
  <a href="#run()"><code>run()</code></a> unchanged — constructor lookup is skipped. This matches legacy <code>BeanCreator</code>
  semantics for static <code>create()</code> / <code>builder()</code> / <code>getInstance()</code> methods.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// AttributeArg.create(ParameterInfo) returns null if @Attr is not present.</jc>
    <jc>// Without factoryAbstainOnNull, BeanInstantiator would then invoke the AttributeArg(ParameterInfo)</jc>
@@ -882,7 +881,7 @@ loadScripts(document, 'script');</script>
  the same use case (legacy filtered out the multi-arg ctors via <code>hasAllParams</code> returning false, since the
  legacy bean store didn't auto-resolve raw <code>Map</code>/<code>Collection</code> parameter types).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Instantiating an arbitrary Map subclass — prefer the no-arg ctor over copy-ctors.</jc>
    Map&lt;?,?&gt; <jv>m</jv> = BeanInstantiator
@@ -942,7 +941,7 @@ loadScripts(document, 'script');</script>
  which creation path was taken, why creation might have failed, or to troubleshoot
  unexpected behavior.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Debug logs include: builder detection, factory method attempts, constructor attempts,
       dependency resolution, injection, hooks execution, validation, and fallback usage.
    <li class='note'>The debug log is reset each time <a href="#run()"><code>run()</code></a> or <a href="#asOptional()"><code>asOptional()</code></a> is called.
@@ -952,7 +951,7 @@ loadScripts(document, 'script');</script>
       (subsequent calls return the cached instance unless <a href="#reset()"><code>reset()</code></a> is called).
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Enable debug mode</jc>
    <jk>var</jk> <jv>creator</jv> = BeanInstantiator
@@ -981,7 +980,7 @@ loadScripts(document, 'script');</script>
  to create beans without a builder. This method allows you to specify alternative
  factory method names to support non-standard naming conventions.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Factory methods must be public, static, non-deprecated, and return the bean type.
    <li class='note'>If multiple factory methods match, the one with the most parameters that can be
       resolved from the bean store will be used.
@@ -990,7 +989,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>Calling this method replaces the default factory method names.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Support multiple factory method naming conventions</jc>
    MyBean <jv>bean</jv> = BeanInstantiator
@@ -1020,7 +1019,7 @@ loadScripts(document, 'script');</script>
  This enables graceful degradation when bean creation cannot succeed, such as when optional features
  or dependencies are not available.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>The fallback supplier is only invoked if bean creation fails.
       If bean creation succeeds normally, the fallback is never called.
    <li class='note'>Fallbacks are checked after all normal creation attempts (builders, factory methods, constructors).
@@ -1033,7 +1032,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>To use a pre-created instance as a fallback, wrap it in a supplier: <c>fallback(() -&gt; myInstance)</c>.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Provide a default instance if creation fails</jc>
    MyService <jv>service</jv> = BeanInstantiator
@@ -1096,7 +1095,7 @@ loadScripts(document, 'script');</script>
  all parent classes up to and including the bean type. If no subtype was specified, the list will contain
  only the bean type.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// If beanType is A and beanSubType is C (extends B extends A)</jc>
    <jc>// getBeanSubTypes() returns: [C, B, A]</jc>
@@ -1141,7 +1140,7 @@ loadScripts(document, 'script');</script>
  This method returns a list that includes the primary builder type and all builder types found by traversing
  the builder's parent hierarchy. This allows parent builders to be resolved as injectable types.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Class A with builder</jc>
    <jk>class</jk> A {
@@ -1176,7 +1175,7 @@ loadScripts(document, 'script');</script>
  <a href="#run()"><code>run()</code></a> or <a href="#asOptional()"><code>asOptional()</code></a>. The log is only populated when <a href="#debug()"><code>debug()</code></a>
  mode is enabled.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Returns an empty list if <a href="#debug()"><code>debug()</code></a> was not called or if no creation has been attempted.
    <li class='note'>The log is reset at the beginning of each <a href="#run()"><code>run()</code></a> call.
    <li class='note'>Since <a href="#run()"><code>run()</code></a> uses a cached <a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function"><code>Memoizer</code></a>, the log reflects only the first creation
@@ -1184,7 +1183,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>The returned list is unmodifiable.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>var</jk> <jv>creator</jv> = BeanInstantiator.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
       .debug();
@@ -1212,7 +1211,7 @@ loadScripts(document, 'script');</script>
  When specified, the bean creation logic is bypassed and this implementation is returned
  directly from <a href="#run()"><code>run()</code></a>, after performing dependency injection on it.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>The bean implementation will still have its fields and methods injected via <a href="../reflect/ClassInfo.html#inject(T,org.apache.juneau.commons.inject.BeanStore)"><code>ClassInfo.inject(Object, BeanStore)</code></a>.
    <li class='note'>This is useful when you want to provide a pre-configured instance but still benefit from dependency injection.
    <li class='note'>The explicit implementation is preserved even when <a href="#reset()"><code>reset()</code></a> is called, unlike cached results from suppliers.
@@ -1238,7 +1237,7 @@ loadScripts(document, 'script');</script>
  <p>
  Multiple hooks can be registered and they will be executed in the order they were added.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Hooks are executed every time <a href="#run()"><code>run()</code></a> is called. Since <a href="#run()"><code>run()</code></a> uses a cached
       <a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function"><code>Memoizer</code></a>, hooks are only executed once unless <a href="#reset()"><code>reset()</code></a> is called.
    <li class='note'>Hooks are executed after dependency injection, so all <code>@Inject</code> fields and methods
@@ -1249,7 +1248,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>The hook receives the fully initialized bean instance as its parameter.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Register multiple post-creation hooks</jc>
    MyService <jv>service</jv> = BeanInstantiator
@@ -1311,7 +1310,7 @@ loadScripts(document, 'script');</script>
  Multiple wrappers may be registered; they are applied in registration order. Each wrapper receives
  the output of the previous wrapper.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BeanInstantiator.<jsm>of</jsm>(MyService.<jk>class</jk>, store)
       .wrap(LoggingProxy::wrap)
@@ -1440,7 +1439,7 @@ loadScripts(document, 'script');</script>
  methods or constructors. This is useful when a Builder class is co-located with the bean type
  (e.g. <code>Foo.Builder</code>) but the caller wants to use a builder-taking constructor instead.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    BeanInstantiator.<jsm>of</jsm>(BasicSwaggerProvider.<jk>class</jk>, beanStore)
       .add(SwaggerProvider.Builder.<jk>class</jk>, <jv>this</jv>)
@@ -1493,7 +1492,7 @@ loadScripts(document, 'script');</script>
  <p>
  This causes them to be re-evaluated on the next call to <a href="#run()"><code>run()</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>If an explicit builder instance was set via <a href="#builder(java.lang.Object)"><code>builder(Object)</code></a>,
       it is preserved and not cleared by this method.
    <li class='note'>If an explicit implementation was set via <a href="#impl(T)"><code>impl(Object)</code></a>,

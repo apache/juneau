@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. It's particularly
  useful when you need to construct lists dynamically with conditional elements or from multiple sources.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Fluent API - all methods return <c>this</c> for method chaining
    <li>Multiple add methods - single elements, varargs, collections, arrays
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    <li>Custom conversion functions - type conversion via <a href="#elementFunction(java.util.function.Function)"><code>elementFunction(Function)</code></a>
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Basic usage</jc>
    List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -154,12 +153,12 @@ loadScripts(document, 'script');</script>
       .buildFiltered();
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
  properly synchronized.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">Collections Package</a>
    <li class='jc'><a href="Maps.html" title="class in org.apache.juneau.commons.collections"><code>Maps</code></a>
    <li class='jc'><a href="Sets.html" title="class in org.apache.juneau.commons.collections"><code>Sets</code></a>
@@ -331,7 +330,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="Lists.html" title="class in org.apache.juneau.commons.collections">Lists</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Lists.html#line-134">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
 <div class="block">Creates a new list builder for the specified element type.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
       .add(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>)
@@ -407,7 +406,7 @@ loadScripts(document, 'script');</script>
    <li>Convertible types - converted using <a href="#elementFunction(java.util.function.Function)"><code>elementFunction(Function)</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Mix different input types</jc>
    List&lt;Integer&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -468,7 +467,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is a convenience method that calls <a href="#build()"><code>build()</code></a> and wraps the result in a <a href="FluentList.html" title="class in org.apache.juneau.commons.collections"><code>FluentList</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -488,7 +487,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FilteredList.html" title="class in org.apache.juneau.commons.collections">FilteredList</a>&lt;<a href="Lists.html" title="type parameter in Lists">E</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Lists.html#line-361">buildFiltered</a></span>()</div>
 <div class="block">Builds the list as a <a href="FilteredList.html" title="class in org.apache.juneau.commons.collections"><code>FilteredList</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -555,7 +554,7 @@ loadScripts(document, 'script');</script>
    <li>Empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collections</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -590,7 +589,7 @@ loadScripts(document, 'script');</script>
  <p>
  Note: Filtering is applied at build time, not when adding elements.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -679,7 +678,7 @@ loadScripts(document, 'script');</script>
  The list will be wrapped using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#synchronizedList(java.util.List)" title="class or interface in java.util" class="external-link"><code>Collections.synchronizedList(List)</code></a> to provide thread-safety.
  This is useful when the list needs to be accessed from multiple threads.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a thread-safe list</jc>
    List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -703,7 +702,7 @@ loadScripts(document, 'script');</script>
  When <c>true</c>, the list will be wrapped using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#synchronizedList(java.util.List)" title="class or interface in java.util" class="external-link"><code>Collections.synchronizedList(List)</code></a> to provide thread-safety.
  This is useful when the list needs to be accessed from multiple threads.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Conditionally create a thread-safe list</jc>
    List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)

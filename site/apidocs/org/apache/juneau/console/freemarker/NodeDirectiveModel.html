@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ implements freemarker.template.TemplateDirectiveModel</span></div>
  <code>visible=false</code> omits the node and its whole subtree &mdash; the body is not even rendered. A node not
  nested inside <code>&lt;@navigation&gt;</code> and without <code>under=</code> is rejected fail-closed.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bcode'>
    &lt;@navigation&gt;
      &lt;@node id="work" label="Work" href="/work"&gt;
@@ -109,7 +108,7 @@ implements freemarker.template.TemplateDirectiveModel</span></div>
    &lt;/@navigation&gt;
  </p>
 
- <h5 class='section'><code>under=</code>: page-scoped nav additions:</h5>
+ <h2 class='section'><code>under=</code>: page-scoped nav additions:</h2>
  <p>
  <code>under=</code> is allowed only on a <code>&lt;@node&gt;</code> that is a direct child of <code>&lt;@page&gt;</code>, or of
  <code>&lt;@console&gt;</code> outside <code>&lt;@navigation&gt;</code>; anywhere else it is E-B14.  The node (and any ordinary nested

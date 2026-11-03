@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * {@link Microservice} (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with</span>
 <span class="source-line-no">033</span><span id="line-33"> * {@link TestBean @TestBean} mock-bean injection and convenience parameter resolution.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='topic'&gt;Lifecycle (per class)&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='topic'&gt;Lifecycle (per class)&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * The microservice is built + {@link Microservice#start() started} once in {@code beforeAll} and</span>
@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * one-way, the bean store is closed, and each {@code start()} adds a JVM shutdown hook). The bound port is read</span>
 <span class="source-line-no">042</span><span id="line-42"> * from the live {@link ServerConnector} (never hard-coded), mirroring the established fixture pattern.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='topic'&gt;Mock-bean injection&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='topic'&gt;Mock-bean injection&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@link TestBean @TestBean} declarations are discovered via</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> * them from startup. &lt;b&gt;Mode OVERLAY&lt;/b&gt; pushes the overrides onto the booted instance's bean store for the</span>
 <span class="source-line-no">051</span><span id="line-51"> * class duration and pops them in teardown.</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='topic'&gt;Parameter resolution&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='topic'&gt;Parameter resolution&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> * Resolves {@link RestClient} (bound to the booted root URL), {@link Microservice}, {@link WritableBeanStore},</span>

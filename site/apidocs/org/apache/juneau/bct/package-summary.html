@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -73,7 +72,7 @@ loadScripts(document, 'script');</script>
  for Java objects. The Bean-Centric Testing (BCT) framework eliminates verbose test code while providing
  comprehensive object introspection and comparison capabilities.</p>
 
- <h5 class='section'>Key Features:</h5>
+ <h2 class='section'>Key Features:</h2>
  <ul>
     <li><b>Concise Assertions:</b> Replace multiple lines of manual property extraction with single assertion calls</li>
     <li><b>Powerful Property Access:</b> Nested objects, collections, arrays, and maps with unified syntax</li>
@@ -82,14 +81,14 @@ loadScripts(document, 'script');</script>
     <li><b>Extensible:</b> Custom property extractors, stringifiers, and conversion logic</li>
  </ul>
 
- <h5 class='section'>Core Classes:</h5>
+ <h2 class='section'>Core Classes:</h2>
  <ul>
     <li><b><a href="BctAssertions.html" title="class in org.apache.juneau.bct"><code>BctAssertions</code></a>:</b> Main assertion methods for BCT</li>
     <li><b><a href="BeanConverter.html" title="interface in org.apache.juneau.bct"><code>BeanConverter</code></a>:</b> Interface for object conversion and property access</li>
     <li><b><a href="BasicBeanConverter.html" title="class in org.apache.juneau.bct"><code>BasicBeanConverter</code></a>:</b> Default implementation with extensible type handlers</li>
  </ul>
 
- <h5 class='section'>Quick Start:</h5>
+ <h2 class='section'>Quick Start:</h2>
  <p class='bjava'>
     <jk>import static</jk> org.apache.juneau.bct.BctAssertions.*;
 
@@ -105,9 +104,9 @@ loadScripts(document, 'script');</script>
     }
  </p>
 
- <h5 class='section'>Assertion Method Examples:</h5>
+ <h2 class='section'>Assertion Method Examples:</h2>
 
- <h6 class='figure'>1. <a href="BctAssertions.html#assertBean(java.lang.Object,java.lang.String,java.lang.String)"><code>assertBean()</code></a></h6>
+ <h3 class='figure'>1. <a href="BctAssertions.html#assertBean(java.lang.Object,java.lang.String,java.lang.String)"><code>assertBean()</code></a></h3>
  <p>Tests object properties with support for nested syntax and collection iteration.</p>
  <p class='bjava'>
     User <jv>user</jv> = <jk>new</jk> User(<js>"Bob"</js>, 30);
@@ -122,7 +121,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertBean</jsm>(<jv>user</jv>, <js>"address{street,city}"</js>, <js>"{456 Oak Ave,Denver}"</js>);
  </p>
 
- <h6 class='figure'>2. <a href="BctAssertions.html#assertBeans(java.lang.Object,java.lang.String,java.lang.String...)"><code>assertBeans()</code></a></h6>
+ <h3 class='figure'>2. <a href="BctAssertions.html#assertBeans(java.lang.Object,java.lang.String,java.lang.String...)"><code>assertBeans()</code></a></h3>
  <p>Tests collections of objects by extracting and comparing specific fields.</p>
  <p class='bjava'>
     List&lt;User&gt; <jv>users</jv> = Arrays.<jsm>asList</jsm>(
@@ -138,7 +137,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertBeans</jsm>(<jv>users</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>, <js>"Bob,30"</js>, <js>"Carol,35"</js>);
  </p>
 
- <h6 class='figure'>3. <a href="BctAssertions.html#assertMapped(T,java.util.function.BiFunction,java.lang.String,java.lang.String)"><code>assertMapped()</code></a></h6>
+ <h3 class='figure'>3. <a href="BctAssertions.html#assertMapped(T,java.util.function.BiFunction,java.lang.String,java.lang.String)"><code>assertMapped()</code></a></h3>
  <p>Tests custom property access using BiFunction for non-standard objects.</p>
  <p class='bjava'>
     Map&lt;String,Object&gt; <jv>data</jv> = <jk>new</jk> HashMap&lt;&gt;();
@@ -149,7 +148,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertMapped</jsm>(<jv>data</jv>, (obj, key) -&gt; obj.get(key), <js>"name,score"</js>, <js>"Alice,95"</js>);
  </p>
 
- <h6 class='figure'>4. <a href="BctAssertions.html#assertList(java.lang.Object,java.lang.Object...)"><code>assertList()</code></a></h6>
+ <h3 class='figure'>4. <a href="BctAssertions.html#assertList(java.lang.Object,java.lang.Object...)"><code>assertList()</code></a></h3>
  <p>Tests list/collection elements with varargs for expected values.</p>
  <p class='bjava'>
     List&lt;String&gt; <jv>names</jv> = Arrays.<jsm>asList</jsm>(<js>"Alice"</js>, <js>"Bob"</js>, <js>"Carol"</js>);
@@ -160,7 +159,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertList</jsm>(<jv>colors</jv>, <js>"red"</js>, <js>"green"</js>, <js>"blue"</js>);
  </p>
 
- <h6 class='figure'>5. <a href="BctAssertions.html#assertContains(java.lang.String,java.lang.Object)"><code>assertContains()</code></a></h6>
+ <h3 class='figure'>5. <a href="BctAssertions.html#assertContains(java.lang.String,java.lang.Object)"><code>assertContains()</code></a></h3>
  <p>Tests that a string appears somewhere within the stringified object.</p>
  <p class='bjava'>
     User <jv>user</jv> = <jk>new</jk> User(<js>"Alice Smith"</js>, 25);
@@ -171,7 +170,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertContains</jsm>(<js>"banana"</js>, <jv>items</jv>);
  </p>
 
- <h6 class='figure'>6. <a href="BctAssertions.html#assertContainsAll(java.lang.Object,java.lang.String...)"><code>assertContainsAll()</code></a></h6>
+ <h3 class='figure'>6. <a href="BctAssertions.html#assertContainsAll(java.lang.Object,java.lang.String...)"><code>assertContainsAll()</code></a></h3>
  <p>Tests that all specified strings appear within the stringified object.</p>
  <p class='bjava'>
     User <jv>user</jv> = <jk>new</jk> User(<js>"Alice Smith"</js>, 25);
@@ -182,7 +181,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertContainsAll</jsm>(<jv>user</jv>, <js>"alice"</js>, <js>"example.com"</js>);
  </p>
 
- <h6 class='figure'>7. <a href="BctAssertions.html#assertEmpty(java.lang.Object)"><code>assertEmpty()</code></a></h6>
+ <h3 class='figure'>7. <a href="BctAssertions.html#assertEmpty(java.lang.Object)"><code>assertEmpty()</code></a></h3>
  <p>Tests that collections, arrays, maps, or strings are empty.</p>
  <p class='bjava'>
     List&lt;String&gt; <jv>emptyList</jv> = <jk>new</jk> ArrayList&lt;&gt;();
@@ -197,7 +196,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertEmpty</jsm>(<jv>emptyString</jv>);
  </p>
 
- <h6 class='figure'>8. <a href="BctAssertions.html#assertNotEmpty(java.lang.Object)"><code>assertNotEmpty()</code></a></h6>
+ <h3 class='figure'>8. <a href="BctAssertions.html#assertNotEmpty(java.lang.Object)"><code>assertNotEmpty()</code></a></h3>
  <p>Tests that collections, arrays, maps, or strings are not empty.</p>
  <p class='bjava'>
     List&lt;String&gt; <jv>names</jv> = Arrays.<jsm>asList</jsm>(<js>"Alice"</js>);
@@ -212,7 +211,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertNotEmpty</jsm>(<jv>message</jv>);
  </p>
 
- <h6 class='figure'>9. <a href="BctAssertions.html#assertSize(int,java.lang.Object)"><code>assertSize()</code></a></h6>
+ <h3 class='figure'>9. <a href="BctAssertions.html#assertSize(int,java.lang.Object)"><code>assertSize()</code></a></h3>
  <p>Tests the size/length of collections, arrays, maps, or strings.</p>
  <p class='bjava'>
     List&lt;String&gt; <jv>names</jv> = Arrays.<jsm>asList</jsm>(<js>"Alice"</js>, <js>"Bob"</js>, <js>"Carol"</js>);
@@ -227,7 +226,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertSize</jsm>(5, <jv>message</jv>);
  </p>
 
- <h6 class='figure'>10. <a href="BctAssertions.html#assertString(java.lang.String,java.lang.Object)"><code>assertString()</code></a></h6>
+ <h3 class='figure'>10. <a href="BctAssertions.html#assertString(java.lang.String,java.lang.Object)"><code>assertString()</code></a></h3>
  <p>Tests the string representation of an object using the configured converter.</p>
  <p class='bjava'>
     User <jv>user</jv> = <jk>new</jk> User(<js>"Alice"</js>, 25);
@@ -240,7 +239,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertString</jsm>(<js>"2021-01-01"</js>, <jv>date</jv>);
  </p>
 
- <h6 class='figure'>11. <a href="BctAssertions.html#assertMatchesGlob(java.lang.String,java.lang.Object)"><code>assertMatchesGlob()</code></a></h6>
+ <h3 class='figure'>11. <a href="BctAssertions.html#assertMatchesGlob(java.lang.String,java.lang.Object)"><code>assertMatchesGlob()</code></a></h3>
  <p>Tests that the stringified object matches a glob-style pattern (* and ? wildcards).</p>
  <p class='bjava'>
     User <jv>user</jv> = <jk>new</jk> User(<js>"Alice Smith"</js>, 25);
@@ -254,7 +253,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertMatchesGlob</jsm>(<js>"User(name=Alice*, age=25)"</js>, <jv>user</jv>);
  </p>
 
- <h5 class='section'>Custom Error Messages:</h5>
+ <h2 class='section'>Custom Error Messages:</h2>
  <p>All assertion methods support custom error messages via a <code>Supplier&lt;String&gt;</code> parameter:</p>
  <p class='bjava'>
     <jc>// Simple custom message</jc>
@@ -264,7 +263,7 @@ loadScripts(document, 'script');</script>
     <jsm>assertBean</jsm>(<jsm>fs</jsm>(<js>"User %s validation failed"</js>, <js>"Alice"</js>), <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  </p>
 
- <h5 class='section'>Customizing the Default Converter:</h5>
+ <h2 class='section'>Customizing the Default Converter:</h2>
  <p>The default bean converter can be customized on a per-thread basis:</p>
  <p class='bjava'>
     <jc>// Set custom converter in @BeforeEach method</jc>
@@ -287,7 +286,7 @@ loadScripts(document, 'script');</script>
     }
  </p>
 
- <h5 class='section'>Configuration Annotations:</h5>
+ <h2 class='section'>Configuration Annotations:</h2>
  <p>Annotations for configuring Bean-Centric Testing (BCT) framework behavior are also provided in this package.</p></div>
 <dl class="notes">
 <dt>See Also:</dt>

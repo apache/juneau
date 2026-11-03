@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * Schema objects are created via builders instantiated through the {@link #create()} method.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Jakarta Bean Validation Support:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Jakarta Bean Validation Support:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * As of 9.2.0, this class supports Jakarta Bean Validation constraint annotations (e.g., &lt;c&gt;@NotNull&lt;/c&gt;, &lt;c&gt;@Size&lt;/c&gt;, &lt;c&gt;@Min&lt;/c&gt;, &lt;c&gt;@Max&lt;/c&gt;).</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * When these annotations are encountered during schema building, they are automatically mapped to corresponding OpenAPI schema properties:</em>
@@ -89,11 +89,11 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * This integration uses pure reflection and does not require &lt;c&gt;jakarta.validation-api&lt;/c&gt; as a dependency.</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * The annotations are detected and processed automatically when present.</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class is thread safe and reusable.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/OpenApiSupport" target="alexandria_uri">https://juneau.apache.org/docs/topics/OpenApiSupport</a>"&gt;OpenApi&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> */</em>
@@ -581,7 +581,7 @@
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.</em>
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">		 * &lt;ul class='values javatree'&gt;</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">		 * 	&lt;ul class='jc'&gt;{@link HttpPartCollectionFormat}</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jc'&gt;{@link HttpPartCollectionFormat}</em>
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">		 * 	&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">		 * 		&lt;li&gt;</em>
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">		 * 			{@link HttpPartCollectionFormat#CSV CSV} (default) - Comma-separated values (e.g. &lt;js&gt;"foo,bar"&lt;/js&gt;).</em>
@@ -1077,7 +1077,7 @@
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> <em class="jxr_javadoccomment">		 * &lt;ul class='values javatree'&gt;</em>
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> <em class="jxr_javadoccomment">		 * 	&lt;ul class='jc'&gt;{@link HttpPartFormat}</em>
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='jc'&gt;{@link HttpPartFormat}</em>
 <a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> <em class="jxr_javadoccomment">		 * 	&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> <em class="jxr_javadoccomment">		 * 		&lt;li class='jf'&gt;</em>
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> <em class="jxr_javadoccomment">		 * 			{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.</em>
@@ -1119,7 +1119,7 @@
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">		 * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='extlink'&gt;&lt;a class="doclink" href="<a href="https://swagger.io/specification/v2" target="alexandria_uri">https://swagger.io/specification/v2</a>#schemaObject"&gt;Swagger Schema Object&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> <em class="jxr_javadoccomment">		 *</em>
@@ -1189,7 +1189,7 @@
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> <em class="jxr_javadoccomment">		 * 		&lt;br&gt;If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.</em>
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='extlink'&gt;&lt;a class="doclink" href="<a href="https://swagger.io/specification/v2" target="alexandria_uri">https://swagger.io/specification/v2</a>#schemaObject"&gt;Swagger Schema Object&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2338,7 +2338,7 @@
 <a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">		 * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='extlink'&gt;&lt;a class="doclink" href="<a href="https://swagger.io/specification" target="alexandria_uri">https://swagger.io/specification</a>#dataTypes"&gt;Swagger Data Types&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2336" href="#L2336">2336</a> <em class="jxr_javadoccomment">		 *</em>
@@ -2401,7 +2401,7 @@
 <a class="jxr_linenumber" name="L2393" href="#L2393">2393</a> <em class="jxr_javadoccomment">		 * 		&lt;br&gt;This type is currently not supported.</em>
 <a class="jxr_linenumber" name="L2394" href="#L2394">2394</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2395" href="#L2395">2395</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> <em class="jxr_javadoccomment">		 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L2397" href="#L2397">2397</a> <em class="jxr_javadoccomment">		 * 	&lt;li class='extlink'&gt;&lt;a class="doclink" href="<a href="https://swagger.io/specification" target="alexandria_uri">https://swagger.io/specification</a>#dataTypes"&gt;Swagger Data Types&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L2398" href="#L2398">2398</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> <em class="jxr_javadoccomment">		 *</em>

@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  <p>
  Note that this annotation is optional if you do not need to override any of the values.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  </ul></div>
 </section>
@@ -187,7 +186,7 @@ loadScripts(document, 'script');</script>
  <p>
  If you do not specify a path, then the path is inferred from the Java method name.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bjava'>
    <jc>// PATCH /pet</jc>
    <ja>@RemotePatch</ja>
@@ -302,7 +301,7 @@ loadScripts(document, 'script');</script>
  Precedence (most-specific first): an <a href="../Url.html" title="annotation interface in org.apache.juneau.http"><code>@Url</code></a> parameter, then this method-level
  value, then the interface-level default (<a href="Remote.html#baseUrl()"><code>Remote.baseUrl()</code></a>), then the client root URL.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -346,7 +345,7 @@ loadScripts(document, 'script');</script>
  declared via <a href="#headers()"><code>headers()</code></a> (since it also drives serializer selection); a genuinely caller-supplied
  <code>@Header("Content-Type")</code> parameter still takes effect.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -382,7 +381,7 @@ loadScripts(document, 'script');</script>
  <a href="#headers()"><code>headers()</code></a>; a genuinely caller-supplied <code>@Header("Accept")</code> parameter still takes effect.  Exactly
  one <code>Accept</code> header is sent.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -410,7 +409,7 @@ loadScripts(document, 'script');</script>
  (it is not suppressed), and this method-level value takes precedence over an interface-level
  <a href="Remote.html#headers()"><code>Remote.headers()</code></a> constant of the same name.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -441,7 +440,7 @@ loadScripts(document, 'script');</script>
  this method-level value takes precedence over an interface-level <a href="Remote.html#queryData()"><code>Remote.queryData()</code></a> constant of the same
  name.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -472,7 +471,7 @@ loadScripts(document, 'script');</script>
  this method-level value takes precedence over an interface-level <a href="Remote.html#formData()"><code>Remote.formData()</code></a> constant of the same
  name.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -502,7 +501,7 @@ loadScripts(document, 'script');</script>
  (<a href="Remote.html#interceptors()"><code>Remote.interceptors()</code></a>) and builder-configured interceptors; the three sets are unioned in the order
  builder &rarr; interface &rarr; method.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The member type is <code>Class&lt;?&gt;[]</code> (not <code>Class&lt;? extends RestCallInterceptor&gt;[]</code>) because
       <c>RestCallInterceptor</c> lives in the <code>juneau-rest-client</code> module, which this annotation's module
@@ -533,7 +532,7 @@ loadScripts(document, 'script');</script>
  value overrides the interface-level default (<a href="Remote.html#timeout()"><code>Remote.timeout()</code></a>).  Connect timeouts remain a client-level
  setting.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -573,7 +572,7 @@ loadScripts(document, 'script');</script>
  <p>
  Scalar precedence: a positive method-level value overrides the interface-level default (<a href="Remote.html#retries()"><code>Remote.retries()</code></a>).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -599,7 +598,7 @@ loadScripts(document, 'script');</script>
  with a non-repeatable body is never retried.  The effective value is the logical OR of this method-level value
  and the interface-level default (<a href="Remote.html#retryNonIdempotent()"><code>Remote.retryNonIdempotent()</code></a>).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -627,7 +626,7 @@ loadScripts(document, 'script');</script>
  The effective value is the logical OR of this method-level value and the interface-level default
  (<a href="Remote.html#throwOnError()"><code>Remote.throwOnError()</code></a>).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).

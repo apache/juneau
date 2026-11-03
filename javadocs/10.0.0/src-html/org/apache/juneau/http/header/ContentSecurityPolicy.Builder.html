@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * mitigating cross-site-scripting (XSS) and data-injection attacks.  This bean carries an already-rendered policy</span>
 <span class="source-line-no">031</span><span id="line-31"> * value; use {@link Builder} to assemble the value from typed directives.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jc&gt;// Build a static policy and emit it as a response header.&lt;/jc&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    ContentSecurityPolicy &lt;jv&gt;csp&lt;/jv&gt; = ContentSecurityPolicy.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> * &lt;c&gt;defaultResponseHeaders&lt;/c&gt; {@link HttpHeaderList} (e.g. via a &lt;c&gt;&lt;ja&gt;@Bean&lt;/ja&gt;(name=&lt;js&gt;"defaultResponseHeaders"&lt;/js&gt;)&lt;/c&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * factory method) and is emitted through the normal response-header path.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='jc'&gt;{@link Builder}</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='extlink'&gt;&lt;a class='doclink' href='https://www.w3.org/TR/CSP3/'&gt;Content Security Policy Level 3 (W3C WD)&lt;/a&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='extlink'&gt;&lt;a class='doclink' href='https://www.w3.org/TR/CSP2/'&gt;Content Security Policy Level 2 (W3C Rec)&lt;/a&gt;</span>
@@ -193,7 +193,7 @@
 <span class="source-line-no">180</span><span id="line-180">    * directives; {@link #directive(String, String...)} is a generic escape hatch so new directives never require an API</span>
 <span class="source-line-no">181</span><span id="line-181">    * change.  Setting the same directive more than once &lt;b&gt;replaces&lt;/b&gt; the previous source list.</span>
 <span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">183</span><span id="line-183">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">184</span><span id="line-184">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    *    String &lt;jv&gt;value&lt;/jv&gt; = ContentSecurityPolicy.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">186</span><span id="line-186">    *       .defaultSrc(&lt;jsf&gt;SELF&lt;/jsf&gt;)</span>
@@ -203,14 +203,14 @@
 <span class="source-line-no">190</span><span id="line-190">    *    &lt;jc&gt;// =&amp;gt; "default-src 'self'; img-src 'self' data:; object-src 'none'"&lt;/jc&gt;</span>
 <span class="source-line-no">191</span><span id="line-191">    * &lt;/p&gt;</span>
 <span class="source-line-no">192</span><span id="line-192">    *</span>
-<span class="source-line-no">193</span><span id="line-193">    * &lt;h5 class='section'&gt;Nonces:&lt;/h5&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    * &lt;h2 class='section'&gt;Nonces:&lt;/h2&gt;</span>
 <span class="source-line-no">194</span><span id="line-194">    * &lt;p&gt;</span>
 <span class="source-line-no">195</span><span id="line-195">    * Source helper {@link #nonce(String)} renders a &lt;c&gt;'nonce-&amp;lt;token&amp;gt;'&lt;/c&gt; source expression.  For per-request</span>
 <span class="source-line-no">196</span><span id="line-196">    * nonces (where the actual token is not known until the response is rendered), use {@link #NONCE_PLACEHOLDER} as the</span>
 <span class="source-line-no">197</span><span id="line-197">    * token and have the REST layer rewrite it per-response via {@link #resolveNonce(String, String)}; the same nonce is</span>
 <span class="source-line-no">198</span><span id="line-198">    * then stamped onto the inline &lt;c&gt;&amp;lt;script&amp;gt;&lt;/c&gt;/&lt;c&gt;&amp;lt;style&amp;gt;&lt;/c&gt; tags the serializer emits.</span>
 <span class="source-line-no">199</span><span id="line-199">    *</span>
-<span class="source-line-no">200</span><span id="line-200">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">200</span><span id="line-200">    * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">201</span><span id="line-201">    *    &lt;li class='jc'&gt;{@link ContentSecurityPolicy}</span>
 <span class="source-line-no">202</span><span id="line-202">    *    &lt;li class='extlink'&gt;&lt;a class='doclink' href='https://www.w3.org/TR/CSP3/'&gt;Content Security Policy Level 3 (W3C WD)&lt;/a&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    * &lt;/ul&gt;</span>

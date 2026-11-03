@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * file system. This is particularly useful in applications that need to work with files in both</span>
 <span class="source-line-no">032</span><span id="line-32"> * development (file system) and production (packaged JAR) environments.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Unified file access - works with both classpath resources and file system files</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;Optional caching - can cache file contents in memory for fast repeated access</span>
@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;Thread-safe reading - synchronized access for cached content</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Reading configuration files that may be on classpath or file system</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Accessing template files in both development and production environments</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Applications that need to support both embedded and external file access</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;jc&gt;// Classpath file&lt;/jc&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *    LocalFile &lt;jv&gt;classpathFile&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"config.properties"&lt;/js&gt;);</span>
@@ -76,20 +76,20 @@
 <span class="source-line-no">063</span><span id="line-63"> *    InputStream &lt;jv&gt;is3&lt;/jv&gt; = &lt;jv&gt;cachedFile&lt;/jv&gt;.read();  &lt;jc&gt;// Fast - uses cache&lt;/jc&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Caching:&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;Caching:&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * The {@link #cache()} method loads the entire file contents into memory, which can improve</span>
 <span class="source-line-no">069</span><span id="line-69"> * performance for files that are accessed multiple times. Once cached, subsequent calls to</span>
 <span class="source-line-no">070</span><span id="line-70"> * {@link #read()} return a {@link ByteArrayInputStream} backed by the cached data. Caching is</span>
 <span class="source-line-no">071</span><span id="line-71"> * thread-safe and synchronized.</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
-<span class="source-line-no">073</span><span id="line-73"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;p&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * This class is thread-safe for reading operations. The caching mechanism uses synchronization</span>
 <span class="source-line-no">076</span><span id="line-76"> * to ensure thread-safe access to cached content. Multiple threads can safely call {@link #read()}</span>
 <span class="source-line-no">077</span><span id="line-77"> * concurrently.</span>
 <span class="source-line-no">078</span><span id="line-78"> *</span>
-<span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link LocalDir} - Directory counterpart for resolving files within directories</span>
 <span class="source-line-no">081</span><span id="line-81"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO"&gt;I/O Package&lt;/a&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> * &lt;/ul&gt;</span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100">    * Creates a LocalFile that references a file on the classpath, relative to the specified class.</span>
 <span class="source-line-no">101</span><span id="line-101">    * The path is resolved using {@link Class#getResourceAsStream(String)}.</span>
 <span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">104</span><span id="line-104">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">    *    &lt;jc&gt;// File in same package as MyClass&lt;/jc&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    *    LocalFile &lt;jv&gt;file1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"config.properties"&lt;/js&gt;);</span>
@@ -144,7 +144,7 @@
 <span class="source-line-no">131</span><span id="line-131">    * Creates a LocalFile that references a file on the file system using a {@link Path}.</span>
 <span class="source-line-no">132</span><span id="line-132">    * The path must point to an actual file (not a directory) and must have a filename component.</span>
 <span class="source-line-no">133</span><span id="line-133">    *</span>
-<span class="source-line-no">134</span><span id="line-134">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">135</span><span id="line-135">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    *    &lt;jc&gt;// Absolute path&lt;/jc&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">    *    LocalFile &lt;jv&gt;file1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(Paths.get(&lt;js&gt;"/etc/config.properties"&lt;/js&gt;));</span>
@@ -183,7 +183,7 @@
 <span class="source-line-no">170</span><span id="line-170">    * The caching operation is thread-safe and synchronized. If multiple threads call this method</span>
 <span class="source-line-no">171</span><span id="line-171">    * concurrently, only one will perform the actual read operation.</span>
 <span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">173</span><span id="line-173">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">175</span><span id="line-175">    *    LocalFile &lt;jv&gt;file&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"template.html"&lt;/js&gt;);</span>
 <span class="source-line-no">176</span><span id="line-176">    *    &lt;jv&gt;file&lt;/jv&gt;.cache();  &lt;jc&gt;// Load into memory&lt;/jc&gt;</span>
@@ -193,7 +193,7 @@
 <span class="source-line-no">180</span><span id="line-180">    *    InputStream &lt;jv&gt;is2&lt;/jv&gt; = &lt;jv&gt;file&lt;/jv&gt;.read();</span>
 <span class="source-line-no">181</span><span id="line-181">    * &lt;/p&gt;</span>
 <span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * &lt;h5 class='section'&gt;Memory Considerations:&lt;/h5&gt;</span>
+<span class="source-line-no">183</span><span id="line-183">    * &lt;h4 class='section'&gt;Memory Considerations:&lt;/h4&gt;</span>
 <span class="source-line-no">184</span><span id="line-184">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    *    &lt;li&gt;The entire file is loaded into memory, so use with caution for large files</span>
 <span class="source-line-no">186</span><span id="line-186">    *    &lt;li&gt;Once cached, the file contents remain in memory for the lifetime of the LocalFile object</span>
@@ -217,7 +217,7 @@
 <span class="source-line-no">204</span><span id="line-204">    * For classpath files, this is the last component of the classpath path.</span>
 <span class="source-line-no">205</span><span id="line-205">    * For file system files, this is the filename component of the path.</span>
 <span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">207</span><span id="line-207">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">208</span><span id="line-208">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">209</span><span id="line-209">    *    LocalFile &lt;jv&gt;file1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"templates/index.html"&lt;/js&gt;);</span>
 <span class="source-line-no">210</span><span id="line-210">    *    String &lt;jv&gt;name1&lt;/jv&gt; = &lt;jv&gt;file1&lt;/jv&gt;.getName();  &lt;jc&gt;// Returns "index.html"&lt;/jc&gt;</span>
@@ -242,7 +242,7 @@
 <span class="source-line-no">229</span><span id="line-229">    * Each call to this method returns a new input stream. The caller is responsible</span>
 <span class="source-line-no">230</span><span id="line-230">    * for closing the returned stream.</span>
 <span class="source-line-no">231</span><span id="line-231">    *</span>
-<span class="source-line-no">232</span><span id="line-232">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">232</span><span id="line-232">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">233</span><span id="line-233">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">234</span><span id="line-234">    *    LocalFile &lt;jv&gt;file&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"data.txt"&lt;/js&gt;);</span>
 <span class="source-line-no">235</span><span id="line-235">    *</span>
@@ -282,7 +282,7 @@
 <span class="source-line-no">269</span><span id="line-269">    * callers need to check for existence before deciding whether to call {@link #read()} (which</span>
 <span class="source-line-no">270</span><span id="line-270">    * throws an {@link IOException} if the file is missing).</span>
 <span class="source-line-no">271</span><span id="line-271">    *</span>
-<span class="source-line-no">272</span><span id="line-272">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">272</span><span id="line-272">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">273</span><span id="line-273">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">274</span><span id="line-274">    *    LocalFile &lt;jv&gt;file&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(MyClass.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"optional.properties"&lt;/js&gt;);</span>
 <span class="source-line-no">275</span><span id="line-275">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;file&lt;/jv&gt;.exists()) {</span>
@@ -311,7 +311,7 @@
 <span class="source-line-no">298</span><span id="line-298">    * For file system files, this method returns the actual file size using {@link Files#size(Path)}.</span>
 <span class="source-line-no">299</span><span id="line-299">    * For classpath files, the size cannot be determined and this method returns &lt;c&gt;-1&lt;/c&gt;.</span>
 <span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">302</span><span id="line-302">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">303</span><span id="line-303">    *    LocalFile &lt;jv&gt;fsFile&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LocalFile(Paths.get(&lt;js&gt;"/var/log/app.log"&lt;/js&gt;));</span>
 <span class="source-line-no">304</span><span id="line-304">    *    &lt;jk&gt;long&lt;/jk&gt; &lt;jv&gt;size&lt;/jv&gt; = &lt;jv&gt;fsFile&lt;/jv&gt;.size();  &lt;jc&gt;// Returns actual file size&lt;/jc&gt;</span>

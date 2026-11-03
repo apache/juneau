@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  in Swagger 2.0. Operations define what actions can be taken, what parameters they accept, what they consume/produce,
  and what responses they return.
 
- <h5 class='section'>Swagger Specification:</h5>
+ <h2 class='section'>Swagger Specification:</h2>
  <p>
  The Operation Object is composed of the following fields:
  <ul class='spaced-list'>
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
    <li><c>security</c> (array of map) - A declaration of which security schemes are applied for this operation
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Construct using SwaggerBuilder.</jc>
    Operation <jv>operation</jv> = <jsm>operation</jsm>()
@@ -205,7 +204,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#operation-object">Swagger 2.0 Specification &gt; Operation Object</a>
    <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -903,7 +902,7 @@ loadScripts(document, 'script');</script>
  <p>
  A list of parameters that are applicable for this operation.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
       the new definition will override it, but can never remove it.

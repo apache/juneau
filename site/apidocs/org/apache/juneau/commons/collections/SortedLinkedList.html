@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  <p>
  For better random access performance, consider using <a href="SortedArrayList.html" title="class in org.apache.juneau.commons.collections"><code>SortedArrayList</code></a>.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Maintains elements in sorted order automatically
    <li>Allows duplicate elements (unlike <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeSet.html" title="class or interface in java.util" class="external-link"><code>TreeSet</code></a>)
@@ -119,7 +118,7 @@ loadScripts(document, 'script');</script>
    <li>Supports custom comparators or natural ordering
  </ul>
 
- <h5 class='section'>Performance Characteristics:</h5>
+ <h2 class='section'>Performance Characteristics:</h2>
  <ul class='spaced-list'>
    <li><b>add(E)</b>: O(n) - linear search to find position + O(1) insertion
    <li><b>get(int)</b>: O(n) - must traverse to index
@@ -128,7 +127,7 @@ loadScripts(document, 'script');</script>
    <li><b>set(int, E)</b>: O(n) - may need to re-sort if element order changes
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Natural ordering</jc>
    SortedLinkedList&lt;String&gt; <jv>list</jv> = <jk>new</jk> SortedLinkedList&lt;&gt;();
@@ -145,7 +144,7 @@ loadScripts(document, 'script');</script>
    <jc>// list2 contains: ["a", "bb", "ccc"] (sorted by length)</jc>
  </p>
 
- <h5 class='section'>Notes:</h5>
+ <h2 class='section'>Notes:</h2>
  <ul class='spaced-list'>
    <li>All elements must be mutually comparable (or comparable via the comparator)
    <li>Null elements are allowed only if the comparator supports them

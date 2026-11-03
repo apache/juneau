@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -81,7 +80,7 @@ loadScripts(document, 'script');</script>
  Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a value
  retrieved from the request attributes.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@RestGet</ja>
    <jk>public</jk> Person getPerson(<ja>@Attr</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters">Java Method Parameters</a>
 
  </ul></div>
@@ -156,7 +155,7 @@ loadScripts(document, 'script');</script>
       If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
       then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 
-      <h5 class='figure'>Examples:</h5>
+      <h4 class='figure'>Examples:</h4>
       <p class='bjava'>
    <ja>@RestPost</ja>(<js>"/addPet"</js>)
    <jk>public void</jk> addPet(<ja>@Attr</ja> JsonMap <jv>allAttributes</jv>) {...}

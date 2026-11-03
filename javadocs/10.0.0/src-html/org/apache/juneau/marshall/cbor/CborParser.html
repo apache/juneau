@@ -46,11 +46,11 @@
 <span class="source-line-no">033</span><span id="line-33">/**</span>
 <span class="source-line-no">034</span><span id="line-34"> * Parses CBOR streams (RFC 8949) into POJO models.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='topic'&gt;Media types&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
 <span class="source-line-no">038</span><span id="line-38"> * Handles &lt;c&gt;Content-Type&lt;/c&gt; types:  &lt;bc&gt;application/cbor&lt;/bc&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='topic'&gt;Description&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * CBOR-to-Java type mapping:</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;ul class='spaced-list'&gt;</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;CBOR semantic tag (major type 6) → tag ignored; tagged value parsed normally</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/ul&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;Round-trip notes:&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;Round-trip notes:&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;li&gt;Integers (major types 0/1) surface by target type: a {@link BigInteger} field carries the full</span>
 <span class="source-line-no">059</span><span id="line-59"> *       unsigned-64-bit magnitude; any other numeric type keeps the raw 64-bit bits as a {@code long}.</span>
@@ -80,11 +80,11 @@
 <span class="source-line-no">067</span><span id="line-67"> *       {@link TokenReader} cursor.</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor"&gt;CBOR&lt;/a&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html"&gt;RFC 8949&lt;/a&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;/ul&gt;</span>

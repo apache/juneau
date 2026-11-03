@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,12 +95,12 @@ loadScripts(document, 'script');</script>
  nested type is only materialized if at least one key resolves anywhere under its sub-prefix; otherwise the field
  is left <jk>null</jk>.
 
- <h5 class='section'>Usage</h5>
+ <h2 class='section'>Usage</h2>
  <p class='bjava'>
    MyServiceProperties <jv>props</jv> = ConfigPropertiesBinder.<jsm>of</jsm>(<jk>new</jk> MyServiceProperties(), <js>"MyService"</js>).run();
  </p>
 
- <h5 class='section'>Precedence (candidate-major)</h5>
+ <h2 class='section'>Precedence (candidate-major)</h2>
  <p>
  Precedence is <b>candidate-major</b>: each spelling (in <a href="../settings/RelaxedPropertySource.html#candidates(java.lang.String)"><code>RelaxedPropertySource.candidates(String)</code></a> order —
  verbatim, upper-underscore, lower-dotted) is resolved through the full <a href="../settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> source chain before the
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  first.
  </p>
 
- <h5 class='section'>Caller-scoped sources</h5>
+ <h2 class='section'>Caller-scoped sources</h2>
  <p>
  When a <a href="#beanStore(org.apache.juneau.commons.inject.BeanStore)"><code>beanStore(BeanStore)</code></a> is supplied, its <a href="../settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>-typed beans are
  consulted <b>ahead of</b> the global <a href="../settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> chain for each candidate key, but <b>after</b> any
@@ -122,7 +121,7 @@ loadScripts(document, 'script');</script>
  beans, resolution is identical to binding against <a href="#settings(org.apache.juneau.commons.settings.Settings)"><code>settings(Settings)</code></a> alone.
  </p>
 
- <h5 class='section'>Limitation — raw-type conversion only</h5>
+ <h2 class='section'>Limitation — raw-type conversion only</h2>
  <p>
  Unlike <a href="Value.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Value</code></a>, conversion here is keyed on the field's <b>raw</b> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> (via
  <a href="../reflect/FieldInfo.html#getFieldType()"><code>FieldInfo.getFieldType()</code></a>), not its full generic <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a>. Generic container types
@@ -130,7 +129,7 @@ loadScripts(document, 'script');</script>
  field types; use a plain field type instead.
  </p>
 
- <h5 class='section'>Nested fields and circular nesting</h5>
+ <h2 class='section'>Nested fields and circular nesting</h2>
  <p>
  A field whose type is itself <code>@ConfigProperties</code>-annotated is bound recursively under
  <code>prefix.fieldName</code>. The set of nested types along the active recursion path is tracked, and re-entering a
@@ -139,7 +138,7 @@ loadScripts(document, 'script');</script>
  constructor; if it doesn't, materialization throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> naming the offending field.
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigProperties">@ConfigProperties Annotation Basics</a>
  </ul></div>
 <dl class="notes">

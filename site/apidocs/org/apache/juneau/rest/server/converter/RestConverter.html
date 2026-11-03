@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Introspectable.html" title="class in org.apache.juneau.rest.server.converter">Introspectable</a></code>, <code><a href="Queryable.html" title="class in org.apache.juneau.rest.server.converter">Queryable</a></code>, <code><a href="Traversable.html" title="class in org.apache.juneau.rest.server.converter">Traversable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/RestConverter.html#line-82">RestConverter</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/RestConverter.html#line-81">RestConverter</a></span></div>
 <div class="block">REST method response converter.
 
  <p>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
    <li class='ja'><a href="../RestOp.html#converters()"><code>RestOp.converters()</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>public class</jk> RequestEchoResource <jk>extends</jk> BasicRestServlet {
 
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  Converters can also be associated at the servlet level using the <a href="../Rest.html#converters()"><code>@Rest(converters)</code></a> annotation.
  <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
 
- <h5 class='topic'>How to implement</h5>
+ <h2 class='topic'>How to implement</h2>
 
  Implementers should simply implement the <a href="#convert(org.apache.juneau.rest.server.RestRequest,java.lang.Object)"><code>convert(RestRequest, Object)</code></a> and return back a 'converted' object.
  <br>It's up to the implementer to decide what this means.
@@ -125,17 +124,16 @@ loadScripts(document, 'script');</script>
  <p>
  Subclasses can also be defined as inner classes of the resource class.
 
- <h5 class='topic'>Predefined converters</h5>
+ <h2 class='topic'>Predefined converters</h2>
  <ul class='javatree'>
    <li class='jc'><a href="Traversable.html" title="class in org.apache.juneau.rest.server.converter"><code>Traversable</code></a> - Allows URL additional path info to address individual elements in a POJO tree.
    <li class='jc'><a href="Queryable.html" title="class in org.apache.juneau.rest.server.converter"><code>Queryable</code></a> - Allows BeanQuery search/view/sort/paging functions to be performed on POJOs.
    <li class='jc'><a href="Introspectable.html" title="class in org.apache.juneau.rest.server.converter"><code>Introspectable</code></a> - Allows Java public methods to be invoked on the returned POJOs.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='ja'><a href="../RestOp.html#converters()"><code>RestOp.converters()</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
- </ul>
  </ul></div>
 </section>
 <section class="summary">
@@ -174,7 +172,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="convert(org.apache.juneau.rest.server.RestRequest,java.lang.Object)">
 <h3>convert</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/RestConverter.html#line-93">convert</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/RestConverter.html#line-92">convert</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;res)</span>
         throws <span class="exceptions"><a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a>,
 <a href="../../../marshall/serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>

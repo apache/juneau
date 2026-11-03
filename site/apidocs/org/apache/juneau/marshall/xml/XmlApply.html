@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -82,13 +81,13 @@ loadScripts(document, 'script');</script>
  <b>content</b> concern (<a href="#value()"><code>value()</code></a>), enabling <a href="Xml.html" title="annotation interface in org.apache.juneau.marshall.xml"><code>@Xml</code></a> to be a pure data annotation
  without marshall-specific application machinery.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@XmlApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@Xml</ja>(format=XmlFormat.ATTR))
    <jk>public class</jk> MyConfig {}
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  </ul></div>
 </section>
@@ -186,7 +185,7 @@ loadScripts(document, 'script');</script>
  <p>
  Identifies the targets this annotation applies to using fully-qualified names.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  </ul></div>
 <dl class="notes">
@@ -208,7 +207,7 @@ loadScripts(document, 'script');</script>
  <p>
  Identical to <a href="#on()"><code>on()</code></a> except allows you to specify class objects instead of strings.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  </ul></div>
 <dl class="notes">

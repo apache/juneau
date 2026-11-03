@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,13 +96,13 @@ loadScripts(document, 'script');</script>
 implements <a href="HjsonMetaProvider.html" title="interface in org.apache.juneau.marshall.hjson">HjsonMetaProvider</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
 <div class="block">Serializes POJO models to Hjson (Human JSON).
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Handles <c>Accept</c> types:  <bc>application/hjson, application/hjson+json</bc>
  <p>
  Produces <c>Content-Type</c> types:  <bc>application/hjson</bc>
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
  <p>
  Hjson is a syntax extension of JSON designed for human-friendly configuration files and hand-edited data.
  This serializer produces output that is valid Hjson and can be parsed back by <a href="HjsonParser.html" title="class in org.apache.juneau.marshall.hjson"><code>HjsonParser</code></a>.
@@ -136,7 +135,7 @@ implements <a href="HjsonMetaProvider.html" title="interface in org.apache.junea
  <a href="../MarshallingContext.Builder.html#swaps(java.lang.Object...)"><code>MarshallingContext.Builder.swaps(Class...)</code></a> method.
  Several default transforms are provided for transforming Dates, Enums, Iterators, etc.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Use one of the default serializers to serialize a POJO</jc>
    String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -148,7 +147,7 @@ implements <a href="HjsonMetaProvider.html" title="interface in org.apache.junea
    <jv>compact</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.copy().useMultilineStrings(<jk>true</jk>).build();
  </p>
 
- <h5 class='figure'>Example output - readable mode (Map of name/age):</h5>
+ <h2 class='figure'>Example output - readable mode (Map of name/age):</h2>
  <p class='bjson'>
    {
      name: Alice
@@ -156,12 +155,12 @@ implements <a href="HjsonMetaProvider.html" title="interface in org.apache.junea
    }
  </p>
 
- <h5 class='figure'>Example output - compact mode:</h5>
+ <h2 class='figure'>Example output - compact mode:</h2>
  <p class='bjson'>
    {name:Alice,age:30}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>String values equal to <c>true</c>, <c>false</c>, <c>null</c>, or parseable as numbers
       are automatically serialized in double quotes to prevent parse ambiguity.
    <li class='note'>Empty strings are always serialized as <c>""</c>.
@@ -174,7 +173,7 @@ implements <a href="HjsonMetaProvider.html" title="interface in org.apache.junea
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Hjson">Hjson</a>
    <li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  </ul></div>

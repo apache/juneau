@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -108,7 +107,7 @@ implements <a href="BeanStore.html" title="interface in org.apache.juneau.common
  extending <a href="BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a> so that it does <i>not</i> inherit the entries / defaults / parent storage
  that a <a href="BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a> provides.  A <code>StackOverlay</code> is purely a stack of pluggable bean stores.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create an overlay-capable bean store.</jc>
    StackOverlay <jv>overlay</jv> = <jk>new</jk> StackOverlay();
@@ -122,7 +121,7 @@ implements <a href="BeanStore.html" title="interface in org.apache.juneau.common
    <jv>overlay</jv>.pop();
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a> - The bean store this overlay sits in front of.
  </ul></div>
 <dl class="notes">

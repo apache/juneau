@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,14 +93,14 @@ loadScripts(document, 'script');</script>
  writer. This is useful when you need to pass a writer to code that will close it, but you
  want to keep the underlying writer open for further use.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Prevents closing - <a href="#close()"><code>close()</code></a> flushes but doesn't close the underlying writer
    <li>Transparent delegation - all other operations pass through to the wrapped writer
    <li>Useful for resource management - allows multiple consumers without premature closing
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Passing writers to APIs that close them, but you need to keep the writer open
    <li>Multiple operations on the same writer where intermediate operations might close it
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
    <li>Wrapping system writers that should not be closed
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Wrap a writer that should not be closed</jc>
    FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"output.txt"</js>);
@@ -123,14 +122,14 @@ loadScripts(document, 'script');</script>
    <jv>fw</jv>.close();  <jc>// Close when actually done</jc>
  </p>
 
- <h5 class='section'>Important Notes:</h5>
+ <h2 class='section'>Important Notes:</h2>
  <ul class='spaced-list'>
    <li>The <a href="#close()"><code>close()</code></a> method flushes the writer but does not close the underlying writer
    <li>You are responsible for closing the underlying writer when you're done with it
    <li>This wrapper does not prevent resource leaks - ensure the underlying writer is eventually closed
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="NoCloseOutputStream.html" title="class in org.apache.juneau.commons.io"><code>NoCloseOutputStream</code></a> - OutputStream counterpart
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  </ul></div>
@@ -243,7 +242,7 @@ loadScripts(document, 'script');</script>
  Creates a new NoCloseWriter that wraps the specified Writer. The wrapper will prevent
  the underlying writer from being closed via the <a href="#close()"><code>close()</code></a> method.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"file.txt"</js>);
    NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);
@@ -320,7 +319,7 @@ loadScripts(document, 'script');</script>
  This method flushes any buffered data to the underlying writer but does not close it.
  The underlying writer remains open and can continue to be used after this method is called.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"file.txt"</js>);
    NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);

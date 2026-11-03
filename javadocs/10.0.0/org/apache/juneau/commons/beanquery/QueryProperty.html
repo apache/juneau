@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  and the configured <a href="../bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a>, so it is the name serializers emit.  Reads use the getter (or record
  accessor), else the field.  Writes use the setter, else a non-final field.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    QueryProperty <jv>age</jv> = QueryModel.<jsm>of</jsm>(Person.<jk>class</jk>).getReadableProperty(<js>"age"</js>);
    SearchType <jv>type</jv> = <jv>age</jv>.getSearchType();  <jc>// NUMERIC</jc>
@@ -189,7 +188,7 @@ loadScripts(document, 'script');</script>
  are <a href="SearchType.html#NUMERIC"><code>SearchType.NUMERIC</code></a>; enums are <a href="SearchType.html#ENUM"><code>SearchType.ENUM</code></a>; dates, calendars and temporals are
  <a href="SearchType.html#TIMESTAMP"><code>SearchType.TIMESTAMP</code></a>; everything else is <a href="SearchType.html#TEXT"><code>SearchType.TEXT</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    QueryProperty.<jsm>searchTypeOf</jsm>(<jk>int</jk>.<jk>class</jk>);        <jc>// NUMERIC</jc>
    QueryProperty.<jsm>searchTypeOf</jsm>(Instant.<jk>class</jk>);     <jc>// TIMESTAMP</jc>

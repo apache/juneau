@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> * is the host-side complement to {@link Rest#mixins() @Rest(mixins=...)} (which takes bare classes and offers</span>
 <span class="source-line-no">038</span><span id="line-38"> * no override hook).</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(</span>
 <span class="source-line-no">043</span><span id="line-43"> *       mixinDefs=&lt;ja&gt;@Mixin&lt;/ja&gt;(type=FooMixin.&lt;jk&gt;class&lt;/jk&gt;, guards=AdminGuard.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> * Here {@code AdminGuard} is applied to {@code FooMixin}'s endpoints as declared by the host, without</span>
 <span class="source-line-no">050</span><span id="line-50"> * {@code FooMixin} having to declare it.</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;Override semantics&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;Override semantics&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * The override slots mirror the same {@code @Rest} attributes and resolve through the existing host&amp;rarr;mixin</span>
 <span class="source-line-no">055</span><span id="line-55"> * inheritance chain, exactly as if the value had been declared on the mixin class itself, but at the</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@link #path()}/{@link #paths()} re-mount the mixin's endpoints under host-chosen prefix(es).</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;Merging a mixin's list attributes into the host&lt;/h5&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;Merging a mixin's list attributes into the host&lt;/h2&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;p&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * The override slots above apply the &lt;i&gt;host's&lt;/i&gt; values to the &lt;i&gt;mixin's&lt;/i&gt; endpoints.  The separate opt-in</span>
 <span class="source-line-no">079</span><span id="line-79"> * {@link #mergeIntoHost()} directive does the reverse: it appends the &lt;i&gt;mixin's&lt;/i&gt; own list-shaped</span>
@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81"> * {@code @RestOp} methods pick them up too.  It defaults to {@code false} (host endpoints see only the host's</span>
 <span class="source-line-no">082</span><span id="line-82"> * chain, as before) and is only settable on a rich {@code @Mixin} &amp;mdash; see {@link #mergeIntoHost()}.</span>
 <span class="source-line-no">083</span><span id="line-83"> *</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> *    &lt;li class='ja'&gt;{@link Rest#mixinDefs()}</span>
 <span class="source-line-no">086</span><span id="line-86"> *    &lt;li class='ja'&gt;{@link Rest#mixins()}</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;/ul&gt;</span>
@@ -141,7 +141,7 @@
 <span class="source-line-no">128</span><span id="line-128">    * {@code @Mixin} that leaves it {@code false}, so existing resources are unaffected.  The mixin still mounts</span>
 <span class="source-line-no">129</span><span id="line-129">    * its own endpoints as usual &amp;mdash; this directive is purely additive to the host chain.</span>
 <span class="source-line-no">130</span><span id="line-130">    *</span>
-<span class="source-line-no">131</span><span id="line-131">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">132</span><span id="line-132">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">133</span><span id="line-133">    *    &lt;jc&gt;// Auto-wire JspMixin's JspViewRenderer into the host so the host's own @RestOp methods can&lt;/jc&gt;</span>
 <span class="source-line-no">134</span><span id="line-134">    *    &lt;jc&gt;// return JspView (no need to also list JspViewRenderer in the host's @Rest(responseProcessors)).&lt;/jc&gt;</span>

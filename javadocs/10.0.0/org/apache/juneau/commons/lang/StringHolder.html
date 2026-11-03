@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,12 +87,12 @@ loadScripts(document, 'script');</script>
  This class extends <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>&gt; and adds convenience methods for string
  equality testing, which are useful in lambdas and conditional logic.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       This class is <b>not thread-safe</b>. For concurrent access, use synchronization or atomic classes.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a mutable string</jc>
    StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  </ul></div>
 </section>
@@ -217,7 +216,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="StringHolder.html" title="class in org.apache.juneau.commons.lang">StringHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/StringHolder.html#line-71">create</a></span>()</div>
 <div class="block">Creates a new empty string value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    StringHolder <jv>name</jv> = StringHolder.<jsm>create</jsm>();
    <jsm>assertNull</jsm>(<jv>name</jv>.get());
@@ -234,7 +233,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="StringHolder.html" title="class in org.apache.juneau.commons.lang">StringHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/StringHolder.html#line-87">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Creates a new string value with the specified initial value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"Hello"</js>);
    <jsm>assertEquals</jsm>(<js>"Hello"</js>, <jv>name</jv>.get());
@@ -256,7 +255,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison, which handles nulls safely.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
    <jsm>assertTrue</jsm>(<jv>name</jv>.is(<js>"John"</js>));
@@ -285,7 +284,7 @@ loadScripts(document, 'script');</script>
  <p>
  Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison of each value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
    <jsm>assertTrue</jsm>(<jv>name</jv>.isAny(<js>"John"</js>, <js>"Jane"</js>, <js>"Bob"</js>));

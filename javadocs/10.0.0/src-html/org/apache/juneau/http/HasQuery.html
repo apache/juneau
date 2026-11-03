@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> *    Therefore, this annotation can be used in conjunction with the {@link Content @Cpmtemt} annotation or</span>
 <span class="source-line-no">043</span><span id="line-43"> *    {@code RestRequest.getContent()} method for &lt;c&gt;application/x-www-form-urlencoded POST&lt;/c&gt; calls.</span>
 <span class="source-line-no">044</span><span id="line-44"> *  &lt;/p&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='figure'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;ja&gt;@RestGet&lt;/ja&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;jk&gt;public void&lt;/jk&gt; doGet(&lt;ja&gt;@HasQuery&lt;/ja&gt;(&lt;js&gt;"p1"&lt;/js&gt;) &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;p1&lt;/jv&gt;) {...}</span>
@@ -77,33 +77,33 @@
 <span class="source-line-no">064</span><span id="line-64"> *    The following table shows the behavioral differences between &lt;ja&gt;@HasQuery&lt;/ja&gt; and &lt;ja&gt;@Query&lt;/ja&gt;:</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;table class='styled w400'&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;tr&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *       &lt;th&gt;&lt;c&gt;Query content&lt;/c&gt;&lt;/th&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *       &lt;th&gt;&lt;c&gt;&lt;ja&gt;@HasQuery&lt;/ja&gt;(&lt;js&gt;"a"&lt;/js&gt;)&lt;/c&gt;&lt;/th&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *       &lt;th&gt;&lt;c&gt;&lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"a"&lt;/js&gt;)&lt;/c&gt;&lt;/th&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> *    &lt;tr&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> *       &lt;td&gt;&lt;c&gt;?a=foo&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> *       &lt;td&gt;&lt;jk&gt;true&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">075</span><span id="line-75"> *       &lt;td&gt;&lt;js&gt;"foo"&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> *    &lt;tr&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *       &lt;td&gt;&lt;c&gt;?a=&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> *       &lt;td&gt;&lt;jk&gt;true&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">080</span><span id="line-80"> *       &lt;td&gt;&lt;js&gt;""&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">081</span><span id="line-81"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">082</span><span id="line-82"> *    &lt;tr&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> *       &lt;td&gt;&lt;c&gt;?a&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> *       &lt;td&gt;&lt;jk&gt;true&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *       &lt;td&gt;&lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *    &lt;tr&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> *       &lt;td&gt;&lt;c&gt;?b=foo&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">089</span><span id="line-89"> *       &lt;td&gt;&lt;jk&gt;false&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">090</span><span id="line-90"> *       &lt;td&gt;&lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">091</span><span id="line-91"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;/table&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> * &lt;p&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;caption&gt;Query content to return value&lt;/caption&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;tr&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *       &lt;th&gt;&lt;c&gt;Query content&lt;/c&gt;&lt;/th&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *       &lt;th&gt;&lt;c&gt;&lt;ja&gt;@HasQuery&lt;/ja&gt;(&lt;js&gt;"a"&lt;/js&gt;)&lt;/c&gt;&lt;/th&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *       &lt;th&gt;&lt;c&gt;&lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"a"&lt;/js&gt;)&lt;/c&gt;&lt;/th&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *    &lt;tr&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *       &lt;td&gt;&lt;c&gt;?a=foo&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *       &lt;td&gt;&lt;jk&gt;true&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> *       &lt;td&gt;&lt;js&gt;"foo"&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;tr&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> *       &lt;td&gt;&lt;c&gt;?a=&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> *       &lt;td&gt;&lt;jk&gt;true&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> *       &lt;td&gt;&lt;js&gt;""&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> *    &lt;tr&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *       &lt;td&gt;&lt;c&gt;?a&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *       &lt;td&gt;&lt;jk&gt;true&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *       &lt;td&gt;&lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> *    &lt;tr&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *       &lt;td&gt;&lt;c&gt;?b=foo&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> *       &lt;td&gt;&lt;jk&gt;false&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">091</span><span id="line-91"> *       &lt;td&gt;&lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;/table&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> */</span>
 <span class="source-line-no">095</span><span id="line-95">@Documented</span>
 <span class="source-line-no">096</span><span id="line-96">@Target({ PARAMETER })</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">    *</span>
 <span class="source-line-no">112</span><span id="line-112">    * Required. The name of the parameter. Parameter names are case sensitive.</span>
 <span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">115</span><span id="line-115">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">116</span><span id="line-116">    *       The format is plain-text.</span>
 <span class="source-line-no">117</span><span id="line-117">    * &lt;/ul&gt;</span>

@@ -126,7 +126,7 @@
 <span class="source-line-no">113</span><span id="line-113"> * the REST resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),</span>
 <span class="source-line-no">114</span><span id="line-114"> * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.</span>
 <span class="source-line-no">115</span><span id="line-115"> *</span>
-<span class="source-line-no">116</span><span id="line-116"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">116</span><span id="line-116"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">117</span><span id="line-117"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">118</span><span id="line-118"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/myresource"&lt;/js&gt;, serializers=JsonSerializer.&lt;jk&gt;class&lt;/jk&gt;, parsers=JsonParser.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">119</span><span id="line-119"> *    &lt;jk&gt;public class&lt;/jk&gt; MyResource {</span>
@@ -146,11 +146,11 @@
 <span class="source-line-no">133</span><span id="line-133"> * See &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/V10MigrationGuide"&gt;v10.0 Migration Guide&lt;/a&gt;</span>
 <span class="source-line-no">134</span><span id="line-134"> * for replacement recipes.</span>
 <span class="source-line-no">135</span><span id="line-135"> *</span>
-<span class="source-line-no">136</span><span id="line-136"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">136</span><span id="line-136"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">137</span><span id="line-137"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
 <span class="source-line-no">138</span><span id="line-138"> * &lt;/ul&gt;</span>
 <span class="source-line-no">139</span><span id="line-139"> *</span>
-<span class="source-line-no">140</span><span id="line-140"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">140</span><span id="line-140"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">141</span><span id="line-141"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext"&gt;RestContext&lt;/a&gt;</span>
 <span class="source-line-no">142</span><span id="line-142"> * &lt;/ul&gt;</span>
 <span class="source-line-no">143</span><span id="line-143"> */</span>
@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">    * (above the resource's local {@code @Bean} factory entries and the Spring bridge).  This is the</span>
 <span class="source-line-no">183</span><span id="line-183">    * canonical Mode INJECT wiring point for {@code juneau-junit5}'s {@code TestBeanStore}.</span>
 <span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">186</span><span id="line-186">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">187</span><span id="line-187">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;ctx&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; RestContext(&lt;jk&gt;new&lt;/jk&gt; RestContext.Args(MyResource.&lt;jk&gt;class&lt;/jk&gt;, () -&amp;gt; &lt;jk&gt;new&lt;/jk&gt; MyResource()));</span>
 <span class="source-line-no">188</span><span id="line-188">    * &lt;/p&gt;</span>
@@ -3985,7 +3985,7 @@
 <span class="source-line-no">3972</span><span id="line-3972">   /**</span>
 <span class="source-line-no">3973</span><span id="line-3973">    * Allowed header URL parameters.</span>
 <span class="source-line-no">3974</span><span id="line-3974">    *</span>
-<span class="source-line-no">3975</span><span id="line-3975">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3975</span><span id="line-3975">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">3976</span><span id="line-3976">    *    &lt;li class='ja'&gt;{@link Rest#allowedHeaderParams}</span>
 <span class="source-line-no">3977</span><span id="line-3977">    * &lt;/ul&gt;</span>
 <span class="source-line-no">3978</span><span id="line-3978">    *</span>
@@ -3998,7 +3998,7 @@
 <span class="source-line-no">3985</span><span id="line-3985">   /**</span>
 <span class="source-line-no">3986</span><span id="line-3986">    * Allowed method headers.</span>
 <span class="source-line-no">3987</span><span id="line-3987">    *</span>
-<span class="source-line-no">3988</span><span id="line-3988">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">3988</span><span id="line-3988">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">3989</span><span id="line-3989">    *    &lt;li class='ja'&gt;{@link Rest#allowedMethodHeaders}</span>
 <span class="source-line-no">3990</span><span id="line-3990">    * &lt;/ul&gt;</span>
 <span class="source-line-no">3991</span><span id="line-3991">    *</span>
@@ -4011,7 +4011,7 @@
 <span class="source-line-no">3998</span><span id="line-3998">   /**</span>
 <span class="source-line-no">3999</span><span id="line-3999">    * Allowed method URL parameters.</span>
 <span class="source-line-no">4000</span><span id="line-4000">    *</span>
-<span class="source-line-no">4001</span><span id="line-4001">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4001</span><span id="line-4001">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4002</span><span id="line-4002">    *    &lt;li class='ja'&gt;{@link Rest#allowedMethodParams}</span>
 <span class="source-line-no">4003</span><span id="line-4003">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4004</span><span id="line-4004">    *</span>
@@ -4068,7 +4068,7 @@
 <span class="source-line-no">4055</span><span id="line-4055">    * {@link RestDebugFormatter} bean registered in the bean store (or a {@link Bean @Bean}-annotated factory method)</span>
 <span class="source-line-no">4056</span><span id="line-4056">    * &amp;gt; {@link BasicRestDebugFormatter}.</span>
 <span class="source-line-no">4057</span><span id="line-4057">    *</span>
-<span class="source-line-no">4058</span><span id="line-4058">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4058</span><span id="line-4058">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4059</span><span id="line-4059">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging"&gt;Logging / Debugging&lt;/a&gt;</span>
 <span class="source-line-no">4060</span><span id="line-4060">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4061</span><span id="line-4061">    *</span>
@@ -4100,7 +4100,7 @@
 <span class="source-line-no">4087</span><span id="line-4087">   /**</span>
 <span class="source-line-no">4088</span><span id="line-4088">    * Returns the name of the client version header name used by this resource.</span>
 <span class="source-line-no">4089</span><span id="line-4089">    *</span>
-<span class="source-line-no">4090</span><span id="line-4090">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4090</span><span id="line-4090">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4091</span><span id="line-4091">    *    &lt;li class='ja'&gt;{@link Rest#clientVersionHeader}</span>
 <span class="source-line-no">4092</span><span id="line-4092">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4093</span><span id="line-4093">    *</span>
@@ -4140,7 +4140,7 @@
 <span class="source-line-no">4127</span><span id="line-4127">   /**</span>
 <span class="source-line-no">4128</span><span id="line-4128">    * Returns the default request attributes for this resource.</span>
 <span class="source-line-no">4129</span><span id="line-4129">    *</span>
-<span class="source-line-no">4130</span><span id="line-4130">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4130</span><span id="line-4130">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4131</span><span id="line-4131">    *    &lt;li class='ja'&gt;{@link Rest#defaultRequestAttributes()}</span>
 <span class="source-line-no">4132</span><span id="line-4132">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4133</span><span id="line-4133">    *</span>
@@ -4153,7 +4153,7 @@
 <span class="source-line-no">4140</span><span id="line-4140">   /**</span>
 <span class="source-line-no">4141</span><span id="line-4141">    * Returns the default request headers for this resource.</span>
 <span class="source-line-no">4142</span><span id="line-4142">    *</span>
-<span class="source-line-no">4143</span><span id="line-4143">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4143</span><span id="line-4143">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4144</span><span id="line-4144">    *    &lt;li class='ja'&gt;{@link Rest#defaultRequestHeaders()}</span>
 <span class="source-line-no">4145</span><span id="line-4145">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4146</span><span id="line-4146">    *</span>
@@ -4166,7 +4166,7 @@
 <span class="source-line-no">4153</span><span id="line-4153">   /**</span>
 <span class="source-line-no">4154</span><span id="line-4154">    * Returns the default response headers for this resource.</span>
 <span class="source-line-no">4155</span><span id="line-4155">    *</span>
-<span class="source-line-no">4156</span><span id="line-4156">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4156</span><span id="line-4156">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4157</span><span id="line-4157">    *    &lt;li class='ja'&gt;{@link Rest#defaultResponseHeaders()}</span>
 <span class="source-line-no">4158</span><span id="line-4158">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4159</span><span id="line-4159">    *</span>
@@ -4190,7 +4190,7 @@
 <span class="source-line-no">4177</span><span id="line-4177">    * &lt;p&gt;</span>
 <span class="source-line-no">4178</span><span id="line-4178">    * If path is not specified, returns &lt;js&gt;""&lt;/js&gt;.</span>
 <span class="source-line-no">4179</span><span id="line-4179">    *</span>
-<span class="source-line-no">4180</span><span id="line-4180">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4180</span><span id="line-4180">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4181</span><span id="line-4181">    *    &lt;li class='ja'&gt;{@link Rest#path()}</span>
 <span class="source-line-no">4182</span><span id="line-4182">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4183</span><span id="line-4183">    *</span>
@@ -4277,7 +4277,7 @@
 <span class="source-line-no">4264</span><span id="line-4264">    * &lt;p&gt;</span>
 <span class="source-line-no">4265</span><span id="line-4265">    * If path is not specified, returns &lt;js&gt;""&lt;/js&gt;.</span>
 <span class="source-line-no">4266</span><span id="line-4266">    *</span>
-<span class="source-line-no">4267</span><span id="line-4267">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4267</span><span id="line-4267">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4268</span><span id="line-4268">    *    &lt;li class='ja'&gt;{@link Rest#path()}</span>
 <span class="source-line-no">4269</span><span id="line-4269">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4270</span><span id="line-4270">    *</span>
@@ -4310,7 +4310,7 @@
 <span class="source-line-no">4297</span><span id="line-4297">    * {@code JettyServerComponent}, and Spring Boot's {@code ServletRegistrationBean} wiring &amp;mdash; should</span>
 <span class="source-line-no">4298</span><span id="line-4298">    * consume when mounting the resource at the top level.</span>
 <span class="source-line-no">4299</span><span id="line-4299">    *</span>
-<span class="source-line-no">4300</span><span id="line-4300">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4300</span><span id="line-4300">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4301</span><span id="line-4301">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">4302</span><span id="line-4302">    *       Returns an empty array (not {@code null}) when none of the rungs resolve. Hosting runtimes interpret</span>
 <span class="source-line-no">4303</span><span id="line-4303">    *       an empty array as &amp;quot;no top-level mounts&amp;quot; and surface a clear error naming the resource.</span>
@@ -4318,7 +4318,7 @@
 <span class="source-line-no">4305</span><span id="line-4305">    *       The scalar {@link #getPath()} accessor remains orthogonal to this method.</span>
 <span class="source-line-no">4306</span><span id="line-4306">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4307</span><span id="line-4307">    *</span>
-<span class="source-line-no">4308</span><span id="line-4308">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4308</span><span id="line-4308">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4309</span><span id="line-4309">    *    &lt;li class='ja'&gt;{@link Rest#paths()}</span>
 <span class="source-line-no">4310</span><span id="line-4310">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4311</span><span id="line-4311">    *</span>
@@ -4376,7 +4376,7 @@
 <span class="source-line-no">4363</span><span id="line-4363">    * Returned in the order they're invoked by {@link #processResponse(RestOpSession)}.</span>
 <span class="source-line-no">4364</span><span id="line-4364">    * The returned array is the live backing array — callers must not mutate it.</span>
 <span class="source-line-no">4365</span><span id="line-4365">    *</span>
-<span class="source-line-no">4366</span><span id="line-4366">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4366</span><span id="line-4366">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4367</span><span id="line-4367">    *    &lt;li class='ja'&gt;{@link Rest#responseProcessors}</span>
 <span class="source-line-no">4368</span><span id="line-4368">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors"&gt;Response Processors&lt;/a&gt;</span>
 <span class="source-line-no">4369</span><span id="line-4369">    * &lt;/ul&gt;</span>
@@ -4395,7 +4395,7 @@
 <span class="source-line-no">4382</span><span id="line-4382">    * (see {@link #findRestOperationArgs(Method, BeanStore)}); this getter returns the class list</span>
 <span class="source-line-no">4383</span><span id="line-4383">    * that drives that resolution.</span>
 <span class="source-line-no">4384</span><span id="line-4384">    *</span>
-<span class="source-line-no">4385</span><span id="line-4385">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4385</span><span id="line-4385">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4386</span><span id="line-4386">    *    &lt;li class='ja'&gt;{@link Rest#restOpArgs}</span>
 <span class="source-line-no">4387</span><span id="line-4387">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4388</span><span id="line-4388">    *</span>
@@ -4456,7 +4456,7 @@
 <span class="source-line-no">4443</span><span id="line-4443">    *    &lt;li&gt;Beans flow down only: a child's beans are never visible to its parent or its siblings.</span>
 <span class="source-line-no">4444</span><span id="line-4444">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4445</span><span id="line-4445">    *</span>
-<span class="source-line-no">4446</span><span id="line-4446">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4446</span><span id="line-4446">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4447</span><span id="line-4447">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4448</span><span id="line-4448">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(children={PetResource.&lt;jk&gt;class&lt;/jk&gt;, OrderResource.&lt;jk&gt;class&lt;/jk&gt;})</span>
 <span class="source-line-no">4449</span><span id="line-4449">    *    &lt;jk&gt;public class&lt;/jk&gt; RootResources &lt;jk&gt;extends&lt;/jk&gt; BasicRestServletGroup {</span>
@@ -4544,7 +4544,7 @@
 <span class="source-line-no">4531</span><span id="line-4531">   /**</span>
 <span class="source-line-no">4532</span><span id="line-4532">    * Returns the Swagger provider used by this resource.</span>
 <span class="source-line-no">4533</span><span id="line-4533">    *</span>
-<span class="source-line-no">4534</span><span id="line-4534">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4534</span><span id="line-4534">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4535</span><span id="line-4535">    *    &lt;li class='ja'&gt;{@link Rest#swaggerProvider()}</span>
 <span class="source-line-no">4536</span><span id="line-4536">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4537</span><span id="line-4537">    *</span>
@@ -4580,7 +4580,7 @@
 <span class="source-line-no">4567</span><span id="line-4567">   /**</span>
 <span class="source-line-no">4568</span><span id="line-4568">    * Returns the OpenAPI 3.1 provider used by this resource.</span>
 <span class="source-line-no">4569</span><span id="line-4569">    *</span>
-<span class="source-line-no">4570</span><span id="line-4570">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4570</span><span id="line-4570">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4571</span><span id="line-4571">    *    &lt;li class='ja'&gt;{@link Rest#openApiProvider()}</span>
 <span class="source-line-no">4572</span><span id="line-4572">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4573</span><span id="line-4573">    *</span>
@@ -4602,7 +4602,7 @@
 <span class="source-line-no">4589</span><span id="line-4589">   /**</span>
 <span class="source-line-no">4590</span><span id="line-4590">    * Returns the authority path of the resource.</span>
 <span class="source-line-no">4591</span><span id="line-4591">    *</span>
-<span class="source-line-no">4592</span><span id="line-4592">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4592</span><span id="line-4592">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4593</span><span id="line-4593">    *    &lt;li class='ja'&gt;{@link Rest#uriAuthority()}</span>
 <span class="source-line-no">4594</span><span id="line-4594">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4595</span><span id="line-4595">    *</span>
@@ -4617,7 +4617,7 @@
 <span class="source-line-no">4604</span><span id="line-4604">   /**</span>
 <span class="source-line-no">4605</span><span id="line-4605">    * Returns the context path of the resource.</span>
 <span class="source-line-no">4606</span><span id="line-4606">    *</span>
-<span class="source-line-no">4607</span><span id="line-4607">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4607</span><span id="line-4607">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4608</span><span id="line-4608">    *    &lt;li class='ja'&gt;{@link Rest#uriContext()}</span>
 <span class="source-line-no">4609</span><span id="line-4609">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4610</span><span id="line-4610">    *</span>
@@ -4632,7 +4632,7 @@
 <span class="source-line-no">4619</span><span id="line-4619">   /**</span>
 <span class="source-line-no">4620</span><span id="line-4620">    * Returns the setting on how relative URIs should be interpreted as relative to.</span>
 <span class="source-line-no">4621</span><span id="line-4621">    *</span>
-<span class="source-line-no">4622</span><span id="line-4622">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4622</span><span id="line-4622">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4623</span><span id="line-4623">    *    &lt;li class='ja'&gt;{@link Rest#uriRelativity()}</span>
 <span class="source-line-no">4624</span><span id="line-4624">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4625</span><span id="line-4625">    *</span>
@@ -4645,7 +4645,7 @@
 <span class="source-line-no">4632</span><span id="line-4632">   /**</span>
 <span class="source-line-no">4633</span><span id="line-4633">    * Returns the setting on how relative URIs should be resolved.</span>
 <span class="source-line-no">4634</span><span id="line-4634">    *</span>
-<span class="source-line-no">4635</span><span id="line-4635">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4635</span><span id="line-4635">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4636</span><span id="line-4636">    *    &lt;li class='ja'&gt;{@link Rest#uriResolution()}</span>
 <span class="source-line-no">4637</span><span id="line-4637">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4638</span><span id="line-4638">    *</span>
@@ -4663,7 +4663,7 @@
 <span class="source-line-no">4650</span><span id="line-4650">    * They can be nested arbitrarily deep.</span>
 <span class="source-line-no">4651</span><span id="line-4651">    * They can also return values that themselves contain other variables.</span>
 <span class="source-line-no">4652</span><span id="line-4652">    *</span>
-<span class="source-line-no">4653</span><span id="line-4653">    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4653</span><span id="line-4653">    * &lt;h4 class='figure'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4654</span><span id="line-4654">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4655</span><span id="line-4655">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(</span>
 <span class="source-line-no">4656</span><span id="line-4656">    *       messages=&lt;js&gt;"nls/Messages"&lt;/js&gt;,</span>
@@ -4700,7 +4700,7 @@
 <span class="source-line-no">4687</span><span id="line-4687">    *    &lt;jk&gt;public&lt;/jk&gt; LoggerEntry getLogger(RestRequest &lt;jv&gt;req&lt;/jv&gt;, &lt;ja&gt;@Path&lt;/ja&gt; String &lt;jv&gt;name&lt;/jv&gt;) &lt;jk&gt;throws&lt;/jk&gt; Exception {</span>
 <span class="source-line-no">4688</span><span id="line-4688">    * &lt;/p&gt;</span>
 <span class="source-line-no">4689</span><span id="line-4689">    *</span>
-<span class="source-line-no">4690</span><span id="line-4690">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4690</span><span id="line-4690">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4691</span><span id="line-4691">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">4692</span><span id="line-4692">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4693</span><span id="line-4693">    *</span>
@@ -4729,7 +4729,7 @@
 <span class="source-line-no">4716</span><span id="line-4716">    * &lt;c&gt;PUT&lt;/c&gt;/&lt;c&gt;POST&lt;/c&gt; requests, so a simple cross-origin &lt;c&gt;GET&lt;/c&gt; can't use it to smuggle a body past</span>
 <span class="source-line-no">4717</span><span id="line-4717">    * an endpoint's real &lt;c&gt;Content-Type&lt;/c&gt; gate.</span>
 <span class="source-line-no">4718</span><span id="line-4718">    *</span>
-<span class="source-line-no">4719</span><span id="line-4719">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4719</span><span id="line-4719">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4720</span><span id="line-4720">    *    &lt;li class='ja'&gt;{@link Rest#disableContentParam()}</span>
 <span class="source-line-no">4721</span><span id="line-4721">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4722</span><span id="line-4722">    *</span>
@@ -4768,7 +4768,7 @@
 <span class="source-line-no">4755</span><span id="line-4755">    *       {@code Accept} header matches {@code application/problem+json} (or {@code *&amp;#47;*}).</span>
 <span class="source-line-no">4756</span><span id="line-4756">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4757</span><span id="line-4757">    *</span>
-<span class="source-line-no">4758</span><span id="line-4758">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4758</span><span id="line-4758">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4759</span><span id="line-4759">    *    &lt;li class='ja'&gt;{@link Rest#problemDetails()}</span>
 <span class="source-line-no">4760</span><span id="line-4760">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4761</span><span id="line-4761">    *</span>
@@ -4785,7 +4785,7 @@
 <span class="source-line-no">4772</span><span id="line-4772">    * handle requests &amp;mdash; engaging recursion-detection-that-throws, parse-input buffering, and stack-trace-prefixed</span>
 <span class="source-line-no">4773</span><span id="line-4773">    * marshalling exceptions. This is independent of the JUL logger level.</span>
 <span class="source-line-no">4774</span><span id="line-4774">    *</span>
-<span class="source-line-no">4775</span><span id="line-4775">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4775</span><span id="line-4775">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4776</span><span id="line-4776">    *    &lt;li class='ja'&gt;{@link Rest#debugMarshalling()}</span>
 <span class="source-line-no">4777</span><span id="line-4777">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4778</span><span id="line-4778">    *</span>
@@ -4915,7 +4915,7 @@
 <span class="source-line-no">4902</span><span id="line-4902">   /**</span>
 <span class="source-line-no">4903</span><span id="line-4903">    * Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.</span>
 <span class="source-line-no">4904</span><span id="line-4904">    *</span>
-<span class="source-line-no">4905</span><span id="line-4905">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4905</span><span id="line-4905">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4906</span><span id="line-4906">    *    &lt;li class='ja'&gt;{@link Rest#eagerInit()}</span>
 <span class="source-line-no">4907</span><span id="line-4907">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4908</span><span id="line-4908">    *</span>
@@ -4935,7 +4935,7 @@
 <span class="source-line-no">4922</span><span id="line-4922">    *   &lt;li&gt;{@code RestContext.lazyChildren} env-driven default (default {@code false}).&lt;/li&gt;</span>
 <span class="source-line-no">4923</span><span id="line-4923">    * &lt;/ol&gt;</span>
 <span class="source-line-no">4924</span><span id="line-4924">    *</span>
-<span class="source-line-no">4925</span><span id="line-4925">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">4925</span><span id="line-4925">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">4926</span><span id="line-4926">    *    &lt;li class='ja'&gt;{@link Rest#lazyChildren()}</span>
 <span class="source-line-no">4927</span><span id="line-4927">    *    &lt;li class='jm'&gt;{@link Builder#lazyChildInit(boolean)}</span>
 <span class="source-line-no">4928</span><span id="line-4928">    * &lt;/ul&gt;</span>

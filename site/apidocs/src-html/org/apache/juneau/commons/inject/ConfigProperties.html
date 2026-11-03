@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * under {@link #prefix()} via {@link ConfigPropertiesBinder}, and the bound instance is auto-registered</span>
 <span class="source-line-no">032</span><span id="line-32"> * into the current {@link BeanStore}.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Binding order and lifecycle&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Binding order and lifecycle&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * The whole-object config bind runs &lt;b&gt;after&lt;/b&gt; {@code @Value}/{@code @Inject} field-and-method injection and</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;b&gt;before&lt;/b&gt; any {@link PostConstruct @PostConstruct} method — so a</span>
@@ -52,14 +52,14 @@
 <span class="source-line-no">039</span><span id="line-39"> * {@code @Value} or {@code @Inject} are left to the injection engine and are never overwritten by config binding,</span>
 <span class="source-line-no">040</span><span id="line-40"> * even when a matching {@code prefix.fieldName} key exists.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Caller-scoped sources&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Caller-scoped sources&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * The bind consults any {@link org.apache.juneau.commons.settings.PropertySource PropertySource}-typed beans in the</span>
 <span class="source-line-no">045</span><span id="line-45"> * active {@link BeanStore} &lt;b&gt;ahead of&lt;/b&gt; the global {@link org.apache.juneau.commons.settings.Settings Settings}</span>
 <span class="source-line-no">046</span><span id="line-46"> * chain, so a caller can layer overriding or supplementary sources without mutating the shared</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@code Settings.get()} singleton.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Not inherited&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Not inherited&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * This annotation is &lt;b&gt;not&lt;/b&gt; {@link java.lang.annotation.Inherited @Inherited}: the {@link BeanInstantiator}</span>
 <span class="source-line-no">052</span><span id="line-52"> * trigger fires only when the &lt;i&gt;exact declared type&lt;/i&gt; being instantiated carries the annotation — a subclass or</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58"> * type still triggers nested binding under the enclosing type's prefix, since the annotation lookup there walks the</span>
 <span class="source-line-no">059</span><span id="line-59"> * declared field type's class hierarchy rather than requiring an exact-type match.</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;ja&gt;@ConfigProperties&lt;/ja&gt;(prefix = &lt;js&gt;"MyService"&lt;/js&gt;)</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;jk&gt;public class&lt;/jk&gt; MyServiceProperties {</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73"> * {@code @Value} fields internally and separately be the target of another class's nested</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@code @ConfigProperties} bind.</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigProperties"&gt;@ConfigProperties Annotation Basics&lt;/a&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>

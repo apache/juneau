@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * the {@code /favicon.ico} URL becomes available alongside the host's own endpoints with no further</span>
 <span class="source-line-no">035</span><span id="line-35"> * wiring.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Hardcoded mount path:&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Hardcoded mount path:&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * Unlike the sibling api-docs and ops mixins (see {@link org.apache.juneau.rest.server.docs.SwaggerMixin},</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> * Browsers fetch {@code /favicon.ico} from the site root regardless of any application-level</span>
 <span class="source-line-no">045</span><span id="line-45"> * routing rewrites, so a runtime mount-path override here would have no practical effect.</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Mixin-only deployment:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Mixin-only deployment:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is</span>
@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52"> * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin</span>
 <span class="source-line-no">053</span><span id="line-53"> * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h5 class='figure'&gt;Composition example:&lt;/h5&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='figure'&gt;Composition example:&lt;/h2&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/api"&lt;/js&gt;, mixins=FaviconMixin.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> *    }</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;Behavior:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;{@code GET /favicon.ico} returns the configured icon bytes with</span>
@@ -93,7 +93,7 @@
 <span class="source-line-no">080</span><span id="line-80"> *       API-meaningful.</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;h5 class='section'&gt;Builder API:&lt;/h5&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;h2 class='section'&gt;Builder API:&lt;/h2&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *    &lt;li&gt;{@link #create() create()} &amp;mdash; entry point for configuring an instance.</span>
@@ -104,7 +104,7 @@
 <span class="source-line-no">091</span><span id="line-91"> *       30-day {@code Cache-Control} header.</span>
 <span class="source-line-no">092</span><span id="line-92"> * &lt;/ul&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> *</span>
-<span class="source-line-no">094</span><span id="line-94"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *    &lt;li class='jc'&gt;{@link SeoMixin}</span>
 <span class="source-line-no">096</span><span id="line-96"> *    &lt;li class='jc'&gt;{@link VersionMixin}</span>
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;li class='jc'&gt;{@link WellKnownMixin}</span>
@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">    * programmatic {@link RestBuilder}(carrying any {@code @Rest}-level overrides such as {@code path}) so those</span>
 <span class="source-line-no">146</span><span id="line-146">    * values take precedence over the mixin class's own {@link Rest @Rest} annotation.</span>
 <span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;h5 class='section'&gt;Why worker + builder, not the flavor Builder:&lt;/h5&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">    * &lt;h4 class='section'&gt;Why worker + builder, not the flavor Builder:&lt;/h4&gt;</span>
 <span class="source-line-no">149</span><span id="line-149">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">150</span><span id="line-150">    *    &lt;li&gt;Takes the already-built &lt;b&gt;worker bean&lt;/b&gt; (not the flavor {@link Builder}) so the flavor can be</span>
 <span class="source-line-no">151</span><span id="line-151">    *       constructed from ANY independently-supplied worker &amp;mdash; e.g. a user's own {@code @Bean FaviconProvider}</span>

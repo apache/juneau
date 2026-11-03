@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * Note that this annotation is optional if you do not need to override any of the values.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies"&gt;REST Proxies&lt;/a&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> */</span>
@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48">    * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49">    * If you do not specify a path, then the path is inferred from the Java method name.</span>
 <span class="source-line-no">050</span><span id="line-50">    *</span>
-<span class="source-line-no">051</span><span id="line-51">    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">051</span><span id="line-51">    * &lt;h4 class='figure'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">052</span><span id="line-52">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">053</span><span id="line-53">    *    &lt;jc&gt;// POST /pet&lt;/jc&gt;</span>
 <span class="source-line-no">054</span><span id="line-54">    *    &lt;ja&gt;@RemoteDelete&lt;/ja&gt;</span>
@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">    * Precedence (most-specific first): an {@link Url @Url} parameter, then this method-level</span>
 <span class="source-line-no">140</span><span id="line-140">    * value, then the interface-level default ({@link Remote#baseUrl()}), then the client root URL.</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">142</span><span id="line-142">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">143</span><span id="line-143">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">144</span><span id="line-144">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt;</span>
 <span class="source-line-no">145</span><span id="line-145">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
@@ -188,7 +188,7 @@
 <span class="source-line-no">175</span><span id="line-175">    * declared via {@link #headers()} (since it also drives serializer selection); a genuinely caller-supplied</span>
 <span class="source-line-no">176</span><span id="line-176">    * {@code @Header("Content-Type")} parameter still takes effect.</span>
 <span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">178</span><span id="line-178">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">179</span><span id="line-179">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">180</span><span id="line-180">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
 <span class="source-line-no">181</span><span id="line-181">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
@@ -216,7 +216,7 @@
 <span class="source-line-no">203</span><span id="line-203">    * {@link #headers()}; a genuinely caller-supplied {@code @Header("Accept")} parameter still takes effect.  Exactly</span>
 <span class="source-line-no">204</span><span id="line-204">    * one {@code Accept} header is sent.</span>
 <span class="source-line-no">205</span><span id="line-205">    *</span>
-<span class="source-line-no">206</span><span id="line-206">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">208</span><span id="line-208">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
 <span class="source-line-no">209</span><span id="line-209">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
@@ -236,7 +236,7 @@
 <span class="source-line-no">223</span><span id="line-223">    * (it is not suppressed), and this method-level value takes precedence over an interface-level</span>
 <span class="source-line-no">224</span><span id="line-224">    * {@link Remote#headers()} constant of the same name.</span>
 <span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">227</span><span id="line-227">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">228</span><span id="line-228">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt;</span>
 <span class="source-line-no">229</span><span id="line-229">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">    * this method-level value takes precedence over an interface-level {@link Remote#queryData()} constant of the same</span>
 <span class="source-line-no">247</span><span id="line-247">    * name.</span>
 <span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">250</span><span id="line-250">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">251</span><span id="line-251">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt;</span>
 <span class="source-line-no">252</span><span id="line-252">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
@@ -282,7 +282,7 @@
 <span class="source-line-no">269</span><span id="line-269">    * this method-level value takes precedence over an interface-level {@link Remote#formData()} constant of the same</span>
 <span class="source-line-no">270</span><span id="line-270">    * name.</span>
 <span class="source-line-no">271</span><span id="line-271">    *</span>
-<span class="source-line-no">272</span><span id="line-272">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">272</span><span id="line-272">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">273</span><span id="line-273">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">274</span><span id="line-274">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt;</span>
 <span class="source-line-no">275</span><span id="line-275">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
@@ -304,7 +304,7 @@
 <span class="source-line-no">291</span><span id="line-291">    * ({@link Remote#interceptors()}) and builder-configured interceptors; the three sets are unioned in the order</span>
 <span class="source-line-no">292</span><span id="line-292">    * builder &amp;rarr; interface &amp;rarr; method.</span>
 <span class="source-line-no">293</span><span id="line-293">    *</span>
-<span class="source-line-no">294</span><span id="line-294">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">294</span><span id="line-294">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">295</span><span id="line-295">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">296</span><span id="line-296">    *       The member type is {@code Class&lt;?&gt;[]} (not {@code Class&lt;? extends RestCallInterceptor&gt;[]}) because</span>
 <span class="source-line-no">297</span><span id="line-297">    *       &lt;c&gt;RestCallInterceptor&lt;/c&gt; lives in the {@code juneau-rest-client} module, which this annotation's module</span>
@@ -327,7 +327,7 @@
 <span class="source-line-no">314</span><span id="line-314">    * value overrides the interface-level default ({@link Remote#timeout()}).  Connect timeouts remain a client-level</span>
 <span class="source-line-no">315</span><span id="line-315">    * setting.</span>
 <span class="source-line-no">316</span><span id="line-316">    *</span>
-<span class="source-line-no">317</span><span id="line-317">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">317</span><span id="line-317">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">318</span><span id="line-318">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">319</span><span id="line-319">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
 <span class="source-line-no">320</span><span id="line-320">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
@@ -359,7 +359,7 @@
 <span class="source-line-no">346</span><span id="line-346">    * &lt;p&gt;</span>
 <span class="source-line-no">347</span><span id="line-347">    * Scalar precedence: a positive method-level value overrides the interface-level default ({@link Remote#retries()}).</span>
 <span class="source-line-no">348</span><span id="line-348">    *</span>
-<span class="source-line-no">349</span><span id="line-349">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">349</span><span id="line-349">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">350</span><span id="line-350">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">351</span><span id="line-351">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
 <span class="source-line-no">352</span><span id="line-352">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
@@ -377,7 +377,7 @@
 <span class="source-line-no">364</span><span id="line-364">    * with a non-repeatable body is never retried.  The effective value is the logical OR of this method-level value</span>
 <span class="source-line-no">365</span><span id="line-365">    * and the interface-level default ({@link Remote#retryNonIdempotent()}).</span>
 <span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">368</span><span id="line-368">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">369</span><span id="line-369">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
 <span class="source-line-no">370</span><span id="line-370">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
@@ -397,7 +397,7 @@
 <span class="source-line-no">384</span><span id="line-384">    * The effective value is the logical OR of this method-level value and the interface-level default</span>
 <span class="source-line-no">385</span><span id="line-385">    * ({@link Remote#throwOnError()}).</span>
 <span class="source-line-no">386</span><span id="line-386">    *</span>
-<span class="source-line-no">387</span><span id="line-387">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">387</span><span id="line-387">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">388</span><span id="line-388">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">389</span><span id="line-389">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
 <span class="source-line-no">390</span><span id="line-390">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>

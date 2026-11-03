@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * navigation page renders one entry per {@link Rest#children() @Rest(children)} resource declared on the</span>
 <span class="source-line-no">031</span><span id="line-31"> * host.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Reaching the host's children:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Reaching the host's children:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * A mixin's {@code @RestOp} methods are bound to a per-mixin {@link RestContext} sub-context that has no</span>
@@ -52,21 +52,21 @@
 <span class="source-line-no">039</span><span id="line-39"> * {@code getHostContext()} is backed by the sub-context's already-populated parent linkage, this works</span>
 <span class="source-line-no">040</span><span id="line-40"> * whether the mixin is composed onto a servlet host or a child-resource host.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Page decoration:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Page decoration:&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * Per the mixin sub-context inheritance model, the navigation page inherits the host's class-level</span>
 <span class="source-line-no">046</span><span id="line-46"> * {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig} page decoration (navigation links,</span>
 <span class="source-line-no">047</span><span id="line-47"> * etc.), so the rendered HTML matches the host's other endpoints.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='figure'&gt;Composition example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='figure'&gt;Composition example:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(mixins=NavigationMixin.&lt;jk&gt;class&lt;/jk&gt;, children={Foo.&lt;jk&gt;class&lt;/jk&gt;, Bar.&lt;jk&gt;class&lt;/jk&gt;})</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;jk&gt;public class&lt;/jk&gt; RootResource &lt;jk&gt;extends&lt;/jk&gt; RestServlet { ... }</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='jc'&gt;{@link ChildResourceDescriptions}</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;li class='jm'&gt;{@link RestMixin#getHostContext()}</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server — Mixins and Multi-Mount Paths&lt;/a&gt;</span>

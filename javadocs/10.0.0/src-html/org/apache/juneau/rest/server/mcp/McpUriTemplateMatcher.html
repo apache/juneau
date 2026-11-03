@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> *       an immutable, insertion-ordered, percent-decoded variable map, or &lt;jk&gt;null&lt;/jk&gt; if the URI does not match.</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Reverse-matchable forms:&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Reverse-matchable forms:&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * Non-explode, non-prefix simple scalar &lt;c&gt;{var}&lt;/c&gt;, reserved scalar &lt;c&gt;{+var}&lt;/c&gt;, fragment scalar</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;c&gt;{#var}&lt;/c&gt;, path segments &lt;c&gt;{/var}&lt;/c&gt; / &lt;c&gt;{/x,y}&lt;/c&gt;, label segments &lt;c&gt;{.var}&lt;/c&gt; / &lt;c&gt;{.x,y}&lt;/c&gt;, query</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> * successfully (so they remain listable and completable) but are never selected for a template-backed read;</span>
 <span class="source-line-no">054</span><span id="line-54"> * {@link #match(String)} always returns &lt;jk&gt;null&lt;/jk&gt; for them.</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;Percent-encoding normalization:&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;Percent-encoding normalization:&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * Matching and literal-specificity counting follow RFC 3986 percent-normalization implemented fresh by this</span>
 <span class="source-line-no">059</span><span id="line-59"> * class: valid &lt;c&gt;%HH&lt;/c&gt; triplets are hex-uppercased; triplets that decode to an unreserved octet</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> * (&lt;c&gt;+&lt;/c&gt; as space) and lack hex-case normalization, reserved-octet preservation, and malformed-escape</span>
 <span class="source-line-no">070</span><span id="line-70"> * rejection, all of which contradict the rules above.</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Ambiguous-capture resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Ambiguous-capture resolution:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * A reversible template compiles to an alternating sequence of literal and capture pieces; because an</span>
 <span class="source-line-no">075</span><span id="line-75"> * expression with ambiguous adjacency to another expression is rejected as non-reverse-matchable (see above),</span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85"> * intentional and consistent with this matcher covering reliable inversion of a narrow subset, not a complete</span>
 <span class="source-line-no">086</span><span id="line-86"> * RFC 6570 engine.</span>
 <span class="source-line-no">087</span><span id="line-87"> *</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;h5 class='section'&gt;Scope:&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;h2 class='section'&gt;Scope:&lt;/h2&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;p&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * This matcher is intentionally MCP-local. It is not registered as a general-purpose RFC 3986/6570 utility;</span>
 <span class="source-line-no">091</span><span id="line-91"> * if a second real consumer outside MCP resource templates needs equivalent percent-normalization or</span>

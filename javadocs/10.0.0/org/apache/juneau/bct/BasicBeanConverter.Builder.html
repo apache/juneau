@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  and property extraction logic. The builder supports registration of four main types
  of customizations:</p>
 
- <h5 class='section'>Type Handlers:</h5>
+ <h2 class='section'>Type Handlers:</h2>
  <ul>
     <li><b><a href="#addStringifier(java.lang.Class,org.apache.juneau.bct.Stringifier)"><code>addStringifier(Class, Stringifier)</code></a></b> - Custom string conversion logic</li>
     <li><b><a href="#addListifier(java.lang.Class,org.apache.juneau.bct.Listifier)"><code>addListifier(Class, Listifier)</code></a></b> - Custom list conversion for collection-like objects</li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
     <li><b><a href="#addPropertyExtractor(org.apache.juneau.bct.PropertyExtractor)"><code>addPropertyExtractor(PropertyExtractor)</code></a></b> - Custom property access strategies</li>
  </ul>
 
- <h5 class='section'>PropertyExtractors:</h5>
+ <h2 class='section'>PropertyExtractors:</h2>
  <p>Property extractors define how the converter accesses object properties during nested
  field access (e.g., <code>"user.address.city"</code>). The converter uses a chain-of-responsibility
  pattern, trying each registered extractor until one succeeds:</p>
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
        .build();
  </p>
 
- <h5 class='section'>Default Configuration:</h5>
+ <h2 class='section'>Default Configuration:</h2>
  <p>The <a href="#defaultSettings()"><code>defaultSettings()</code></a> method pre-registers comprehensive type handlers
  and property extractors for common Java types, providing out-of-the-box functionality
  for most use cases while still allowing full customization.</p></div>
@@ -275,7 +274,7 @@ loadScripts(document, 'script');</script>
     <li><b>Legacy objects:</b> Bridging older APIs with modern property access</li>
  </ul>
 
- <h5 class='section'>Implementation Example:</h5>
+ <h4 class='section'>Implementation Example:</h4>
  <p class='bjava'>
     <jc>// Custom extractor for a specialized data class</jc>
     PropertyExtractor <jv>customExtractor</jv> = (<jp>obj</jp>, <jp>property</jp>) -&gt; {

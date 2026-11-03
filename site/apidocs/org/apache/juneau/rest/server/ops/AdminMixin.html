@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  <a href="RouteIndexMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>RouteIndexMixin</code></a> (<code>/options</code>). All three classes live in
  the <code>org.apache.juneau.rest.server.ops</code> ops/introspection mixin pack.
 
- <h5 class='section'>Default-deny security posture:</h5>
+ <h2 class='section'>Default-deny security posture:</h2>
 
  <p>
  The mixin is annotated with <a href="../Rest.html#guards()"><code>@Rest(guards=DenyAllGuard.class)</code></a>, so every
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
  via <code>@Bean</code> keeps the override surface narrow &mdash; one factory method on the host
  &mdash; and matches the way every other Juneau op-context bean is wired.
 
- <h5 class='section'>Configurable mount prefix:</h5>
+ <h2 class='section'>Configurable mount prefix:</h2>
 
  <p>
  The default mount prefix <code>/admin</code> can be overridden via the SVL variable
@@ -122,7 +121,7 @@ loadScripts(document, 'script');</script>
  Override accepts bare token (<code>admin</code>), leading slash (<code>/admin</code>), trailing slash
  (<code>admin/</code>), or wildcard suffix (<code>/admin/*</code>) &mdash; all resolve to the same mount.
 
- <h5 class='section'>Mixin-only deployment:</h5>
+ <h2 class='section'>Mixin-only deployment:</h2>
 
  <p>
  This resource is designed for composition via <code>@Rest(mixins=...)</code>. The four mount paths
@@ -131,7 +130,7 @@ loadScripts(document, 'script');</script>
  on the handler methods; a class-level <code>@Rest(paths=...)</code> declaration would be silently
  ignored under the mixin pattern (see <a href="../Rest.html#paths()"><code>@Rest(paths)</code></a> Javadoc).
 
- <h5 class='figure'>Composition example:</h5>
+ <h2 class='figure'>Composition example:</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/api"</js>, mixins=AdminMixin.<jk>class</jk>)
@@ -153,7 +152,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Endpoints:</h5>
+ <h2 class='section'>Endpoints:</h2>
 
  <ul class='spaced-list'>
    <li><b><code>GET /admin/threads</code></b> &mdash; emits a JSON list of currently-live threads. The
@@ -183,7 +182,7 @@ loadScripts(document, 'script');</script>
  All four endpoints carry <a href="../OpSwagger.html#ignore()"><code>@OpSwagger(ignore=true)</code></a> so the admin surface
  stays out of any generated Swagger / OpenAPI spec.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>EchoMixin</code></a>
    <li class='jc'><a href="RouteIndexMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>RouteIndexMixin</code></a>
    <li class='jc'><a href="../guard/DenyAllGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>DenyAllGuard</code></a>

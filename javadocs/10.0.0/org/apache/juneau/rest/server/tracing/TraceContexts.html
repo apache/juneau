@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  <code>params._meta</code>) without that adapter depending on OpenTelemetry. The adapter depends only on
  this class and the installed <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>.
 
- <h5 class='topic'>Off-by-default contract</h5>
+ <h2 class='topic'>Off-by-default contract</h2>
 
  <p>
  <a href="#inject(org.apache.juneau.rest.server.tracing.TracerHook,org.apache.juneau.http.tracing.TraceContextCarrier)"><code>inject(TracerHook, TraceContextCarrier)</code></a> does nothing but null-check its arguments and
@@ -100,7 +99,7 @@ loadScripts(document, 'script');</script>
  OpenTelemetry bridge in <code>juneau-rest-server-tracing-otel</code>) writes <code>traceparent</code> /
  <code>tracestate</code> / <code>baggage</code> keys.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a>
    <li class='jc'><a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>
    <li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>

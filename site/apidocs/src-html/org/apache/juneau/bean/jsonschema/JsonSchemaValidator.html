@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> * {@code MarshalledPropertyPostProcessor}) can install schema validation closures on bean properties without taking a</span>
 <span class="source-line-no">040</span><span id="line-40"> * compile-time dependency on this module.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Supported keywords (v1):&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Supported keywords (v1):&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Any type: {@code type}, {@code enum}, {@code const}.</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Numeric: {@code minimum}, {@code maximum}, {@code exclusiveMinimum}, {@code exclusiveMaximum},</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> *       {@link Map}-shaped values).</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;Deferred keywords:&lt;/h5&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='section'&gt;Deferred keywords:&lt;/h2&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@code format} — informational only by default; validators may treat it as advisory.</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;{@code patternProperties}, {@code additionalProperties}, {@code prefixItems}, {@code contains},</span>
@@ -73,13 +73,13 @@
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li&gt;References: {@code $ref}, {@code $defs} (the bean carries them; the validator does not resolve them yet).</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Descriptive keywords (always ignored):&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Descriptive keywords (always ignored):&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *    &lt;li&gt;{@code title}, {@code summary}, {@code description}, {@code examples}, {@code $comment}, {@code deprecated},</span>
 <span class="source-line-no">066</span><span id="line-66"> *       {@code readOnly}, {@code writeOnly}.</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Java-value mapping:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;Java-value mapping:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * Java values are matched against JSON Schema {@code type} keywords as follows:</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;ul class='spaced-list'&gt;</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li&gt;{@code any} — always matches.</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='section'&gt;Nested validation:&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='section'&gt;Nested validation:&lt;/h2&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> * &lt;p&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> * For property-level validation, the validator recurses into:</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;ul class='spaced-list'&gt;</span>
@@ -107,11 +107,11 @@
 <span class="source-line-no">094</span><span id="line-94"> * The validator does &lt;b&gt;not&lt;/b&gt; recurse into Java beans via reflection.  Inner {@code @Schema} annotations on a</span>
 <span class="source-line-no">095</span><span id="line-95"> * nested bean's own properties are validated independently by the marshalling layer's per-property install hooks.</span>
 <span class="source-line-no">096</span><span id="line-96"> *</span>
-<span class="source-line-no">097</span><span id="line-97"> * &lt;h5 class='section'&gt;Thread safety:&lt;/h5&gt;</span>
+<span class="source-line-no">097</span><span id="line-97"> * &lt;h2 class='section'&gt;Thread safety:&lt;/h2&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> * Instances are immutable and safe to share across threads.  The compiled {@link Pattern} for the {@code pattern}</span>
 <span class="source-line-no">099</span><span id="line-99"> * keyword is cached on construction.</span>
 <span class="source-line-no">100</span><span id="line-100"> *</span>
-<span class="source-line-no">101</span><span id="line-101"> * &lt;h5 class='section'&gt;Interruptible {@code pattern} matching:&lt;/h5&gt;</span>
+<span class="source-line-no">101</span><span id="line-101"> * &lt;h2 class='section'&gt;Interruptible {@code pattern} matching:&lt;/h2&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> * &lt;p&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that a hostile input can</span>
 <span class="source-line-no">104</span><span id="line-104"> * drive into effectively-unbounded work. {@link java.util.regex.Matcher} never checks {@link Thread#isInterrupted()},</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109"> * promptly. A caller that bounds validation on a worker thread (for example an MCP {@code tools/call} DoS guard) can</span>
 <span class="source-line-no">110</span><span id="line-110"> * therefore reclaim the thread by interrupting it, rather than leaking a core to a match that ignores cancellation.</span>
 <span class="source-line-no">111</span><span id="line-111"> *</span>
-<span class="source-line-no">112</span><span id="line-112"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">112</span><span id="line-112"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">113</span><span id="line-113"> *    &lt;li class='link'&gt;&lt;a href="https://json-schema.org/draft/2020-12/json-schema-validation.html"&gt;JSON Schema 2020-12 Validation&lt;/a&gt;</span>
 <span class="source-line-no">114</span><span id="line-114"> * &lt;/ul&gt;</span>
 <span class="source-line-no">115</span><span id="line-115"> *</span>

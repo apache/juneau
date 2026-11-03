@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <p>
  Used to compare version numbers.
 
- <h5 class='section'>Equality vs. matching:</h5>
+ <h2 class='section'>Equality vs. matching:</h2>
  <p>
  <a href="#equals(java.lang.Object)"><code>equals(Object)</code></a>, <a href="#hashCode()"><code>hashCode()</code></a> and <a href="#compareTo(org.apache.juneau.commons.lang.Version)"><code>compareTo(Version)</code></a> are <b>strict</b> and
  mutually consistent &mdash; two versions are only equal when their full part sequences are identical
@@ -338,7 +337,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Version.html#line-158">isAtLeast</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at least this version.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1"</js>)));
    <jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"2"</js>)));
@@ -360,7 +359,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  boolean&nbsp;exclusive)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at least this version.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>false</jk>)));
    <jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
@@ -380,7 +379,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Version.html#line-208">isAtMost</a></span><wbr><span class="parameters">(<a href="Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at most this version.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1"</js>)));
    <jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"2"</js>)));
@@ -402,7 +401,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  boolean&nbsp;exclusive)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified version is at most this version.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>false</jk>)));
    <jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
@@ -430,7 +429,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  consistent with <a href="#hashCode()"><code>hashCode()</code></a> and must never be used as the basis for hash- or tree-based collection
  membership.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
    <jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2"</js>)));

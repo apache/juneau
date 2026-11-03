@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
  testing framework, enabling consistent object introspection and value extraction across
  different object types and structures.</p>
 
- <h5 class='section'>Core Conversion Operations:</h5>
+ <h2 class='section'>Core Conversion Operations:</h2>
  <dl>
     <dt><b><a href="#stringify(java.lang.Object)"><code>stringify(Object)</code></a></b></dt>
     <dd>Converts any object to its string representation, handling nested structures</dd>
@@ -102,10 +101,10 @@ loadScripts(document, 'script');</script>
     <dd>Accesses object properties using multiple fallback mechanisms</dd>
  </dl>
 
- <h5 class='section'>Property Access Strategy:</h5>
+ <h2 class='section'>Property Access Strategy:</h2>
  <p>The <a href="#getProperty(java.lang.Object,java.lang.String)"><code>getProperty(Object, String)</code></a> method uses a comprehensive fallback approach:</p>
 
- <h5 class='section'>Usage in BCT Framework:</h5>
+ <h2 class='section'>Usage in BCT Framework:</h2>
  <p>This interface is used internally by BCT assertion methods like:</p>
  <ul>
     <li><a href="BctAssertions.html#assertBean(java.lang.Object,java.lang.String,java.lang.String)"><code>BctAssertions.assertBean(Object, String, String)</code></a></li>

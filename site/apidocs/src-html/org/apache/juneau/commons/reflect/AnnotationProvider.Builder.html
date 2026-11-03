@@ -57,9 +57,9 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Caches results for performance</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Annotation Order of Precedence:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Annotation Order of Precedence:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h6 class='topic'&gt;For Classes ({@link #find(Class, ClassInfo, AnnotationTraversal...)}):&lt;/h6&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h3 class='topic'&gt;For Classes ({@link #find(Class, ClassInfo, AnnotationTraversal...)}):&lt;/h3&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * Annotations are returned in &lt;b&gt;child-to-parent&lt;/b&gt; order with the following precedence:</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;ol&gt;</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;jc&gt;// 7. @Annotation on package-info.java&lt;/jc&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h6 class='topic'&gt;For Methods ({@link #find(Class, MethodInfo, AnnotationTraversal...)}):&lt;/h6&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h3 class='topic'&gt;For Methods ({@link #find(Class, MethodInfo, AnnotationTraversal...)}):&lt;/h3&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * Annotations are returned in &lt;b&gt;child-to-parent&lt;/b&gt; order with the following precedence:</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;ol&gt;</span>
@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81"> *    &lt;li&gt;&lt;b&gt;Declared annotations&lt;/b&gt; on overridden parent methods (child-to-parent order)</span>
 <span class="source-line-no">082</span><span id="line-82"> * &lt;/ol&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;h6 class='topic'&gt;For Fields ({@link #find(Class, FieldInfo, AnnotationTraversal...)}):&lt;/h6&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;h3 class='topic'&gt;For Fields ({@link #find(Class, FieldInfo, AnnotationTraversal...)}):&lt;/h3&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;p&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> * Annotations are returned with the following precedence:</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;ol&gt;</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89"> *    &lt;li&gt;&lt;b&gt;Declared annotations&lt;/b&gt; on the field</span>
 <span class="source-line-no">090</span><span id="line-90"> * &lt;/ol&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> *</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;h6 class='topic'&gt;For Constructors ({@link #find(Class, ConstructorInfo, AnnotationTraversal...)}):&lt;/h6&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;h3 class='topic'&gt;For Constructors ({@link #find(Class, ConstructorInfo, AnnotationTraversal...)}):&lt;/h3&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;p&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> * Annotations are returned with the following precedence:</span>
 <span class="source-line-no">095</span><span id="line-95"> * &lt;ol&gt;</span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;li&gt;&lt;b&gt;Declared annotations&lt;/b&gt; on the constructor</span>
 <span class="source-line-no">098</span><span id="line-98"> * &lt;/ol&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> *</span>
-<span class="source-line-no">100</span><span id="line-100"> * &lt;h5 class='section'&gt;Runtime Annotations:&lt;/h5&gt;</span>
+<span class="source-line-no">100</span><span id="line-100"> * &lt;h2 class='section'&gt;Runtime Annotations:&lt;/h2&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> * &lt;p&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> * Runtime annotations are concrete objects that implement annotation interfaces, added programmatically via the</span>
 <span class="source-line-no">103</span><span id="line-103"> * builder's {@link Builder#addRuntimeAnnotations(List)} method. They allow you to dynamically apply annotations</span>
@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142"> * For example, a runtime {@code @Marshalled} annotation on a class will be found before any {@code @Marshalled} annotation</span>
 <span class="source-line-no">143</span><span id="line-143"> * declared directly on that class.</span>
 <span class="source-line-no">144</span><span id="line-144"> *</span>
-<span class="source-line-no">145</span><span id="line-145"> * &lt;h5 class='section'&gt;Comparison with ElementInfo Methods:&lt;/h5&gt;</span>
+<span class="source-line-no">145</span><span id="line-145"> * &lt;h2 class='section'&gt;Comparison with ElementInfo Methods:&lt;/h2&gt;</span>
 <span class="source-line-no">146</span><span id="line-146"> * &lt;p&gt;</span>
 <span class="source-line-no">147</span><span id="line-147"> * The methods in this class differ from {@link ClassInfo#getAnnotations()}, {@link MethodInfo#getAnnotations()}, etc.:</span>
 <span class="source-line-no">148</span><span id="line-148"> * &lt;ul&gt;</span>
@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151"> *    &lt;li&gt;&lt;b&gt;Precedence&lt;/b&gt;: Runtime annotations are inserted at each level with higher priority than declared annotations.</span>
 <span class="source-line-no">152</span><span id="line-152"> * &lt;/ul&gt;</span>
 <span class="source-line-no">153</span><span id="line-153"> *</span>
-<span class="source-line-no">154</span><span id="line-154"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">154</span><span id="line-154"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">155</span><span id="line-155"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">156</span><span id="line-156"> *    &lt;jc&gt;// Create with default settings&lt;/jc&gt;</span>
 <span class="source-line-no">157</span><span id="line-157"> *    AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider.&lt;jsm&gt;create&lt;/jsm&gt;().build();</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169"> *    Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;myAnnotations&lt;/jv&gt; = &lt;jv&gt;provider&lt;/jv&gt;.find(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">170</span><span id="line-170"> * &lt;/p&gt;</span>
 <span class="source-line-no">171</span><span id="line-171"> *</span>
-<span class="source-line-no">172</span><span id="line-172"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">172</span><span id="line-172"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">173</span><span id="line-173"> * &lt;ul&gt;</span>
 <span class="source-line-no">174</span><span id="line-174"> *    &lt;li class='jc'&gt;{@link AnnotationProvider}</span>
 <span class="source-line-no">175</span><span id="line-175"> *    &lt;li class='jc'&gt;{@link AnnotationInfo}</span>
@@ -206,7 +206,7 @@
 <span class="source-line-no">193</span><span id="line-193">   /**</span>
 <span class="source-line-no">194</span><span id="line-194">    * Builder for creating configured {@link AnnotationProvider} instances.</span>
 <span class="source-line-no">195</span><span id="line-195">    *</span>
-<span class="source-line-no">196</span><span id="line-196">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">196</span><span id="line-196">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">197</span><span id="line-197">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">198</span><span id="line-198">    *    AnnotationProvider &lt;jv&gt;provider&lt;/jv&gt; = AnnotationProvider</span>
 <span class="source-line-no">199</span><span id="line-199">    *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -214,7 +214,7 @@
 <span class="source-line-no">201</span><span id="line-201">    *       .build();</span>
 <span class="source-line-no">202</span><span id="line-202">    * &lt;/p&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">205</span><span id="line-205">    * &lt;ul&gt;</span>
 <span class="source-line-no">206</span><span id="line-206">    *    &lt;li class='jm'&gt;{@link AnnotationProvider#create()}</span>
 <span class="source-line-no">207</span><span id="line-207">    * &lt;/ul&gt;</span>
@@ -527,7 +527,7 @@
 <span class="source-line-no">514</span><span id="line-514">    * This method provides a flexible API for traversing annotations.</span>
 <span class="source-line-no">515</span><span id="line-515">    * It uses {@link AnnotationTraversal} enums to configure what elements to search and in what order.</span>
 <span class="source-line-no">516</span><span id="line-516">    *</span>
-<span class="source-line-no">517</span><span id="line-517">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">517</span><span id="line-517">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">518</span><span id="line-518">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">519</span><span id="line-519">    *    &lt;jc&gt;// Search class only&lt;/jc&gt;</span>
 <span class="source-line-no">520</span><span id="line-520">    *    List&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;l1&lt;/jv&gt; =</span>
@@ -560,7 +560,7 @@
 <span class="source-line-no">547</span><span id="line-547">    * &lt;p&gt;</span>
 <span class="source-line-no">548</span><span id="line-548">    * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.</span>
 <span class="source-line-no">549</span><span id="line-549">    *</span>
-<span class="source-line-no">550</span><span id="line-550">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">550</span><span id="line-550">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">551</span><span id="line-551">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">552</span><span id="line-552">    *    &lt;jc&gt;// Search constructor annotations&lt;/jc&gt;</span>
 <span class="source-line-no">553</span><span id="line-553">    *    Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</span>
@@ -585,7 +585,7 @@
 <span class="source-line-no">572</span><span id="line-572">    * &lt;p&gt;</span>
 <span class="source-line-no">573</span><span id="line-573">    * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.</span>
 <span class="source-line-no">574</span><span id="line-574">    *</span>
-<span class="source-line-no">575</span><span id="line-575">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">575</span><span id="line-575">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">576</span><span id="line-576">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">577</span><span id="line-577">    *    &lt;jc&gt;// Search field annotations&lt;/jc&gt;</span>
 <span class="source-line-no">578</span><span id="line-578">    *    Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</span>
@@ -610,7 +610,7 @@
 <span class="source-line-no">597</span><span id="line-597">    * &lt;p&gt;</span>
 <span class="source-line-no">598</span><span id="line-598">    * This method provides a flexible API for traversing method annotations.</span>
 <span class="source-line-no">599</span><span id="line-599">    *</span>
-<span class="source-line-no">600</span><span id="line-600">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">600</span><span id="line-600">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">601</span><span id="line-601">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">602</span><span id="line-602">    *    &lt;jc&gt;// Search method and matching parent methods&lt;/jc&gt;</span>
 <span class="source-line-no">603</span><span id="line-603">    *    List&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;l1&lt;/jv&gt; =</span>
@@ -639,7 +639,7 @@
 <span class="source-line-no">626</span><span id="line-626">    * &lt;p&gt;</span>
 <span class="source-line-no">627</span><span id="line-627">    * This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.</span>
 <span class="source-line-no">628</span><span id="line-628">    *</span>
-<span class="source-line-no">629</span><span id="line-629">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">629</span><span id="line-629">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">630</span><span id="line-630">    * &lt;ul&gt;</span>
 <span class="source-line-no">631</span><span id="line-631">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</span>
 <span class="source-line-no">632</span><span id="line-632">    *    &lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</span>
@@ -649,7 +649,7 @@
 <span class="source-line-no">636</span><span id="line-636">    * &lt;p&gt;</span>
 <span class="source-line-no">637</span><span id="line-637">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</span>
 <span class="source-line-no">638</span><span id="line-638">    *</span>
-<span class="source-line-no">639</span><span id="line-639">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">639</span><span id="line-639">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">640</span><span id="line-640">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">641</span><span id="line-641">    *    &lt;jc&gt;// Search parameter, matching parameters, and parameter type (child-to-parent)&lt;/jc&gt;</span>
 <span class="source-line-no">642</span><span id="line-642">    *    Stream&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</span>
@@ -685,7 +685,7 @@
 <span class="source-line-no">672</span><span id="line-672">    * This method provides a flexible API for traversing all class annotations.</span>
 <span class="source-line-no">673</span><span id="line-673">    * Unlike {@link #find(Class, ClassInfo, AnnotationTraversal...)}, this method does not filter by annotation type.</span>
 <span class="source-line-no">674</span><span id="line-674">    *</span>
-<span class="source-line-no">675</span><span id="line-675">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">675</span><span id="line-675">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">676</span><span id="line-676">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">677</span><span id="line-677">    *    &lt;jc&gt;// Get all annotations from class only&lt;/jc&gt;</span>
 <span class="source-line-no">678</span><span id="line-678">    *    List&amp;lt;AnnotationInfo&amp;lt;Annotation&amp;gt;&amp;gt; &lt;jv&gt;l1&lt;/jv&gt; =</span>
@@ -712,7 +712,7 @@
 <span class="source-line-no">699</span><span id="line-699">    * This method provides a flexible, stream-based API for traversing all constructor annotations without creating intermediate lists.</span>
 <span class="source-line-no">700</span><span id="line-700">    * Unlike {@link #find(Class, ConstructorInfo, AnnotationTraversal...)}, this method does not filter by annotation type.</span>
 <span class="source-line-no">701</span><span id="line-701">    *</span>
-<span class="source-line-no">702</span><span id="line-702">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">702</span><span id="line-702">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">703</span><span id="line-703">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">704</span><span id="line-704">    *    &lt;jc&gt;// Get all annotations from constructor&lt;/jc&gt;</span>
 <span class="source-line-no">705</span><span id="line-705">    *    Stream&amp;lt;AnnotationInfo&amp;lt;Annotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</span>
@@ -735,7 +735,7 @@
 <span class="source-line-no">722</span><span id="line-722">    * This method provides a flexible, stream-based API for traversing all field annotations without creating intermediate lists.</span>
 <span class="source-line-no">723</span><span id="line-723">    * Unlike {@link #find(Class, FieldInfo, AnnotationTraversal...)}, this method does not filter by annotation type.</span>
 <span class="source-line-no">724</span><span id="line-724">    *</span>
-<span class="source-line-no">725</span><span id="line-725">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">725</span><span id="line-725">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">726</span><span id="line-726">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">727</span><span id="line-727">    *    &lt;jc&gt;// Get all annotations from field&lt;/jc&gt;</span>
 <span class="source-line-no">728</span><span id="line-728">    *    Stream&amp;lt;AnnotationInfo&amp;lt;Annotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</span>
@@ -758,7 +758,7 @@
 <span class="source-line-no">745</span><span id="line-745">    * This method provides a flexible API for traversing all method annotations.</span>
 <span class="source-line-no">746</span><span id="line-746">    * Unlike {@link #find(Class, MethodInfo, AnnotationTraversal...)}, this method does not filter by annotation type.</span>
 <span class="source-line-no">747</span><span id="line-747">    *</span>
-<span class="source-line-no">748</span><span id="line-748">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">748</span><span id="line-748">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">749</span><span id="line-749">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">750</span><span id="line-750">    *    &lt;jc&gt;// Get all annotations from method and matching parent methods&lt;/jc&gt;</span>
 <span class="source-line-no">751</span><span id="line-751">    *    List&amp;lt;AnnotationInfo&amp;lt;Annotation&amp;gt;&amp;gt; &lt;jv&gt;l1&lt;/jv&gt; =</span>
@@ -785,7 +785,7 @@
 <span class="source-line-no">772</span><span id="line-772">    * This method provides a flexible, stream-based API for traversing all parameter annotations without creating intermediate lists.</span>
 <span class="source-line-no">773</span><span id="line-773">    * Unlike {@link #find(Class, ParameterInfo, AnnotationTraversal...)}, this method does not filter by annotation type.</span>
 <span class="source-line-no">774</span><span id="line-774">    *</span>
-<span class="source-line-no">775</span><span id="line-775">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">775</span><span id="line-775">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">776</span><span id="line-776">    * &lt;ul&gt;</span>
 <span class="source-line-no">777</span><span id="line-777">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</span>
 <span class="source-line-no">778</span><span id="line-778">    *    &lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</span>
@@ -795,7 +795,7 @@
 <span class="source-line-no">782</span><span id="line-782">    * &lt;p&gt;</span>
 <span class="source-line-no">783</span><span id="line-783">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</span>
 <span class="source-line-no">784</span><span id="line-784">    *</span>
-<span class="source-line-no">785</span><span id="line-785">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">785</span><span id="line-785">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">786</span><span id="line-786">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">787</span><span id="line-787">    *    &lt;jc&gt;// Get all annotations from parameter, matching parameters, and parameter type&lt;/jc&gt;</span>
 <span class="source-line-no">788</span><span id="line-788">    *    Stream&amp;lt;AnnotationInfo&amp;lt;Annotation&amp;gt;&amp;gt; &lt;jv&gt;s1&lt;/jv&gt; =</span>
@@ -826,7 +826,7 @@
 <span class="source-line-no">813</span><span id="line-813">    *    find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;clazz&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</span>
 <span class="source-line-no">814</span><span id="line-814">    * &lt;/p&gt;</span>
 <span class="source-line-no">815</span><span id="line-815">    *</span>
-<span class="source-line-no">816</span><span id="line-816">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">816</span><span id="line-816">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">817</span><span id="line-817">    * &lt;ul&gt;</span>
 <span class="source-line-no">818</span><span id="line-818">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this class</span>
 <span class="source-line-no">819</span><span id="line-819">    *    &lt;li&gt;{@link AnnotationTraversal#PARENTS PARENTS} - Parent classes and interfaces (child-to-parent order)</span>
@@ -837,7 +837,7 @@
 <span class="source-line-no">824</span><span id="line-824">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code PARENTS, PACKAGE}</span>
 <span class="source-line-no">825</span><span id="line-825">    * &lt;br&gt;Note: {@code PARENTS} includes the class itself plus all parent classes and interfaces.</span>
 <span class="source-line-no">826</span><span id="line-826">    *</span>
-<span class="source-line-no">827</span><span id="line-827">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">827</span><span id="line-827">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">828</span><span id="line-828">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">829</span><span id="line-829">    *    &lt;jc&gt;// Check if class has @MyAnnotation anywhere in hierarchy&lt;/jc&gt;</span>
 <span class="source-line-no">830</span><span id="line-830">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;ci&lt;/jv&gt;);</span>
@@ -867,7 +867,7 @@
 <span class="source-line-no">854</span><span id="line-854">    *    find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;constructor&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</span>
 <span class="source-line-no">855</span><span id="line-855">    * &lt;/p&gt;</span>
 <span class="source-line-no">856</span><span id="line-856">    *</span>
-<span class="source-line-no">857</span><span id="line-857">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">857</span><span id="line-857">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">858</span><span id="line-858">    * &lt;ul&gt;</span>
 <span class="source-line-no">859</span><span id="line-859">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this constructor</span>
 <span class="source-line-no">860</span><span id="line-860">    * &lt;/ul&gt;</span>
@@ -875,7 +875,7 @@
 <span class="source-line-no">862</span><span id="line-862">    * &lt;p&gt;</span>
 <span class="source-line-no">863</span><span id="line-863">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF}</span>
 <span class="source-line-no">864</span><span id="line-864">    *</span>
-<span class="source-line-no">865</span><span id="line-865">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">865</span><span id="line-865">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">866</span><span id="line-866">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">867</span><span id="line-867">    *    &lt;jc&gt;// Check if constructor has @MyAnnotation&lt;/jc&gt;</span>
 <span class="source-line-no">868</span><span id="line-868">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;ci&lt;/jv&gt;);</span>
@@ -902,7 +902,7 @@
 <span class="source-line-no">889</span><span id="line-889">    *    find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;field&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</span>
 <span class="source-line-no">890</span><span id="line-890">    * &lt;/p&gt;</span>
 <span class="source-line-no">891</span><span id="line-891">    *</span>
-<span class="source-line-no">892</span><span id="line-892">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">892</span><span id="line-892">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">893</span><span id="line-893">    * &lt;ul&gt;</span>
 <span class="source-line-no">894</span><span id="line-894">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this field</span>
 <span class="source-line-no">895</span><span id="line-895">    * &lt;/ul&gt;</span>
@@ -910,7 +910,7 @@
 <span class="source-line-no">897</span><span id="line-897">    * &lt;p&gt;</span>
 <span class="source-line-no">898</span><span id="line-898">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF}</span>
 <span class="source-line-no">899</span><span id="line-899">    *</span>
-<span class="source-line-no">900</span><span id="line-900">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">900</span><span id="line-900">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">901</span><span id="line-901">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">902</span><span id="line-902">    *    &lt;jc&gt;// Check if field has @MyAnnotation&lt;/jc&gt;</span>
 <span class="source-line-no">903</span><span id="line-903">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;fi&lt;/jv&gt;);</span>
@@ -937,7 +937,7 @@
 <span class="source-line-no">924</span><span id="line-924">    *    find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;method&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</span>
 <span class="source-line-no">925</span><span id="line-925">    * &lt;/p&gt;</span>
 <span class="source-line-no">926</span><span id="line-926">    *</span>
-<span class="source-line-no">927</span><span id="line-927">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">927</span><span id="line-927">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">928</span><span id="line-928">    * &lt;ul&gt;</span>
 <span class="source-line-no">929</span><span id="line-929">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this method</span>
 <span class="source-line-no">930</span><span id="line-930">    *    &lt;li&gt;{@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS} - Matching methods in parent classes (child-to-parent)</span>
@@ -948,7 +948,7 @@
 <span class="source-line-no">935</span><span id="line-935">    * &lt;p&gt;</span>
 <span class="source-line-no">936</span><span id="line-936">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}</span>
 <span class="source-line-no">937</span><span id="line-937">    *</span>
-<span class="source-line-no">938</span><span id="line-938">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">938</span><span id="line-938">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">939</span><span id="line-939">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">940</span><span id="line-940">    *    &lt;jc&gt;// Check if method has @MyAnnotation anywhere in hierarchy&lt;/jc&gt;</span>
 <span class="source-line-no">941</span><span id="line-941">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;mi&lt;/jv&gt;);</span>
@@ -978,7 +978,7 @@
 <span class="source-line-no">965</span><span id="line-965">    *    find(&lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;parameter&lt;/jv&gt;, &lt;jv&gt;traversals&lt;/jv&gt;).findFirst().isPresent()</span>
 <span class="source-line-no">966</span><span id="line-966">    * &lt;/p&gt;</span>
 <span class="source-line-no">967</span><span id="line-967">    *</span>
-<span class="source-line-no">968</span><span id="line-968">    * &lt;h5 class='section'&gt;Supported Traversal Types:&lt;/h5&gt;</span>
+<span class="source-line-no">968</span><span id="line-968">    * &lt;h4 class='section'&gt;Supported Traversal Types:&lt;/h4&gt;</span>
 <span class="source-line-no">969</span><span id="line-969">    * &lt;ul&gt;</span>
 <span class="source-line-no">970</span><span id="line-970">    *    &lt;li&gt;{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter</span>
 <span class="source-line-no">971</span><span id="line-971">    *    &lt;li&gt;{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)</span>
@@ -988,7 +988,7 @@
 <span class="source-line-no">975</span><span id="line-975">    * &lt;p&gt;</span>
 <span class="source-line-no">976</span><span id="line-976">    * &lt;b&gt;Default:&lt;/b&gt; If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}</span>
 <span class="source-line-no">977</span><span id="line-977">    *</span>
-<span class="source-line-no">978</span><span id="line-978">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">978</span><span id="line-978">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">979</span><span id="line-979">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">980</span><span id="line-980">    *    &lt;jc&gt;// Check if parameter has @MyAnnotation anywhere in hierarchy&lt;/jc&gt;</span>
 <span class="source-line-no">981</span><span id="line-981">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;hasIt&lt;/jv&gt; = has(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;pi&lt;/jv&gt;);</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
  in memory for inspection during tests. It implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link"><code>Closeable</code></a> to automatically
  remove itself from the logger's listeners when closed.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Capture records using try-with-resources</jc>
    <jk>try</jk> (LogRecordCapture <jv>capture</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>).captureEvents()) {
@@ -109,12 +108,12 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
    }
  </p>
 
- <h5 class='section'>Format String:</h5>
+ <h2 class='section'>Format String:</h2>
  <p>
  The format string supports placeholders as documented in <a href="LogRecord.html#formatted(java.lang.String)"><code>LogRecord.formatted(String)</code></a>.
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="RichLogger.html#captureEvents()"><code>RichLogger.captureEvents()</code></a>
    <li class='jc'><a href="LogRecord.html#formatted(java.lang.String)"><code>LogRecord.formatted(String)</code></a>
  </ul></div>

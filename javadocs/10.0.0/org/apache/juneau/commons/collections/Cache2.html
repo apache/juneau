@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,13 +87,13 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Simple in-memory cache for storing and retrieving objects by two-part keys.
 
- <h5 class='section'>Overview:</h5>
+ <h2 class='section'>Overview:</h2>
  <p>
  This class uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a> internally to provide a thread-safe caching layer with automatic
  value computation, cache eviction, and statistics tracking for two-part composite keys. It's designed for
  caching expensive-to-compute or frequently-accessed objects indexed by two keys.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Thread-safe concurrent access without external synchronization
    <li>Two-part composite key support
@@ -106,7 +105,7 @@ loadScripts(document, 'script');</script>
    <li>Can be disabled entirely via builder or system property
  </ul>
 
- <h5 class='section'>WEAK Mode Semantics:</h5>
+ <h2 class='section'>WEAK Mode Semantics:</h2>
  <p>
  <a href="CacheMode.html#WEAK"><code>CacheMode.WEAK</code></a> on this class is <b>best-effort</b>, not retention-guaranteed. Each lookup synthesizes
  an internal <code>Tuple2</code> composite key that is never exposed to the caller, so that key is reachable only
@@ -117,7 +116,7 @@ loadScripts(document, 'script');</script>
  remains strongly reachable elsewhere. If guaranteed retention is required, use <a href="CacheMode.html#FULL"><code>CacheMode.FULL</code></a> (the
  default mode) instead of WEAK. See <a href="CacheMode.html#WEAK"><code>CacheMode.WEAK</code></a> for details.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create a cache with default supplier</jc>
    Cache2&lt;ClassLoader,Class&lt;?&gt;,ClassMeta&gt; <jv>metaCache</jv> = Cache2
@@ -133,7 +132,7 @@ loadScripts(document, 'script');</script>
    ClassMeta <jv>meta2</jv> = <jv>metaCache</jv>.get(<jv>classLoader</jv>, Integer.<jk>class</jk>, () -&gt; customMeta);
  </p>
 
- <h5 class='section'>Cache Behavior:</h5>
+ <h2 class='section'>Cache Behavior:</h2>
  <ul class='spaced-list'>
    <li>When a key pair is requested:
       <ul>
@@ -146,7 +145,7 @@ loadScripts(document, 'script');</script>
    <li>Null keys always bypass the cache and invoke the supplier
  </ul>
 
- <h5 class='section'>Environment Variables:</h5>
+ <h2 class='section'>Environment Variables:</h2>
  <p>
  The following system properties can be used to configure default cache behavior:
  <ul class='spaced-list'>
@@ -155,14 +154,14 @@ loadScripts(document, 'script');</script>
    <li><c>juneau.cache.logOnExit</c> - Log cache statistics on shutdown (default: <jk>false</jk>)
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe and can be safely used from multiple threads without external synchronization.
  However, note that when the cache is cleared due to exceeding max size, there's a small window where
  multiple threads might compute the same value. This is acceptable for most use cases as it only affects
  performance, not correctness.
 
- <h5 class='section'>Performance Considerations:</h5>
+ <h2 class='section'>Performance Considerations:</h2>
  <ul class='spaced-list'>
    <li>Cache operations are O(1) average time complexity
    <li>The <a href="#get(K1,K2,java.util.function.Supplier)"><code>get(Object, Object, java.util.function.Supplier)</code></a> method uses
@@ -172,7 +171,7 @@ loadScripts(document, 'script');</script>
    <li>Statistics tracking uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicInteger</code></a> for thread-safe counting without locking
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Simple cache with defaults</jc>
    Cache2&lt;String,String,Config&gt; <jv>cache</jv> = Cache2.<jsm>of</jsm>(String.<jk>class</jk>, String.<jk>class</jk>, Config.<jk>class</jk>).build();
@@ -192,7 +191,7 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="Cache.html" title="class in org.apache.juneau.commons.collections"><code>Cache</code></a>
    <li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
@@ -371,7 +370,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
  This variant allows you to specify the cache's generic types explicitly without passing
  the class objects, which is useful when working with complex parameterized types.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Working with complex generic types</jc>
    Cache2&lt;Class&lt;?&gt;,Class&lt;? extends Annotation&gt;,List&lt;Annotation&gt;&gt; <jv>cache</jv> =
@@ -399,7 +398,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;type)</span></div>
 <div class="block">Creates a new <a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections"><code>Cache2.Builder</code></a> for constructing a cache.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2
       .<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>)
@@ -478,7 +477,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
  This method uses the default supplier configured via <a href="Cache2.Builder.html#supplier(org.apache.juneau.commons.function.Function2)"><code>Cache2.Builder.supplier(Function2)</code></a>.
  If no default supplier was configured, this method will throw a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2
       .<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>)
@@ -517,7 +516,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
    <li>Return the value
  </ol>
 
- <h5 class='section'>Behavior:</h5>
+ <h4 class='section'>Behavior:</h4>
  <ul class='spaced-list'>
    <li>If the cache is disabled, always invokes the supplier without caching
    <li>If the cache exceeds <a href="Cache2.Builder.html#maxSize(int)"><code>Cache2.Builder.maxSize(int)</code></a>, clears all entries before storing the new value
@@ -526,7 +525,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
       (due to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html#putIfAbsent(K,V)" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap.putIfAbsent(Object, Object)</code></a> semantics)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>).build();
 
@@ -559,7 +558,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
  <a href="#get(K1,K2,java.util.function.Supplier)"><code>get(Object, Object, java.util.function.Supplier)</code></a> finds an existing cached value
  for the requested key pair, avoiding the need to invoke the supplier.
 
- <h5 class='section'>Cache Effectiveness:</h5>
+ <h4 class='section'>Cache Effectiveness:</h4>
  <p>
  You can calculate the cache hit ratio using:
  <p class='bjava'>
@@ -569,7 +568,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
    <jk>double</jk> <jv>hitRatio</jv> = (<jk>double</jk>) <jv>hits</jv> / <jv>total</jv>;  <jc>// 0.0 to 1.0</jc>
  </p>
 
- <h5 class='section'>Notes:</h5>
+ <h4 class='section'>Notes:</h4>
  <ul>
    <li>This counter is never reset, even when <a href="#clear()"><code>clear()</code></a> is called
    <li>Thread-safe using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicInteger</code></a>

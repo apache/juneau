@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * direction of text. The bdo element requires a dir attribute to specify the text direction, which</span>
 <span class="source-line-no">029</span><span id="line-29"> * can be "ltr" (left-to-right) or "rtl" (right-to-left).</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
@@ -78,31 +78,30 @@
 <span class="source-line-no">065</span><span id="line-65"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#bdo(String, Object...) bdo(String, Object...)}</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;/p&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> */</span>
-<span class="source-line-no">074</span><span id="line-74">@Marshalled(typeName = "bdo")</span>
-<span class="source-line-no">075</span><span id="line-75">public class Bdo extends HtmlElementMixed&lt;Bdo&gt; {</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Creates an empty {@link Bdo} element.</span>
-<span class="source-line-no">079</span><span id="line-79">    */</span>
-<span class="source-line-no">080</span><span id="line-80">   public Bdo() {}</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /**</span>
-<span class="source-line-no">083</span><span id="line-83">    * Creates a {@link Bdo} element with the specified {@link Bdo#dir(String)} attribute and child nodes.</span>
-<span class="source-line-no">084</span><span id="line-84">    *</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param dir The {@link Bdo#dir(String)} attribute.</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param children The child nodes.</span>
-<span class="source-line-no">087</span><span id="line-87">    */</span>
-<span class="source-line-no">088</span><span id="line-88">   public Bdo(String dir, Object...children) {</span>
-<span class="source-line-no">089</span><span id="line-89">      dir(dir).children(children);</span>
-<span class="source-line-no">090</span><span id="line-90">   }</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">}</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> */</span>
+<span class="source-line-no">073</span><span id="line-73">@Marshalled(typeName = "bdo")</span>
+<span class="source-line-no">074</span><span id="line-74">public class Bdo extends HtmlElementMixed&lt;Bdo&gt; {</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * Creates an empty {@link Bdo} element.</span>
+<span class="source-line-no">078</span><span id="line-78">    */</span>
+<span class="source-line-no">079</span><span id="line-79">   public Bdo() {}</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   /**</span>
+<span class="source-line-no">082</span><span id="line-82">    * Creates a {@link Bdo} element with the specified {@link Bdo#dir(String)} attribute and child nodes.</span>
+<span class="source-line-no">083</span><span id="line-83">    *</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param dir The {@link Bdo#dir(String)} attribute.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param children The child nodes.</span>
+<span class="source-line-no">086</span><span id="line-86">    */</span>
+<span class="source-line-no">087</span><span id="line-87">   public Bdo(String dir, Object...children) {</span>
+<span class="source-line-no">088</span><span id="line-88">      dir(dir).children(children);</span>
+<span class="source-line-no">089</span><span id="line-89">   }</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">}</span>
 
 
 

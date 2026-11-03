@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * visible regardless of whether the record is a base JUL {@link java.util.logging.LogRecord} (as both debug pipelines</span>
 <span class="source-line-no">028</span><span id="line-28"> * construct) or the commons {@link LogRecord} subclass.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Identity-key invariant (load-bearing):&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Identity-key invariant (load-bearing):&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * The backing {@link WeakHashMap} behaves as an identity map &lt;b&gt;only because&lt;/b&gt; neither base JUL</span>
 <span class="source-line-no">033</span><span id="line-33"> * {@link java.util.logging.LogRecord} nor the commons {@link LogRecord} subclass overrides {@code equals}/{@code hashCode}</span>
@@ -48,13 +48,13 @@
 <span class="source-line-no">035</span><span id="line-35"> * (two distinct records comparing equal would share/overwrite one entry).  A unit test guards this by asserting both</span>
 <span class="source-line-no">036</span><span id="line-36"> * record types remain on {@link Object} equality.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Framework attach points:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='section'&gt;Framework attach points:&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * The two {@code attachIfAbsent} overloads are called by {@link RichLogger#log(java.util.logging.LogRecord)} and by the</span>
 <span class="source-line-no">041</span><span id="line-41"> * two REST debug pipelines to pre-seed a record's correlation context.  They are &lt;b&gt;not&lt;/b&gt; intended as a general</span>
 <span class="source-line-no">042</span><span id="line-42"> * application-facing mutator.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='jc'&gt;{@link LogContext}</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='jc'&gt;{@link RichLogger#log(java.util.logging.LogRecord)}</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>

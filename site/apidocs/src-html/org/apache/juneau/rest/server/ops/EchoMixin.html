@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * {@link Rest#mixins() @Rest(mixins=EchoMixin.class)}; the {@code /echo/*} URL becomes</span>
 <span class="source-line-no">044</span><span id="line-44"> * available alongside the host's own endpoints with no further wiring.</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Configurable mount path:&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Configurable mount path:&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * The default mount {@code /echo/*} can be overridden via the SVL variable</span>
@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65"> * {@code /debug/echo/*} alias must now either set {@code -Djuneau.echo.path=debug/echo} or</span>
 <span class="source-line-no">066</span><span id="line-66"> * compose a second instance with the override.</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Mixin-only deployment:&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h2 class='section'&gt;Mixin-only deployment:&lt;/h2&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73"> * {@link #echo}; a class-level {@code @Rest(paths=...)} declaration would be silently ignored</span>
 <span class="source-line-no">074</span><span id="line-74"> * under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='figure'&gt;Composition example:&lt;/h5&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='figure'&gt;Composition example:&lt;/h2&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93"> *    }</span>
 <span class="source-line-no">094</span><span id="line-94"> * &lt;/p&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;h5 class='section'&gt;Enablement:&lt;/h5&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * &lt;h2 class='section'&gt;Enablement:&lt;/h2&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> *</span>
 <span class="source-line-no">098</span><span id="line-98"> * &lt;p&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> * The endpoint is &lt;b&gt;disabled by default&lt;/b&gt;. Reachability is controlled by an explicit, non-logging switch and is</span>
@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125"> * Host-level {@link Rest#guards() @Rest(guards=...)} inherit onto the mixed-in {@code /echo/*} operation, so declaring</span>
 <span class="source-line-no">126</span><span id="line-126"> * guards at the host authorizes the endpoint.</span>
 <span class="source-line-no">127</span><span id="line-127"> *</span>
-<span class="source-line-no">128</span><span id="line-128"> * &lt;h5 class='section'&gt;Sensitive-header redaction:&lt;/h5&gt;</span>
+<span class="source-line-no">128</span><span id="line-128"> * &lt;h2 class='section'&gt;Sensitive-header redaction:&lt;/h2&gt;</span>
 <span class="source-line-no">129</span><span id="line-129"> *</span>
 <span class="source-line-no">130</span><span id="line-130"> * &lt;p&gt;</span>
 <span class="source-line-no">131</span><span id="line-131"> * Token-bearing headers must never be reflected back to the caller (would defeat any auth scheme</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141"> * {@link RedactedHeaders#REDACTED} and {@link RedactedHeaders#DEFAULT} respectively; masking is</span>
 <span class="source-line-no">142</span><span id="line-142"> * performed by delegating to {@link RedactedHeaders#redact(String, String, java.util.Collection)}.</span>
 <span class="source-line-no">143</span><span id="line-143"> *</span>
-<span class="source-line-no">144</span><span id="line-144"> * &lt;h5 class='section'&gt;Body capture and truncation:&lt;/h5&gt;</span>
+<span class="source-line-no">144</span><span id="line-144"> * &lt;h2 class='section'&gt;Body capture and truncation:&lt;/h2&gt;</span>
 <span class="source-line-no">145</span><span id="line-145"> *</span>
 <span class="source-line-no">146</span><span id="line-146"> * &lt;p&gt;</span>
 <span class="source-line-no">147</span><span id="line-147"> * The handler reads up to {@link Builder#bodyLimit(long) bodyLimit} bytes (default</span>
@@ -163,7 +163,7 @@
 <span class="source-line-no">150</span><span id="line-150"> * portion is truncated and the {@code truncated} flag is set to {@code true} so callers can see</span>
 <span class="source-line-no">151</span><span id="line-151"> * the response is incomplete.</span>
 <span class="source-line-no">152</span><span id="line-152"> *</span>
-<span class="source-line-no">153</span><span id="line-153"> * &lt;h5 class='section'&gt;Response shape:&lt;/h5&gt;</span>
+<span class="source-line-no">153</span><span id="line-153"> * &lt;h2 class='section'&gt;Response shape:&lt;/h2&gt;</span>
 <span class="source-line-no">154</span><span id="line-154"> *</span>
 <span class="source-line-no">155</span><span id="line-155"> * &lt;p class='bjson'&gt;</span>
 <span class="source-line-no">156</span><span id="line-156"> *    {</span>
@@ -184,7 +184,7 @@
 <span class="source-line-no">171</span><span id="line-171"> * The endpoint is excluded from generated Swagger / OpenAPI specs via</span>
 <span class="source-line-no">172</span><span id="line-172"> * {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.</span>
 <span class="source-line-no">173</span><span id="line-173"> *</span>
-<span class="source-line-no">174</span><span id="line-174"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">174</span><span id="line-174"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">175</span><span id="line-175"> *    &lt;li class='jc'&gt;{@link AdminMixin}</span>
 <span class="source-line-no">176</span><span id="line-176"> *    &lt;li class='jc'&gt;{@link RouteIndexMixin}</span>
 <span class="source-line-no">177</span><span id="line-177"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server — Mixins and Multi-Mount Paths&lt;/a&gt;</span>

@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * the {@code juneau-views.js} runtime can paint what actually happened (success, failure, a &lt;i&gt;named&lt;/i&gt; refusal, or</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * an honest unknown) rather than what the request asked for.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Its own, independent contract version&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Its own, independent contract version&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * The action-result is a &lt;b&gt;third&lt;/b&gt; independently-versioned wire contract, alongside {@code VIEW_META}</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * and the FTL card/slot envelope.  Its</em>
@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * {@code VIEW_META}: aliasing a per-view contract's version onto a separate contract couples two</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * unrelated client/server locksteps, so this contract versions itself.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Refusals are an opaque, namespaced code &amp;mdash; not a framework-closed enum&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Refusals are an opaque, namespaced code &amp;mdash; not a framework-closed enum&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * A refusal's {@link #refusalCode} is an &lt;b&gt;opaque namespaced string&lt;/b&gt;, not a framework-closed enum and not a</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * free-text message.  Refusals span two independent sources, and the framework must be able to render a refusal it</em>
@@ -65,14 +65,14 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * The runtime renders ANY code as a visible &lt;i&gt;named&lt;/i&gt; refusal without the framework needing to know consumer</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * concepts exist.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Reserved async terminal outcomes&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Reserved async terminal outcomes&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * {@link Outcome#CANCELLED cancelled} and {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} are</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;reserved from day one&lt;/b&gt; (as {@code VIEW_META} reserved {@code rowActions} before it was implemented), even</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * though a synchronous write never emits them.  A future async/streaming variant can therefore emit them without a</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * second result-contract bump and a three-sided lockstep.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// A success carrying the authoritative row read back from the remote system.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 	ActionResult &lt;jv&gt;ok&lt;/jv&gt; = ActionResult.&lt;jsm&gt;success&lt;/jsm&gt;(&lt;jv&gt;incidentReadBack&lt;/jv&gt;);</em>
@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * 	ActionResult &lt;jv&gt;again&lt;/jv&gt; = ActionResult.&lt;jsm&gt;success&lt;/jsm&gt;(&lt;jv&gt;incidentReadBack&lt;/jv&gt;).replay(&lt;jk&gt;true&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link RowAction}</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link org.apache.juneau.console.widgets.ModalDef}</em>
@@ -182,20 +182,20 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * The follow-up &lt;b&gt;read-only&lt;/b&gt; form-source URL a receipt is painted from; omitted from the wire when unset.</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Honored on {@link Outcome#SUCCESS success} only&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Honored on {@link Outcome#SUCCESS success} only&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * This is the mechanical form of &lt;i&gt;a receipt must never look like a receipt for a write that didn't happen&lt;/i&gt;.</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * On a failure, a refusal, an unknown, or a transport failure this field is &lt;b&gt;ignored&lt;/b&gt;, no follow-up GET is</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * issued, and nothing is swapped &amp;mdash; so no result host can appear for a write that did not commit.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;The served payload must not carry a form&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;The served payload must not carry a form&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * The URL serves a {@code ModalDef}, and that payload &lt;b&gt;must not&lt;/b&gt; declare a {@code form}.  A result host is</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * terminal by definition: the write already committed, so there is nothing left to gate.  A payload carrying</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * inputs is refused &lt;i&gt;visibly&lt;/i&gt; rather than rendered read-only or silently stripped, because it is a consumer</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * authoring bug and should be visible as one.</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;It is a swap, not a new dialog&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;It is a swap, not a new dialog&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * The runtime paints the receipt into the dialog that is &lt;b&gt;already open&lt;/b&gt;, at the same layer depth, and only</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * when that dialog opted in with {@code ModalDef.keepOpenOnSubmit}.  Set on a result whose dialog did not opt in,</em>
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * Readability alias for {@link #success(Object) success(null)} &amp;mdash; a {@link Outcome#SUCCESS success} result</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * that carries no row (e.g. a delete, or a navigate/redraw action).</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Equivalent to ActionResult.success(null).message(...)&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;return&lt;/jk&gt; ActionResult.&lt;jsm&gt;ok&lt;/jsm&gt;().message(&lt;js&gt;"Deleted"&lt;/js&gt;);</em>
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * Readability alias for {@link #success(Object)}.</em>
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;return&lt;/jk&gt; ActionResult.&lt;jsm&gt;ok&lt;/jsm&gt;(&lt;jv&gt;store&lt;/jv&gt;.updatePet(&lt;jv&gt;pet&lt;/jv&gt;)).message(&lt;js&gt;"Saved"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>

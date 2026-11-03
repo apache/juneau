@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"> * as a {@code &lt;template data-card="{id}"&gt;}. A bare {@code html} card (no body) emits an empty fragment — the</span>
 <span class="source-line-no">026</span><span id="line-26"> * shell paints an empty {@code .jc-card} and nothing more.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;Trust boundary for {@code src}:&lt;/h5&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;h2 class='section'&gt;Trust boundary for {@code src}:&lt;/h2&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * An {@code html} card in a page contract may instead name a {@code src} endpoint. The {@code src} must be a</span>
 <span class="source-line-no">031</span><span id="line-31"> * same-origin path (checked at page build, by {@code PageCapture.addCard} for FreeMarker and {@code PageSpec} cards</span>
@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> * card fails closed with E-JS-8 and paints nothing. The flag only affects {@code src} cards, and the default is</span>
 <span class="source-line-no">043</span><span id="line-43"> * unchanged (unsanitized).</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *   CardSource &lt;jv&gt;s&lt;/jv&gt; = CardSource.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"html"&lt;/js&gt;, &lt;js&gt;"welcome"&lt;/js&gt;)</span>
 <span class="source-line-no">048</span><span id="line-48"> *     .title(&lt;js&gt;"Welcome"&lt;/js&gt;)</span>

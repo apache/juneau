@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * the token to the page renderer, which stamps it on {@code &lt;body data-juneau-csrf&gt;} for the console toolkit to send</span>
 <span class="source-line-no">037</span><span id="line-37"> * back.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;The effective method&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;The effective method&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * A request is judged on the method it claims, not only on its request line.  A {@code method} query parameter or</span>
 <span class="source-line-no">042</span><span id="line-42"> * an {@code X-Method}, {@code X-HTTP-Method-Override}, {@code X-HTTP-Method} or {@code X-Method-Override} header</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> * honour that override.  So {@code GET /console/pets/1?method=DELETE} needs the same Origin and token a real</span>
 <span class="source-line-no">045</span><span id="line-45"> * {@code DELETE} does, and a later change to a resource's allowed method overrides cannot open a hole here.</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;The API's token&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;The API's token&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * The {@code /petstore} API is not covered by this boundary: it sits behind its own, {@link PetstoreApiBoundary},</span>
 <span class="source-line-no">050</span><span id="line-50"> * which has a different token.  The console's one write to the API, its photo upload</span>
@@ -76,12 +76,12 @@
 <span class="source-line-no">063</span><span id="line-63"> * only its own token attributes, so on that rare path the API's token can still be emitted, possibly without</span>
 <span class="source-line-no">064</span><span id="line-64"> * {@code no-store}.  That is accepted, as {@link PetstoreApiBoundary} describes.</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;What is outside&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;What is outside&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * The {@code /petstore-ui} app (which only reads) is covered by neither boundary.  The Jetty deployment puts the</span>
 <span class="source-line-no">069</span><span id="line-69"> * microservice admin resources behind a third boundary of their own.</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='section'&gt;The authority&lt;/h5&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='section'&gt;The authority&lt;/h2&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * The single accepted {@code Host} is the {@value #AUTHORITY_PROPERTY} setting when set, else</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@code localhost:&lt;port&gt;} with the port the request arrived on.  It is fixed on the first console request, after</span>
@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line-86"> * demo does not configure the framework boundary's {@code CONTAINER} origin source, so behind a TLS-terminating proxy</span>
 <span class="source-line-no">087</span><span id="line-87"> * the API refuses writes too (see {@link PetstoreApiBoundary}).</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
-<span class="source-line-no">089</span><span id="line-89"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;reg&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FilterRegistrationBean&amp;lt;&amp;gt;(&lt;jk&gt;new&lt;/jk&gt; PetstoreConsoleBoundary(&lt;jv&gt;apiBoundary&lt;/jv&gt;));</span>
 <span class="source-line-no">092</span><span id="line-92"> *    &lt;jv&gt;reg&lt;/jv&gt;.addUrlPatterns(PetstoreConsoleBoundary.&lt;jsf&gt;URL_PATTERN&lt;/jsf&gt;);</span>

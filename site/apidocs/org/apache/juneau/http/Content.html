@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,12 +86,12 @@ loadScripts(document, 'script');</script>
    <li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  </ul>
 
- <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
+ <h2 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h2>
 
  <p>
  On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Used on parameter</jc>
    <ja>@RestPost</ja>(<js>"/pets"</js>)
@@ -117,19 +116,19 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ <h2 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h2>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Content">@Content</a>
  </ul>
 
- <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
+ <h2 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h2>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       Annotation parameter values will be aggregated when used on POJO parent and child classes.
       <br>Values on child classes override values on parent classes.
@@ -269,7 +268,7 @@ loadScripts(document, 'script');</script>
  Values specified on this field override values specified on the type, and values specified on child types override values
  specified on parent types.
 
- <h5 class='section'>Used for:</h5>
+ <h4 class='section'>Used for:</h4>
  <ul class='spaced-list'>
    <li>
       Server-side schema-based parsing and parsing validation.

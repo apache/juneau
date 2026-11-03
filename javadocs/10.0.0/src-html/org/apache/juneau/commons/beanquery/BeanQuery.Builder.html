@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * grammar for {@link #getSearch() search} and {@link #getOpts() opts} lives &lt;b&gt;inside&lt;/b&gt; those single strings and is</span>
 <span class="source-line-no">035</span><span id="line-35"> * decoded by a {@link BeanQuerySession session} when the query runs, not by this bean.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Fields&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Fields&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;ul&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;b&gt;search&lt;/b&gt; ({@link String}) &amp;mdash; the one search string.  Top-level commas (outside parentheses) separate</span>
 <span class="source-line-no">040</span><span id="line-40"> *       clauses; the first unescaped {@code =} separates a column from its raw {@code $}-expression</span>
@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * Construct with {@link #create()}, which returns a {@link Builder} that assembles these raw strings fluently:</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *    BeanQuery &lt;jv&gt;q&lt;/jv&gt; = BeanQuery.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">058</span><span id="line-58"> *       .eq(&lt;js&gt;"status"&lt;/js&gt;, &lt;js&gt;"active"&lt;/js&gt;)</span>
@@ -281,7 +281,7 @@
 <span class="source-line-no">268</span><span id="line-268">    * &lt;p&gt;Exposes the same condition methods as {@link Builder}, minus paging/view/sort/opts, since a group only</span>
 <span class="source-line-no">269</span><span id="line-269">    * ever contributes conditions to its enclosing level.</span>
 <span class="source-line-no">270</span><span id="line-270">    *</span>
-<span class="source-line-no">271</span><span id="line-271">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">271</span><span id="line-271">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">272</span><span id="line-272">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">273</span><span id="line-273">    *    BeanQuery.&lt;jsm&gt;create&lt;/jsm&gt;().or(&lt;jv&gt;g&lt;/jv&gt; -&amp;gt; &lt;jv&gt;g&lt;/jv&gt;.eq(&lt;js&gt;"a"&lt;/js&gt;, 1).eq(&lt;js&gt;"b"&lt;/js&gt;, 2));</span>
 <span class="source-line-no">274</span><span id="line-274">    *    &lt;jc&gt;// -&amp;gt; "$or(a=$eq(\"1\"),b=$eq(\"2\"))"&lt;/jc&gt;</span>
@@ -566,7 +566,7 @@
 <span class="source-line-no">553</span><span id="line-553">    * &lt;p&gt;Exposes every {@link GroupBuilder} condition method (they add top-level conditions here) plus</span>
 <span class="source-line-no">554</span><span id="line-554">    * view/sort/paging/opts/counts and {@link #build()}.</span>
 <span class="source-line-no">555</span><span id="line-555">    *</span>
-<span class="source-line-no">556</span><span id="line-556">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">556</span><span id="line-556">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">557</span><span id="line-557">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">558</span><span id="line-558">    *    BeanQuery &lt;jv&gt;q&lt;/jv&gt; = BeanQuery.&lt;jsm&gt;create&lt;/jsm&gt;().eq(&lt;js&gt;"status"&lt;/js&gt;, &lt;js&gt;"active"&lt;/js&gt;).build();</span>
 <span class="source-line-no">559</span><span id="line-559">    * &lt;/p&gt;</span>

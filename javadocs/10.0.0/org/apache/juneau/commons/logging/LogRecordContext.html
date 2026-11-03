@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
  visible regardless of whether the record is a base JUL <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> (as both debug pipelines
  construct) or the commons <a href="LogRecord.html" title="class in org.apache.juneau.commons.logging"><code>LogRecord</code></a> subclass.
 
- <h5 class='section'>Identity-key invariant (load-bearing):</h5>
+ <h2 class='section'>Identity-key invariant (load-bearing):</h2>
  <p>
  The backing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/WeakHashMap.html" title="class or interface in java.util" class="external-link"><code>WeakHashMap</code></a> behaves as an identity map <b>only because</b> neither base JUL
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> nor the commons <a href="LogRecord.html" title="class in org.apache.juneau.commons.logging"><code>LogRecord</code></a> subclass overrides <code>equals</code>/<code>hashCode</code>
@@ -95,13 +94,13 @@ loadScripts(document, 'script');</script>
  (two distinct records comparing equal would share/overwrite one entry).  A unit test guards this by asserting both
  record types remain on <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a> equality.
 
- <h5 class='section'>Framework attach points:</h5>
+ <h2 class='section'>Framework attach points:</h2>
  <p>
  The two <code>attachIfAbsent</code> overloads are called by <a href="RichLogger.html#log(java.util.logging.LogRecord)"><code>RichLogger.log(java.util.logging.LogRecord)</code></a> and by the
  two REST debug pipelines to pre-seed a record's correlation context.  They are <b>not</b> intended as a general
  application-facing mutator.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="LogContext.html" title="class in org.apache.juneau.commons.logging"><code>LogContext</code></a>
    <li class='jc'><a href="RichLogger.html#log(java.util.logging.LogRecord)"><code>RichLogger.log(java.util.logging.LogRecord)</code></a>
  </ul></div>

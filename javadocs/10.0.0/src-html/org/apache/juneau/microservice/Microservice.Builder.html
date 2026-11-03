@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67"> * Your microservice class must be specified as the &lt;jk&gt;Main-Class&lt;/jk&gt; entry in the manifest file of your microservice</span>
 <span class="source-line-no">068</span><span id="line-68"> * jar file if it's an executable jar.</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='topic'&gt;Microservice Configuration&lt;/h5&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='topic'&gt;Microservice Configuration&lt;/h2&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> * This class defines the following method for accessing configuration for your microservice:</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;ul class='spaced-list'&gt;</span>
@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79"> *       {@link #getManifest()} - The manifest file for the main jar file.</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> *</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='topic'&gt;Lifecycle Methods&lt;/h5&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h2 class='topic'&gt;Lifecycle Methods&lt;/h2&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *</span>
 <span class="source-line-no">084</span><span id="line-84"> * Subclasses must implement the following lifecycle methods:</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;ul class='spaced-list'&gt;</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93"> *       {@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.</span>
 <span class="source-line-no">094</span><span id="line-94"> * &lt;/ul&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice"&gt;juneau-microservice&lt;/a&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> * &lt;/ul&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> */</span>
@@ -1006,7 +1006,7 @@
 <span class="source-line-no">993</span><span id="line-993">    * &lt;p&gt;</span>
 <span class="source-line-no">994</span><span id="line-994">    * This method can be called from the class constructor.</span>
 <span class="source-line-no">995</span><span id="line-995">    *</span>
-<span class="source-line-no">996</span><span id="line-996">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">996</span><span id="line-996">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">997</span><span id="line-997">    * &lt;p class='bini'&gt;</span>
 <span class="source-line-no">998</span><span id="line-998">    *    &lt;cc&gt;#--------------------------&lt;/cc&gt;</span>
 <span class="source-line-no">999</span><span id="line-999">    *    &lt;cc&gt;# My section&lt;/cc&gt;</span>
@@ -1121,7 +1121,7 @@
 <span class="source-line-no">1108</span><span id="line-1108">    * &lt;p&gt;</span>
 <span class="source-line-no">1109</span><span id="line-1109">    * This method can be called from the class constructor.</span>
 <span class="source-line-no">1110</span><span id="line-1110">    *</span>
-<span class="source-line-no">1111</span><span id="line-1111">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1111</span><span id="line-1111">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1112</span><span id="line-1112">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1113</span><span id="line-1113">    *    &lt;jc&gt;// Get Main-Class from manifest file.&lt;/jc&gt;</span>
 <span class="source-line-no">1114</span><span id="line-1114">    *    String &lt;jv&gt;mainClass&lt;/jv&gt; = Microservice.&lt;jsm&gt;getManifest&lt;/jsm&gt;().getString(&lt;js&gt;"Main-Class"&lt;/js&gt;, &lt;js&gt;"unknown"&lt;/js&gt;);</span>

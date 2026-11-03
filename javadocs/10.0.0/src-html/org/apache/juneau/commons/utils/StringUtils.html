@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">    * If the string is &lt;jk&gt;null&lt;/jk&gt;, shorter than or equal to &lt;c&gt;length&lt;/c&gt;, or has length 3 or less,</span>
 <span class="source-line-no">190</span><span id="line-190">    * the original string is returned unchanged.</span>
 <span class="source-line-no">191</span><span id="line-191">    *</span>
-<span class="source-line-no">192</span><span id="line-192">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">194</span><span id="line-194">    *    abbreviate(&lt;js&gt;"Hello World"&lt;/js&gt;, 8);        &lt;jc&gt;// "Hello..."&lt;/jc&gt;</span>
 <span class="source-line-no">195</span><span id="line-195">    *    abbreviate(&lt;js&gt;"Hello World"&lt;/js&gt;, 20);       &lt;jc&gt;// "Hello World" (no change)&lt;/jc&gt;</span>
@@ -243,7 +243,7 @@
 <span class="source-line-no">230</span><span id="line-230">    * If the string is &lt;jk&gt;null&lt;/jk&gt;, empty, or contains only whitespace, nothing is appended.</span>
 <span class="source-line-no">231</span><span id="line-231">    * If &lt;c&gt;sb&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt; and an append is going to occur, a new StringBuilder is automatically created.</span>
 <span class="source-line-no">232</span><span id="line-232">    *</span>
-<span class="source-line-no">233</span><span id="line-233">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">233</span><span id="line-233">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">234</span><span id="line-234">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">235</span><span id="line-235">    *    StringBuilder &lt;jv&gt;sb&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringBuilder();</span>
 <span class="source-line-no">236</span><span id="line-236">    *    appendIfNotBlank(&lt;jv&gt;sb&lt;/jv&gt;, &lt;js&gt;"hello"&lt;/js&gt;);  &lt;jc&gt;// Appends "hello"&lt;/jc&gt;</span>
@@ -278,7 +278,7 @@
 <span class="source-line-no">265</span><span id="line-265">    * If the string is &lt;jk&gt;null&lt;/jk&gt; or empty, nothing is appended.</span>
 <span class="source-line-no">266</span><span id="line-266">    * If &lt;c&gt;sb&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt; and an append is going to occur, a new StringBuilder is automatically created.</span>
 <span class="source-line-no">267</span><span id="line-267">    *</span>
-<span class="source-line-no">268</span><span id="line-268">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">268</span><span id="line-268">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">269</span><span id="line-269">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">270</span><span id="line-270">    *    StringBuilder &lt;jv&gt;sb&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringBuilder();</span>
 <span class="source-line-no">271</span><span id="line-271">    *    appendIfNotEmpty(&lt;jv&gt;sb&lt;/jv&gt;, &lt;js&gt;"hello"&lt;/js&gt;);  &lt;jc&gt;// Appends "hello"&lt;/jc&gt;</span>
@@ -314,7 +314,7 @@
 <span class="source-line-no">301</span><span id="line-301">    * If the StringBuilder is not empty, the separator is appended first, then the string.</span>
 <span class="source-line-no">302</span><span id="line-302">    * If &lt;c&gt;sb&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt; and an append is going to occur, a new StringBuilder is automatically created.</span>
 <span class="source-line-no">303</span><span id="line-303">    *</span>
-<span class="source-line-no">304</span><span id="line-304">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">304</span><span id="line-304">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">305</span><span id="line-305">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">306</span><span id="line-306">    *    StringBuilder &lt;jv&gt;sb&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringBuilder();</span>
 <span class="source-line-no">307</span><span id="line-307">    *    appendWithSeparator(&lt;jv&gt;sb&lt;/jv&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;", "&lt;/js&gt;);   &lt;jc&gt;// Appends "first"&lt;/jc&gt;</span>
@@ -460,7 +460,7 @@
 <span class="source-line-no">447</span><span id="line-447">    * Creates a new StringBuilder, applies the consumer to it, and returns the resulting string.</span>
 <span class="source-line-no">448</span><span id="line-448">    * This provides a functional way to build strings without manually managing the StringBuilder.</span>
 <span class="source-line-no">449</span><span id="line-449">    *</span>
-<span class="source-line-no">450</span><span id="line-450">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">450</span><span id="line-450">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">451</span><span id="line-451">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">452</span><span id="line-452">    *    String &lt;jv&gt;result&lt;/jv&gt; = buildString(&lt;jv&gt;sb&lt;/jv&gt; -&amp;gt; {</span>
 <span class="source-line-no">453</span><span id="line-453">    *       &lt;jv&gt;sb&lt;/jv&gt;.append(&lt;js&gt;"Hello"&lt;/js&gt;);</span>
@@ -502,7 +502,7 @@
 <span class="source-line-no">489</span><span id="line-489">    *   &lt;li&gt;Mixed case: "Hello_World-Test" → "helloWorldTest"&lt;/li&gt;</span>
 <span class="source-line-no">490</span><span id="line-490">    * &lt;/ul&gt;</span>
 <span class="source-line-no">491</span><span id="line-491">    *</span>
-<span class="source-line-no">492</span><span id="line-492">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">492</span><span id="line-492">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">493</span><span id="line-493">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">494</span><span id="line-494">    *    camelCase(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">495</span><span id="line-495">    *    camelCase(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -541,7 +541,7 @@
 <span class="source-line-no">528</span><span id="line-528">   /**</span>
 <span class="source-line-no">529</span><span id="line-529">    * Capitalizes the first character of a string.</span>
 <span class="source-line-no">530</span><span id="line-530">    *</span>
-<span class="source-line-no">531</span><span id="line-531">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">531</span><span id="line-531">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">532</span><span id="line-532">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">533</span><span id="line-533">    *    capitalize(&lt;jk&gt;null&lt;/jk&gt;);          &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">534</span><span id="line-534">    *    capitalize(&lt;js&gt;""&lt;/js&gt;);            &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -591,7 +591,7 @@
 <span class="source-line-no">578</span><span id="line-578">    *   &lt;li&gt;The index is greater than or equal to the string length&lt;/li&gt;</span>
 <span class="source-line-no">579</span><span id="line-579">    * &lt;/ul&gt;</span>
 <span class="source-line-no">580</span><span id="line-580">    *</span>
-<span class="source-line-no">581</span><span id="line-581">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">581</span><span id="line-581">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">582</span><span id="line-582">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">583</span><span id="line-583">    *    charAt(&lt;js&gt;"Hello"&lt;/js&gt;, 0);     &lt;jc&gt;// 'H'&lt;/jc&gt;</span>
 <span class="source-line-no">584</span><span id="line-584">    *    charAt(&lt;js&gt;"Hello"&lt;/js&gt;, 4);     &lt;jc&gt;// 'o'&lt;/jc&gt;</span>
@@ -614,7 +614,7 @@
 <span class="source-line-no">601</span><span id="line-601">   /**</span>
 <span class="source-line-no">602</span><span id="line-602">    * Cleans a string by removing control characters and normalizing whitespace.</span>
 <span class="source-line-no">603</span><span id="line-603">    *</span>
-<span class="source-line-no">604</span><span id="line-604">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">604</span><span id="line-604">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">605</span><span id="line-605">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">606</span><span id="line-606">    *    clean(&lt;js&gt;"hello\u0000\u0001world"&lt;/js&gt;);     &lt;jc&gt;// "hello world"&lt;/jc&gt;</span>
 <span class="source-line-no">607</span><span id="line-607">    *    clean(&lt;js&gt;"hello  \t\n  world"&lt;/js&gt;);         &lt;jc&gt;// "hello world"&lt;/jc&gt;</span>
@@ -642,7 +642,7 @@
 <span class="source-line-no">629</span><span id="line-629">    *   &lt;li&gt;Neither &lt;jk&gt;null&lt;/jk&gt; → returns the same as {@link String#compareTo(String)}&lt;/li&gt;</span>
 <span class="source-line-no">630</span><span id="line-630">    * &lt;/ul&gt;</span>
 <span class="source-line-no">631</span><span id="line-631">    *</span>
-<span class="source-line-no">632</span><span id="line-632">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">632</span><span id="line-632">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">633</span><span id="line-633">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">634</span><span id="line-634">    *    compare(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"banana"&lt;/js&gt;);   &lt;jc&gt;// negative (apple &amp;lt; banana)&lt;/jc&gt;</span>
 <span class="source-line-no">635</span><span id="line-635">    *    compare(&lt;js&gt;"banana"&lt;/js&gt;, &lt;js&gt;"apple"&lt;/js&gt;);   &lt;jc&gt;// positive (banana &amp;gt; apple)&lt;/jc&gt;</span>
@@ -673,7 +673,7 @@
 <span class="source-line-no">660</span><span id="line-660">    * &lt;p&gt;</span>
 <span class="source-line-no">661</span><span id="line-661">    * Returns a negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second string, ignoring case.</span>
 <span class="source-line-no">662</span><span id="line-662">    *</span>
-<span class="source-line-no">663</span><span id="line-663">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">663</span><span id="line-663">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">664</span><span id="line-664">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">665</span><span id="line-665">    *    compareIgnoreCase(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"BANANA"&lt;/js&gt;);   &lt;jc&gt;// negative (apple &amp;lt; banana)&lt;/jc&gt;</span>
 <span class="source-line-no">666</span><span id="line-666">    *    compareIgnoreCase(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);    &lt;jc&gt;// 0 (equal)&lt;/jc&gt;</span>
@@ -701,7 +701,7 @@
 <span class="source-line-no">688</span><span id="line-688">    * This method compresses the input string using GZIP compression. The string is first converted to</span>
 <span class="source-line-no">689</span><span id="line-689">    * UTF-8 bytes, then compressed. Use {@link #decompress(byte[])} to decompress the result.</span>
 <span class="source-line-no">690</span><span id="line-690">    *</span>
-<span class="source-line-no">691</span><span id="line-691">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">691</span><span id="line-691">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">692</span><span id="line-692">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">693</span><span id="line-693">    *    &lt;jc&gt;// Compress a string&lt;/jc&gt;</span>
 <span class="source-line-no">694</span><span id="line-694">    *    byte[] &lt;jv&gt;compressed&lt;/jv&gt; = compress(&lt;js&gt;"Hello World"&lt;/js&gt;);</span>
@@ -732,7 +732,7 @@
 <span class="source-line-no">719</span><span id="line-719">    * &lt;p&gt;</span>
 <span class="source-line-no">720</span><span id="line-720">    * This is a null-safe operation. Returns &lt;jk&gt;false&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">721</span><span id="line-721">    *</span>
-<span class="source-line-no">722</span><span id="line-722">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">722</span><span id="line-722">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">723</span><span id="line-723">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">724</span><span id="line-724">    *    contains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;);   &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">725</span><span id="line-725">    *    contains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -757,7 +757,7 @@
 <span class="source-line-no">744</span><span id="line-744">    * Returns &lt;jk&gt;false&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;, otherwise behaves the same as</span>
 <span class="source-line-no">745</span><span id="line-745">    * {@link String#contains(CharSequence)}.</span>
 <span class="source-line-no">746</span><span id="line-746">    *</span>
-<span class="source-line-no">747</span><span id="line-747">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">747</span><span id="line-747">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">748</span><span id="line-748">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">749</span><span id="line-749">    *    contains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">750</span><span id="line-750">    *    contains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -782,7 +782,7 @@
 <span class="source-line-no">769</span><span id="line-769">    * Returns &lt;jk&gt;false&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;, otherwise behaves the same as</span>
 <span class="source-line-no">770</span><span id="line-770">    * {@link String#contains(CharSequence)}.</span>
 <span class="source-line-no">771</span><span id="line-771">    *</span>
-<span class="source-line-no">772</span><span id="line-772">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">772</span><span id="line-772">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">773</span><span id="line-773">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">774</span><span id="line-774">    *    contains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">775</span><span id="line-775">    *    contains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -810,7 +810,7 @@
 <span class="source-line-no">797</span><span id="line-797">    *   &lt;li&gt;Any of the specified characters are not found in the string&lt;/li&gt;</span>
 <span class="source-line-no">798</span><span id="line-798">    * &lt;/ul&gt;</span>
 <span class="source-line-no">799</span><span id="line-799">    *</span>
-<span class="source-line-no">800</span><span id="line-800">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">800</span><span id="line-800">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">801</span><span id="line-801">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">802</span><span id="line-802">    *    containsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'H'&lt;/js&gt;, &lt;js&gt;'e'&lt;/js&gt;, &lt;js&gt;'l'&lt;/js&gt;);   &lt;jc&gt;// true (contains all)&lt;/jc&gt;</span>
 <span class="source-line-no">803</span><span id="line-803">    *    containsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'H'&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);                &lt;jc&gt;// false (missing 'x')&lt;/jc&gt;</span>
@@ -843,7 +843,7 @@
 <span class="source-line-no">830</span><span id="line-830">    *   &lt;li&gt;Any of the specified substrings are not found in the string&lt;/li&gt;</span>
 <span class="source-line-no">831</span><span id="line-831">    * &lt;/ul&gt;</span>
 <span class="source-line-no">832</span><span id="line-832">    *</span>
-<span class="source-line-no">833</span><span id="line-833">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">833</span><span id="line-833">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">834</span><span id="line-834">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">835</span><span id="line-835">    *    containsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// true (contains all)&lt;/jc&gt;</span>
 <span class="source-line-no">836</span><span id="line-836">    *    containsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);    &lt;jc&gt;// false (missing "Foo")&lt;/jc&gt;</span>
@@ -876,7 +876,7 @@
 <span class="source-line-no">863</span><span id="line-863">    *   &lt;li&gt;Any of the specified substrings are not found in the string&lt;/li&gt;</span>
 <span class="source-line-no">864</span><span id="line-864">    * &lt;/ul&gt;</span>
 <span class="source-line-no">865</span><span id="line-865">    *</span>
-<span class="source-line-no">866</span><span id="line-866">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">866</span><span id="line-866">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">867</span><span id="line-867">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">868</span><span id="line-868">    *    containsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// true (contains all)&lt;/jc&gt;</span>
 <span class="source-line-no">869</span><span id="line-869">    *    containsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);    &lt;jc&gt;// false (missing "Foo")&lt;/jc&gt;</span>
@@ -909,7 +909,7 @@
 <span class="source-line-no">896</span><span id="line-896">    *   &lt;li&gt;None of the specified characters are found in the string&lt;/li&gt;</span>
 <span class="source-line-no">897</span><span id="line-897">    * &lt;/ul&gt;</span>
 <span class="source-line-no">898</span><span id="line-898">    *</span>
-<span class="source-line-no">899</span><span id="line-899">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">899</span><span id="line-899">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">900</span><span id="line-900">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">901</span><span id="line-901">    *    containsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);   &lt;jc&gt;// true (contains 'o')&lt;/jc&gt;</span>
 <span class="source-line-no">902</span><span id="line-902">    *    containsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;, &lt;js&gt;'y'&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -943,7 +943,7 @@
 <span class="source-line-no">930</span><span id="line-930">    *   &lt;li&gt;None of the specified substrings are found in the string&lt;/li&gt;</span>
 <span class="source-line-no">931</span><span id="line-931">    * &lt;/ul&gt;</span>
 <span class="source-line-no">932</span><span id="line-932">    *</span>
-<span class="source-line-no">933</span><span id="line-933">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">933</span><span id="line-933">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">934</span><span id="line-934">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">935</span><span id="line-935">    *    containsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);   &lt;jc&gt;// true (contains "Hello")&lt;/jc&gt;</span>
 <span class="source-line-no">936</span><span id="line-936">    *    containsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;, &lt;js&gt;"Bar"&lt;/js&gt;);    &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -977,7 +977,7 @@
 <span class="source-line-no">964</span><span id="line-964">    *   &lt;li&gt;None of the specified substrings are found in the string&lt;/li&gt;</span>
 <span class="source-line-no">965</span><span id="line-965">    * &lt;/ul&gt;</span>
 <span class="source-line-no">966</span><span id="line-966">    *</span>
-<span class="source-line-no">967</span><span id="line-967">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">967</span><span id="line-967">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">968</span><span id="line-968">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">969</span><span id="line-969">    *    containsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);   &lt;jc&gt;// true (contains "Hello")&lt;/jc&gt;</span>
 <span class="source-line-no">970</span><span id="line-970">    *    containsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;, &lt;js&gt;"Bar"&lt;/js&gt;);    &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1004,7 +1004,7 @@
 <span class="source-line-no">991</span><span id="line-991">   /**</span>
 <span class="source-line-no">992</span><span id="line-992">    * Checks if a string contains a substring, ignoring case.</span>
 <span class="source-line-no">993</span><span id="line-993">    *</span>
-<span class="source-line-no">994</span><span id="line-994">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">994</span><span id="line-994">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">995</span><span id="line-995">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">996</span><span id="line-996">    *    containsIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">997</span><span id="line-997">    *    containsIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -1027,7 +1027,7 @@
 <span class="source-line-no">1014</span><span id="line-1014">    * &lt;p&gt;</span>
 <span class="source-line-no">1015</span><span id="line-1015">    * Returns &lt;c&gt;0&lt;/c&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1016</span><span id="line-1016">    *</span>
-<span class="source-line-no">1017</span><span id="line-1017">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1017</span><span id="line-1017">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1018</span><span id="line-1018">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1019</span><span id="line-1019">    *    countChars(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;);   &lt;jc&gt;// 2&lt;/jc&gt;</span>
 <span class="source-line-no">1020</span><span id="line-1020">    *    countChars(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);   &lt;jc&gt;// 0&lt;/jc&gt;</span>
@@ -1051,7 +1051,7 @@
 <span class="source-line-no">1038</span><span id="line-1038">   /**</span>
 <span class="source-line-no">1039</span><span id="line-1039">    * Counts the number of occurrences of a substring within a string.</span>
 <span class="source-line-no">1040</span><span id="line-1040">    *</span>
-<span class="source-line-no">1041</span><span id="line-1041">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1041</span><span id="line-1041">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1042</span><span id="line-1042">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1043</span><span id="line-1043">    *    countMatches(&lt;js&gt;"hello world world"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// 2&lt;/jc&gt;</span>
 <span class="source-line-no">1044</span><span id="line-1044">    *    countMatches(&lt;js&gt;"ababab"&lt;/js&gt;, &lt;js&gt;"ab"&lt;/js&gt;);                    &lt;jc&gt;// 3&lt;/jc&gt;</span>
@@ -1081,7 +1081,7 @@
 <span class="source-line-no">1068</span><span id="line-1068">    * Converts non-printable and non-ASCII characters (outside the range &lt;c&gt;0x20-0x7E&lt;/c&gt;) to hexadecimal</span>
 <span class="source-line-no">1069</span><span id="line-1069">    * sequences in the format &lt;js&gt;"[hex]"&lt;/js&gt;. Printable ASCII characters are left unchanged.</span>
 <span class="source-line-no">1070</span><span id="line-1070">    *</span>
-<span class="source-line-no">1071</span><span id="line-1071">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1071</span><span id="line-1071">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1072</span><span id="line-1072">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1073</span><span id="line-1073">    *    decodeHex(&lt;js&gt;"Hello"&lt;/js&gt;);              &lt;jc&gt;// "Hello"&lt;/jc&gt;</span>
 <span class="source-line-no">1074</span><span id="line-1074">    *    decodeHex(&lt;js&gt;"Hello\u0000World"&lt;/js&gt;);   &lt;jc&gt;// "Hello[0]World"&lt;/jc&gt;</span>
@@ -1112,7 +1112,7 @@
 <span class="source-line-no">1099</span><span id="line-1099">    * This method is the inverse of {@link #compress(String)}. It takes a byte array that was compressed</span>
 <span class="source-line-no">1100</span><span id="line-1100">    * using GZIP compression and decompresses it into a UTF-8 encoded string.</span>
 <span class="source-line-no">1101</span><span id="line-1101">    *</span>
-<span class="source-line-no">1102</span><span id="line-1102">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1102</span><span id="line-1102">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1103</span><span id="line-1103">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1104</span><span id="line-1104">    *    &lt;jc&gt;// Compress a string&lt;/jc&gt;</span>
 <span class="source-line-no">1105</span><span id="line-1105">    *    byte[] &lt;jv&gt;compressed&lt;/jv&gt; = compress(&lt;js&gt;"Hello World"&lt;/js&gt;);</span>
@@ -1161,7 +1161,7 @@
 <span class="source-line-no">1148</span><span id="line-1148">    * where they differ. If the strings are equal, returns &lt;c&gt;-1&lt;/c&gt;. If one string is a prefix of the other,</span>
 <span class="source-line-no">1149</span><span id="line-1149">    * returns the length of the shorter string.</span>
 <span class="source-line-no">1150</span><span id="line-1150">    *</span>
-<span class="source-line-no">1151</span><span id="line-1151">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1151</span><span id="line-1151">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1152</span><span id="line-1152">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1153</span><span id="line-1153">    *    diffPosition(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"apple"&lt;/js&gt;);      &lt;jc&gt;// -1 (equal)&lt;/jc&gt;</span>
 <span class="source-line-no">1154</span><span id="line-1154">    *    diffPosition(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"apricot"&lt;/js&gt;);    &lt;jc&gt;// 2 (differs at 'p' vs 'r')&lt;/jc&gt;</span>
@@ -1198,7 +1198,7 @@
 <span class="source-line-no">1185</span><span id="line-1185">    * where they differ. If the strings are equal (ignoring case), returns &lt;c&gt;-1&lt;/c&gt;. If one string is a prefix of the other,</span>
 <span class="source-line-no">1186</span><span id="line-1186">    * returns the length of the shorter string.</span>
 <span class="source-line-no">1187</span><span id="line-1187">    *</span>
-<span class="source-line-no">1188</span><span id="line-1188">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1188</span><span id="line-1188">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1189</span><span id="line-1189">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1190</span><span id="line-1190">    *    diffPositionIc(&lt;js&gt;"Apple"&lt;/js&gt;, &lt;js&gt;"apple"&lt;/js&gt;);      &lt;jc&gt;// -1 (equal ignoring case)&lt;/jc&gt;</span>
 <span class="source-line-no">1191</span><span id="line-1191">    *    diffPositionIc(&lt;js&gt;"Apple"&lt;/js&gt;, &lt;js&gt;"Apricot"&lt;/js&gt;);    &lt;jc&gt;// 2 (differs at 'p' vs 'r')&lt;/jc&gt;</span>
@@ -1233,7 +1233,7 @@
 <span class="source-line-no">1220</span><span id="line-1220">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the array is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1221</span><span id="line-1221">    * Uses a {@link LinkedHashSet} to preserve insertion order while removing duplicates.</span>
 <span class="source-line-no">1222</span><span id="line-1222">    *</span>
-<span class="source-line-no">1223</span><span id="line-1223">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1223</span><span id="line-1223">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1224</span><span id="line-1224">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1225</span><span id="line-1225">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;, &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"baz"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;};</span>
 <span class="source-line-no">1226</span><span id="line-1226">    *    String[] &lt;jv&gt;unique&lt;/jv&gt; = distinct(&lt;jv&gt;array&lt;/jv&gt;);</span>
@@ -1256,7 +1256,7 @@
 <span class="source-line-no">1243</span><span id="line-1243">    * Double Metaphone is an improved version of Metaphone that returns two codes:</span>
 <span class="source-line-no">1244</span><span id="line-1244">    * a primary code and an alternate code. This handles more edge cases and variations.</span>
 <span class="source-line-no">1245</span><span id="line-1245">    *</span>
-<span class="source-line-no">1246</span><span id="line-1246">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1246</span><span id="line-1246">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1247</span><span id="line-1247">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1248</span><span id="line-1248">    *    doubleMetaphone(&lt;js&gt;"Smith"&lt;/js&gt;);   &lt;jc&gt;// "SM0"&lt;/jc&gt;</span>
 <span class="source-line-no">1249</span><span id="line-1249">    *    doubleMetaphone(&lt;js&gt;"Schmidt"&lt;/js&gt;); &lt;jc&gt;// "XMT"&lt;/jc&gt;</span>
@@ -1300,7 +1300,7 @@
 <span class="source-line-no">1287</span><span id="line-1287">    * &lt;p&gt;</span>
 <span class="source-line-no">1288</span><span id="line-1288">    * This is a null-safe operation. Returns &lt;jk&gt;false&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">1289</span><span id="line-1289">    *</span>
-<span class="source-line-no">1290</span><span id="line-1290">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1290</span><span id="line-1290">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1291</span><span id="line-1291">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1292</span><span id="line-1292">    *    endsWith(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">1293</span><span id="line-1293">    *    endsWith(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;'H'&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1331,7 +1331,7 @@
 <span class="source-line-no">1318</span><span id="line-1318">    * This is a null-safe operation. Returns &lt;jk&gt;false&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1319</span><span id="line-1319">    * Otherwise behaves the same as {@link String#endsWith(String)}.</span>
 <span class="source-line-no">1320</span><span id="line-1320">    *</span>
-<span class="source-line-no">1321</span><span id="line-1321">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1321</span><span id="line-1321">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1322</span><span id="line-1322">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1323</span><span id="line-1323">    *    endsWith(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">1324</span><span id="line-1324">    *    endsWith(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1360,7 +1360,7 @@
 <span class="source-line-no">1347</span><span id="line-1347">    *   &lt;li&gt;The string does not end with any of the specified characters&lt;/li&gt;</span>
 <span class="source-line-no">1348</span><span id="line-1348">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1349</span><span id="line-1349">    *</span>
-<span class="source-line-no">1350</span><span id="line-1350">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1350</span><span id="line-1350">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1351</span><span id="line-1351">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1352</span><span id="line-1352">    *    endsWithAny(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);     &lt;jc&gt;// true (ends with 'o')&lt;/jc&gt;</span>
 <span class="source-line-no">1353</span><span id="line-1353">    *    endsWithAny(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;, &lt;js&gt;'y'&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1397,7 +1397,7 @@
 <span class="source-line-no">1384</span><span id="line-1384">    *   &lt;li&gt;The string does not end with any of the specified suffixes&lt;/li&gt;</span>
 <span class="source-line-no">1385</span><span id="line-1385">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1386</span><span id="line-1386">    *</span>
-<span class="source-line-no">1387</span><span id="line-1387">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1387</span><span id="line-1387">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1388</span><span id="line-1388">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1389</span><span id="line-1389">    *    endsWithAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);   &lt;jc&gt;// true (ends with "World")&lt;/jc&gt;</span>
 <span class="source-line-no">1390</span><span id="line-1390">    *    endsWithAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1424,7 +1424,7 @@
 <span class="source-line-no">1411</span><span id="line-1411">   /**</span>
 <span class="source-line-no">1412</span><span id="line-1412">    * Checks if a string ends with a suffix, ignoring case.</span>
 <span class="source-line-no">1413</span><span id="line-1413">    *</span>
-<span class="source-line-no">1414</span><span id="line-1414">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1414</span><span id="line-1414">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1415</span><span id="line-1415">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1416</span><span id="line-1416">    *    endsWithIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">1417</span><span id="line-1417">    *    endsWithIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -1450,7 +1450,7 @@
 <span class="source-line-no">1437</span><span id="line-1437">    * &lt;c&gt;H(X) = -Σ P(x) * log2(P(x))&lt;/c&gt;</span>
 <span class="source-line-no">1438</span><span id="line-1438">    * where P(x) is the probability of character x.</span>
 <span class="source-line-no">1439</span><span id="line-1439">    *</span>
-<span class="source-line-no">1440</span><span id="line-1440">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1440</span><span id="line-1440">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1441</span><span id="line-1441">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1442</span><span id="line-1442">    *    entropy(&lt;js&gt;"aaaa"&lt;/js&gt;);        &lt;jc&gt;// 0.0 (no randomness)&lt;/jc&gt;</span>
 <span class="source-line-no">1443</span><span id="line-1443">    *    entropy(&lt;js&gt;"abcd"&lt;/js&gt;);        &lt;jc&gt;// 2.0 (high randomness)&lt;/jc&gt;</span>
@@ -1496,7 +1496,7 @@
 <span class="source-line-no">1483</span><span id="line-1483">    *   &lt;li&gt;Neither &lt;jk&gt;null&lt;/jk&gt; → compares string representations ignoring case&lt;/li&gt;</span>
 <span class="source-line-no">1484</span><span id="line-1484">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1485</span><span id="line-1485">    *</span>
-<span class="source-line-no">1486</span><span id="line-1486">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1486</span><span id="line-1486">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1487</span><span id="line-1487">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1488</span><span id="line-1488">    *    equalsIgnoreCase(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"HELLO"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">1489</span><span id="line-1489">    *    equalsIgnoreCase(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1530,7 +1530,7 @@
 <span class="source-line-no">1517</span><span id="line-1517">    *   &lt;li&gt;Neither &lt;jk&gt;null&lt;/jk&gt; → compares strings ignoring case&lt;/li&gt;</span>
 <span class="source-line-no">1518</span><span id="line-1518">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1519</span><span id="line-1519">    *</span>
-<span class="source-line-no">1520</span><span id="line-1520">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1520</span><span id="line-1520">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1521</span><span id="line-1521">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1522</span><span id="line-1522">    *    equalsIgnoreCase(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">1523</span><span id="line-1523">    *    equalsIgnoreCase(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -1586,7 +1586,7 @@
 <span class="source-line-no">1573</span><span id="line-1573">    * &lt;p&gt;This method converts special characters to their Java escape sequences and</span>
 <span class="source-line-no">1574</span><span id="line-1574">    * converts non-printable ASCII characters to Unicode escape sequences.</span>
 <span class="source-line-no">1575</span><span id="line-1575">    *</span>
-<span class="source-line-no">1576</span><span id="line-1576">    * &lt;h5 class='section'&gt;Escape mappings:&lt;/h5&gt;</span>
+<span class="source-line-no">1576</span><span id="line-1576">    * &lt;h4 class='section'&gt;Escape mappings:&lt;/h4&gt;</span>
 <span class="source-line-no">1577</span><span id="line-1577">    * &lt;ul&gt;</span>
 <span class="source-line-no">1578</span><span id="line-1578">    *   &lt;li&gt;{@code "} → {@code \"}&lt;/li&gt;</span>
 <span class="source-line-no">1579</span><span id="line-1579">    *   &lt;li&gt;{@code \} → {@code \\}&lt;/li&gt;</span>
@@ -1598,7 +1598,7 @@
 <span class="source-line-no">1585</span><span id="line-1585">    *   &lt;li&gt;Non-printable characters → {@code \\uXXXX}&lt;/li&gt;</span>
 <span class="source-line-no">1586</span><span id="line-1586">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1587</span><span id="line-1587">    *</span>
-<span class="source-line-no">1588</span><span id="line-1588">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1588</span><span id="line-1588">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1589</span><span id="line-1589">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1590</span><span id="line-1590">    *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;escaped&lt;/jv&gt; = &lt;jsm&gt;escapeForJava&lt;/jsm&gt;(&lt;js&gt;"Hello\nWorld\"Test\""&lt;/js&gt;);</span>
 <span class="source-line-no">1591</span><span id="line-1591">    *   &lt;jc&gt;// Returns: "Hello\\nWorld\\\"Test\\\""&lt;/jc&gt;</span>
@@ -1646,7 +1646,7 @@
 <span class="source-line-no">1633</span><span id="line-1633">    *    &lt;li&gt;{@code U+2029} (PARAGRAPH SEPARATOR) &amp;rarr; {@code \u005Cu2029}</span>
 <span class="source-line-no">1634</span><span id="line-1634">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1635</span><span id="line-1635">    *</span>
-<span class="source-line-no">1636</span><span id="line-1636">    * &lt;h5 class='section'&gt;Injection vectors this defends against (do not "simplify" these away):&lt;/h5&gt;</span>
+<span class="source-line-no">1636</span><span id="line-1636">    * &lt;h4 class='section'&gt;Injection vectors this defends against (do not "simplify" these away):&lt;/h4&gt;</span>
 <span class="source-line-no">1637</span><span id="line-1637">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">1638</span><span id="line-1638">    *    &lt;li&gt;&lt;b&gt;{@code &lt;/script&gt;} break-out.&lt;/b&gt;  A {@code &lt;script&gt;} element's content is &lt;i&gt;raw text&lt;/i&gt;: the HTML</span>
 <span class="source-line-no">1639</span><span id="line-1639">    *       parser scans it only for an end tag, which it matches ASCII-case-insensitively as {@code &lt;/script}</span>
@@ -1665,21 +1665,21 @@
 <span class="source-line-no">1652</span><span id="line-1652">    *       one helper is correct for both the {@code type="application/json"} and the inline-expression form.</span>
 <span class="source-line-no">1653</span><span id="line-1653">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1654</span><span id="line-1654">    *</span>
-<span class="source-line-no">1655</span><span id="line-1655">    * &lt;h5 class='section'&gt;Why &lt;c&gt;&amp;amp;&lt;/c&gt; and {@code &gt;} are deliberately NOT escaped:&lt;/h5&gt;</span>
+<span class="source-line-no">1655</span><span id="line-1655">    * &lt;h4 class='section'&gt;Why &lt;c&gt;&amp;amp;&lt;/c&gt; and {@code &gt;} are deliberately NOT escaped:&lt;/h4&gt;</span>
 <span class="source-line-no">1656</span><span id="line-1656">    * &lt;p&gt;</span>
 <span class="source-line-no">1657</span><span id="line-1657">    * Raw-text content is not entity-decoded by the browser, so HTML character references buy no safety here and</span>
 <span class="source-line-no">1658</span><span id="line-1658">    * {@link #escapeHtml(String)} is the &lt;b&gt;wrong&lt;/b&gt; tool for this context &amp;mdash; it would rewrite &lt;c&gt;&amp;amp;&lt;/c&gt;</span>
 <span class="source-line-no">1659</span><span id="line-1659">    * to &lt;c&gt;&amp;amp;amp;&lt;/c&gt; and corrupt the payload the moment {@code JSON.parse} reads it back verbatim.  For the</span>
 <span class="source-line-no">1660</span><span id="line-1660">    * same reason {@code &gt;} cannot terminate anything on its own once {@code &lt;} is gone.</span>
 <span class="source-line-no">1661</span><span id="line-1661">    *</span>
-<span class="source-line-no">1662</span><span id="line-1662">    * &lt;h5 class='section'&gt;Why the substitutions are safe:&lt;/h5&gt;</span>
+<span class="source-line-no">1662</span><span id="line-1662">    * &lt;h4 class='section'&gt;Why the substitutions are safe:&lt;/h4&gt;</span>
 <span class="source-line-no">1663</span><span id="line-1663">    * &lt;p&gt;</span>
 <span class="source-line-no">1664</span><span id="line-1664">    * In valid JSON, {@code &lt;}, {@code U+2028}, and {@code U+2029} can only occur inside a string literal (JSON's</span>
 <span class="source-line-no">1665</span><span id="line-1665">    * inter-token whitespace is limited to space, tab, CR, and LF), and inside a string literal a backslash is</span>
 <span class="source-line-no">1666</span><span id="line-1666">    * always itself escaped as {@code \u005C\u005C}.  The inserted backslash therefore always begins a fresh</span>
 <span class="source-line-no">1667</span><span id="line-1667">    * escape sequence rather than extending a preceding one.</span>
 <span class="source-line-no">1668</span><span id="line-1668">    *</span>
-<span class="source-line-no">1669</span><span id="line-1669">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1669</span><span id="line-1669">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1670</span><span id="line-1670">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1671</span><span id="line-1671">    *    &lt;jc&gt;// Serialize, escape, then insert as VERBATIM raw script content (never entity-encoded).&lt;/jc&gt;</span>
 <span class="source-line-no">1672</span><span id="line-1672">    *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jsm&gt;escapeForScript&lt;/jsm&gt;(Json.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;meta&lt;/jv&gt;));</span>
@@ -1721,7 +1721,7 @@
 <span class="source-line-no">1708</span><span id="line-1708">    *   &lt;li&gt;&lt;js&gt;'\''&lt;/js&gt; → &lt;js&gt;"&amp;amp;#39;"&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">1709</span><span id="line-1709">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1710</span><span id="line-1710">    *</span>
-<span class="source-line-no">1711</span><span id="line-1711">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1711</span><span id="line-1711">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1712</span><span id="line-1712">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1713</span><span id="line-1713">    *    escapeHtml(&lt;js&gt;"&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;"&lt;/js&gt;);</span>
 <span class="source-line-no">1714</span><span id="line-1714">    *    &lt;jc&gt;// Returns: "&amp;amp;lt;script&amp;amp;gt;alert(&amp;amp;#39;xss&amp;amp;#39;)&amp;amp;lt;/script&amp;amp;gt;"&lt;/jc&gt;</span>
@@ -1754,7 +1754,7 @@
 <span class="source-line-no">1741</span><span id="line-1741">    * &lt;p&gt;</span>
 <span class="source-line-no">1742</span><span id="line-1742">    * Escapes the following regex special characters: &lt;js&gt;\.*+?^${}()[]|\\&lt;/js&gt;</span>
 <span class="source-line-no">1743</span><span id="line-1743">    *</span>
-<span class="source-line-no">1744</span><span id="line-1744">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1744</span><span id="line-1744">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1745</span><span id="line-1745">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1746</span><span id="line-1746">    *    escapeRegex(&lt;js&gt;"file.txt"&lt;/js&gt;);        &lt;jc&gt;// Returns: "file\\.txt"&lt;/jc&gt;</span>
 <span class="source-line-no">1747</span><span id="line-1747">    *    escapeRegex(&lt;js&gt;"price: $10.99"&lt;/js&gt;);   &lt;jc&gt;// Returns: "price: \\$10\\.99"&lt;/jc&gt;</span>
@@ -1778,7 +1778,7 @@
 <span class="source-line-no">1765</span><span id="line-1765">    * Basic SQL escaping for string literals. Escapes single quotes by doubling them.</span>
 <span class="source-line-no">1766</span><span id="line-1766">    * This is a basic implementation - for production use, consider using prepared statements.</span>
 <span class="source-line-no">1767</span><span id="line-1767">    *</span>
-<span class="source-line-no">1768</span><span id="line-1768">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1768</span><span id="line-1768">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1769</span><span id="line-1769">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1770</span><span id="line-1770">    *    escapeSql(&lt;js&gt;"O'Brien"&lt;/js&gt;);     &lt;jc&gt;// Returns: "O''Brien"&lt;/jc&gt;</span>
 <span class="source-line-no">1771</span><span id="line-1771">    *    escapeSql(&lt;js&gt;"It's a test"&lt;/js&gt;); &lt;jc&gt;// Returns: "It''s a test"&lt;/jc&gt;</span>
@@ -1806,7 +1806,7 @@
 <span class="source-line-no">1793</span><span id="line-1793">    *   &lt;li&gt;&lt;js&gt;'\''&lt;/js&gt; → &lt;js&gt;"&amp;amp;apos;"&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">1794</span><span id="line-1794">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1795</span><span id="line-1795">    *</span>
-<span class="source-line-no">1796</span><span id="line-1796">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1796</span><span id="line-1796">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1797</span><span id="line-1797">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1798</span><span id="line-1798">    *    escapeXml(&lt;js&gt;"&amp;lt;tag attr='value'&amp;gt;text&amp;lt;/tag&amp;gt;"&lt;/js&gt;);</span>
 <span class="source-line-no">1799</span><span id="line-1799">    *    &lt;jc&gt;// Returns: "&amp;amp;lt;tag attr=&amp;amp;apos;value&amp;amp;apos;&amp;amp;gt;text&amp;amp;lt;/tag&amp;amp;gt;"&lt;/jc&gt;</span>
@@ -1839,7 +1839,7 @@
 <span class="source-line-no">1826</span><span id="line-1826">    * &lt;p&gt;</span>
 <span class="source-line-no">1827</span><span id="line-1827">    * Finds all occurrences of text between the start and end markers (non-overlapping).</span>
 <span class="source-line-no">1828</span><span id="line-1828">    *</span>
-<span class="source-line-no">1829</span><span id="line-1829">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1829</span><span id="line-1829">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1830</span><span id="line-1830">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1831</span><span id="line-1831">    *    extractBetween(&lt;js&gt;"&amp;lt;tag&amp;gt;content&amp;lt;/tag&amp;gt;"&lt;/js&gt;, &lt;js&gt;"&amp;lt;"&lt;/js&gt;, &lt;js&gt;"&amp;gt;"&lt;/js&gt;);</span>
 <span class="source-line-no">1832</span><span id="line-1832">    *    &lt;jc&gt;// ["tag", "/tag"]&lt;/jc&gt;</span>
@@ -1877,7 +1877,7 @@
 <span class="source-line-no">1864</span><span id="line-1864">    * &lt;p&gt;</span>
 <span class="source-line-no">1865</span><span id="line-1865">    * Uses a basic email regex pattern to find email addresses.</span>
 <span class="source-line-no">1866</span><span id="line-1866">    *</span>
-<span class="source-line-no">1867</span><span id="line-1867">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1867</span><span id="line-1867">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1868</span><span id="line-1868">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1869</span><span id="line-1869">    *    extractEmails(&lt;js&gt;"Contact: user@example.com or admin@test.org"&lt;/js&gt;);</span>
 <span class="source-line-no">1870</span><span id="line-1870">    *    &lt;jc&gt;// ["user@example.com", "admin@test.org"]&lt;/jc&gt;</span>
@@ -1906,7 +1906,7 @@
 <span class="source-line-no">1893</span><span id="line-1893">    * &lt;p&gt;</span>
 <span class="source-line-no">1894</span><span id="line-1894">    * Finds all sequences of digits (including decimal numbers with dots).</span>
 <span class="source-line-no">1895</span><span id="line-1895">    *</span>
-<span class="source-line-no">1896</span><span id="line-1896">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1896</span><span id="line-1896">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1897</span><span id="line-1897">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1898</span><span id="line-1898">    *    extractNumbers(&lt;js&gt;"Price: $19.99, Quantity: 5"&lt;/js&gt;);</span>
 <span class="source-line-no">1899</span><span id="line-1899">    *    &lt;jc&gt;// ["19.99", "5"]&lt;/jc&gt;</span>
@@ -1936,7 +1936,7 @@
 <span class="source-line-no">1923</span><span id="line-1923">    * &lt;p&gt;</span>
 <span class="source-line-no">1924</span><span id="line-1924">    * Uses a basic URL regex pattern to find URLs (http, https, ftp).</span>
 <span class="source-line-no">1925</span><span id="line-1925">    *</span>
-<span class="source-line-no">1926</span><span id="line-1926">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1926</span><span id="line-1926">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1927</span><span id="line-1927">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1928</span><span id="line-1928">    *    extractUrls(&lt;js&gt;"Visit https://example.com or http://test.org"&lt;/js&gt;);</span>
 <span class="source-line-no">1929</span><span id="line-1929">    *    &lt;jc&gt;// ["https://example.com", "http://test.org"]&lt;/jc&gt;</span>
@@ -1965,7 +1965,7 @@
 <span class="source-line-no">1952</span><span id="line-1952">    * &lt;p&gt;</span>
 <span class="source-line-no">1953</span><span id="line-1953">    * A word is defined as a sequence of letters, digits, and underscores.</span>
 <span class="source-line-no">1954</span><span id="line-1954">    *</span>
-<span class="source-line-no">1955</span><span id="line-1955">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1955</span><span id="line-1955">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1956</span><span id="line-1956">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1957</span><span id="line-1957">    *    extractWords(&lt;js&gt;"Hello world! This is a test."&lt;/js&gt;);</span>
 <span class="source-line-no">1958</span><span id="line-1958">    *    &lt;jc&gt;// ["Hello", "world", "This", "is", "a", "test"]&lt;/jc&gt;</span>
@@ -1995,7 +1995,7 @@
 <span class="source-line-no">1982</span><span id="line-1982">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the array is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1983</span><span id="line-1983">    * Returns an empty array if the predicate is &lt;jk&gt;null&lt;/jk&gt; or no elements match.</span>
 <span class="source-line-no">1984</span><span id="line-1984">    *</span>
-<span class="source-line-no">1985</span><span id="line-1985">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1985</span><span id="line-1985">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">1986</span><span id="line-1986">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1987</span><span id="line-1987">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;""&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"baz"&lt;/js&gt;};</span>
 <span class="source-line-no">1988</span><span id="line-1988">    *    String[] &lt;jv&gt;filtered&lt;/jv&gt; = filter(&lt;jv&gt;array&lt;/jv&gt;, StringUtils.&lt;jsf&gt;NOT_EMPTY&lt;/jsf&gt;);</span>
@@ -2027,7 +2027,7 @@
 <span class="source-line-no">2014</span><span id="line-2014">    *   &lt;li&gt;The string is empty&lt;/li&gt;</span>
 <span class="source-line-no">2015</span><span id="line-2015">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2016</span><span id="line-2016">    *</span>
-<span class="source-line-no">2017</span><span id="line-2017">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2017</span><span id="line-2017">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2018</span><span id="line-2018">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2019</span><span id="line-2019">    *    firstChar(&lt;js&gt;"Hello"&lt;/js&gt;);     &lt;jc&gt;// 'H'&lt;/jc&gt;</span>
 <span class="source-line-no">2020</span><span id="line-2020">    *    firstChar(&lt;js&gt;"World"&lt;/js&gt;);     &lt;jc&gt;// 'W'&lt;/jc&gt;</span>
@@ -2067,7 +2067,7 @@
 <span class="source-line-no">2054</span><span id="line-2054">    * This method iterates through the provided strings and returns the first one that is not &lt;jk&gt;null&lt;/jk&gt;</span>
 <span class="source-line-no">2055</span><span id="line-2055">    * and not empty (as determined by {@link #isNotEmpty(CharSequence)}).</span>
 <span class="source-line-no">2056</span><span id="line-2056">    *</span>
-<span class="source-line-no">2057</span><span id="line-2057">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2057</span><span id="line-2057">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2058</span><span id="line-2058">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2059</span><span id="line-2059">    *    firstNonEmpty(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;""&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// "Hello"&lt;/jc&gt;</span>
 <span class="source-line-no">2060</span><span id="line-2060">    *    firstNonEmpty(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);                              &lt;jc&gt;// "Hello"&lt;/jc&gt;</span>
@@ -2094,7 +2094,7 @@
 <span class="source-line-no">2081</span><span id="line-2081">    * This method scans the string from the beginning and returns the first character that is not</span>
 <span class="source-line-no">2082</span><span id="line-2082">    * a whitespace character (as determined by {@link Character#isWhitespace(char)}).</span>
 <span class="source-line-no">2083</span><span id="line-2083">    *</span>
-<span class="source-line-no">2084</span><span id="line-2084">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2084</span><span id="line-2084">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2085</span><span id="line-2085">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2086</span><span id="line-2086">    *    firstNonWhitespaceChar(&lt;js&gt;"Hello"&lt;/js&gt;);          &lt;jc&gt;// 'H'&lt;/jc&gt;</span>
 <span class="source-line-no">2087</span><span id="line-2087">    *    firstNonWhitespaceChar(&lt;js&gt;"  Hello"&lt;/js&gt;);        &lt;jc&gt;// 'H'&lt;/jc&gt;</span>
@@ -2128,7 +2128,7 @@
 <span class="source-line-no">2115</span><span id="line-2115">    * Only ASCII characters (0-127) that are not in the valid URI character set are encoded.</span>
 <span class="source-line-no">2116</span><span id="line-2116">    * If the string contains no invalid characters, the original string is returned.</span>
 <span class="source-line-no">2117</span><span id="line-2117">    *</span>
-<span class="source-line-no">2118</span><span id="line-2118">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2118</span><span id="line-2118">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2119</span><span id="line-2119">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2120</span><span id="line-2120">    *    fixUrl(&lt;js&gt;"hello world"&lt;/js&gt;);              &lt;jc&gt;// "hello+world"&lt;/jc&gt;</span>
 <span class="source-line-no">2121</span><span id="line-2121">    *    fixUrl(&lt;js&gt;"file://path/to file.txt"&lt;/js&gt;);  &lt;jc&gt;// "file://path/to+file.txt"&lt;/jc&gt;</span>
@@ -2181,12 +2181,12 @@
 <span class="source-line-no">2168</span><span id="line-2168">    * escaping). For MessageFormat-style (&lt;js&gt;"{0}"&lt;/js&gt;) patterns — including externally-authored i18n</span>
 <span class="source-line-no">2169</span><span id="line-2169">    * &lt;c&gt;.properties&lt;/c&gt; strings — use {@link #mformat(String, Object...)} instead.</span>
 <span class="source-line-no">2170</span><span id="line-2170">    *</span>
-<span class="source-line-no">2171</span><span id="line-2171">    * &lt;h5 class='section'&gt;Format Support:&lt;/h5&gt;</span>
+<span class="source-line-no">2171</span><span id="line-2171">    * &lt;h4 class='section'&gt;Format Support:&lt;/h4&gt;</span>
 <span class="source-line-no">2172</span><span id="line-2172">    * &lt;ul&gt;</span>
 <span class="source-line-no">2173</span><span id="line-2173">    *   &lt;li&gt;&lt;b&gt;Printf-style:&lt;/b&gt; &lt;js&gt;"%s"&lt;/js&gt;, &lt;js&gt;"%d"&lt;/js&gt;, &lt;js&gt;"%.2f"&lt;/js&gt;, &lt;js&gt;"%1$s"&lt;/js&gt;, etc.&lt;/li&gt;</span>
 <span class="source-line-no">2174</span><span id="line-2174">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2175</span><span id="line-2175">    *</span>
-<span class="source-line-no">2176</span><span id="line-2176">    * &lt;h5 class='section'&gt;Printf Format Specifiers:&lt;/h5&gt;</span>
+<span class="source-line-no">2176</span><span id="line-2176">    * &lt;h4 class='section'&gt;Printf Format Specifiers:&lt;/h4&gt;</span>
 <span class="source-line-no">2177</span><span id="line-2177">    * &lt;ul&gt;</span>
 <span class="source-line-no">2178</span><span id="line-2178">    *   &lt;li&gt;&lt;b&gt;%s&lt;/b&gt; - String&lt;/li&gt;</span>
 <span class="source-line-no">2179</span><span id="line-2179">    *   &lt;li&gt;&lt;b&gt;%d&lt;/b&gt; - Decimal integer&lt;/li&gt;</span>
@@ -2204,12 +2204,12 @@
 <span class="source-line-no">2191</span><span id="line-2191">    *   &lt;li&gt;&lt;b&gt;%%&lt;/b&gt; - Literal percent sign&lt;/li&gt;</span>
 <span class="source-line-no">2192</span><span id="line-2192">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2193</span><span id="line-2193">    *</span>
-<span class="source-line-no">2194</span><span id="line-2194">    * &lt;h5 class='section'&gt;Format Specifier Syntax:&lt;/h5&gt;</span>
+<span class="source-line-no">2194</span><span id="line-2194">    * &lt;h4 class='section'&gt;Format Specifier Syntax:&lt;/h4&gt;</span>
 <span class="source-line-no">2195</span><span id="line-2195">    * &lt;p&gt;</span>
 <span class="source-line-no">2196</span><span id="line-2196">    * Printf format specifiers follow this pattern: &lt;c&gt;%[argument_index$][flags][width][.precision]conversion&lt;/c&gt;</span>
 <span class="source-line-no">2197</span><span id="line-2197">    * &lt;/p&gt;</span>
 <span class="source-line-no">2198</span><span id="line-2198">    *</span>
-<span class="source-line-no">2199</span><span id="line-2199">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">2199</span><span id="line-2199">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">2200</span><span id="line-2200">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2201</span><span id="line-2201">    *    &lt;jc&gt;// Printf-style formatting&lt;/jc&gt;</span>
 <span class="source-line-no">2202</span><span id="line-2202">    *    format(&lt;js&gt;"Hello %s, you have %d items"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;, 5);</span>
@@ -2232,7 +2232,7 @@
 <span class="source-line-no">2219</span><span id="line-2219">    *    &lt;jc&gt;// Returns: "Alice loves Bob, and Alice also loves Charlie"&lt;/jc&gt;</span>
 <span class="source-line-no">2220</span><span id="line-2220">    * &lt;/p&gt;</span>
 <span class="source-line-no">2221</span><span id="line-2221">    *</span>
-<span class="source-line-no">2222</span><span id="line-2222">    * &lt;h5 class='section'&gt;Comparison with mformat():&lt;/h5&gt;</span>
+<span class="source-line-no">2222</span><span id="line-2222">    * &lt;h4 class='section'&gt;Comparison with mformat():&lt;/h4&gt;</span>
 <span class="source-line-no">2223</span><span id="line-2223">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2224</span><span id="line-2224">    *    &lt;jc&gt;// Printf style (this method)&lt;/jc&gt;</span>
 <span class="source-line-no">2225</span><span id="line-2225">    *    format(&lt;js&gt;"Hello %s, you have %d items"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;, 5);</span>
@@ -2241,7 +2241,7 @@
 <span class="source-line-no">2228</span><span id="line-2228">    *    mformat(&lt;js&gt;"Hello {0}, you have {1} items"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;, 5);</span>
 <span class="source-line-no">2229</span><span id="line-2229">    * &lt;/p&gt;</span>
 <span class="source-line-no">2230</span><span id="line-2230">    *</span>
-<span class="source-line-no">2231</span><span id="line-2231">    * &lt;h5 class='section'&gt;Null Handling:&lt;/h5&gt;</span>
+<span class="source-line-no">2231</span><span id="line-2231">    * &lt;h4 class='section'&gt;Null Handling:&lt;/h4&gt;</span>
 <span class="source-line-no">2232</span><span id="line-2232">    * &lt;p&gt;</span>
 <span class="source-line-no">2233</span><span id="line-2233">    * Null arguments are formatted as the string &lt;js&gt;"null"&lt;/js&gt; for string conversions,</span>
 <span class="source-line-no">2234</span><span id="line-2234">    * or cause a {@link NullPointerException} for numeric conversions (consistent with {@link String#format(String, Object...)}).</span>
@@ -2274,7 +2274,7 @@
 <span class="source-line-no">2261</span><span id="line-2261">    * supplied the pattern is returned verbatim (so &lt;js&gt;"''"&lt;/js&gt;-quoting is left untouched for placeholder-free</span>
 <span class="source-line-no">2262</span><span id="line-2262">    * strings).</span>
 <span class="source-line-no">2263</span><span id="line-2263">    *</span>
-<span class="source-line-no">2264</span><span id="line-2264">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">2264</span><span id="line-2264">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">2265</span><span id="line-2265">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2266</span><span id="line-2266">    *    mformat(&lt;js&gt;"Hello {0}, you have {1} items"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;, 5);</span>
 <span class="source-line-no">2267</span><span id="line-2267">    *    &lt;jc&gt;// Returns: "Hello John, you have 5 items"&lt;/jc&gt;</span>
@@ -2480,7 +2480,7 @@
 <span class="source-line-no">2467</span><span id="line-2467">    * &lt;p&gt;</span>
 <span class="source-line-no">2468</span><span id="line-2468">    * Returns a UUID in the format: &lt;c&gt;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/c&gt;</span>
 <span class="source-line-no">2469</span><span id="line-2469">    *</span>
-<span class="source-line-no">2470</span><span id="line-2470">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2470</span><span id="line-2470">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2471</span><span id="line-2471">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2472</span><span id="line-2472">    *    generateUUID();  &lt;jc&gt;// "550e8400-e29b-41d4-a716-446655440000"&lt;/jc&gt;</span>
 <span class="source-line-no">2473</span><span id="line-2473">    * &lt;/p&gt;</span>
@@ -2553,7 +2553,7 @@
 <span class="source-line-no">2540</span><span id="line-2540">    * &lt;p&gt;</span>
 <span class="source-line-no">2541</span><span id="line-2541">    * Supports simple duration formats:</span>
 <span class="source-line-no">2542</span><span id="line-2542">    *</span>
-<span class="source-line-no">2543</span><span id="line-2543">    * &lt;h5 class='section'&gt;Format Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">2543</span><span id="line-2543">    * &lt;h4 class='section'&gt;Format Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">2544</span><span id="line-2544">    * &lt;ul&gt;</span>
 <span class="source-line-no">2545</span><span id="line-2545">    *    &lt;li&gt;&lt;js&gt;"1000"&lt;/js&gt; - 1000 milliseconds (no suffix)</span>
 <span class="source-line-no">2546</span><span id="line-2546">    *    &lt;li&gt;&lt;js&gt;"10s"&lt;/js&gt; - 10 seconds</span>
@@ -2564,7 +2564,7 @@
 <span class="source-line-no">2551</span><span id="line-2551">    *    &lt;li&gt;&lt;js&gt;"1h 30m"&lt;/js&gt; - 1 hour 30 minutes (with spaces)</span>
 <span class="source-line-no">2552</span><span id="line-2552">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2553</span><span id="line-2553">    *</span>
-<span class="source-line-no">2554</span><span id="line-2554">    * &lt;h5 class='section'&gt;Supported Units:&lt;/h5&gt;</span>
+<span class="source-line-no">2554</span><span id="line-2554">    * &lt;h4 class='section'&gt;Supported Units:&lt;/h4&gt;</span>
 <span class="source-line-no">2555</span><span id="line-2555">    * &lt;ul&gt;</span>
 <span class="source-line-no">2556</span><span id="line-2556">    *    &lt;li&gt;&lt;b&gt;Milliseconds:&lt;/b&gt; &lt;js&gt;"ms"&lt;/js&gt;, &lt;js&gt;"millis"&lt;/js&gt;, &lt;js&gt;"milliseconds"&lt;/js&gt; (or no suffix)</span>
 <span class="source-line-no">2557</span><span id="line-2557">    *    &lt;li&gt;&lt;b&gt;Seconds:&lt;/b&gt; &lt;js&gt;"s"&lt;/js&gt;, &lt;js&gt;"sec"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;, &lt;js&gt;"seconds"&lt;/js&gt;</span>
@@ -2654,7 +2654,7 @@
 <span class="source-line-no">2641</span><span id="line-2641">    *   &lt;li&gt;All other characters are treated literally&lt;/li&gt;</span>
 <span class="source-line-no">2642</span><span id="line-2642">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2643</span><span id="line-2643">    *</span>
-<span class="source-line-no">2644</span><span id="line-2644">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2644</span><span id="line-2644">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2645</span><span id="line-2645">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2646</span><span id="line-2646">    *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;pattern&lt;/jv&gt; = &lt;jsm&gt;getGlobMatchPattern&lt;/jsm&gt;(&lt;js&gt;"user_*_temp"&lt;/js&gt;);</span>
 <span class="source-line-no">2647</span><span id="line-2647">    *   &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_alice_temp"&lt;/js&gt;).matches();  &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -2679,7 +2679,7 @@
 <span class="source-line-no">2666</span><span id="line-2666">    *   &lt;li&gt;All other characters are treated literally&lt;/li&gt;</span>
 <span class="source-line-no">2667</span><span id="line-2667">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2668</span><span id="line-2668">    *</span>
-<span class="source-line-no">2669</span><span id="line-2669">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2669</span><span id="line-2669">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2670</span><span id="line-2670">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2671</span><span id="line-2671">    *   &lt;jc&gt;// Case-insensitive matching&lt;/jc&gt;</span>
 <span class="source-line-no">2672</span><span id="line-2672">    *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;pattern&lt;/jv&gt; = &lt;jsm&gt;getGlobMatchPattern&lt;/jsm&gt;(&lt;js&gt;"USER_*"&lt;/js&gt;, Pattern.&lt;jsf&gt;CASE_INSENSITIVE&lt;/jsf&gt;);</span>
@@ -2784,7 +2784,7 @@
 <span class="source-line-no">2771</span><span id="line-2771">    * &lt;b&gt;Note:&lt;/b&gt; Actual memory usage may vary based on JVM implementation, object alignment,</span>
 <span class="source-line-no">2772</span><span id="line-2772">    * and whether compressed OOPs are enabled. This is an approximation for informational purposes.</span>
 <span class="source-line-no">2773</span><span id="line-2773">    *</span>
-<span class="source-line-no">2774</span><span id="line-2774">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">2774</span><span id="line-2774">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">2775</span><span id="line-2775">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2776</span><span id="line-2776">    *    getStringSize(&lt;jk&gt;null&lt;/jk&gt;);        &lt;jc&gt;// Returns: 0&lt;/jc&gt;</span>
 <span class="source-line-no">2777</span><span id="line-2777">    *    getStringSize(&lt;js&gt;""&lt;/js&gt;);          &lt;jc&gt;// Returns: ~40 bytes&lt;/jc&gt;</span>
@@ -2807,7 +2807,7 @@
 <span class="source-line-no">2794</span><span id="line-2794">   /**</span>
 <span class="source-line-no">2795</span><span id="line-2795">    * Checks if a string has text (not null, not empty, and contains at least one non-whitespace character).</span>
 <span class="source-line-no">2796</span><span id="line-2796">    *</span>
-<span class="source-line-no">2797</span><span id="line-2797">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2797</span><span id="line-2797">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2798</span><span id="line-2798">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2799</span><span id="line-2799">    *    hasText(&lt;jk&gt;null&lt;/jk&gt;);       &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">2800</span><span id="line-2800">    *    hasText(&lt;js&gt;""&lt;/js&gt;);         &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -2844,7 +2844,7 @@
 <span class="source-line-no">2831</span><span id="line-2831">   /**</span>
 <span class="source-line-no">2832</span><span id="line-2832">    * Finds the index of the first occurrence of a substring within a string.</span>
 <span class="source-line-no">2833</span><span id="line-2833">    *</span>
-<span class="source-line-no">2834</span><span id="line-2834">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2834</span><span id="line-2834">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2835</span><span id="line-2835">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2836</span><span id="line-2836">    *    indexOf(&lt;js&gt;"hello world"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// 6&lt;/jc&gt;</span>
 <span class="source-line-no">2837</span><span id="line-2837">    *    indexOf(&lt;js&gt;"hello world"&lt;/js&gt;, &lt;js&gt;"xyz"&lt;/js&gt;);       &lt;jc&gt;// -1&lt;/jc&gt;</span>
@@ -2864,7 +2864,7 @@
 <span class="source-line-no">2851</span><span id="line-2851">   /**</span>
 <span class="source-line-no">2852</span><span id="line-2852">    * Finds the index of the first occurrence of a substring within a string, ignoring case.</span>
 <span class="source-line-no">2853</span><span id="line-2853">    *</span>
-<span class="source-line-no">2854</span><span id="line-2854">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2854</span><span id="line-2854">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2855</span><span id="line-2855">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2856</span><span id="line-2856">    *    indexOfIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// 6&lt;/jc&gt;</span>
 <span class="source-line-no">2857</span><span id="line-2857">    *    indexOfIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);     &lt;jc&gt;// 6&lt;/jc&gt;</span>
@@ -2888,7 +2888,7 @@
 <span class="source-line-no">2875</span><span id="line-2875">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the input string is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">2876</span><span id="line-2876">    * This method provides a null-safe wrapper around {@link String#intern()}.</span>
 <span class="source-line-no">2877</span><span id="line-2877">    *</span>
-<span class="source-line-no">2878</span><span id="line-2878">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">2878</span><span id="line-2878">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">2879</span><span id="line-2879">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2880</span><span id="line-2880">    *    String &lt;jv&gt;s1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; String(&lt;js&gt;"test"&lt;/js&gt;);</span>
 <span class="source-line-no">2881</span><span id="line-2881">    *    String &lt;jv&gt;s2&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; String(&lt;js&gt;"test"&lt;/js&gt;);</span>
@@ -2899,7 +2899,7 @@
 <span class="source-line-no">2886</span><span id="line-2886">    *    assertTrue(&lt;jv&gt;i1&lt;/jv&gt; == &lt;jv&gt;i2&lt;/jv&gt;);  &lt;jc&gt;// Same interned object&lt;/jc&gt;</span>
 <span class="source-line-no">2887</span><span id="line-2887">    * &lt;/p&gt;</span>
 <span class="source-line-no">2888</span><span id="line-2888">    *</span>
-<span class="source-line-no">2889</span><span id="line-2889">    * &lt;h5 class='section'&gt;Performance Note:&lt;/h5&gt;</span>
+<span class="source-line-no">2889</span><span id="line-2889">    * &lt;h4 class='section'&gt;Performance Note:&lt;/h4&gt;</span>
 <span class="source-line-no">2890</span><span id="line-2890">    * &lt;p&gt;String interning stores strings in a special pool, which can save memory when the same string</span>
 <span class="source-line-no">2891</span><span id="line-2891">    * values are used repeatedly. However, the intern pool has limited size and interning can be slow,</span>
 <span class="source-line-no">2892</span><span id="line-2892">    * so use judiciously for strings that are known to be repeated frequently.&lt;/p&gt;</span>
@@ -2918,7 +2918,7 @@
 <span class="source-line-no">2905</span><span id="line-2905">    * Replaces variables of the form &lt;js&gt;"${name}"&lt;/js&gt; with values from the map.</span>
 <span class="source-line-no">2906</span><span id="line-2906">    * This is similar to shell variable interpolation syntax.</span>
 <span class="source-line-no">2907</span><span id="line-2907">    *</span>
-<span class="source-line-no">2908</span><span id="line-2908">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2908</span><span id="line-2908">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">2909</span><span id="line-2909">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">2910</span><span id="line-2910">    *    var vars = Map.of(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;, &lt;js&gt;"city"&lt;/js&gt;, &lt;js&gt;"New York"&lt;/js&gt;);</span>
 <span class="source-line-no">2911</span><span id="line-2911">    *    interpolate(&lt;js&gt;"Hello ${name}, welcome to ${city}"&lt;/js&gt;, vars);</span>
@@ -3033,7 +3033,7 @@
 <span class="source-line-no">3020</span><span id="line-3020">    * Returns &lt;jk&gt;true&lt;/jk&gt; only if all strings are not null, not empty, and contain non-whitespace characters.</span>
 <span class="source-line-no">3021</span><span id="line-3021">    * Returns &lt;jk&gt;false&lt;/jk&gt; if the array is null or empty, or if any string is null, empty, or whitespace only.</span>
 <span class="source-line-no">3022</span><span id="line-3022">    *</span>
-<span class="source-line-no">3023</span><span id="line-3023">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3023</span><span id="line-3023">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3024</span><span id="line-3024">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3025</span><span id="line-3025">    *    isAllNotBlank();                                     &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3026</span><span id="line-3026">    *    isAllNotBlank(&lt;jk&gt;null&lt;/jk&gt;);                        &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3066,7 +3066,7 @@
 <span class="source-line-no">3053</span><span id="line-3053">    * Returns &lt;jk&gt;true&lt;/jk&gt; only if all strings are not null and have a length greater than zero.</span>
 <span class="source-line-no">3054</span><span id="line-3054">    * Returns &lt;jk&gt;false&lt;/jk&gt; if the array is null or empty, or if any string is null or empty.</span>
 <span class="source-line-no">3055</span><span id="line-3055">    *</span>
-<span class="source-line-no">3056</span><span id="line-3056">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3056</span><span id="line-3056">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3057</span><span id="line-3057">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3058</span><span id="line-3058">    *    isAllNotEmpty();                                     &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3059</span><span id="line-3059">    *    isAllNotEmpty(&lt;jk&gt;null&lt;/jk&gt;);                        &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3094,7 +3094,7 @@
 <span class="source-line-no">3081</span><span id="line-3081">   /**</span>
 <span class="source-line-no">3082</span><span id="line-3082">    * Checks if a string contains only alphabetic characters (a-z, A-Z).</span>
 <span class="source-line-no">3083</span><span id="line-3083">    *</span>
-<span class="source-line-no">3084</span><span id="line-3084">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3084</span><span id="line-3084">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3085</span><span id="line-3085">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3086</span><span id="line-3086">    *    isAlpha(&lt;jk&gt;null&lt;/jk&gt;);         &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3087</span><span id="line-3087">    *    isAlpha(&lt;js&gt;""&lt;/js&gt;);           &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3119,7 +3119,7 @@
 <span class="source-line-no">3106</span><span id="line-3106">   /**</span>
 <span class="source-line-no">3107</span><span id="line-3107">    * Checks if a string contains only alphanumeric characters (a-z, A-Z, 0-9).</span>
 <span class="source-line-no">3108</span><span id="line-3108">    *</span>
-<span class="source-line-no">3109</span><span id="line-3109">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3109</span><span id="line-3109">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3110</span><span id="line-3110">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3111</span><span id="line-3111">    *    isAlphaNumeric(&lt;jk&gt;null&lt;/jk&gt;);         &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3112</span><span id="line-3112">    *    isAlphaNumeric(&lt;js&gt;""&lt;/js&gt;);           &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3148,7 +3148,7 @@
 <span class="source-line-no">3135</span><span id="line-3135">    * &lt;p&gt;</span>
 <span class="source-line-no">3136</span><span id="line-3136">    * Returns &lt;jk&gt;true&lt;/jk&gt; if at least one string is not null, not empty, and contains non-whitespace characters.</span>
 <span class="source-line-no">3137</span><span id="line-3137">    *</span>
-<span class="source-line-no">3138</span><span id="line-3138">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3138</span><span id="line-3138">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3139</span><span id="line-3139">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3140</span><span id="line-3140">    *    isAnyNotBlank(&lt;jk&gt;null&lt;/jk&gt;, &lt;jk&gt;null&lt;/jk&gt;);             &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3141</span><span id="line-3141">    *    isAnyNotBlank(&lt;js&gt;""&lt;/js&gt;, &lt;js&gt;""&lt;/js&gt;);                 &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3176,7 +3176,7 @@
 <span class="source-line-no">3163</span><span id="line-3163">    * &lt;p&gt;</span>
 <span class="source-line-no">3164</span><span id="line-3164">    * Returns &lt;jk&gt;true&lt;/jk&gt; if at least one string is not null and has a length greater than zero.</span>
 <span class="source-line-no">3165</span><span id="line-3165">    *</span>
-<span class="source-line-no">3166</span><span id="line-3166">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3166</span><span id="line-3166">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3167</span><span id="line-3167">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3168</span><span id="line-3168">    *    isAnyNotEmpty(&lt;jk&gt;null&lt;/jk&gt;, &lt;jk&gt;null&lt;/jk&gt;);             &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3169</span><span id="line-3169">    *    isAnyNotEmpty(&lt;js&gt;""&lt;/js&gt;, &lt;js&gt;""&lt;/js&gt;);                 &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3200,7 +3200,7 @@
 <span class="source-line-no">3187</span><span id="line-3187">   /**</span>
 <span class="source-line-no">3188</span><span id="line-3188">    * Checks if a string is blank (null, empty, or whitespace only).</span>
 <span class="source-line-no">3189</span><span id="line-3189">    *</span>
-<span class="source-line-no">3190</span><span id="line-3190">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3190</span><span id="line-3190">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3191</span><span id="line-3191">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3192</span><span id="line-3192">    *    isBlank(&lt;jk&gt;null&lt;/jk&gt;);       &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3193</span><span id="line-3193">    *    isBlank(&lt;js&gt;""&lt;/js&gt;);         &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -3227,7 +3227,7 @@
 <span class="source-line-no">3214</span><span id="line-3214">    *   &lt;li&gt;Ensuring the number is between 13-19 digits (standard credit card length)&lt;/li&gt;</span>
 <span class="source-line-no">3215</span><span id="line-3215">    * &lt;/ul&gt;</span>
 <span class="source-line-no">3216</span><span id="line-3216">    *</span>
-<span class="source-line-no">3217</span><span id="line-3217">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3217</span><span id="line-3217">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3218</span><span id="line-3218">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3219</span><span id="line-3219">    *    isCreditCard(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3220</span><span id="line-3220">    *    isCreditCard(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3381,7 +3381,7 @@
 <span class="source-line-no">3368</span><span id="line-3368">   /**</span>
 <span class="source-line-no">3369</span><span id="line-3369">    * Checks if a string contains only digit characters (0-9).</span>
 <span class="source-line-no">3370</span><span id="line-3370">    *</span>
-<span class="source-line-no">3371</span><span id="line-3371">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3371</span><span id="line-3371">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3372</span><span id="line-3372">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3373</span><span id="line-3373">    *    isDigit(&lt;jk&gt;null&lt;/jk&gt;);         &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3374</span><span id="line-3374">    *    isDigit(&lt;js&gt;""&lt;/js&gt;);           &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3410,7 +3410,7 @@
 <span class="source-line-no">3397</span><span id="line-3397">    * Performs basic email validation using a simple regex pattern.</span>
 <span class="source-line-no">3398</span><span id="line-3398">    * This is not a complete RFC 5321/5322 validation, but covers most common email formats.</span>
 <span class="source-line-no">3399</span><span id="line-3399">    *</span>
-<span class="source-line-no">3400</span><span id="line-3400">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3400</span><span id="line-3400">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3401</span><span id="line-3401">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3402</span><span id="line-3402">    *    isEmail(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3403</span><span id="line-3403">    *    isEmail(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3433,7 +3433,7 @@
 <span class="source-line-no">3420</span><span id="line-3420">   /**</span>
 <span class="source-line-no">3421</span><span id="line-3421">    * Checks if a string is null or empty.</span>
 <span class="source-line-no">3422</span><span id="line-3422">    *</span>
-<span class="source-line-no">3423</span><span id="line-3423">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3423</span><span id="line-3423">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3424</span><span id="line-3424">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3425</span><span id="line-3425">    *    isEmpty(&lt;jk&gt;null&lt;/jk&gt;);    &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3426</span><span id="line-3426">    *    isEmpty(&lt;js&gt;""&lt;/js&gt;);      &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -3460,7 +3460,7 @@
 <span class="source-line-no">3447</span><span id="line-3447">   /**</span>
 <span class="source-line-no">3448</span><span id="line-3448">    * Checks if a string is non-null and not empty.</span>
 <span class="source-line-no">3449</span><span id="line-3449">    *</span>
-<span class="source-line-no">3450</span><span id="line-3450">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3450</span><span id="line-3450">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3451</span><span id="line-3451">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3452</span><span id="line-3452">    *    isNotEmpty(&lt;jk&gt;null&lt;/jk&gt;);    &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3453</span><span id="line-3453">    *    isNotEmpty(&lt;js&gt;""&lt;/js&gt;);      &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3526,7 +3526,7 @@
 <span class="source-line-no">3513</span><span id="line-3513">    * Returns &lt;jk&gt;false&lt;/jk&gt; if the input string is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">3514</span><span id="line-3514">    * A string is considered interned if it is the same object reference as its interned version.</span>
 <span class="source-line-no">3515</span><span id="line-3515">    *</span>
-<span class="source-line-no">3516</span><span id="line-3516">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">3516</span><span id="line-3516">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">3517</span><span id="line-3517">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3518</span><span id="line-3518">    *    String &lt;jv&gt;s1&lt;/jv&gt; = &lt;js&gt;"test"&lt;/js&gt;;  &lt;jc&gt;// String literal is automatically interned&lt;/jc&gt;</span>
 <span class="source-line-no">3519</span><span id="line-3519">    *    assertTrue(isInterned(&lt;jv&gt;s1&lt;/jv&gt;));</span>
@@ -3624,7 +3624,7 @@
 <span class="source-line-no">3611</span><span id="line-3611">   /**</span>
 <span class="source-line-no">3612</span><span id="line-3612">    * Checks if a string is not blank (not null, not empty, and not whitespace only).</span>
 <span class="source-line-no">3613</span><span id="line-3613">    *</span>
-<span class="source-line-no">3614</span><span id="line-3614">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3614</span><span id="line-3614">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3615</span><span id="line-3615">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3616</span><span id="line-3616">    *    isNotBlank(&lt;jk&gt;null&lt;/jk&gt;);       &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3617</span><span id="line-3617">    *    isNotBlank(&lt;js&gt;""&lt;/js&gt;);         &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3692,7 +3692,7 @@
 <span class="source-line-no">3679</span><span id="line-3679">    *   &lt;li&gt;With country code: &lt;js&gt;"+1 123-456-7890"&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">3680</span><span id="line-3680">    * &lt;/ul&gt;</span>
 <span class="source-line-no">3681</span><span id="line-3681">    *</span>
-<span class="source-line-no">3682</span><span id="line-3682">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3682</span><span id="line-3682">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3683</span><span id="line-3683">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3684</span><span id="line-3684">    *    isPhoneNumber(&lt;jk&gt;null&lt;/jk&gt;);              &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">3685</span><span id="line-3685">    *    isPhoneNumber(&lt;js&gt;""&lt;/js&gt;);                &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3722,7 +3722,7 @@
 <span class="source-line-no">3709</span><span id="line-3709">    * &lt;p&gt;</span>
 <span class="source-line-no">3710</span><span id="line-3710">    * Uses the {@link #similarity(String, String)} method to calculate similarity and compares it to the threshold.</span>
 <span class="source-line-no">3711</span><span id="line-3711">    *</span>
-<span class="source-line-no">3712</span><span id="line-3712">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3712</span><span id="line-3712">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3713</span><span id="line-3713">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3714</span><span id="line-3714">    *    isSimilar(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;0.8&lt;/js&gt;);        &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3715</span><span id="line-3715">    *    isSimilar(&lt;js&gt;"kitten"&lt;/js&gt;, &lt;js&gt;"sitting"&lt;/js&gt;, &lt;js&gt;0.8&lt;/js&gt;);     &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -3800,7 +3800,7 @@
 <span class="source-line-no">3787</span><span id="line-3787">    * &lt;p&gt;</span>
 <span class="source-line-no">3788</span><span id="line-3788">    * Uses {@link SimpleDateFormat} to parse the date string according to the format pattern.</span>
 <span class="source-line-no">3789</span><span id="line-3789">    *</span>
-<span class="source-line-no">3790</span><span id="line-3790">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3790</span><span id="line-3790">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3791</span><span id="line-3791">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3792</span><span id="line-3792">    *    isValidDateFormat(&lt;js&gt;"2023-12-25"&lt;/js&gt;, &lt;js&gt;"yyyy-MM-dd"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3793</span><span id="line-3793">    *    isValidDateFormat(&lt;js&gt;"25/12/2023"&lt;/js&gt;, &lt;js&gt;"dd/MM/yyyy"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -3838,7 +3838,7 @@
 <span class="source-line-no">3825</span><span id="line-3825">    *   &lt;li&gt;Labels cannot be empty&lt;/li&gt;</span>
 <span class="source-line-no">3826</span><span id="line-3826">    * &lt;/ul&gt;</span>
 <span class="source-line-no">3827</span><span id="line-3827">    *</span>
-<span class="source-line-no">3828</span><span id="line-3828">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3828</span><span id="line-3828">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3829</span><span id="line-3829">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3830</span><span id="line-3830">    *    isValidHostname(&lt;js&gt;"example.com"&lt;/js&gt;);        &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3831</span><span id="line-3831">    *    isValidHostname(&lt;js&gt;"sub.example.com"&lt;/js&gt;);    &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -3892,7 +3892,7 @@
 <span class="source-line-no">3879</span><span id="line-3879">    * &lt;p&gt;</span>
 <span class="source-line-no">3880</span><span id="line-3880">    * Supports both IPv4 (e.g., "192.168.1.1") and IPv6 (e.g., "2001:0db8:85a3:0000:0000:8a2e:0370:7334") formats.</span>
 <span class="source-line-no">3881</span><span id="line-3881">    *</span>
-<span class="source-line-no">3882</span><span id="line-3882">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3882</span><span id="line-3882">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3883</span><span id="line-3883">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3884</span><span id="line-3884">    *    isValidIpAddress(&lt;js&gt;"192.168.1.1"&lt;/js&gt;);                    &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3885</span><span id="line-3885">    *    isValidIpAddress(&lt;js&gt;"2001:0db8:85a3::8a2e:0370:7334"&lt;/js&gt;); &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -3940,7 +3940,7 @@
 <span class="source-line-no">3927</span><span id="line-3927">    *   &lt;li&gt;No separators: &lt;js&gt;"001B44113AB7"&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">3928</span><span id="line-3928">    * &lt;/ul&gt;</span>
 <span class="source-line-no">3929</span><span id="line-3929">    *</span>
-<span class="source-line-no">3930</span><span id="line-3930">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3930</span><span id="line-3930">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3931</span><span id="line-3931">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3932</span><span id="line-3932">    *    isValidMacAddress(&lt;js&gt;"00:1B:44:11:3A:B7"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3933</span><span id="line-3933">    *    isValidMacAddress(&lt;js&gt;"00-1B-44-11-3A-B7"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -3970,7 +3970,7 @@
 <span class="source-line-no">3957</span><span id="line-3957">    * &lt;p&gt;</span>
 <span class="source-line-no">3958</span><span id="line-3958">    * Attempts to compile the regex pattern to verify it's syntactically correct.</span>
 <span class="source-line-no">3959</span><span id="line-3959">    *</span>
-<span class="source-line-no">3960</span><span id="line-3960">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3960</span><span id="line-3960">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3961</span><span id="line-3961">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3962</span><span id="line-3962">    *    isValidRegex(&lt;js&gt;"[a-z]+"&lt;/js&gt;);        &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3963</span><span id="line-3963">    *    isValidRegex(&lt;js&gt;"[a-z"&lt;/js&gt;);          &lt;jc&gt;// false (unclosed bracket)&lt;/jc&gt;</span>
@@ -3997,7 +3997,7 @@
 <span class="source-line-no">3984</span><span id="line-3984">    * &lt;p&gt;</span>
 <span class="source-line-no">3985</span><span id="line-3985">    * Uses {@link SimpleDateFormat} to parse the time string according to the format pattern.</span>
 <span class="source-line-no">3986</span><span id="line-3986">    *</span>
-<span class="source-line-no">3987</span><span id="line-3987">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">3987</span><span id="line-3987">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">3988</span><span id="line-3988">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">3989</span><span id="line-3989">    *    isValidTimeFormat(&lt;js&gt;"14:30:00"&lt;/js&gt;, &lt;js&gt;"HH:mm:ss"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">3990</span><span id="line-3990">    *    isValidTimeFormat(&lt;js&gt;"2:30 PM"&lt;/js&gt;, &lt;js&gt;"h:mm a"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -4035,7 +4035,7 @@
 <span class="source-line-no">4022</span><span id="line-4022">   /**</span>
 <span class="source-line-no">4023</span><span id="line-4023">    * Checks if a string contains only whitespace characters.</span>
 <span class="source-line-no">4024</span><span id="line-4024">    *</span>
-<span class="source-line-no">4025</span><span id="line-4025">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4025</span><span id="line-4025">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4026</span><span id="line-4026">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4027</span><span id="line-4027">    *    isWhitespace(&lt;jk&gt;null&lt;/jk&gt;);         &lt;jc&gt;// false&lt;/jc&gt;</span>
 <span class="source-line-no">4028</span><span id="line-4028">    *    isWhitespace(&lt;js&gt;""&lt;/js&gt;);           &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -4144,7 +4144,7 @@
 <span class="source-line-no">4131</span><span id="line-4131">   /**</span>
 <span class="source-line-no">4132</span><span id="line-4132">    * Joins an array of integers with a delimiter.</span>
 <span class="source-line-no">4133</span><span id="line-4133">    *</span>
-<span class="source-line-no">4134</span><span id="line-4134">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4134</span><span id="line-4134">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4135</span><span id="line-4135">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4136</span><span id="line-4136">    *    join(&lt;jk&gt;new int&lt;/jk&gt;[]{1, 2, 3}, &lt;js&gt;","&lt;/js&gt;);   &lt;jc&gt;// "1,2,3"&lt;/jc&gt;</span>
 <span class="source-line-no">4137</span><span id="line-4137">    *    join(&lt;jk&gt;new int&lt;/jk&gt;[]{}, &lt;js&gt;","&lt;/js&gt;);          &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -4268,7 +4268,7 @@
 <span class="source-line-no">4255</span><span id="line-4255">    *   &lt;li&gt;Snake_case: "hello_world" → "hello-world"&lt;/li&gt;</span>
 <span class="source-line-no">4256</span><span id="line-4256">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4257</span><span id="line-4257">    *</span>
-<span class="source-line-no">4258</span><span id="line-4258">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4258</span><span id="line-4258">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4259</span><span id="line-4259">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4260</span><span id="line-4260">    *    kebabCase(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">4261</span><span id="line-4261">    *    kebabCase(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -4302,7 +4302,7 @@
 <span class="source-line-no">4289</span><span id="line-4289">   /**</span>
 <span class="source-line-no">4290</span><span id="line-4290">    * Finds the index of the last occurrence of a substring within a string.</span>
 <span class="source-line-no">4291</span><span id="line-4291">    *</span>
-<span class="source-line-no">4292</span><span id="line-4292">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4292</span><span id="line-4292">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4293</span><span id="line-4293">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4294</span><span id="line-4294">    *    lastIndexOf(&lt;js&gt;"hello world world"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// 12&lt;/jc&gt;</span>
 <span class="source-line-no">4295</span><span id="line-4295">    *    lastIndexOf(&lt;js&gt;"hello world"&lt;/js&gt;, &lt;js&gt;"xyz"&lt;/js&gt;);             &lt;jc&gt;// -1&lt;/jc&gt;</span>
@@ -4322,7 +4322,7 @@
 <span class="source-line-no">4309</span><span id="line-4309">   /**</span>
 <span class="source-line-no">4310</span><span id="line-4310">    * Finds the index of the last occurrence of a substring within a string, ignoring case.</span>
 <span class="source-line-no">4311</span><span id="line-4311">    *</span>
-<span class="source-line-no">4312</span><span id="line-4312">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4312</span><span id="line-4312">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4313</span><span id="line-4313">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4314</span><span id="line-4314">    *    lastIndexOfIgnoreCase(&lt;js&gt;"Hello World World"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);     &lt;jc&gt;// 12&lt;/jc&gt;</span>
 <span class="source-line-no">4315</span><span id="line-4315">    *    lastIndexOfIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"WORLD"&lt;/js&gt;);           &lt;jc&gt;// 6&lt;/jc&gt;</span>
@@ -4358,7 +4358,7 @@
 <span class="source-line-no">4345</span><span id="line-4345">   /**</span>
 <span class="source-line-no">4346</span><span id="line-4346">    * Returns the leftmost characters of a string.</span>
 <span class="source-line-no">4347</span><span id="line-4347">    *</span>
-<span class="source-line-no">4348</span><span id="line-4348">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4348</span><span id="line-4348">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4349</span><span id="line-4349">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4350</span><span id="line-4350">    *    left(&lt;jk&gt;null&lt;/jk&gt;, 3);          &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">4351</span><span id="line-4351">    *    left(&lt;js&gt;""&lt;/js&gt;, 3);            &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -4386,7 +4386,7 @@
 <span class="source-line-no">4373</span><span id="line-4373">    * &lt;p&gt;</span>
 <span class="source-line-no">4374</span><span id="line-4374">    * The Levenshtein distance is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into another.</span>
 <span class="source-line-no">4375</span><span id="line-4375">    *</span>
-<span class="source-line-no">4376</span><span id="line-4376">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4376</span><span id="line-4376">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4377</span><span id="line-4377">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4378</span><span id="line-4378">    *    levenshteinDistance(&lt;js&gt;"kitten"&lt;/js&gt;, &lt;js&gt;"sitting"&lt;/js&gt;);     &lt;jc&gt;// 3&lt;/jc&gt;</span>
 <span class="source-line-no">4379</span><span id="line-4379">    *    levenshteinDistance(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);        &lt;jc&gt;// 0&lt;/jc&gt;</span>
@@ -4438,7 +4438,7 @@
 <span class="source-line-no">4425</span><span id="line-4425">    * &lt;p&gt;</span>
 <span class="source-line-no">4426</span><span id="line-4426">    * Counts newline characters. A string ending without a newline is counted as one line.</span>
 <span class="source-line-no">4427</span><span id="line-4427">    *</span>
-<span class="source-line-no">4428</span><span id="line-4428">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4428</span><span id="line-4428">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4429</span><span id="line-4429">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4430</span><span id="line-4430">    *    lineCount(&lt;js&gt;"line1\nline2\nline3"&lt;/js&gt;);      &lt;jc&gt;// 3&lt;/jc&gt;</span>
 <span class="source-line-no">4431</span><span id="line-4431">    *    lineCount(&lt;js&gt;"single line"&lt;/js&gt;);              &lt;jc&gt;// 1&lt;/jc&gt;</span>
@@ -4506,7 +4506,7 @@
 <span class="source-line-no">4493</span><span id="line-4493">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the array is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">4494</span><span id="line-4494">    * Returns an array with &lt;jk&gt;null&lt;/jk&gt; elements if the function is &lt;jk&gt;null&lt;/jk&gt; or returns &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">4495</span><span id="line-4495">    *</span>
-<span class="source-line-no">4496</span><span id="line-4496">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">4496</span><span id="line-4496">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">4497</span><span id="line-4497">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4498</span><span id="line-4498">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;, &lt;js&gt;"baz"&lt;/js&gt;};</span>
 <span class="source-line-no">4499</span><span id="line-4499">    *    String[] &lt;jv&gt;uppercased&lt;/jv&gt; = map(&lt;jv&gt;array&lt;/jv&gt;, String::toUpperCase);</span>
@@ -4531,7 +4531,7 @@
 <span class="source-line-no">4518</span><span id="line-4518">   /**</span>
 <span class="source-line-no">4519</span><span id="line-4519">    * Checks if a string matches a regular expression pattern.</span>
 <span class="source-line-no">4520</span><span id="line-4520">    *</span>
-<span class="source-line-no">4521</span><span id="line-4521">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4521</span><span id="line-4521">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4522</span><span id="line-4522">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4523</span><span id="line-4523">    *    matches(&lt;js&gt;"12345"&lt;/js&gt;, &lt;js&gt;"\\d+"&lt;/js&gt;);              &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">4524</span><span id="line-4524">    *    matches(&lt;js&gt;"abc123"&lt;/js&gt;, &lt;js&gt;"^[a-z]+\\d+$"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -4556,7 +4556,7 @@
 <span class="source-line-no">4543</span><span id="line-4543">    * Metaphone is a phonetic algorithm that produces codes representing how words sound.</span>
 <span class="source-line-no">4544</span><span id="line-4544">    * It's more accurate than Soundex for English words.</span>
 <span class="source-line-no">4545</span><span id="line-4545">    *</span>
-<span class="source-line-no">4546</span><span id="line-4546">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4546</span><span id="line-4546">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4547</span><span id="line-4547">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4548</span><span id="line-4548">    *    metaphone(&lt;js&gt;"Smith"&lt;/js&gt;);   &lt;jc&gt;// "SM0"&lt;/jc&gt;</span>
 <span class="source-line-no">4549</span><span id="line-4549">    *    metaphone(&lt;js&gt;"Smythe"&lt;/js&gt;);  &lt;jc&gt;// "SM0"&lt;/jc&gt;</span>
@@ -4712,7 +4712,7 @@
 <span class="source-line-no">4699</span><span id="line-4699">   /**</span>
 <span class="source-line-no">4700</span><span id="line-4700">    * Returns the middle characters of a string.</span>
 <span class="source-line-no">4701</span><span id="line-4701">    *</span>
-<span class="source-line-no">4702</span><span id="line-4702">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4702</span><span id="line-4702">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4703</span><span id="line-4703">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4704</span><span id="line-4704">    *    mid(&lt;jk&gt;null&lt;/jk&gt;, 1, 3);          &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">4705</span><span id="line-4705">    *    mid(&lt;js&gt;""&lt;/js&gt;, 1, 3);            &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -4743,7 +4743,7 @@
 <span class="source-line-no">4730</span><span id="line-4730">    * Returns the character that appears most often. If multiple characters have the same</span>
 <span class="source-line-no">4731</span><span id="line-4731">    * frequency, returns the first one encountered.</span>
 <span class="source-line-no">4732</span><span id="line-4732">    *</span>
-<span class="source-line-no">4733</span><span id="line-4733">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4733</span><span id="line-4733">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4734</span><span id="line-4734">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4735</span><span id="line-4735">    *    mostFrequentChar(&lt;js&gt;"hello"&lt;/js&gt;);     &lt;jc&gt;// 'l'&lt;/jc&gt;</span>
 <span class="source-line-no">4736</span><span id="line-4736">    *    mostFrequentChar(&lt;js&gt;"aabbcc"&lt;/js&gt;);    &lt;jc&gt;// 'a' (first encountered)&lt;/jc&gt;</span>
@@ -4780,7 +4780,7 @@
 <span class="source-line-no">4767</span><span id="line-4767">    * Compares strings in a way that numbers are compared numerically rather than lexicographically.</span>
 <span class="source-line-no">4768</span><span id="line-4768">    * For example, "file2.txt" comes before "file10.txt" in natural order.</span>
 <span class="source-line-no">4769</span><span id="line-4769">    *</span>
-<span class="source-line-no">4770</span><span id="line-4770">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4770</span><span id="line-4770">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4771</span><span id="line-4771">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4772</span><span id="line-4772">    *    naturalCompare(&lt;js&gt;"file2.txt"&lt;/js&gt;, &lt;js&gt;"file10.txt"&lt;/js&gt;);   &lt;jc&gt;// negative (2 &amp;lt; 10)&lt;/jc&gt;</span>
 <span class="source-line-no">4773</span><span id="line-4773">    *    naturalCompare(&lt;js&gt;"file10.txt"&lt;/js&gt;, &lt;js&gt;"file2.txt"&lt;/js&gt;);   &lt;jc&gt;// positive (10 &amp;gt; 2)&lt;/jc&gt;</span>
@@ -4859,7 +4859,7 @@
 <span class="source-line-no">4846</span><span id="line-4846">    * &lt;p&gt;</span>
 <span class="source-line-no">4847</span><span id="line-4847">    * Uses Unicode normalization form NFD (Canonical Decomposition).</span>
 <span class="source-line-no">4848</span><span id="line-4848">    *</span>
-<span class="source-line-no">4849</span><span id="line-4849">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4849</span><span id="line-4849">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4850</span><span id="line-4850">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4851</span><span id="line-4851">    *    normalizeUnicode(&lt;js&gt;"café"&lt;/js&gt;);</span>
 <span class="source-line-no">4852</span><span id="line-4852">    *    &lt;jc&gt;// Normalized form&lt;/jc&gt;</span>
@@ -4877,7 +4877,7 @@
 <span class="source-line-no">4864</span><span id="line-4864">   /**</span>
 <span class="source-line-no">4865</span><span id="line-4865">    * Normalizes all whitespace in a string to single spaces.</span>
 <span class="source-line-no">4866</span><span id="line-4866">    *</span>
-<span class="source-line-no">4867</span><span id="line-4867">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4867</span><span id="line-4867">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4868</span><span id="line-4868">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4869</span><span id="line-4869">    *    normalizeWhitespace(&lt;js&gt;"hello  \t\n  world"&lt;/js&gt;);   &lt;jc&gt;// "hello world"&lt;/jc&gt;</span>
 <span class="source-line-no">4870</span><span id="line-4870">    *    normalizeWhitespace(&lt;js&gt;"  hello  world  "&lt;/js&gt;);     &lt;jc&gt;// "hello world"&lt;/jc&gt;</span>
@@ -4899,7 +4899,7 @@
 <span class="source-line-no">4886</span><span id="line-4886">    * This is the inverse of {@link #contains(String, char)}.</span>
 <span class="source-line-no">4887</span><span id="line-4887">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt; or does not contain the character.</span>
 <span class="source-line-no">4888</span><span id="line-4888">    *</span>
-<span class="source-line-no">4889</span><span id="line-4889">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4889</span><span id="line-4889">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4890</span><span id="line-4890">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4891</span><span id="line-4891">    *    notContains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);   &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">4892</span><span id="line-4892">    *    notContains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -4923,7 +4923,7 @@
 <span class="source-line-no">4910</span><span id="line-4910">    * This is the inverse of {@link #contains(String, CharSequence)}.</span>
 <span class="source-line-no">4911</span><span id="line-4911">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt; or does not contain the substring.</span>
 <span class="source-line-no">4912</span><span id="line-4912">    *</span>
-<span class="source-line-no">4913</span><span id="line-4913">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4913</span><span id="line-4913">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4914</span><span id="line-4914">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4915</span><span id="line-4915">    *    notContains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">4916</span><span id="line-4916">    *    notContains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -4947,7 +4947,7 @@
 <span class="source-line-no">4934</span><span id="line-4934">    * This is the inverse of {@link #contains(String, String)}.</span>
 <span class="source-line-no">4935</span><span id="line-4935">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt; or does not contain the substring.</span>
 <span class="source-line-no">4936</span><span id="line-4936">    *</span>
-<span class="source-line-no">4937</span><span id="line-4937">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4937</span><span id="line-4937">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4938</span><span id="line-4938">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4939</span><span id="line-4939">    *    notContains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">4940</span><span id="line-4940">    *    notContains(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// false&lt;/jc&gt;</span>
@@ -4976,7 +4976,7 @@
 <span class="source-line-no">4963</span><span id="line-4963">    *   &lt;li&gt;Any of the specified characters are not found in the string&lt;/li&gt;</span>
 <span class="source-line-no">4964</span><span id="line-4964">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4965</span><span id="line-4965">    *</span>
-<span class="source-line-no">4966</span><span id="line-4966">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4966</span><span id="line-4966">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4967</span><span id="line-4967">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4968</span><span id="line-4968">    *    notContainsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'H'&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);                &lt;jc&gt;// true (missing 'x')&lt;/jc&gt;</span>
 <span class="source-line-no">4969</span><span id="line-4969">    *    notContainsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'H'&lt;/js&gt;, &lt;js&gt;'e'&lt;/js&gt;, &lt;js&gt;'l'&lt;/js&gt;);   &lt;jc&gt;// false (contains all)&lt;/jc&gt;</span>
@@ -5004,7 +5004,7 @@
 <span class="source-line-no">4991</span><span id="line-4991">    *   &lt;li&gt;Any of the specified substrings are not found in the string&lt;/li&gt;</span>
 <span class="source-line-no">4992</span><span id="line-4992">    * &lt;/ul&gt;</span>
 <span class="source-line-no">4993</span><span id="line-4993">    *</span>
-<span class="source-line-no">4994</span><span id="line-4994">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">4994</span><span id="line-4994">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">4995</span><span id="line-4995">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">4996</span><span id="line-4996">    *    notContainsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);    &lt;jc&gt;// true (missing "Foo")&lt;/jc&gt;</span>
 <span class="source-line-no">4997</span><span id="line-4997">    *    notContainsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// false (contains all)&lt;/jc&gt;</span>
@@ -5032,7 +5032,7 @@
 <span class="source-line-no">5019</span><span id="line-5019">    *   &lt;li&gt;Any of the specified substrings are not found in the string&lt;/li&gt;</span>
 <span class="source-line-no">5020</span><span id="line-5020">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5021</span><span id="line-5021">    *</span>
-<span class="source-line-no">5022</span><span id="line-5022">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5022</span><span id="line-5022">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5023</span><span id="line-5023">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5024</span><span id="line-5024">    *    notContainsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);    &lt;jc&gt;// true (missing "Foo")&lt;/jc&gt;</span>
 <span class="source-line-no">5025</span><span id="line-5025">    *    notContainsAll(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;);   &lt;jc&gt;// false (contains all)&lt;/jc&gt;</span>
@@ -5060,7 +5060,7 @@
 <span class="source-line-no">5047</span><span id="line-5047">    *   &lt;li&gt;None of the specified characters are found in the string&lt;/li&gt;</span>
 <span class="source-line-no">5048</span><span id="line-5048">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5049</span><span id="line-5049">    *</span>
-<span class="source-line-no">5050</span><span id="line-5050">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5050</span><span id="line-5050">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5051</span><span id="line-5051">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5052</span><span id="line-5052">    *    notContainsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;, &lt;js&gt;'y'&lt;/js&gt;);   &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">5053</span><span id="line-5053">    *    notContainsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;'o'&lt;/js&gt;, &lt;js&gt;'x'&lt;/js&gt;);   &lt;jc&gt;// false (contains 'o')&lt;/jc&gt;</span>
@@ -5089,7 +5089,7 @@
 <span class="source-line-no">5076</span><span id="line-5076">    *   &lt;li&gt;None of the specified substrings are found in the string&lt;/li&gt;</span>
 <span class="source-line-no">5077</span><span id="line-5077">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5078</span><span id="line-5078">    *</span>
-<span class="source-line-no">5079</span><span id="line-5079">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5079</span><span id="line-5079">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5080</span><span id="line-5080">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5081</span><span id="line-5081">    *    notContainsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;, &lt;js&gt;"Bar"&lt;/js&gt;);    &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">5082</span><span id="line-5082">    *    notContainsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);  &lt;jc&gt;// false (contains "Hello")&lt;/jc&gt;</span>
@@ -5118,7 +5118,7 @@
 <span class="source-line-no">5105</span><span id="line-5105">    *   &lt;li&gt;None of the specified substrings are found in the string&lt;/li&gt;</span>
 <span class="source-line-no">5106</span><span id="line-5106">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5107</span><span id="line-5107">    *</span>
-<span class="source-line-no">5108</span><span id="line-5108">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5108</span><span id="line-5108">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5109</span><span id="line-5109">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5110</span><span id="line-5110">    *    notContainsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;, &lt;js&gt;"Bar"&lt;/js&gt;);    &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">5111</span><span id="line-5111">    *    notContainsAny(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"Hello"&lt;/js&gt;, &lt;js&gt;"Foo"&lt;/js&gt;);  &lt;jc&gt;// false (contains "Hello")&lt;/jc&gt;</span>
@@ -5150,7 +5150,7 @@
 <span class="source-line-no">5137</span><span id="line-5137">   /**</span>
 <span class="source-line-no">5138</span><span id="line-5138">    * Converts a number to its ordinal form (1st, 2nd, 3rd, 4th, etc.).</span>
 <span class="source-line-no">5139</span><span id="line-5139">    *</span>
-<span class="source-line-no">5140</span><span id="line-5140">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5140</span><span id="line-5140">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5141</span><span id="line-5141">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5142</span><span id="line-5142">    *    ordinal(&lt;js&gt;1&lt;/js&gt;);     &lt;jc&gt;// "1st"&lt;/jc&gt;</span>
 <span class="source-line-no">5143</span><span id="line-5143">    *    ordinal(&lt;js&gt;2&lt;/js&gt;);     &lt;jc&gt;// "2nd"&lt;/jc&gt;</span>
@@ -5184,7 +5184,7 @@
 <span class="source-line-no">5171</span><span id="line-5171">   /**</span>
 <span class="source-line-no">5172</span><span id="line-5172">    * Center pads a string with a specified character.</span>
 <span class="source-line-no">5173</span><span id="line-5173">    *</span>
-<span class="source-line-no">5174</span><span id="line-5174">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5174</span><span id="line-5174">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5175</span><span id="line-5175">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5176</span><span id="line-5176">    *    padCenter(&lt;jk&gt;null&lt;/jk&gt;, 5, &lt;js&gt;' '&lt;/js&gt;);          &lt;jc&gt;// "     "&lt;/jc&gt;</span>
 <span class="source-line-no">5177</span><span id="line-5177">    *    padCenter(&lt;js&gt;""&lt;/js&gt;, 5, &lt;js&gt;' '&lt;/js&gt;);            &lt;jc&gt;// "     "&lt;/jc&gt;</span>
@@ -5212,7 +5212,7 @@
 <span class="source-line-no">5199</span><span id="line-5199">   /**</span>
 <span class="source-line-no">5200</span><span id="line-5200">    * Left pads a string with a specified character.</span>
 <span class="source-line-no">5201</span><span id="line-5201">    *</span>
-<span class="source-line-no">5202</span><span id="line-5202">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5202</span><span id="line-5202">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5203</span><span id="line-5203">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5204</span><span id="line-5204">    *    padLeft(&lt;jk&gt;null&lt;/jk&gt;, 5, &lt;js&gt;' '&lt;/js&gt;);          &lt;jc&gt;// "     "&lt;/jc&gt;</span>
 <span class="source-line-no">5205</span><span id="line-5205">    *    padLeft(&lt;js&gt;""&lt;/js&gt;, 5, &lt;js&gt;' '&lt;/js&gt;);            &lt;jc&gt;// "     "&lt;/jc&gt;</span>
@@ -5238,7 +5238,7 @@
 <span class="source-line-no">5225</span><span id="line-5225">   /**</span>
 <span class="source-line-no">5226</span><span id="line-5226">    * Right pads a string with a specified character.</span>
 <span class="source-line-no">5227</span><span id="line-5227">    *</span>
-<span class="source-line-no">5228</span><span id="line-5228">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5228</span><span id="line-5228">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5229</span><span id="line-5229">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5230</span><span id="line-5230">    *    padRight(&lt;jk&gt;null&lt;/jk&gt;, 5, &lt;js&gt;' '&lt;/js&gt;);          &lt;jc&gt;// "     "&lt;/jc&gt;</span>
 <span class="source-line-no">5231</span><span id="line-5231">    *    padRight(&lt;js&gt;""&lt;/js&gt;, 5, &lt;js&gt;' '&lt;/js&gt;);            &lt;jc&gt;// "     "&lt;/jc&gt;</span>
@@ -5314,7 +5314,7 @@
 <span class="source-line-no">5301</span><span id="line-5301">    * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})</span>
 <span class="source-line-no">5302</span><span id="line-5302">    * without having to write a {@code try}/{@code catch} block at the call site.</span>
 <span class="source-line-no">5303</span><span id="line-5303">    *</span>
-<span class="source-line-no">5304</span><span id="line-5304">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5304</span><span id="line-5304">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5305</span><span id="line-5305">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5306</span><span id="line-5306">    *    &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;port&lt;/jv&gt; = StringUtils.&lt;jsm&gt;parseInt&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;,</span>
 <span class="source-line-no">5307</span><span id="line-5307">    *       ()-&amp;gt; &lt;jsm&gt;illegalArg&lt;/jsm&gt;(&lt;js&gt;"Invalid port: {0}"&lt;/js&gt;, &lt;jv&gt;value&lt;/jv&gt;));</span>
@@ -5404,7 +5404,7 @@
 <span class="source-line-no">5391</span><span id="line-5391">    * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})</span>
 <span class="source-line-no">5392</span><span id="line-5392">    * without having to write a {@code try}/{@code catch} block at the call site.</span>
 <span class="source-line-no">5393</span><span id="line-5393">    *</span>
-<span class="source-line-no">5394</span><span id="line-5394">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5394</span><span id="line-5394">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5395</span><span id="line-5395">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5396</span><span id="line-5396">    *    &lt;jk&gt;long&lt;/jk&gt; &lt;jv&gt;size&lt;/jv&gt; = StringUtils.&lt;jsm&gt;parseLong&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;,</span>
 <span class="source-line-no">5397</span><span id="line-5397">    *       ()-&amp;gt; &lt;jsm&gt;illegalArg&lt;/jsm&gt;(&lt;js&gt;"Invalid size: {0}"&lt;/js&gt;, &lt;jv&gt;value&lt;/jv&gt;));</span>
@@ -5470,7 +5470,7 @@
 <span class="source-line-no">5457</span><span id="line-5457">    * &lt;p&gt;</span>
 <span class="source-line-no">5458</span><span id="line-5458">    * Splits the string by the entry delimiter, then splits each entry by the key-value delimiter.</span>
 <span class="source-line-no">5459</span><span id="line-5459">    *</span>
-<span class="source-line-no">5460</span><span id="line-5460">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5460</span><span id="line-5460">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5461</span><span id="line-5461">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5462</span><span id="line-5462">    *    parseMap(&lt;js&gt;"key1=value1,key2=value2"&lt;/js&gt;, &lt;js&gt;'='&lt;/js&gt;, &lt;js&gt;','&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);</span>
 <span class="source-line-no">5463</span><span id="line-5463">    *    &lt;jc&gt;// {"key1":"value1","key2":"value2"}&lt;/jc&gt;</span>
@@ -5621,7 +5621,7 @@
 <span class="source-line-no">5608</span><span id="line-5608">    *   &lt;li&gt;Kebab-case: "hello-world" → "HelloWorld"&lt;/li&gt;</span>
 <span class="source-line-no">5609</span><span id="line-5609">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5610</span><span id="line-5610">    *</span>
-<span class="source-line-no">5611</span><span id="line-5611">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5611</span><span id="line-5611">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5612</span><span id="line-5612">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5613</span><span id="line-5613">    *    pascalCase(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">5614</span><span id="line-5614">    *    pascalCase(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -5657,7 +5657,7 @@
 <span class="source-line-no">5644</span><span id="line-5644">    * Simple pluralization that adds "s" to most words, with basic rules for words ending in "s", "x", "z", "ch", "sh" (add "es"),</span>
 <span class="source-line-no">5645</span><span id="line-5645">    * and words ending in "y" preceded by a consonant (replace "y" with "ies").</span>
 <span class="source-line-no">5646</span><span id="line-5646">    *</span>
-<span class="source-line-no">5647</span><span id="line-5647">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5647</span><span id="line-5647">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5648</span><span id="line-5648">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5649</span><span id="line-5649">    *    pluralize(&lt;js&gt;"cat"&lt;/js&gt;, &lt;js&gt;1&lt;/js&gt;);        &lt;jc&gt;// "cat"&lt;/jc&gt;</span>
 <span class="source-line-no">5650</span><span id="line-5650">    *    pluralize(&lt;js&gt;"cat"&lt;/js&gt;, &lt;js&gt;2&lt;/js&gt;);        &lt;jc&gt;// "cats"&lt;/jc&gt;</span>
@@ -5742,7 +5742,7 @@
 <span class="source-line-no">5729</span><span id="line-5729">    * &lt;p&gt;</span>
 <span class="source-line-no">5730</span><span id="line-5730">    * Characters are composed of upper-case and lower-case ASCII letters (a-z, A-Z).</span>
 <span class="source-line-no">5731</span><span id="line-5731">    *</span>
-<span class="source-line-no">5732</span><span id="line-5732">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5732</span><span id="line-5732">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5733</span><span id="line-5733">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5734</span><span id="line-5734">    *    randomAlphabetic(&lt;jk&gt;5&lt;/jk&gt;);  &lt;jc&gt;// "aBcDe"&lt;/jc&gt;</span>
 <span class="source-line-no">5735</span><span id="line-5735">    * &lt;/p&gt;</span>
@@ -5770,7 +5770,7 @@
 <span class="source-line-no">5757</span><span id="line-5757">    * &lt;p&gt;</span>
 <span class="source-line-no">5758</span><span id="line-5758">    * Characters are composed of upper-case and lower-case ASCII letters and digits (a-z, A-Z, 0-9).</span>
 <span class="source-line-no">5759</span><span id="line-5759">    *</span>
-<span class="source-line-no">5760</span><span id="line-5760">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5760</span><span id="line-5760">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5761</span><span id="line-5761">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5762</span><span id="line-5762">    *    randomAlphanumeric(&lt;jk&gt;8&lt;/jk&gt;);  &lt;jc&gt;// "aB3dE5fG"&lt;/jc&gt;</span>
 <span class="source-line-no">5763</span><span id="line-5763">    * &lt;/p&gt;</span>
@@ -5800,7 +5800,7 @@
 <span class="source-line-no">5787</span><span id="line-5787">    * &lt;p&gt;</span>
 <span class="source-line-no">5788</span><span id="line-5788">    * Characters are composed of printable ASCII characters (32-126).</span>
 <span class="source-line-no">5789</span><span id="line-5789">    *</span>
-<span class="source-line-no">5790</span><span id="line-5790">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5790</span><span id="line-5790">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5791</span><span id="line-5791">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5792</span><span id="line-5792">    *    randomAscii(&lt;jk&gt;10&lt;/jk&gt;);  &lt;jc&gt;// "!@#$%^&amp;amp;*()"&lt;/jc&gt;</span>
 <span class="source-line-no">5793</span><span id="line-5793">    * &lt;/p&gt;</span>
@@ -5824,7 +5824,7 @@
 <span class="source-line-no">5811</span><span id="line-5811">    * &lt;p&gt;</span>
 <span class="source-line-no">5812</span><span id="line-5812">    * Characters are composed of digits (0-9).</span>
 <span class="source-line-no">5813</span><span id="line-5813">    *</span>
-<span class="source-line-no">5814</span><span id="line-5814">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5814</span><span id="line-5814">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5815</span><span id="line-5815">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5816</span><span id="line-5816">    *    randomNumeric(&lt;jk&gt;6&lt;/jk&gt;);  &lt;jc&gt;// "123456"&lt;/jc&gt;</span>
 <span class="source-line-no">5817</span><span id="line-5817">    * &lt;/p&gt;</span>
@@ -5848,7 +5848,7 @@
 <span class="source-line-no">5835</span><span id="line-5835">    * &lt;p&gt;</span>
 <span class="source-line-no">5836</span><span id="line-5836">    * Each character in the generated string is randomly selected from the provided character set.</span>
 <span class="source-line-no">5837</span><span id="line-5837">    *</span>
-<span class="source-line-no">5838</span><span id="line-5838">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5838</span><span id="line-5838">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5839</span><span id="line-5839">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5840</span><span id="line-5840">    *    randomString(&lt;jk&gt;5&lt;/jk&gt;, &lt;js&gt;"ABC"&lt;/js&gt;);  &lt;jc&gt;// "BACAB"&lt;/jc&gt;</span>
 <span class="source-line-no">5841</span><span id="line-5841">    * &lt;/p&gt;</span>
@@ -5882,7 +5882,7 @@
 <span class="source-line-no">5869</span><span id="line-5869">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5870</span><span id="line-5870">    * Returns a score from 0-100, where higher scores indicate easier reading.</span>
 <span class="source-line-no">5871</span><span id="line-5871">    *</span>
-<span class="source-line-no">5872</span><span id="line-5872">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">5872</span><span id="line-5872">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">5873</span><span id="line-5873">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5874</span><span id="line-5874">    *    readabilityScore(&lt;js&gt;"The cat sat."&lt;/js&gt;);      &lt;jc&gt;// Higher score (simple)&lt;/jc&gt;</span>
 <span class="source-line-no">5875</span><span id="line-5875">    *    readabilityScore(&lt;js&gt;"The sophisticated..."&lt;/js&gt;); &lt;jc&gt;// Lower score (complex)&lt;/jc&gt;</span>
@@ -5936,7 +5936,7 @@
 <span class="source-line-no">5923</span><span id="line-5923">    * nested structures to create human-readable representations. It's extensively used throughout</span>
 <span class="source-line-no">5924</span><span id="line-5924">    * the Juneau framework for test assertions and debugging output.&lt;/p&gt;</span>
 <span class="source-line-no">5925</span><span id="line-5925">    *</span>
-<span class="source-line-no">5926</span><span id="line-5926">    * &lt;h5 class='section'&gt;Type-Specific Formatting:&lt;/h5&gt;</span>
+<span class="source-line-no">5926</span><span id="line-5926">    * &lt;h4 class='section'&gt;Type-Specific Formatting:&lt;/h4&gt;</span>
 <span class="source-line-no">5927</span><span id="line-5927">    * &lt;ul&gt;</span>
 <span class="source-line-no">5928</span><span id="line-5928">    *    &lt;li&gt;&lt;b&gt;null:&lt;/b&gt; Returns &lt;js&gt;null&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">5929</span><span id="line-5929">    *    &lt;li&gt;&lt;b&gt;Optional:&lt;/b&gt; Recursively formats the contained value (or &lt;js&gt;null&lt;/js&gt; if empty)&lt;/li&gt;</span>
@@ -5955,7 +5955,7 @@
 <span class="source-line-no">5942</span><span id="line-5942">    *    &lt;li&gt;&lt;b&gt;All other types:&lt;/b&gt; Uses {@link Object#toString()}&lt;/li&gt;</span>
 <span class="source-line-no">5943</span><span id="line-5943">    * &lt;/ul&gt;</span>
 <span class="source-line-no">5944</span><span id="line-5944">    *</span>
-<span class="source-line-no">5945</span><span id="line-5945">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">5945</span><span id="line-5945">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">5946</span><span id="line-5946">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">5947</span><span id="line-5947">    *    &lt;jc&gt;// Collections&lt;/jc&gt;</span>
 <span class="source-line-no">5948</span><span id="line-5948">    *    readable(List.of("a", "b", "c")) &lt;jc&gt;// Returns: "[a,b,c]"&lt;/jc&gt;</span>
@@ -5978,12 +5978,12 @@
 <span class="source-line-no">5965</span><span id="line-5965">    *    readable(MyEnum.FOO) &lt;jc&gt;// Returns: "FOO"&lt;/jc&gt;</span>
 <span class="source-line-no">5966</span><span id="line-5966">    * &lt;/p&gt;</span>
 <span class="source-line-no">5967</span><span id="line-5967">    *</span>
-<span class="source-line-no">5968</span><span id="line-5968">    * &lt;h5 class='section'&gt;Recursive Processing:&lt;/h5&gt;</span>
+<span class="source-line-no">5968</span><span id="line-5968">    * &lt;h4 class='section'&gt;Recursive Processing:&lt;/h4&gt;</span>
 <span class="source-line-no">5969</span><span id="line-5969">    * &lt;p&gt;The method recursively processes nested structures, so complex objects containing</span>
 <span class="source-line-no">5970</span><span id="line-5970">    * collections, maps, and arrays are fully flattened into readable format. This makes it</span>
 <span class="source-line-no">5971</span><span id="line-5971">    * ideal for test assertions where you need to compare complex object structures.&lt;/p&gt;</span>
 <span class="source-line-no">5972</span><span id="line-5972">    *</span>
-<span class="source-line-no">5973</span><span id="line-5973">    * &lt;h5 class='section'&gt;Error Handling:&lt;/h5&gt;</span>
+<span class="source-line-no">5973</span><span id="line-5973">    * &lt;h4 class='section'&gt;Error Handling:&lt;/h4&gt;</span>
 <span class="source-line-no">5974</span><span id="line-5974">    * &lt;p&gt;IO operations (reading files, streams) are wrapped in safe() calls, converting</span>
 <span class="source-line-no">5975</span><span id="line-5975">    * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is</span>
 <span class="source-line-no">5976</span><span id="line-5976">    * converted to hexadecimal representation for readability.&lt;/p&gt;</span>
@@ -6036,7 +6036,7 @@
 <span class="source-line-no">6023</span><span id="line-6023">   /**</span>
 <span class="source-line-no">6024</span><span id="line-6024">    * Removes all occurrences of a substring from a string.</span>
 <span class="source-line-no">6025</span><span id="line-6025">    *</span>
-<span class="source-line-no">6026</span><span id="line-6026">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6026</span><span id="line-6026">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6027</span><span id="line-6027">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6028</span><span id="line-6028">    *    remove(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"x"&lt;/js&gt;);              &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">6029</span><span id="line-6029">    *    remove(&lt;js&gt;"hello"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;);          &lt;jc&gt;// "hello"&lt;/jc&gt;</span>
@@ -6060,7 +6060,7 @@
 <span class="source-line-no">6047</span><span id="line-6047">    * &lt;p&gt;</span>
 <span class="source-line-no">6048</span><span id="line-6048">    * Normalizes the string to NFD form and removes combining diacritical marks.</span>
 <span class="source-line-no">6049</span><span id="line-6049">    *</span>
-<span class="source-line-no">6050</span><span id="line-6050">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6050</span><span id="line-6050">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6051</span><span id="line-6051">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6052</span><span id="line-6052">    *    removeAccents(&lt;js&gt;"café"&lt;/js&gt;);     &lt;jc&gt;// "cafe"&lt;/jc&gt;</span>
 <span class="source-line-no">6053</span><span id="line-6053">    *    removeAccents(&lt;js&gt;"naïve"&lt;/js&gt;);    &lt;jc&gt;// "naive"&lt;/jc&gt;</span>
@@ -6094,7 +6094,7 @@
 <span class="source-line-no">6081</span><span id="line-6081">   /**</span>
 <span class="source-line-no">6082</span><span id="line-6082">    * Removes multiple substrings from a string.</span>
 <span class="source-line-no">6083</span><span id="line-6083">    *</span>
-<span class="source-line-no">6084</span><span id="line-6084">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6084</span><span id="line-6084">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6085</span><span id="line-6085">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6086</span><span id="line-6086">    *    removeAll(&lt;js&gt;"hello world test"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"test"&lt;/js&gt;);  &lt;jc&gt;// " world "&lt;/jc&gt;</span>
 <span class="source-line-no">6087</span><span id="line-6087">    *    removeAll(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"x"&lt;/js&gt;);                                     &lt;jc&gt;// null&lt;/jc&gt;</span>
@@ -6120,7 +6120,7 @@
 <span class="source-line-no">6107</span><span id="line-6107">   /**</span>
 <span class="source-line-no">6108</span><span id="line-6108">    * Removes control characters from a string, replacing them with spaces.</span>
 <span class="source-line-no">6109</span><span id="line-6109">    *</span>
-<span class="source-line-no">6110</span><span id="line-6110">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6110</span><span id="line-6110">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6111</span><span id="line-6111">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6112</span><span id="line-6112">    *    removeControlChars(&lt;js&gt;"hello\u0000\u0001world"&lt;/js&gt;);   &lt;jc&gt;// "hello  world"&lt;/jc&gt;</span>
 <span class="source-line-no">6113</span><span id="line-6113">    *    removeControlChars(&lt;js&gt;"hello\nworld"&lt;/js&gt;);             &lt;jc&gt;// "hello\nworld"&lt;/jc&gt;</span>
@@ -6146,7 +6146,7 @@
 <span class="source-line-no">6133</span><span id="line-6133">   /**</span>
 <span class="source-line-no">6134</span><span id="line-6134">    * Removes a suffix from a string if present.</span>
 <span class="source-line-no">6135</span><span id="line-6135">    *</span>
-<span class="source-line-no">6136</span><span id="line-6136">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6136</span><span id="line-6136">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6137</span><span id="line-6137">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6138</span><span id="line-6138">    *    removeEnd(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"x"&lt;/js&gt;);              &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">6139</span><span id="line-6139">    *    removeEnd(&lt;js&gt;"hello"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;);          &lt;jc&gt;// "hello"&lt;/jc&gt;</span>
@@ -6169,7 +6169,7 @@
 <span class="source-line-no">6156</span><span id="line-6156">   /**</span>
 <span class="source-line-no">6157</span><span id="line-6157">    * Removes non-printable characters from a string.</span>
 <span class="source-line-no">6158</span><span id="line-6158">    *</span>
-<span class="source-line-no">6159</span><span id="line-6159">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6159</span><span id="line-6159">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6160</span><span id="line-6160">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6161</span><span id="line-6161">    *    removeNonPrintable(&lt;js&gt;"hello\u0000world"&lt;/js&gt;);   &lt;jc&gt;// "helloworld"&lt;/jc&gt;</span>
 <span class="source-line-no">6162</span><span id="line-6162">    * &lt;/p&gt;</span>
@@ -6186,7 +6186,7 @@
 <span class="source-line-no">6173</span><span id="line-6173">   /**</span>
 <span class="source-line-no">6174</span><span id="line-6174">    * Removes a prefix from a string if present.</span>
 <span class="source-line-no">6175</span><span id="line-6175">    *</span>
-<span class="source-line-no">6176</span><span id="line-6176">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6176</span><span id="line-6176">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6177</span><span id="line-6177">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6178</span><span id="line-6178">    *    removeStart(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"x"&lt;/js&gt;);              &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">6179</span><span id="line-6179">    *    removeStart(&lt;js&gt;"hello"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;);          &lt;jc&gt;// "hello"&lt;/jc&gt;</span>
@@ -6217,7 +6217,7 @@
 <span class="source-line-no">6204</span><span id="line-6204">    * &lt;p&gt;</span>
 <span class="source-line-no">6205</span><span id="line-6205">    * If the string does not contain any underscores, the original string is returned (no new object created).</span>
 <span class="source-line-no">6206</span><span id="line-6206">    *</span>
-<span class="source-line-no">6207</span><span id="line-6207">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6207</span><span id="line-6207">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6208</span><span id="line-6208">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6209</span><span id="line-6209">    *    removeUnderscores(&lt;js&gt;"1_000_000"&lt;/js&gt;);        &lt;jc&gt;// "1000000"&lt;/jc&gt;</span>
 <span class="source-line-no">6210</span><span id="line-6210">    *    removeUnderscores(&lt;js&gt;"1_000.5"&lt;/js&gt;);          &lt;jc&gt;// "1000.5"&lt;/jc&gt;</span>
@@ -6280,7 +6280,7 @@
 <span class="source-line-no">6267</span><span id="line-6267">   /**</span>
 <span class="source-line-no">6268</span><span id="line-6268">    * Reverses a string.</span>
 <span class="source-line-no">6269</span><span id="line-6269">    *</span>
-<span class="source-line-no">6270</span><span id="line-6270">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6270</span><span id="line-6270">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6271</span><span id="line-6271">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6272</span><span id="line-6272">    *    reverse(&lt;jk&gt;null&lt;/jk&gt;);          &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">6273</span><span id="line-6273">    *    reverse(&lt;js&gt;""&lt;/js&gt;);            &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -6299,7 +6299,7 @@
 <span class="source-line-no">6286</span><span id="line-6286">   /**</span>
 <span class="source-line-no">6287</span><span id="line-6287">    * Returns the rightmost characters of a string.</span>
 <span class="source-line-no">6288</span><span id="line-6288">    *</span>
-<span class="source-line-no">6289</span><span id="line-6289">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6289</span><span id="line-6289">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6290</span><span id="line-6290">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6291</span><span id="line-6291">    *    right(&lt;jk&gt;null&lt;/jk&gt;, 3);          &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">6292</span><span id="line-6292">    *    right(&lt;js&gt;""&lt;/js&gt;, 3);            &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -6328,7 +6328,7 @@
 <span class="source-line-no">6315</span><span id="line-6315">    * Removes HTML/XML tags and escapes special characters to prevent XSS attacks.</span>
 <span class="source-line-no">6316</span><span id="line-6316">    * This is a basic sanitization - for production use, consider a more robust library.</span>
 <span class="source-line-no">6317</span><span id="line-6317">    *</span>
-<span class="source-line-no">6318</span><span id="line-6318">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6318</span><span id="line-6318">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6319</span><span id="line-6319">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6320</span><span id="line-6320">    *    sanitize(&lt;js&gt;"&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;"&lt;/js&gt;);     &lt;jc&gt;// "&amp;amp;lt;script&amp;amp;gt;alert('xss')&amp;amp;lt;/script&amp;amp;gt;"&lt;/jc&gt;</span>
 <span class="source-line-no">6321</span><span id="line-6321">    *    sanitize(&lt;js&gt;"Hello &amp;lt;b&amp;gt;World&amp;lt;/b&amp;gt;"&lt;/js&gt;);                &lt;jc&gt;// "Hello &amp;amp;lt;b&amp;amp;gt;World&amp;amp;lt;/b&amp;amp;gt;"&lt;/jc&gt;</span>
@@ -6350,7 +6350,7 @@
 <span class="source-line-no">6337</span><span id="line-6337">    * &lt;p&gt;</span>
 <span class="source-line-no">6338</span><span id="line-6338">    * Returns a value between 0.0 (completely different) and 1.0 (identical).</span>
 <span class="source-line-no">6339</span><span id="line-6339">    *</span>
-<span class="source-line-no">6340</span><span id="line-6340">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6340</span><span id="line-6340">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6341</span><span id="line-6341">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6342</span><span id="line-6342">    *    similarity(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);           &lt;jc&gt;// 1.0 (100%)&lt;/jc&gt;</span>
 <span class="source-line-no">6343</span><span id="line-6343">    *    similarity(&lt;js&gt;"kitten"&lt;/js&gt;, &lt;js&gt;"sitting"&lt;/js&gt;);        &lt;jc&gt;// ~0.57 (57%)&lt;/jc&gt;</span>
@@ -6388,7 +6388,7 @@
 <span class="source-line-no">6375</span><span id="line-6375">    *   &lt;li&gt;Kebab-case: "hello-world" → "hello_world"&lt;/li&gt;</span>
 <span class="source-line-no">6376</span><span id="line-6376">    * &lt;/ul&gt;</span>
 <span class="source-line-no">6377</span><span id="line-6377">    *</span>
-<span class="source-line-no">6378</span><span id="line-6378">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6378</span><span id="line-6378">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6379</span><span id="line-6379">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6380</span><span id="line-6380">    *    snakeCase(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">6381</span><span id="line-6381">    *    snakeCase(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -6428,7 +6428,7 @@
 <span class="source-line-no">6415</span><span id="line-6415">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the array is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">6416</span><span id="line-6416">    * This method creates a copy of the array and sorts it, leaving the original array unchanged.</span>
 <span class="source-line-no">6417</span><span id="line-6417">    *</span>
-<span class="source-line-no">6418</span><span id="line-6418">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">6418</span><span id="line-6418">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">6419</span><span id="line-6419">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6420</span><span id="line-6420">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"zebra"&lt;/js&gt;, &lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"banana"&lt;/js&gt;};</span>
 <span class="source-line-no">6421</span><span id="line-6421">    *    String[] &lt;jv&gt;sorted&lt;/jv&gt; = sort(&lt;jv&gt;array&lt;/jv&gt;);</span>
@@ -6454,7 +6454,7 @@
 <span class="source-line-no">6441</span><span id="line-6441">    * This method creates a copy of the array and sorts it using case-insensitive comparison,</span>
 <span class="source-line-no">6442</span><span id="line-6442">    * leaving the original array unchanged.</span>
 <span class="source-line-no">6443</span><span id="line-6443">    *</span>
-<span class="source-line-no">6444</span><span id="line-6444">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">6444</span><span id="line-6444">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">6445</span><span id="line-6445">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6446</span><span id="line-6446">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"Zebra"&lt;/js&gt;, &lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"Banana"&lt;/js&gt;};</span>
 <span class="source-line-no">6447</span><span id="line-6447">    *    String[] &lt;jv&gt;sorted&lt;/jv&gt; = sortIgnoreCase(&lt;jv&gt;array&lt;/jv&gt;);</span>
@@ -6479,7 +6479,7 @@
 <span class="source-line-no">6466</span><span id="line-6466">    * Soundex is a phonetic algorithm for indexing names by sound. The code consists of</span>
 <span class="source-line-no">6467</span><span id="line-6467">    * a letter followed by three digits. Similar-sounding names produce the same code.</span>
 <span class="source-line-no">6468</span><span id="line-6468">    *</span>
-<span class="source-line-no">6469</span><span id="line-6469">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">6469</span><span id="line-6469">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">6470</span><span id="line-6470">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">6471</span><span id="line-6471">    *    soundex(&lt;js&gt;"Smith"&lt;/js&gt;);   &lt;jc&gt;// "S530"&lt;/jc&gt;</span>
 <span class="source-line-no">6472</span><span id="line-6472">    *    soundex(&lt;js&gt;"Smythe"&lt;/js&gt;);  &lt;jc&gt;// "S530"&lt;/jc&gt;</span>
@@ -7080,7 +7080,7 @@
 <span class="source-line-no">7067</span><span id="line-7067">   /**</span>
 <span class="source-line-no">7068</span><span id="line-7068">    * Checks if a string starts with a prefix, ignoring case.</span>
 <span class="source-line-no">7069</span><span id="line-7069">    *</span>
-<span class="source-line-no">7070</span><span id="line-7070">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7070</span><span id="line-7070">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7071</span><span id="line-7071">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7072</span><span id="line-7072">    *    startsWithIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">7073</span><span id="line-7073">    *    startsWithIgnoreCase(&lt;js&gt;"Hello World"&lt;/js&gt;, &lt;js&gt;"HELLO"&lt;/js&gt;);     &lt;jc&gt;// true&lt;/jc&gt;</span>
@@ -7153,7 +7153,7 @@
 <span class="source-line-no">7140</span><span id="line-7140">   /**</span>
 <span class="source-line-no">7141</span><span id="line-7141">    * Returns the substring after the first occurrence of a separator.</span>
 <span class="source-line-no">7142</span><span id="line-7142">    *</span>
-<span class="source-line-no">7143</span><span id="line-7143">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7143</span><span id="line-7143">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7144</span><span id="line-7144">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7145</span><span id="line-7145">    *    substringAfter(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"."&lt;/js&gt;);              &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">7146</span><span id="line-7146">    *    substringAfter(&lt;js&gt;"hello.world"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;);    &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -7179,7 +7179,7 @@
 <span class="source-line-no">7166</span><span id="line-7166">   /**</span>
 <span class="source-line-no">7167</span><span id="line-7167">    * Returns the substring before the first occurrence of a separator.</span>
 <span class="source-line-no">7168</span><span id="line-7168">    *</span>
-<span class="source-line-no">7169</span><span id="line-7169">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7169</span><span id="line-7169">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7170</span><span id="line-7170">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7171</span><span id="line-7171">    *    substringBefore(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"."&lt;/js&gt;);              &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">7172</span><span id="line-7172">    *    substringBefore(&lt;js&gt;"hello.world"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;);    &lt;jc&gt;// "hello.world"&lt;/jc&gt;</span>
@@ -7203,7 +7203,7 @@
 <span class="source-line-no">7190</span><span id="line-7190">   /**</span>
 <span class="source-line-no">7191</span><span id="line-7191">    * Returns the substring between two delimiters.</span>
 <span class="source-line-no">7192</span><span id="line-7192">    *</span>
-<span class="source-line-no">7193</span><span id="line-7193">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7193</span><span id="line-7193">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7194</span><span id="line-7194">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7195</span><span id="line-7195">    *    substringBetween(&lt;jk&gt;null&lt;/jk&gt;, &lt;js&gt;"&amp;lt;"&lt;/js&gt;, &lt;js&gt;"&amp;gt;"&lt;/js&gt;);              &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">7196</span><span id="line-7196">    *    substringBetween(&lt;js&gt;"&amp;lt;hello&amp;gt;"&lt;/js&gt;, &lt;js&gt;"&amp;lt;"&lt;/js&gt;, &lt;js&gt;"&amp;gt;"&lt;/js&gt;);   &lt;jc&gt;// "hello"&lt;/jc&gt;</span>
@@ -7230,7 +7230,7 @@
 <span class="source-line-no">7217</span><span id="line-7217">   /**</span>
 <span class="source-line-no">7218</span><span id="line-7218">    * Swaps the case of all characters in a string.</span>
 <span class="source-line-no">7219</span><span id="line-7219">    *</span>
-<span class="source-line-no">7220</span><span id="line-7220">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7220</span><span id="line-7220">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7221</span><span id="line-7221">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7222</span><span id="line-7222">    *    swapCase(&lt;js&gt;"Hello World"&lt;/js&gt;);   &lt;jc&gt;// "hELLO wORLD"&lt;/jc&gt;</span>
 <span class="source-line-no">7223</span><span id="line-7223">    *    swapCase(&lt;js&gt;"ABC123xyz"&lt;/js&gt;);     &lt;jc&gt;// "abc123XYZ"&lt;/jc&gt;</span>
@@ -7267,7 +7267,7 @@
 <span class="source-line-no">7254</span><span id="line-7254">    *   &lt;li&gt;Kebab-case: "hello-world" → "Hello World"&lt;/li&gt;</span>
 <span class="source-line-no">7255</span><span id="line-7255">    * &lt;/ul&gt;</span>
 <span class="source-line-no">7256</span><span id="line-7256">    *</span>
-<span class="source-line-no">7257</span><span id="line-7257">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7257</span><span id="line-7257">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7258</span><span id="line-7258">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7259</span><span id="line-7259">    *    titleCase(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">7260</span><span id="line-7260">    *    titleCase(&lt;js&gt;""&lt;/js&gt;);                      &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -7566,7 +7566,7 @@
 <span class="source-line-no">7553</span><span id="line-7553">    * it is replaced with the corresponding character at the same position in &lt;c&gt;toChars&lt;/c&gt;.</span>
 <span class="source-line-no">7554</span><span id="line-7554">    * Characters not found in &lt;c&gt;fromChars&lt;/c&gt; are left unchanged.</span>
 <span class="source-line-no">7555</span><span id="line-7555">    *</span>
-<span class="source-line-no">7556</span><span id="line-7556">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7556</span><span id="line-7556">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7557</span><span id="line-7557">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7558</span><span id="line-7558">    *    transliterate(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"aeiou"&lt;/js&gt;, &lt;js&gt;"12345"&lt;/js&gt;);</span>
 <span class="source-line-no">7559</span><span id="line-7559">    *    &lt;jc&gt;// "h2ll4"&lt;/jc&gt;</span>
@@ -7703,7 +7703,7 @@
 <span class="source-line-no">7690</span><span id="line-7690">   /**</span>
 <span class="source-line-no">7691</span><span id="line-7691">    * Uncapitalizes the first character of a string.</span>
 <span class="source-line-no">7692</span><span id="line-7692">    *</span>
-<span class="source-line-no">7693</span><span id="line-7693">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7693</span><span id="line-7693">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7694</span><span id="line-7694">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7695</span><span id="line-7695">    *    uncapitalize(&lt;jk&gt;null&lt;/jk&gt;);          &lt;jc&gt;// null&lt;/jc&gt;</span>
 <span class="source-line-no">7696</span><span id="line-7696">    *    uncapitalize(&lt;js&gt;""&lt;/js&gt;);            &lt;jc&gt;// ""&lt;/jc&gt;</span>
@@ -7765,7 +7765,7 @@
 <span class="source-line-no">7752</span><span id="line-7752">    *   &lt;li&gt;&lt;js&gt;"&amp;amp;#39;"&lt;/js&gt; or &lt;js&gt;"&amp;amp;apos;"&lt;/js&gt; → &lt;js&gt;'\''&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">7753</span><span id="line-7753">    * &lt;/ul&gt;</span>
 <span class="source-line-no">7754</span><span id="line-7754">    *</span>
-<span class="source-line-no">7755</span><span id="line-7755">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7755</span><span id="line-7755">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7756</span><span id="line-7756">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7757</span><span id="line-7757">    *    unescapeHtml(&lt;js&gt;"&amp;amp;lt;script&amp;amp;gt;"&lt;/js&gt;);     &lt;jc&gt;// Returns: "&amp;lt;script&amp;gt;"&lt;/jc&gt;</span>
 <span class="source-line-no">7758</span><span id="line-7758">    * &lt;/p&gt;</span>
@@ -7793,7 +7793,7 @@
 <span class="source-line-no">7780</span><span id="line-7780">    *   &lt;li&gt;&lt;js&gt;"&amp;amp;apos;"&lt;/js&gt; → &lt;js&gt;'\''&lt;/js&gt;&lt;/li&gt;</span>
 <span class="source-line-no">7781</span><span id="line-7781">    * &lt;/ul&gt;</span>
 <span class="source-line-no">7782</span><span id="line-7782">    *</span>
-<span class="source-line-no">7783</span><span id="line-7783">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7783</span><span id="line-7783">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7784</span><span id="line-7784">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">7785</span><span id="line-7785">    *    unescapeXml(&lt;js&gt;"&amp;amp;lt;tag&amp;amp;gt;"&lt;/js&gt;);     &lt;jc&gt;// Returns: "&amp;lt;tag&amp;gt;"&lt;/jc&gt;</span>
 <span class="source-line-no">7786</span><span id="line-7786">    * &lt;/p&gt;</span>
@@ -8008,7 +8008,7 @@
 <span class="source-line-no">7995</span><span id="line-7995">    * A word is defined as a sequence of one or more word characters (letters, digits, underscores)</span>
 <span class="source-line-no">7996</span><span id="line-7996">    * separated by non-word characters.</span>
 <span class="source-line-no">7997</span><span id="line-7997">    *</span>
-<span class="source-line-no">7998</span><span id="line-7998">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">7998</span><span id="line-7998">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">7999</span><span id="line-7999">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">8000</span><span id="line-8000">    *    wordCount(&lt;js&gt;"Hello world"&lt;/js&gt;);              &lt;jc&gt;// 2&lt;/jc&gt;</span>
 <span class="source-line-no">8001</span><span id="line-8001">    *    wordCount(&lt;js&gt;"The quick brown fox"&lt;/js&gt;);      &lt;jc&gt;// 4&lt;/jc&gt;</span>
@@ -8047,7 +8047,7 @@
 <span class="source-line-no">8034</span><span id="line-8034">    * Wraps text by breaking at word boundaries (spaces). Words longer than the wrap length</span>
 <span class="source-line-no">8035</span><span id="line-8035">    * will be broken at the wrap length. Existing newlines are preserved.</span>
 <span class="source-line-no">8036</span><span id="line-8036">    *</span>
-<span class="source-line-no">8037</span><span id="line-8037">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">8037</span><span id="line-8037">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">8038</span><span id="line-8038">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">8039</span><span id="line-8039">    *    wrap(&lt;js&gt;"hello world test"&lt;/js&gt;, 10);  &lt;jc&gt;// "hello world\ntest"&lt;/jc&gt;</span>
 <span class="source-line-no">8040</span><span id="line-8040">    *    wrap(&lt;jk&gt;null&lt;/jk&gt;, 10);                &lt;jc&gt;// null&lt;/jc&gt;</span>
@@ -8069,7 +8069,7 @@
 <span class="source-line-no">8056</span><span id="line-8056">    * Wraps text by breaking at word boundaries (spaces). Words longer than the wrap length</span>
 <span class="source-line-no">8057</span><span id="line-8057">    * will be broken at the wrap length. Existing newlines are preserved.</span>
 <span class="source-line-no">8058</span><span id="line-8058">    *</span>
-<span class="source-line-no">8059</span><span id="line-8059">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">8059</span><span id="line-8059">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">8060</span><span id="line-8060">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">8061</span><span id="line-8061">    *    wrap(&lt;js&gt;"hello world test"&lt;/js&gt;, 10, &lt;js&gt;"&lt;br&gt;"&lt;/js&gt;);  &lt;jc&gt;// "hello world&lt;br&gt;test"&lt;/jc&gt;</span>
 <span class="source-line-no">8062</span><span id="line-8062">    *    wrap(&lt;jk&gt;null&lt;/jk&gt;, 10, &lt;js&gt;"\n"&lt;/js&gt;);                  &lt;jc&gt;// null&lt;/jc&gt;</span>

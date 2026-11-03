@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * a single list, without actually copying the elements. Modifications made through the iterator</span>
 <span class="source-line-no">030</span><span id="line-30"> * or list iterator affect the underlying lists.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;&lt;b&gt;Zero-Copy Composition:&lt;/b&gt; No data is copied when creating a MultiList; it simply wraps the provided lists</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;&lt;b&gt;Transparent Access:&lt;/b&gt; Accessing elements by index or iterating over a MultiList seamlessly traverses all underlying lists in order</span>
@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;b&gt;Enumeration Support:&lt;/b&gt; Provides an {@link Enumeration} view via {@link #enumerator()}</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;jc&gt;// Create a MultiList from three separate lists&lt;/jc&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    List&amp;lt;String&amp;gt; &lt;jv&gt;list1&lt;/jv&gt; = List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;);</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> *    }</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Behavior Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Behavior Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;li&gt;The order of access follows the order of lists as provided in the constructor</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li&gt;Within each list, access order follows the list's natural order</span>
@@ -93,12 +93,12 @@
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li&gt;The {@link #get(int)} method locates the element by traversing lists until the correct index is found</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> * &lt;p&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> * This class is not inherently thread-safe. If the underlying lists are modified concurrently</span>
 <span class="source-line-no">086</span><span id="line-86"> * during iteration or access, the behavior is undefined. Synchronization must be handled externally if needed.</span>
 <span class="source-line-no">087</span><span id="line-87"> *</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;h5 class='section'&gt;Example - Processing Multiple Data Sources:&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;h2 class='section'&gt;Example - Processing Multiple Data Sources:&lt;/h2&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *    &lt;jc&gt;// Combine results from database, cache, and defaults&lt;/jc&gt;</span>
 <span class="source-line-no">091</span><span id="line-91"> *    List&amp;lt;User&amp;gt; &lt;jv&gt;dbUsers&lt;/jv&gt; = fetchFromDatabase();</span>
@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101"> *    User &lt;jv&gt;user&lt;/jv&gt; = &lt;jv&gt;allUsers&lt;/jv&gt;.get(&lt;jv&gt;10&lt;/jv&gt;);</span>
 <span class="source-line-no">102</span><span id="line-102"> * &lt;/p&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> *</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> * &lt;ul&gt;</span>
 <span class="source-line-no">106</span><span id="line-106"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</span>
 <span class="source-line-no">107</span><span id="line-107"> * &lt;/ul&gt;</span>
@@ -141,7 +141,7 @@
 <span class="source-line-no">128</span><span id="line-128">    * The lists are stored by reference (not copied), so modifications made through the</span>
 <span class="source-line-no">129</span><span id="line-129">    * MultiList's iterator will affect the original lists.</span>
 <span class="source-line-no">130</span><span id="line-130">    *</span>
-<span class="source-line-no">131</span><span id="line-131">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">132</span><span id="line-132">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">133</span><span id="line-133">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;));</span>
 <span class="source-line-no">134</span><span id="line-134">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list2&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"c"&lt;/js&gt;, &lt;js&gt;"d"&lt;/js&gt;));</span>
@@ -169,7 +169,7 @@
 <span class="source-line-no">156</span><span id="line-156">    * This is useful for compatibility with legacy APIs that require an {@link Enumeration}</span>
 <span class="source-line-no">157</span><span id="line-157">    * rather than an {@link Iterator}.</span>
 <span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">161</span><span id="line-161">    *    MultiList&amp;lt;String&amp;gt; &lt;jv&gt;multiList&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MultiList&amp;lt;&amp;gt;(list1, list2);</span>
 <span class="source-line-no">162</span><span id="line-162">    *    Enumeration&amp;lt;String&amp;gt; &lt;jv&gt;enumeration&lt;/jv&gt; = &lt;jv&gt;multiList&lt;/jv&gt;.enumerator();</span>
@@ -194,7 +194,7 @@
 <span class="source-line-no">181</span><span id="line-181">    * The index is resolved by traversing the underlying lists in order until the</span>
 <span class="source-line-no">182</span><span id="line-182">    * correct list and position within that list is found.</span>
 <span class="source-line-no">183</span><span id="line-183">    *</span>
-<span class="source-line-no">184</span><span id="line-184">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">186</span><span id="line-186">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list1&lt;/jv&gt; = List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;);        &lt;jc&gt;// indices 0-1&lt;/jc&gt;</span>
 <span class="source-line-no">187</span><span id="line-187">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list2&lt;/jv&gt; = List.of(&lt;js&gt;"c"&lt;/js&gt;, &lt;js&gt;"d"&lt;/js&gt;, &lt;js&gt;"e"&lt;/js&gt;); &lt;jc&gt;// indices 2-4&lt;/jc&gt;</span>
@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">    * The returned iterator supports the {@link Iterator#remove()} operation, which removes</span>
 <span class="source-line-no">222</span><span id="line-222">    * the current element from its underlying list.</span>
 <span class="source-line-no">223</span><span id="line-223">    *</span>
-<span class="source-line-no">224</span><span id="line-224">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</span>
 <span class="source-line-no">225</span><span id="line-225">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">226</span><span id="line-226">    *    &lt;li&gt;Elements from the first list are iterated first, then the second, and so on</span>
 <span class="source-line-no">227</span><span id="line-227">    *    &lt;li&gt;If a list is empty, it is skipped during iteration</span>
@@ -245,7 +245,7 @@
 <span class="source-line-no">232</span><span id="line-232">    *       in a row may throw {@link IllegalStateException} (behavior depends on underlying list)</span>
 <span class="source-line-no">233</span><span id="line-233">    * &lt;/ul&gt;</span>
 <span class="source-line-no">234</span><span id="line-234">    *</span>
-<span class="source-line-no">235</span><span id="line-235">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">236</span><span id="line-236">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">237</span><span id="line-237">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;));</span>
 <span class="source-line-no">238</span><span id="line-238">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list2&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; ArrayList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"c"&lt;/js&gt;, &lt;js&gt;"d"&lt;/js&gt;));</span>
@@ -312,7 +312,7 @@
 <span class="source-line-no">299</span><span id="line-299">    * The returned list iterator supports the {@link ListIterator#remove()} operation, which removes</span>
 <span class="source-line-no">300</span><span id="line-300">    * the current element from its underlying list.</span>
 <span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">302</span><span id="line-302">    * &lt;h4 class='section'&gt;Behavior:&lt;/h4&gt;</span>
 <span class="source-line-no">303</span><span id="line-303">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    *    &lt;li&gt;Elements from the first list are iterated first, then the second, and so on</span>
 <span class="source-line-no">305</span><span id="line-305">    *    &lt;li&gt;If a list is empty, it is skipped during iteration</span>
@@ -462,7 +462,7 @@
 <span class="source-line-no">449</span><span id="line-449">    * underlying list. The size is recalculated each time this method is called</span>
 <span class="source-line-no">450</span><span id="line-450">    * (it is not cached).</span>
 <span class="source-line-no">451</span><span id="line-451">    *</span>
-<span class="source-line-no">452</span><span id="line-452">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">452</span><span id="line-452">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">453</span><span id="line-453">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">454</span><span id="line-454">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list1&lt;/jv&gt; = List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;);        &lt;jc&gt;// size = 2&lt;/jc&gt;</span>
 <span class="source-line-no">455</span><span id="line-455">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list2&lt;/jv&gt; = List.of(&lt;js&gt;"c"&lt;/js&gt;, &lt;js&gt;"d"&lt;/js&gt;, &lt;js&gt;"e"&lt;/js&gt;); &lt;jc&gt;// size = 3&lt;/jc&gt;</span>
@@ -488,7 +488,7 @@
 <span class="source-line-no">475</span><span id="line-475">    * The format is &lt;c&gt;"[[...],[...],...]"&lt;/c&gt; where each &lt;c&gt;[...]&lt;/c&gt; is the standard</span>
 <span class="source-line-no">476</span><span id="line-476">    * standard string representation of each underlying list (as returned by {@link Object#toString()}).</span>
 <span class="source-line-no">477</span><span id="line-477">    *</span>
-<span class="source-line-no">478</span><span id="line-478">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">478</span><span id="line-478">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">479</span><span id="line-479">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">480</span><span id="line-480">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list1&lt;/jv&gt; = List.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;);</span>
 <span class="source-line-no">481</span><span id="line-481">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list2&lt;/jv&gt; = List.of(&lt;js&gt;"c"&lt;/js&gt;, &lt;js&gt;"d"&lt;/js&gt;);</span>

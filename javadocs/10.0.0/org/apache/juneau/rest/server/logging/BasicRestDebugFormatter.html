@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -103,7 +102,7 @@ implements <a href="RestDebugFormatter.html" title="interface in org.apache.june
       below); otherwise a suppression placeholder + byte count.
  </ul>
 
- <h5 class='section'>Secure-by-default body handling</h5>
+ <h2 class='section'>Secure-by-default body handling</h2>
  <p>
  Bodies are <b>never dumped by default</b>. Dumping is a deliberate operator opt-in behind a single environment-variable
  master gate, <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code>:
@@ -125,7 +124,7 @@ implements <a href="RestDebugFormatter.html" title="interface in org.apache.june
  </ul>
  No bytes appear in any placeholder in any representation.
 
- <h5 class='section'>Header redaction and sanitization</h5>
+ <h2 class='section'>Header redaction and sanitization</h2>
  <p>
  Values for a widened, formatter-local credential-bearing header set are masked with <a href="../../../http/RedactedHeaders.html#REDACTED"><code>RedactedHeaders.REDACTED</code></a>.
  The set starts from <a href="../../../http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a> plus <code>X-Auth-Token</code>, <code>X-Authorization</code>,
@@ -136,14 +135,14 @@ implements <a href="RestDebugFormatter.html" title="interface in org.apache.june
  text, placeholders) is sanitized against CR/LF/control-char log forging via <a href="../../../http/DebugTextSanitizer.html" title="class in org.apache.juneau.http"><code>DebugTextSanitizer</code></a>, in
  <b>mask &rarr; escape &rarr; cap</b> order.
 
- <h5 class='section'>Bounds</h5>
+ <h2 class='section'>Bounds</h2>
  <p>
  Bodies are bounded by <a href="#bodyCap()"><code>bodyCap()</code></a> bytes (default <b>8&nbsp;KB</b>) at capture time; headers by
  <a href="#maxHeaders(int)"><code>maxHeaders(int)</code></a>/<a href="#maxHeaderScan(int)"><code>maxHeaderScan(int)</code></a>/<a href="#maxFieldLength(int)"><code>maxFieldLength(int)</code></a>; the URI by <a href="#maxUriLength(int)"><code>maxUriLength(int)</code></a>.
  The 8&nbsp;KB body cap is deliberately smaller than <code>EchoMixin</code>'s 1&nbsp;MB body cap &mdash; debug logging is
  intended for low-volume operator diagnostics; the two caps are independent by design.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  </ul></div>
 <dl class="notes">

@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * width and height attributes to define the canvas size, and the actual drawing is done through</span>
 <span class="source-line-no">030</span><span id="line-30"> * the Canvas API in JavaScript.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
@@ -91,65 +91,64 @@
 <span class="source-line-no">078</span><span id="line-78"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#canvas(Number, Number) canvas(Number, Number)}</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
-<span class="source-line-no">081</span><span id="line-81"> * &lt;/p&gt;</span>
-<span class="source-line-no">082</span><span id="line-82"> *</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;/ul&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> */</span>
-<span class="source-line-no">087</span><span id="line-87">@Marshalled(typeName = "canvas")</span>
-<span class="source-line-no">088</span><span id="line-88">public class Canvas extends HtmlElementMixed&lt;Canvas&gt; {</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   /**</span>
-<span class="source-line-no">091</span><span id="line-91">    * Creates an empty {@link Canvas} element.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   public Canvas() {}</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   /**</span>
-<span class="source-line-no">096</span><span id="line-96">    * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and</span>
-<span class="source-line-no">097</span><span id="line-97">    * {@link Canvas#height(Object)} attributes.</span>
-<span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param width The {@link Canvas#width(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">100</span><span id="line-100">    * @param height The {@link Canvas#height(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   public Canvas(Number width, Number height) {</span>
-<span class="source-line-no">103</span><span id="line-103">      width(width).height(height);</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height"&gt;height&lt;/a&gt; attribute.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * &lt;p&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">    * Vertical dimension.</span>
-<span class="source-line-no">111</span><span id="line-111">    *</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param value</span>
-<span class="source-line-no">113</span><span id="line-113">    *    The new value for this attribute.</span>
-<span class="source-line-no">114</span><span id="line-114">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">115</span><span id="line-115">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">116</span><span id="line-116">    * @return This object.</span>
-<span class="source-line-no">117</span><span id="line-117">    */</span>
-<span class="source-line-no">118</span><span id="line-118">   public Canvas height(Object value) {</span>
-<span class="source-line-no">119</span><span id="line-119">      attr("height", value);</span>
-<span class="source-line-no">120</span><span id="line-120">      return this;</span>
-<span class="source-line-no">121</span><span id="line-121">   }</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">   /**</span>
-<span class="source-line-no">124</span><span id="line-124">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width"&gt;width&lt;/a&gt; attribute.</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    * Horizontal dimension.</span>
-<span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param value</span>
-<span class="source-line-no">130</span><span id="line-130">    *    The new value for this attribute.</span>
-<span class="source-line-no">131</span><span id="line-131">    *    Typically a {@link Number} or {@link String}.</span>
-<span class="source-line-no">132</span><span id="line-132">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">133</span><span id="line-133">    * @return This object.</span>
-<span class="source-line-no">134</span><span id="line-134">    */</span>
-<span class="source-line-no">135</span><span id="line-135">   public Canvas width(Object value) {</span>
-<span class="source-line-no">136</span><span id="line-136">      attr("width", value);</span>
-<span class="source-line-no">137</span><span id="line-137">      return this;</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139">}</span>
+<span class="source-line-no">081</span><span id="line-81"> *</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;/ul&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> */</span>
+<span class="source-line-no">086</span><span id="line-86">@Marshalled(typeName = "canvas")</span>
+<span class="source-line-no">087</span><span id="line-87">public class Canvas extends HtmlElementMixed&lt;Canvas&gt; {</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /**</span>
+<span class="source-line-no">090</span><span id="line-90">    * Creates an empty {@link Canvas} element.</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   public Canvas() {}</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   /**</span>
+<span class="source-line-no">095</span><span id="line-95">    * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and</span>
+<span class="source-line-no">096</span><span id="line-96">    * {@link Canvas#height(Object)} attributes.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param width The {@link Canvas#width(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param height The {@link Canvas#height(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public Canvas(Number width, Number height) {</span>
+<span class="source-line-no">102</span><span id="line-102">      width(width).height(height);</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /**</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height"&gt;height&lt;/a&gt; attribute.</span>
+<span class="source-line-no">107</span><span id="line-107">    *</span>
+<span class="source-line-no">108</span><span id="line-108">    * &lt;p&gt;</span>
+<span class="source-line-no">109</span><span id="line-109">    * Vertical dimension.</span>
+<span class="source-line-no">110</span><span id="line-110">    *</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param value</span>
+<span class="source-line-no">112</span><span id="line-112">    *    The new value for this attribute.</span>
+<span class="source-line-no">113</span><span id="line-113">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">114</span><span id="line-114">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">115</span><span id="line-115">    * @return This object.</span>
+<span class="source-line-no">116</span><span id="line-116">    */</span>
+<span class="source-line-no">117</span><span id="line-117">   public Canvas height(Object value) {</span>
+<span class="source-line-no">118</span><span id="line-118">      attr("height", value);</span>
+<span class="source-line-no">119</span><span id="line-119">      return this;</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   /**</span>
+<span class="source-line-no">123</span><span id="line-123">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width"&gt;width&lt;/a&gt; attribute.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * &lt;p&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    * Horizontal dimension.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param value</span>
+<span class="source-line-no">129</span><span id="line-129">    *    The new value for this attribute.</span>
+<span class="source-line-no">130</span><span id="line-130">    *    Typically a {@link Number} or {@link String}.</span>
+<span class="source-line-no">131</span><span id="line-131">    *    Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @return This object.</span>
+<span class="source-line-no">133</span><span id="line-133">    */</span>
+<span class="source-line-no">134</span><span id="line-134">   public Canvas width(Object value) {</span>
+<span class="source-line-no">135</span><span id="line-135">      attr("width", value);</span>
+<span class="source-line-no">136</span><span id="line-136">      return this;</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138">}</span>
 
 
 

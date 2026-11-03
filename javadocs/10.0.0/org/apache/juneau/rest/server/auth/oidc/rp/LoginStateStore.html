@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  without sticky sessions &mdash; the same motivation as a distributed <a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>SessionStore</code></a>.  When the
  hook is unused, behavior is identical to the single-node default.
 
- <h5 class='section'>Security contract (read before implementing)</h5>
+ <h2 class='section'>Security contract (read before implementing)</h2>
 
  <p>
  <b>Secret-bearing.</b> A stored entry carries the PKCE <code>code_verifier</code> (and <code>nonce</code>).  With a
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
  <b>Per-process by default.</b> The shipped default enforces single-use only within one JVM.  Cross-node
  single-use requires a shared backend with an atomic consume primitive (see <a href="#consume(java.lang.String)"><code>consume(String)</code></a>).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="InMemoryLoginStateStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp"><code>InMemoryLoginStateStore</code></a>
    <li class='jc'><a href="OidcRelyingParty.Builder.html#loginStateStore(org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore)"><code>OidcRelyingParty.Builder.loginStateStore(LoginStateStore)</code></a>
    <li class='jc'><a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>SessionStore</code></a>

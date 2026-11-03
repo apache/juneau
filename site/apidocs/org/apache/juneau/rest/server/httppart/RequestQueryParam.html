@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-93">RequestQueryParam</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-94">RequestQueryParam</a></span>
 <span class="extends-implements">extends <a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.server.httppart">RequestHttpPart</a>
 implements <a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span></div>
 <div class="block">Represents a single query parameter on an HTTP request.
@@ -144,9 +143,10 @@ implements <a href="../../../http/HttpPart.html" title="interface in org.apache.
          <li class='jm'><a href="RequestHttpPart.html#getName()"><code>getName()</code></a>
          <li class='jm'><a href="RequestHttpPart.html#getValue()"><code>getValue()</code></a>
       </ul>
+   </ul>
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 </section>
@@ -221,7 +221,7 @@ implements <a href="../../../http/HttpPart.html" title="interface in org.apache.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.String)">
 <h3>RequestQueryParam</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-102">RequestQueryParam</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-103">RequestQueryParam</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
@@ -244,7 +244,7 @@ implements <a href="../../../http/HttpPart.html" title="interface in org.apache.
 <li>
 <section class="detail" id="def(java.lang.String)">
 <h3>def</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestQueryParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestQueryParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-106">def</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestQueryParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestQueryParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-107">def</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;def)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RequestHttpPart.html#def(java.lang.String)">RequestHttpPart</a></code></span></div>
 <div class="block">Sets a default value for this part.</div>
 <dl class="notes">
@@ -260,7 +260,7 @@ implements <a href="../../../http/HttpPart.html" title="interface in org.apache.
 <li>
 <section class="detail" id="parser(org.apache.juneau.marshall.httppart.HttpPartParserSession)">
 <h3>parser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestQueryParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestQueryParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-112">parser</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestQueryParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestQueryParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-113">parser</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RequestHttpPart.html#parser(org.apache.juneau.marshall.httppart.HttpPartParserSession)">RequestHttpPart</a></code></span></div>
 <div class="block">Specifies the part parser to use for this part.
 
@@ -280,7 +280,7 @@ implements <a href="../../../http/HttpPart.html" title="interface in org.apache.
 <li>
 <section class="detail" id="schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">
 <h3>schema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestQueryParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestQueryParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-118">schema</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestQueryParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestQueryParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestQueryParam.html#line-119">schema</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RequestHttpPart.html#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">RequestHttpPart</a></code></span></div>
 <div class="block">Specifies the part schema for this part.
 

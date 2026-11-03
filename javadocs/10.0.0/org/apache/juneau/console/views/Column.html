@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="block">One datatable column's search configuration &mdash; its value <a href="../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery"><code>SearchType</code></a> and the optional
  per-column <a href="../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperatorSet</code></a>.
 
- <h5 class='section'>Operator gating</h5>
+ <h2 class='section'>Operator gating</h2>
  <p>
  A column's offerable operators are modeled by a single <a href="../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperatorSet</code></a>, never a string allow-list or a
  separate custom-operator map.  A custom operator is simply a <a href="../../commons/beanquery/SearchOperator.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperator</code></a> placed inside a set via
@@ -99,14 +98,14 @@ loadScripts(document, 'script');</script>
  An operator not on the effective set is a <b>reject</b> (the popup marks it invalid), never a silent rewrite
  &mdash; see <a href="#offers(java.lang.String)"><code>offers(String)</code></a>.
 
- <h5 class='section'>Mutability</h5>
+ <h2 class='section'>Mutability</h2>
  <p>
  Deliberately mutable, like <a href="ViewDef.html" title="class in org.apache.juneau.console.views"><code>ViewDef</code></a> and <a href="RegionDef.html" title="class in org.apache.juneau.console.views"><code>RegionDef</code></a>: a <a href="Column.html" title="class in org.apache.juneau.console.views"><code>Column</code></a> is a server-side authoring
  bean built up once via fluent setters while constructing a view definition, not an
  immutable value object.  Callers must not mutate one concurrently from more than one thread, and must not reuse
  one across requests unless every request treats it as read-only after construction.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// A searchable "status" column offering only $eq and $in, plus a custom "$mine" operator.</jc>
    Column <jv>status</jv> = Column.<jsm>create</jsm>(<js>"status"</js>)
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
          SearchOperator.<jsm>create</jsm>(<js>"$mine"</js>, <js>"Assigned to me"</js>).types(SearchType.<jsf>ID</jsf>).build()));
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="../../commons/beanquery/SearchOperator.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperator</code></a>
    <li class='jc'><a href="../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperatorSet</code></a>

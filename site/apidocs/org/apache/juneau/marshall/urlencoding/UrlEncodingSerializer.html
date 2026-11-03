@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -103,13 +102,13 @@ loadScripts(document, 'script');</script>
 implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache.juneau.marshall.urlencoding">UrlEncodingMetaProvider</a></span></div>
 <div class="block">Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
 
- <h5 class='section'>Media types:</h5>
+ <h2 class='section'>Media types:</h2>
  <p>
  Handles <c>Accept</c> types:  <bc>application/x-www-form-urlencoded</bc>
  <p>
  Produces <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
 
  This serializer provides several serialization options.
  <br>Typically, one of the predefined DEFAULT serializers will be sufficient.
@@ -163,7 +162,7 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
    )
  </p>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Serialize a Map</jc>
    Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
@@ -194,11 +193,11 @@ implements <a href="UrlEncodingMetaProvider.html" title="interface in org.apache
    String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding</a>
  </ul></div>
 </section>

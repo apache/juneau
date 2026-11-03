@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -82,14 +81,14 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-241">CsrfBoundary</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-242">CsrfBoundary</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></span></div>
 <div class="block">The cross-site request forgery boundary for an application reachable from the network: decides whether a
  state-changing request came from this application's own page, or from a client that is not a browser, and refuses
  it when it came from some other site's page.
 
- <h5 class='section'>What this answers, and what it does not</h5>
+ <h2 class='section'>What this answers, and what it does not</h2>
  <p>
  This class answers one question:
  <p class='bcode'>
@@ -104,12 +103,13 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  For an application bound only to the loopback interface, <a href="LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a> pins a single known origin and is
  stricter.  This class is for applications whose own origin is whatever the request's <code>Host</code> says it is.
 
- <h5 class='section'>The checks</h5>
+ <h2 class='section'>The checks</h2>
  <p>
  <a href="#check(jakarta.servlet.http.HttpServletRequest)"><code>check(HttpServletRequest)</code></a> runs these steps in order, and the first failure wins.  The method judged is the
  <a href="../MethodSafety.html#effectiveMethod(java.lang.String,java.lang.String,java.util.function.UnaryOperator)">effective method</a>, so a
  <code>method</code> query parameter or an override header cannot carry a write past them.
  <table class='styled w800'>
+   <caption>CSRF boundary checks</caption>
    <tr><th>Step</th><th>Applies to</th><th>Refused when</th><th>Reason</th><th>Status</th></tr>
    <tr><td>Allowed hosts</td><td>Every request, when <a href="CsrfBoundary.Builder.html#allowedHosts(java.lang.String...)"><code>CsrfBoundary.Builder.allowedHosts(String...)</code></a> is set</td>
       <td>The request's own host is not listed; or its <code>Host</code> (on HTTP/2, its <code>:authority</code>) is missing or
@@ -155,7 +155,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  and no leading zero.  Nothing else is re-canonicalized, so <code>127.1</code>, <code>[::ffff:127.0.0.1]</code> and a trailing
  dot each fail to match any other spelling of the same address.  That is fail-closed, by design.
 
- <h5 class='section'>Non-browser clients</h5>
+ <h2 class='section'>Non-browser clients</h2>
  <p>
  A request with neither <code>Origin</code> nor <code>Sec-Fetch-Site</code> is handled by <a href="CsrfBoundary.Builder.html#nonBrowser(org.apache.juneau.rest.server.filter.CsrfBoundary.NonBrowser)"><code>CsrfBoundary.Builder.nonBrowser(NonBrowser)</code></a>.
  The default, <a href="CsrfBoundary.NonBrowser.html#ADMIT_NON_SIMPLE"><code>CsrfBoundary.NonBrowser.ADMIT_NON_SIMPLE</code></a>, admits only requests a browser could not have sent cross-site
@@ -163,14 +163,14 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  every non-simple request they issue; current browsers do, and the <code>Origin</code> check is the real control for
  them.</b>
 
- <h5 class='section'>The token is accepted only in the header</h5>
+ <h2 class='section'>The token is accepted only in the header</h2>
  <p>
  The token is read from the <a href="#csrfHeader()"><code>csrfHeader()</code></a> request header and nowhere else: never a query parameter, never a
  form field.  A plain HTML <code>&lt;form&gt;</code> cannot set a header, so every HTML form POST, including the application's
  own, is refused with <code>CSRF_TOKEN_MISSING</code>.  This boundary is for applications whose writes go through script
  that sends the header.
 
- <h5 class='section'>The request's own origin, and proxies</h5>
+ <h2 class='section'>The request's own origin, and proxies</h2>
  <p>
  By default (<a href="CsrfBoundary.OriginSource.html#HOST_HEADER"><code>CsrfBoundary.OriginSource.HOST_HEADER</code></a>) the request's own origin is <code>ServletRequest.getScheme()</code> plus
  the <code>Host</code> header (on HTTP/2, the <code>:authority</code>; see below).  <code>X-Forwarded-*</code> and <code>Forwarded</code>
@@ -187,7 +187,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  <code>HIGHEST_PRECEDENCE</code> itself.  The boundary cannot see its own order; a misordered deployment shows up as
  scheme-mismatch refusals and the warning described below.
 
- <h5 class='section'>Trusting a forwarded origin</h5>
+ <h2 class='section'>Trusting a forwarded origin</h2>
  <p>
  If your container cannot rewrite the request itself, or does not do so for WebSocket upgrades, use
  <a href="CsrfBoundary.Builder.html#trustedForwarding(org.apache.juneau.rest.server.filter.CsrfBoundary.ForwardedSource)"><code>CsrfBoundary.Builder.trustedForwarding(ForwardedSource)</code></a>.  The request's own origin is then the forwarded host
@@ -220,7 +220,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
       behind another untrusted tier is still believed for what it wrote.
  </ul>
 
- <h5 class='section'>HTTP/2 and <code>:authority</code></h5>
+ <h2 class='section'>HTTP/2 and <code>:authority</code></h2>
  <p>
  An HTTP/2 request has no <code>Host</code> header; its <code>:authority</code> pseudo-header plays that part, and servlet
  containers surface it only through <code>ServletRequest.getServerName()</code> and
@@ -243,7 +243,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  proxy that overwrites <code>X-Forwarded-*</code>, or list the expected hosts with
  <a href="CsrfBoundary.Builder.html#allowedHosts(java.lang.String...)"><code>CsrfBoundary.Builder.allowedHosts(String...)</code></a>.
 
- <h5 class='section'>Non-goals</h5>
+ <h2 class='section'>Non-goals</h2>
  <ul>
    <li><b>DNS rebinding</b>, unless <a href="CsrfBoundary.Builder.html#allowedHosts(java.lang.String...)"><code>CsrfBoundary.Builder.allowedHosts(String...)</code></a> is set: a rebound page's <code>Origin</code> and
       <code>Host</code> agree.  TLS defeats rebinding; a plain-HTTP intranet application should list its host names.
@@ -258,7 +258,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
       the proxy, and a client behind a listed address (a shared NAT, a sidecar) is believed too.
  </ul>
 
- <h5 class='section'>What an application must do</h5>
+ <h2 class='section'>What an application must do</h2>
  <ul>
    <li>Call <code>HttpServletRequest.changeSessionId()</code> on login.  A per-session token follows the session id, so
       without that a token seen before login stays valid after it.
@@ -266,7 +266,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
    <li>Not use URL rewriting for session ids.
  </ul>
 
- <h5 class='section'>Responses and logging</h5>
+ <h2 class='section'>Responses and logging</h2>
  <p>
  A rejection message names the header at fault and the kind of value expected.  It never echoes a value the request
  presented, never prints this server's own origin, and never reveals whether a session exists.  Each refusal is
@@ -275,7 +275,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
  <code>FINEST</code>, stripped of control characters and truncated.  Three misconfiguration patterns are logged once per process at <code>WARNING</code>: a scheme-only mismatch, a port-only
  mismatch, and repeated missing tokens from the application's own origin.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    CsrfBoundary <jv>boundary</jv> = CsrfBoundary.<jsm>create</jsm>()
       .allowedHosts(<js>"app.example.com"</js>)
@@ -284,7 +284,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
       .addMappingForUrlPatterns(<jk>null</jk>, <jk>false</jk>, <js>"/*"</js>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jic'><a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter"><code>RequestBoundary</code></a>
    <li class='jc'><a href="RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a>
    <li class='jc'><a href="CsrfTokens.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfTokens</code></a>
@@ -485,7 +485,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.filter.CsrfBoundary.Builder)">
 <h3>CsrfBoundary</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-334">CsrfBoundary</a></span><wbr><span class="parameters">(<a href="CsrfBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">CsrfBoundary.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-335">CsrfBoundary</a></span><wbr><span class="parameters">(<a href="CsrfBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">CsrfBoundary.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -504,7 +504,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">CsrfBoundary.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-353">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.Builder.html" title="class in org.apache.juneau.rest.server.filter">CsrfBoundary.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-354">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -515,7 +515,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="check(jakarta.servlet.http.HttpServletRequest)">
 <h3>check</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-363">check</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-364">check</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Applies the boundary to a request.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -530,7 +530,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="acceptsHandshakeOrigin(java.lang.String)">
 <h3>acceptsHandshakeOrigin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-462">acceptsHandshakeOrigin</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origin)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-463">acceptsHandshakeOrigin</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origin)</span></div>
 <div class="block">Whether a WebSocket handshake's <code>Origin</code> value is well-formed enough to be checked later, once the
  handshake's <code>Host</code> is visible.
 
@@ -551,7 +551,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="checkHandshake(java.lang.String,java.util.List,java.util.List,java.util.List)">
 <h3>checkHandshake</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-507">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-508">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;hosts,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;origins,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;fetchSites)</span></div>
@@ -602,7 +602,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="checkHandshake(java.lang.String,org.apache.juneau.rest.server.filter.HandshakeHosts,java.util.List,java.util.List)">
 <h3>checkHandshake</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-527">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-528">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
  <a href="HandshakeHosts.html" title="class in org.apache.juneau.rest.server.filter">HandshakeHosts</a>&nbsp;hosts,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;origins,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;fetchSites)</span></div>
@@ -627,7 +627,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="checkHandshake(java.lang.String,org.apache.juneau.rest.server.filter.HandshakeHosts,java.util.Map)">
 <h3>checkHandshake</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-550">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-551">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
  <a href="HandshakeHosts.html" title="class in org.apache.juneau.rest.server.filter">HandshakeHosts</a>&nbsp;hosts,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&nbsp;headers)</span></div>
 <div class="block">Applies this boundary to a WebSocket handshake, reading every header it needs from the handshake's header map.
@@ -652,7 +652,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="checkHandshake(java.lang.String,org.apache.juneau.rest.server.filter.HandshakeHosts,java.util.Map,java.net.InetAddress)">
 <h3>checkHandshake</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-570">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BoundaryResult.html" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-571">checkHandshake</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme,
  <a href="HandshakeHosts.html" title="class in org.apache.juneau.rest.server.filter">HandshakeHosts</a>&nbsp;hosts,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&nbsp;headers,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html" title="class or interface in java.net" class="external-link">InetAddress</a>&nbsp;peer)</span></div>
@@ -678,7 +678,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="tokenFor(jakarta.servlet.http.HttpServletRequest)">
 <h3>tokenFor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-916">tokenFor</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-917">tokenFor</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">A freshly masked token for the page being served to this request.
 
  <p>
@@ -697,7 +697,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="csrfHeader()">
 <h3>csrfHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-922">csrfHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-923">csrfHeader</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RequestBoundary.html#csrfHeader()">RequestBoundary</a></code></span></div>
 <div class="block">The name of the header a state-changing request must carry the CSRF token in.</div>
 <dl class="notes">
@@ -711,7 +711,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="tokens()">
 <h3>tokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfTokens.html" title="class in org.apache.juneau.rest.server.filter">CsrfTokens</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-930">tokens</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfTokens.html" title="class in org.apache.juneau.rest.server.filter">CsrfTokens</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-931">tokens</a></span>()</div>
 <div class="block">The token strategy.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -722,7 +722,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="nonBrowser()">
 <h3>nonBrowser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.NonBrowser.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.NonBrowser</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-937">nonBrowser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.NonBrowser.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.NonBrowser</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-938">nonBrowser</a></span>()</div>
 <div class="block">The policy for unsafe requests with neither <code>Origin</code> nor <code>Sec-Fetch-Site</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -733,7 +733,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="originSource()">
 <h3>originSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.OriginSource.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.OriginSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-944">originSource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.OriginSource.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.OriginSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-945">originSource</a></span>()</div>
 <div class="block">Where the request's own origin comes from.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -744,7 +744,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="trustedForwarding()">
 <h3>trustedForwarding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.ForwardedSource.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.ForwardedSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-951">trustedForwarding</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsrfBoundary.ForwardedSource.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.ForwardedSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-952">trustedForwarding</a></span>()</div>
 <div class="block">The header family whose forwarded origin is trusted.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -755,7 +755,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="trustedHops()">
 <h3>trustedHops</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-958">trustedHops</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-959">trustedHops</a></span>()</div>
 <div class="block">The number of trusted proxy entries; the one this far from the right of the forwarded header is used.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -766,7 +766,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="trustedProxies()">
 <h3>trustedProxies</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-966">trustedProxies</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-967">trustedProxies</a></span>()</div>
 <div class="block">The peer address ranges whose forwarded headers are believed.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -778,7 +778,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="requireJson()">
 <h3>requireJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-973">requireJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-974">requireJson</a></span>()</div>
 <div class="block">Whether every admitted unsafe request must carry a single <code>application/json</code> content type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -789,7 +789,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="allowedHosts()">
 <h3>allowedHosts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-980">allowedHosts</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-981">allowedHosts</a></span>()</div>
 <div class="block">The host names every request's own host must be one of, lower-cased.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -800,7 +800,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="createSessions()">
 <h3>createSessions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-988">createSessions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-989">createSessions</a></span>()</div>
 <div class="block">Whether <a href="RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a> may create a session so that a page it serves can carry a session-scoped
  token.</div>
 <dl class="notes">
@@ -812,7 +812,7 @@ implements <a href="RequestBoundary.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-995">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/CsrfBoundary.html#line-996">toString</a></span>()</div>
 <div class="block">Returns a description of the configuration that does <b>not</b> include any key or token.</div>
 <dl class="notes">
 <dt>Overrides:</dt>

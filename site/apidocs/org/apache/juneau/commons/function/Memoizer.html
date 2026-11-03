@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -100,7 +99,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
  and a <a href="#reset()"><code>reset()</code></a> method to clear the cache, forcing recomputation on the next call to <a href="#get()"><code>get()</code></a>.
  It also inherits all Optional-like convenience methods from <a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function"><code>NullableSupplier</code></a>.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create a memoizer</jc>
    Memoizer&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> Memoizer&lt;&gt;(() -&gt; expensiveComputation());
@@ -121,13 +120,13 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
    String <jv>result3</jv> = <jv>supplier</jv>.get();  <jc>// Recomputes</jc>
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe for both <a href="#get()"><code>get()</code></a> and <a href="#reset()"><code>reset()</code></a> operations.
  If multiple threads call get() simultaneously after a reset, the supplier may be invoked
  multiple times, but only one result will be cached.
 
- <h5 class='section'>Notes:</h5>
+ <h2 class='section'>Notes:</h2>
  <ul>
    <li>The supplier may be called multiple times if threads race, but only one result is cached.
    <li>The cached value can be <jk>null</jk> if the supplier returns <jk>null</jk>.
@@ -136,7 +135,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
    <li>Inherits all Optional-like methods from <a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function"><code>NullableSupplier</code></a> (isPresent(), isEmpty(), map(), orElse(), etc.).
  </ul>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jm'><a href="Suppliers.html#memoizer(java.util.function.Supplier)"><code>Suppliers.memoizer(Supplier)</code></a>
    <li class='jc'><a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function"><code>NullableSupplier</code></a> - Base interface providing Optional-like methods
@@ -283,7 +282,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
  This method is thread-safe and is particularly useful for testing when you need to
  inject a specific value without invoking the supplier.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a memoizer</jc>
    Memoizer&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> Memoizer&lt;&gt;(() -&gt; <js>"computed"</js>);

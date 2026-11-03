@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException.Code#BAD_VALUE BAD_VALUE} rather than emitting SQL that differs from the in-memory</span>
 <span class="source-line-no">038</span><span id="line-38"> * result.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    SqlDialect &lt;jv&gt;dialect&lt;/jv&gt; = PostgresDialect.&lt;jsf&gt;INSTANCE&lt;/jsf&gt;;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    SqlFragment &lt;jv&gt;frag&lt;/jv&gt; = &lt;jv&gt;dialect&lt;/jv&gt;.renderBare(&lt;jv&gt;dialect&lt;/jv&gt;.quote(&lt;js&gt;"status"&lt;/js&gt;), SearchType.&lt;jsf&gt;ENUM&lt;/jsf&gt;, &lt;js&gt;"OPEN"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);</span>
@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">    * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException.Code#BAD_VALUE BAD_VALUE} instead of silently comparing text (where {@code 9.10}</span>
 <span class="source-line-no">108</span><span id="line-108">    * sorts before {@code 9.9}).  Equality, {@code $in}, {@code $ne} and {@code $prefix} are not affected.</span>
 <span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">111</span><span id="line-111">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">112</span><span id="line-112">    *    &lt;jc&gt;// A dialect that compares versions as integer tuples opts in.&lt;/jc&gt;</span>
 <span class="source-line-no">113</span><span id="line-113">    *    &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public boolean&lt;/jk&gt; supportsVersionOrdering() { &lt;jk&gt;return true&lt;/jk&gt;; }</span>

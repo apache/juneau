@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,7 +85,7 @@ loadScripts(document, 'script');</script>
  (<code>org/apache/juneau/console/base.ftlh</code>) &mdash; and the <code>&lt;@tag&gt;</code> macro it defines &mdash; resolvable
  from any consumer template, without shadowing the consumer's own <code>basePath</code>-rooted template tree.
 
- <h5 class='section'>Used INSTEAD OF <a href="../../rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a>, not beside it:</h5>
+ <h2 class='section'>Used INSTEAD OF <a href="../../rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a>, not beside it:</h2>
  <p>
  Register it typed as either <a href="../../rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a> or <code>ConsoleFreemarkerMixin</code> &mdash; both declared
  return types work. <code>FreemarkerViewRenderer</code> finds the exact-type <code>FreemarkerMixin</code> bean when one is
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Consumer <code>/templates</code> is never shadowed:</h5>
+ <h2 class='section'>Consumer <code>/templates</code> is never shadowed:</h2>
  <p>
  The augmented <code>Configuration</code>'s <code>TemplateLoader</code> tries the consumer's own <code>basePath</code>-derived
  loader <b>first</b>; the reserved template is addressed by its full classpath-root-relative path
@@ -120,7 +119,7 @@ loadScripts(document, 'script');</script>
    &lt;#include "/org/apache/juneau/console/base.ftlh"&gt;
  </p>
 
- <h5 class='section'>Consumer-supplied <code>Configuration</code> is the same instance, then fill-missing stamped:</h5>
+ <h2 class='section'>Consumer-supplied <code>Configuration</code> is the same instance, then fill-missing stamped:</h2>
  <p>
  When the request's <code>BeanStore</code> already has a <code>Configuration</code> bean (Spring/Spring-Boot autoconfig, or
  a microservice <code>BasicBeanStore.put</code>), <a href="#resolveConfiguration(org.apache.juneau.rest.server.RestRequest)"><code>resolveConfiguration(org.apache.juneau.rest.server.RestRequest)</code></a> still returns that <b>same instance</b>

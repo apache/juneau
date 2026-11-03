@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. Sets automatically
  handle duplicates - adding the same element multiple times will result in only one occurrence in the final set.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Fluent API - all methods return <c>this</c> for method chaining
    <li>Multiple add methods - single elements, varargs, collections, arrays
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
    <li>Automatic deduplication - duplicate elements are automatically removed
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Basic usage</jc>
    Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -161,12 +160,12 @@ loadScripts(document, 'script');</script>
       .buildFiltered();
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
  properly synchronized.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">Collections Package</a>
    <li class='jc'><a href="Lists.html" title="class in org.apache.juneau.commons.collections"><code>Lists</code></a>
    <li class='jc'><a href="Maps.html" title="class in org.apache.juneau.commons.collections"><code>Maps</code></a>
@@ -490,7 +489,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is a convenience method that calls <a href="#build()"><code>build()</code></a> and wraps the result in a <a href="FluentSet.html" title="class in org.apache.juneau.commons.collections"><code>FluentSet</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -518,7 +517,7 @@ loadScripts(document, 'script');</script>
    <li>Otherwise: Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashSet.html" title="class or interface in java.util" class="external-link"><code>HashSet</code></a> (or synchronized HashSet if concurrent)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -585,7 +584,7 @@ loadScripts(document, 'script');</script>
    <li>Empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collections</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -620,7 +619,7 @@ loadScripts(document, 'script');</script>
  <p>
  Note: Filtering is applied at build time, not when adding elements.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -724,7 +723,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is useful when the set needs to be accessed from multiple threads.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a thread-safe set using synchronized HashSet</jc>
    Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -762,7 +761,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is useful when the set needs to be accessed from multiple threads.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Conditionally create a thread-safe set</jc>
    Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -791,7 +790,7 @@ loadScripts(document, 'script');</script>
  Note: If <a href="#sorted()"><code>sorted()</code></a> was previously called, calling this method will override it.
  The last method called (<a href="#ordered()"><code>ordered()</code></a> or <a href="#sorted()"><code>sorted()</code></a>) determines the final set type.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create an ordered set (preserves insertion order)</jc>
    Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -820,7 +819,7 @@ loadScripts(document, 'script');</script>
  Note: If <a href="#sorted()"><code>sorted()</code></a> was previously called, calling this method with <c>true</c> will override it.
  The last method called (<a href="#ordered()"><code>ordered()</code></a> or <a href="#sorted()"><code>sorted()</code></a>) determines the final set type.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Conditionally create an ordered set</jc>
    Set&lt;String&gt; <jv>set</jv> = Sets.<jsm>create</jsm>(String.<jk>class</jk>)

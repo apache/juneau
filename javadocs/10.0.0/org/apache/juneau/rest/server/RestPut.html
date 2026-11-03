@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is a specialized subtype of <c><ja><a href="RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>(method=<jsf>PUT</jsf>)</c>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
 
  </ul></div>
@@ -355,13 +354,13 @@ loadScripts(document, 'script');</script>
  <p>
  Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestOpContext.html#getSupportedContentTypes()"><code>RestOpContext.getSupportedContentTypes()</code></a>
  </ul></div>
 <dl class="notes">
@@ -422,13 +421,13 @@ loadScripts(document, 'script');</script>
  <p>
  The default character encoding for the request and response if not specified on the request.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#defaultCharset()"><code>Rest.defaultCharset()</code></a>
  </ul></div>
 <dl class="notes">
@@ -478,7 +477,7 @@ loadScripts(document, 'script');</script>
       <li class='jm'><a href="RestRequest.html#getAttributes()"><code>RestRequest.getAttributes()</code></a>.
    </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Defined via annotation resolving to a config file setting with default value.</jc>
    <ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
@@ -490,14 +489,14 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- </ul>
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>    *    <li class='ja'><a href="Rest.html#defaultRequestAttributes()"><code>Rest.defaultRequestAttributes()</code></a>
+ <h4 class='section'>See Also:</h4><ul>
+   <li class='ja'><a href="Rest.html#defaultRequestAttributes()"><code>Rest.defaultRequestAttributes()</code></a>
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -522,13 +521,13 @@ loadScripts(document, 'script');</script>
  Affects values returned by <a href="RestRequest.html#getFormParam(java.lang.String)"><code>RestRequest.getFormParam(String)</code></a> when the parameter is not present on the
  request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
    <jk>public</jk> String doPut(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
    <li class='note'>
@@ -556,14 +555,14 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies default values for request headers if they're not passed in through the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Assume "text/json" Accept value when Accept not specified</jc>
    <ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
    <jk>public</jk> String doPut()  {...}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -590,13 +589,13 @@ loadScripts(document, 'script');</script>
  <p>
  Affects values returned by <a href="RestRequest.html#getQueryParam(java.lang.String)"><code>RestRequest.getQueryParam(String)</code></a> when the parameter is not present on the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
    <jk>public</jk> String doPut(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
    <li class='note'>
@@ -624,14 +623,14 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies default values for response headers if they're not overwritten during the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Assume "text/json" Accept value when Accept not specified</jc>
    <ja>@RestPut</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
    <jk>public</jk> String doPut()  {...}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -663,7 +662,7 @@ loadScripts(document, 'script');</script>
       The description of the method in the Swagger page.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
    <li class='note'>
@@ -693,7 +692,7 @@ loadScripts(document, 'script');</script>
  This value overrides encoders specified at the class level using <a href="Rest.html#encoders()"><code>Rest.encoders()</code></a>.
  The <a href="../../marshall/encoders/EncoderSet.Inherit.html" title="class in org.apache.juneau.marshall.encoders"><code>EncoderSet.Inherit</code></a> class can be used to include values from the parent class.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Define a REST resource that handles GZIP compression.</jc>
    <ja>@Rest</ja>(
@@ -719,7 +718,7 @@ loadScripts(document, 'script');</script>
  For programmatic equivalents, contribute a <a href="../../marshall/encoders/EncoderSet.html" title="class in org.apache.juneau.marshall.encoders"><code>EncoderSet</code></a> bean via
  <a href="../../commons/inject/Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean(name="encoders")</code></a> (use methodScope to scope to specific operation methods).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders in REST servers</a>
  </ul></div>
 <dl class="notes">
@@ -763,7 +762,7 @@ loadScripts(document, 'script');</script>
  Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
  differing based on some request attribute, such as a specific header value.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jac'><a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher"><code>RestMatcher</code></a>
  </ul></div>
 <dl class="notes">
@@ -786,20 +785,20 @@ loadScripts(document, 'script');</script>
  Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
  in out-of-memory errors which could affect system stability.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPut</ja>(
       maxInput=<js>"100M"</js>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#maxInput()"><code>Rest.maxInput()</code></a>
  </ul></div>
 <dl class="notes">
@@ -831,7 +830,7 @@ loadScripts(document, 'script');</script>
  This value overrides parsers specified at the class level using <a href="Rest.html#parsers()"><code>Rest.parsers()</code></a>.
  The <a href="../../marshall/parser/ParserSet.Inherit.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSet.Inherit</code></a> class can be used to include values from the parent class.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Define a REST resource that can consume JSON and HTML.</jc>
    <ja>@Rest</ja>(
@@ -858,7 +857,7 @@ loadScripts(document, 'script');</script>
  For programmatic equivalents, contribute a <a href="../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSet</code></a> bean via
  <a href="../../commons/inject/Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean(name="parsers")</code></a> (use methodScope to scope to specific operation methods).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  </ul></div>
 <dl class="notes">
@@ -885,7 +884,7 @@ loadScripts(document, 'script');</script>
  <p>
  The path can contain variables that get resolved to <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http"><code>@Path</code></a> parameters.
 
- <h5 class='figure'>Examples:</h5>
+ <h4 class='figure'>Examples:</h4>
  <p class='bjava'>
    <ja>@RestPut</ja>(path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  </p>
@@ -896,7 +895,7 @@ loadScripts(document, 'script');</script>
  <p>
  If you do not specify a path name, then the path name is inferred from the Java method name.
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bjava'>
    <jc>// Path is assumed to be "/foo".</jc>
    <ja>@RestPut</ja>
@@ -906,7 +905,7 @@ loadScripts(document, 'script');</script>
  <p>
  Note that you can also use <a href="#value()"><code>value()</code></a> to specify the path.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http"><code>Path</code></a>
  </ul></div>
 <dl class="notes">
@@ -936,13 +935,13 @@ loadScripts(document, 'script');</script>
    <li><js>""</js> (default) &mdash; inherit from <a href="Rest.html#problemDetails()"><code>Rest.problemDetails()</code></a>.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#problemDetails()"><code>Rest.problemDetails()</code></a>
  </ul></div>
 <dl class="notes">
@@ -971,7 +970,7 @@ loadScripts(document, 'script');</script>
    <li><js>""</js> (default) &mdash; inherit from <a href="Rest.html#debugMarshalling()"><code>Rest.debugMarshalling()</code></a>.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#debugMarshalling()"><code>Rest.debugMarshalling()</code></a>
  </ul></div>
 <dl class="notes">
@@ -999,7 +998,7 @@ loadScripts(document, 'script');</script>
    <li><js>""</js> (default) &mdash; inherits the resource-level setting.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="RestOp.html#observability()"><code>RestOp.observability()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1025,7 +1024,7 @@ loadScripts(document, 'script');</script>
  specific operation through a dedicated thread pool. Empty string (default) inherits from
  <a href="Rest.html#asyncCompletionExecutor()"><code>Rest.asyncCompletionExecutor()</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="RestOp.html#asyncCompletionExecutor()"><code>RestOp.asyncCompletionExecutor()</code></a>
    <li class='ja'><a href="Rest.html#asyncCompletionExecutor()"><code>Rest.asyncCompletionExecutor()</code></a>
  </ul></div>
@@ -1047,7 +1046,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-653">metricName</a></span></div>
 <div class="block">Per-operation metric name override. Empty string (default) uses the recorder's own name derivation.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="RestOp.html#metricName()"><code>RestOp.metricName()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1069,7 +1068,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Per-operation metric tags. Format: comma-separated <code>key=value</code> pairs.
  Empty string (default) means no additional tags.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="RestOp.html#metricTags()"><code>RestOp.metricTags()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1093,13 +1092,13 @@ loadScripts(document, 'script');</script>
  <p>
  Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestOpContext.html#getSupportedAcceptTypes()"><code>RestOpContext.getSupportedAcceptTypes()</code></a>
  </ul></div>
 <dl class="notes">
@@ -1124,7 +1123,7 @@ loadScripts(document, 'script');</script>
  Merged on top of resource-level <a href="Rest.html#allowedSerializerOptions()"><code>Rest.allowedSerializerOptions()</code></a> values.
  Use <a href="#noInherit()"><code>noInherit()</code></a> to replace rather than extend the resource-level list.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
  </ul></div>
 <dl class="notes">
@@ -1149,7 +1148,7 @@ loadScripts(document, 'script');</script>
  Merged on top of resource-level <a href="Rest.html#allowedParserOptions()"><code>Rest.allowedParserOptions()</code></a> values.
  Use <a href="#noInherit()"><code>noInherit()</code></a> to replace rather than extend the resource-level list.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
  </ul></div>
 <dl class="notes">
@@ -1174,7 +1173,7 @@ loadScripts(document, 'script');</script>
  Prevents the named property from inheriting values from the enclosing <code>@Rest</code> annotation.
  The <code>noInherit</code> attribute itself is never inherited.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options via HTTP</a>
  </ul></div>
 <dl class="notes">
@@ -1196,7 +1195,7 @@ loadScripts(document, 'script');</script>
  <p>
  An expression defining if a user with the specified roles are allowed to access this method.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 
@@ -1209,7 +1208,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports any of the following expression constructs:
       <ul>
@@ -1258,7 +1257,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used in conjunction with <a href="#roleGuard()"><code>roleGuard()</code></a> is used with patterns.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 
@@ -1300,7 +1299,7 @@ loadScripts(document, 'script');</script>
  This value overrides serializers specified at the class level using <a href="Rest.html#serializers()"><code>Rest.serializers()</code></a>.
  The <a href="../../marshall/serializer/SerializerSet.Inherit.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSet.Inherit</code></a> class can be used to include values from the parent class.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Define a REST resource that can produce JSON and HTML.</jc>
    <ja>@Rest</ja>(
@@ -1327,7 +1326,7 @@ loadScripts(document, 'script');</script>
  For programmatic equivalents, contribute a <a href="../../marshall/serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSet</code></a> bean via
  <a href="../../commons/inject/Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean(name="serializers")</code></a> (use methodScope to scope to specific operation methods).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  </ul></div>
 <dl class="notes">
@@ -1357,7 +1356,7 @@ loadScripts(document, 'script');</script>
       The summary of the method in the Swagger page.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
    <li class='note'>
@@ -1387,7 +1386,7 @@ loadScripts(document, 'script');</script>
  The format of this annotation is JSON when all individual parts are concatenated.
  <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPut</ja>(
       path=<js>"/{propertyName}"</js>,
@@ -1406,7 +1405,7 @@ loadScripts(document, 'script');</script>
    )
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The format is <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>.
       <br>Multiple lines are concatenated with newlines.
@@ -1419,7 +1418,7 @@ loadScripts(document, 'script');</script>
       (e.g. <js>"$L{my.localized.variable}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="OpSwagger.html" title="annotation interface in org.apache.juneau.rest.server"><code>OpSwagger</code></a>
    <li class='jc'><a href="swagger/SwaggerProvider.html" title="interface in org.apache.juneau.rest.server.swagger"><code>SwaggerProvider</code></a>
  </ul></div>

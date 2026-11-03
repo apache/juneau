@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
  <code>data-juneau-region</code> container plus <b>one sidecar per host</b> carrying every region descriptor that host
  declares.
 
- <h5 class='section'>The container carries identity; the sidecar carries configuration:</h5>
+ <h2 class='section'>The container carries identity; the sidecar carries configuration:</h2>
  <p>
  The container is deliberately empty and deliberately attribute-only &mdash; id, type, and the handshake stamp and
  nothing else. Configuration (the populator name, <code>dataUrl</code>, <code>params</code>, <code>renderer</code>, <code>lazy</code>,
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
  <b>One sidecar per host, not per region.</b> One <code>&lt;script&gt;</code> per card in a twelve-card grid is twelve parses;
  the existing pattern is one sidecar per view / page / header / bar, and this follows it.
 
- <h5 class='section'>Two sidecar forms, and why the second exists:</h5>
+ <h2 class='section'>Two sidecar forms, and why the second exists:</h2>
  <p>
  <a href="#sidecar(java.lang.String,java.util.List)"><code>sidecar(String, List)</code></a> stamps a document-unique HTML <code>id</code>, for an ordinary once-per-response host
  (a page, a card grid). <a href="#detailSidecar(java.util.List)"><code>detailSidecar(List)</code></a> ships <code>id</code>-less and is found by attribute instead,

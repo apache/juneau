@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  <a href="../../commons/beanquery/BeanQuerySyntaxException.Code.html#BAD_VALUE"><code>BAD_VALUE</code></a> rather than emitting SQL that differs from the in-memory
  result.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    SqlDialect <jv>dialect</jv> = PostgresDialect.<jsf>INSTANCE</jsf>;
    SqlFragment <jv>frag</jv> = <jv>dialect</jv>.renderBare(<jv>dialect</jv>.quote(<js>"status"</js>), SearchType.<jsf>ENUM</jsf>, <js>"OPEN"</js>, <jk>false</jk>);
@@ -257,7 +256,7 @@ loadScripts(document, 'script');</script>
  <a href="../../commons/beanquery/BeanQuerySyntaxException.Code.html#BAD_VALUE"><code>BAD_VALUE</code></a> instead of silently comparing text (where <code>9.10</code>
  sorts before <code>9.9</code>).  Equality, <code>$in</code>, <code>$ne</code> and <code>$prefix</code> are not affected.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// A dialect that compares versions as integer tuples opts in.</jc>
    <ja>@Override</ja> <jk>public boolean</jk> supportsVersionOrdering() { <jk>return true</jk>; }

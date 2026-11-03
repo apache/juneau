@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -334,12 +333,12 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
  The parser that best matches the <c>Accept</c> header will be used to parse the response body.
  <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. <a href="../../../marshall/MarshallingContextable.Builder.html#ignoreUnknownBeanProperties()"><code>MarshallingContextable.Builder.ignoreUnknownBeanProperties()</code></a>) or
    bean context property setters (e.g. <a href="../../../marshall/MarshallingContextable.Builder.html#swaps(java.lang.Object...)"><code>MarshallingContextable.Builder.swaps(Class...)</code></a>) defined on this builder class.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
    RestClient <jv>client</jv> = RestClient
@@ -361,13 +360,13 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="pathVars(java.util.Map)">
 <h3>pathVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-351">pathVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-349">pathVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Add resolved path variables to this client.
 
  <p>
  Allows you to add resolved parent path variables when performing tests on child resource classes.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// A parent class with a path variable.</jc>
    <ja>@Rest</ja>(
@@ -399,9 +398,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
       .run()
       .assertStatus().asCode().is(200)
       .assertContent().is(<js>"bar"</js>);
- </p>
-
- <review>Needs review</review></div>
+ </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The path variables.</dd>
@@ -419,7 +416,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="pathVars(java.lang.String...)">
 <h3>pathVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-365">pathVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-363">pathVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
 <div class="block">Add resolved path variables to this client.
 
  <p>
@@ -435,7 +432,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="restBean(java.lang.Object)">
 <h3>restBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-375">restBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-373">restBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Specifies the <a href="../../server/Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>Rest</code></a>-annotated bean class or instance to test against.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -448,7 +445,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="restContext(org.apache.juneau.rest.server.RestContext)">
 <h3>restContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-386">restContext</a></span><wbr><span class="parameters">(<a href="../../server/RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-384">restContext</a></span><wbr><span class="parameters">(<a href="../../server/RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;value)</span></div>
 <div class="block">Specifies the <a href="../../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> created for the REST bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -461,7 +458,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)">
 <h3>overridingBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-406">overridingBeanStore</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-404">overridingBeanStore</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</span></div>
 <div class="block">Installs a <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> as the
  <code>overridingParent</code> of the <a href="../../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>'s bean store, so test-time overrides
  (e.g. <code>TestBeanStore</code>) resolve at tier 1 of the lookup chain &mdash; above the
@@ -485,7 +482,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="serializers(java.lang.Class...)">
 <h3>serializers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-412">serializers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-410">serializers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.Builder.html#serializers(java.lang.Class...)">RestClient.Builder</a></code></span></div>
 <div class="block">Serializers.
 
@@ -499,12 +496,12 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
  The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
  <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. <a href="../../client/classic/RestClient.Builder.html#sortCollections()"><code>RestClient.Builder.sortCollections()</code></a>) or
    bean context property setters (e.g. <a href="../../../marshall/MarshallingContextable.Builder.html#swaps(java.lang.Object...)"><code>MarshallingContextable.Builder.swaps(Class...)</code></a>) defined on this builder class.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
    RestClient <jv>client</jv> = RestClient
@@ -527,7 +524,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="servletPath(java.lang.String)">
 <h3>servletPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-439">servletPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-437">servletPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Identifies the servlet path for the REST resource.
 
  <p>
@@ -555,7 +552,7 @@ implements <a href="../../../commons/inject/BeanStoreOverridable.html" title="in
 <li>
 <section class="detail" id="suppressLogging()">
 <h3>suppressLogging</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-449">suppressLogging</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.Builder.html#line-447">suppressLogging</a></span>()</div>
 <div class="block">Suppress logging on this client.</div>
 <dl class="notes">
 <dt>Returns:</dt>

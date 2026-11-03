@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * Keywords are stored in a sorted array, making lookups O(log n) efficient. This is particularly useful for</span>
 <span class="source-line-no">029</span><span id="line-29"> * parsers, compilers, and syntax highlighters that need to frequently check if identifiers are reserved keywords.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Immutable after construction - thread-safe for concurrent reads</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Efficient O(log n) lookups using binary search</span>
@@ -49,14 +49,14 @@
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Automatic rejection of null and single-character strings</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Implementation Details:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Implementation Details:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * Keywords are sorted lexicographically during construction and stored in an internal array. The {@link #contains(String)}</span>
 <span class="source-line-no">042</span><span id="line-42"> * method uses {@link Arrays#binarySearch(Object[], Object)} for efficient lookups. Strings shorter than 2 characters</span>
 <span class="source-line-no">043</span><span id="line-43"> * are automatically rejected without performing a search, as most programming languages don't have single-character</span>
 <span class="source-line-no">044</span><span id="line-44"> * keywords.</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;jc&gt;// Create a keyword set for Java reserved words&lt;/jc&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    KeywordSet &lt;jv&gt;javaKeywords&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; KeywordSet(</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> *    }</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;/p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;Programming language parsers - checking if tokens are reserved words</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li&gt;Syntax highlighters - identifying keywords for special formatting</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;li&gt;Query languages - validating reserved words</span>
 <span class="source-line-no">084</span><span id="line-84"> * &lt;/ul&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> *       This class is &lt;b&gt;immutable and thread-safe&lt;/b&gt; after construction. Multiple threads can safely call</span>
 <span class="source-line-no">089</span><span id="line-89"> *       {@link #contains(String)} concurrently.</span>
@@ -109,7 +109,7 @@
 <span class="source-line-no">096</span><span id="line-96"> *       Consider creating {@link KeywordSet} instances as static final constants to avoid repeated construction.</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;/ul&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *</span>
-<span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">100</span><span id="line-100"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections"&gt;Collections Package&lt;/a&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> * &lt;/ul&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> */</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line-110">    * Keywords are automatically sorted during construction. Duplicate keywords are allowed but provide</span>
 <span class="source-line-no">111</span><span id="line-111">    * no benefit. For best performance, pass unique keywords.</span>
 <span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">114</span><span id="line-114">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">115</span><span id="line-115">    *    &lt;jc&gt;// Create a keyword set for SQL keywords&lt;/jc&gt;</span>
 <span class="source-line-no">116</span><span id="line-116">    *    KeywordSet &lt;jv&gt;sql&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; KeywordSet(</span>
@@ -150,7 +150,7 @@
 <span class="source-line-no">137</span><span id="line-137">    * This method performs an O(log n) binary search on the sorted keyword array. Null strings and</span>
 <span class="source-line-no">138</span><span id="line-138">    * strings with fewer than 2 characters are automatically rejected without performing a search.</span>
 <span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">141</span><span id="line-141">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">142</span><span id="line-142">    *    KeywordSet &lt;jv&gt;keywords&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; KeywordSet(&lt;js&gt;"class"&lt;/js&gt;, &lt;js&gt;"interface"&lt;/js&gt;, &lt;js&gt;"enum"&lt;/js&gt;);</span>
 <span class="source-line-no">143</span><span id="line-143">    *</span>
@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line-155">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(&lt;jv&gt;keywords&lt;/jv&gt;.contains(&lt;js&gt;"CLASS"&lt;/js&gt;));     &lt;jc&gt;// Different case&lt;/jc&gt;</span>
 <span class="source-line-no">156</span><span id="line-156">    * &lt;/p&gt;</span>
 <span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * &lt;h5 class='section'&gt;Performance:&lt;/h5&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;h4 class='section'&gt;Performance:&lt;/h4&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    * &lt;ul&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    *    &lt;li&gt;Time complexity: O(log n) using binary search</span>
 <span class="source-line-no">161</span><span id="line-161">    *    &lt;li&gt;Space complexity: O(1) - no additional memory allocated</span>

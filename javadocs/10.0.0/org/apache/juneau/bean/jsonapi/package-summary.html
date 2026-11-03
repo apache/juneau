@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -66,7 +65,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Juneau <a href="../../marshall/Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for the
  <a href="https://jsonapi.org/format/">JSON:API v1.1</a> wire format.
 
- <h5 class='topic'>Overview</h5>
+ <h2 class='topic'>Overview</h2>
 
  <p>
  JSON:API is a media-type (<code>application/vnd.api+json</code>) for building APIs with shared conventions for
@@ -75,7 +74,7 @@ loadScripts(document, 'script');</script>
  <a href="../../marshall/json/JsonParser.html" title="class in org.apache.juneau.marshall.json"><code>JsonParser</code></a> already produce and consume the wire format. The matching
  <code>ContentType</code> constant is <code>org.apache.juneau.http.header.ContentType#APPLICATION_VND_API_JSON</code>.
 
- <h5 class='topic'>Bean Classes</h5>
+ <h2 class='topic'>Bean Classes</h2>
  <ul class='spaced-list'>
    <li><a href="JsonApiDocument.html" title="class in org.apache.juneau.bean.jsonapi"><code>JsonApiDocument</code></a> - Top-level container with
      <code>data</code>/<code>errors</code>/<code>meta</code>/<code>jsonapi</code>/<code>links</code>/<code>included</code>.
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
      string URL or a <a href="JsonApiLink.html" title="class in org.apache.juneau.bean.jsonapi"><code>JsonApiLink</code></a> object per the spec.
  </ul>
 
- <h5 class='topic'>Important: <code>JsonApiResource.type</code> is a plain String</h5>
+ <h2 class='topic'>Important: <code>JsonApiResource.type</code> is a plain String</h2>
 
  <p>
  JSON:API uses <code>type</code> as an open-ended string field on resource objects (the entity-type name, e.g.
@@ -107,14 +106,14 @@ loadScripts(document, 'script');</script>
  bean dispatch would break round-tripping of unknown <code>type</code> values and force every API to enumerate its
  resource types in a Java dictionary up front.
 
- <h5 class='topic'>Document-level mutual exclusion</h5>
+ <h2 class='topic'>Document-level mutual exclusion</h2>
 
  <p>
  Per the JSON:API spec, a document MUST contain at least one of <code>data</code>, <code>errors</code>, or <code>meta</code>;
  <code>data</code> and <code>errors</code> MUST NOT coexist. <a href="JsonApiDocument.html" title="class in org.apache.juneau.bean.jsonapi"><code>JsonApiDocument</code></a>
  documents this constraint and offers an optional <code>validate()</code> helper.
 
- <h5 class='topic'>Example</h5>
+ <h2 class='topic'>Example</h2>
 
  <p class='bjava'>
    <jc>// Build a compound document with included resources.</jc>
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
    String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>doc</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a href="https://jsonapi.org/format/">JSON:API v1.1</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  </ul></div>

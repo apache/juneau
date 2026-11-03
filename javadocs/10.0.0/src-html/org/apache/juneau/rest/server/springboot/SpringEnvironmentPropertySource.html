@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> * {@code application.properties}, command-line args, environment variables, and any custom</span>
 <span class="source-line-no">039</span><span id="line-39"> * {@code org.springframework.core.env.PropertySource} that Spring loads.</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Lifecycle:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Lifecycle:&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * {@link SpringBeanStore} registers one instance per {@link org.springframework.context.ApplicationContext} in</span>
 <span class="source-line-no">044</span><span id="line-44"> * {@link org.apache.juneau.commons.settings.Settings Settings}, shared by every store on that context.  It is removed</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> * want explicit lifecycle control can construct the source directly and add it via {@code Settings.get().addSource(...)};</span>
 <span class="source-line-no">048</span><span id="line-48"> * such instances are not shared.</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Miss cache:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;Miss cache:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * Juneau's builder keys (e.g. {@code MarshallingContext.unsortedProperties}) are not valid Spring Boot property names,</span>
 <span class="source-line-no">053</span><span id="line-53"> * so Spring walks every raw property source for each of them.  This source remembers up to 4096 such keys that were</span>
@@ -71,14 +71,14 @@
 <span class="source-line-no">058</span><span id="line-58"> * call {@link #invalidate()} after such a change.  Setting {@code juneau.spring.missCache.disable=true} in the Spring</span>
 <span class="source-line-no">059</span><span id="line-59"> * Environment before the first lookup turns the cache off.</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;Lazy resolution:&lt;/h5&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h2 class='section'&gt;Lazy resolution:&lt;/h2&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;p&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> * The {@code Environment} is resolved lazily on the first {@link #get(String)} call so that</span>
 <span class="source-line-no">064</span><span id="line-64"> * constructors that build the source from an {@code ApplicationContext} do not interact with the</span>
 <span class="source-line-no">065</span><span id="line-65"> * context until a lookup actually happens.  This matters for tests that mock the context and assert</span>
 <span class="source-line-no">066</span><span id="line-66"> * "no interactions" until a Spring-side bean is requested.</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Ordering:&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h2 class='section'&gt;Ordering:&lt;/h2&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;p&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * Because {@code Settings} walks property sources in reverse insertion order, the Spring</span>
 <span class="source-line-no">071</span><span id="line-71"> * {@code Environment} bridge — registered when Spring creates the bean store — shadows any</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73"> * {@code ConfigPropertySourceProvider}.  Programmatic {@code addSource()} calls made after the</span>
 <span class="source-line-no">074</span><span id="line-74"> * Spring context is built (e.g. from a user-provided microservice {@code Config}) still win.</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation"&gt;@Value Annotation Basics&lt;/a&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='jc'&gt;{@link SpringBeanStore}</span>
 <span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>

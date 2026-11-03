@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  empty a <a href="../../../http/response/TooManyRequests.html" title="class in org.apache.juneau.http.response"><code>TooManyRequests</code></a> exception is thrown with a <code>Retry-After</code> header set to the integer
  number of seconds until the next token will be available.
 
- <h5 class='topic'>Example usage</h5>
+ <h2 class='topic'>Example usage</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(path=<js>"/api"</js>)
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='topic'>Keying</h5>
+ <h2 class='topic'>Keying</h2>
 
  <p>
  The default key is the request's remote address.  Set
@@ -122,7 +121,7 @@ loadScripts(document, 'script');</script>
  of the application, attackers can spoof the <code>X-Forwarded-For</code> header and defeat the IP-based key.  Only
  opt in when the request edge enforces the header.
 
- <h5 class='topic'>Storage</h5>
+ <h2 class='topic'>Storage</h2>
 
  <p>
  Bucket state is held by a pluggable <a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard"><code>RateLimitGuard.Storage</code></a> SPI.  The default <a href="RateLimitGuard.Storage.html#inMemory()"><code>RateLimitGuard.Storage.inMemory()</code></a> implementation
@@ -130,14 +129,14 @@ loadScripts(document, 'script');</script>
  for single-pod deployments.  Distributed deployments should provide a substrate-backed implementation
  (e.g. Redis) so per-pod buckets do not split the shared rate envelope.
 
- <h5 class='topic'>Probe paths</h5>
+ <h2 class='topic'>Probe paths</h2>
 
  <p>
  Built-in probe paths (<code>/healthz</code>, <code>/readyz</code>, <code>/livez</code>) are exempted from throttling by
  default so a misconfigured limit cannot mask a healthy pod from the orchestrator.  Override via
  <a href="RateLimitGuard.Builder.html#exemptPaths(java.lang.String...)"><code>RateLimitGuard.Builder.exemptPaths(String...)</code></a>.
 
- <h5 class='topic'>Time source</h5>
+ <h2 class='topic'>Time source</h2>
 
  <p>
  Refill math uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#nanoTime()" title="class or interface in java.lang" class="external-link"><code>System.nanoTime()</code></a>.  This is monotonic and safe across wall-clock jumps but does not
@@ -148,7 +147,7 @@ loadScripts(document, 'script');</script>
  <a href="RateLimitGuard.BucketState.html#lastRequest()"><code>RateLimitGuard.BucketState.lastRequest()</code></a> instant reported by <a href="RateLimitGuard.Storage.html#snapshot()"><code>RateLimitGuard.Storage.snapshot()</code></a> is read from a separate
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link"><code>Clock</code></a> (default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html#systemUTC()" title="class or interface in java.time" class="external-link"><code>Clock.systemUTC()</code></a>), likewise overridable through a package-private constructor.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">Rate-Limiting and Request-Id Propagation</a>
  </ul></div>
 <dl class="notes">

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  (<code>kind:"line", x:..., series:[...]</code>) byte-for-byte; the other kinds emit <code>helper:{kind, ...}</code>, and
  <code>raw</code> emits neither (its <a href="#option(org.apache.juneau.marshall.collections.JsonMap)"><code>option(JsonMap)</code></a> is the whole chart).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jv>page</jv>.card(ChartDef.<jsm>line</jsm>(<js>"orders-trend"</js>).title(<js>"Orders"</js>).src(<js>"/console/store/stats/daily"</js>)
       .x(<js>"day"</js>).series(<js>"placed"</js>, <js>"Placed"</js>).series(<js>"delivered"</js>, <js>"Delivered"</js>).toCardSpec());
@@ -459,7 +458,7 @@ loadScripts(document, 'script');</script>
  A click on a tile publishes the row's <a href="#tileFields(java.lang.String...)"><code>tileFields(String...)</code></a> as <code>meta</code> (the tile's <code>row</code> is
  always <jk>null</jk>); a click on a group does nothing.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ChartDef.<jsm>treemap</jsm>(<js>"fleet"</js>).src(<js>"/api/hosts"</js>).groupBy(<js>"region"</js>, <js>"cluster"</js>).label(<js>"host"</js>)
       .colorBy(<js>"health"</js>, ChartDef.<jsm>legendItem</jsm>(<js>"ok"</js>, <js>"Healthy"</js>, <js>"ok"</js>),

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  file system. This is particularly useful in applications that need to work with files in both
  development (file system) and production (packaged JAR) environments.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Unified file access - works with both classpath resources and file system files
    <li>Optional caching - can cache file contents in memory for fast repeated access
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
    <li>Thread-safe reading - synchronized access for cached content
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Reading configuration files that may be on classpath or file system
    <li>Accessing template files in both development and production environments
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    <li>Applications that need to support both embedded and external file access
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Classpath file</jc>
    LocalFile <jv>classpathFile</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"config.properties"</js>);
@@ -120,20 +119,20 @@ loadScripts(document, 'script');</script>
    InputStream <jv>is3</jv> = <jv>cachedFile</jv>.read();  <jc>// Fast - uses cache</jc>
  </p>
 
- <h5 class='section'>Caching:</h5>
+ <h2 class='section'>Caching:</h2>
  <p>
  The <a href="#cache()"><code>cache()</code></a> method loads the entire file contents into memory, which can improve
  performance for files that are accessed multiple times. Once cached, subsequent calls to
  <a href="#read()"><code>read()</code></a> return a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/ByteArrayInputStream.html" title="class or interface in java.io" class="external-link"><code>ByteArrayInputStream</code></a> backed by the cached data. Caching is
  thread-safe and synchronized.
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe for reading operations. The caching mechanism uses synchronization
  to ensure thread-safe access to cached content. Multiple threads can safely call <a href="#read()"><code>read()</code></a>
  concurrently.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="LocalDir.html" title="class in org.apache.juneau.commons.io"><code>LocalDir</code></a> - Directory counterpart for resolving files within directories
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  </ul></div>
@@ -224,7 +223,7 @@ loadScripts(document, 'script');</script>
  Creates a LocalFile that references a file on the classpath, relative to the specified class.
  The path is resolved using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getResourceAsStream(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>Class.getResourceAsStream(String)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// File in same package as MyClass</jc>
    LocalFile <jv>file1</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"config.properties"</js>);
@@ -253,7 +252,7 @@ loadScripts(document, 'script');</script>
  Creates a LocalFile that references a file on the file system using a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a>.
  The path must point to an actual file (not a directory) and must have a filename component.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Absolute path</jc>
    LocalFile <jv>file1</jv> = <jk>new</jk> LocalFile(Paths.get(<js>"/etc/config.properties"</js>));
@@ -299,7 +298,7 @@ loadScripts(document, 'script');</script>
  The caching operation is thread-safe and synchronized. If multiple threads call this method
  concurrently, only one will perform the actual read operation.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    LocalFile <jv>file</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"template.html"</js>);
    <jv>file</jv>.cache();  <jc>// Load into memory</jc>
@@ -309,7 +308,7 @@ loadScripts(document, 'script');</script>
    InputStream <jv>is2</jv> = <jv>file</jv>.read();
  </p>
 
- <h5 class='section'>Memory Considerations:</h5>
+ <h4 class='section'>Memory Considerations:</h4>
  <ul class='spaced-list'>
    <li>The entire file is loaded into memory, so use with caution for large files
    <li>Once cached, the file contents remain in memory for the lifetime of the LocalFile object
@@ -333,7 +332,7 @@ loadScripts(document, 'script');</script>
  For classpath files, this is the last component of the classpath path.
  For file system files, this is the filename component of the path.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    LocalFile <jv>file1</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"templates/index.html"</js>);
    String <jv>name1</jv> = <jv>file1</jv>.getName();  <jc>// Returns "index.html"</jc>
@@ -363,7 +362,7 @@ loadScripts(document, 'script');</script>
  Each call to this method returns a new input stream. The caller is responsible
  for closing the returned stream.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    LocalFile <jv>file</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"data.txt"</js>);
 
@@ -396,7 +395,7 @@ loadScripts(document, 'script');</script>
  callers need to check for existence before deciding whether to call <a href="#read()"><code>read()</code></a> (which
  throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> if the file is missing).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    LocalFile <jv>file</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"optional.properties"</js>);
    <jk>if</jk> (<jv>file</jv>.exists()) {
@@ -422,7 +421,7 @@ loadScripts(document, 'script');</script>
  For file system files, this method returns the actual file size using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Files.html#size(java.nio.file.Path)" title="class or interface in java.nio.file" class="external-link"><code>Files.size(Path)</code></a>.
  For classpath files, the size cannot be determined and this method returns <c>-1</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    LocalFile <jv>fsFile</jv> = <jk>new</jk> LocalFile(Paths.get(<js>"/var/log/app.log"</js>));
    <jk>long</jk> <jv>size</jv> = <jv>fsFile</jv>.size();  <jc>// Returns actual file size</jc>

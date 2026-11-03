@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
    <li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with <a href="MarshalledApply.html" title="annotation interface in org.apache.juneau.marshall"><code>@MarshalledApply</code></a>.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledAnnotation">@Marshalled Annotation</a>
  </ul></div>
 </section>
@@ -311,7 +310,7 @@ loadScripts(document, 'script');</script>
  <p>
  The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="MarshalledProp.html#dictionary()"><code>MarshalledProp.dictionary()</code></a>
    <li class='ja'><a href="MarshalledConfig.html#dictionary()"><code>MarshalledConfig.dictionary()</code></a>
    <li class='ja'><a href="MarshalledConfig.html#dictionary_replace()"><code>MarshalledConfig.dictionary_replace()</code></a>
@@ -564,13 +563,13 @@ loadScripts(document, 'script');</script>
  <p>
  Examples are used in cases such as POJO examples in Swagger documents.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
    <jk>public class</jk> MyClass {...}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Setting applies to specified class and all subclasses.
    <li class='note'>
@@ -587,7 +586,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Example.html" title="annotation interface in org.apache.juneau.marshall"><code>Example</code></a>
  </ul></div>
 <dl class="notes">
@@ -618,7 +617,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="implClass()">
 <h3>implClass</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-278">implClass</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-277">implClass</a></span></div>
 <div class="block">Implementation class.
 
  <p>
@@ -626,11 +625,10 @@ loadScripts(document, 'script');</script>
  interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
  parse).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@Marshalled</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
-   <jk>public class</jk> MyInterface {...}
- <p></div>
+   <jk>public class</jk> MyInterface {...}</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The annotation value.</dd>
@@ -644,13 +642,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="interceptor()">
 <h3>interceptor</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../commons/bean/BeanInterceptor.html" title="class in org.apache.juneau.commons.bean">BeanInterceptor</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-292">interceptor</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../commons/bean/BeanInterceptor.html" title="class in org.apache.juneau.commons.bean">BeanInterceptor</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-291">interceptor</a></span></div>
 <div class="block">Bean property interceptor.
 
  <p>
  Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jc'><a href="../commons/bean/BeanInterceptor.html" title="class in org.apache.juneau.commons.bean"><code>BeanInterceptor</code></a>
  </ul></div>
 <dl class="notes">
@@ -666,7 +664,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="typeName()">
 <h3>typeName</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-318">typeName</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-317">typeName</a></span></div>
 <div class="block">An identifying name for this class.
 
  <p>
@@ -677,14 +675,14 @@ loadScripts(document, 'script');</script>
  <p>
  It is also used to specify element names in XML.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Use _type='mybean' to identify this bean.</jc>
    <ja>@Marshalled</ja>(typeName=<js>"mybean"</js>)
    <jk>public class</jk> MyBean {...}
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingContext.Builder.html#beanDictionary(java.lang.Class...)"><code>MarshallingContext.Builder.beanDictionary(Class...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -700,7 +698,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="typePropertyName()">
 <h3>typePropertyName</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-343">typePropertyName</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Marshalled.html#line-342">typePropertyName</a></span></div>
 <div class="block">The property name to use for representing the type name.
 
  <p>
@@ -709,14 +707,14 @@ loadScripts(document, 'script');</script>
  <p>
  The default value if not specified is <js>"_type"</js>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Use 'type' instead of '_type' for bean names.</jc>
    <ja>@Marshalled</ja>(typePropertyName=<js>"type"</js>)
    <jk>public class</jk> MyBean {...}
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="MarshalledConfig.html#typePropertyName()"><code>MarshalledConfig.typePropertyName()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#typePropertyName(java.lang.String)"><code>MarshallingContext.Builder.typePropertyName(String)</code></a>
  </ul></div>

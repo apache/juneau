@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -70,7 +69,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Authentication (AuthN) guards, servlet-layer filters, SPIs, and request-time helpers for
  <code>juneau-rest-server</code>.
 
- <h5 class='topic'>Guard-level authentication (<a href="../guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuard</code></a>)</h5>
+ <h2 class='topic'>Guard-level authentication (<a href="../guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuard</code></a>)</h2>
 
  <p>
  <a href="BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a> and <a href="ApiKeyGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>ApiKeyGuard</code></a> are
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  <a href="AuthArg.html" title="class in org.apache.juneau.rest.server.auth"><code>@Auth Principal</code></a> or
  <code>req.getAttributes().get(PRINCIPAL_ATTR)</code>.
 
- <h5 class='topic'>Servlet-layer authentication (<a href="AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a>)</h5>
+ <h2 class='topic'>Servlet-layer authentication (<a href="AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a>)</h2>
 
  <p>
  This package also ships a two-layer pluggable servlet-filter authentication framework that runs <b>at the
@@ -97,7 +96,7 @@ loadScripts(document, 'script');</script>
  <code>AuthFilter</code> instances with first-success principal resolution, role aggregation across all successful
  filters, and all-failure aggregation into a single <code>401</code> response.
 
- <h5 class='topic'>Optional&lt;AuthResult&gt; three-state contract</h5>
+ <h2 class='topic'>Optional&lt;AuthResult&gt; three-state contract</h2>
 
  <p>
  <a href="Authenticator.html#authenticate(jakarta.servlet.http.HttpServletRequest)"><code>authenticate(HttpServletRequest)</code></a> returns:
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#of(T)" title="class or interface in java.util" class="external-link"><code>Optional.of(AuthResult)</code></a> &mdash; authentication succeeded.
  </ul>
 
- <h5 class='topic'>Principal and role surface</h5>
+ <h2 class='topic'>Principal and role surface</h2>
 
  <p>
  On success the chain wraps the request in <a href="AuthenticatedRequestWrapper.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticatedRequestWrapper</code></a>,
@@ -119,7 +118,7 @@ loadScripts(document, 'script');</script>
  This makes <a href="../guard/RoleBasedRestGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RoleBasedRestGuard</code></a> and <code>@Auth Principal</code> arg injection work
  with zero changes.
 
- <h5 class='topic'>SPIs</h5>
+ <h2 class='topic'>SPIs</h2>
 
  <p>
  <a href="TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a> and <a href="ApiKeyStore.html" title="interface in org.apache.juneau.rest.server.auth"><code>ApiKeyStore</code></a> are the
@@ -128,7 +127,7 @@ loadScripts(document, 'script');</script>
  optional <code>juneau-rest-server-auth-jwt</code> sub-module (which plugs into the
  <a href="TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a> SPI from this package).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards — Bearer / API-Key / JWT</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  </ul></div>

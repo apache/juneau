@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * typically rendered in a monospace font and is commonly used for displaying code snippets,</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * ASCII art, or any text where formatting and spacing are important.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;p class='bcode w800'&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
@@ -103,35 +103,34 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * 		&lt;li class='jm'&gt;{@link HtmlBuilder#pre(Object...) pre(Object...)}</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauBeanHtml5</a>"&gt;juneau-bean-html5&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> @Marshalled(typeName = <span class="jxr_string">"pre"</span>)
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Pre" href="../../../../../org/apache/juneau/bean/html5/Pre.html#Pre">Pre</a> <strong class="jxr_keyword">extends</strong> HtmlElementMixed&lt;Pre&gt; {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * Creates an empty {@link Pre} element.</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">public</strong> <a name="Pre" href="../../../../../org/apache/juneau/bean/html5/Pre.html#Pre">Pre</a>() {}
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * Creates a {@link Pre} element with the specified child nodes.</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * @param children The child nodes. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">public</strong> <a name="Pre" href="../../../../../org/apache/juneau/bean/html5/Pre.html#Pre">Pre</a>(Object...children) {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		children(children);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Xml(format = MIXED_PWS)
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@BeanProp(name=<span class="jxr_string">"c"</span>) @MarshalledProp(dictionary=HtmlBeanDictionary.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Override
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> List&lt;Object&gt; getChildren() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.getChildren(); }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauBeanHtml5</a>"&gt;juneau-bean-html5&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> @Marshalled(typeName = <span class="jxr_string">"pre"</span>)
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Pre" href="../../../../../org/apache/juneau/bean/html5/Pre.html#Pre">Pre</a> <strong class="jxr_keyword">extends</strong> HtmlElementMixed&lt;Pre&gt; {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * Creates an empty {@link Pre} element.</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">public</strong> <a name="Pre" href="../../../../../org/apache/juneau/bean/html5/Pre.html#Pre">Pre</a>() {}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * Creates a {@link Pre} element with the specified child nodes.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @param children The child nodes. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">public</strong> <a name="Pre" href="../../../../../org/apache/juneau/bean/html5/Pre.html#Pre">Pre</a>(Object...children) {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		children(children);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Xml(format = MIXED_PWS)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@BeanProp(name=<span class="jxr_string">"c"</span>) @MarshalledProp(dictionary=HtmlBeanDictionary.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Override
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> List&lt;Object&gt; getChildren() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.getChildren(); }
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

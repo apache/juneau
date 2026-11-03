@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  Settings instances are created using the <a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings"><code>Settings.Builder</code></a> pattern. Use <a href="#create()"><code>create()</code></a> to create a new builder,
  or <a href="#get()"><code>get()</code></a> to get the singleton instance (which is created using default builder settings).
 
- <h5 class='section'>Lookup Order:</h5>
+ <h2 class='section'>Lookup Order:</h2>
  <p>
  When retrieving a property value, the lookup order is:
  <ol>
@@ -111,14 +110,14 @@ loadScripts(document, 'script');</script>
  If SPI registered no system-property source (a shaded jar that does not merge <c>META-INF/services</c>, for example),
  a fallback system-property source sits just above the relaxed environment source.
 
- <h5 class='section'>Sources vs Stores:</h5>
+ <h2 class='section'>Sources vs Stores:</h2>
  <ul class='spaced-list'>
    <li><b>Sources</b> (<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>) - Provide read-only access to property values. Examples: <a href="FunctionalPropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>FunctionalPropertySource</code></a>
    <li><b>Stores</b> (<a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings"><code>PropertyStore</code></a>) - Provide read/write access to property values. Examples: <a href="MapStore.html" title="class in org.apache.juneau.commons.settings"><code>MapStore</code></a>, <a href="FunctionalPropertyStore.html" title="class in org.apache.juneau.commons.settings"><code>FunctionalPropertyStore</code></a>
    <li>Stores can be used as sources (they extend <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>), so you can add stores via <a href="Settings.Builder.html#addSource(org.apache.juneau.commons.settings.PropertySource)"><code>Settings.Builder.addSource(PropertySource)</code></a>
  </ul>
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>System property access - read Java system properties with type conversion via <a href="StringSetting.html" title="class in org.apache.juneau.commons.settings"><code>StringSetting</code></a>
    <li>Global overrides - override system properties globally for all threads (stored in a <a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings"><code>PropertyStore</code></a>)
@@ -129,7 +128,7 @@ loadScripts(document, 'script');</script>
    <li>Resettable suppliers - settings are returned as <a href="StringSetting.html" title="class in org.apache.juneau.commons.settings"><code>StringSetting</code></a> instances that can be reset to force recomputation
  </ul>
 
- <h5 class='section'>Usage Examples:</h5>
+ <h2 class='section'>Usage Examples:</h2>
  <p class='bjava'>
    <jc>// Get a system property as a StringSetting (using singleton instance)</jc>
    StringSetting <jv>setting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.property"</js>);
@@ -175,7 +174,7 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>System Properties:</h5>
+ <h2 class='section'>System Properties:</h2>
  <ul class='spaced-list'>
    <li><c>juneau.settings.disableGlobal</c> (system property) or <c>JUNEAU_SETTINGS_DISABLEGLOBAL</c> (system env) - If set to <c>true</c>, prevents new global overrides
       from being set via <a href="#setGlobal(java.lang.String,java.lang.String)"><code>setGlobal(String, String)</code></a>. Existing global overrides will still be
@@ -409,7 +408,7 @@ loadScripts(document, 'script');</script>
  configuration. The builder allows you to configure stores, sources, and other settings
  before building the final Settings instance.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a custom Settings instance</jc>
    Settings <jv>custom</jv> = Settings.<jsf>create</jsf>()
@@ -597,7 +596,7 @@ loadScripts(document, 'script');</script>
  Supported types include any type that has a static method with signature <c>public static &lt;T&gt; T anyName(String arg)</c>
  or a public constructor with signature <c>public T(String arg)</c>, such as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link"><code>Charset</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>, etc.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// System property: -Dmy.property=true</jc>
    Boolean <jv>flag</jv> = get(<js>"my.property"</js>, <jk>false</jk>);  <jc>// true</jc>
@@ -820,7 +819,7 @@ loadScripts(document, 'script');</script>
  When a conversion method or constructor is found via reflection, it is cached in the
  <c>toTypeFunctions</c> map for future use.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <ul class='spaced-list'>
    <li><c>Boolean</c> - Uses <c>Boolean.valueOf(String)</c> static method
    <li><c>Integer</c> - Uses <c>Integer.valueOf(String)</c> static method

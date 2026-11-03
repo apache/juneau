@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=WidgetsMixin.class)}; the asset URLs then become</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * available alongside the host's own endpoints.</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;These assets still need the view runtime beside them&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;These assets still need the view runtime beside them&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * The bytes live here, but they are &lt;b&gt;not&lt;/b&gt; a standalone widget runtime: the calendar script</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * resolves its glyphs through the rich-view module's icon registry ({@code juneau-icons.js}) and pushes its</em>
@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * these assets from before they moved, reading the bytes from &lt;b&gt;this&lt;/b&gt; module's classpath.  An existing</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * application therefore keeps working unchanged; a new one composes this mixin.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Contract-version handshake:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Contract-version handshake:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * Each {@code *_CONTRACT_VERSION} constant is the handshake stamp the matching runtime bakes in.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * {@link #CALENDAR_CONTRACT_VERSION} aliases {@link CalendarDef#CONTRACT_VERSION};</em>
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * {@link #HEADER_CONTRACT_VERSION} is a literal (the header bean is gone). The three are deliberately distinct from one another: a calendar-envelope</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * revision must never force a header or bar-sidecar bump, or vice-versa.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Cache-busting + versioned URLs:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Cache-busting + versioned URLs:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * {@link #widgetAssetUrl(String)} carries the same {@code ?v=&lt;buildVersion&gt;-&lt;hash8&gt;} content-sensitive cache-buster</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * shape the views mixin uses: an 8-hex-char content hash of the asset's own served bytes, computed once and cached.</em>
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * {@code buildVersion} resolves this module's implementation version rather than a neighbouring module's.  The two</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * modules share the hash function, not a cache.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The serving-path {@code Widget.validate()} gate&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;The serving-path {@code Widget.validate()} gate&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * This class also nests {@link WidgetValidationProcessor}, a {@link ResponseProcessor} that calls</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * {@link Widget#validate()} on any REST response content that is a {@link Widget}, fail-closed, ahead of every</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * processor is itself a serving-framework type, so nesting it here keeps that rule literally true rather than</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * requiring an amendment.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link CalendarDef}</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link WidgetValidationProcessor}</em>
@@ -108,7 +108,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * The URL path at which the reusable-calendar runtime is served (relative to the host mount).</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Load order is a contract, not a preference:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Load order is a contract, not a preference:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * This {@code &lt;script&gt;} MUST come after the view module's {@code juneau-views.js}.  The calendar's</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * {@code "+N more"} popover is pushed onto the ONE shared layer stack that script publishes, so Escape, focus</em>
@@ -259,14 +259,14 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * REST response content that is a {@link Widget}, giving the JSON serving path the same gate the</em>
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * {@code juneau-console-views} HTML emitters already give every {@code Widget} they consume.</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * {@code juneau-rest-server} does not (and must not) depend on this module, so a hard-coded validation step</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * inside it cannot see {@link Widget} without inverting that dependency. A {@link ResponseProcessor} declared</em>
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * here, discovered by every classpath that carries this module via {@code ServiceLoader}, needs no such</em>
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * reflection or hoisted marker interface &amp;mdash; see the class Javadoc.</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Why {@code NEXT}, never {@code FINISHED}&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Why {@code NEXT}, never {@code FINISHED}&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * This processor validates and declines to handle: it never claims the response, so it cannot perturb chain</em>
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * ordering, content-type negotiation, or the {@code NotImplemented} fallthrough. Non-{@link Widget} content</em>
@@ -274,14 +274,14 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * {@code org.apache.juneau.rest.server.widget.Widget} SVL resolver &amp;mdash; see the module Javadoc's naming</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * collision note) costs one {@code instanceof} test and is otherwise untouched.</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Why {@code InternalServerError} (500), not the caller's problem&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Why {@code InternalServerError} (500), not the caller's problem&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * A malformed {@link Widget} reaching the serving path is a &lt;b&gt;server&lt;/b&gt; defect &amp;mdash; the client asked for</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * a dialog correctly and the server built a broken one &amp;mdash; not an inbound-validation failure of the kind</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * {@code ValidationException} (400) is scoped to. The underlying {@link IllegalArgumentException} rides as the</em>
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * cause so the message names the failing rule.</em>
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * A widget that already called {@code checked()} is validated twice per response: once at build time, once</em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * here. No {@code validated} flag is added to skip the second pass &amp;mdash; a mutable "already validated" flag</em>
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * that this module's contract deliberately avoids elsewhere. {@code validate()} is cheap and idempotent, so the</em>
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * repeat costs nothing worth building around.</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Traversal is top-level only&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Traversal is top-level only&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * Only {@code res.getContent()} itself is tested. Nested widgets are covered by the beans' own recursive</em>
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * {@code validate()} (e.g. {@link ModalDef#validate()} &amp;rarr; {@link FormDef#validate()}); a {@link Widget}</em>
@@ -297,7 +297,7 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * that shape, and walking one would collide with the unrelated {@code examples.views.Widget} row-bean lists</em>
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * some example endpoints do return.</em>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Escape hatch&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;h2 class='section'&gt;Escape hatch&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * A resource that must serve a deliberately-invalid {@link Widget} can override the response-processor chain</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * entirely with a {@code @Bean ResponseProcessorList} factory method, which replaces the whole list. There is</em>

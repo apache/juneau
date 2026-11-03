@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -217,7 +216,7 @@ loadScripts(document, 'script');</script>
  <p>
  Key/value pairs in the config file section get copied as bean property values to the specified bean class.
 
- <h5 class='figure'>Example config file</h5>
+ <h4 class='figure'>Example config file</h4>
  <p class='bini'>
    <cs>[MyAddress]</cs>
    <ck>name</ck> = <cv>John Smith</cv>
@@ -227,7 +226,7 @@ loadScripts(document, 'script');</script>
    <ck>zip</ck> = <cv>12345</cv>
  </p>
 
- <h5 class='figure'>Example bean</h5>
+ <h4 class='figure'>Example bean</h4>
  <p class='bjava'>
    <jk>public class</jk> Address {
       <jk>public</jk> String <jf>name</jf>, <jf>street</jf>, <jf>city</jf>;
@@ -236,7 +235,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='figure'>Example usage</h5>
+ <h4 class='figure'>Example usage</h4>
  <p class='bjava'>
    Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
    Address <jv>address</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).asBean(Address.<jk>class</jk>).orElse(<jk>null</jk>);
@@ -263,7 +262,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Wraps this section inside a Java interface so that values in the section can be read and
  write using getters and setters.
 
- <h5 class='figure'>Example config file</h5>
+ <h4 class='figure'>Example config file</h4>
  <p class='bini'>
    <cs>[MySection]</cs>
    <ck>string</ck> = <cv>foo</cv>
@@ -274,7 +273,7 @@ loadScripts(document, 'script');</script>
    <ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
  </p>
 
- <h5 class='figure'>Example interface</h5>
+ <h4 class='figure'>Example interface</h4>
  <p class='bjava'>
    <jk>public interface</jk> MyConfigInterface {
 
@@ -298,7 +297,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='figure'>Example usage</h5>
+ <h4 class='figure'>Example usage</h4>
  <p class='bjava'>
    Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 
@@ -311,7 +310,7 @@ loadScripts(document, 'script');</script>
    <jv>ci</jv>.save();
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Calls to setters when the configuration is read-only will cause <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> to be thrown.
  </ul></div>
 <dl class="notes">

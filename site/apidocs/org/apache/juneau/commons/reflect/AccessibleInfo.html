@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
  accessible (fields, methods, and constructors). It mirrors the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AccessibleObject.html" title="class or interface in java.lang.reflect" class="external-link"><code>AccessibleObject</code></a> API, allowing private
  members to be accessed via reflection.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Accessibility control - make private members accessible
    <li>Security exception handling - gracefully handles security exceptions
@@ -102,14 +101,14 @@ loadScripts(document, 'script');</script>
    <li>Fluent API - methods return <c>this</c> for method chaining
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Accessing private fields, methods, or constructors
    <li>Building frameworks that need to work with non-public members
    <li>Testing scenarios where private members need to be accessed
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Make accessible</jc>
    AccessibleInfo <jv>ai</jv> = ...;
@@ -124,13 +123,13 @@ loadScripts(document, 'script');</script>
    <jv>ai</jv>.accessible();  <jc>// Returns this after making accessible</jc>
  </p>
 
- <h5 class='section'>Security:</h5>
+ <h2 class='section'>Security:</h2>
  <p>
  The <a href="#setAccessible()"><code>setAccessible()</code></a> method attempts to make the element accessible and quietly ignores
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SecurityException.html" title="class or interface in java.lang" class="external-link"><code>SecurityException</code></a> if the security manager denies access. This allows code to work in
  both secure and non-secure environments.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ElementInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ElementInfo</code></a> - Base class for all reflection elements
    <li class='jc'><a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect"><code>FieldInfo</code></a> - Field introspection
    <li class='jc'><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> - Method introspection
@@ -228,7 +227,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method was added in Java 9. For earlier versions, this always returns <jk>false</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if accessible without security checks</jc>
    <jk>if</jk> (!accessibleInfo.isAccessible()) {

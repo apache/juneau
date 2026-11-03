@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ implements <a href="PropertyExtractor.html" title="interface in org.apache.junea
  comprehensive JavaBean property access patterns. It tries multiple approaches to
  access object properties, providing maximum compatibility with different coding styles.</p>
 
- <h5 class='section'>Property Access Order:</h5>
+ <h2 class='section'>Property Access Order:</h2>
  <ol>
     <li><b><code>is{Property}()</code></b> - Boolean property getters (e.g., <code>isActive()</code>)</li>
     <li><b><code>get{Property}()</code></b> - Standard getter methods (e.g., <code>getName()</code>)</li>
@@ -108,7 +107,7 @@ implements <a href="PropertyExtractor.html" title="interface in org.apache.junea
     <li><b><code>{property}()</code></b> - No-argument methods with exact property name</li>
  </ol>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
     <jc>// Property "name" can be accessed via:</jc>
     <jv>obj</jv>.getName()        <jc>// Standard getter</jc>

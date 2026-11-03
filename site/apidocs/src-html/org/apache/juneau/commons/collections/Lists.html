@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. It's particularly</span>
 <span class="source-line-no">034</span><span id="line-34"> * useful when you need to construct lists dynamically with conditional elements or from multiple sources.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;Fluent API - all methods return &lt;c&gt;this&lt;/c&gt; for method chaining</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;Multiple add methods - single elements, varargs, collections, arrays</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Custom conversion functions - type conversion via {@link #elementFunction(Function)}</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Basic usage&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = Lists.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -109,12 +109,12 @@
 <span class="source-line-no">096</span><span id="line-96"> *       .buildFiltered();</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;/p&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *</span>
-<span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">100</span><span id="line-100"> * &lt;p&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> * This class is &lt;b&gt;not thread-safe&lt;/b&gt;. Each builder instance should be used by a single thread or</span>
 <span class="source-line-no">102</span><span id="line-102"> * properly synchronized.</span>
 <span class="source-line-no">103</span><span id="line-103"> *</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections"&gt;Collections Package&lt;/a&gt;</span>
 <span class="source-line-no">106</span><span id="line-106"> *    &lt;li class='jc'&gt;{@link Maps}</span>
 <span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='jc'&gt;{@link Sets}</span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120">   /**</span>
 <span class="source-line-no">121</span><span id="line-121">    * Creates a new list builder for the specified element type.</span>
 <span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">124</span><span id="line-124">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">125</span><span id="line-125">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = Lists.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">126</span><span id="line-126">    *       .add(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;)</span>
@@ -230,7 +230,7 @@
 <span class="source-line-no">217</span><span id="line-217">    *    &lt;li&gt;Convertible types - converted using {@link #elementFunction(Function)}</span>
 <span class="source-line-no">218</span><span id="line-218">    * &lt;/ul&gt;</span>
 <span class="source-line-no">219</span><span id="line-219">    *</span>
-<span class="source-line-no">220</span><span id="line-220">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">220</span><span id="line-220">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">221</span><span id="line-221">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">    *    &lt;jc&gt;// Mix different input types&lt;/jc&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    *    List&amp;lt;Integer&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = Lists.&lt;jsm&gt;create&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -334,7 +334,7 @@
 <span class="source-line-no">321</span><span id="line-321">    * &lt;p&gt;</span>
 <span class="source-line-no">322</span><span id="line-322">    * This is a convenience method that calls {@link #build()} and wraps the result in a {@link FluentList}.</span>
 <span class="source-line-no">323</span><span id="line-323">    *</span>
-<span class="source-line-no">324</span><span id="line-324">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">324</span><span id="line-324">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">325</span><span id="line-325">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">326</span><span id="line-326">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">327</span><span id="line-327">    *</span>
@@ -353,7 +353,7 @@
 <span class="source-line-no">340</span><span id="line-340">   /**</span>
 <span class="source-line-no">341</span><span id="line-341">    * Builds the list as a {@link FilteredList}.</span>
 <span class="source-line-no">342</span><span id="line-342">    *</span>
-<span class="source-line-no">343</span><span id="line-343">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">343</span><span id="line-343">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">344</span><span id="line-344">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">345</span><span id="line-345">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">346</span><span id="line-346">    *</span>
@@ -421,7 +421,7 @@
 <span class="source-line-no">408</span><span id="line-408">    *    &lt;li&gt;Empty {@link Collection Collections}</span>
 <span class="source-line-no">409</span><span id="line-409">    * &lt;/ul&gt;</span>
 <span class="source-line-no">410</span><span id="line-410">    *</span>
-<span class="source-line-no">411</span><span id="line-411">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">411</span><span id="line-411">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">412</span><span id="line-412">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">413</span><span id="line-413">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">414</span><span id="line-414">    *</span>
@@ -463,7 +463,7 @@
 <span class="source-line-no">450</span><span id="line-450">    * &lt;p&gt;</span>
 <span class="source-line-no">451</span><span id="line-451">    * Note: Filtering is applied at build time, not when adding elements.</span>
 <span class="source-line-no">452</span><span id="line-452">    *</span>
-<span class="source-line-no">453</span><span id="line-453">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">453</span><span id="line-453">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">454</span><span id="line-454">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">455</span><span id="line-455">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">456</span><span id="line-456">    *</span>
@@ -549,7 +549,7 @@
 <span class="source-line-no">536</span><span id="line-536">    * The list will be wrapped using {@link Collections#synchronizedList(List)} to provide thread-safety.</span>
 <span class="source-line-no">537</span><span id="line-537">    * This is useful when the list needs to be accessed from multiple threads.</span>
 <span class="source-line-no">538</span><span id="line-538">    *</span>
-<span class="source-line-no">539</span><span id="line-539">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">539</span><span id="line-539">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">540</span><span id="line-540">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">541</span><span id="line-541">    *    &lt;jc&gt;// Create a thread-safe list&lt;/jc&gt;</span>
 <span class="source-line-no">542</span><span id="line-542">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = Lists.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -572,7 +572,7 @@
 <span class="source-line-no">559</span><span id="line-559">    * When &lt;c&gt;true&lt;/c&gt;, the list will be wrapped using {@link Collections#synchronizedList(List)} to provide thread-safety.</span>
 <span class="source-line-no">560</span><span id="line-560">    * This is useful when the list needs to be accessed from multiple threads.</span>
 <span class="source-line-no">561</span><span id="line-561">    *</span>
-<span class="source-line-no">562</span><span id="line-562">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">562</span><span id="line-562">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">563</span><span id="line-563">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">564</span><span id="line-564">    *    &lt;jc&gt;// Conditionally create a thread-safe list&lt;/jc&gt;</span>
 <span class="source-line-no">565</span><span id="line-565">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = Lists.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>

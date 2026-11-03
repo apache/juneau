@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -177,7 +176,7 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
  Setting this disables the per-resource <a href="../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> cache for the duration of this
  build, so the overlay is not silently shared with a previously-cached instance.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore().override(MyService.<jk>class</jk>, mockSvc);
    <jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>)
@@ -209,7 +208,7 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
  so the server must be able to produce that content type.  Omit this (the default) when the target
  resource does not have a JSON serializer configured.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyJsonResource.<jk>class</jk>)
          .defaultParser(JsonParser.<jsf>DEFAULT</jsf>)
@@ -237,7 +236,7 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
  Opt-in only; no other builder option turns it on. The one-line access record is still logged.  To do the
  same for a single call, use <a href="../client/RestRequest.html#noTrace()"><code>RestRequest.noTrace()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>).noTrace().build()) {
       <jv>client</jv>.get(<js>"/missing"</js>).run().assertStatus().is(404);

@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * without sticky sessions &amp;mdash; the same motivation as a distributed {@link SessionStore}.  When the</span>
 <span class="source-line-no">032</span><span id="line-32"> * hook is unused, behavior is identical to the single-node default.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Security contract (read before implementing)&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Security contract (read before implementing)&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;b&gt;Secret-bearing.&lt;/b&gt; A stored entry carries the PKCE {@code code_verifier} (and {@code nonce}).  With a</span>
@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63"> * &lt;b&gt;Per-process by default.&lt;/b&gt; The shipped default enforces single-use only within one JVM.  Cross-node</span>
 <span class="source-line-no">064</span><span id="line-64"> * single-use requires a shared backend with an atomic consume primitive (see {@link #consume(String)}).</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='jc'&gt;{@link InMemoryLoginStateStore}</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='jc'&gt;{@link OidcRelyingParty.Builder#loginStateStore(LoginStateStore)}</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='jc'&gt;{@link SessionStore}</span>

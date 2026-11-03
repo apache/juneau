@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,14 +96,14 @@ loadScripts(document, 'script');</script>
  This tree is the parser's output, not a wire format: a <a href="BeanQuery.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuery</code></a> carries only raw expression strings, and
  engines call the parser themselves.  See <a href="SearchExpressionParser.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchExpressionParser</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    SearchExpression <jv>node</jv> = SearchExpressionParser.<jsm>parse</jsm>(<js>"$contains(err)"</js>, SearchOperatorSet.<jsm>standard</jsm>());
    <jk>if</jk> (<jv>node</jv>.isFunction())
       <jsm>evaluate</jsm>(<jv>node</jv>.name(), <jv>node</jv>.literalArgs());  <jc>// name() == "$contains", literalArgs() == ["err"]</jc>
  </p>
 
- <h5 class='section'>Example (typed values):</h5>
+ <h2 class='section'>Example (typed values):</h2>
  <p class='bjava'>
    SearchExpression <jv>e</jv> = SearchExpressionParser.<jsm>parse</jsm>(<js>"$eq(42)"</js>, SearchOperatorSet.<jsm>standard</jsm>());
    <jc>// After QueryResolver types it against a NUMERIC column, the arg's typedValue() is a BigDecimal, not "42".</jc>

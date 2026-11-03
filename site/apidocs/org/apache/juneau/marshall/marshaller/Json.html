@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  <p>
    The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Using instance.</jc>
    Json <jv>json</jv> = <jk>new</jk> Json();
@@ -106,12 +105,12 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  </p>
 
- <h5 class='figure'>Example output (Map of name/age):</h5>
+ <h2 class='figure'>Example output (Map of name/age):</h2>
  <p class='bjson'>
    {<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30}
  </p>
 
- <h5 class='figure'>Complex (nested object + array):</h5>
+ <h2 class='figure'>Complex (nested object + array):</h2>
  <p class='bjson'>
    {<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30,<js>"address"</js>:{<js>"street"</js>:<js>"123 Main St"</js>,<js>"city"</js>:<js>"Boston"</js>,<js>"state"</js>:<js>"MA"</js>},<js>"tags"</js>:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
  </p>
@@ -122,7 +121,7 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = Json.<jsm>of</jsm>(<jv>myPojo</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  </ul></div>
 </section>

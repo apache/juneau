@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li class='jm'&gt;{@link BeanInstantiator#of(Class)}</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Bean with builder pattern&lt;/jc&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103"> *       .run();</span>
 <span class="source-line-no">104</span><span id="line-104"> * &lt;/p&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> *</span>
-<span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;Bean Creation Order:&lt;/h5&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> * &lt;h2 class='section'&gt;Bean Creation Order:&lt;/h2&gt;</span>
 <span class="source-line-no">107</span><span id="line-107"> * &lt;p&gt;</span>
 <span class="source-line-no">108</span><span id="line-108"> * The creator attempts to instantiate beans in the following order:</span>
 <span class="source-line-no">109</span><span id="line-109"> * &lt;ol class='spaced-list'&gt;</span>
@@ -139,7 +139,7 @@
 <span class="source-line-no">126</span><span id="line-126"> *       &lt;/ol&gt;</span>
 <span class="source-line-no">127</span><span id="line-127"> * &lt;/ol&gt;</span>
 <span class="source-line-no">128</span><span id="line-128"> *</span>
-<span class="source-line-no">129</span><span id="line-129"> * &lt;h5 class='section'&gt;Builder Detection:&lt;/h5&gt;</span>
+<span class="source-line-no">129</span><span id="line-129"> * &lt;h2 class='section'&gt;Builder Detection:&lt;/h2&gt;</span>
 <span class="source-line-no">130</span><span id="line-130"> * &lt;p&gt;</span>
 <span class="source-line-no">131</span><span id="line-131"> * Builders are detected in the following priority order:</span>
 <span class="source-line-no">132</span><span id="line-132"> * &lt;ol class='spaced-list'&gt;</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141"> *       &lt;/ul&gt;</span>
 <span class="source-line-no">142</span><span id="line-142"> * &lt;/ol&gt;</span>
 <span class="source-line-no">143</span><span id="line-143"> *</span>
-<span class="source-line-no">144</span><span id="line-144"> * &lt;h5 class='section'&gt;Dependency Injection:&lt;/h5&gt;</span>
+<span class="source-line-no">144</span><span id="line-144"> * &lt;h2 class='section'&gt;Dependency Injection:&lt;/h2&gt;</span>
 <span class="source-line-no">145</span><span id="line-145"> * &lt;p&gt;</span>
 <span class="source-line-no">146</span><span id="line-146"> * Both builder instances and the final bean have automatic dependency injection performed via</span>
 <span class="source-line-no">147</span><span id="line-147"> * {@link ClassInfo#inject(Object, BeanStore)}, which processes {@code @Inject} and {@code @Autowired} annotations</span>
@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151"> * This means that after a bean is created, all of its fields and methods annotated with {@code @Inject} or {@code @Autowired}</span>
 <span class="source-line-no">152</span><span id="line-152"> * will automatically be populated with beans from the bean store.</span>
 <span class="source-line-no">153</span><span id="line-153"> *</span>
-<span class="source-line-no">154</span><span id="line-154"> * &lt;h5 class='section'&gt;Caching:&lt;/h5&gt;</span>
+<span class="source-line-no">154</span><span id="line-154"> * &lt;h2 class='section'&gt;Caching:&lt;/h2&gt;</span>
 <span class="source-line-no">155</span><span id="line-155"> * &lt;p&gt;</span>
 <span class="source-line-no">156</span><span id="line-156"> * By default, each call to {@link #run()} creates a new bean instance. To enable caching, call {@link Builder#cached()}.</span>
 <span class="source-line-no">157</span><span id="line-157"> * When caching is enabled, bean instances are cached using {@link Memoizer}, so multiple calls to {@link #run()}</span>
@@ -172,14 +172,14 @@
 <span class="source-line-no">159</span><span id="line-159"> * {@link Builder#impl(Object)} and explicit builder instances set via {@link Builder#builder(Object)} are preserved</span>
 <span class="source-line-no">160</span><span id="line-160"> * across resets.</span>
 <span class="source-line-no">161</span><span id="line-161"> *</span>
-<span class="source-line-no">162</span><span id="line-162"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">162</span><span id="line-162"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">163</span><span id="line-163"> * &lt;p&gt;</span>
 <span class="source-line-no">164</span><span id="line-164"> * Configuration is performed on the inner {@link Builder} which is &lt;b&gt;not&lt;/b&gt; thread-safe. Configure on a single</span>
 <span class="source-line-no">165</span><span id="line-165"> * thread, then call {@link Builder#build()} to produce an immutable {@link BeanInstantiator} that is safe for</span>
 <span class="source-line-no">166</span><span id="line-166"> * shared concurrent use. The {@link Builder#run()} shorthand is equivalent to {@code build().run()} and is</span>
 <span class="source-line-no">167</span><span id="line-167"> * appropriate for one-shot bean creation from a single thread.</span>
 <span class="source-line-no">168</span><span id="line-168"> *</span>
-<span class="source-line-no">169</span><span id="line-169"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">169</span><span id="line-169"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">170</span><span id="line-170"> *    &lt;li class='note'&gt;Builders must have a &lt;c&gt;build()&lt;/c&gt;, &lt;c&gt;create()&lt;/c&gt;, or &lt;c&gt;get()&lt;/c&gt; method that returns the bean type.</span>
 <span class="source-line-no">171</span><span id="line-171"> *       This method is required - constructors accepting builders are no longer supported.</span>
 <span class="source-line-no">172</span><span id="line-172"> *    &lt;li class='note'&gt;The builder's &lt;c&gt;build()&lt;/c&gt;/&lt;c&gt;create()&lt;/c&gt;/&lt;c&gt;get()&lt;/c&gt; method may have &lt;c&gt;@Inject&lt;/c&gt; or &lt;c&gt;@Autowired&lt;/c&gt;</span>
@@ -192,7 +192,7 @@
 <span class="source-line-no">179</span><span id="line-179"> *    &lt;li class='note'&gt;Deprecated and &lt;a class="doclink" href="https://juneau.apache.org/site/apidocs/org/apache/juneau/commons/bean/BeanIgnore.html"&gt;@BeanIgnore&lt;/a&gt;-annotated methods/constructors are ignored.</span>
 <span class="source-line-no">180</span><span id="line-180"> * &lt;/ul&gt;</span>
 <span class="source-line-no">181</span><span id="line-181"> *</span>
-<span class="source-line-no">182</span><span id="line-182"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">182</span><span id="line-182"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">183</span><span id="line-183"> *    &lt;li class='jc'&gt;{@link BasicBeanStore}</span>
 <span class="source-line-no">184</span><span id="line-184"> * &lt;/ul&gt;</span>
 <span class="source-line-no">185</span><span id="line-185"> *</span>
@@ -471,7 +471,7 @@
 <span class="source-line-no">458</span><span id="line-458">    * an immutable {@link BeanInstantiator} suitable for shared concurrent use. Most call sites use the</span>
 <span class="source-line-no">459</span><span id="line-459">    * {@link #run()} shorthand which is equivalent to {@code build().run()}.</span>
 <span class="source-line-no">460</span><span id="line-460">    *</span>
-<span class="source-line-no">461</span><span id="line-461">    * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">461</span><span id="line-461">    * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">462</span><span id="line-462">    * &lt;p&gt;</span>
 <span class="source-line-no">463</span><span id="line-463">    * Builder instances are &lt;b&gt;not&lt;/b&gt; thread-safe. Configure on one thread, then either call {@link #build()}</span>
 <span class="source-line-no">464</span><span id="line-464">    * to produce a thread-safe immutable {@link BeanInstantiator}, or call {@link #run()} to one-shot create a</span>
@@ -590,7 +590,7 @@
 <span class="source-line-no">577</span><span id="line-577">    * This method is useful when bean creation failure is expected and should not be treated as exceptional,</span>
 <span class="source-line-no">578</span><span id="line-578">    * such as when implementing optional features or trying multiple creation strategies.</span>
 <span class="source-line-no">579</span><span id="line-579">    *</span>
-<span class="source-line-no">580</span><span id="line-580">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">580</span><span id="line-580">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">581</span><span id="line-581">    *    &lt;li class='note'&gt;Unlike {@link #run()}, this method catches {@link ExecutableException} and returns empty.</span>
 <span class="source-line-no">582</span><span id="line-582">    *    &lt;li class='note'&gt;If a fallback is registered via {@link #fallback(Supplier)},</span>
 <span class="source-line-no">583</span><span id="line-583">    *       it will be used before returning empty, so this method will only return empty if both</span>
@@ -602,7 +602,7 @@
 <span class="source-line-no">589</span><span id="line-589">    *       and will propagate to the caller.</span>
 <span class="source-line-no">590</span><span id="line-590">    * &lt;/ul&gt;</span>
 <span class="source-line-no">591</span><span id="line-591">    *</span>
-<span class="source-line-no">592</span><span id="line-592">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">592</span><span id="line-592">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">593</span><span id="line-593">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">594</span><span id="line-594">    *    &lt;jc&gt;// Try to create, use default if it fails&lt;/jc&gt;</span>
 <span class="source-line-no">595</span><span id="line-595">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = BeanInstantiator</span>
@@ -644,14 +644,14 @@
 <span class="source-line-no">631</span><span id="line-631">    * This is particularly useful when the bean store contents change and you want to recreate the bean</span>
 <span class="source-line-no">632</span><span id="line-632">    * with updated dependencies.</span>
 <span class="source-line-no">633</span><span id="line-633">    *</span>
-<span class="source-line-no">634</span><span id="line-634">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">634</span><span id="line-634">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">635</span><span id="line-635">    *    &lt;li class='note'&gt;The returned {@link Memoizer} is thread-safe.</span>
 <span class="source-line-no">636</span><span id="line-636">    *    &lt;li class='note'&gt;Each call to {@link Memoizer#get()} after a reset() will invoke</span>
 <span class="source-line-no">637</span><span id="line-637">    *       {@link #run()}, which may trigger dependency injection and post-creation hooks.</span>
 <span class="source-line-no">638</span><span id="line-638">    *    &lt;li class='note'&gt;The memoizer inherits all Optional-like methods from {@link NullableSupplier}.</span>
 <span class="source-line-no">639</span><span id="line-639">    * &lt;/ul&gt;</span>
 <span class="source-line-no">640</span><span id="line-640">    *</span>
-<span class="source-line-no">641</span><span id="line-641">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">641</span><span id="line-641">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">642</span><span id="line-642">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">643</span><span id="line-643">    *    &lt;jc&gt;// Create a memoizer for a bean with dependencies&lt;/jc&gt;</span>
 <span class="source-line-no">644</span><span id="line-644">    *    BeanStore &lt;jv&gt;store&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; BasicBeanStore(&lt;jk&gt;null&lt;/jk&gt;);</span>
@@ -778,7 +778,7 @@
 <span class="source-line-no">765</span><span id="line-765">    * If the builder instance's class is invalid (does not have a valid build method), this method throws an</span>
 <span class="source-line-no">766</span><span id="line-766">    * {@link IllegalArgumentException}.</span>
 <span class="source-line-no">767</span><span id="line-767">    *</span>
-<span class="source-line-no">768</span><span id="line-768">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">768</span><span id="line-768">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">769</span><span id="line-769">    *    &lt;li class='note'&gt;When specified, the builder type detection is bypassed.</span>
 <span class="source-line-no">770</span><span id="line-770">    *    &lt;li class='note'&gt;The builder will be used to create the bean via:</span>
 <span class="source-line-no">771</span><span id="line-771">    *       &lt;ul&gt;</span>
@@ -807,7 +807,7 @@
 <span class="source-line-no">794</span><span id="line-794">    * By default, {@code BeanInstantiator} looks for inner classes named {@code "Builder"}.</span>
 <span class="source-line-no">795</span><span id="line-795">    * This method allows you to specify alternative class names.</span>
 <span class="source-line-no">796</span><span id="line-796">    *</span>
-<span class="source-line-no">797</span><span id="line-797">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">797</span><span id="line-797">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">798</span><span id="line-798">    *    &lt;li class='note'&gt;Inner builder classes must be public, static, and pass builder validation</span>
 <span class="source-line-no">799</span><span id="line-799">    *       (have a build/create/get method or be accepted by a bean constructor).</span>
 <span class="source-line-no">800</span><span id="line-800">    *    &lt;li class='note'&gt;If multiple inner classes match, the first valid one found will be used.</span>
@@ -816,7 +816,7 @@
 <span class="source-line-no">803</span><span id="line-803">    *    &lt;li class='note'&gt;Calling this method replaces the default builder class names.</span>
 <span class="source-line-no">804</span><span id="line-804">    * &lt;/ul&gt;</span>
 <span class="source-line-no">805</span><span id="line-805">    *</span>
-<span class="source-line-no">806</span><span id="line-806">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">806</span><span id="line-806">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">807</span><span id="line-807">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">808</span><span id="line-808">    *    &lt;jc&gt;// Support alternative builder class naming conventions&lt;/jc&gt;</span>
 <span class="source-line-no">809</span><span id="line-809">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = BeanInstantiator</span>
@@ -841,7 +841,7 @@
 <span class="source-line-no">828</span><span id="line-828">    * By default, {@code BeanInstantiator} looks for static methods named {@code "create"} or {@code "builder"}</span>
 <span class="source-line-no">829</span><span id="line-829">    * that return a builder type. This method allows you to specify alternative method names.</span>
 <span class="source-line-no">830</span><span id="line-830">    *</span>
-<span class="source-line-no">831</span><span id="line-831">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">831</span><span id="line-831">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">832</span><span id="line-832">    *    &lt;li class='note'&gt;Builder factory methods must be public, static, non-deprecated, and return a builder type</span>
 <span class="source-line-no">833</span><span id="line-833">    *       (not the bean type itself).</span>
 <span class="source-line-no">834</span><span id="line-834">    *    &lt;li class='note'&gt;If multiple builder factory methods match, the one with the most parameters that can be</span>
@@ -850,7 +850,7 @@
 <span class="source-line-no">837</span><span id="line-837">    *    &lt;li class='note'&gt;Calling this method replaces the default builder method names.</span>
 <span class="source-line-no">838</span><span id="line-838">    * &lt;/ul&gt;</span>
 <span class="source-line-no">839</span><span id="line-839">    *</span>
-<span class="source-line-no">840</span><span id="line-840">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">840</span><span id="line-840">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">841</span><span id="line-841">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">842</span><span id="line-842">    *    &lt;jc&gt;// Support alternative builder factory method naming conventions&lt;/jc&gt;</span>
 <span class="source-line-no">843</span><span id="line-843">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = BeanInstantiator</span>
@@ -875,7 +875,7 @@
 <span class="source-line-no">862</span><span id="line-862">    * By default, {@code BeanInstantiator} looks for instance methods named {@code "build"}, {@code "create"}, or {@code "get"}</span>
 <span class="source-line-no">863</span><span id="line-863">    * on the builder that return the bean type. This method allows you to specify alternative method names.</span>
 <span class="source-line-no">864</span><span id="line-864">    *</span>
-<span class="source-line-no">865</span><span id="line-865">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">865</span><span id="line-865">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">866</span><span id="line-866">    *    &lt;li class='note'&gt;Build methods must be public, non-static, non-deprecated, and return the bean type</span>
 <span class="source-line-no">867</span><span id="line-867">    *       (or a parent type of the bean type).</span>
 <span class="source-line-no">868</span><span id="line-868">    *    &lt;li class='note'&gt;If the method has {@code @Inject} or {@code @Autowired} annotation, its parameters are resolved from the bean store.</span>
@@ -883,7 +883,7 @@
 <span class="source-line-no">870</span><span id="line-870">    *    &lt;li class='note'&gt;Calling this method replaces the default build method names.</span>
 <span class="source-line-no">871</span><span id="line-871">    * &lt;/ul&gt;</span>
 <span class="source-line-no">872</span><span id="line-872">    *</span>
-<span class="source-line-no">873</span><span id="line-873">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">873</span><span id="line-873">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">874</span><span id="line-874">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">875</span><span id="line-875">    *    &lt;jc&gt;// Support alternative build method naming conventions&lt;/jc&gt;</span>
 <span class="source-line-no">876</span><span id="line-876">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = BeanInstantiator</span>
@@ -913,7 +913,7 @@
 <span class="source-line-no">900</span><span id="line-900">    * When caching mode is disabled (the default), each call to {@link #run()} will create a new bean instance</span>
 <span class="source-line-no">901</span><span id="line-901">    * by calling {@link #findBeanImpl()} directly.</span>
 <span class="source-line-no">902</span><span id="line-902">    *</span>
-<span class="source-line-no">903</span><span id="line-903">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">903</span><span id="line-903">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">904</span><span id="line-904">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">905</span><span id="line-905">    *    &lt;jc&gt;// Enable caching mode - same instance returned on each run()&lt;/jc&gt;</span>
 <span class="source-line-no">906</span><span id="line-906">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;creator&lt;/jv&gt; = BeanInstantiator</span>
@@ -952,7 +952,7 @@
 <span class="source-line-no">939</span><span id="line-939">    * {@link #run()} unchanged — constructor lookup is skipped. This matches legacy {@code BeanCreator}</span>
 <span class="source-line-no">940</span><span id="line-940">    * semantics for static {@code create()} / {@code builder()} / {@code getInstance()} methods.</span>
 <span class="source-line-no">941</span><span id="line-941">    *</span>
-<span class="source-line-no">942</span><span id="line-942">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">942</span><span id="line-942">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">943</span><span id="line-943">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">944</span><span id="line-944">    *    &lt;jc&gt;// AttributeArg.create(ParameterInfo) returns null if @Attr is not present.&lt;/jc&gt;</span>
 <span class="source-line-no">945</span><span id="line-945">    *    &lt;jc&gt;// Without factoryAbstainOnNull, BeanInstantiator would then invoke the AttributeArg(ParameterInfo)&lt;/jc&gt;</span>
@@ -999,7 +999,7 @@
 <span class="source-line-no">986</span><span id="line-986">    * the same use case (legacy filtered out the multi-arg ctors via {@code hasAllParams} returning false, since the</span>
 <span class="source-line-no">987</span><span id="line-987">    * legacy bean store didn't auto-resolve raw {@code Map}/{@code Collection} parameter types).</span>
 <span class="source-line-no">988</span><span id="line-988">    *</span>
-<span class="source-line-no">989</span><span id="line-989">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">989</span><span id="line-989">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">990</span><span id="line-990">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">991</span><span id="line-991">    *    &lt;jc&gt;// Instantiating an arbitrary Map subclass — prefer the no-arg ctor over copy-ctors.&lt;/jc&gt;</span>
 <span class="source-line-no">992</span><span id="line-992">    *    Map&amp;lt;?,?&amp;gt; &lt;jv&gt;m&lt;/jv&gt; = BeanInstantiator</span>
@@ -1100,7 +1100,7 @@
 <span class="source-line-no">1087</span><span id="line-1087">    * which creation path was taken, why creation might have failed, or to troubleshoot</span>
 <span class="source-line-no">1088</span><span id="line-1088">    * unexpected behavior.</span>
 <span class="source-line-no">1089</span><span id="line-1089">    *</span>
-<span class="source-line-no">1090</span><span id="line-1090">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1090</span><span id="line-1090">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1091</span><span id="line-1091">    *    &lt;li class='note'&gt;Debug logs include: builder detection, factory method attempts, constructor attempts,</span>
 <span class="source-line-no">1092</span><span id="line-1092">    *       dependency resolution, injection, hooks execution, validation, and fallback usage.</span>
 <span class="source-line-no">1093</span><span id="line-1093">    *    &lt;li class='note'&gt;The debug log is reset each time {@link #run()} or {@link #asOptional()} is called.</span>
@@ -1110,7 +1110,7 @@
 <span class="source-line-no">1097</span><span id="line-1097">    *       (subsequent calls return the cached instance unless {@link #reset()} is called).</span>
 <span class="source-line-no">1098</span><span id="line-1098">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1099</span><span id="line-1099">    *</span>
-<span class="source-line-no">1100</span><span id="line-1100">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1100</span><span id="line-1100">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1101</span><span id="line-1101">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1102</span><span id="line-1102">    *    &lt;jc&gt;// Enable debug mode&lt;/jc&gt;</span>
 <span class="source-line-no">1103</span><span id="line-1103">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;creator&lt;/jv&gt; = BeanInstantiator</span>
@@ -1139,7 +1139,7 @@
 <span class="source-line-no">1126</span><span id="line-1126">    * to create beans without a builder. This method allows you to specify alternative</span>
 <span class="source-line-no">1127</span><span id="line-1127">    * factory method names to support non-standard naming conventions.</span>
 <span class="source-line-no">1128</span><span id="line-1128">    *</span>
-<span class="source-line-no">1129</span><span id="line-1129">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1129</span><span id="line-1129">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1130</span><span id="line-1130">    *    &lt;li class='note'&gt;Factory methods must be public, static, non-deprecated, and return the bean type.</span>
 <span class="source-line-no">1131</span><span id="line-1131">    *    &lt;li class='note'&gt;If multiple factory methods match, the one with the most parameters that can be</span>
 <span class="source-line-no">1132</span><span id="line-1132">    *       resolved from the bean store will be used.</span>
@@ -1148,7 +1148,7 @@
 <span class="source-line-no">1135</span><span id="line-1135">    *    &lt;li class='note'&gt;Calling this method replaces the default factory method names.</span>
 <span class="source-line-no">1136</span><span id="line-1136">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1137</span><span id="line-1137">    *</span>
-<span class="source-line-no">1138</span><span id="line-1138">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1138</span><span id="line-1138">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1139</span><span id="line-1139">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1140</span><span id="line-1140">    *    &lt;jc&gt;// Support multiple factory method naming conventions&lt;/jc&gt;</span>
 <span class="source-line-no">1141</span><span id="line-1141">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = BeanInstantiator</span>
@@ -1177,7 +1177,7 @@
 <span class="source-line-no">1164</span><span id="line-1164">    * This enables graceful degradation when bean creation cannot succeed, such as when optional features</span>
 <span class="source-line-no">1165</span><span id="line-1165">    * or dependencies are not available.</span>
 <span class="source-line-no">1166</span><span id="line-1166">    *</span>
-<span class="source-line-no">1167</span><span id="line-1167">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1167</span><span id="line-1167">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1168</span><span id="line-1168">    *    &lt;li class='note'&gt;The fallback supplier is only invoked if bean creation fails.</span>
 <span class="source-line-no">1169</span><span id="line-1169">    *       If bean creation succeeds normally, the fallback is never called.</span>
 <span class="source-line-no">1170</span><span id="line-1170">    *    &lt;li class='note'&gt;Fallbacks are checked after all normal creation attempts (builders, factory methods, constructors).</span>
@@ -1190,7 +1190,7 @@
 <span class="source-line-no">1177</span><span id="line-1177">    *    &lt;li class='note'&gt;To use a pre-created instance as a fallback, wrap it in a supplier: &lt;c&gt;fallback(() -&amp;gt; myInstance)&lt;/c&gt;.</span>
 <span class="source-line-no">1178</span><span id="line-1178">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1179</span><span id="line-1179">    *</span>
-<span class="source-line-no">1180</span><span id="line-1180">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1180</span><span id="line-1180">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1181</span><span id="line-1181">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1182</span><span id="line-1182">    *    &lt;jc&gt;// Provide a default instance if creation fails&lt;/jc&gt;</span>
 <span class="source-line-no">1183</span><span id="line-1183">    *    MyService &lt;jv&gt;service&lt;/jv&gt; = BeanInstantiator</span>
@@ -1248,7 +1248,7 @@
 <span class="source-line-no">1235</span><span id="line-1235">    * all parent classes up to and including the bean type. If no subtype was specified, the list will contain</span>
 <span class="source-line-no">1236</span><span id="line-1236">    * only the bean type.</span>
 <span class="source-line-no">1237</span><span id="line-1237">    *</span>
-<span class="source-line-no">1238</span><span id="line-1238">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1238</span><span id="line-1238">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1239</span><span id="line-1239">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1240</span><span id="line-1240">    *    &lt;jc&gt;// If beanType is A and beanSubType is C (extends B extends A)&lt;/jc&gt;</span>
 <span class="source-line-no">1241</span><span id="line-1241">    *    &lt;jc&gt;// getBeanSubTypes() returns: [C, B, A]&lt;/jc&gt;</span>
@@ -1287,7 +1287,7 @@
 <span class="source-line-no">1274</span><span id="line-1274">    * This method returns a list that includes the primary builder type and all builder types found by traversing</span>
 <span class="source-line-no">1275</span><span id="line-1275">    * the builder's parent hierarchy. This allows parent builders to be resolved as injectable types.</span>
 <span class="source-line-no">1276</span><span id="line-1276">    *</span>
-<span class="source-line-no">1277</span><span id="line-1277">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1277</span><span id="line-1277">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1278</span><span id="line-1278">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1279</span><span id="line-1279">    *    &lt;jc&gt;// Class A with builder&lt;/jc&gt;</span>
 <span class="source-line-no">1280</span><span id="line-1280">    *    &lt;jk&gt;class&lt;/jk&gt; A {</span>
@@ -1320,7 +1320,7 @@
 <span class="source-line-no">1307</span><span id="line-1307">    * {@link #run()} or {@link #asOptional()}. The log is only populated when {@link #debug()}</span>
 <span class="source-line-no">1308</span><span id="line-1308">    * mode is enabled.</span>
 <span class="source-line-no">1309</span><span id="line-1309">    *</span>
-<span class="source-line-no">1310</span><span id="line-1310">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1310</span><span id="line-1310">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1311</span><span id="line-1311">    *    &lt;li class='note'&gt;Returns an empty list if {@link #debug()} was not called or if no creation has been attempted.</span>
 <span class="source-line-no">1312</span><span id="line-1312">    *    &lt;li class='note'&gt;The log is reset at the beginning of each {@link #run()} call.</span>
 <span class="source-line-no">1313</span><span id="line-1313">    *    &lt;li class='note'&gt;Since {@link #run()} uses a cached {@link Memoizer}, the log reflects only the first creation</span>
@@ -1328,7 +1328,7 @@
 <span class="source-line-no">1315</span><span id="line-1315">    *    &lt;li class='note'&gt;The returned list is unmodifiable.</span>
 <span class="source-line-no">1316</span><span id="line-1316">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1317</span><span id="line-1317">    *</span>
-<span class="source-line-no">1318</span><span id="line-1318">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1318</span><span id="line-1318">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1319</span><span id="line-1319">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1320</span><span id="line-1320">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;creator&lt;/jv&gt; = BeanInstantiator.&lt;jsm&gt;of&lt;/jsm&gt;(MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;store&lt;/jv&gt;)</span>
 <span class="source-line-no">1321</span><span id="line-1321">    *       .debug();</span>
@@ -1354,7 +1354,7 @@
 <span class="source-line-no">1341</span><span id="line-1341">    * When specified, the bean creation logic is bypassed and this implementation is returned</span>
 <span class="source-line-no">1342</span><span id="line-1342">    * directly from {@link #run()}, after performing dependency injection on it.</span>
 <span class="source-line-no">1343</span><span id="line-1343">    *</span>
-<span class="source-line-no">1344</span><span id="line-1344">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1344</span><span id="line-1344">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1345</span><span id="line-1345">    *    &lt;li class='note'&gt;The bean implementation will still have its fields and methods injected via {@link ClassInfo#inject(Object, BeanStore)}.</span>
 <span class="source-line-no">1346</span><span id="line-1346">    *    &lt;li class='note'&gt;This is useful when you want to provide a pre-configured instance but still benefit from dependency injection.</span>
 <span class="source-line-no">1347</span><span id="line-1347">    *    &lt;li class='note'&gt;The explicit implementation is preserved even when {@link #reset()} is called, unlike cached results from suppliers.</span>
@@ -1378,7 +1378,7 @@
 <span class="source-line-no">1365</span><span id="line-1365">    * &lt;p&gt;</span>
 <span class="source-line-no">1366</span><span id="line-1366">    * Multiple hooks can be registered and they will be executed in the order they were added.</span>
 <span class="source-line-no">1367</span><span id="line-1367">    *</span>
-<span class="source-line-no">1368</span><span id="line-1368">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1368</span><span id="line-1368">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1369</span><span id="line-1369">    *    &lt;li class='note'&gt;Hooks are executed every time {@link #run()} is called. Since {@link #run()} uses a cached</span>
 <span class="source-line-no">1370</span><span id="line-1370">    *       {@link Memoizer}, hooks are only executed once unless {@link #reset()} is called.</span>
 <span class="source-line-no">1371</span><span id="line-1371">    *    &lt;li class='note'&gt;Hooks are executed after dependency injection, so all {@code @Inject} fields and methods</span>
@@ -1389,7 +1389,7 @@
 <span class="source-line-no">1376</span><span id="line-1376">    *    &lt;li class='note'&gt;The hook receives the fully initialized bean instance as its parameter.</span>
 <span class="source-line-no">1377</span><span id="line-1377">    * &lt;/ul&gt;</span>
 <span class="source-line-no">1378</span><span id="line-1378">    *</span>
-<span class="source-line-no">1379</span><span id="line-1379">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1379</span><span id="line-1379">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1380</span><span id="line-1380">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1381</span><span id="line-1381">    *    &lt;jc&gt;// Register multiple post-creation hooks&lt;/jc&gt;</span>
 <span class="source-line-no">1382</span><span id="line-1382">    *    MyService &lt;jv&gt;service&lt;/jv&gt; = BeanInstantiator</span>
@@ -1448,7 +1448,7 @@
 <span class="source-line-no">1435</span><span id="line-1435">    * Multiple wrappers may be registered; they are applied in registration order. Each wrapper receives</span>
 <span class="source-line-no">1436</span><span id="line-1436">    * the output of the previous wrapper.</span>
 <span class="source-line-no">1437</span><span id="line-1437">    *</span>
-<span class="source-line-no">1438</span><span id="line-1438">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1438</span><span id="line-1438">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1439</span><span id="line-1439">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1440</span><span id="line-1440">    *    BeanInstantiator.&lt;jsm&gt;of&lt;/jsm&gt;(MyService.&lt;jk&gt;class&lt;/jk&gt;, store)</span>
 <span class="source-line-no">1441</span><span id="line-1441">    *       .wrap(LoggingProxy::wrap)</span>
@@ -1571,7 +1571,7 @@
 <span class="source-line-no">1558</span><span id="line-1558">    * methods or constructors. This is useful when a Builder class is co-located with the bean type</span>
 <span class="source-line-no">1559</span><span id="line-1559">    * (e.g. {@code Foo.Builder}) but the caller wants to use a builder-taking constructor instead.</span>
 <span class="source-line-no">1560</span><span id="line-1560">    *</span>
-<span class="source-line-no">1561</span><span id="line-1561">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1561</span><span id="line-1561">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">1562</span><span id="line-1562">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">1563</span><span id="line-1563">    *    BeanInstantiator.&lt;jsm&gt;of&lt;/jsm&gt;(BasicSwaggerProvider.&lt;jk&gt;class&lt;/jk&gt;, beanStore)</span>
 <span class="source-line-no">1564</span><span id="line-1564">    *       .add(SwaggerProvider.Builder.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;this&lt;/jv&gt;)</span>
@@ -1650,7 +1650,7 @@
 <span class="source-line-no">1637</span><span id="line-1637">    * &lt;p&gt;</span>
 <span class="source-line-no">1638</span><span id="line-1638">    * This causes them to be re-evaluated on the next call to {@link #run()}.</span>
 <span class="source-line-no">1639</span><span id="line-1639">    *</span>
-<span class="source-line-no">1640</span><span id="line-1640">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">1640</span><span id="line-1640">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">1641</span><span id="line-1641">    *    &lt;li class='note'&gt;If an explicit builder instance was set via {@link #builder(Object)},</span>
 <span class="source-line-no">1642</span><span id="line-1642">    *       it is preserved and not cleared by this method.</span>
 <span class="source-line-no">1643</span><span id="line-1643">    *    &lt;li class='note'&gt;If an explicit implementation was set via {@link #impl(Object)},</span>

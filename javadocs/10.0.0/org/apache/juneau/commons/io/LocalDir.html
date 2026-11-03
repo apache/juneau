@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  or the file system. This is particularly useful in applications that need to work with directory-based
  resources in both development (file system) and production (packaged JAR) environments.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Unified directory access - works with both classpath resources and file system directories
    <li>File resolution - can resolve files within the directory using relative paths
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
    <li>Immutable - directory location cannot be changed after construction
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Accessing template directories that may be on classpath or file system
    <li>Loading configuration files from directories in both development and production
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    <li>Applications that need to support both embedded and external directory access
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Classpath directory</jc>
    LocalDir <jv>classpathDir</jv> = <jk>new</jk> LocalDir(MyClass.<jk>class</jk>, <js>"templates"</js>);
@@ -119,7 +118,7 @@ loadScripts(document, 'script');</script>
    LocalFile <jv>file3</jv> = <jv>packageDir</jv>.resolve(<js>"resource.txt"</js>);
  </p>
 
- <h5 class='section'>Path Resolution:</h5>
+ <h2 class='section'>Path Resolution:</h2>
  <p>
  The <a href="#resolve(java.lang.String)"><code>resolve(String)</code></a> method resolves files within the directory using relative paths.
  For classpath directories, the path resolution follows Java resource path conventions:
@@ -129,12 +128,12 @@ loadScripts(document, 'script');</script>
    <li>Relative path - resolves relative to the specified classpath path
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is immutable and therefore thread-safe. Multiple threads can safely access a LocalDir
  instance concurrently without synchronization.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="LocalFile.html" title="class in org.apache.juneau.commons.io"><code>LocalFile</code></a> - File counterpart for individual file access
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  </ul></div>
@@ -214,7 +213,7 @@ loadScripts(document, 'script');</script>
  Creates a LocalDir that references a directory on the classpath, relative to the specified class.
  The path resolution follows Java resource path conventions.
 
- <h5 class='section'>Path Examples:</h5>
+ <h4 class='section'>Path Examples:</h4>
  <p class='bjava'>
    <jc>// Package directory (null or empty)</jc>
    LocalDir <jv>dir1</jv> = <jk>new</jk> LocalDir(MyClass.<jk>class</jk>, <jk>null</jk>);
@@ -249,7 +248,7 @@ loadScripts(document, 'script');</script>
  <p>
  Creates a LocalDir that references a directory on the file system using a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Absolute path</jc>
    LocalDir <jv>dir1</jv> = <jk>new</jk> LocalDir(Paths.get(<js>"/var/config"</js>));
@@ -315,7 +314,7 @@ loadScripts(document, 'script');</script>
    <li>Relative clazzPath - resolved path remains relative
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    LocalDir <jv>dir</jv> = <jk>new</jk> LocalDir(MyClass.<jk>class</jk>, <js>"templates"</js>);
 
@@ -329,7 +328,7 @@ loadScripts(document, 'script');</script>
    LocalFile <jv>file2</jv> = <jv>dir</jv>.resolve(<js>"pages/about.html"</js>);
  </p>
 
- <h5 class='section'>Security (path-traversal):</h5>
+ <h4 class='section'>Security (path-traversal):</h4>
  <p>
  For filesystem-root <code>LocalDir</code> instances, path resolution is delegated to
  <a href="../utils/FileUtils.html#resolveSafely(java.io.File,java.lang.String)"><code>FileUtils.resolveSafely(java.io.File, String)</code></a> which enforces a strict boundary check:

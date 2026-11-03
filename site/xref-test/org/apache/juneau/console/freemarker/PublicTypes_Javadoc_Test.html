@@ -34,11 +34,11 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Enforces the standing Juneau convention that every new public type carries a class-level</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@code &lt;h5 class='section'&gt;Example:&lt;/h5&gt;} Javadoc block and {@code @since 10.0.0}, for exactly the top-level</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@code &lt;h2 class='section'&gt;Example:&lt;/h2&gt;} Javadoc block and {@code @since 10.0.0}, for exactly the top-level</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * public types the C3 page-builder work created. Reads source text, not compiled Javadoc (doc comments do not</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * survive into {@code .class} files); a renamed or moved file fails loudly so the audit cannot silently go stale.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;jsm&gt;assertHasExampleBlock&lt;/jsm&gt;(&lt;jv&gt;juneauRoot&lt;/jv&gt;.resolve(&lt;js&gt;"juneau-rest/.../TableSpec.java"&lt;/js&gt;));</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
@@ -84,8 +84,8 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public abstract class"</span>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(typeIdx &gt;= 0, () -&gt; <span class="jxr_string">"No public type declaration found in '"</span> + file + <span class="jxr_string">"'."</span>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> javadoc = text.substring(0, typeIdx);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"&lt;h5 class='section'&gt;Example:&lt;/h5&gt;"</span>),
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing the class-level &lt;h5 class='section'&gt;Example:&lt;/h5&gt; Javadoc block."</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"&lt;h2 class='section'&gt;Example:&lt;/h2&gt;"</span>),
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing the class-level &lt;h2 class='section'&gt;Example:&lt;/h2&gt; Javadoc block."</span>);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"@since 10.0.0"</span>),
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing @since 10.0.0 on its class-level Javadoc."</span>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}

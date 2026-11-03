@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -800,7 +799,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../bct/assertions/FluentStringAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentStringAssertion</a>&lt;<a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-342">assertCharset</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on the response character encoding.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Validates that the response content charset is UTF-8.</jc>
    <jv>request</jv>
@@ -820,7 +819,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertions/FluentRequestContentAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentRequestContentAssertion</a>&lt;<a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-358">assertContent</a></span>()</div>
 <div class="block">Returns a fluent assertion for the request content.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Validates the request content contains "foo".</jc>
    <jv>request</jv>
@@ -838,7 +837,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertions/FluentRequestFormParamAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentRequestFormParamAssertion</a>&lt;<a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-375">assertFormParam</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a fluent assertion for the specified form parameter.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Validates the content type is JSON.</jc>
    <jv>request</jv>
@@ -858,7 +857,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertions/FluentRequestHeaderAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentRequestHeaderAssertion</a>&lt;<a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-392">assertHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a fluent assertion for the specified header.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Validates the content type is JSON.</jc>
    <jv>request</jv>
@@ -878,7 +877,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertions/FluentRequestQueryParamAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentRequestQueryParamAssertion</a>&lt;<a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-409">assertQueryParam</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a fluent assertion for the specified query parameter.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Validates the content type is JSON.</jc>
    <jv>request</jv>
@@ -898,7 +897,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="assertions/FluentRequestLineAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentRequestLineAssertion</a>&lt;<a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-425">assertRequestLine</a></span>()</div>
 <div class="block">Returns an assertion on the request line returned by <a href="#getRequestLine()"><code>getRequestLine()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Validates the request content contains "foo".</jc>
    <jv>request</jv>
@@ -932,7 +931,7 @@ loadScripts(document, 'script');</script>
       the supplied date.
  </ol>
 
- <h5 class='section'>Usage:</h5>
+ <h4 class='section'>Usage:</h4>
 
  <p>
  Set the response's <c>ETag</c> and/or <c>Last-Modified</c> <b>first</b>, then call this method.
@@ -949,7 +948,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> so the caller controls how to handle the failure
       (throw inline, hand off to a logger, etc.). Both the returned <c>304</c> and <c>412</c>
       failures are <a href="../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response"><code>BasicHttpException</code></a> instances, which are <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>s,
@@ -962,7 +961,7 @@ loadScripts(document, 'script');</script>
       flag is ignored when comparing tag values.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestResponse.html#eTag(java.lang.String)"><code>RestResponse.eTag(String)</code></a>
    <li class='jm'><a href="RestResponse.html#lastModified(java.time.Instant)"><code>RestResponse.lastModified(Instant)</code></a>
  </ul></div>
@@ -1045,7 +1044,7 @@ loadScripts(document, 'script');</script>
  <p>
  Returns a <a href="httppart/RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestAttributes</code></a> object that encapsulates access to attributes on the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPost</ja>(...)
    <jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
@@ -1058,7 +1057,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This object is modifiable.
    <li class='note'>
@@ -1069,7 +1068,7 @@ loadScripts(document, 'script');</script>
       The <a href="Attr.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Attr</code></a> annotation can be used to access individual attribute values.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 <dl class="notes">
@@ -1123,7 +1122,7 @@ loadScripts(document, 'script');</script>
 
  The config file is identified via <a href="Rest.html#config()"><code>Rest.config()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestGet</ja>(...)
    <jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
@@ -1139,12 +1138,12 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The <a href="../../config/Config.html" title="class in org.apache.juneau.config"><code>Config</code></a> object can also be passed as a parameter on the method.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigurationFiles">Configuration Files</a>
  </ul></div>
 <dl class="notes">
@@ -1163,7 +1162,7 @@ loadScripts(document, 'script');</script>
  <p>
  Returns a <a href="httppart/RequestContent.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestContent</code></a> object that encapsulates access to the HTTP request content.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPost</ja>(...)
    <jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
@@ -1174,14 +1173,14 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The <a href="httppart/RequestContent.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestContent</code></a> object can also be passed as a parameter on the method.
    <li class='note'>
       The <a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a> annotation can be used to access the content as well.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 <dl class="notes">
@@ -1299,7 +1298,7 @@ loadScripts(document, 'script');</script>
  <p>
  Similar to <code>ServletRequest.getParameterMap()</code>, but only looks for form data in the HTTP content.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPost</ja>(...)
    <jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
@@ -1314,7 +1313,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This object is modifiable.
    <li class='note'>
@@ -1325,7 +1324,7 @@ loadScripts(document, 'script');</script>
       The <a href="../../http/FormData.html" title="annotation interface in org.apache.juneau.http"><code>@FormDAta</code></a> annotation can be used to access individual form data parameter values.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 <dl class="notes">
@@ -1413,7 +1412,7 @@ loadScripts(document, 'script');</script>
  If there is more than one matching header in the message the last element of <c>getHeaders(String)</c> is returned.
  <br>If there is no matching header in the message, an empty request header object is returned.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
    <jv>request</jv>
@@ -1438,7 +1437,7 @@ loadScripts(document, 'script');</script>
  <p>
  Returns a <a href="httppart/RequestHeaderList.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestHeaderList</code></a> object that encapsulates access to HTTP headers on the request.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestPost</ja>(...)
    <jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
@@ -1457,7 +1456,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This object is modifiable.
    <li class='note'>
@@ -1468,7 +1467,7 @@ loadScripts(document, 'script');</script>
       The <a href="../../http/Header.html" title="annotation interface in org.apache.juneau.http"><code>@Header</code></a> annotation can be used to access individual header values.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 <dl class="notes">
@@ -1552,7 +1551,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/cp/Messages.html" title="class in org.apache.juneau.marshall.cp">Messages</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-1121">getMessages</a></span>()</div>
 <div class="block">Returns the resource bundle for the request locale.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestGet</ja>
    <jk>public</jk> String hello(RestRequest <jv>req</jv>, <ja>@Query</ja>(<js>"user"</js>) String <jv>user</jv>) {
@@ -1562,12 +1561,12 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The <a href="../../marshall/cp/Messages.html" title="class in org.apache.juneau.marshall.cp"><code>Messages</code></a> object can also be passed as a parameter on the method.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="#getMessage(java.lang.String,java.lang.Object...)"><code>getMessage(String,Object...)</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
  </ul></div>
@@ -1682,7 +1681,7 @@ loadScripts(document, 'script');</script>
  <p>
  Returns a <a href="httppart/RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestPathParamList</code></a> object that encapsulates access to URL path parameters.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestGet</ja>(<js>"/{foo}/{bar}/{baz}/*"</js>)
    <jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
@@ -1699,7 +1698,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This object is modifiable.
  </ul></div>
@@ -1776,7 +1775,7 @@ loadScripts(document, 'script');</script>
  <p>
  Similar to <code>ServletRequest.getParameterMap()</code> but only looks for query parameters in the URL and not form posts.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestGet</ja>(...)
    <jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
@@ -1791,12 +1790,12 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This object is modifiable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 <dl class="notes">
@@ -1840,7 +1839,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestRequest.html#line-1368">getRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <ja>@RestPost</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
    <jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
@@ -1998,7 +1997,7 @@ loadScripts(document, 'script');</script>
  <p>
  A shortcut for calling <c>getInfoProvider().getSwagger(request);</c>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestGet</ja>
    <jk>public</jk> List&lt;Tag&gt; swaggerTags(RestRequest <jv>req</jv>) {
@@ -2006,12 +2005,12 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The <a href="../../bean/swagger/Swagger.html" title="class in org.apache.juneau.bean.swagger"><code>Swagger</code></a> object can also be passed as a parameter on the method.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#swaggerProvider()"><code>Rest.swaggerProvider()</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  </ul></div>
@@ -2031,7 +2030,7 @@ loadScripts(document, 'script');</script>
  <p>
  Sibling of <a href="#getSwagger()"><code>getSwagger()</code></a> for the OpenAPI 3.1 emission path.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Rest.html#openApiProvider()"><code>Rest.openApiProvider()</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">API-Docs Mixin Pack</a>
  </ul></div>
@@ -2127,7 +2126,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used to resolve SVL variables in text.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@RestGet</ja>
    <jk>public</jk> String hello(RestRequest <jv>req</jv>) {
@@ -2140,12 +2139,12 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The <a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a> object can also be passed as a parameter on the method.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RestContext.html#getVarResolver()"><code>RestContext.getVarResolver()</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
  </ul></div>

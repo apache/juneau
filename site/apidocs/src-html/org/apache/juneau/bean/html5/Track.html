@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * It allows you to add subtitles, captions, descriptions, chapters, or metadata to media content,</span>
 <span class="source-line-no">030</span><span id="line-30"> * making it more accessible and user-friendly.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jc&gt;// Subtitles track&lt;/jc&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    Track &lt;jv&gt;subtitles&lt;/jv&gt; = &lt;jsm&gt;track&lt;/jsm&gt;()</span>
@@ -92,145 +92,144 @@
 <span class="source-line-no">079</span><span id="line-79"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#track() track()}</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;/p&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> *</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;/ul&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> */</span>
-<span class="source-line-no">088</span><span id="line-88">@Marshalled(typeName = "track")</span>
-<span class="source-line-no">089</span><span id="line-89">public class Track extends HtmlElementVoid&lt;Track&gt; {</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   /**</span>
-<span class="source-line-no">092</span><span id="line-92">    * Creates an empty {@link Track} element.</span>
-<span class="source-line-no">093</span><span id="line-93">    */</span>
-<span class="source-line-no">094</span><span id="line-94">   public Track() {}</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   /**</span>
-<span class="source-line-no">097</span><span id="line-97">    * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}</span>
-<span class="source-line-no">098</span><span id="line-98">    * attributes.</span>
-<span class="source-line-no">099</span><span id="line-99">    *</span>
-<span class="source-line-no">100</span><span id="line-100">    * @param src The {@link Track#src(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the attribute is stored with a &lt;jk&gt;null&lt;/jk&gt; value (not removed).</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param kind The {@link Track#kind(String)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   public Track(Object src, String kind) {</span>
-<span class="source-line-no">104</span><span id="line-104">      src(src).kind(kind);</span>
-<span class="source-line-no">105</span><span id="line-105">   }</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   /**</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default"&gt;default&lt;/a&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    * attribute.</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * &lt;p&gt;</span>
-<span class="source-line-no">112</span><span id="line-112">    * Specifies that this track should be enabled by default if no other text track is more suitable.</span>
-<span class="source-line-no">113</span><span id="line-113">    * This is useful for providing fallback captions or subtitles.</span>
-<span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    * &lt;p&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">    * This attribute uses deminimized values:</span>
-<span class="source-line-no">117</span><span id="line-117">    * &lt;ul&gt;</span>
-<span class="source-line-no">118</span><span id="line-118">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Track is not enabled by default (default)&lt;/li&gt;</span>
-<span class="source-line-no">119</span><span id="line-119">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Track is enabled by default&lt;/li&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    * &lt;/ul&gt;</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param value Whether this track should be enabled by default. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return This object.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   @SuppressWarnings({</span>
-<span class="source-line-no">127</span><span id="line-127">      "java:S100" // Method name uses underscore suffix to avoid Java keyword conflict</span>
-<span class="source-line-no">128</span><span id="line-128">   })</span>
-<span class="source-line-no">129</span><span id="line-129">   public Track default_(Object value) {</span>
-<span class="source-line-no">130</span><span id="line-130">      attr("default", value);</span>
-<span class="source-line-no">131</span><span id="line-131">      return this;</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   /**</span>
-<span class="source-line-no">135</span><span id="line-135">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind"&gt;kind&lt;/a&gt; attribute.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
-<span class="source-line-no">138</span><span id="line-138">    * Specifies the type of text track. This determines how the track is used by the media element.</span>
-<span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
-<span class="source-line-no">141</span><span id="line-141">    * Possible values:</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;ul&gt;</span>
-<span class="source-line-no">143</span><span id="line-143">    *    &lt;li&gt;&lt;js&gt;"subtitles"&lt;/js&gt; - Subtitles for the deaf and hard-of-hearing&lt;/li&gt;</span>
-<span class="source-line-no">144</span><span id="line-144">    *    &lt;li&gt;&lt;js&gt;"captions"&lt;/js&gt; - Captions for the deaf and hard-of-hearing&lt;/li&gt;</span>
-<span class="source-line-no">145</span><span id="line-145">    *    &lt;li&gt;&lt;js&gt;"descriptions"&lt;/js&gt; - Text descriptions of the video content&lt;/li&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    *    &lt;li&gt;&lt;js&gt;"chapters"&lt;/js&gt; - Chapter titles for navigation&lt;/li&gt;</span>
-<span class="source-line-no">147</span><span id="line-147">    *    &lt;li&gt;&lt;js&gt;"metadata"&lt;/js&gt; - Metadata for the media&lt;/li&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;/ul&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * @param value The type of text track. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @return This object.</span>
-<span class="source-line-no">152</span><span id="line-152">    */</span>
-<span class="source-line-no">153</span><span id="line-153">   public Track kind(String value) {</span>
-<span class="source-line-no">154</span><span id="line-154">      attr("kind", value);</span>
-<span class="source-line-no">155</span><span id="line-155">      return this;</span>
-<span class="source-line-no">156</span><span id="line-156">   }</span>
-<span class="source-line-no">157</span><span id="line-157"></span>
-<span class="source-line-no">158</span><span id="line-158">   /**</span>
-<span class="source-line-no">159</span><span id="line-159">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label"&gt;label&lt;/a&gt; attribute.</span>
-<span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * &lt;p&gt;</span>
-<span class="source-line-no">162</span><span id="line-162">    * Specifies a user-visible label for the text track. This label is displayed in the media</span>
-<span class="source-line-no">163</span><span id="line-163">    * player's track selection menu.</span>
-<span class="source-line-no">164</span><span id="line-164">    *</span>
-<span class="source-line-no">165</span><span id="line-165">    * &lt;p&gt;</span>
-<span class="source-line-no">166</span><span id="line-166">    * The label should be descriptive and help users identify the track (e.g., "English Subtitles",</span>
-<span class="source-line-no">167</span><span id="line-167">    * "Spanish Captions").</span>
-<span class="source-line-no">168</span><span id="line-168">    *</span>
-<span class="source-line-no">169</span><span id="line-169">    * @param value The user-visible label for the text track. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">170</span><span id="line-170">    * @return This object.</span>
-<span class="source-line-no">171</span><span id="line-171">    */</span>
-<span class="source-line-no">172</span><span id="line-172">   public Track label(String value) {</span>
-<span class="source-line-no">173</span><span id="line-173">      attr("label", value);</span>
-<span class="source-line-no">174</span><span id="line-174">      return this;</span>
-<span class="source-line-no">175</span><span id="line-175">   }</span>
-<span class="source-line-no">176</span><span id="line-176"></span>
-<span class="source-line-no">177</span><span id="line-177">   /**</span>
-<span class="source-line-no">178</span><span id="line-178">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src"&gt;src&lt;/a&gt; attribute.</span>
-<span class="source-line-no">179</span><span id="line-179">    *</span>
-<span class="source-line-no">180</span><span id="line-180">    * &lt;p&gt;</span>
-<span class="source-line-no">181</span><span id="line-181">    * Address of the resource.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * &lt;p&gt;</span>
-<span class="source-line-no">184</span><span id="line-184">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">185</span><span id="line-185">    * Strings must be valid URIs.</span>
-<span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * &lt;p&gt;</span>
-<span class="source-line-no">188</span><span id="line-188">    * URIs defined by {@link UriResolver} can be used for values.</span>
-<span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * @param value</span>
-<span class="source-line-no">191</span><span id="line-191">    *    The new value for this attribute.</span>
-<span class="source-line-no">192</span><span id="line-192">    *    Typically a {@link URL} or {@link String}.</span>
-<span class="source-line-no">193</span><span id="line-193">    *    Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the attribute is stored with a &lt;jk&gt;null&lt;/jk&gt; value (not removed).</span>
-<span class="source-line-no">194</span><span id="line-194">    * @return This object.</span>
-<span class="source-line-no">195</span><span id="line-195">    */</span>
-<span class="source-line-no">196</span><span id="line-196">   public Track src(Object value) {</span>
-<span class="source-line-no">197</span><span id="line-197">      attrUri("src", value);</span>
-<span class="source-line-no">198</span><span id="line-198">      return this;</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">   /**</span>
-<span class="source-line-no">202</span><span id="line-202">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang"&gt;srclang&lt;/a&gt;</span>
-<span class="source-line-no">203</span><span id="line-203">    * attribute.</span>
-<span class="source-line-no">204</span><span id="line-204">    *</span>
-<span class="source-line-no">205</span><span id="line-205">    * &lt;p&gt;</span>
-<span class="source-line-no">206</span><span id="line-206">    * Specifies the language of the text track. This helps browsers and media players</span>
-<span class="source-line-no">207</span><span id="line-207">    * determine which track to use based on the user's language preferences.</span>
-<span class="source-line-no">208</span><span id="line-208">    *</span>
-<span class="source-line-no">209</span><span id="line-209">    * &lt;p&gt;</span>
-<span class="source-line-no">210</span><span id="line-210">    * The value should be a valid language code (e.g., "en", "es", "fr", "de").</span>
-<span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * @param value The language code of the text track. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
-<span class="source-line-no">213</span><span id="line-213">    * @return This object.</span>
-<span class="source-line-no">214</span><span id="line-214">    */</span>
-<span class="source-line-no">215</span><span id="line-215">   public Track srclang(String value) {</span>
-<span class="source-line-no">216</span><span id="line-216">      attr("srclang", value);</span>
-<span class="source-line-no">217</span><span id="line-217">      return this;</span>
-<span class="source-line-no">218</span><span id="line-218">   }</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">}</span>
+<span class="source-line-no">082</span><span id="line-82"> *</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;/ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> */</span>
+<span class="source-line-no">087</span><span id="line-87">@Marshalled(typeName = "track")</span>
+<span class="source-line-no">088</span><span id="line-88">public class Track extends HtmlElementVoid&lt;Track&gt; {</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Creates an empty {@link Track} element.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   public Track() {}</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)}</span>
+<span class="source-line-no">097</span><span id="line-97">    * attributes.</span>
+<span class="source-line-no">098</span><span id="line-98">    *</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param src The {@link Track#src(Object)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the attribute is stored with a &lt;jk&gt;null&lt;/jk&gt; value (not removed).</span>
+<span class="source-line-no">100</span><span id="line-100">    * @param kind The {@link Track#kind(String)} attribute. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">101</span><span id="line-101">    */</span>
+<span class="source-line-no">102</span><span id="line-102">   public Track(Object src, String kind) {</span>
+<span class="source-line-no">103</span><span id="line-103">      src(src).kind(kind);</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   /**</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default"&gt;default&lt;/a&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    * attribute.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * Specifies that this track should be enabled by default if no other text track is more suitable.</span>
+<span class="source-line-no">112</span><span id="line-112">    * This is useful for providing fallback captions or subtitles.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    * This attribute uses deminimized values:</span>
+<span class="source-line-no">116</span><span id="line-116">    * &lt;ul&gt;</span>
+<span class="source-line-no">117</span><span id="line-117">    *    &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt; - Track is not enabled by default (default)&lt;/li&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    *    &lt;li&gt;&lt;jk&gt;true&lt;/jk&gt; - Track is enabled by default&lt;/li&gt;</span>
+<span class="source-line-no">119</span><span id="line-119">    *    &lt;li&gt;Other values - Passed through as-is&lt;/li&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;/ul&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param value Whether this track should be enabled by default. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">123</span><span id="line-123">    * @return This object.</span>
+<span class="source-line-no">124</span><span id="line-124">    */</span>
+<span class="source-line-no">125</span><span id="line-125">   @SuppressWarnings({</span>
+<span class="source-line-no">126</span><span id="line-126">      "java:S100" // Method name uses underscore suffix to avoid Java keyword conflict</span>
+<span class="source-line-no">127</span><span id="line-127">   })</span>
+<span class="source-line-no">128</span><span id="line-128">   public Track default_(Object value) {</span>
+<span class="source-line-no">129</span><span id="line-129">      attr("default", value);</span>
+<span class="source-line-no">130</span><span id="line-130">      return this;</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind"&gt;kind&lt;/a&gt; attribute.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    * Specifies the type of text track. This determines how the track is used by the media element.</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * &lt;p&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">    * Possible values:</span>
+<span class="source-line-no">141</span><span id="line-141">    * &lt;ul&gt;</span>
+<span class="source-line-no">142</span><span id="line-142">    *    &lt;li&gt;&lt;js&gt;"subtitles"&lt;/js&gt; - Subtitles for the deaf and hard-of-hearing&lt;/li&gt;</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;li&gt;&lt;js&gt;"captions"&lt;/js&gt; - Captions for the deaf and hard-of-hearing&lt;/li&gt;</span>
+<span class="source-line-no">144</span><span id="line-144">    *    &lt;li&gt;&lt;js&gt;"descriptions"&lt;/js&gt; - Text descriptions of the video content&lt;/li&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    *    &lt;li&gt;&lt;js&gt;"chapters"&lt;/js&gt; - Chapter titles for navigation&lt;/li&gt;</span>
+<span class="source-line-no">146</span><span id="line-146">    *    &lt;li&gt;&lt;js&gt;"metadata"&lt;/js&gt; - Metadata for the media&lt;/li&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;/ul&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">    *</span>
+<span class="source-line-no">149</span><span id="line-149">    * @param value The type of text track. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">150</span><span id="line-150">    * @return This object.</span>
+<span class="source-line-no">151</span><span id="line-151">    */</span>
+<span class="source-line-no">152</span><span id="line-152">   public Track kind(String value) {</span>
+<span class="source-line-no">153</span><span id="line-153">      attr("kind", value);</span>
+<span class="source-line-no">154</span><span id="line-154">      return this;</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   /**</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label"&gt;label&lt;/a&gt; attribute.</span>
+<span class="source-line-no">159</span><span id="line-159">    *</span>
+<span class="source-line-no">160</span><span id="line-160">    * &lt;p&gt;</span>
+<span class="source-line-no">161</span><span id="line-161">    * Specifies a user-visible label for the text track. This label is displayed in the media</span>
+<span class="source-line-no">162</span><span id="line-162">    * player's track selection menu.</span>
+<span class="source-line-no">163</span><span id="line-163">    *</span>
+<span class="source-line-no">164</span><span id="line-164">    * &lt;p&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    * The label should be descriptive and help users identify the track (e.g., "English Subtitles",</span>
+<span class="source-line-no">166</span><span id="line-166">    * "Spanish Captions").</span>
+<span class="source-line-no">167</span><span id="line-167">    *</span>
+<span class="source-line-no">168</span><span id="line-168">    * @param value The user-visible label for the text track. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">169</span><span id="line-169">    * @return This object.</span>
+<span class="source-line-no">170</span><span id="line-170">    */</span>
+<span class="source-line-no">171</span><span id="line-171">   public Track label(String value) {</span>
+<span class="source-line-no">172</span><span id="line-172">      attr("label", value);</span>
+<span class="source-line-no">173</span><span id="line-173">      return this;</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175"></span>
+<span class="source-line-no">176</span><span id="line-176">   /**</span>
+<span class="source-line-no">177</span><span id="line-177">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src"&gt;src&lt;/a&gt; attribute.</span>
+<span class="source-line-no">178</span><span id="line-178">    *</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;p&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    * Address of the resource.</span>
+<span class="source-line-no">181</span><span id="line-181">    *</span>
+<span class="source-line-no">182</span><span id="line-182">    * &lt;p&gt;</span>
+<span class="source-line-no">183</span><span id="line-183">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">184</span><span id="line-184">    * Strings must be valid URIs.</span>
+<span class="source-line-no">185</span><span id="line-185">    *</span>
+<span class="source-line-no">186</span><span id="line-186">    * &lt;p&gt;</span>
+<span class="source-line-no">187</span><span id="line-187">    * URIs defined by {@link UriResolver} can be used for values.</span>
+<span class="source-line-no">188</span><span id="line-188">    *</span>
+<span class="source-line-no">189</span><span id="line-189">    * @param value</span>
+<span class="source-line-no">190</span><span id="line-190">    *    The new value for this attribute.</span>
+<span class="source-line-no">191</span><span id="line-191">    *    Typically a {@link URL} or {@link String}.</span>
+<span class="source-line-no">192</span><span id="line-192">    *    Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the attribute is stored with a &lt;jk&gt;null&lt;/jk&gt; value (not removed).</span>
+<span class="source-line-no">193</span><span id="line-193">    * @return This object.</span>
+<span class="source-line-no">194</span><span id="line-194">    */</span>
+<span class="source-line-no">195</span><span id="line-195">   public Track src(Object value) {</span>
+<span class="source-line-no">196</span><span id="line-196">      attrUri("src", value);</span>
+<span class="source-line-no">197</span><span id="line-197">      return this;</span>
+<span class="source-line-no">198</span><span id="line-198">   }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">   /**</span>
+<span class="source-line-no">201</span><span id="line-201">    * &lt;a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang"&gt;srclang&lt;/a&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">    * attribute.</span>
+<span class="source-line-no">203</span><span id="line-203">    *</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;p&gt;</span>
+<span class="source-line-no">205</span><span id="line-205">    * Specifies the language of the text track. This helps browsers and media players</span>
+<span class="source-line-no">206</span><span id="line-206">    * determine which track to use based on the user's language preferences.</span>
+<span class="source-line-no">207</span><span id="line-207">    *</span>
+<span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * The value should be a valid language code (e.g., "en", "es", "fr", "de").</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    * @param value The language code of the text track. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the attribute.</span>
+<span class="source-line-no">212</span><span id="line-212">    * @return This object.</span>
+<span class="source-line-no">213</span><span id="line-213">    */</span>
+<span class="source-line-no">214</span><span id="line-214">   public Track srclang(String value) {</span>
+<span class="source-line-no">215</span><span id="line-215">      attr("srclang", value);</span>
+<span class="source-line-no">216</span><span id="line-216">      return this;</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">}</span>
 
 
 

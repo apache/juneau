@@ -59,11 +59,11 @@
 <span class="source-line-no">046</span><span id="line-46">/**</span>
 <span class="source-line-no">047</span><span id="line-47"> * Session object that lives for the duration of a single use of {@link Parser}.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='warn'&gt;This class is not thread safe and is typically discarded after one use.</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers"&gt;Serializers and Parsers&lt;/a&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"></span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
@@ -444,7 +444,7 @@
 <span class="source-line-no">431</span><span id="line-431">    * &lt;p&gt;</span>
 <span class="source-line-no">432</span><span id="line-432">    * This is the preferred parse method for simple types since you don't need to cast the results.</span>
 <span class="source-line-no">433</span><span id="line-433">    *</span>
-<span class="source-line-no">434</span><span id="line-434">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">434</span><span id="line-434">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">435</span><span id="line-435">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">436</span><span id="line-436">    *    ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
 <span class="source-line-no">437</span><span id="line-437">    *</span>
@@ -507,7 +507,7 @@
 <span class="source-line-no">494</span><span id="line-494">    * &lt;p&gt;</span>
 <span class="source-line-no">495</span><span id="line-495">    * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).</span>
 <span class="source-line-no">496</span><span id="line-496">    *</span>
-<span class="source-line-no">497</span><span id="line-497">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">497</span><span id="line-497">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">498</span><span id="line-498">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">499</span><span id="line-499">    *    ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
 <span class="source-line-no">500</span><span id="line-500">    *</span>
@@ -536,7 +536,7 @@
 <span class="source-line-no">523</span><span id="line-523">    * &lt;p&gt;</span>
 <span class="source-line-no">524</span><span id="line-524">    * The array can be arbitrarily long to indicate arbitrarily complex data structures.</span>
 <span class="source-line-no">525</span><span id="line-525">    *</span>
-<span class="source-line-no">526</span><span id="line-526">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">526</span><span id="line-526">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">527</span><span id="line-527">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">528</span><span id="line-528">    *       Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.</span>
 <span class="source-line-no">529</span><span id="line-529">    * &lt;/ul&gt;</span>
@@ -584,7 +584,7 @@
 <span class="source-line-no">571</span><span id="line-571">    * &lt;p&gt;</span>
 <span class="source-line-no">572</span><span id="line-572">    * This is the preferred parse method for simple types since you don't need to cast the results.</span>
 <span class="source-line-no">573</span><span id="line-573">    *</span>
-<span class="source-line-no">574</span><span id="line-574">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">574</span><span id="line-574">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">575</span><span id="line-575">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">576</span><span id="line-576">    *    ReaderParser &lt;jv&gt;parser&lt;/jv&gt; = JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
 <span class="source-line-no">577</span><span id="line-577">    *</span>

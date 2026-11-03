@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * placed immediately after the opening html tag and before the body element. It can contain</span>
 <span class="source-line-no">030</span><span id="line-30"> * elements like title, meta, link, style, script, and base.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
@@ -110,30 +110,29 @@
 <span class="source-line-no">097</span><span id="line-97"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#head(Object...) head(Object...)}</span>
 <span class="source-line-no">098</span><span id="line-98"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> * &lt;/ul&gt;</span>
-<span class="source-line-no">100</span><span id="line-100"> * &lt;/p&gt;</span>
-<span class="source-line-no">101</span><span id="line-101"> *</span>
-<span class="source-line-no">102</span><span id="line-102"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">103</span><span id="line-103"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;/ul&gt;</span>
-<span class="source-line-no">105</span><span id="line-105"> */</span>
-<span class="source-line-no">106</span><span id="line-106">@Marshalled(typeName = "head")</span>
-<span class="source-line-no">107</span><span id="line-107">public class Head extends HtmlElementContainer&lt;Head&gt; {</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   /**</span>
-<span class="source-line-no">110</span><span id="line-110">    * Creates an empty {@link Head} element.</span>
-<span class="source-line-no">111</span><span id="line-111">    */</span>
-<span class="source-line-no">112</span><span id="line-112">   public Head() {}</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   /**</span>
-<span class="source-line-no">115</span><span id="line-115">    * Creates a {@link Head} element with the specified child nodes.</span>
-<span class="source-line-no">116</span><span id="line-116">    *</span>
-<span class="source-line-no">117</span><span id="line-117">    * @param children The child nodes.</span>
-<span class="source-line-no">118</span><span id="line-118">    */</span>
-<span class="source-line-no">119</span><span id="line-119">   public Head(Object...children) {</span>
-<span class="source-line-no">120</span><span id="line-120">      children(children);</span>
-<span class="source-line-no">121</span><span id="line-121">   }</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">}</span>
+<span class="source-line-no">100</span><span id="line-100"> *</span>
+<span class="source-line-no">101</span><span id="line-101"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">103</span><span id="line-103"> * &lt;/ul&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> */</span>
+<span class="source-line-no">105</span><span id="line-105">@Marshalled(typeName = "head")</span>
+<span class="source-line-no">106</span><span id="line-106">public class Head extends HtmlElementContainer&lt;Head&gt; {</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">   /**</span>
+<span class="source-line-no">109</span><span id="line-109">    * Creates an empty {@link Head} element.</span>
+<span class="source-line-no">110</span><span id="line-110">    */</span>
+<span class="source-line-no">111</span><span id="line-111">   public Head() {}</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Creates a {@link Head} element with the specified child nodes.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * @param children The child nodes.</span>
+<span class="source-line-no">117</span><span id="line-117">    */</span>
+<span class="source-line-no">118</span><span id="line-118">   public Head(Object...children) {</span>
+<span class="source-line-no">119</span><span id="line-119">      children(children);</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">}</span>
 
 
 
