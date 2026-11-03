@@ -188,7 +188,8 @@ class TerminalProcess_Test extends TestBase {
 
 	@DisabledOnOs(OS.WINDOWS)
 	@Test void a09_nullEnvIsRefused() {
-		assertThrows(NullPointerException.class, () -> TerminalProcess.start("generic", List.of("true"), 80, 24, run, (Map<String,String>)null));
+		var argv = List.of("true");
+		assertThrows(NullPointerException.class, () -> TerminalProcess.start("generic", argv, 80, 24, run, (Map<String,String>)null));
 	}
 
 	@DisabledOnOs(OS.WINDOWS)
@@ -226,6 +227,9 @@ class TerminalProcess_Test extends TestBase {
 		p.close();
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // polls for a file the fake process writes; there is no notification to wait on instead.
+	})
 	private static void awaitStarted(Path f) throws Exception {
 		var end = System.nanoTime() + TimeUnit.SECONDS.toNanos(20);
 		while (! Files.exists(f) && System.nanoTime() < end)

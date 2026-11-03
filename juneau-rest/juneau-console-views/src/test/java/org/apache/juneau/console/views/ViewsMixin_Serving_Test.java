@@ -1207,7 +1207,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	 * Selectors are {@code div.dt-container div.dt-search input} (0,2,3) so they beat DataTables'
 	 * {@code div.dt-container .dt-search input { border: 1px solid #aaa }} (0,2,2).
 	 */
-	@Test void p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
+	@Test void p01a_viewsCss_toolbarSearchInputHasGreyBorderAndText() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("--jc-chrome-control-border: var(--jc-control-border, #ced4da);"), body);
 		assertTrue(body.contains("--jc-chrome-button-border: var(--jc-chrome-control-border);"), body);
@@ -1230,9 +1230,19 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(region.contains("-webkit-appearance: none"), region);
 		assertTrue(region.contains("box-shadow: none"), region);
 		assertTrue(body.contains("--jc-chrome-control-radius: 3.2px"), body);
+	}
+
+	/** DF-3, continued: the toolbar search placeholder colour. */
+	@Test void p01b_viewsCss_toolbarSearchInputPlaceholderIsGrey() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("color: var(--jc-placeholder, #b4b5b6)"), body);
 		assertTrue(body.contains(".dt-search input::placeholder"), body);
 		assertTrue(body.contains(".dt-search input::-webkit-input-placeholder"), body);
+	}
+
+	/** DF-3, continued: focusing the toolbar search input draws no outline, glow or offset ring of its own. */
+	@Test void p01c_viewsCss_toolbarSearchInputFocusHasNoRing() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("div.dt-container div.dt-search input:focus,"), body);
 		assertTrue(body.contains("div.dt-container div.dt-search input:focus-visible,"), body);
 		var focusStart = body.indexOf("div.dt-container div.dt-search input:focus,");

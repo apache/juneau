@@ -752,6 +752,11 @@ public class ModalDef implements Widget {
 	 *
 	 * @throws IllegalArgumentException If this modal is not well-formed.
 	 */
+	/** The message for a token that is neither of its two allowed values. */
+	private static String notOneOf(String what, String a, String b, String actual) {
+		return what + " must be '" + a + "' or '" + b + "', not '" + actual + "'.";
+	}
+
 	@Override
 	public void validate() {
 		if (ib(title))
@@ -763,15 +768,14 @@ public class ModalDef implements Widget {
 				if (f.label == null || f.label.isBlank())
 					throw iaex("ModalDef.Field label must not be null or blank.");
 				if (f.kind != null && ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
-					throw iaex("ModalDef.Field kind must be '" + FIELD_KIND_TEXT + "' or '" + FIELD_KIND_CODE
-						+ "', not '" + f.kind + "'.");
+					throw iaex(notOneOf("ModalDef.Field kind", FIELD_KIND_TEXT, FIELD_KIND_CODE, f.kind));
 			}
 		validateChildActions();
 		validateSteps();
 		if (chrome != null && chrome.isBlank())
 			throw iaex("ModalDef chrome must not be blank.");
 		if (nav != null && ! (eqa(nav, NAV_PILL, NAV_FOLDER)))
-			throw iaex("ModalDef nav must be '" + NAV_PILL + "' or '" + NAV_FOLDER + "', not '" + nav + "'.");
+			throw iaex(notOneOf("ModalDef nav", NAV_PILL, NAV_FOLDER, nav));
 		if (form != null)
 			form.validate();
 		if (barSlot != null)
@@ -795,8 +799,7 @@ public class ModalDef implements Widget {
 					if (f == null || f.label == null || f.label.isBlank())
 						throw iaex("ModalDef.Step '" + st.id + "' field label must not be null or blank.");
 					if (f.kind != null && ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
-						throw iaex("ModalDef.Step '" + st.id + "' field kind must be '" + FIELD_KIND_TEXT + "' or '"
-							+ FIELD_KIND_CODE + "', not '" + f.kind + "'.");
+						throw iaex(notOneOf("ModalDef.Step '" + st.id + "' field kind", FIELD_KIND_TEXT, FIELD_KIND_CODE, f.kind));
 				}
 		}
 	}
