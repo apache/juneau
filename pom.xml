@@ -255,6 +255,9 @@
 						<exclude>/docs/static/site/**</exclude>
 						<exclude>**/javadocs/**</exclude>
 
+						<!-- Local agent skills (gitignored; RAT 0.17+ follows the symlinks into them) -->
+						<exclude>/agents/**</exclude>
+
 						<!-- Eclipse metadata files -->
 						<exclude>**/.settings/**</exclude>
 						<exclude>**/.project</exclude>
