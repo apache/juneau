@@ -417,8 +417,9 @@ def _trace_guard(s, args, since):
     code = traces.gate("traces", "Traces", TRACE_ALLOWLIST, since=since, warn_only=args.warn_traces, full_run=full_run,
                        report=TRACE_REPORT, label="Traces")
     if code:
+        advice = traces.failure_hint("Fix it, allowlist it with a reason, or use --warn-traces.")
         s.fail("\n❌ ERROR: Traces gate failed (a stack trace not in scripts/trace-allowlist.txt); nothing committed.  "
-               "Fix it, allowlist it with a reason, or use --warn-traces.")
+               + advice)
 
 
 def _gates(s, repo_dir, args):

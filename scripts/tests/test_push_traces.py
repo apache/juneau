@@ -50,6 +50,7 @@ class Session:
 
     def fail(self, msg, *, hint=None):
         self.failed.append(msg)
+        self.hint = hint
         raise SystemExit(1)
 
 
@@ -105,3 +106,12 @@ def test_a_snapshot_without_the_module_names_the_remedy(push, monkeypatch):
     monkeypatch.delattr(sys.modules["juneau_terminal_scripts"], "traces")
     with pytest.raises(push.bootstrap.BootstrapError, match="mvn install"):
         push.toolkit()
+
+
+def test_an_unreadable_full_log_gets_the_log_hint(push):
+    since = push.traces.mark()
+    push.log.unlink()
+    s = Session()
+    with pytest.raises(SystemExit):
+        push._trace_guard(s, args(push), since)
+    assert "Cannot read the full log" in s.failed[0] and "(a stack trace not in scripts/trace-allowlist.txt)" in s.failed[0]
